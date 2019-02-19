@@ -15,6 +15,7 @@ import fastqcparser
 from sys import argv
 from io import open
 
+## import
 thisDir = os.path.dirname(os.path.abspath(argv[0]))
 sys.path.append(thisDir)
 import functions
@@ -84,35 +85,23 @@ def call_fastqc(path, file1, file2, sample, fastqc_bin):
 def parse_fastqcFile(resultsfile):
 	## parse fastqc_data.txt file 
 	print ("+ Parsing results from fastqc analysis")
-
 	# load file
 	f = fastqcparser.FastQCParser(resultsfile)
-	#print ("\nStatus: ")
 	#gc_content = f.modules['Basic Statistics']['data'][-1][1]
-	
 	statistics = {
 		'filename':f.filename,
 		'encoding':f.encoding,
 		'sequences':f.total_sequences,
 		'filtered':f.filtered_sequences,
 		'GC':f.modules['Basic Statistics']['data'][-1][1],
-	}
-	
-	status = {}
-	
+	}	
+	status = {}	
 	for values in f.modules.keys():
 		status[values] = f.modules[values]['status']
 		#print ('[ ' + values + ' ]: ' + f.modules[values]['status'])
-
 	
-	#print (f.filename)
-	#print (f.file_type) 
-	#print (f.encoding)
-	#print (f.total_sequences)
-	#print (f.filtered_sequences)
-	#print (f.sequence_length)
-	#print ('%GC ' + str(gc_content))
-	
+	#print (f.filename), #print (f.file_type),	#print (f.encoding), #print (f.total_sequences), 
+	#print (f.filtered_sequences), #print (f.sequence_length), #print ('%GC ' + str(gc_content))
 	return (statistics, status)
 	
 ######
@@ -134,7 +123,6 @@ def get_files(path):
 			tmp = path + '/' + f + '/fastqc_data.txt'
 			if os.path.isfile(tmp):
 				fastqc_files.append(tmp)
-	
 	return fastqc_files
 
 ######
@@ -160,7 +148,6 @@ def main():
 	
 	for files in fastqc_files:
 		parse_fastqcFile(files)
-		
 		
 ######
 
