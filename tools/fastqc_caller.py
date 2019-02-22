@@ -9,7 +9,6 @@ import time
 import io
 import os
 import re
-import subprocess
 import sys
 import fastqcparser
 from sys import argv
@@ -19,6 +18,7 @@ from io import open
 thisDir = os.path.dirname(os.path.abspath(argv[0]))
 sys.path.append(thisDir)
 import functions
+import config
 
 ######
 class fastqcObject: 
@@ -60,7 +60,7 @@ class fastqcObject:
 ######
 
 def	help_options():
-	print ("\nUSAGE: python %s folder file1 file2 name fastqc\n")
+	print ("\nUSAGE: python %s folder file1 file2 name fastqc\n"  %os.path.abspath(argv[0]))
 
 ######
 def call_fastqc(path, file1, file2, sample, fastqc_bin):	
@@ -74,12 +74,7 @@ def call_fastqc(path, file1, file2, sample, fastqc_bin):
 	print ("+ Calling fastqc for samples...")	
 	cmd_fastqc = '%s --extract -o %s %s %s > %s 2> %s' %(fastqc_bin, name, file1, file2, logFile, logFile)
 	## send command	
-	try:
-		subprocess.check_output(cmd_fastqc, shell = True)
-		return ('OK')
-	except subprocess.CalledProcessError as err:
-		print (err.output)
-		return ('FAIL')
+	return (functions.system_call( cmd_fastqc ))
 		
 ######	
 def parse_fastqcFile(resultsfile):
@@ -105,8 +100,9 @@ def parse_fastqcFile(resultsfile):
 	return (statistics, status)
 	
 ######
-def run_module_fastqc(path, file1, file2, sample, fastqc_bin):	
+def run_module_fastqc(path, file1, file2, sample):	
 	## Arguments provided via ARGVs
+	fastqc_bin = config.CONFIGURATION['fastqc']
 	codeReturn = call_fastqc(path, file1, file2, sample, fastqc_bin)
 	if codeReturn == 'FAIL':
 		exit()

@@ -8,6 +8,7 @@ import re
 import subprocess
 import sys
 from datetime import datetime
+import config
 
 ###############   
 def gettime (start_time):
@@ -45,17 +46,25 @@ def timestamp (start_time_partial):
 ############### 
 
 ############### 
-def get_symbolic_link (final_sample_list, path_to_samples, directory):
-	for samplex in final_sample_list:
+def get_symbolic_link (sample_list, path_to_samples, directory):
+	for samplex in sample_list:
 		sample_path = path_to_samples + '/' + samplex
 		cmd = 'ln -s %s %s' %(sample_path, directory)
-		try:
-			print ('Symbolic link sample ', samplex)
-			subprocess.check_output(cmd, shell = True)
-		except subprocess.CalledProcessError as err:
-			print (err.output)
-			#sys.exit()
+		system_call(cmd)
 
 	files2return = os.listdir(directory)
 	return files2return
 ###############
+
+###############
+def system_call(cmd):	
+	## call system
+	## send command	
+	try:
+		subprocess.check_output(cmd, shell = True)
+		return ('OK')
+	except subprocess.CalledProcessError as err:
+		print (err.output)
+		return ('FAIL')
+
+
