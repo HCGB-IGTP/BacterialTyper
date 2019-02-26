@@ -101,7 +101,7 @@ def run_module_SPADES(name, path, file1, file2, threads):
 	folder = functions.create_subfolder(name, path)
 	
 	## get configuration
-	SPADES_bin = config.CONFIGURATION['spades']
+	SPADES_bin = config.EXECUTABLES['spades']
 	
 	##
 	path_to_contigs = run_SPADES_assembly(folder, file1, file2, sample, SPADES_bin, threads)
@@ -128,7 +128,7 @@ def discardPlasmids(contigs, plasmids, path):
 	folder = functions.create_subfolder('blast_search', path)
 	
 	## generate blastdb for genome
-	makeblastDBexe = config.CONFIGURATION['makeblastdb']
+	makeblastDBexe = config.EXECUTABLES['makeblastdb']
 	DBname = folder + '/mainAssembly'
 	cmd_makeblast = "%s -in %s -input_type fasta -dbtype %s -out %s" %(makeblastDBexe, contigs, 'nucl', DBname)
 	print ('[ System Call: ' + cmd_makeblast + ' ]')
@@ -140,7 +140,7 @@ def discardPlasmids(contigs, plasmids, path):
 		exit()
 	
 	## blastn plasmids vs contigs
-	blastnexe = config.CONFIGURATION['blastn']
+	blastnexe = config.EXECUTABLES['blastn']
 	outFile = folder + '/blastn_output.txt'
 	cmd_blastn = "%s -db %s -query %s -out %s -evalue 1e-20 -outfmt \'6 std qlen slen\'" %(blastnexe, DBname, plasmids, outFile )
 	print ('[ System Call: ' + cmd_blastn + ' ]')
@@ -271,10 +271,8 @@ def main():
 	file1 = os.path.abspath(argv[1])
 	file2 = os.path.abspath(argv[2])
 	sample = argv[3]
-	
-	SPADES_bin = config.CONFIGURATION['spades']
-	#SPADES_bin = argv[4]
-	threads = int(argv[4])
+	SPADES_bin = argv[4]
+	threads = int(argv[5])
 
 	path = os.path.abspath('.')		
 	folder = functions.create_subfolder('assembly', path)
