@@ -14,13 +14,20 @@ from sys import argv
 from io import open
 
 ## import my modules
-thisDir = os.path.dirname(os.path.abspath(argv[0]))
-sys.path.append(thisDir)
-
-import config
+pythonDir = os.path.dirname(os.path.abspath(argv[0]))
+sys.path.append(pythonDir)
 import functions
 
-MLSTarR_script = thisDir + '/MLSTar_call.R'
+configDir = os.path.dirname(os.path.abspath(argv[0])) + '../../config/'
+sys.path.append(configDir)
+import config
+
+RscriptDir = os.path.dirname(os.path.abspath(argv[0])) + '../R/'
+MLSTarR_script = RscriptDir + '/MLSTar_call.R'
+
+print (pythonDir)
+print (configDir)
+print (MLSTarR_script)
 
 
 ## check if profile and sequences are already downloaded

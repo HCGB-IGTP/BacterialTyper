@@ -18,6 +18,7 @@ BUSCO_datasets = {
 }
 MLSTar = {
 	'profile_folder': ''
+	'sequence_folder': ''
 }
 
 ## Variables

@@ -16,13 +16,19 @@ from io import open
 from Bio import SeqIO
 
 ## import my modules
-thisDir = os.path.dirname(os.path.abspath(argv[0]))
-sys.path.append(thisDir)
+pythonDir = os.path.dirname(os.path.abspath(argv[0]))
+sys.path.append(pythonDir)
+import functions
+
+configDir = os.path.dirname(os.path.abspath(argv[0])) + '../../config/'
+sys.path.append(configDir)
+import config
 
 from blast_parser import parse
-import config
-import functions
-contig_stats_script = thisDir + '/contig_stats.pl'
+
+perlDir = os.path.dirname(os.path.abspath(argv[0])) + '../perl/'
+sys.path.append(perlDir)
+contig_stats_script = perlDir + '/contig_stats.pl'
 
 ######
 def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads):
@@ -103,14 +109,16 @@ def run_module_SPADES(name, path, file1, file2, threads):
 	## get configuration
 	SPADES_bin = config.EXECUTABLES['spades']
 	
-	##
+	## assembly main 
 	path_to_contigs = run_SPADES_assembly(folder, file1, file2, sample, SPADES_bin, threads)
+
+	## assembly plasmids
 	path_to_plasmids = run_SPADES_plasmid_assembly(folder, file1, file2, sample, SPADES_bin, threads)
 	
-	##
+	## discard plasmids from main
 	new_contigs, new_plasmids = discardPlasmids(path_to_contigs, path_to_plasmids, folder)
 	
-	##	
+	## contig stats
 	contig_stats(new_contigs, new_plasmids)	
 
 ######
