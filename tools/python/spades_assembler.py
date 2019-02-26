@@ -20,13 +20,13 @@ pythonDir = os.path.dirname(os.path.abspath(argv[0]))
 sys.path.append(pythonDir)
 import functions
 
-configDir = os.path.dirname(os.path.abspath(argv[0])) + '../../config/'
+configDir = os.path.dirname(os.path.abspath(argv[0])) + '/../../config/'
 sys.path.append(configDir)
 import config
 
 from blast_parser import parse
 
-perlDir = os.path.dirname(os.path.abspath(argv[0])) + '../perl/'
+perlDir = os.path.dirname(os.path.abspath(argv[0])) + '../perl'
 sys.path.append(perlDir)
 contig_stats_script = perlDir + '/contig_stats.pl'
 

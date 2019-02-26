@@ -38,8 +38,8 @@ x <- doMLST(
   schemeFastas = fastas_scheme,
   schemeProfile = profile_scheme,
   
-  write = "new",     # Don't write fasta files for alleles found
-  fdir = paste0(opt$dir, "_alleles"), 
+  write = "new",     # write fasta files for alleles found
+  fdir = paste0(opt$dir, '/', opt$name, "_alleles"), 
   
   n_threads = opt$threads
   
@@ -49,7 +49,7 @@ x <- doMLST(
   
 )
 
-res_file <- paste0(opt$dir, "_results.txt")
+res_file <- paste0(opt$dir, '/', opt$name, "_results.txt")
 
 ## get results
 write.table(x$result, file=res_file,sep = "\t", quote = FALSE) ## save to file

@@ -35,7 +35,24 @@ def create_subfolder (name, path):
 	return subfolder_path
 ###############   
     
-###############   
+###############  
+def create_folder (path):
+    ## create subfolder  ##	
+	access_rights = 0o755
+	
+    # define the access rights
+	try:
+		os.mkdir(path, access_rights)
+	except OSError:  
+	   	print ("\tDirectory %s already exists" %path)
+	else:  
+		print ("\tSuccessfully created the directory %s " %path)
+	
+	print ("")
+	return path
+###############  
+
+###############	
 def timestamp (start_time_partial):
 	h,m,s = gettime(start_time_partial)
 	print ('--------------------------------')

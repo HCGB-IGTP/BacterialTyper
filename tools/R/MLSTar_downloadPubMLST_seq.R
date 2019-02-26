@@ -6,8 +6,7 @@ library("optparse")
 option_list = list(
 	make_option(c("-sp", "--species"), type="character", help="species name for PubMLST download", metavar="character"),
 	make_option(c("-sc", "--scheme"), type="integer", help="scheme id for PubMLST download", metavar="integer"),
-	make_option(c("-d_seq", "--dir_seq"), type="character", help="folder path to download sequences", metavar="character"),
-	make_option(c("-d_prf", "--dir_profile"), type="character", help="folder path to download profile", metavar="character")	
+	make_option(c("-d_seq", "--dir_seq"), type="character", help="folder path to download sequences", metavar="character")
 ); 
 
 opt_parser = OptionParser(option_list=option_list);
@@ -23,6 +22,5 @@ if (is.null(opt$species)){
 
 ## load library
 library(MLSTar)
-downloadPubmlst_profile(org=opt$species, scheme=opt$scheme, dir=opt$dir_profile)
 downloadPubmlst_seq(org=opt$species, scheme=opt$scheme, dir=opt$dir_seq)
 

@@ -19,7 +19,7 @@ pythonDir = os.path.dirname(os.path.abspath(argv[0]))
 sys.path.append(pythonDir)
 import functions
 
-configDir = os.path.dirname(os.path.abspath(argv[0])) + '../../config/'
+configDir = os.path.dirname(os.path.abspath(argv[0])) + '/../../config/'
 sys.path.append(configDir)
 import config
 
