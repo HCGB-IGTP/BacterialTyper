@@ -8,3 +8,11 @@ pip install configparser
 pip install numpy
 pip install cython
 pip install biopython
+
+pip install pandas
+pip install xlrd
+pip install xlwt
+
+pip install wget
+pip install xtract
+

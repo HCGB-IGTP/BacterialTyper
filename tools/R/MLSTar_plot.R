@@ -4,15 +4,16 @@ library("optparse")
 
 ## get options
 option_list = list(
-  make_option(c("-f_profile", "--file_profile"), type="character", help="folder path to download sequences", metavar="character"),
-  make_option(c("-f_result", "--file_result"), type="character", help="folder path to download profile", metavar="character")
+  make_option(c("-f_profile", "--folder_profile"), type="character", help="folder path to profile tabular file", metavar="character"),
+  make_option(c("-f_result", "--file_result"), type="character", help="path to results file", metavar="character"),
+  make_option(c("-out", "--output"), type="character", help="path to create image", metavar="character")
 ); 
 
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
 
 ## get help message
-if (is.null(opt$file_profile)){
+if (is.null(opt$folder_profile)){
   print_help(opt_parser)
   stop("No arguments provided", call.=FALSE)
 }
@@ -28,13 +29,18 @@ resu[] <- lapply(resu, as.character)
 resu <- resu[,c("ST",setdiff(names(resu),"ST"))]
 
 ## get profile
-profile_get <- read.delim(file=opt$file_profile, header=TRUE, sep="\t")
+profile_scheme <- list.files(path = opt$folder_profile, full.names = TRUE)
+profile_get <- read.delim(file=profile_scheme, header=TRUE, sep="\t")
 # convert data frame, character
 prof <- as.data.frame(profile_get, stringsAsFactors = FALSE)
 prof[] <- lapply(profile_get, as.character)
 
+prof2 <- subset(prof, select = -c(clonal_complex) ) ## discard clonal_complex column
+## random profile
+prof3 <- prof2[sample(nrow(prof2), 50), ] ## >5000 rows is too much!
+
 #add attributes and convert to MLST object
-out <- list(result = resu, profile = prof)
+out <- list(result = resu, profile = prof3)
 attr(out, 'infiles') <- "default"
 attr(out, 'org') <- "default"
 attr(out, 'scheme') <- "default"
@@ -43,14 +49,35 @@ attr(out, 'pid') <- "default"
 attr(out, 'scov') <- "default"
 attr(out, 'class') <- 'mlst'
 
+## output file
+name = paste0(opt$output, '/MLST_network.pdf')
+pdf(file=name, width = 29.7, height = 21)
+
 ## generate plot and save to file
-plot(out, 
-     what='both',
-     label=FALSE,
-     alpha=0.4,
-     col.axis='red',
-     lty=3
+## generate plot and save to file
+set.seed(4)
+plot(out,                # object of class mlst      
+     what='both',        # result/profile/both
+     label=TRUE,         # logical (TRUE/FALSE): whether to plot node/tip labels
+     alpha=0.6,          # color transparency
+     
+     col.axis='black',   #
+     lty=1,              #
+     
+     pt.size=6,          # The size of the point. Default: 3.
+     pf.col='red',       # The color of profile nodes/tips. Ignored if what="result".
+     st.col='blue',      # The color of result nodes/tips which have an ST assigned. Ignored if what="profile".
+     nst.col='yellow',   # The color of result nodes/tips with no ST assigned. Default: "white". Ignored if what="profile".
+     
+     # A list of arguments to be passed to plot.igraph. Used only if type="mst".
+     plot.igraph.args= list(layout=layout_nicely,        # The layout for the graph
+                            vertex.label.dist=1,       # Set labels slightly off the dots
+                            vertex.label.color='black',  # The color of the name labels
+                            vertex.label.cex=2)          # Specifies the size of the font of the labels.
 )
+
+dev.off()
+
 
 ##############################
 ## S3 method for class mlst

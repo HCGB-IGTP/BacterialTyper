@@ -20,7 +20,11 @@ MLSTar = {
 	'profile_folder': '',
 	'sequence_folder': ''
 }
-
+VFDB = {
+	'VFs':'',
+	'Comparative_tables_from_VFDB':'',
+	'VFDB_set_folder':''	
+}
 ## Variables
 ## Others
 

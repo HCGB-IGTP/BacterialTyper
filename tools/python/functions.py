@@ -7,7 +7,10 @@ import os
 import re
 import subprocess
 import sys
+import wget
 from datetime import datetime
+from xtract import xtract
+from Bio import SeqIO
 
 ###############   
 def gettime (start_time):
@@ -83,4 +86,28 @@ def system_call(cmd):
 		print (err.output)
 		return ('FAIL')
 
+###############
+def wget_download(url, path):
+	print ('+ Downloading: ', url)
+	wget.download(url, path)
+	print ('\n')
+###############
+
+###############
+def subset_fasta(ident, fasta, out):
+	output_FASTA = open(out, 'w')	
+	for record in SeqIO.parse(fasta, "fasta"):
+		all_id = record.description
+		species_search = re.search(r"%s" % ident, all_id)
+		if species_search:
+			head = ">" + all_id + "\n"
+			output_FASTA.write(head)
+			output_FASTA.write(str(record.seq))
+			output_FASTA.write("\n")
+
+###############
+
+###############
+def extract(fileGiven):
+	xtract(fileGiven, all=True)
 

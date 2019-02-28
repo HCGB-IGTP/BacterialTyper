@@ -39,28 +39,44 @@ def run_MLSTar(species, scheme, name, path, fileGiven, threads):
 	download_PubMLST(profile_folder, scheme, seq_folder, name, rscript, species)
 
 	## call MLSTar for this sample
-	run_doMLST(profile_folder, scheme, seq_folder, name, rscript, species, path, fileGiven, threads)
+	results = run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads)
+	return (results)
 
 ######
 def help_options():
 	print ("\nUSAGE: python %s genome species scheme name rscript_bin threads profile_folder seq_folder path\n"  %os.path.abspath(argv[0]))
 
 ######
-def run_doMLST(profile_folder, scheme, seq_folder, name, rscript, species, path, fileGiven, threads):
+def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads):
 	print ('+ Create sample folder...')
 	folder_path = functions.create_subfolder(name, path)
 
 	print ('+ Generating profile for sample...')
-	cmd_profiler = "%s %s --species %s --scheme %s --dir_profile %s --dir_seq %s --file %s --dir %s --name %s --threads %s" %(rscript, MLSTarR_script, species, scheme, profile_folder, seq_folder, fileGiven, folder_path, name, threads)
+	cmd_profiler = "%s %s --dir_profile %s --dir_seq %s --file %s --dir %s --name %s --threads %s" %(rscript, MLSTarR_script, profile_folder, seq_folder, fileGiven, folder_path, name, threads)
 	callCode = functions.system_call(cmd_profiler)
+
+	if callCode == 'OK':
+		res_file = folder_path + '/' + name + "_results.txt"
+		return (res_file)
+	else:
+		exit()
 
 ######
 def update_MLSTar_profile_alleles():
 	return("")
 
 ######
-def plot_MLST(results, profile):
-	return("")
+def call_plot(results):
+	profile_folder = config.MLSTar['profile_folder']
+	rscript = config.EXECUTABLES['Rscript']
+	plot_MLST(results, profile_folder, rscript)
+	
+######
+def plot_MLST(results, profile, rscript):
+	path_folder = os.path.dirname(results)
+	cmd_plotter = "%s %s --output %s --folder_profile %s --file_result %s" %(rscript, MLSTarR_plot, path_folder, profile, results)
+	print (cmd_plotter)
+	return(functions.system_call(cmd_plotter))
 	
 ######
 def download_PubMLST(profile_folder, scheme, seq_folder, name, rscript, species):
@@ -147,9 +163,9 @@ def main():
 	download_PubMLST(profile_folder, scheme, seq_folder, name, rscript, species)
 	
 	## call MLSTar for this sample
-	run_doMLST(profile_folder, scheme, seq_folder, name, rscript, species, path, fileGiven, threads)
+	results = run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads)
 
-	
+	plot_MLST(results, profile_folder, rscript)
 		
 ######
 '''******************************************'''
