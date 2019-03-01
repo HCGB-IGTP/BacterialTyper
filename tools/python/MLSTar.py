@@ -75,7 +75,6 @@ def call_plot(results):
 def plot_MLST(results, profile, rscript):
 	path_folder = os.path.dirname(results)
 	cmd_plotter = "%s %s --output %s --folder_profile %s --file_result %s" %(rscript, MLSTarR_plot, path_folder, profile, results)
-	print (cmd_plotter)
 	return(functions.system_call(cmd_plotter))
 	
 ######

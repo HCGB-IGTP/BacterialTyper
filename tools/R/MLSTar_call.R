@@ -20,10 +20,11 @@ if (is.null(opt$dir_seq)){
   stop("No arguments provided", call.=FALSE)
 }
 
-
 ##
 library(MLSTar)
-nameDir = paste0(opt$dir, '/', opt$name, '_test/')
+
+setwd(opt$dir)
+nameDir = paste0(opt$name, '_alleles')
 
 ## get files
 fastas_scheme <- list.files(path = opt$dir_seq, full.names = TRUE)
