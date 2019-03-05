@@ -14,11 +14,11 @@ from sys import argv
 from io import open
 
 ## import my modules
-pythonDir = os.path.dirname(os.path.abspath(argv[0]))
+pythonDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(pythonDir)
 import functions
 
-configDir = os.path.dirname(os.path.abspath(argv[0])) + '/../../config/'
+configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
 sys.path.append(configDir)
 import config
 

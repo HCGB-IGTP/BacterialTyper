@@ -15,11 +15,11 @@ from sys import argv
 from io import open
 
 ## import modules
-pythonDir = os.path.dirname(os.path.abspath(argv[0]))
+pythonDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(pythonDir)
 import functions
 
-configDir = os.path.dirname(os.path.abspath(argv[0])) + '/../../config/'
+configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
 sys.path.append(configDir)
 import config
 
@@ -61,9 +61,8 @@ class fastqcObject:
         return "fastqcObject: " + self.__path + ", Name: " +  str(self.__sample)
 
 ######
-
 def	help_options():
-	print ("\nUSAGE: python %s folder file1 file2 name fastqc\n"  %os.path.abspath(argv[0]))
+	print ("\nUSAGE: python %s folder file1 file2 name fastqc\n"  %os.path.realpath(__file__))
 
 ######
 def call_fastqc(path, file1, file2, sample, fastqc_bin):	
@@ -123,6 +122,16 @@ def get_files(path):
 			if os.path.isfile(tmp):
 				fastqc_files.append(tmp)
 	return fastqc_files
+
+######
+def return_fastqcObject(path, file1, file2, sample, fastqc_bin):
+	##
+	path_to_sample = run_module_fastqc(path, file1, file2, sample, fastqc_bin)
+	fastqc_files = get_files(path_to_sample)
+	statistics, status = parse_fastqcFile(fastqc_files)
+	
+	return (fastqcObject(sample=sample, path=path, StatisticsFrame=statistics, StatusFrame=status))
+	
 
 ######
 def main():

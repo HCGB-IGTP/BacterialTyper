@@ -16,11 +16,11 @@ from io import open
 from datetime import datetime
 
 ## import my modules
-pythonDir = os.path.dirname(os.path.abspath(argv[0]))
+pythonDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(pythonDir)
 import functions
 
-configDir = os.path.dirname(os.path.abspath(argv[0])) + '/../../config/'
+configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
 sys.path.append(configDir)
 import config
 
@@ -30,14 +30,13 @@ def printNote():
 	print ("Full dataset (dataset_B) covers all genes related to known and predicted VFs in the database.\n******\n")
 
 ############
-def subset_VFs_species(species, path, VF_xlsx_file):
+def subset_VFs_species(species, subset_xlsx_file, VF_xlsx_file):
 	
 	dfs = pd.read_excel(VF_xlsx_file, sheet_name="VFs", index_cols=0, skiprows=1)
 	df2 = dfs.set_index("Bacteria", drop = False) 				## order
 	df_species = df2.loc[species:species] 						## filter by species
 	df_species2 = df_species.set_index("VFID", drop = False) 	## order
 	ls_items = list(df_species2)								## get column headers
-	name = path + '/VFs_' + species + '.xls'
 	df_species2.to_excel(name, sheet_name=species, header=ls_items)
 	
 ######
@@ -118,7 +117,8 @@ def check_download_VFDB(path):
 ######
 def subsetting_species(species, path, VFDB_files):
 	print ('+ Subsetting information for species of interest')
-	subset_VFs_species(species, path, VFDB_files['VFs-xls'])
+	subset_xlsx_file = path + '/VFs_' + species + '.xls'
+	subset_VFs_species(species, subset_xlsx_file, VFDB_files['VFs-xls'])
 	
 	## subset A
 	subsetA_out = path + '/' + species + '_subsetA_prot.fasta'
@@ -160,7 +160,7 @@ def main():
 
 ######
 def help_options():
-	print ("\nUSAGE: python %s species path VFDB_path VFs_links_file\n"  %os.path.abspath(argv[0]))
+	print ("\nUSAGE: python %s species path VFDB_path VFs_links_file\n"  %os.path.realpath(__file__))
 		
 ######
 '''******************************************'''

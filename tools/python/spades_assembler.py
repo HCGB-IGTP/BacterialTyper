@@ -16,17 +16,17 @@ from io import open
 from Bio import SeqIO
 
 ## import my modules
-pythonDir = os.path.dirname(os.path.abspath(argv[0]))
+pythonDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(pythonDir)
 import functions
 
-configDir = os.path.dirname(os.path.abspath(argv[0])) + '/../../config/'
+configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
 sys.path.append(configDir)
 import config
 
 from blast_parser import parse
 
-perlDir = os.path.dirname(os.path.abspath(argv[0])) + '../perl'
+perlDir = os.path.dirname(os.path.realpath(__file__)) + '../perl'
 sys.path.append(perlDir)
 contig_stats_script = perlDir + '/contig_stats.pl'
 
@@ -262,7 +262,7 @@ def contig_stats(new_contigs, new_plasmids):
 	
 ######
 def	help_options():
-	print ("\nUSAGE: python %s file1 file2 name SPADES_bin threads\n"  %os.path.abspath(argv[0]))
+	print ("\nUSAGE: python %s file1 file2 name SPADES_bin threads\n"  %os.path.realpath(__file__))
 
 
 ######

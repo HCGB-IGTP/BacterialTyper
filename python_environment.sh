@@ -16,3 +16,5 @@ pip install xlwt
 pip install wget
 pip install xtract
 
+pip install ncbi-genome-download
+

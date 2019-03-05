@@ -14,15 +14,15 @@ from sys import argv
 from io import open
 
 ## import my modules
-pythonDir = os.path.dirname(os.path.abspath(argv[0]))
+pythonDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(pythonDir)
 import functions
 
-configDir = os.path.dirname(os.path.abspath(argv[0])) + '/../../config/'
+configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
 sys.path.append(configDir)
 import config
 
-RscriptDir = os.path.dirname(os.path.abspath(argv[0])) + '/../R'
+RscriptDir = os.path.dirname(os.path.realpath(__file__)) + '/../R'
 MLSTarR_script = RscriptDir + '/MLSTar_call.R'
 MLSTarR_plot = RscriptDir + '/MLSTar_plot.R'
 MLSTarR_download_seq = RscriptDir + '/MLSTar_downloadPubMLST_seq.R'
@@ -44,7 +44,7 @@ def run_MLSTar(species, scheme, name, path, fileGiven, threads):
 
 ######
 def help_options():
-	print ("\nUSAGE: python %s genome species scheme name rscript_bin threads profile_folder seq_folder path\n"  %os.path.abspath(argv[0]))
+	print ("\nUSAGE: python %s genome species scheme name rscript_bin threads profile_folder seq_folder path\n"  %os.path.realpath(__file__))
 
 ######
 def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads):
