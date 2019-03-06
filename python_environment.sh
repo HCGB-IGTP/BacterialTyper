@@ -18,3 +18,4 @@ pip install xtract
 
 pip install ncbi-genome-download
 
+pip install matplotlib

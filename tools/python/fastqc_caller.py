@@ -13,6 +13,15 @@ import sys
 import fastqcparser
 from sys import argv
 from io import open
+import pandas as pd
+
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
+from pandas.plotting import table
+from matplotlib.backends.backend_pdf import PdfPages
+
+import numpy as np
 
 ## import modules
 pythonDir = os.path.dirname(os.path.realpath(__file__))
@@ -79,27 +88,33 @@ def call_fastqc(path, file1, file2, sample, fastqc_bin):
 	return (functions.system_call( cmd_fastqc ))
 		
 ######	
-def parse_fastqcFile(resultsfile):
+def parse_fastqcFile(resultsfile, name):
 	## parse fastqc_data.txt file 
 	print ("+ Parsing results from fastqc analysis")
 	# load file
 	f = fastqcparser.FastQCParser(resultsfile)
-	#gc_content = f.modules['Basic Statistics']['data'][-1][1]
-	statistics = {
-		'filename':f.filename,
-		'encoding':f.encoding,
-		'sequences':f.total_sequences,
-		'filtered':f.filtered_sequences,
-		'GC':f.modules['Basic Statistics']['data'][-1][1],
-	}	
-	status = {}	
-	for values in f.modules.keys():
-		status[values] = f.modules[values]['status']
-		#print ('[ ' + values + ' ]: ' + f.modules[values]['status'])
 	
-	#print (f.filename), #print (f.file_type),	#print (f.encoding), #print (f.total_sequences), 
-	#print (f.filtered_sequences), #print (f.sequence_length), #print ('%GC ' + str(gc_content))
-	return (statistics, status)
+	# statistics
+	col_names_statistics = ['name', 'filename', 'encoding', 'sequences', 'filtered', 'GC']
+	statistics_df = pd.DataFrame(columns = col_names_statistics)
+	statistics_df.loc[0] = [name, f.filename, f.encoding,f.total_sequences,f.filtered_sequences,f.modules['Basic Statistics']['data'][-1][1]]
+	#statistics_df.append([name, f.filename, f.encoding,f.total_sequences,f.filtered_sequences,f.modules['Basic Statistics']['data'][-1][1]], ignore_index=True)
+	
+	# status
+	col_names_status = ['name', 'filename']
+	modules_list = list(f.modules.keys())
+	col_names_status.extend(modules_list)
+	status_df = pd.DataFrame(columns = col_names_status)
+	status = []
+	
+	for values in f.modules.keys():
+		status.append(f.modules[values]['status'])
+	
+	status.insert(0, f.filename)
+	status.insert(0, name)
+	status_df.loc[0] = pd.Series(status).values
+
+	return (statistics_df, status_df)
 	
 ######
 def run_module_fastqc(path, file1, file2, sample):	
@@ -112,6 +127,31 @@ def run_module_fastqc(path, file1, file2, sample):
 	return path_to_sample
 
 ######
+def generateTable(dataFrame, fileName):
+	## set index
+	index_dataFrame = dataFrame.set_index(['name', 'filename'])
+
+	index_dataFrame.to_csv(fileName, sep='\t')
+
+	## plot table
+	pp = PdfPages('Output.pdf')
+
+	# Calculate some sizes for formatting - constants are arbitrary - play around
+	nrows, ncols = len(index_dataFrame), len(index_dataFrame.columns)
+	hcell, wcell = 0.3, 1.
+	hpad, wpad = 0, 0   
+
+	#put the table on a correctly sized figure    
+	fig=plt.figure(figsize=(ncols*wcell+wpad, nrows*hcell+hpad))
+	plt.gca().axis('off')
+
+	matplotlib_tab = table(plt.gca(),index_dataFrame, loc='center')    
+
+	pp.savefig()
+	plt.close()
+	pp.close()
+
+######
 def get_files(path):
 	files = os.listdir(path)
 	fastqc_files = []
@@ -121,17 +161,7 @@ def get_files(path):
 			tmp = path + '/' + f + '/fastqc_data.txt'
 			if os.path.isfile(tmp):
 				fastqc_files.append(tmp)
-	return fastqc_files
-
-######
-def return_fastqcObject(path, file1, file2, sample, fastqc_bin):
-	##
-	path_to_sample = run_module_fastqc(path, file1, file2, sample, fastqc_bin)
-	fastqc_files = get_files(path_to_sample)
-	statistics, status = parse_fastqcFile(fastqc_files)
-	
-	return (fastqcObject(sample=sample, path=path, StatisticsFrame=statistics, StatusFrame=status))
-	
+	return (fastqc_files)
 
 ######
 def main():
