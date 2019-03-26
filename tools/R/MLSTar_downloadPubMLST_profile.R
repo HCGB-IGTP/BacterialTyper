@@ -23,3 +23,9 @@ if (is.null(opt$species)){
 ## load library
 library(MLSTar)
 downloadPubmlst_profile(org=opt$species, scheme=opt$scheme, dir=opt$dir_profile)
+
+#############
+## citation
+#############
+## Jolley KA, Bray JE, Maiden MCJ. A RESTful application programming interface for the PubMLST molecular typing and genome databases. Database: The Journal of Biological Databases and Curation. 2017;2017:bax060. doi:10.1093/database/bax060.
+## MLSTar citation

@@ -149,7 +149,8 @@ def generateTable(dataFrame, fileName):
 	
 	## color according to pass|warn|fail
 	colors = index_dataFrame.applymap(lambda x: 'green' if x== 'pass' else ('yellow' if x== 'warn' else ('red' if x=='fail' else 'white' )))
-	
+	## https://www.rapidtables.com/web/color/html-color-codes.html
+
 	tab = ax.table(
 		cellText=index_dataFrame.values,
 		#rowLabels=index_dataFrame.index.get_level_values(1), 

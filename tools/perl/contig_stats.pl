@@ -103,7 +103,8 @@ foreach my $keys (sort {$a<=>$b} keys %parts_array) {
 
 ##	Set	average   median N95	Count_Genomic_Contigs  		CountContigs_%  pb_this_set	pb_this_set_%	Reads_RNA_Count			 Reads_RNA_Count_%	Unmapped_contigs_Count				Unmapped_contigs_%							
 &printHeader("","#"); &printHeader(" Assembly Statistics ","#");  &printHeader("","#"); 
-my $csv_file = $name[0]."_stats.csv";
+my $path = join '/', @file[0..$#file-1];
+my $csv_file = $path."/".$name[0]."_stats.csv";
 print "Assembly Statisitcs for file: $fasta\n";
 print "Printing statistics in CSV file: $csv_file\n\n";
 print "## General Statistics ##\n";

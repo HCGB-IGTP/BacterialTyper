@@ -78,7 +78,8 @@ def get_symbolic_link (sample_list, path_to_samples, directory):
 ###############
 def system_call(cmd):	
 	## call system
-	## send command	
+	## send command
+	print ("[System: %s]" % cmd)
 	try:
 		subprocess.check_output(cmd, shell = True)
 		return ('OK')

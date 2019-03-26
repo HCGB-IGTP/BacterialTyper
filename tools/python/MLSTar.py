@@ -12,11 +12,19 @@ import re
 import sys
 from sys import argv
 from io import open
+import pandas as pd
+
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
+from pandas.plotting import table
+from matplotlib.backends.backend_pdf import PdfPages
 
 ## import my modules
 pythonDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(pythonDir)
 import functions
+import fastqc_caller
 
 configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
 sys.path.append(configDir)
@@ -27,6 +35,9 @@ MLSTarR_script = RscriptDir + '/MLSTar_call.R'
 MLSTarR_plot = RscriptDir + '/MLSTar_plot.R'
 MLSTarR_download_seq = RscriptDir + '/MLSTar_downloadPubMLST_seq.R'
 MLSTarR_download_prf = RscriptDir + '/MLSTar_downloadPubMLST_profile.R'
+
+## MLSTar available data
+MLSTar_species = os.path.dirname(os.path.realpath(__file__)) + '/../../data/MLSTar_species.txt'
 
 ######
 def run_MLSTar(species, scheme, name, path, fileGiven, threads):
@@ -64,6 +75,43 @@ def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threa
 ######
 def update_MLSTar_profile_alleles():
 	return("")
+	
+######
+def get_MLSTar_species():
+	# pandas from csv file
+	data = pd.read_csv(MLSTar_species, header=0, sep=",")
+	#print (data)
+
+	fileName = "MLSTar_species"
+	data.to_csv(fileName + '.txt', sep='\t')
+
+	## plot table
+	pdf_name = fileName + '.pdf'
+	pp = PdfPages(pdf_name)
+
+	fig,ax = plt.subplots()
+	fig.patch.set_visible(False)
+	
+	ax.axis('off')
+	ax.axis('tight')
+	
+	## color according to kingdom
+	colors = data.applymap(lambda x: 'palegreen' if x== 'bacteria' else ('lightyellow' if x== 'eukarya' else ('lightsalmon' if x=='other' else 'white' )))
+	## https://www.rapidtables.com/web/color/html-color-codes.html
+	
+	tab = ax.table(
+		cellText=data.values,
+		colLabels=data.columns,
+		cellColours =colors.values,
+		colWidths=[0.26 for x in data.columns],
+		loc='center', colLoc = 'center', rowLoc='left', cellLoc='center')
+	tab.auto_set_font_size(False)
+	tab.set_fontsize(5)
+
+	fig.tight_layout()	
+	pp.savefig()
+	plt.close()
+	pp.close()	
 
 ######
 def call_plot(results):
@@ -134,6 +182,7 @@ def download_PubMLST(profile_folder, scheme, seq_folder, name, rscript, species)
 		print ('+ Downloading sequences...')
 		cmd_seq = "%s %s --species %s --scheme %s --dir_seq %s" %(rscript, MLSTarR_download_seq, species, scheme, seq_folder)
 		callCode = functions.system_call(cmd_seq)	
+
 
 ######
 def main():

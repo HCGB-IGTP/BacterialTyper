@@ -1,116 +1,120 @@
-achromobacter
-abaumannii
-aeromonas
-aphagocytophilum
-arcobacter
-bcereus
-blicheniformis
-bsubtilis
-llactis_phage
-bbacilliformis
-bhenselae
-bordetella
-borrelia
-brachyspira
-brucella
-bcc
-bpseudomallei
-campylobacter_nonjejuni
-campylobacter
-calbicans
-cglabrata
-ctropicalis
-cmaltaromaticum
-chlamydiales
-cfreundii
-csinensis
-cbotulinum
-cdifficile
-csepticum
-cdiphtheriae
-cronobacter
-dnodosus
-edwardsiella
-ecloacae
-efaecalis
-efaecium
-fpsychrophilum
-gallibacterium
-hinfluenzae
-hparasuis
-hcinaedi
-helicobacter
-hsuis
-kaerogenes
-koxytoca
-kseptempunctata
-lsalivarius
-leptospira
-liberibacter
-mcanis
-mcaseolyticus
-mplutonius
-mabscessus
-mycobacteria
-magalactiae
-mbovis
-mhyopneumoniae
-mhyorhinis
-miowae
-mpneumoniae
-msynoviae
-neisseria
-otsutsugamushi
-orhinotracheale
-plarvae
-pmultocida
-ppentosaceus
-pdamselae
-psalmonis
-plasmid
-pgingivalis
-pacnes
-paeruginosa
-pfluorescens
-pputida
-ranatipestifer
-rhodococcus
-rmlst
-rmlst_kiosk
-salmonella
-sparasitica
-sinorhizobium
-smaltophilia
-saureus
-sepidermidis
-shaemolyticus
-shominis
-spseudintermedius
-oralstrep
-sagalactiae
-sbsec
-scanis
-sdysgalactiae
-sgallolyticus
-spneumoniae
-spyogenes
-ssuis
-sthermophilus
-suberis
-szooepidemicus
-streptomyces
-taylorella
-tenacibaculum
-test
-tpallidum
-tvaginalis
-ureaplasma
-vcholerae
-vibrio
-vparahaemolyticus
-vtapetis
-vvulnificus
-wolbachia
-xfastidiosa
-yersinia
-yruckeri
+Kingdom,MLSTar name,Species description
+bacteria,achromobacter,Achromobacter
+bacteria,abaumannii,Acinetobacter baumannii
+bacteria,aeromonas,Aeromonas spp.
+bacteria,aphagocytophilum,Anaplasma phagocytophilum
+bacteria,arcobacter,Arcobacter spp.
+bacteria,bcereus,Bacillus cereus
+bacteria,blicheniformis,Bacillus licheniformis
+bacteria,bsubtilis,Bacillus subtilis
+bacteria,bordetella,Bordetella spp.
+bacteria,borrelia,Borrelia spp.
+bacteria,bbacilliformis,Bartonella bacilliformis
+bacteria,bhenselae,Bartonella henselae
+bacteria,brachyspira,Brachyspira spp.
+bacteria,brucella,Brucella spp.
+bacteria,bcc,Burkholderia cepacia complex
+bacteria,bpseudomallei,Burkholderia pseudomallei
+bacteria,campylobacter,Campylobacter spp.
+bacteria,liberibacter,Liberibacter solanacearum
+bacteria,cmaltaromaticum,Carnobacterium maltaromaticum
+bacteria,chlamydiales,Chlamydiales spp.
+bacteria,cfreundii,Citrobacter freundii
+bacteria,cbotulinum,Clostridium botulinum
+bacteria,cdifficile,Clostridium difficile
+bacteria,csepticum,Clostridium septicum
+bacteria,cdiphtheriae,Corynebacterium diphtheriae
+bacteria,cronobacter,Cronobacter spp.
+bacteria,dnodosus,Dichelobacter nodosus
+bacteria,ecloacae,Enterobacter cloacae
+bacteria,edwardsiella,Edwardsiella spp.
+bacteria,efaecalis,Enterococcus faecalis
+bacteria,efaecium,Enterococcus faecium
+bacteria,escherichia,Escherichia spp.
+bacteria,fpsychrophilum,Flavobacterium psychrophilum
+bacteria,gallibacterium,Gallibacterium anatis
+bacteria,hinfluenzae,Haemophilus influenzae
+bacteria,hparasuis,Haemophilus parasuis
+bacteria,hcinaedi,Helicobacter cinaedi
+bacteria,helicobacter,Helicobacter pylori
+bacteria,hsuis,Helicobacter suis
+bacteria,kaerogenes,Klebsiella aerogenes
+bacteria,koxytoca,Klebsiella oxytoca
+bacteria,lsalivarius,Lactobacillus salivarius
+bacteria,leptospira,Leptospira spp.
+bacteria,mcanis,Macrococcus canis
+bacteria,mcaseolyticus,Macrococcus caseolyticus
+bacteria,mhaemolytica,Mannheimia haemolytica
+bacteria,mplutonius,Melissococcus plutonius
+bacteria,mycobacteria,Mycobacteria spp.
+bacteria,mabscessus,Mycobacterium abscessus complex
+bacteria,magalactiae,Mycoplasma agalactiae
+bacteria,mbovis,Mycoplasma bovis
+bacteria,mhyopneumoniae,Mycoplasma hyopneumoniae
+bacteria,mhyorhinis,Mycoplasma hyorhinis
+bacteria,miowae,Mycoplasma iowae
+bacteria,mpneumoniae,Mycoplasma pneumoniae
+bacteria,msynoviae,Mycoplasma synoviae
+bacteria,neisseria,Neisseria spp.
+bacteria,oralstrep,Oral Streptococcus spp.
+bacteria,otsutsugamushi,Orientia tsutsugamushi
+bacteria,orhinotracheale,Ornithobacterium rhinotracheale
+bacteria,plarvae,Paenibacillus larvae
+bacteria,pmultocida,Pasteurella multocida
+bacteria,ppentosaceus,Pediococcus pentosaceus
+bacteria,pdamselae,Photobacterium damselae
+bacteria,psalmonis,Piscirickettsia salmonis
+bacteria,pgingivalis,Porphyromonas gingivalis
+bacteria,pacnes,Propionibacterium acnes
+bacteria,paeruginosa,Pseudomonas aeruginosa
+bacteria,pfluorescens,Pseudomonas fluorescens
+bacteria,pputida,Pseudomonas putida
+bacteria,rhodococcus,Rhodococcus equi
+bacteria,ranatipestifer,Riemerella anatipestifer
+bacteria,sinorhizobium,Sinorhizobium spp.
+bacteria,salmonella,Salmonella spp.
+bacteria,saureus,Staphylococcus aureus
+bacteria,sepidermidis,Staphylococcus epidermidis
+bacteria,shaemolyticus,Staphylococcus haemolyticus
+bacteria,shominis,Staphylococcus hominis
+bacteria,spseudintermedius,Staphylococcus pseudintermedius
+bacteria,smaltophilia,Stenotrophomonas maltophilia
+bacteria,sagalactiae,Streptococcus agalactiae
+bacteria,sbsec,Streptococcus bovis/equinus complex
+bacteria,scanis,Streptococcus canis
+bacteria,sdysgalactiae,Streptococcus dysgalactiae
+bacteria,sgallolyticus,Streptococcus gallolyticus
+bacteria,spneumoniae,Streptococcus pneumoniae
+bacteria,spyogenes,Streptococcus pyogenes
+bacteria,ssuis,Streptococcus suis
+bacteria,sthermophilus,Streptococcus thermophilus
+bacteria,suberis,Streptococcus uberis
+bacteria,szooepidemicus,Streptococcus zooepidemicus
+bacteria,streptomyces,Streptomyces spp.
+bacteria,taylorella,Taylorella spp.
+bacteria,tenacibaculum,Tenacibaculum spp.
+bacteria,tpallidum,Treponema pallidum subsp. pallidum
+bacteria,ureaplasma,Ureaplasma spp.
+bacteria,vibrio,Vibrio spp.
+bacteria,vcholerae,Vibrio cholerae
+bacteria,vparahaemolyticus,Vibrio parahaemolyticus
+bacteria,vtapetis,Vibrio tapetis
+bacteria,vvulnificus,Vibrio vulnificus
+bacteria,wolbachia,Wolbachia spp.
+bacteria,xfastidiosa,Xylella fastidiosa
+bacteria,ypseudotuberculosis,Yersinia pseudotuberculosis
+bacteria,yersinia,Yersinia spp.
+bacteria,yruckeri,Yersinia ruckeri
+eukarya,afumigatus,Aspergillus fumigatus
+eukarya,blastocystis,Blastocystis sp.
+eukarya,calbicans,Candida albicans
+eukarya,cglabrata,Candida glabrata
+eukarya,ckrusei,Candida krusei
+eukarya,ctropicalis,Candida tropicalis
+eukarya,csinensis,Clonorchis sinensis
+eukarya,kseptempunctata,Kudoa septempunctata
+eukarya,sparasitica,Saprolegnia parasitica
+eukarya,tvaginalis,Trichomonas vaginalis
+other,bacteriophages,Bacteriophage MLST
+other,bburgdorferi,Borrelia burgdorferi MLSA
+other,plasmid,Plasmid MLST

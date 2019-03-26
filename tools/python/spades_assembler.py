@@ -14,6 +14,7 @@ import sys
 from sys import argv
 from io import open
 from Bio import SeqIO
+import shutil
 
 ## import my modules
 pythonDir = os.path.dirname(os.path.realpath(__file__))
@@ -26,9 +27,15 @@ import config
 
 from blast_parser import parse
 
-perlDir = os.path.dirname(os.path.realpath(__file__)) + '../perl'
+perlDir = os.path.dirname(os.path.realpath(__file__)) + '/../perl'
 sys.path.append(perlDir)
 contig_stats_script = perlDir + '/contig_stats.pl'
+
+
+######
+def generate_DataFrame_database():
+	## ID,Folder,Genus,species,name,NCBI_assembly_ID,Genome,GFF,Proteins,Plasmids_number,Plasmids_NCBI_id,Plasmids
+	return()
 
 ######
 def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads):
@@ -39,12 +46,12 @@ def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads)
 	message_return = run_SPADES(path, file1, file2, name, SPADES_bin, options, threads)
 
 	if 	message_return == 'FAIL':	
-		print ("***ERROR: plasmidSPADES failed for sample " + sample)	
+		print ("\n\n***ERROR: plasmidSPADES failed for sample " + sample)	
 		exit()
 
 	scaffolds_retrieved = get_files(path + '/' + name)
 	if scaffolds_retrieved == 'FAIL':	
-		print ('***ATTENTION: No plasmids assembly...')
+		print ('\n\n***ATTENTION: No plasmids assembly...')
 
 	return (scaffolds_retrieved)
 
@@ -55,12 +62,12 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 	options = ''
 	message_return = run_SPADES(path, file1, file2, sample, SPADES_bin, options, threads)
 	if 	message_return == 'FAIL':	
-		print ("***ERROR: SPADES failed for sample " + sample)
+		print ("\n\n***ERROR: SPADES failed for sample " + sample)
 		exit()
 
 	scaffolds_retrieved = get_files(path + '/' + sample)
 	if scaffolds_retrieved == 'FAIL':	
-		print ('***ERROR: No scaffolds assembly...')
+		print ('\n\n***ERROR: No scaffolds assembly...')
 		exit()
 	
 	return (scaffolds_retrieved)
@@ -75,11 +82,12 @@ def run_SPADES(path, file1, file2, name, SPADES_bin, options, threads):
 	if os.path.isfile(logFile):
 		return ('OK')
 	
-	print ("+ Calling fastqc for samples...")	
+	print ("+ Calling spades assembly for sample...", name)	
 	cmd_SPADES = '%s %s-t %s -o %s -1 %s -2 %s > %s 2> %s' %(SPADES_bin, options, threads, sample_folder, file1, file2, logFile, logFile)
 	print ('[ System Call: ' + cmd_SPADES + ' ]')
 	## send command	
-	return (functions.system_call( cmd_SPADES ))
+	#return (functions.system_call( cmd_SPADES ))
+	return ('OK')
 
 ######
 def get_files(path):
@@ -116,23 +124,26 @@ def run_module_SPADES(name, path, file1, file2, threads):
 	path_to_plasmids = run_SPADES_plasmid_assembly(folder, file1, file2, sample, SPADES_bin, threads)
 	
 	## discard plasmids from main
-	new_contigs, new_plasmids = discardPlasmids(path_to_contigs, path_to_plasmids, folder)
+	new_contigs, new_plasmids = discardPlasmids(path_to_contigs, path_to_plasmids, folder, sample)
 	
 	## contig stats
 	contig_stats(new_contigs, new_plasmids)	
 
 ######
-def discardPlasmids(contigs, plasmids, path):
+def discardPlasmids(contigs, plasmids, path, sample):
 	
-	print ('+ Check if plasmids also reported in main assembly...')
-
 	## check if any plasmids
 	if (plasmids == 'FAIL'):
-		print ('+ No plasmids assembled.')
-		print ('+ No need to discard any plasmids from the main assembly')
-		return (contigs, plasmids)
+		#print ('+ No plasmids assembled.')
+		#print ('+ No need to discard any plasmids from the main assembly')
+		
+		contig_out_file = os.path.dirname(path) + '/' + sample + '/' + sample + '_chromosome.fna'
+		shutil.copy(contigs, contig_out_file)
+		return (contig_out_file, plasmids)
 	
 	## discard 
+	print ('+ Check if any plasmids are also reported in main assembly...')
+
 	folder = functions.create_subfolder('blast_search', path)
 	
 	## generate blastdb for genome
@@ -215,17 +226,23 @@ def discardPlasmids(contigs, plasmids, path):
 	print ('There are %s sequences to discard from main assembly identified as plasmids' %items)
 
 	## print filtered contigs
-	contig_out_file = os.path.dirname(contigs) + '/' + os.path.splitext( os.path.basename(contigs) )[0] + '_chromosome.fasta'
+	contig_out_file = os.path.dirname(path) + '/' + sample + '/' + sample + '_chromosome.fna'
+	plasmid_out_file = os.path.dirname(path) + '/' + sample + '/' + sample + '_plasmid.fna'
+		
 	contig_out_file_handle = open(contig_out_file, 'w')
+	plasmid_out_file_handle = open(plasmid_out_file, 'w')
+	
 	contig_items = SeqIO.parse(contigs, 'fasta')
 	for seq in contig_items:
 		if seq.id in sequences2discard:
-			print('')
+			plasmid_out_file_handle.write(seq.format("fasta"))
+			plasmid_out_file_handle.write('\n')
 		else:
 			contig_out_file_handle.write(seq.format("fasta"))
 			contig_out_file_handle.write('\n')
+
 	contig_out_file_handle.close()
-	return (contig_out_file, plasmids)
+	return (contig_out_file, plasmid_out_file)
 
 ######
 def contig_stats(new_contigs, new_plasmids):
@@ -262,8 +279,7 @@ def contig_stats(new_contigs, new_plasmids):
 	
 ######
 def	help_options():
-	print ("\nUSAGE: python %s file1 file2 name SPADES_bin threads\n"  %os.path.realpath(__file__))
-
+	print ("\nUSAGE: python %s file1 file2 name SPADES_bin threads path\n"  %os.path.realpath(__file__))
 
 ######
 def main():
@@ -281,9 +297,9 @@ def main():
 	sample = argv[3]
 	SPADES_bin = argv[4]
 	threads = int(argv[5])
+	path = 	argv[6]
 
-	path = os.path.abspath('.')		
-	folder = functions.create_subfolder('assembly', path)
+	folder = functions.create_subfolder(sample, path)
 
 	## assembly main 
 	path_to_contigs = run_SPADES_assembly(folder, file1, file2, sample, SPADES_bin, threads)
@@ -292,7 +308,7 @@ def main():
 	path_to_plasmids = run_SPADES_plasmid_assembly(folder, file1, file2, sample, SPADES_bin, threads)
 
 	## discard plasmids from main
-	new_contigs, new_plasmids = discardPlasmids(path_to_contigs, path_to_plasmids, folder)
+	new_contigs, new_plasmids = discardPlasmids(path_to_contigs, path_to_plasmids, folder, sample)
 	
 	## contig stats
 	contig_stats(new_contigs, new_plasmids)	
