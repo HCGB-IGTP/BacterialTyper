@@ -26,7 +26,7 @@ import config
 
 ######
 def	help_options():
-	print ("\nUSAGE:\npython %s Outfolder folder_R1 folder_R2 trimmomatic threads trimmomatic_adapters\n"  %os.path.abspath(argv[0]))
+	print ("\nUSAGE:\npython %s Outfolder file_R1 file_R2 trimmomatic threads trimmomatic_adapters sample_name\n"  %os.path.abspath(argv[0]))
 
 ######	
 def trimmo_module(file_R1, file_R2, path_name, sample_name, threads):
@@ -54,7 +54,7 @@ def trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threa
 	orphan_R1 = sample_folder + '/' + sample_name + '_orphan_R1.fastq'
 	orphan_R2 = sample_folder + '/' + sample_name + '_orphan_R2.fastq'
 		
-	cmd = "java -jar %s PE -threads %s -phred33 -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24" %(trimmomatic_jar, threads, log_file, folder1 + '/' + files_R1, folder2 + '/' + files_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters)
+	cmd = "java -jar %s PE -threads %s -phred33 -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24" %(trimmomatic_jar, threads, log_file, file_R1, file_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters)
 	return(functions.system_call(cmd))	
 
 ######
@@ -74,11 +74,8 @@ def main():
 	trimmomatic_jar = argv[4]
 	threads = argv[5]
 	trimmomatic_adapters = os.path.abspath(argv[6]) ##"/imppc/labs/lslab/share/data/references/Trimmomatic_adapters.fa"
+	sample_name = argv[7]
 
-	## get name
-	sampleR1_search = re.search(r"(.*)_R1(.*)", file_R1)
-	sample_name = sampleR1_search.group(1)
-	
 	## call
 	trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threads, trimmomatic_adapters)
 		
