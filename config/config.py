@@ -6,26 +6,37 @@ EXECUTABLES = {
 	'fastqc': '/software/debian-8/bin/fastqc',
 	'busco_bin': '',
 	'Phispy_folder': '/imppc/labs/lslab/jsanchez/git_repo/PhiSpy',
-	'Rscript': '/usr/bin/Rscript'
+	'prokka': '/software/debian-8/bin/prokka',
+	'trimmomatic':'',
+	'Rscript': '/usr/bin/Rscript',
+	'java':''
 }
+
 PARAMETERS = {
 	## Parameters
 	'threads':2,
 }
-BUSCO_datasets = {
-	'bacteria': '/imppc/labs/lslab/jsanchez/software/BUSCO/datasets/bacteria_odb9',
-	'firmicutes': '/imppc/labs/lslab/jsanchez/software/BUSCO/datasets/firmicutes_odb9'
+
+DATA = {
+	## database generated
+	'database':'',
+
+	## BUSCO datasets
+	'busco_bacteria': '/imppc/labs/lslab/jsanchez/software/BUSCO/datasets/bacteria_odb9',
+	'busco_firmicutes': '/imppc/labs/lslab/jsanchez/software/BUSCO/datasets/firmicutes_odb9',
+
+	## Virulence Factor Database
+	'VFDB_VFs':'',
+	'VFDB_Comparative_tables':'',
+	'VFDB_set_folder':'',
+
+	## MLSTar
+	'MLSTar_profile_folder': '',
+	'MLSTar_sequence_folder': '',
+
+	## trimmomatic
+	'trimmomatic_adapters':'',
+
 }
-MLSTar = {
-	'profile_folder': '',
-	'sequence_folder': ''
-}
-VFDB = {
-	'VFs':'',
-	'Comparative_tables_from_VFDB':'',
-	'VFDB_set_folder':''	
-}
-## Variables
-## Others
 
 

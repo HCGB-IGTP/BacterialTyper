@@ -20,10 +20,6 @@ pythonDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(pythonDir)
 import functions
 
-configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
-sys.path.append(configDir)
-import config
-
 ############
 def printNote():
 	print ("\n******\nNOTE:\nCore dataset (dataset_A) includes genes associated with experimentally verified VFs only.")

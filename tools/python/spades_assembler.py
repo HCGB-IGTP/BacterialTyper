@@ -21,6 +21,7 @@ pythonDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(pythonDir)
 import functions
 
+## import configuration
 configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
 sys.path.append(configDir)
 import config
@@ -30,12 +31,7 @@ from blast_parser import parse
 perlDir = os.path.dirname(os.path.realpath(__file__)) + '/../perl'
 sys.path.append(perlDir)
 contig_stats_script = perlDir + '/contig_stats.pl'
-
-
-######
-def generate_DataFrame_database():
-	## ID,Folder,Genus,species,name,NCBI_assembly_ID,Genome,GFF,Proteins,Plasmids_number,Plasmids_NCBI_id,Plasmids
-	return()
+rename_seqs_script = perlDir + '/rename_FASTA_seqs.pl'
 
 ######
 def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads):
@@ -124,7 +120,16 @@ def run_module_SPADES(name, path, file1, file2, threads):
 	path_to_plasmids = run_SPADES_plasmid_assembly(folder, file1, file2, sample, SPADES_bin, threads)
 	
 	## discard plasmids from main
-	new_contigs, new_plasmids = discardPlasmids(path_to_contigs, path_to_plasmids, folder, sample)
+	tmp_contigs, tmp_plasmids = discardPlasmids(path_to_contigs, path_to_plasmids, folder, sample)
+	
+	## rename fasta sequences
+	new_contigs = tmp_contigs.split("fna.tmp") + '.fna'	
+	rename_contigs(tmp_contigs, "scaffolds_chr", new_contigs)
+	
+	new_plasmids=""
+	if os.path.isfile(tmp_plasmids):
+		new_plasmids = tmp_contigs.split("fna.tmp") + '.fna'	
+		rename_contigs(tmp_plasmids, "scaffolds_plasmids", new_plasmids)
 	
 	## contig stats
 	contig_stats(new_contigs, new_plasmids)	
@@ -137,7 +142,7 @@ def discardPlasmids(contigs, plasmids, path, sample):
 		#print ('+ No plasmids assembled.')
 		#print ('+ No need to discard any plasmids from the main assembly')
 		
-		contig_out_file = os.path.dirname(path) + '/' + sample + '/' + sample + '_chromosome.fna'
+		contig_out_file = os.path.dirname(path) + '/' + sample + '/' + sample + '_chromosome.fna.tmp'
 		shutil.copy(contigs, contig_out_file)
 		return (contig_out_file, plasmids)
 	
@@ -226,8 +231,8 @@ def discardPlasmids(contigs, plasmids, path, sample):
 	print ('There are %s sequences to discard from main assembly identified as plasmids' %items)
 
 	## print filtered contigs
-	contig_out_file = os.path.dirname(path) + '/' + sample + '/' + sample + '_chromosome.fna'
-	plasmid_out_file = os.path.dirname(path) + '/' + sample + '/' + sample + '_plasmid.fna'
+	contig_out_file = os.path.dirname(path) + '/' + sample + '/' + sample + '_chromosome.fna.tmp'
+	plasmid_out_file = os.path.dirname(path) + '/' + sample + '/' + sample + '_plasmid.fna.tmp'
 		
 	contig_out_file_handle = open(contig_out_file, 'w')
 	plasmid_out_file_handle = open(plasmid_out_file, 'w')
@@ -242,6 +247,7 @@ def discardPlasmids(contigs, plasmids, path, sample):
 			contig_out_file_handle.write('\n')
 
 	contig_out_file_handle.close()
+	plasmid_out_file_handle.close()	
 	return (contig_out_file, plasmid_out_file)
 
 ######
@@ -249,7 +255,6 @@ def contig_stats(new_contigs, new_plasmids):
 	
 	## generate contig statistics
 	print ('+ Get assembly statistics:...\n')
-
 	print (' + Main assembly:')
 	contig_out = new_contigs + '_stats.txt'
 	cmd_stats_chromosome = 'perl %s %s > %s' %(contig_stats_script, new_contigs, contig_out)
@@ -276,6 +281,12 @@ def contig_stats(new_contigs, new_plasmids):
 		plasmid_file_read = plasmid_out_file.read()
 		plasmid_out_file.close()
 		print(plasmid_file_read)	
+	
+######
+def rename_contigs(fasta_file, name, new_fasta):
+	## perl tools/perl/rename_FASTA_seqs.pl fasta_file name_file name2add ADD|REPLACE|BEGIN|ADD_BEGIN
+	perl_call = "%s %s %s %s REPLACE" %(rename_seqs_script, fasta_file, new_fasta, name)
+	return (functions.system_call(perl_call))
 	
 ######
 def	help_options():
@@ -308,7 +319,18 @@ def main():
 	path_to_plasmids = run_SPADES_plasmid_assembly(folder, file1, file2, sample, SPADES_bin, threads)
 
 	## discard plasmids from main
-	new_contigs, new_plasmids = discardPlasmids(path_to_contigs, path_to_plasmids, folder, sample)
+	tmp_contigs, tmp_plasmids = discardPlasmids(path_to_contigs, path_to_plasmids, folder, sample)
+	
+	## rename fasta sequences
+	new_contigs_list = tmp_contigs.split(".tmp")
+	new_contigs = new_contigs_list[0]
+	rename_contigs(tmp_contigs, "scaffolds_chr", new_contigs)
+	
+	new_plasmids=""
+	if os.path.isfile(tmp_plasmids):
+		new_plasmids_list = tmp_plasmids.split(".tmp")
+		new_plasmids = new_plasmids_list[0]
+		rename_contigs(tmp_plasmids, "scaffolds_plasmids", new_plasmids)
 	
 	## contig stats
 	contig_stats(new_contigs, new_plasmids)	

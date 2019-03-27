@@ -155,7 +155,7 @@ def update_db_data_file(data, folder):
 ######
 def update_database_user_data(data, folder):
 
-	print ("+ Updating information from assembly data...")
+	print ("+ Updating information from user data...")
 	data2update = get_data(folder + '/database.csv')
 	data2update = data2update.set_index('ID')
 	
