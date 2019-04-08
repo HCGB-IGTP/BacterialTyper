@@ -1,5 +1,8 @@
 #usr/bin/env python
-
+'''
+Jose F. Sanchez
+Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+'''
 ## useful imports
 import time
 import io

@@ -26,7 +26,7 @@ pip install -r ./config/python_requirements.txt
 ## pip install -I --isolated wget
 ## pip install -I --isolated xtract
 ## pip install -I --isolated ncbi-genome-download
-## pip install -I --isolated matplotlib
+## pip install -I --isolated 'matplotlib==2.2.4'
 ## pip install -I --isolated multiqc
 ##
 ## pip freeze > requirements.txt

@@ -43,6 +43,7 @@ def trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threa
 	print ('\t-', file_R2)
 		
 	sample_folder = path_name + '/' + sample_name
+	trimmo_log = path_name + '/' + sample_name + '.log'
 
 	## create folder
 	functions.create_folder(path_name)
@@ -54,7 +55,7 @@ def trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threa
 	orphan_R1 = sample_folder + '/' + sample_name + '_orphan_R1.fastq'
 	orphan_R2 = sample_folder + '/' + sample_name + '_orphan_R2.fastq'
 		
-	cmd = "java -jar %s PE -threads %s -phred33 -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24" %(trimmomatic_jar, threads, log_file, file_R1, file_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters)
+	cmd = "java -jar %s PE -threads %s -phred33 -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 > %s" %(trimmomatic_jar, threads, log_file, file_R1, file_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters, trimmo_log)
 	return(functions.system_call(cmd))	
 
 ######
