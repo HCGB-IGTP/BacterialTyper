@@ -21,6 +21,10 @@ import functions
 from Bio import SeqIO
 import shutil
 
+## import configuration
+dataDir = os.path.dirname(os.path.realpath(__file__)) + '/../../data/'
+plasmid_groups = dataDir + '/available_plasmids_data.txt'
+
 ######
 def NCBIdownload(data, data2download, folder):	
 	
@@ -216,7 +220,31 @@ def update_database_user_data(data, folder):
 	dataUpdated = update_db_data_file(data2update, folder)
 	dataUpdated.to_csv(folder + "/database.csv")
 	return(folder + "/database.csv")
+
+
+def plasmidID_db_NCBI(path, name):
+
+	plasmid_data = functions.create_subfolder("plasmid_data", path)
+	## NCBI Genome Plasmids ftp site.
+	functions.wget_download("ftp://ftp.ncbi.nlm.nih.gov/genomes/GENOME_REPORTS/plasmids.txt", plasmid_data)
 	
+	plasmids_info = plasmid_data + '/plasmids.txt'
+	plasmids = get_data(plasmids_info, '\t')
+	plasmids_fna = plasmid_data + '/plasmids_database.fna'
+	
+	## get desirable group
+	if (name == 'all'):
+		plasmids_filter = plasmids
+	else:
+		plasmids_filter = plasmids.loc[plasmids['SubGroup'] == name]
+
+	## loop the table and download nucleotide sequences
+	for index, entry in plasmids_filter.iterrows():
+		#print (plasmids_filter.iloc[index])
+		sequence = plasmids_filter.loc[index]['RefSeq']
+		cmd='curl -s "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&amp;id=' + sequence + '&amp;retmode=text&amp;rettype=fasta" >> ' + plasmids_fna
+		functions.system_call(cmd)	
+
 ######
 def get_files_folder(folder):
 	## check if files are gunzip
@@ -245,9 +273,9 @@ def get_files_folder(folder):
 	return (genome, prot, gff, plasmids, number, "::".join(plasm_ids))
 
 ######
-def get_data(ID_file):	
+def get_data(ID_file, SEP):	
 	print ("+ Obtaining information from file: ", ID_file)
-	data = pd.read_csv(ID_file, header=0)
+	data = pd.read_csv(ID_file, header=0, sep=SEP)
 	print ("\n+ Data:")
 	print (data)
 	print ("\n\n")	
@@ -256,7 +284,7 @@ def get_data(ID_file):
 ######
 def init_DB(ID_file, folder):
 	## get file information
-	strains2get = get_data(ID_file)	
+	strains2get = get_data(ID_file, ',')	
 	print ("+ Create the database in folder: \n", folder)	
 	data2download=pd.DataFrame(columns=('ID','folder','genus','species','name','genome','GFF','proteins','plasmids_number','plasmids_ID','plasmids'))
 	
@@ -279,39 +307,61 @@ def main():
 	## get arguments provided
 	option = argv[1]
 	folder = os.path.abspath(argv[2])
-	ID_file = os.path.abspath(argv[3])
 	
 	if (option == "init_db"):
+		ID_file = os.path.abspath(argv[3])
 		init_DB(ID_file, folder)
 	elif (option == "update_NCBI"):
+		ID_file = os.path.abspath(argv[3])
 		update_database(ID_file, folder)
 	elif (option == "update_user_data"):
+		ID_file = os.path.abspath(argv[3])
 		update_database_user_data(ID_file, folder)
+	elif (option == "plasmidID_db_NCBI"):
+		plasmidID_db_NCBI(folder, argv[3])
+	elif (option == "plasmidID_user_data"):
+		plasmidID_user_data(folder)
 
 ######
 def help_options():
-	print ("\nUSAGE: python %s option database_folder ID_file\n"  %os.path.realpath(__file__))
-	print ("---------------")
-	print ("+ Option: init_db | update_NCBI | update_user_data")
+	print ("\nUSAGE: python %s option database_folder [ID_file]\n"  %os.path.realpath(__file__))
+	print ("+ Option:\n\t|-init_db\n\t|-update_NCBI\n\t|-update_user_data\n\t|-plasmidID_db_NCBI\n\t|-plasmidID_user_data\n")
 	print ("+ database_folder: path to the database [if does not exist will be created]")
-	print ("+ ID_file is a CSV file containing different values according to the option:")
+	print ("\n+ ID_file is a CSV file containing different values according to the option:")
 	print ("\n#####################")
-	print ("Option 1: init_db & update_NCBI: genus,species,name,NCBI_assembly_ID")	
+	print (" Option 1: init_db & update_NCBI:")
+	print ("#####################")
+	print ("ID_file format: genus,species,name,NCBI_assembly_ID")	
 	print ("---- Example 1 -------")
 	print ("genus,species,name,NCBI_assembly_ID")
 	print ("Staphylococcus,aureus,MRSA252,GCx_0000001")
 	print ("Staphylococcus,epidermis,strain2,GCx_0000002")
 	print ("Staphylococcus,aureus,strain3,GCx_0000003")
 	print ("----------------------")
+	print ("\n#####################")
+	print (" Option 2: update_own_data:")
 	print ("#####################")
-	print ("\nOption 2: update_own_data: ID,folder,genus,species,name")	
+	print ("ID_file format: ID,folder,genus,species,name")	
 	print ("** If genus,species or names is not known just leave it blank")
 	print ("---- Example 2 -------")	
 	print ("ID,folder,genus,species,name")
 	print ("sample1,/path/to/spades_assembly_folder1/,,,")
 	print ("sample2,/path/to/spades_assembly_folder2/,,,")
 	print ("----------------------")
-	print ("#####################\n")
+	print ("\n#####################")
+	print (" Option 3: plasmidID_db_NCBI")
+	print ("#####################")
+	print ("+ No ID_file provided. ")
+	print ("+ Provide instead any of the groups below or 'all':")
+	get_data(plasmid_groups, ',')
+	print ("----------------------")
+	print ("\n#####################")
+	print (" Option 4: plasmidID_user_data")
+	print ("#####################")
+	print ("+ No ID_file provided. ")
+	print ("+ Provide word: user. Plasmids previously identified from user samples would be added to the dabase generated for plasmidID identification.")
+	print ("----------------------")
+	
 		
 ######
 '''******************************************'''

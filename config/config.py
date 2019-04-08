@@ -9,7 +9,9 @@ EXECUTABLES = {
 	'prokka': '/software/debian-8/bin/prokka',
 	'trimmomatic':'',
 	'Rscript': '/usr/bin/Rscript',
-	'java':''
+	'java':'',
+	'kma':'/imppc/labs/lslab/jsanchez/git_repo/KmerFinder/kma',
+	'plasmidID':'/imppc/labs/lslab/jsanchez/git_repo/plasmidID/plasmidID.sh'
 }
 
 PARAMETERS = {
