@@ -1,0 +1,10 @@
+blastn
+bowtie2
+cd-hit-est
+bedtools
+prokka
+samtools
+circos
+plasmidID
+spades
+mummer

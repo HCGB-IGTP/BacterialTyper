@@ -16,20 +16,19 @@ from io import open
 from Bio import SeqIO
 import shutil
 
-## import my modules
-pythonDir = os.path.dirname(os.path.realpath(__file__))
+## import modules
+pythonDir = os.path.dirname(os.path.realpath(__file__)) + '/../tools/python'
 sys.path.append(pythonDir)
 import functions
+from blast_parser import parse
 
-## import configuration
-configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
+## config
+configDir = os.path.dirname(os.path.realpath(__file__)) + '/../config/'
 sys.path.append(configDir)
 import config
 
-from blast_parser import parse
-
+## perl scripts
 perlDir = os.path.dirname(os.path.realpath(__file__)) + '/../perl'
-sys.path.append(perlDir)
 contig_stats_script = perlDir + '/contig_stats.pl'
 rename_seqs_script = perlDir + '/rename_FASTA_seqs.pl'
 
@@ -80,10 +79,7 @@ def run_SPADES(path, file1, file2, name, SPADES_bin, options, threads):
 	
 	print ("+ Calling spades assembly for sample...", name)	
 	cmd_SPADES = '%s %s-t %s -o %s -1 %s -2 %s > %s 2> %s' %(SPADES_bin, options, threads, sample_folder, file1, file2, logFile, logFile)
-	print ('[ System Call: ' + cmd_SPADES + ' ]')
-	## send command	
-	#return (functions.system_call( cmd_SPADES ))
-	return ('OK')
+	return(functions.system_call(cmd_SPADES))
 
 ######
 def get_files(path):
@@ -149,31 +145,16 @@ def discardPlasmids(contigs, plasmids, path, sample):
 	## discard 
 	print ('+ Check if any plasmids are also reported in main assembly...')
 
-	folder = functions.create_subfolder('blast_search', path)
+	folder = functions.create_subfolder('blast_search', path)	
 	
-	## generate blastdb for genome
-	makeblastDBexe = config.EXECUTABLES['makeblastdb']
+	## makeblastDB
 	DBname = folder + '/mainAssembly'
-	cmd_makeblast = "%s -in %s -input_type fasta -dbtype %s -out %s" %(makeblastDBexe, contigs, 'nucl', DBname)
-	print ('[ System Call: ' + cmd_makeblast + ' ]')
-	code = functions.system_call(cmd_makeblast)
-
-	if (code == 'FAIL'):
-		print ('****ERROR: Some error happened during the makeblastDB command')
-		print (cmd_makeblast)
-		exit()
+	functions.makeblastdb(dbName, contigs)
 	
-	## blastn plasmids vs contigs
-	blastnexe = config.EXECUTABLES['blastn']
+	## blastn command
 	outFile = folder + '/blastn_output.txt'
-	cmd_blastn = "%s -db %s -query %s -out %s -evalue 1e-20 -outfmt \'6 std qlen slen\'" %(blastnexe, DBname, plasmids, outFile )
-	print ('[ System Call: ' + cmd_blastn + ' ]')
-	codeBlastn = functions.system_call(cmd_blastn)
-	
-	if (codeBlastn == 'FAIL'):
-		print ('****ERROR: Some error happened during the blastn command')
-		print (cmd_blastn)
-		exit()
+	threads = 1
+	functions.blastn(outFile, dbName, plasmids, threads)
 	
 	########################
 	## parseBlast results

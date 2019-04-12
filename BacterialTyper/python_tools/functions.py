@@ -14,6 +14,12 @@ import wget
 from datetime import datetime
 from xtract import xtract
 from Bio import SeqIO
+from termcolor import colored
+
+## import configuration
+configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
+sys.path.append(configDir)
+import config
 
 ###############   
 def gettime (start_time):
@@ -82,12 +88,12 @@ def get_symbolic_link (sample_list, path_to_samples, directory):
 def system_call(cmd):	
 	## call system
 	## send command
-	print ("[System: %s]" % cmd)
+	print (colored("[** System: %s **]" % cmd, 'green'))
 	try:
 		subprocess.check_output(cmd, shell = True)
 		return ('OK')
 	except subprocess.CalledProcessError as err:
-		print (err.output)
+		print (colored(err.output, 'red'))
 		return ('FAIL')
 
 ###############
@@ -114,4 +120,50 @@ def subset_fasta(ident, fasta, out):
 ###############
 def extract(fileGiven):
 	xtract(fileGiven, all=True)
+###############
 
+###############
+def makeblastdb(DBname, fasta):
+	## generate blastdb for genome
+	makeblastDBexe = config.EXECUTABLES['makeblastdb']
+	
+	if (os.path.isfile(DBname + '.nhr')):
+		print ("+ BLAST database is already generated...")
+	else:
+		cmd_makeblast = "%s -in %s -input_type fasta -dbtype %s -out %s" %(makeblastDBexe, fasta, 'nucl', DBname)
+		code = system_call(cmd_makeblast)
+
+		if (code == 'FAIL'):
+			print (colored('****ERROR: Some error happened during the makeblastDB command', 'red'))
+			print (cmd_makeblast)
+			exit()
+	
+###############
+
+###############	
+def blastn(outFile, DBname, fasta, threads):
+	# blastn plasmids vs contigs
+	blastnexe = config.EXECUTABLES['blastn']
+	cmd_blastn = "%s -db %s -query %s -out %s -evalue 1e-20 -outfmt \'6 std qlen slen\' -num_threads %s" %(blastnexe, DBname, fasta, outFile, threads )
+	codeBlastn = system_call(cmd_blastn)
+	
+	if (codeBlastn == 'FAIL'):
+		print (colored('****ERROR: Some error happened during the blastn command', 'red'))
+		print (cmd_blastn)
+		exit()
+	
+###############
+
+###############
+def progbar(curr, total, full_progbar):
+	frac = (curr/total)
+	filled_progbar = round(frac*full_progbar)
+	print ('\r', '#'*filled_progbar + '-'*(full_progbar-filled_progbar), '[{:>7.2%}]'.format(frac), end='')
+	sys.stdout.flush()
+###############
+
+###############
+def get_number_lines(input_file):	
+	with open(input_file) as foo:
+		lines = len(foo.readlines())
+	return (lines)

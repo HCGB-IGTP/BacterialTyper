@@ -24,7 +24,6 @@ from matplotlib.backends.backend_pdf import PdfPages
 pythonDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(pythonDir)
 import functions
-import fastqc_caller
 
 configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
 sys.path.append(configDir)

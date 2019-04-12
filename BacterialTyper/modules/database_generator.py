@@ -17,12 +17,16 @@ from sys import argv
 from io import open
 import pandas as pd
 import ncbi_genome_download as ngd
-import functions
 from Bio import SeqIO
 import shutil
 
-## import configuration
-dataDir = os.path.dirname(os.path.realpath(__file__)) + '/../../data/'
+## functions
+pythonDir = os.path.dirname(os.path.realpath(__file__)) + '/../tools/python'
+sys.path.append(pythonDir)
+import functions
+
+## import data
+dataDir = os.path.dirname(os.path.realpath(__file__)) + '/../data/'
 plasmid_groups = dataDir + '/available_plasmids_data.txt'
 
 ######
@@ -80,9 +84,9 @@ def NCBIdownload(data, data2download, folder):
 		
 			contig_out_file = dir_path + '/' + acc_ID + '_chromosome.fna'
 			plasmid_out_file = dir_path + '/' + acc_ID + '_plasmid.fna' 
-
+			
+			## open
 			contig_out_file_handle = open(contig_out_file, 'w')
-			plasmid_out_file_handle = open(plasmid_out_file, 'w')
 		
 			for seq_record in SeqIO.parse(genome, "fasta"):
 				plasmid_search = re.search(r".*plasmid.*", seq_record.description)
@@ -91,15 +95,17 @@ def NCBIdownload(data, data2download, folder):
 					name = str( seq_record.id )
 					plasmid_id.append(name)
 				
+					plasmid_out_file_handle = open(plasmid_out_file, 'a')
 					plasmid_out_file_handle.write(seq_record.format("fasta"))
 					plasmid_out_file_handle.write('\n')
+					plasmid_out_file_handle.close()
 				else:
 					contig_out_file_handle.write(seq_record.format("fasta"))
 					contig_out_file_handle.write('\n')
 				
 			##
 			contig_out_file_handle.close()
-			plasmid_out_file_handle.close()
+
 		
 			## populate DB
 			data2download.loc[acc_ID]['genome'] = contig_out_file
@@ -138,8 +144,8 @@ def get_files_download(folder):
 ######
 def update_database(strains2get_file, folder):
 	## get file information from database
-	database = get_data(folder + '/database.csv')	
-	strains2get = get_data(strains2get_file)	
+	database = get_data(folder + '/database.csv', '\t')	
+	strains2get = get_data(strains2get_file, '\t')	
 	
 	## download
 	data = NCBIdownload(strains2get, database, folder)
@@ -160,7 +166,7 @@ def update_db_data_file(data, folder):
 def update_database_user_data(data, folder):
 
 	print ("+ Updating information from user data...")
-	data2update = get_data(folder + '/database.csv')
+	data2update = get_data(folder + '/database.csv', '\t')
 	data2update = data2update.set_index('ID')
 	
 	## create folder
@@ -221,30 +227,91 @@ def update_database_user_data(data, folder):
 	dataUpdated.to_csv(folder + "/database.csv")
 	return(folder + "/database.csv")
 
+###
+def plasmidID_user_data(folder):
+	print ("+ Adding available plasmid sequences to the plasmid database:")
 
+
+####
+def concat_fasta(dirFasta, Fasta):
+	print ("+ Concatenating all information into one file...")	
+	cmd = 'cat ' + dirFasta + '/*fna > ' + Fasta
+	return(functions.system_call(cmd))
+
+####
 def plasmidID_db_NCBI(path, name):
 
+	print ("+ Preparing folder for downloading data:")
 	plasmid_data = functions.create_subfolder("plasmid_data", path)
-	## NCBI Genome Plasmids ftp site.
-	functions.wget_download("ftp://ftp.ncbi.nlm.nih.gov/genomes/GENOME_REPORTS/plasmids.txt", plasmid_data)
+
+	## name = Firmicutes,Alphaproteobacteria or all
+	seq_folder, info = download_plasmid_NCBI(plasmid_data, name)
+	print ("+ Information from plasmids downloaded is in file: " + info)
 	
-	plasmids_info = plasmid_data + '/plasmids.txt'
-	plasmids = get_data(plasmids_info, '\t')
+	#
 	plasmids_fna = plasmid_data + '/plasmids_database.fna'
+	concat_fasta(seq_folder, plasmids_fna)
+	print ("+ Plasmids are availabe in file: " + plasmids_fna)
+
+	return(plasmids_fna)
+
+####
+def download_plasmid_NCBI(folder, name):
+
+	print ("+ Downloading information from available plasmids on NCBI...")
+
+	path = functions.create_subfolder("download", folder)
+
+
+	## NCBI Genome Plasmids ftp site.
+	functions.wget_download("ftp://ftp.ncbi.nlm.nih.gov/genomes/GENOME_REPORTS/plasmids.txt", path)
+	
+	plasmids_info = path + '/plasmids.txt'
+	plasmids = get_data(plasmids_info, '\t')
+	sequence_folder = functions.create_subfolder("seqs", path)
 	
 	## get desirable group
+	names = []
 	if (name == 'all'):
 		plasmids_filter = plasmids
 	else:
-		plasmids_filter = plasmids.loc[plasmids['SubGroup'] == name]
+		names = name.split(",")
+		plasmids_filter = plasmids.loc[plasmids['SubGroup'].isin(names)]
+
+	## 
+	ids_download = path + "/plasmid_ids_Downloaded.txt"
+	out_handle = open(ids_download, "a")
 
 	## loop the table and download nucleotide sequences
+	count = 0
 	for index, entry in plasmids_filter.iterrows():
 		#print (plasmids_filter.iloc[index])
 		sequence = plasmids_filter.loc[index]['RefSeq']
-		cmd='curl -s "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&amp;id=' + sequence + '&amp;retmode=text&amp;rettype=fasta" >> ' + plasmids_fna
-		functions.system_call(cmd)	
-
+		
+		### get id to download	
+		if (sequence == '-'):
+			continue
+		else:
+			## file
+			seq = sequence_folder + '/' + sequence + '.fna'
+		
+			## download if not available
+			if os.path.isfile(seq):
+				print ("%s is already available in folder...." %sequence)
+			else:
+				## eutils NCBI
+				cmd='curl -s "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&amp;id=' + sequence + '&amp;retmode=text&amp;rettype=fasta" > ' + seq
+				functions.system_call(cmd)
+				string = sequence + '\t' + plasmids_filter.loc[index]['Kingdom'] + '\t'+  plasmids_filter.loc[index]['#Organism/Name'] + '\t' + plasmids_filter.loc[index]['Group'] +'\t' + plasmids_filter.loc[index]['SubGroup'] + '\t' + plasmids_filter.loc[index]['Plasmid Name']
+				out_handle.write(string)
+				out_handle.write("\n")
+				count += 1
+	
+	out_handle.close()
+	
+	print ("\n\n+ %s sequences have been downloaded from NCBI belonging to: %s" %(count, names))
+	return(sequence_folder, ids_download)
+		
 ######
 def get_files_folder(folder):
 	## check if files are gunzip
@@ -324,6 +391,7 @@ def main():
 
 ######
 def help_options():
+
 	print ("\nUSAGE: python %s option database_folder [ID_file]\n"  %os.path.realpath(__file__))
 	print ("+ Option:\n\t|-init_db\n\t|-update_NCBI\n\t|-update_user_data\n\t|-plasmidID_db_NCBI\n\t|-plasmidID_user_data\n")
 	print ("+ database_folder: path to the database [if does not exist will be created]")
@@ -352,8 +420,9 @@ def help_options():
 	print (" Option 3: plasmidID_db_NCBI")
 	print ("#####################")
 	print ("+ No ID_file provided. ")
-	print ("+ Provide instead any of the groups below or 'all':")
+	print ("+ Provide a comma separated string instead with any of the groups below or 'all' to download them all:")
 	get_data(plasmid_groups, ',')
+	print ("\n\n+ Example: python %s plasmidID_db_NCBI database_folder Firmicutes,Alphaproteobacteria" %os.path.realpath(__file__))
 	print ("----------------------")
 	print ("\n#####################")
 	print (" Option 4: plasmidID_user_data")

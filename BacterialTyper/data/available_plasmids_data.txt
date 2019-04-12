@@ -1,0 +1,57 @@
+Acidithiobacillia
+Acidobacteriia
+Actinobacteria
+Alphaproteobacteria
+Aquificae
+Archaeoglobi
+Ascomycetes
+Bacteroidetes/Chlorobi group
+Basidiomycetes
+Betaproteobacteria
+Chlamydiae
+Chloroflexi
+Crenarchaeota
+Cyanobacteria/Melainabacteria group
+Deferribacteres
+Deinococcus-Thermus
+Diaforarchaea group
+Endomicrobia
+Firmicutes
+Fusobacteriia
+Gammaproteobacteria
+Gemmatimonadetes
+Hydrogenophilalia
+Land Plants
+Methanomada group
+Nitrospira
+Oligoflexia
+Other
+Other Protists
+Planctomycetes
+Podoviridae
+Spirochaetia
+Stenosarchaea group
+Synergistia
+Tenericutes
+Thermococci
+Thermotogae
+Verrucomicrobia
+archaeon enrichment culture clone 1(2010)
+bacterium enrichment culture clone 1(2010)
+bacterium enrichment culture clone 2a(2010)
+bacterium enrichment culture clone 2b(2010)
+delta/epsilon subdivisions
+environmental samples
+unclassified Bacteria (miscellaneous)
+unclassified Proteobacteria
+uncultured bacterium AST1
+uncultured bacterium AST2
+uncultured bacterium AST3
+uncultured bacterium AST4
+uncultured bacterium HH1107
+uncultured bacterium HHV216
+uncultured bacterium HHV35
+uncultured bacterium pAKD4
+uncultured bacterium pMCBF6
+uncultured eubacterium pIE1115
+uncultured marine bacterium

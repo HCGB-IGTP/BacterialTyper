@@ -184,6 +184,10 @@ def parse(handle, eval_thresh=10, aln_thresh=0, length_thresh=0):
              for line in hsps:
 #                 line = line.decode("utf-8")
                  hsp = Hsp(line)
+                 
+                 if (hsp.qid == hsp.sid):
+                 	continue ## discard reporting autohit
+                 
                  aln = (int(hsp.length)/int(hsp.qlen))*100
                  if aln >= aln_thresh and hsp.evalue <= eval_thresh and hsp.qlen > length_thresh:
                      hsps_temp.append(hsp)

@@ -15,10 +15,15 @@ from sys import argv
 from io import open
 from datetime import datetime
 
-## import my modules
-pythonDir = os.path.dirname(os.path.realpath(__file__))
+## import modules
+pythonDir = os.path.dirname(os.path.realpath(__file__)) + '/../tools/python'
 sys.path.append(pythonDir)
 import functions
+
+## config
+configDir = os.path.dirname(os.path.realpath(__file__)) + '/../config/'
+sys.path.append(configDir)
+import config
 
 ############
 def printNote():
