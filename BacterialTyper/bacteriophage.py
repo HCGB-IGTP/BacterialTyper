@@ -1,4 +1,4 @@
-#usr/bin/env python
+ #!/usr/bin/env python3
 '''
 This code generates a bacteriophage identification profile for each sample
 Jose F. Sanchez

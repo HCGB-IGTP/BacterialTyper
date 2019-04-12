@@ -1,8 +1,7 @@
 __all__ = [
-	'database_generator',
-	'multiQC_report',	
+	'database',
 	'spades_assembler',
-	'trimmomatic_call',
+	'trimm',
 	'virulence_resistance',
 	'fastqc_caller',
 	'plasmidID_call',

@@ -37,7 +37,6 @@ def list2file(givenList, path):
 	outfile.close()
 	return(name)
 
-
 ######
 def	help_options():
 	print ("\nUSAGE:\npython %s folder sample_list name\n"  %os.path.abspath(argv[0]))

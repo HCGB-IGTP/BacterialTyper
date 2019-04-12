@@ -1,4 +1,4 @@
-#usr/bin/env python
+ #!/usr/bin/env python3
 '''
 This code generates a virulence and an antibiotic resistance profile.
 Jose F. Sanchez

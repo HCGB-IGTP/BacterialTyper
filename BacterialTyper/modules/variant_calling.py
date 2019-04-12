@@ -1,4 +1,4 @@
-#usr/bin/env python
+ #!/usr/bin/env python3
 '''
 This code calls KMerGenie for k-mer optimization and Mccortex for the variant calling
 Jose F. Sanchez

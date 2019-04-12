@@ -1,4 +1,4 @@
-#usr/bin/env python
+ #!/usr/bin/env python3
 '''
 This code calls Trimmomatic for the trimming of sequence adapter within fastq reads.
 Jose F. Sanchez

@@ -6,7 +6,10 @@ __all__ = [
 	'functions',
 	'blast_parser',
 	'config',
-	'MLSTar'
+	'MLSTar',
+	'trimmomatic_call',
+	'database_generator',
+	'multiQC_report'
 ]
 
 from BacterialTyper import *
