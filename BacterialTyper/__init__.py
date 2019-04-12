@@ -9,6 +9,7 @@ __all__ = [
 	'MLSTar',
 	'trimmomatic_call',
 	'database_generator',
+	'fastqc_caller',
 	'multiQC_report'
 ]
 

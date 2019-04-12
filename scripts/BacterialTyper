@@ -4,38 +4,129 @@ This code...
 Jose F. Sanchez
 Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
 '''
-import argparse
+import argparse ## https://docs.python.org/3/library/argparse.html#module-argparse
 import os
 import BacterialTyper
 
 parser = argparse.ArgumentParser(
     prog='BacterialTyper',
     usage='BacterialTyper <command> <options>',
-    description='BacterialTyper: Bacterial Genotyping using NGS...',
-
+    description='BacterialTyper: Bacterial Genotyping using NGS...'
 )
 subparsers = parser.add_subparsers(title='Available modules', help='', metavar='')
 
+
+##initial_group = parser.add_argument_group("Configuration")
+
 ## submodules
-subparser_database = subparsers.add_parser(
+##------------------------------ config ---------------------- ##
+subparser_config = subparsers.add_parser(
+    'config',
+    help='Configure the pipeline: initiates and updates.',
+    usage='BacterialGenotyper config [-h|--help]',
+    description='xxxxx',
+)
+subparser_config.set_defaults(func=BacterialTyper.modules.set_configuration.run)
+##-------------------------------------------------------------##
+
+micplot_colour_group = subparser_micplot.add_argument_group('Colour options')
+
+##--------------------- initiate database -------------------- ##
+subparser_initDB = subparsers.add_parser(
+    'init_DB',
+    help='Downloads and initiates a database for later use.',
+    usage='BacterialGenotyper init_DB <folder> <ID_file> [-h|--help]',
+    description='',
+)
+subparser_initDB.add_argument("path", help="Folder path to generate database.")
+subparser_initDB.add_argument("ID_file", help="ID_file is a csv file containing several columns per row genus,species,name,NCBI_assembly_ID. Use the header provided: genus,species,name,NCBI_assembly_ID.")
+subparser_initDB.set_defaults(func=BacterialTyper.modules.database.init_DB)
+##-------------------------------------------------------------##
+
+##--------------------- update database NCBI ----------------- ##
+subparser_updateDB_NCBI = subparsers.add_parser(
+    'updateDB_NCBI',
+    help='Downloads and updates a database for later use.',
+    usage='BacterialGenotyper init_DB <folder> <ID_file> [-h|--help]',
+    description='',
+)
+subparser_initDB.add_argument("path", help="Folder path to generate database.")
+subparser_initDB.add_argument("ID_file", help="ID_file is a csv file containing several columns per row genus,species,name,NCBI_assembly_ID. Use the header provided: genus,species,name,NCBI_assembly_ID.")
+subparser_initDB.set_defaults(func=BacterialTyper.modules.database.init_DB)
+##-------------------------------------------------------------##
+
+
+
+
+
+##------------------------------ trimm ----------------------- ##
+subparser_trimm = subparsers.add_parser(
     'trimm',
     help='Trimms sequencing adapters from files.',
-    usage='BacterialGenotyper trimm <option> <folder> [pair]',
-    description='....',
+    usage='BacterialGenotyper trimm <input_folder> <output_folder> [pair] [skip_report] [-h|--help]',
+    description='This module trimms sequencing adapters that could be present in next generation sequencing files',
 )
-subparser_database.set_defaults(func=BacterialTyper.modules.trimm.run)
-##subparser_database.add_argument("help", help="Example of command argument")
+subparser_trimm.add_argument("input_folder", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
+subparser_trimm.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
+subparser_trimm.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+subparser_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
+subparser_trimm.add_argument("--adapters", help="Additional adapter sequences different to the ones specified during the configuration")
+subparser_trimm.add_argument("--threads", help="Number of CPUs to use [Default: 2].")
+subparser_trimm.set_defaults(func=BacterialTyper.modules.trimm.run)
+##-------------------------------------------------------------##
 
-## submodules
-subparser_database = subparsers.add_parser(
-    'database',
-    help='Downloads, updates and prepares database for later use.',
-    usage='BacterialGenotyper database <option> <folder> [ID_file]',
-    description='....',
+
+##--------------------------- fastqc ------------------------- ##
+subparser_fastqc = subparsers.add_parser(
+    'fastqc',
+    help='Generates quality check for each sample using FASTQC.',
+    usage='BacterialGenotyper fastqc <input_folder> <output_folder> [pair] [skip_report] [-h|--help]',
+    description='This module call FASTQC for a quality check of each sample provided',
 )
-subparser_database.set_defaults(func=BacterialTyper.modules.database.run)
-##subparser_database.add_argument("help", help="Example of command argument")
+subparser_fastqc.add_argument("input_folder", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
+subparser_fastqc.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
+subparser_fastqc.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+subparser_fastqc.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
+subparser_fastqc.add_argument("--threads", help="Number of CPUs to use [Default: 2].")
+subparser_fastqc.set_defaults(func=BacterialTyper.modules.qc.fastqc)
+##-------------------------------------------------------------##
 
+
+
+##--------------------------- assemble ----------------------- ##
+##-------------------------------------------------------------##
+
+
+
+##--------------------- Assembly check ----------------------- ##
+subparser_assemblyQC = subparsers.add_parser(
+    'assemblyQC',
+    help='Generates quality check for each assembly generated using basic statistics and BUSCO.',
+    usage='BacterialGenotyper assembly_check <input_folder> <output_folder> [-h|--help]',
+    description='This module call FASTQC for a quality check of each sample provided',
+)
+subparser_assemblyQC.add_argument("input_folder", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
+subparser_assemblyQC.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
+subparser_assemblyQC.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
+subparser_assemblyQC.add_argument("--threads", help="Number of CPUs to use [Default: 2].")
+subparser_assemblyQC.set_defaults(func=BacterialTyper.modules.qc.assembly_check)
+##-------------------------------------------------------------##
+
+
+
+
+##--------------------------- annotate ----------------------- ##
+##-------------------------------------------------------------##
+
+
+
+##--------------------------- MLST --------------------------- ##
+##-------------------------------------------------------------##
+
+
+
+##-------------------------- virulence ----------------------- ##
+##-------------------------------------------------------------##
 
 
 #####

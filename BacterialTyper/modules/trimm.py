@@ -12,7 +12,18 @@ from BacterialTyper import multiQC_report
 
 def run(options):
 	
+	
+	## check folder provided and get files
 	print ("Hello world!\n")
+	print (options)
+	print (options.input_folder)
+
+	if (options.pair):
+		print ("paired-end mode")
+
+	else:
+		print ("sinle end mode")
+		
 	## a folder provided containing files to trim
 	
 	#trimmomatic_call.trimmo_module(file_R1, file_R2, path_name, sample_name, threads)
