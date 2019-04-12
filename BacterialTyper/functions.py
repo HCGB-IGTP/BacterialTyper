@@ -17,8 +17,7 @@ from Bio import SeqIO
 from termcolor import colored
 
 ## import configuration
-configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
-sys.path.append(configDir)
+import BacterialTyper 
 import config
 
 ###############   

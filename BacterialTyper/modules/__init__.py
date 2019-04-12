@@ -13,7 +13,7 @@ __all__ = [
 	'version',
 ]
 
-from BacterialTyper.scripts import *
+from BacterialTyper.modules import *
 
 
 

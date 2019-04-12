@@ -14,15 +14,10 @@ from sys import argv
 from io import open
 
 ## import my modules
-pythonDir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(pythonDir)
-import functions
+from BacterialTyper import functions
+from BacterialTyper import config
 
-configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
-sys.path.append(configDir)
-import config
-
-perlDir = os.path.dirname(os.path.realpath(__file__)) + '/../perl'
+perlDir = os.path.dirname(os.path.realpath(__file__)) + '/other_tools/perl'
 sys.path.append(perlDir)
 get_longContigs_script = perlDir + '/get-long-contigs.pl'
 

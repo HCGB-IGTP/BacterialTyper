@@ -21,13 +21,8 @@ from pandas.plotting import table
 from matplotlib.backends.backend_pdf import PdfPages
 
 ## import my modules
-pythonDir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(pythonDir)
-import functions
-
-configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
-sys.path.append(configDir)
-import config
+from BacterialTyper import functions
+from BacterialTyper import config
 
 RscriptDir = os.path.dirname(os.path.realpath(__file__)) + '/../R'
 MLSTarR_script = RscriptDir + '/MLSTar_call.R'

@@ -16,11 +16,10 @@ from io import open
 from Bio import SeqIO
 import shutil
 
-## import modules
-pythonDir = os.path.dirname(os.path.realpath(__file__)) + '/../tools/python'
-sys.path.append(pythonDir)
-import functions
-from blast_parser import parse
+## import my modules
+from BacterialTyper import functions
+from BacterialTyper import config
+from BacterialTyper.blast_parser import parse
 
 ## config
 configDir = os.path.dirname(os.path.realpath(__file__)) + '/../config/'

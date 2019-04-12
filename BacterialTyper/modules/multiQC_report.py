@@ -11,15 +11,9 @@ import sys
 from io import open
 from sys import argv
 
-## import modules
-pythonDir = os.path.dirname(os.path.realpath(__file__)) + '/../tools/python'
-sys.path.append(pythonDir)
-import functions
-
-configDir = os.path.dirname(os.path.realpath(__file__)) + '/../config/'
-sys.path.append(configDir)
-import config
-
+## import my modules
+from BacterialTyper import functions
+from BacterialTyper import config
 
 ###
 def multiQC_module_call(givenList, name, path):

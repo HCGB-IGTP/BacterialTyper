@@ -18,15 +18,9 @@ import subprocess
 import concurrent.futures
 
 ## import modules
-pythonDir = os.path.dirname(os.path.realpath(__file__)) + '/../tools/python'
-sys.path.append(pythonDir)
-import functions
-from blast_parser import parse
-
-## config
-configDir = os.path.dirname(os.path.realpath(__file__)) + '/../config/'
-sys.path.append(configDir)
-import config
+from BacterialTyper import functions
+from BacterialTyper import config
+from BacterialTyper.blast_parser import parse
 
 ## perl scripts
 perlDir = os.path.dirname(os.path.realpath(__file__)) + '/../tools/perl'

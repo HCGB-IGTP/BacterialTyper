@@ -1,7 +1,16 @@
 __all__ = [
 	'config',
-	'tools',
-	'data',
-	'scripts',
+	'modules',
+	'annotation',
+	'bacteriophage',
+	'functions',
+	'blast_parser',
+	'config',
+	'MLSTar'
 ]
+
 from BacterialTyper import *
+
+
+
+

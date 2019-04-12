@@ -15,14 +15,8 @@ from io import open
 import pandas as pd
 
 ## import my modules
-pythonDir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(pythonDir)
-import functions
-
-## config
-configDir = os.path.dirname(os.path.realpath(__file__)) + '/../../config/'
-sys.path.append(configDir)
-import config
+from BacterialTyper import functions
+from BacterialTyper import config
 
 ######
 def module_call(sequence_fasta, kingdom, path, name, threads):

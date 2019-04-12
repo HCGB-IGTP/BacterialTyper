@@ -20,13 +20,12 @@ import ncbi_genome_download as ngd
 from Bio import SeqIO
 import shutil
 
-## functions
-pythonDir = os.path.dirname(os.path.realpath(__file__)) + '/../tools/python'
-sys.path.append(pythonDir)
-import functions
+## import my modules
+from BacterialTyper import functions
+from BacterialTyper import config
 
 ## import data
-dataDir = os.path.dirname(os.path.realpath(__file__)) + '/../data/'
+dataDir = os.path.dirname(os.path.realpath(__file__)) + '/../../data/'
 plasmid_groups = dataDir + '/available_plasmids_data.txt'
 
 ######
