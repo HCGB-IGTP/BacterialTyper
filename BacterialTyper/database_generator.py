@@ -28,7 +28,7 @@ from BacterialTyper import config
 dataDir = os.path.dirname(os.path.realpath(__file__)) + '/../../data/'
 plasmid_groups = dataDir + '/available_plasmids_data.txt'
 
-######
+##########################################################################################
 def NCBIdownload(data, data2download, folder):	
 	
 	## set index
@@ -37,9 +37,9 @@ def NCBIdownload(data, data2download, folder):
 	data2download = data2download.set_index('ID')
 	
 	for index, row in data.iterrows():
-		print ("###########################################################")
+
 		acc_ID = data.loc[index]['NCBI_assembly_ID']
-		info = "Genus: " + data.loc[index]['genus'] + '\n' + "Species: " +  data.loc[index]['species'] + '\n' + "Strain: " +  data.loc[index]['name'] + '\n' + "ID accession: " +  acc_ID + '\n'
+		info = "Genus: " + data.loc[index]['##genus'] + '\n' + "Species: " +  data.loc[index]['species'] + '\n' + "Strain: " +  data.loc[index]['name'] + '\n' + "ID accession: " +  acc_ID + '\n'
 		dir_path = folder + '/genbank/bacteria/' + acc_ID
 		#print (info)
 
@@ -60,7 +60,7 @@ def NCBIdownload(data, data2download, folder):
 			## set database
 			data2download.loc[acc_ID] = '.'
 			data2download.loc[acc_ID]['folder'] = dir_path
-			data2download.loc[acc_ID]['genus'] = data.loc[acc_ID]['genus']
+			data2download.loc[acc_ID]['genus'] = data.loc[acc_ID]['##genus']
 			data2download.loc[acc_ID]['species'] = data.loc[acc_ID]['species']
 			data2download.loc[acc_ID]['name'] = data.loc[acc_ID]['name']
 
@@ -117,13 +117,14 @@ def NCBIdownload(data, data2download, folder):
 			else:
 				data2download.loc[acc_ID]['plasmids'] = ""
 
-			print ("###########################################################\n\n")
+			functions.print_sepLine("+", 75)
+
 			
 	db_updated = update_db_data_file(data2download, folder)
 	db_updated.to_csv(folder + "/database.csv")
 	return(folder + "/database.csv")
 
-######
+##########################################################################################
 def get_files_download(folder):
 	## check if files are gunzip
 	files = os.listdir(folder)
@@ -140,18 +141,18 @@ def get_files_download(folder):
 			prot = folder + '/' + f
 	return(genome, prot, gff)			
 
-######
+##########################################################################################
 def update_database(strains2get_file, folder):
 	## get file information from database
-	database = get_data(folder + '/database.csv', '\t')	
-	strains2get = get_data(strains2get_file, '\t')	
+	database = functions.get_data(folder + '/database.csv', ',')	
+	strains2get = functions.get_data(strains2get_file, '\t')	
 	
 	## download
 	data = NCBIdownload(strains2get, database, folder)
 	print ("+ Database has been updated: \n", data)
 	return (data)
 
-######
+##########################################################################################
 def update_db_data_file(data, folder):
 	if os.path.isfile(folder + "/database.csv"):
 		db2update = pd.read_csv(folder + "/database.csv", header=0)
@@ -161,18 +162,19 @@ def update_db_data_file(data, folder):
 	else:
 		return (data)
 
-######
+
+##########################################################################################
 def update_database_user_data(data, folder):
 
 	print ("+ Updating information from user data...")
-	data2update = get_data(folder + '/database.csv', '\t')
+	data2update = functions.get_data(folder + '/database.csv', '\t')
 	data2update = data2update.set_index('ID')
 	
 	## create folder
 	own_data = functions.create_subfolder("user_data", folder)
 	
 	## get info to update
-	data2be_updated = get_data(data)
+	data2be_updated = functions.get_data(data)
 	data2be_updated = data2be_updated.set_index('ID')
 	
 	for index, row in data2be_updated.iterrows():
@@ -180,8 +182,6 @@ def update_database_user_data(data, folder):
 		if index in data2update.index:
 			print ("\n+ Data is already available in database for:", index)
 		else:
-	
-			print ("###########################################################")
 			folder_ID = data2be_updated.loc[index]['folder']
 			data2update.loc[index] = "." ## init row
 			dir_sample = functions.create_subfolder(index, own_data)
@@ -191,7 +191,7 @@ def update_database_user_data(data, folder):
 
 			## populate dataframe
 			data2update.loc[index]['folder'] = data2be_updated.loc[index]['folder']
-			data2update.loc[index]['genus'] = data2be_updated.loc[index]['genus']
+			data2update.loc[index]['genus'] = data2be_updated.loc[index]['##genus']
 			data2update.loc[index]['species'] = data2be_updated.loc[index]['species']
 			data2update.loc[index]['name'] = data2be_updated.loc[index]['name']
 			data2update.loc[index]['ID'] = index
@@ -214,6 +214,7 @@ def update_database_user_data(data, folder):
 			data2update.loc[index]['plasmids_number'] = number
 			data2update.loc[index]['plasmids_ID'] = plasm_ids		
 
+
 			# copy file
 			if (os.path.isfile(plasmids)):
 				plasm_name =  dir_sample + '/' + os.path.basename(plasmids)
@@ -221,23 +222,23 @@ def update_database_user_data(data, folder):
 				data2update.loc[index]['plasmids'] = plasm_name
 			else:
 				data2update.loc[index]['plasmids'] = ""
+
+			functions.print_sepLine("+", 75)
+
 		
 	dataUpdated = update_db_data_file(data2update, folder)
 	dataUpdated.to_csv(folder + "/database.csv")
 	return(folder + "/database.csv")
 
-###
+
+##########################################################################################
 def plasmidID_user_data(folder):
 	print ("+ Adding available plasmid sequences to the plasmid database:")
 
+	## to do....
+	##
 
-####
-def concat_fasta(dirFasta, Fasta):
-	print ("+ Concatenating all information into one file...")	
-	cmd = 'cat ' + dirFasta + '/*fna > ' + Fasta
-	return(functions.system_call(cmd))
-
-####
+##########################################################################################
 def plasmidID_db_NCBI(path, name):
 
 	print ("+ Preparing folder for downloading data:")
@@ -249,24 +250,22 @@ def plasmidID_db_NCBI(path, name):
 	
 	#
 	plasmids_fna = plasmid_data + '/plasmids_database.fna'
-	concat_fasta(seq_folder, plasmids_fna)
+	functions.concat_fasta(seq_folder, plasmids_fna)
 	print ("+ Plasmids are availabe in file: " + plasmids_fna)
 
 	return(plasmids_fna)
 
-####
+##########################################################################################
 def download_plasmid_NCBI(folder, name):
 
 	print ("+ Downloading information from available plasmids on NCBI...")
-
 	path = functions.create_subfolder("download", folder)
-
 
 	## NCBI Genome Plasmids ftp site.
 	functions.wget_download("ftp://ftp.ncbi.nlm.nih.gov/genomes/GENOME_REPORTS/plasmids.txt", path)
 	
 	plasmids_info = path + '/plasmids.txt'
-	plasmids = get_data(plasmids_info, '\t')
+	plasmids = functions.get_data(plasmids_info, '\t')
 	sequence_folder = functions.create_subfolder("seqs", path)
 	
 	## get desirable group
@@ -311,7 +310,7 @@ def download_plasmid_NCBI(folder, name):
 	print ("\n\n+ %s sequences have been downloaded from NCBI belonging to: %s" %(count, names))
 	return(sequence_folder, ids_download)
 		
-######
+##########################################################################################
 def get_files_folder(folder):
 	## check if files are gunzip
 	files = os.listdir(folder)
@@ -338,19 +337,10 @@ def get_files_folder(folder):
 			
 	return (genome, prot, gff, plasmids, number, "::".join(plasm_ids))
 
-######
-def get_data(ID_file, SEP):	
-	print ("+ Obtaining information from file: ", ID_file)
-	data = pd.read_csv(ID_file, header=0, sep=SEP)
-	print ("\n+ Data:")
-	print (data)
-	print ("\n\n")	
-	return(data)
-
-######
+##########################################################################################
 def init_DB(ID_file, folder):
 	## get file information
-	strains2get = get_data(ID_file, ',')	
+	strains2get = functions.get_data(ID_file, ',')	
 	print ("+ Create the database in folder: \n", folder)	
 	data2download=pd.DataFrame(columns=('ID','folder','genus','species','name','genome','GFF','proteins','plasmids_number','plasmids_ID','plasmids'))
 	
@@ -359,7 +349,12 @@ def init_DB(ID_file, folder):
 	print ("+ Database has been updated: \n", data)
 	return (data)
 
-#####
+##########################################################################################
+def init_message():
+	print ("***** Database generation for further processing. *****")
+
+
+##########################################################################################
 def main():
 	## this code runs when call as a single script
 
@@ -388,7 +383,7 @@ def main():
 	elif (option == "plasmidID_user_data"):
 		plasmidID_user_data(folder)
 
-######
+################################################################################
 def help_options():
 
 	print ("\nUSAGE: python %s option database_folder [ID_file]\n"  %os.path.realpath(__file__))
@@ -398,9 +393,9 @@ def help_options():
 	print ("\n#####################")
 	print (" Option 1: init_db & update_NCBI:")
 	print ("#####################")
-	print ("ID_file format: genus,species,name,NCBI_assembly_ID")	
+	print ("ID_file format: ##genus,species,name,NCBI_assembly_ID")	
 	print ("---- Example 1 -------")
-	print ("genus,species,name,NCBI_assembly_ID")
+	print ("##genus,species,name,NCBI_assembly_ID")
 	print ("Staphylococcus,aureus,MRSA252,GCx_0000001")
 	print ("Staphylococcus,epidermis,strain2,GCx_0000002")
 	print ("Staphylococcus,aureus,strain3,GCx_0000003")
@@ -420,7 +415,7 @@ def help_options():
 	print ("#####################")
 	print ("+ No ID_file provided. ")
 	print ("+ Provide a comma separated string instead with any of the groups below or 'all' to download them all:")
-	get_data(plasmid_groups, ',')
+	functions.get_data(plasmid_groups, ',')
 	print ("\n\n+ Example: python %s plasmidID_db_NCBI database_folder Firmicutes,Alphaproteobacteria" %os.path.realpath(__file__))
 	print ("----------------------")
 	print ("\n#####################")
@@ -429,14 +424,13 @@ def help_options():
 	print ("+ No ID_file provided. ")
 	print ("+ Provide word: user. Plasmids previously identified from user samples would be added to the dabase generated for plasmidID identification.")
 	print ("----------------------")
-	
+
 		
-######
-'''******************************************'''
+################################################################################
 if __name__== "__main__":
 	main()
 	
 	
 ## Download all genomes from a taxa and descendent
-## https://www.biostars.org/p/302533/	
+## https://www.biostars.org/p/302533/	 ## > ncbi.get_descendant_taxa() 
 

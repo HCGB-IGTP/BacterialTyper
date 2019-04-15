@@ -1,9 +1,5 @@
  #!/usr/bin/env python3
-'''
-This code...
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
-'''
+
 import argparse ## https://docs.python.org/3/library/argparse.html#module-argparse
 import os
 import BacterialTyper
@@ -22,57 +18,54 @@ subparsers = parser.add_subparsers(title='Available modules', help='', metavar='
 ##------------------------------ config ---------------------- ##
 subparser_config = subparsers.add_parser(
     'config',
-    help='Configure the pipeline: initiates and updates.',
+    help='Configure the pipeline: executables and additional files/data.',
     usage='BacterialGenotyper config [-h|--help]',
     description='xxxxx',
 )
 subparser_config.set_defaults(func=BacterialTyper.modules.set_configuration.run)
 ##-------------------------------------------------------------##
 
-micplot_colour_group = subparser_micplot.add_argument_group('Colour options')
-
 ##--------------------- initiate database -------------------- ##
 subparser_initDB = subparsers.add_parser(
-    'init_DB',
+    'initDB',
     help='Downloads and initiates a database for later use.',
-    usage='BacterialGenotyper init_DB <folder> <ID_file> [-h|--help]',
+    usage='BacterialGenotyper initDB <folder> <ID_file> [-h|--help]',
     description='',
 )
 subparser_initDB.add_argument("path", help="Folder path to generate database.")
-subparser_initDB.add_argument("ID_file", help="ID_file is a csv file containing several columns per row genus,species,name,NCBI_assembly_ID. Use the header provided: genus,species,name,NCBI_assembly_ID.")
-subparser_initDB.set_defaults(func=BacterialTyper.modules.database.init_DB)
+subparser_initDB.add_argument("ID_file", help="ID_file is a csv file (include header) containing several columns per row according to the header provided: ##genus,species,name,NCBI_assembly_ID")
+subparser_initDB.add_argument("--kma_db", default='bacteria', help="KMA database to download. Not compatible with --index_kma. [Default: bacteria]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
+subparser_initDB.add_argument("--index_KMA", action="store_true", help="Index the genomes downloaded for later usage during species identification. Not compatible with --kma_db options: available databases with broader taxonomic ranges. [Default: OFF]")
+subparser_initDB.add_argument("--no_ARIBA", action="store_true", help="It prevents downloading ARIBA databases. [Default: OFF]")
+subparser_initDB.set_defaults(func=BacterialTyper.modules.database.initial_run)
 ##-------------------------------------------------------------##
 
-##--------------------- update database NCBI ----------------- ##
-subparser_updateDB_NCBI = subparsers.add_parser(
-    'updateDB_NCBI',
-    help='Downloads and updates a database for later use.',
-    usage='BacterialGenotyper init_DB <folder> <ID_file> [-h|--help]',
-    description='',
+##----------------- update database ncbi---------------------- ##
+subparser_updateDB = subparsers.add_parser(
+    'updateDB',
+    help='Updates a database with information from NCBI.',
+    usage='BacterialGenotyper updateDB_NCBI <folder> <ID_file> [-h|--help]',
+    description='Given a file with information from known strains this module updates an initiated database with information from NCBI.'
 )
-subparser_initDB.add_argument("path", help="Folder path to generate database.")
-subparser_initDB.add_argument("ID_file", help="ID_file is a csv file containing several columns per row genus,species,name,NCBI_assembly_ID. Use the header provided: genus,species,name,NCBI_assembly_ID.")
-subparser_initDB.set_defaults(func=BacterialTyper.modules.database.init_DB)
+subparser_updateDB.add_argument("path", help="Folder path to generate database.")
+subparser_updateDB.add_argument("ID_file", help="ID_file is a csv file (include header) containing several columns per row according to the header provided: ##genus,species,name,NCBI_assembly_ID")
+subparser_updateDB.add_argument("--index_KMA", action="store_true", help="Index the genomes downloaded for later usage during species identification. It prevents downloading available databases with broader taxonomic ranges. [Default: OFF]")
+subparser_updateDB.add_argument("--ARIBA_db", action="store_true", help="It downloads ARIBA databases if not downloaded during the initiation. [Default: OFF]")
+subparser_updateDB.set_defaults(func=BacterialTyper.modules.database.updateDB_NCBI)
 ##-------------------------------------------------------------##
 
-
-
-
-
-##------------------------------ trimm ----------------------- ##
-subparser_trimm = subparsers.add_parser(
-    'trimm',
-    help='Trimms sequencing adapters from files.',
-    usage='BacterialGenotyper trimm <input_folder> <output_folder> [pair] [skip_report] [-h|--help]',
-    description='This module trimms sequencing adapters that could be present in next generation sequencing files',
+##--------------------------- merge -------------------------- ##
+subparser_merge = subparsers.add_parser(
+    'mergeFQ',
+    help='Merges FASTQ files for the same sample.',
+    usage='BacterialGenotyper mergeFQ <input_folder> <output_folder> [pair] [skip_report] [-h|--help]',
+    description='This module merges fastq files from a sequencing run where multiples files have been generated for the same sample. It concatenates these files and generates a unique file, one per paired-read if necessary',
 )
-subparser_trimm.add_argument("input_folder", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
-subparser_trimm.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
-subparser_trimm.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
-subparser_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
-subparser_trimm.add_argument("--adapters", help="Additional adapter sequences different to the ones specified during the configuration")
-subparser_trimm.add_argument("--threads", help="Number of CPUs to use [Default: 2].")
-subparser_trimm.set_defaults(func=BacterialTyper.modules.trimm.run)
+subparser_merge.add_argument("input_folder", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
+subparser_merge.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
+subparser_merge.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+subparser_merge.add_argument("--threads", help="Number of CPUs to use [Default: 2].")
+subparser_merge.set_defaults(func=BacterialTyper.modules.sample_prepare.merge)
 ##-------------------------------------------------------------##
 
 
@@ -89,6 +82,22 @@ subparser_fastqc.add_argument("--pair", action="store_true", help="Paired-end fi
 subparser_fastqc.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
 subparser_fastqc.add_argument("--threads", help="Number of CPUs to use [Default: 2].")
 subparser_fastqc.set_defaults(func=BacterialTyper.modules.qc.fastqc)
+##-------------------------------------------------------------##
+
+##------------------------------ trimm ----------------------- ##
+subparser_trimm = subparsers.add_parser(
+    'trimm',
+    help='Trimms sequencing adapters from files.',
+    usage='BacterialGenotyper trimm <input_folder> <output_folder> [pair] [skip_report] [-h|--help]',
+    description='This module trimms sequencing adapters that could be present in next generation sequencing files',
+)
+subparser_trimm.add_argument("input_folder", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
+subparser_trimm.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
+subparser_trimm.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+subparser_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
+subparser_trimm.add_argument("--adapters", help="Additional adapter sequences different to the ones specified during the configuration")
+subparser_trimm.add_argument("--threads", help="Number of CPUs to use [Default: 2].")
+subparser_trimm.set_defaults(func=BacterialTyper.modules.trimm.run)
 ##-------------------------------------------------------------##
 
 
@@ -112,21 +121,30 @@ subparser_assemblyQC.add_argument("--threads", help="Number of CPUs to use [Defa
 subparser_assemblyQC.set_defaults(func=BacterialTyper.modules.qc.assembly_check)
 ##-------------------------------------------------------------##
 
-
-
-
 ##--------------------------- annotate ----------------------- ##
 ##-------------------------------------------------------------##
 
+##--------------------------- identification ------------------##
+subparser_ident = subparsers.add_parser(
+    'ident',
+    help='Generates species identification for each sample.',
+    usage='BacterialGenotyper ident <input_folder> <output_folder> [-h|--help]',
+    description='This module call ...',
+)
+subparser_ident.add_argument("input_folder", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
+subparser_ident.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
+subparser_ident.add_argument("--threads", help="Number of CPUs to use [Default: 2].")
+subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run)
+##-------------------------------------------------------------##
 
 
 ##--------------------------- MLST --------------------------- ##
 ##-------------------------------------------------------------##
 
-
-
 ##-------------------------- virulence ----------------------- ##
 ##-------------------------------------------------------------##
+
+##
 
 
 #####

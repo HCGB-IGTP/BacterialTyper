@@ -21,6 +21,20 @@ from BacterialTyper import functions
 from BacterialTyper import config
 
 ##########
+def download_kma_database(folder, database):
+
+	## types: bacteria, archaea, protozoa, fungi, plasmids, typestrains
+	## Default: downloads all "bacterial" genomes from KMA website
+		
+	## ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/
+	## add step to check if is downloaded...
+	
+	## database should be unzipped and containing files...
+	##	return_code = check_db_indexed(index_name)
+
+	print()
+
+##########
 def index_database(database_entries, kma_bin, index_name, option):
 	
 	########################################################################################
@@ -53,21 +67,82 @@ def index_database(database_entries, kma_bin, index_name, option):
 	#######################################################################################
 	
 	if (option == "new"):
+		print ("\n+ Generate and index entries for kmer alignment search...\n")
 		cmd_kma_index = "%s -batch %s -o %s" %(kma_bin, database_entries, index_name)
 	elif (option == "add"):
+		print ("\n+ Updating database with new entries...\n")
 		cmd_kma_index = "%s -batch %s -o %s -t_db" %(kma_bin, database_entries, index_name)
 
+	functions.system_call(cma_kma_index)
+	
+	return_code = check_db_indexed(index_name)
+	return(return_code)
+
 ##########	
-def kmerfinder_call():
-	print()
+def kma_ident_call(option, files, index_names):
+	
+	output = "output_example_file"	
+	
+	if len(files) == 2:
+		print ("Paired-end mode KMA search:\n")
+		cmd_kma_search = "%s -ipe %s %s -o %s -t_db %s" %(kma_bin, file1, file2, output, index_name)
+	else:
+		print ("Single end mode KMA search:\n")
+		cmd_kma_search = "%s -i %s -o %s -t_db %s" %(kma_bin, files, output, index_name)
+
+	functions.system_call(cma_kma_search)
 	
 ##########
-def kmerfinder_module():
-	print()
+def check_db_indexed(index_name):
+	my_index_list = [".comp.b", ".index.b", ".length.b", ".name", ".seq.b"]
+
+	print ("+ Checking if database has been previously indexed...")
+	for sufix in my_index_list:
+		my_file = index_name + sufix
+		if os.path.isfile(my_file):
+			print ("\t- " + my_file + ' exists...')
+		else:
+			return(False)
+			
+	## dump in screen
+	names = index_name + '.name'
+	count = get_number_lines(names)
+	
+	print ("\n+ Database seems OK and contains several entries (%s):\n" %count)
+
+	if (count > 50):
+		print ("\tToo many entries in the database.\n\tCheck file %s for further details." %(count, names))
+	else:
+		names_hd = open(names, 'r')
+		names_hd_read = names_hd.read()
+		names_hd.close()
+		print (names_hd_read)
+	
+	return(True)
+	
+##########
+def kma_ident_module(index_name, option, files):
+	
+	## index_name
+	index_status = check_db_indexed(index_name)
+
+	if (option == 'update'):
+		#index_database()
+		print()	
+
+	else:	
+		if (index_status == True):
+			print ()
+		else:
+			#index_database	
+			print ()
+	
+	## kma_ident_call
+	## kma -t_db bacteria -Sparse -o example -i WTCHG_370809_205154/WTCHG_370809_205154_trim_R1.fastq -t 4
 
 ######
 def	help_options():
-	print ("\nUSAGE: python %s file1 file2 name SPADES_bin threads path\n"  %os.path.realpath(__file__))
+	print ("\nUSAGE: python %s file1 file2 name xxc threads path\n"  %os.path.realpath(__file__))
 
 ######
 def main():
@@ -80,12 +155,11 @@ def main():
 		help_options()
 		exit()    	
 
-
 ######
-
-'''******************************************'''
 if __name__== "__main__":
 	main()
+	
+	
 	
 	
 ################################################################################################

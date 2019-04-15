@@ -15,6 +15,7 @@ from datetime import datetime
 from xtract import xtract
 from Bio import SeqIO
 from termcolor import colored
+import pandas as pd
 
 ## import configuration
 import BacterialTyper 
@@ -66,9 +67,9 @@ def create_folder (path):
 ###############	
 def timestamp (start_time_partial):
 	h,m,s = gettime(start_time_partial)
-	print ('--------------------------------')
+	print_sepLine("-", 25)
 	print ('(Time spent: %i h %i min %i s)' %(int(h), int(m), int(s)))
-	print ('--------------------------------')
+	print_sepLine("-", 25)
 	return time.time()
 ############### 
 
@@ -162,7 +163,43 @@ def progbar(curr, total, full_progbar):
 ###############
 
 ###############
+def concat_fasta(dirFasta, Fasta):
+	print ("+ Concatenating all information into one file...")	
+	cmd = 'cat ' + dirFasta + '/*fna > ' + Fasta
+	return(system_call(cmd))
+###############
+
+###############
+def get_data(ID_file, SEP):	
+	print ("+ Obtaining information from file: ", ID_file)
+	data = pd.read_csv(ID_file, header=0, sep=SEP)
+	print ("\n+ Data:")
+	print (data)
+	print ("\n\n")	
+	return(data)
+###############
+
+###############
 def get_number_lines(input_file):	
 	with open(input_file) as foo:
 		lines = len(foo.readlines())
 	return (lines)
+###############
+
+###############
+def pipeline_header():
+	print_sepLine("#", 70)
+	print ("BacterialTyper pipeline")
+	print ("Jose F. Sanchez")
+	print ("Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain")
+	print_sepLine("#", 70)
+
+###############
+
+###############
+def print_sepLine(char, num):
+	string = char * num
+	print (string)
+###############
+
+

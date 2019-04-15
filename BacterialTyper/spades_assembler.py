@@ -127,7 +127,7 @@ def run_module_SPADES(name, path, file1, file2, threads):
 		rename_contigs(tmp_plasmids, "scaffolds_plasmids", new_plasmids)
 	
 	## contig stats
-	contig_stats(new_contigs, new_plasmids)	
+	stats(new_contigs, new_plasmids)	
 
 ######
 def discardPlasmids(contigs, plasmids, path, sample):
@@ -231,30 +231,32 @@ def discardPlasmids(contigs, plasmids, path, sample):
 	return (contig_out_file, plasmid_out_file)
 
 ######
-def contig_stats(new_contigs, new_plasmids):
-	
+def contig_stats(sequences):
+	file_out = sequences + '_stats.txt'
+	cmd_stats = 'perl %s %s > %s' %(contig_stats_script, sequences, file_out)
+	code_chr = functions.system_call(cmd_stats)
+	return (file_out)
+
+######
+def stats(new_contigs, new_plasmids):	
 	## generate contig statistics
 	print ('+ Get assembly statistics:...\n')
 	print (' + Main assembly:')
-	contig_out = new_contigs + '_stats.txt'
-	cmd_stats_chromosome = 'perl %s %s > %s' %(contig_stats_script, new_contigs, contig_out)
-	code_chr = functions.system_call(cmd_stats_chromosome)
-	print (cmd_stats_chromosome)
 	
+	contig_out = contig_stats(new_contigs)	
+		
 	## dump in screen
 	contig_out_file = open(contig_out, 'r')
 	contig_out_file_read = contig_out_file.read()
 	contig_out_file.close()
 	print (contig_out_file_read)
+
 	print ('')	
 	if (new_plasmids == 'FAIL'):
 		print ('+ No plasmids identified...\n')
 	else:
 		print ('+ Plasmids assembly')
-		plasmid_out = new_plasmids + '_stats.txt'
-		cmd_stats_plasmids = 'perl %s %s > %s' %(contig_stats_script, new_plasmids, plasmid_out)
-		code_chr = functions.system_call(cmd_stats_plasmids)
-		print (cmd_stats_plasmids)
+		plasmid_out = contig_stats(new_plasmids)	
 
 		## dump in screen
 		plasmid_out_file = open(plasmid_out, 'r')
@@ -313,7 +315,7 @@ def main():
 		rename_contigs(tmp_plasmids, "scaffolds_plasmids", new_plasmids)
 	
 	## contig stats
-	contig_stats(new_contigs, new_plasmids)	
+	stats(new_contigs, new_plasmids)	
 		
 ######
 
