@@ -17,6 +17,33 @@ from io import open
 from BacterialTyper import functions
 from BacterialTyper import config
 
+############################################################### 
+def download_ariba_databases(main_folder):
+
+	## ToDo check if already download	
+	print("\n\n+ Download databases for Antimicrobial Resistance Identification By Assembly (ARIBA).")
+	ariba_folder = functions.create_subfolder("ARIBA", main_folder)
+	## where database is one of: 
+	print ("+ Available databases:")
+	out_info = main_folder + '/ARIBA_information.txt'
+	hd = open(out_info, 'w')
+
+	dbs = ["argannot", "card", "megares", "plasmidfinder", "resfinder", "srst2_argannot", "vfdb_core", "vfdb_full", "virulencefinder"]
+	for db_set in dbs:
+		functions.print_sepLine("-",30)
+		print (colored("+ " + db_set,'yellow'))
+		folder_set = functions.create_subfolder(db_set, ariba_folder)
+		ariba_getref(db_set, folder_set + "/" + db_set)
+
+		## print citation for each database
+		functions.print_sepLine("'", 75)
+
+		hd.write(db_set)
+		hd.write('\n')
+	
+	hd.close()
+
+
 ##########
 def ariba_summary():
 	######################################################################################
@@ -81,15 +108,7 @@ def ariba_getref(database, outdir):
 	cmd = 'ariba getref %s %s' %(database, outdir)
 	return(functions.system_call(cmd))
 	
-	#card Citation: "The Comprehensive Antibiotic Resistance Database", McArthur et al 2013, PMID: 23650175
-	#megares Citation: "MEGARes: an antimicrobial database for high throughput sequencing", Lakin et al 2016, PMID: PMC5210519
-	#plasmidfinder Citation "PlasmidFinder and pMLST: in silico detection and typing of plasmids", Carattoli et al 2014, PMID: 24777092
-	#resfinder Citation "Identification of acquired antimicrobial resistance genes", Zankari et al 2012, PMID: 22782487
-	#srst2_argannot Citation: "ARG-ANNOT, a new bioinformatic tool to discover antibiotic resistance genes in bacterial genomes", Gupta et al 2014, PMID: 24145532
-	#vfdb_core Citation: "VFDB 2016: hierarchical and refined dataset for big data analysis-10 years on",\nChen LH et al 2016, Nucleic Acids Res. 44(Database issue):D694-D697. PMID: 26578559\n\n'
-	#vfdb_full Citation: "VFDB 2016: hierarchical and refined dataset for big data analysis-10 years on",\nChen LH et al 2016, Nucleic Acids Res. 44(Database issue):D694-D697. PMID: 26578559\n\n'
-	#virulencefinder Citation: "Real-time whole-genome sequencing for routine typing, surveillance, and outbreak detection of verotoxigenic Escherichia coli", Joensen al 2014, PMID: 24574290\n\n'
-	
+
 ##########
 def ariba_pubmlstget(species, outdir):
 	######################################################################################

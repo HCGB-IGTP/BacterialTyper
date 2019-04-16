@@ -16,7 +16,7 @@ from BacterialTyper import functions
 from BacterialTyper import config
 
 ###############
-def select_samples (path_to_samples):
+def select_samples (path_to_samples, outdir):
     
     #Get all files in the folder "path_to_samples"    
 	files = os.listdir(path_to_samples)
@@ -37,7 +37,7 @@ def select_samples (path_to_samples):
 			if gz_search:
 				file_name = gz_search.group(1)
 				if file_name not in non_duplicate_samples:
-					functions.extract(path_to_samples + '/' + files)
+					functions.extract(path_to_samples + '/' + files,  outdir)
 					non_duplicate_samples.append(file_name)
 
 			discard_samples.append(files)			

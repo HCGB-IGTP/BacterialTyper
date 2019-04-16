@@ -19,6 +19,7 @@ import pandas as pd
 import ncbi_genome_download as ngd
 from Bio import SeqIO
 import shutil
+from termcolor import colored
 
 ## import my modules
 from BacterialTyper import functions
@@ -45,15 +46,15 @@ def NCBIdownload(data, data2download, folder):
 
 		if acc_ID in data2download.index:
 			print ("\n+ Data is already available in database for: ")
-			print (info)
+			print (colored(info, 'green'))
 		else:
 			if os.path.exists(dir_path):
 				## path exist
 				print ("\n+ Data is already downloaded for: ")
-				print (info)
+				print (colored(info, 'green'))
 			else:
 				print ("\n+ Downloading data for:")	
-				print (info)
+				print (colored(info, 'green'))
 				ngd.download(section='genbank', file_format='fasta,gff,protein-fasta', assembly_accessions=acc_ID, output=folder,  group='bacteria')
 
 
@@ -71,7 +72,7 @@ def NCBIdownload(data, data2download, folder):
 				if f.endswith('gz'):
 					files_list.append(f)
 					print ("\t- Extracting files: ", f)
-					functions.extract(dir_path + '/' + f)
+					functions.extract(dir_path + '/' + f, dir_path)
 					os.remove(dir_path + '/' + f)
 
 			## get files download
@@ -145,7 +146,7 @@ def get_files_download(folder):
 def update_database(strains2get_file, folder):
 	## get file information from database
 	database = functions.get_data(folder + '/database.csv', ',')	
-	strains2get = functions.get_data(strains2get_file, '\t')	
+	strains2get = functions.get_data(strains2get_file, ',')	
 	
 	## download
 	data = NCBIdownload(strains2get, database, folder)

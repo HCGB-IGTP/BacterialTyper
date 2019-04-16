@@ -15,6 +15,7 @@ import re
 import sys
 from sys import argv
 from io import open
+from termcolor import colored
 
 ## import my modules
 from BacterialTyper import functions
@@ -24,15 +25,91 @@ from BacterialTyper import config
 def download_kma_database(folder, database):
 
 	## types: bacteria, archaea, protozoa, fungi, plasmids, typestrains
-	## Default: downloads all "bacterial" genomes from KMA website
-		
-	## ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/
-	## add step to check if is downloaded...
-	
-	## database should be unzipped and containing files...
-	##	return_code = check_db_indexed(index_name)
+	## Default: downloads all "bacterial,plasmids" genomes from KMA website
 
-	print()
+	## ToDo: update with latest version, not working so far.
+	#ftp_site = "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/latest/"
+	
+	## ToDo: Set automatic: download config file and look for prefix for each sample and generate a dictionary to code the prefix for each db.
+	
+	# Database configuration file - Describes the content of the database
+	# Each db consist of 5 files with the following extensions: b, comp.b, length.b, seq.b, name
+	# Other important files are: .name, .kma.entries.all, .kma.entries.deleted, .kma.entries.added, .md5
+	# db_prefix	name	description
+	#bacteria.ATG	Bacteria Organisms	Bacteria organisms library prefix=ATG
+	#plasmids.T	Bacteria Plasmids	Bacteria plasmids library prefix=T
+	#typestrains.ATG	Bacteria Type Strains	Bacteria type strains library prefix=ATG
+	#fungi.ATG	Fungi	Fungi library prefix=ATG
+	#protozoa.ATG	Protozoa	Protozoa library prefix=ATG
+	#archaea.ATG	Archaea	Archaea library prefix=ATG	
+	
+	if (database == 'plasmids'):
+		prefix = '.T'
+	else:
+		prefix = '.ATG'
+		
+	index_name = folder + '/' + database + prefix	
+
+	## check if already download
+	if os.path.exists(folder):
+		return_code_down = check_db_indexed(index_name)
+		#print (return_code_down)
+	
+	if (return_code_down == False):
+		## Download data
+		print ("\t+ Downloading data now, it migth take a while....")
+		ftp_site = "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/20190107/"
+		url = ftp_site + database + '.tar.gz'
+		functions.wget_download(url, folder)
+
+		md5_url = ftp_site + database + '.md5'
+		functions.wget_download(md5_url, folder)
+	
+		print ("\n\t+ Data succesfully downloaded.....")
+
+		## get files
+		files = os.listdir(folder)
+		md5_sum = ""
+		for f in files:
+			if f.endswith('tar.gz'):
+				tar_file = folder + '/' + f
+			elif f.endswith('md5'):
+				md5_sum = folder + '/' + f
+		
+		## check md5sum
+		print ("\t+ Checking for integrity using md5sum")
+		
+		# get md5 sum from source
+		md5_string = ""
+		with open(md5_sum, 'r') as myfile:
+			line = myfile.read()
+		
+		line = re.sub(r"\s", ',', line)
+		md5_string = line.split(",")[0]
+		
+		## calculate md5 for file
+		result_md5 = functions.check_md5sum(md5_string, tar_file)
+		if (result_md5 == True):
+			# extract
+			print ("\t+ Extracting database into destination folder: " + folder)
+			functions.extract(tar_file, folder)	
+			
+			## not fully working
+			
+		else:
+			print (colored("*** ERROR: Some error ocurred during the downloading and file is corrupted ***", 'red'))
+			return ("Error")
+		
+		## database should be unzipped and containing files...
+		return_code_extract = check_db_indexed(index_name)
+		
+		if (return_code_extract):
+			print("+ Database (%s) succesfully extracted in folder: %s..." %(database, folder))
+		else:
+			string = "*** ERROR: Some error ocurred during the extraction of the database (%s). Please check folder (%s) and downloading and file is corrupted ***" %(database, folder)
+			print (colored(string, 'red'))
+			return ("Error")
+
 
 ##########
 def index_database(database_entries, kma_bin, index_name, option):
@@ -96,22 +173,26 @@ def kma_ident_call(option, files, index_names):
 def check_db_indexed(index_name):
 	my_index_list = [".comp.b", ".index.b", ".length.b", ".name", ".seq.b"]
 
-	print ("+ Checking if database has been previously indexed...")
+	print ("\t+ Checking if database has been previously indexed...")
 	for sufix in my_index_list:
+		##print (sufix)
 		my_file = index_name + sufix
 		if os.path.isfile(my_file):
 			print ("\t- " + my_file + ' exists...')
 		else:
-			return(False)
+			if (sufix == '.index.b'):
+				continue
+			else:
+				return(False)
 			
 	## dump in screen
 	names = index_name + '.name'
-	count = get_number_lines(names)
+	count = functions.get_number_lines(names)
 	
-	print ("\n+ Database seems OK and contains several entries (%s):\n" %count)
+	print ("\n\t+ Database seems OK and contains several entries (%s):\n" %count)
 
 	if (count > 50):
-		print ("\tToo many entries in the database.\n\tCheck file %s for further details." %(count, names))
+		print ("\tToo many entries in the database.\n\tCheck file %s for further details." %names)
 	else:
 		names_hd = open(names, 'r')
 		names_hd_read = names_hd.read()

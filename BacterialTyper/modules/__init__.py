@@ -12,6 +12,7 @@ __all__ = [
 	'run',
 	'test',
 	'version',
+	'citation'
 ]
 
 from BacterialTyper.modules import *

@@ -15,6 +15,7 @@ from datetime import datetime
 from xtract import xtract
 from Bio import SeqIO
 from termcolor import colored
+from filehash import FileHash
 import pandas as pd
 
 ## import configuration
@@ -98,8 +99,8 @@ def system_call(cmd):
 
 ###############
 def wget_download(url, path):
-	print ('+ Downloading: ', url)
-	wget.download(url, path)
+	print ('\t+ Downloading: ', url)
+	#wget.download(url, path)
 	print ('\n')
 ###############
 
@@ -118,8 +119,8 @@ def subset_fasta(ident, fasta, out):
 ###############
 
 ###############
-def extract(fileGiven):
-	xtract(fileGiven, all=True)
+def extract(fileGiven, out):
+	xtract(fileGiven, destination=out, all=True)
 ###############
 
 ###############
@@ -201,5 +202,18 @@ def print_sepLine(char, num):
 	string = char * num
 	print (string)
 ###############
+
+###############
+def check_md5sum(string, File):
+	md5hasher = FileHash('md5')
+	md5_file = md5hasher.hash_file(File)
+	
+	if (md5_file == string):
+		#print (md5_file + '==' + string)
+		return (True)
+	else:
+		return (False)
+###############
+
 
 

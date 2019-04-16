@@ -12,6 +12,7 @@ from BacterialTyper import config
 
 ################################
 def merge(options):
+
 	print ()
 
 def retrieve():
