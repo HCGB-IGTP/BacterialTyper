@@ -6,7 +6,7 @@ import BacterialTyper
 
 parser = argparse.ArgumentParser(
     prog='BacterialTyper',
-    usage='BacterialTyper <command> <options>',
+    #usage='BacterialTyper',
     description='BacterialTyper: Bacterial Genotyping using NGS...'
 )
 subparsers = parser.add_subparsers(title='Available modules', help='', metavar='')
@@ -19,7 +19,7 @@ subparsers = parser.add_subparsers(title='Available modules', help='', metavar='
 subparser_config = subparsers.add_parser(
     'config',
     help='Configure the pipeline: executables and additional files/data.',
-    usage='BacterialGenotyper config [-h|--help]',
+    #usage='BacterialGenotyper config [-h|--help]',
     description='xxxxx',
 )
 subparser_config.set_defaults(func=BacterialTyper.modules.set_configuration.run)
@@ -29,7 +29,7 @@ subparser_config.set_defaults(func=BacterialTyper.modules.set_configuration.run)
 subparser_initDB = subparsers.add_parser(
     'initDB',
     help='Downloads and initiates a database for later use.',
-    usage='BacterialGenotyper initDB <folder> <ID_file> [-h|--help] [--kma_db {*}] [--no_def_KMA] [--index_KMA] [--no_ARIBA]',
+    #usage='BacterialGenotyper initDB <folder> <ID_file> [-h|--help] [--kma_db {*}] [--no_def_KMA] [--index_KMA] [--no_ARIBA]',
     description='Given a file with information from known strains this module initiates a database with information from NCBI and other sources: ARIBA databases and KMA indexes.',
 )
 subparser_initDB.add_argument("path", help="Folder path to generate database.")
@@ -45,7 +45,7 @@ subparser_initDB.set_defaults(func=BacterialTyper.modules.database.initial_run)
 subparser_updateDB = subparsers.add_parser(
     'updateDB',
     help='Updates a database with information from NCBI.',
-    usage='BacterialGenotyper updateDB_NCBI <path> <ID_file> [-h|--help] [--kma_db {*}] [--no_def_KMA] [--index_KMA] [--ARIBA_db]',
+    #usage='BacterialGenotyper updateDB_NCBI <path> <ID_file> [-h|--help] [--kma_db {*}] [--no_def_KMA] [--index_KMA] [--ARIBA_db]',
     description='Given a file with information from known strains this module updates an initiated database with information from NCBI. Other options allow to update database from KMA indexes or ARIBA databases.'
 )
 subparser_updateDB.add_argument("path", help="Folder path to generate database.")
@@ -57,6 +57,24 @@ subparser_updateDB.add_argument("--ARIBA_db", action="store_true", help="It down
 subparser_updateDB.set_defaults(func=BacterialTyper.modules.database.updateDB_NCBI)
 ##-------------------------------------------------------------##
 
+##--------------------------- prepareSamples ----------------- ##
+subparser_sample = subparsers.add_parser(
+    'prepareSamples',
+    help='Retrieves FASTQ files for the same sample. Generates symbolic link.',
+    description='This module merges fastq files from a sequencing run where multiples files have been generated for the same sample e.g different lanes. It concatenates these files according the common identifier and generates a unique file, one per paired-read if necessary',
+)
+subparser_sample.add_argument("input", help="Folder containing fastq files. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. All files would be retrieved.")
+subparser_sample.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
+subparser_sample.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+subparser_sample.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].")
+subparser_sample.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+subparser_sample.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+subparser_sample.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+subparser_sample.add_argument("--copy", action="store_true", help="Instead of generating symbolic links, copy files into output folder. [Default OFF].")
+subparser_sample.set_defaults(func=BacterialTyper.modules.sample_prepare.retrieve)
+##-------------------------------------------------------------##
+
+
 ##--------------------------- merge -------------------------- ##
 subparser_merge = subparsers.add_parser(
     'mergeFQ',
@@ -67,7 +85,9 @@ subparser_merge.add_argument("input", help="Folder containing reads. Files could
 subparser_merge.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
 subparser_merge.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
 subparser_merge.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].")
-subparser_merge.add_argument("--bacth", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+subparser_merge.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+subparser_merge.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+subparser_merge.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 subparser_merge.set_defaults(func=BacterialTyper.modules.sample_prepare.merge)
 ##-------------------------------------------------------------##
 
@@ -76,7 +96,7 @@ subparser_merge.set_defaults(func=BacterialTyper.modules.sample_prepare.merge)
 subparser_fastqc = subparsers.add_parser(
     'fastqc',
     help='Generates quality check for each sample using FASTQC.',
-    usage='BacterialGenotyper fastqc <input_folder> <output_folder> [pair] [skip_report] [-h|--help]',
+    #usage='BacterialGenotyper fastqc <input_folder> <output_folder> [pair] [skip_report] [-h|--help]',
     description='This module call FASTQC for a quality check of each sample provided',
 )
 subparser_fastqc.add_argument("input_folder", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
@@ -91,7 +111,7 @@ subparser_fastqc.set_defaults(func=BacterialTyper.modules.qc.fastqc)
 subparser_trimm = subparsers.add_parser(
     'trimm',
     help='Trimms sequencing adapters from files.',
-    usage='BacterialGenotyper trimm <input_folder> <output_folder> [pair] [skip_report] [-h|--help]',
+    #usage='BacterialGenotyper trimm <input_folder> <output_folder> [pair] [skip_report] [-h|--help]',
     description='This module trimms sequencing adapters that could be present in next generation sequencing files',
 )
 subparser_trimm.add_argument("input_folder", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
@@ -114,7 +134,7 @@ subparser_trimm.set_defaults(func=BacterialTyper.modules.trimm.run)
 subparser_assemblyQC = subparsers.add_parser(
     'assemblyQC',
     help='Generates quality check for each assembly generated using basic statistics and BUSCO.',
-    usage='BacterialGenotyper assembly_check <input_folder> <output_folder> [-h|--help]',
+    #usage='BacterialGenotyper assembly_check <input_folder> <output_folder> [-h|--help]',
     description='This module call FASTQC for a quality check of each sample provided',
 )
 subparser_assemblyQC.add_argument("input_folder", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
@@ -131,7 +151,7 @@ subparser_assemblyQC.set_defaults(func=BacterialTyper.modules.qc.assembly_check)
 subparser_ident = subparsers.add_parser(
     'ident',
     help='Generates species identification for each sample.',
-    usage='BacterialGenotyper ident <input_folder> <output_folder> [-h|--help]',
+    #usage='BacterialGenotyper ident <input_folder> <output_folder> [-h|--help]',
     description='This module call ...',
 )
 subparser_ident.add_argument("input_folder", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
@@ -147,14 +167,30 @@ subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run)
 ##-------------------------- virulence ----------------------- ##
 ##-------------------------------------------------------------##
 
+
+
+##-------------------------- version ------------------------- ##
+subparser_version = subparsers.add_parser(
+    'version',
+    help='Print the different packages versions and other softwares versions.',
+    #usage='BacterialGenotyper version {only,all} [-h|--help]',
+    description='This code generates prints an index of version number for the different packages and other softwares employed here',
+)
+subparser_version.add_argument("option", help="Print only this pipeline version or all packages versions.", choices=['only','all'])
+subparser_version.set_defaults(func=BacterialTyper.modules.version.run)
+
+##-------------------------------------------------------------##
+
+
+
 ##--------------------------- citation ------------------------##
 subparser_citation = subparsers.add_parser(
     'citation',
-    help='Generate an index of citations for the different packages and other softwares employed here...',
-    usage='BacterialGenotyper citation [][-h|--help]',
+    help='Print an index of citations for the different packages and other softwares employed here.',
+    #usage='BacterialGenotyper citation {only,all} [-h|--help]',
     description='This code generates prints an index of citation for the different packages and other softwares employed here',
 )
-subparser_citation.add_argument("all", help="Print all citations: third party softwares, other modules and this pipeline citation")
+subparser_citation.add_argument("option", help="Print only this pipeline citation or all packages references.", choices=['only','all'])
 subparser_citation.set_defaults(func=BacterialTyper.modules.citation.run)
 ##---
 

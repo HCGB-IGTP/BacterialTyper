@@ -1,4 +1,4 @@
-#usr/bin/env python
+#usr/bin/en python3
 '''
 This code prepares samples for further analysis.
 Jose F. Sanchez
@@ -16,39 +16,84 @@ from BacterialTyper import functions
 from BacterialTyper import config
 
 ###############
-def select_samples (path_to_samples, outdir):
+def select_samples (list_samples, samples_prefix, pair=True, exclude=False):
     
     #Get all files in the folder "path_to_samples"    
-	files = os.listdir(path_to_samples)
 	sample_list = []
-	for fastq in files:	
-		if fastq.endswith('.gz'):
-			sample_list.append(fastq)
-		elif fastq.endswith('fastq'):
-			sample_list.append(fastq)
-		else:
-			print ("** ERROR: ", fastq, 'is a file that is neither in fastq.gz or .fastq format, so it is not included')
+	for names in samples_prefix:
+		for path_fastq in list_samples:	
+			fastq = os.path.basename(path_fastq)
+			samplename_search = re.search(r"(%s).*" % names, fastq)
+			enter = ""
+			if samplename_search:
+				if (exclude): ## exclude==True
+					enter = False
+				else: ## exclude==True
+					enter = True
+			else:
+				if (exclude): ## exclude==True
+					enter = True
+				else: ## exclude==True
+					enter = False
+					
+			if enter:
+				if fastq.endswith('.gz'):
+					sample_list.append(path_fastq)
+				elif fastq.endswith('fastq'):
+					sample_list.append(path_fastq)
+				else:
+					print ("** ERROR: ", path_fastq, 'is a file that is neither in fastq.gz or .fastq format, so it is not included')
 
+	## discard duplicates if any
 	non_duplicate_samples = list(set(sample_list))	
 	discard_samples = []
-	for files in non_duplicate_samples:
-		if files.endswith('.gz'):
-			gz_search = re.search(r"(.*)\.gz", files)
-			if gz_search:
-				file_name = gz_search.group(1)
-				if file_name not in non_duplicate_samples:
-					functions.extract(path_to_samples + '/' + files,  outdir)
-					non_duplicate_samples.append(file_name)
-
-			discard_samples.append(files)			
 	
+	if (pair):
+		for path_files in non_duplicate_samples:
+			files = os.path.basename(path_files)
+			name_search = re.search(r"(.*)(\_1|_2)(\.f.*q)(\..*)", files)
+			if name_search:
+				file_name = name_search.group(1)
+				read_pair = name_search.group(2)
+				ext = name_search.group(3)
+				gz = name_search.group(4)
+				dirN = os.path.dirname(path_files)
+
+				## get second pair
+				paired = ""
+				if (read_pair == '_1'):
+					paired = dirN + '/' + file_name + '_2' + ext
+				else:
+					paired = dirN + '/' + file_name + '_1' + ext
+	
+				if gz:
+					unzip = dirN + '/' + file_name + read_pair + ext
+					if os.path.isfile(unzip):
+						discard_samples.append(path_files)
+						if os.path.isfile(paired):
+							## both files are unzipped and available
+							discard_samples.append(paired)
+							print (file_name + '\t' + unzip + '\t&\t' + paired)							
+							## save both files
+					else:
+						## gunzipped
+						if os.path.isfile(paired + gz):
+							## save both files
+							print (file_name + '\t' + path_files + '\t&\t' + paired + gz)
+				else:
+					## not gunzipped files					
+					if os.path.isfile(paired):
+						## save both files
+						print (file_name + '\t' + path_files + '\t&\t' + paired)
+			
+	exit()	
 	for samples in discard_samples:
 		non_duplicate_samples.remove(samples)
 						
 	non_duplicate_samples2 = list(set(non_duplicate_samples))						
 	number_samples = len(non_duplicate_samples2)	
 
-	print ("\t\t- ", number_samples," samples selected from ", path_to_samples)
+	print ("\t\t- ", number_samples," samples selected")
 	return sorted(non_duplicate_samples)
 	
 ###############

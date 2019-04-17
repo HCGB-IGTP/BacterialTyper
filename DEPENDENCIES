@@ -7,4 +7,6 @@ samtools
 circos
 plasmidID
 spades
+trimmomatic
+fastqc
 

@@ -75,10 +75,9 @@ def timestamp (start_time_partial):
 ############### 
 
 ############### 
-def get_symbolic_link (sample_list, path_to_samples, directory):
+def get_symbolic_link (sample_list, directory):
 	for samplex in sample_list:
-		sample_path = path_to_samples + '/' + samplex
-		cmd = 'ln -s %s %s' %(sample_path, directory)
+		cmd = 'ln -s %s %s' %(samplex, directory)
 		system_call(cmd)
 
 	files2return = os.listdir(directory)
@@ -188,22 +187,6 @@ def get_number_lines(input_file):
 ###############
 
 ###############
-def pipeline_header():
-	print_sepLine("#", 70)
-	print ("BacterialTyper pipeline")
-	print ("Jose F. Sanchez")
-	print ("Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain")
-	print_sepLine("#", 70)
-
-###############
-
-###############
-def print_sepLine(char, num):
-	string = char * num
-	print (string)
-###############
-
-###############
 def check_md5sum(string, File):
 	md5hasher = FileHash('md5')
 	md5_file = md5hasher.hash_file(File)
@@ -215,5 +198,48 @@ def check_md5sum(string, File):
 		return (False)
 ###############
 
+#################
+def get_fullpath_list(dir_given):
+	return_path = []
+	for root, dirs, files in os.walk(dir_given):
+		for f in files:
+			return_path.append(os.path.join(root,f))
+	return return_path   	    
+#################
+    	    
+
+#################
+### AESTHETICS
+#################
+def pipeline_header():
+	print ("\n")
+	print_sepLine("#", 70)
+	print('#', '{: ^66}'.format("BacterialTyper pipeline"), '#')
+	print('#', '{: ^66}'.format("Jose F. Sanchez & Lauro Sumoy"), '#')
+	print('#', '{: ^66}'.format("Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain"), '#')
+	print_sepLine("#", 70)
+
+###############
+
+###############
+def print_sepLine(char, num):
+	string = char * num
+	print (string)
+###############
+
+###############
+def boxymcboxface(message):
+	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
+	## give credit to them appropiately
+   	#print('-' * 79)
+	print ('\n')
+	print('|', '=' * 50, '|', sep='')
+	print('|', '{: ^48}'.format(message), '|')
+	print('|', '=' * 50, '|', sep='')
+	print ('\n')
+    #print('-' * 79)
+    
+    
+###############
 
 
