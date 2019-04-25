@@ -24,7 +24,7 @@ ARIBA_DB_citation ={
 
 #########
 def print_all():
-
+	functions.pipeline_header()
 	functions.print_sepLine("+", 50)
 	print ("\tARIBA databases")
 	functions.print_sepLine("+", 50)
@@ -43,6 +43,8 @@ def only_us():
 
 #########
 def run(options):
+
+	functions.boxymcboxface("Citation")
 	if (options.option == 'all'):
 		print (colored("\n+ BacterialTyper citation:", 'blue'))
 		only_us()

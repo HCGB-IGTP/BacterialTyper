@@ -18,6 +18,11 @@ from BacterialTyper import functions
 from BacterialTyper import config
 
 ############################################################### 
+def get_ARIBA_dbs():
+	dbs = ["argannot", "card", "megares", "plasmidfinder", "resfinder", "srst2_argannot", "vfdb_core", "vfdb_full", "virulencefinder"]
+	return (dbs)
+
+############################################################### 
 def download_ariba_databases(main_folder):
 
 	## ToDo check if already download	
@@ -28,18 +33,20 @@ def download_ariba_databases(main_folder):
 	out_info = main_folder + '/ARIBA_information.txt'
 	hd = open(out_info, 'w')
 
-	dbs = ["argannot", "card", "megares", "plasmidfinder", "resfinder", "srst2_argannot", "vfdb_core", "vfdb_full", "virulencefinder"]
+	dbs = get_ARIBA_dbs()
 	for db_set in dbs:
 		functions.print_sepLine("-",30)
 		print (colored("+ " + db_set,'yellow'))
 		folder_set = functions.create_subfolder(db_set, ariba_folder)
 		ariba_getref(db_set, folder_set + "/" + db_set)
-
-		## print citation for each database
-		functions.print_sepLine("'", 75)
-
-		hd.write(db_set)
-		hd.write('\n')
+		
+		if (ariba_getref == 'OK'):
+			## print citation for each database
+			functions.print_sepLine("'", 75)
+			hd.write(db_set)
+			hd.write('\n')
+		else:
+			print ("** ARIBA getref failed for " %db_set)
 	
 	hd.close()
 

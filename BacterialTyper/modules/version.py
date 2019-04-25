@@ -21,11 +21,6 @@ python_packages_BacterialTyper = ('ariba', 'bs4', 'dendropy', 'pyfastaq', 'pymum
 def print_all():
 
 	functions.print_sepLine("+", 50)
-	print ('BacterialTyper version: ' + pipeline_version)
-	functions.print_sepLine("+", 50)
-	print ('\n')
-
-	functions.print_sepLine("+", 50)
 	print ('External dependencies:\n')
 	functions.print_sepLine("+", 50)
 	extern_progs.dependencies()
@@ -63,17 +58,26 @@ def print_all():
 def only_us():
 	print ("Version to be included when properly finished...\n\n")
 
+	functions.print_sepLine("+", 50)
+	print ('BacterialTyper version: ' + pipeline_version)
+	functions.print_sepLine("+", 50)
+	print ('\n')
+
+
 #########
 def run(options):
+	functions.pipeline_header()
+	functions.boxymcboxface("Version")
+
 	if (options.option == 'all'):
-		print (colored("\n+ BacterialTyper citation:", 'blue'))
+		print (colored("\n+ BacterialTyper citation:", 'yellow'))
 		only_us()
 
-		print (colored("\n+ Other softwares employed in the pipeline", 'blue'))
+		print (colored("\n+ Other softwares employed in the pipeline", 'yellow'))
 		print_all()
 		
 	elif (options.option == 'only'):
-		print (colored("\n+ BacterialTyper version:", 'blue'))
+		print (colored("\n+ BacterialTyper version:", 'yellow'))
 		only_us()
 
 #########

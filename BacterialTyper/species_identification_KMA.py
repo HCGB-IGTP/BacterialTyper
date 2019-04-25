@@ -13,6 +13,7 @@ import io
 import os
 import re
 import sys
+import pandas as pd
 from sys import argv
 from io import open
 from termcolor import colored
@@ -20,6 +21,11 @@ from termcolor import colored
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
+from BacterialTyper import ariba_caller
+
+####################
+#### DATABASE	####
+####################
 
 ##########
 def download_kma_database(folder, database):
@@ -110,7 +116,38 @@ def download_kma_database(folder, database):
 			print (colored(string, 'red'))
 			return ("Error")
 
+##########
+def check_db_indexed(index_name):
+	my_index_list = [".comp.b", ".index.b", ".length.b", ".name", ".seq.b"]
 
+	print ("\t+ Checking if database has been previously indexed...")
+	for sufix in my_index_list:
+		##print (sufix)
+		my_file = index_name + sufix
+		if os.path.isfile(my_file):
+			print ("\t- " + my_file + ' exists...')
+		else:
+			if (sufix == '.index.b'):
+				continue
+			else:
+				return(False)
+			
+	## dump in screen
+	names = index_name + '.name'
+	count = functions.get_number_lines(names)
+	
+	print ("\n\t+ Database seems OK and contains several entries (%s):\n" %count)
+
+	if (count > 50):
+		print ("\tToo many entries in the database.\n\tCheck file %s for further details." %names)
+	else:
+		names_hd = open(names, 'r')
+		names_hd_read = names_hd.read()
+		names_hd.close()
+		print (names_hd_read)
+	
+	return(True)
+	
 ##########
 def index_database(database_entries, kma_bin, index_name, option):
 	
@@ -155,71 +192,96 @@ def index_database(database_entries, kma_bin, index_name, option):
 	return_code = check_db_indexed(index_name)
 	return(return_code)
 
+
 ##########	
-def kma_ident_call(option, files, index_names):
+def getdbs(database_folder):
+	print ("+ Reading information from: " + database_folder)
+	## read folders within database
+	files = os.listdir(database_folder) ## ARIBA/KMA_db/genbank/user_data
 	
-	output = "output_example_file"	
+	## init dataframe
+	colname = ["source", "db", "path"]
+	db_Dataframe  = pd.DataFrame(columns = colname)
 	
-	if len(files) == 2:
-		print ("Paired-end mode KMA search:\n")
-		cmd_kma_search = "%s -ipe %s %s -o %s -t_db %s" %(kma_bin, file1, file2, output, index_name)
-	else:
-		print ("Single end mode KMA search:\n")
-		cmd_kma_search = "%s -i %s -o %s -t_db %s" %(kma_bin, files, output, index_name)
+	for dbs in files:
+		#print (dbs)
+		print ("")
 
-	functions.system_call(cma_kma_search)
-	
-##########
-def check_db_indexed(index_name):
-	my_index_list = [".comp.b", ".index.b", ".length.b", ".name", ".seq.b"]
-
-	print ("\t+ Checking if database has been previously indexed...")
-	for sufix in my_index_list:
-		##print (sufix)
-		my_file = index_name + sufix
-		if os.path.isfile(my_file):
-			print ("\t- " + my_file + ' exists...')
-		else:
-			if (sufix == '.index.b'):
-				continue
-			else:
-				return(False)
+		#### ARIBA
+		if (dbs == "ARIBA"):
+			ARIBA_dbs = ariba_caller.get_ARIBA_dbs()
+			lineList = [line.rstrip('\n') for line in open(database_folder + '/' + dbs + '_information.txt')]
 			
-	## dump in screen
-	names = index_name + '.name'
-	count = functions.get_number_lines(names)
-	
-	print ("\n\t+ Database seems OK and contains several entries (%s):\n" %count)
+			for ariba_db in ARIBA_dbs:
+				this_db = database_folder + '/' + dbs + '/' + ariba_db
+				#print (this_db)
+				if os.path.exists(this_db):
+					if ariba_db in lineList:
+						db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db]
+						print (colored("\t- ARIBA: including information from database: " + ariba_db, 'green'))
+					else:
+						print (colored("\t**ARIBA: database %s was not available." %ariba_db, 'red'))
+		
+		#### KMA db
+		elif (dbs == "KMA_db"):
+			kma_dbs = os.listdir(database_folder + '/' + dbs)
+			for db in kma_dbs:
+				this_db = database_folder + '/' + dbs + '/' + db
+				if os.path.exists(this_db):				
+					if (db == 'plasmids'):
+						prefix = '.T'
+					else:
+						prefix = '.ATG'
 
-	if (count > 50):
-		print ("\tToo many entries in the database.\n\tCheck file %s for further details." %names)
+					this_db_file = this_db + '/' + db + prefix
+					if os.path.isfile(this_db_file + '.comp.b'):
+						db_Dataframe.loc[len(db_Dataframe)] = ['KMA_db', db, this_db_file]
+						print (colored("\t- KMA_db: including information from database " + db, 'green'))
+					else:
+						print (colored("\t**KMA_db: Database %s was not available." %db, 'red'))
+		#### genbank	
+		elif (dbs == "genbank"):
+			print ("\t- Genbank: including information from different reference strains available.") ## include data from NCBI
+
+		#### user_data
+		elif (dbs == "user_data"):
+			print ("\t- User_data: including information from user previously generated results") ## include user data
+
+	#print (db_Dataframe.to_csv)
+	return (db_Dataframe)
+
+########################
+#### IDENTIFICATION	####
+########################
+
+##########	
+def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads):
+	###
+	out_file_log = out_file + '.log'
+	if len(files) == 2:
+		#print ("Paired-end mode KMA search:\n")
+		cmd_kma_search = "%s -Sparse -ipe %s %s -o %s -t_db %s -t %s 2> %s" %(kma_bin, files[0], files[1], out_file, index_name, threads, out_file_log)
 	else:
-		names_hd = open(names, 'r')
-		names_hd_read = names_hd.read()
-		names_hd.close()
-		print (names_hd_read)
-	
-	return(True)
+		## to be tested
+		print ("Single end mode KMA search:\n")
+		cmd_kma_search = "%s -Sparse -i %s -o %s -t_db %s -t %s 2> %s" %(kma_bin, files[0], out_file, index_name, threads, out_file_log)
+
+	return(functions.system_call(cmd_kma_search))
 	
 ##########
-def kma_ident_module(index_name, option, files):
-	
-	## index_name
-	index_status = check_db_indexed(index_name)
-
-	if (option == 'update'):
-		#index_database()
-		print()	
-
-	else:	
-		if (index_status == True):
-			print ()
-		else:
-			#index_database	
-			print ()
-	
+def kma_ident_module(out_file, files, sample_name, index_name, threads):
 	## kma_ident_call
-	## kma -t_db bacteria -Sparse -o example -i WTCHG_370809_205154/WTCHG_370809_205154_trim_R1.fastq -t 4
+	kma_bin = config.EXECUTABLES["kma"]
+	#return(kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads))
+
+##########
+def parse_kma_results(sample, out_file):
+	results = pd.read_csv(out_file, sep="\t")
+	#pd.set_option('display.max_colwidth', -1)
+	#pd.set_option('display.max_columns', None)
+	#print (results)
+	results_filter = results[results['Template_Coverage'] > 90]
+	return (results_filter)
 
 ######
 def	help_options():
@@ -235,6 +297,12 @@ def main():
 	else:
 		help_options()
 		exit()    	
+	
+	## to do: implement main function
+	name = argv[1]
+	file_out = os.path.abspath(argv[2])
+
+	parse_kma_results(name, file_out)
 
 ######
 if __name__== "__main__":

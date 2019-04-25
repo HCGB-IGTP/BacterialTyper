@@ -11,10 +11,13 @@ import os
 import re
 import sys
 import pandas as pd
+from termcolor import colored
 
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
+
+## todo check if 'link_files' folder exists within folder provided.
 
 ###############
 def select_samples (list_samples, samples_prefix, pair=True, exclude=False):
@@ -65,8 +68,15 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False):
 	for path_files in non_duplicate_samples:
 	
 		files = os.path.basename(path_files)
+		#print (path_files)
+		
 		if (pair):
-			name_search = re.search(r"(.*)(\_1|_2)(\.f.*q)(\..*){0,1}", files)
+			trim_search = re.search(r".*trim.*", files)
+			if (trim_search):
+				name_search = re.search(r"(.*)\_trim\_(R1|R2)(\.f.*q)(\..*){0,1}", files)
+			else:
+				name_search = re.search(r"(.*)(\_1|_2)(\.f.*q)(\..*){0,1}", files)
+		
 		else:
 			name_search = re.search(r"(.*)(\.f.*q)(\..*){0,1}", files)
 		
@@ -89,17 +99,30 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False):
 				gz = name_search.group(3)
 			
 			dirN = os.path.dirname(path_files)
+			
+			#print (file_name)
+			#print (read_pair)
 
 			if (pair):
 				## get second pair
 				paired = ""
 				R2_paired = ""
-				if (read_pair == '_1'):
-					paired = dirN + '/' + file_name + '_2' + ext
-					R2_paired=True
+				
+				read_pair_search = re.search(r".*trim.*", files)
+				if read_pair_search:
+					if (read_pair == 'R1'):
+						paired = dirN + '/' + file_name + '_trim_R2' + ext
+						R2_paired=True
+					else:
+						paired = dirN + '/' + file_name + '_trim_R1' + ext
+						R2_paired=False
 				else:
-					paired = dirN + '/' + file_name + '_1' + ext
-					R2_paired=False
+					if (read_pair == '_1'):
+						paired = dirN + '/' + file_name + '_2' + ext
+						R2_paired=True
+					else:
+						paired = dirN + '/' + file_name + '_1' + ext
+						R2_paired=False
 			
 			found.append(file_name) ## save retrieved samples
 
@@ -146,7 +169,10 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False):
 
 	## df_samples is a pandas dataframe containing info
 	#print (df_samples)
-	number_samples = df_samples.index.size	
+	number_samples = df_samples.index.size
+	if (number_samples == 0):
+		print (colored("\n**ERROR: No samples were retrieved. Check the input provided\n",'red'))
+		exit()
 	print ("\t", number_samples," samples selected from the input provided...")
 	return (df_samples)
 	

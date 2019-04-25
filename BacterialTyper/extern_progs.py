@@ -17,6 +17,7 @@ from io import open
 from sys import argv
 import subprocess
 import pandas as pd
+from termcolor import colored
 
 ## import my modules
 from BacterialTyper import functions
@@ -81,7 +82,9 @@ package_min_versions = {
 def dependencies():
 	progs = {}
 	for prog in prog_to_default:
+		#print (prog)
 		prog_exe = get_exe(prog)
+		#print (prog + '\t' + prog_exe)
 		prog_ver = get_version(prog, prog_exe)
 		progs[prog] = [prog_exe, prog_ver]
 
@@ -100,7 +103,13 @@ def get_exe(prog):
 	else:
 		exe = prog_to_default[prog] ## install in the system
 
-	return(shutil.which(exe)) ## return which path
+	exe_path = shutil.which(exe)
+	if (exe_path):
+		return(exe_path) ## return which path
+	else:
+		print(colored("**ERROR: Programme %s could not be found." % prog,'red'))
+		print(colored("**Check paths or install it in the system and add it to $PATH environment variable.",'red'))
+		exit()
 
 
 ##################

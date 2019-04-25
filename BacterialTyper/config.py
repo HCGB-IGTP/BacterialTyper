@@ -24,7 +24,7 @@ DATA = {
 	'trimmomatic_adapters':'/imppc/labs/lslab/share/data/references/Trimmomatic_adapters.fa',
 
 	## database generated
-	'database':'/home/labs/lslab/jsanchez/DATA/Saures_test/BacterialTyper_test/database',
+	'database':'/imppc/labs/lslab/jsanchez/Cristina_Prat_Project/BacterialTyper_test/database',
 
 	## BUSCO datasets
 	'busco_bacteria': '/imppc/labs/lslab/jsanchez/software/BUSCO/datasets/bacteria_odb9',

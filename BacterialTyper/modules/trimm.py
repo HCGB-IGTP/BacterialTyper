@@ -7,6 +7,7 @@ Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
 ## import useful modules
 import os
 import sys
+import re
 from io import open
 import shutil
 import concurrent.futures
@@ -69,16 +70,31 @@ def run(options):
 
 	print ("\n\n+ Trimming samples has finished...")
 	
+	## get files generated and generate symbolic link
+	dir_symlinks = functions.create_subfolder('link_files', outdir)
+	files2symbolic = []
+	folders = os.listdir(outdir)
+	for fold in folders:
+		if fold.endswith(".log"):
+			continue
+		else:
+			this_folder = outdir + '/' + fold
+			subfiles = os.listdir(this_folder)
+			for files in subfiles:
+				files_search = re.search(r".*trim_R\d{1}.*", files) ## only paired-end. Todo: single end
+				if files_search:
+					files2symbolic.append(this_folder + '/' + files)
+	
+	functions.get_symbolic_link(files2symbolic, dir_symlinks)
+					
 	if (options.skip_report):
 		print ("+ No report generation...")
 	else:
 		print ("\n+ Generating a report using MultiQC module.")
-
-		## get subdirs generated and call multiQC report module
+	
+		## call multiQC report module
 		givenList = []
-		for index, row in pd_samples_retrieved.iterrows():
-			givenList.append(outdir)
-		
+		givenList.append(outdir)
 		my_outdir_list = set(givenList)
 		outdir_report = functions.create_subfolder("report", outdir)
 		multiQC_report.multiQC_module_call(my_outdir_list, "Trimmomatic", outdir_report)

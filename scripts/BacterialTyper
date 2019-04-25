@@ -74,7 +74,6 @@ subparser_sample.add_argument("--copy", action="store_true", help="Instead of ge
 subparser_sample.set_defaults(func=BacterialTyper.modules.sample_prepare.retrieve)
 ##-------------------------------------------------------------##
 
-
 ##--------------------------- merge -------------------------- ##
 subparser_merge = subparsers.add_parser(
     'mergeFQ',
@@ -91,7 +90,6 @@ subparser_merge.add_argument("--ex_sample", help="File containing a list of samp
 subparser_merge.set_defaults(func=BacterialTyper.modules.sample_prepare.merge)
 ##-------------------------------------------------------------##
 
-
 ##--------------------------- fastqc ------------------------- ##
 subparser_fastqc = subparsers.add_parser(
     'fastqc',
@@ -99,11 +97,15 @@ subparser_fastqc = subparsers.add_parser(
     #usage='BacterialGenotyper fastqc <input_folder> <output_folder> [pair] [skip_report] [-h|--help]',
     description='This module call FASTQC for a quality check of each sample provided',
 )
-subparser_fastqc.add_argument("input_folder", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
+subparser_fastqc.add_argument("input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
 subparser_fastqc.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
 subparser_fastqc.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
 subparser_fastqc.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
 subparser_fastqc.add_argument("--threads", help="Number of CPUs to use [Default: 2].")
+subparser_fastqc.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+subparser_fastqc.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+subparser_fastqc.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+
 subparser_fastqc.set_defaults(func=BacterialTyper.modules.qc.fastqc)
 ##-------------------------------------------------------------##
 
@@ -114,21 +116,21 @@ subparser_trimm = subparsers.add_parser(
     #usage='BacterialGenotyper trimm <input_folder> <output_folder> [pair] [skip_report] [-h|--help]',
     description='This module trimms sequencing adapters that could be present in next generation sequencing files',
 )
-subparser_trimm.add_argument("input_folder", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
+subparser_trimm.add_argument("input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
 subparser_trimm.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
 subparser_trimm.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
 subparser_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
 subparser_trimm.add_argument("--adapters", help="Additional adapter sequences different to the ones specified during the configuration")
 subparser_trimm.add_argument("--threads", help="Number of CPUs to use [Default: 2].")
+subparser_trimm.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+subparser_trimm.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+subparser_trimm.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 subparser_trimm.set_defaults(func=BacterialTyper.modules.trimm.run)
 ##-------------------------------------------------------------##
 
 
-
 ##--------------------------- assemble ----------------------- ##
 ##-------------------------------------------------------------##
-
-
 
 ##--------------------- Assembly check ----------------------- ##
 subparser_assemblyQC = subparsers.add_parser(
@@ -154,19 +156,24 @@ subparser_ident = subparsers.add_parser(
     #usage='BacterialGenotyper ident <input_folder> <output_folder> [-h|--help]',
     description='This module call ...',
 )
-subparser_ident.add_argument("input_folder", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
+subparser_ident.add_argument("input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
 subparser_ident.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
+subparser_ident.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+subparser_ident.add_argument("--database", help="Folder containing KMA indexed databases other than default folder provided [Default OFF].")
+subparser_ident.add_argument("--both_folder", help="Folder containing KMA indexed databases other than default folder provided [Default OFF].")
+subparser_ident.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="KMA database(s) to check. Provide several input if desired. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
+subparser_ident.add_argument("--index_KMA", action="store_true",  help="Use only indexed genomes downloaded and/or previously identified stored in default path database folder.[Default: OFF]")
+subparser_ident.add_argument("--both_db", action="store_true", help="Provide this option if kma_db and index_KMA options should be used for species identification.")
+subparser_ident.add_argument("--all_db", action="store_true", help="Provide this option if all databases provided should be used for species identification.")
 subparser_ident.add_argument("--threads", help="Number of CPUs to use [Default: 2].")
+subparser_ident.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+subparser_ident.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+subparser_ident.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run)
 ##-------------------------------------------------------------##
 
-
 ##--------------------------- MLST --------------------------- ##
-##-------------------------------------------------------------##
-
 ##-------------------------- virulence ----------------------- ##
-##-------------------------------------------------------------##
-
 
 
 ##-------------------------- version ------------------------- ##
