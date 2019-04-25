@@ -17,7 +17,6 @@ from BacterialTyper import config
 
 ###
 def multiQC_module_call(givenList, name, path):
-	functions.create_folder(folder)
 	pathFile = list2file(givenList, path)
 	multiQC_call(pathFile, name, path)	
 	
@@ -32,8 +31,8 @@ def multiQC_call(pathFile, name, folder):
 def list2file(givenList, path):
 	# generate a txt file containing information for 
 	name = path + '/' + 'samples.txt'
-	outfile.open(name, "w")
-	outfile.write("\n".join(givenlist))
+	outfile = open(name, "w")
+	outfile.write("\n".join(givenList))
 	outfile.close()
 	return(name)
 

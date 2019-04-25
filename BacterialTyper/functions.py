@@ -40,11 +40,11 @@ def create_subfolder (name, path):
 	try:
 		os.mkdir(subfolder_path, access_rights)
 	except OSError:  
-	   	print ("\tDirectory %s already exists" % subfolder_path)
+	   	#print ("\tDirectory %s already exists" % subfolder_path)
+		return subfolder_path
 	else:  
-		print ("\tSuccessfully created the directory %s " % subfolder_path)
+		print (colored("\tSuccessfully created the directory %s " % subfolder_path, 'yellow'))
 	
-	print ("")
 	return subfolder_path
 ###############   
     
@@ -57,11 +57,11 @@ def create_folder (path):
 	try:
 		os.mkdir(path, access_rights)
 	except OSError:  
-	   	print ("\tDirectory %s already exists" %path)
+	   	#print ("\tDirectory %s already exists" %path)
+	   	return path
 	else:  
-		print ("\tSuccessfully created the directory %s " %path)
+		print (colored("\tSuccessfully created the directory %s " %path, 'yellow'))
 	
-	print ("")
 	return path
 ###############  
 
@@ -99,7 +99,7 @@ def system_call(cmd):
 ###############
 def wget_download(url, path):
 	print ('\t+ Downloading: ', url)
-	#wget.download(url, path)
+	wget.download(url, path)
 	print ('\n')
 ###############
 
@@ -207,6 +207,15 @@ def get_fullpath_list(dir_given):
 	return return_path   	    
 #################
     	    
+#################
+def optimize_threads(total, samples):
+	cpu = int(int(total)/int(samples))
+	
+	if (cpu==0): ## 5 availabe cpus for 10 samples == 0 cpu
+		cpu = 1
+	
+	return(cpu)
+#################
 
 #################
 ### AESTHETICS
@@ -238,8 +247,6 @@ def boxymcboxface(message):
 	print('|', '=' * 50, '|', sep='')
 	print ('\n')
     #print('-' * 79)
-    
-    
 ###############
 
 

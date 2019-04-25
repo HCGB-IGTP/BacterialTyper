@@ -25,8 +25,12 @@ def	help_options():
 
 ######	
 def trimmo_module(file_R1, file_R2, path_name, sample_name, threads):
-	trimmomatic_jar = config.EXECUTABLES('trimmomatic')
-	trimmomatic_adapters = config.DATA('trimmomatic_adapters')
+	trimmomatic_jar = config.EXECUTABLES['trimmomatic']
+	## check if it works
+	
+	trimmomatic_adapters = config.DATA['trimmomatic_adapters']
+	## check if it exists
+	
 	## call
 	return(trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threads, trimmomatic_adapters))
 
@@ -38,28 +42,33 @@ def trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threa
 	print ("+ Cutting adapters for sample: ", sample_name)
 	print ('\t-', file_R1)
 
-	if (file_R2 == "na"):
-		print ('\t-', file_R2)
-		
-		
-	sample_folder = path_name + '/' + sample_name
-	trimmo_log = path_name + '/' + sample_name + '.log'
-
 	## create folder
+	sample_folder = path_name + '/' + sample_name
 	functions.create_folder(path_name)
 	functions.create_folder(sample_folder)
 
 	log_file = sample_folder + '/' + sample_name + '.log'
-	trim_R1 = sample_folder + '/' + sample_name + '_trim_R1.fastq'
-	trim_R2 = sample_folder + '/' + sample_name + '_trim_R2.fastq'
-	orphan_R1 = sample_folder + '/' + sample_name + '_orphan_R1.fastq'
-	orphan_R2 = sample_folder + '/' + sample_name + '_orphan_R2.fastq'
+	trimmo_log = path_name + '/' + sample_name + '.log'
+	
+	trim_R1 = ""
+	orphan_R1 = ""
+	trim_R2 = ""
+	orphan_R2 = ""
+	
+	if (file_R2 == "na"):
+		trim_R1 = sample_folder + '/' + sample_name + '_trim.fastq'
+	else:
+		print ('\t-', file_R2)
+		trim_R1 = sample_folder + '/' + sample_name + '_trim_R1.fastq'
+		orphan_R1 = sample_folder + '/' + sample_name + '_orphan_R1.fastq'
+		trim_R2 = sample_folder + '/' + sample_name + '_trim_R2.fastq'
+		orphan_R2 = sample_folder + '/' + sample_name + '_orphan_R2.fastq'
 
 	cmd = ""	
 	if (file_R2 == "na"):
-		cmd = "java -jar %s PE -threads %s -phred33 -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 > %s" %(trimmomatic_jar, threads, log_file, file_R1, file_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters, trimmo_log)
+		cmd = "java -jar %s SE -threads %s -trimlog %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(trimmomatic_jar, threads, log_file, file_R1, trim_R1, trimmomatic_adapters, trimmo_log)
 	else:
-		cmd = "java -jar %s SE -threads %s -phred33 -trimlog %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 > %s" %(trimmomatic_jar, threads, log_file, file_R1, trim_R1, trimmomatic_adapters, trimmo_log)
+		cmd = "java -jar %s PE -threads %s -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(trimmomatic_jar, threads, log_file, file_R1, file_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters, trimmo_log)
 		
 	return(functions.system_call(cmd))	
 

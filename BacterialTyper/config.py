@@ -7,10 +7,10 @@ EXECUTABLES = {
 	'busco_bin': '',
 	'Phispy_folder': '/imppc/labs/lslab/jsanchez/git_repo/PhiSpy',
 	'prokka': '/software/debian-8/bin/prokka',
-	'trimmomatic':'',
+	'trimmomatic':'/soft/bio/trimmomatic/trimmomatic.jar',
 	'Rscript': '/usr/bin/Rscript',
 	'java':'',
-	'kma':'/imppc/labs/lslab/jsanchez/git_repo/KmerFinder/kma',
+	'kma':'/imppc/labs/lslab/jsanchez/git_repo/KmerFinder/kma/kma',
 	'plasmidID':'/imppc/labs/lslab/jsanchez/git_repo/plasmidID/plasmidID.sh'
 }
 
@@ -20,25 +20,24 @@ PARAMETERS = {
 }
 
 DATA = {
+	## trimmomatic
+	'trimmomatic_adapters':'/imppc/labs/lslab/share/data/references/Trimmomatic_adapters.fa',
+
 	## database generated
-	'database':'',
+	'database':'/home/labs/lslab/jsanchez/DATA/Saures_test/BacterialTyper_test/database',
 
 	## BUSCO datasets
 	'busco_bacteria': '/imppc/labs/lslab/jsanchez/software/BUSCO/datasets/bacteria_odb9',
 	'busco_firmicutes': '/imppc/labs/lslab/jsanchez/software/BUSCO/datasets/firmicutes_odb9',
 
 	## Virulence Factor Database
-	'VFDB_VFs':'',
-	'VFDB_Comparative_tables':'',
-	'VFDB_set_folder':'',
+	#'VFDB_VFs':'',
+	#'VFDB_Comparative_tables':'',
+	#'VFDB_set_folder':'',
 
 	## MLSTar
-	'MLSTar_profile_folder': '',
-	'MLSTar_sequence_folder': '',
-
-	## trimmomatic
-	'trimmomatic_adapters':'',
-
+	#'MLSTar_profile_folder': '',
+	#'MLSTar_sequence_folder': '',
 }
 
 

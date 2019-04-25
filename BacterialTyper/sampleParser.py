@@ -10,6 +10,7 @@ import io
 import os
 import re
 import sys
+import pandas as pd
 
 ## import my modules
 from BacterialTyper import functions
@@ -48,53 +49,106 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False):
 	non_duplicate_samples = list(set(sample_list))	
 	discard_samples = []
 	
+	##	
+	found = []
+
 	if (pair):
-		for path_files in non_duplicate_samples:
-			files = os.path.basename(path_files)
-			name_search = re.search(r"(.*)(\_1|_2)(\.f.*q)(\..*)", files)
-			if name_search:
-				file_name = name_search.group(1)
+		## initiate dataframe
+		name_columns = ("samples", "R1", "R2")
+	else:
+		## initiate dataframe
+		name_columns = ("samples", "read")
+
+	## initiate dataframe
+	df_samples = pd.DataFrame(columns=name_columns)
+
+	for path_files in non_duplicate_samples:
+	
+		files = os.path.basename(path_files)
+		if (pair):
+			name_search = re.search(r"(.*)(\_1|_2)(\.f.*q)(\..*){0,1}", files)
+		else:
+			name_search = re.search(r"(.*)(\.f.*q)(\..*){0,1}", files)
+		
+		if name_search:
+			file_name = name_search.group(1)
+			
+			if file_name in found:
+				continue
+
+			#print ("##")
+			#print (files)
+			
+			if (pair):
+				## could exist or not
 				read_pair = name_search.group(2)
 				ext = name_search.group(3)
 				gz = name_search.group(4)
-				dirN = os.path.dirname(path_files)
+			else:
+				ext = name_search.group(2)
+				gz = name_search.group(3)
+			
+			dirN = os.path.dirname(path_files)
 
+			if (pair):
 				## get second pair
 				paired = ""
+				R2_paired = ""
 				if (read_pair == '_1'):
 					paired = dirN + '/' + file_name + '_2' + ext
+					R2_paired=True
 				else:
 					paired = dirN + '/' + file_name + '_1' + ext
-	
-				if gz:
+					R2_paired=False
+			
+			found.append(file_name) ## save retrieved samples
+
+			if gz:
+				unzip = path_files
+				if (pair):
 					unzip = dirN + '/' + file_name + read_pair + ext
-					if os.path.isfile(unzip):
-						discard_samples.append(path_files)
+			
+				if os.path.isfile(unzip):
+					#discard_samples.append(path_files)
+					if (pair):
 						if os.path.isfile(paired):
 							## both files are unzipped and available
-							discard_samples.append(paired)
-							print (file_name + '\t' + unzip + '\t&\t' + paired)							
 							## save both files
+							if R2_paired:
+								df_samples.loc[len(df_samples)] = [file_name, unzip, paired]							
+							else:
+								df_samples.loc[len(df_samples)] = [file_name, paired, unzip]						
 					else:
-						## gunzipped
-						if os.path.isfile(paired + gz):
-							## save both files
-							print (file_name + '\t' + path_files + '\t&\t' + paired + gz)
+						df_samples.loc[len(df_samples)] = [file_name, path_files]							
 				else:
-					## not gunzipped files					
+					if (pair):
+						## gunzipped
+						## save both files
+						if os.path.isfile(paired + gz):
+							if R2_paired:
+								df_samples.loc[len(df_samples)] = [file_name, path_files, paired + gz]
+							else:
+								df_samples.loc[len(df_samples)] = [file_name, paired + gz, path_files]	
+					else:
+						df_samples.loc[len(df_samples)] = [file_name, path_files]
+			
+			else:
+				## not gunzipped files					
+				if (pair):
 					if os.path.isfile(paired):
 						## save both files
-						print (file_name + '\t' + path_files + '\t&\t' + paired)
-			
-	exit()	
-	for samples in discard_samples:
-		non_duplicate_samples.remove(samples)
-						
-	non_duplicate_samples2 = list(set(non_duplicate_samples))						
-	number_samples = len(non_duplicate_samples2)	
+						if R2_paired:
+							df_samples.loc[len(df_samples)] = [file_name, path_files, paired]
+						else:
+							df_samples.loc[len(df_samples)] = [file_name, paired, path_files]							
+				else:
+					df_samples.loc[len(df_samples)] = [file_name, path_files]							
 
-	print ("\t\t- ", number_samples," samples selected")
-	return sorted(non_duplicate_samples)
+	## df_samples is a pandas dataframe containing info
+	#print (df_samples)
+	number_samples = df_samples.index.size	
+	print ("\t", number_samples," samples selected from the input provided...")
+	return (df_samples)
 	
 ###############
 

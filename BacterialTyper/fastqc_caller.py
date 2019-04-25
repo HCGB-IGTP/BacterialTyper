@@ -119,7 +119,7 @@ def parse_fastqcFile(resultsfile, name):
 ############
 def run_module_fastqc(path, file1, file2, sample):	
 	## Arguments provided via ARGVs
-	fastqc_bin = config.CONFIGURATION['fastqc']
+	fastqc_bin = config.EXECUTABLES['fastqc']
 	codeReturn = call_fastqc(path, file1, file2, sample, fastqc_bin)
 	if codeReturn == 'FAIL':
 		exit()
