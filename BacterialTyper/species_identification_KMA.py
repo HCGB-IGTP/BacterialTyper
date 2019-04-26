@@ -150,7 +150,7 @@ def check_db_indexed(index_name):
 	return(True)
 	
 ##################################################
-def index_database(database_entries, kma_bin, index_name, option):
+def index_database(fileToIndex, kma_bin, index_name, option):
 	
 	########################################################################################
 	## 								KMA_index-1.2.2							
@@ -183,19 +183,19 @@ def index_database(database_entries, kma_bin, index_name, option):
 	
 	if (option == "new"):
 		print ("\n+ Generate and index entries for kmer alignment search...\n")
-		cmd_kma_index = "%s -batch %s -o %s" %(kma_bin, database_entries, index_name)
+		cmd_kma_index = "%s index -i %s -o %s" %(kma_bin, fileToIndex, index_name)
 	elif (option == "add"):
 		print ("\n+ Updating database with new entries...\n")
-		cmd_kma_index = "%s -batch %s -o %s -t_db" %(kma_bin, database_entries, index_name)
+		cmd_kma_index = "%s index -i %s -o %s -t_db" %(kma_bin, fileToIndex, index_name)
 
-	functions.system_call(cma_kma_index)
+	functions.system_call(cmd_kma_index)
 	
 	return_code = check_db_indexed(index_name)
 	return(return_code)
 
 
 ##################################################
-def getdbs(database_folder):
+def getdbs(database_folder, option):
 	print ("+ Reading information from: " + database_folder)
 	## read folders within database
 	files = os.listdir(database_folder) ## ARIBA/KMA_db/genbank/user_data
@@ -249,7 +249,6 @@ def getdbs(database_folder):
 			print ("\t- User_data: including information from user previously generated results") ## include user data
 			## to do
 
-	#print (db_Dataframe.to_csv)
 	return (db_Dataframe)
 
 ########################
@@ -262,11 +261,11 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads):
 	out_file_log = out_file + '.log'
 	if len(files) == 2:
 		#print ("Paired-end mode KMA search:\n")
-		cmd_kma_search = "%s -Sparse -ipe %s %s -o %s -t_db %s -t %s 2> %s" %(kma_bin, files[0], files[1], out_file, index_name, threads, out_file_log)
+		cmd_kma_search = "%s -Sparse -ipe %s %s -o %s -t_db %s -shm 1 -t %s 2> %s" %(kma_bin, files[0], files[1], out_file, index_name, threads, out_file_log)
 	else:
 		## to be tested
 		print ("Single end mode KMA search:\n")
-		cmd_kma_search = "%s -Sparse -i %s -o %s -t_db %s -t %s 2> %s" %(kma_bin, files[0], out_file, index_name, threads, out_file_log)
+		cmd_kma_search = "%s -Sparse -i %s -o %s -t_db %s -shm 1 -t %s 2> %s" %(kma_bin, files[0], out_file, index_name, threads, out_file_log)
 
 	return(functions.system_call(cmd_kma_search))
 	

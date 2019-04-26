@@ -22,6 +22,8 @@ from BacterialTyper import species_identification_KMA
 from BacterialTyper import ariba_caller
 from BacterialTyper.modules import sample_prepare
 
+kma_bin = config.EXECUTABLES["kma"]
+
 ####################################
 def ARIBA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 	functions.boxymcboxface("ARIBA Identification")
@@ -55,16 +57,30 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 		# We can use a with statement to ensure threads are cleaned up promptly
 		with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
 			for db2use in databases2use:
+				
+				## load database on memory
+				print ("+ Loading database on memory for faster identification.")
+				cmd_load_db = "%s shm -t_db %s -shmLvl 1" %(kma_bin, db2use)
+				return_code_load = functions.system_call(cmd_load_db)
+				
+				## send for each sample
 				commandsSent = { executor.submit(species_identification_KMA.kma_ident_module, get_outfile(outdir, row['samples'], db2use), (row['R1'], row['R2']), row['samples'], db2use, cpu_here): index for index, row in pd_samples_retrieved.iterrows() }
 	
-			for cmd2 in concurrent.futures.as_completed(commandsSent):
-				details = commandsSent[cmd2]
-				try:
-					data = cmd2.result()
-				except Exception as exc:
-					print ('***ERROR:')
-					print (cmd2)
-					print('%r generated an exception: %s' % (details, exc))
+				for cmd2 in concurrent.futures.as_completed(commandsSent):
+					details = commandsSent[cmd2]
+					try:
+						data = cmd2.result()
+					except Exception as exc:
+						print ('***ERROR:')
+						print (cmd2)
+						print('%r generated an exception: %s' % (details, exc))
+	
+				## remove database from memory
+				print ("+ Removing database from memory...")
+				cmd_rm_db = "%s shm -t_db %s -shmLvl 1 -destroy" %(kma_bin, db2use)
+				return_code_rm = functions.system_call(cmd_rm_db)
+				if (return_code_rm == 'FAIL'):
+					print (colored("***ERROR: Removing database from memory failed. Please do it! Execute command: %s" %cmd_rm_db,'red'))
 	
 	else:
 		## to do: implement single end mode
@@ -90,6 +106,8 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 			#print ('\t- File: ' + result + '.spa')
 			results = species_identification_KMA.parse_kma_results(row['samples'], result + '.spa')
 
+
+			### Fix: check if db2use is plasmids as it could be several.
 			if (results.index.size > 1):
 				print (colored("Sample %s contains multiple strains." %row['samples'], 'yellow'))
 				print (colored(results.to_csv, 'yellow'))
@@ -114,7 +132,126 @@ def get_outfile(output_dir, name, index_name):
 	output_path = functions.create_subfolder(name, output_dir)
 	out_file = output_path + '/' + name + '_' + basename_tag	
 	return(out_file)
+	
+####################################
+def external_kma(list_files):
+	
+	external_file_returned = []
+	for f in list_files:
+		print (f)
+		status = species_identification_KMA.check_db_indexed(f)
+		if (status): #true
+			external_file_returned.append(f)
+		else: #false
+			dataBase = os.path.abspath(f)
+			basename_name = os.path.basename(dataBase)
+			status = species_identification_KMA.index_database(dataBase, kma_bin, basename_name, "new")
+			if (status): #true
+				external_file_returned.append(basename_name)
+			else:
+				print (colored("***ERROR: Database provided via --kma_external_file option (%s) was not indexed.\n" %f,'orange'))
 
+	return(external_file_returned)
+
+####################################
+def get_options_db(options):
+	print ("\n\n+ Select databases to use for identification:")
+	default_database_folder = config.DATA["database"] ## default: set during configuration
+	
+	## according to user input: select databases to use
+	option_db = ""
+	
+	## Default
+	kma_dbs = ["bacteria", "plasmids"]
+	
+	############
+	## 1) only user data: previously identified and added
+	############
+	if (options.only_user_data):
+		option_db = "user_data"
+		
+	############
+	## 2) only genbank data: previously download from NCBI reference genomes
+	############
+	elif (options.only_genbank_data):
+		option_db = "genbank"
+	
+	############
+	## 3) only kma_db
+	############
+	elif (options.only_kma_db):
+		if (options.kma_dbs):
+			options.kma_dbs = set(options.kma_dbs)
+			kma_dbs_string = ','.join(options.kma_dbs)
+			option_db = "kma:" + kma_dbs_string
+
+		else:
+			## rise error & exit
+			print (colored("***ERROR: No database provided via --kma_db option.\n",'red'))
+			exit()
+
+	############
+	## 4) only external kma
+	############
+	elif (options.only_external_kma):
+		if (options.kma_external_file):
+			options.kma_external_file = set(options.kma_external_file)		
+
+			## check if indexed and/or index if necessary
+			external_kma_dbs_string = external_kma(options.kma_external_files)
+			option_db = "kma_external:" + external_kma_dbs_string
+
+		else:
+			## rise error & exit
+			print (colored("***ERROR: No database provided via --kma_external_file option.\n",'red'))
+			exit()
+
+	############
+	## 5) all databases 
+	############
+	else:
+	
+		############
+		## default dbs + user
+		############
+		
+		print ('\t- Selecting kma databases:')
+		if (options.kma_dbs):
+			options.kma_dbs = options.kma_dbs + kma_dbs
+			options.kma_dbs = set(options.kma_dbs)		
+		else:
+			options.kma_dbs = kma_dbs
+
+		kma_dbs_string = ','.join(options.kma_dbs)
+		option_db = "kma:" + kma_dbs_string
+		
+		for i in options.kma_dbs:
+			print (colored('\t\t+ %s' %i, 'green'))
+
+		
+		############
+		## External file
+		############
+		if (options.kma_external_files):
+			print ('\t- Get additional kma databases:')
+			options.kma_external_file = set(options.kma_external_files)		
+			
+			## check if indexed and/or index if necessary
+			external_kma_dbs_list = external_kma(options.kma_external_files)
+			external_kma_dbs_string = ','.join(external_kma_dbs_list)
+
+			option_db = option_db + "#kma_external:" + external_kma_dbs_string
+
+			for i in external_kma_dbs_list:
+				print (colored('\t\t+ %s' %i, 'green'))
+
+		option_db = option_db + '#user_data'
+		option_db = option_db + '#genbank'
+
+	print (option_db)
+	exit()
+	return (option_db)
+	
 ####################################
 def run(options):
 
@@ -143,21 +280,11 @@ def run(options):
 	print ("(2) Antimicrobial Resistance Inference By Assembly (ARIBA) identification\n\n")	
 	
 	## get databases to check
-	## according to user input: select databases to use
-	print ("\n\n+ Select databases to use for identification:")
-	database_folder = config.DATA["database"] ## default: set during configuration
-	retrieve_databases = species_identification_KMA.getdbs(database_folder)
-
-	if (options.database):
-		## 
-		print ("- User provides a database folder. Checking...")
-		## check databases integrity
-		
-		if (options.both_folder):
-			## use default and user provided
-			print ("- Use both databases: default database and folder user provided.")
-		
+	option_db = get_options_db(options)
 	
+	### get dbs
+	retrieve_databases = species_identification_KMA.getdbs(default_database_folder, option_db)
+
 	########
 	(excel_generated, dataFrame) = KMA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
 	

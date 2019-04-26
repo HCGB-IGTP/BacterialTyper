@@ -142,9 +142,7 @@ def filter_and_cluster_database(database_path, threads):
 	print ("+ Obtaining clustered sequences...")
 	my_cluster_list = set(my_cluster_list)
 	list_cluster_file = folder + '/plasmids_clustered_ids.txt'
-	list_cluster_hd = open(list_cluster_file, 'w')
-	list_cluster_hd.write("\n".join(my_cluster_list))
-	list_cluster_hd.close()
+	functions.printList2file(list_cluster_file, my_cluster_list)
 	
 	## retrieve ids
 	cluster_fasta_file = folder + '/plasmids_clustered.fna'

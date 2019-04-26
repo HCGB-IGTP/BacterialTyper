@@ -218,6 +218,13 @@ def optimize_threads(total, samples):
 #################
 
 #################
+def printList2file(fileGiven, listGiven):
+	file_hd = open(fileGiven, 'w')
+	file_hd.write("\n".join(listGiven))
+	file_hd.close()
+#################
+
+#################
 ### AESTHETICS
 #################
 def pipeline_header():

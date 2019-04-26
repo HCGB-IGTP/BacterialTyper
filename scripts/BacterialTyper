@@ -14,6 +14,10 @@ subparsers = parser.add_subparsers(title='Available modules', help='', metavar='
 
 ##initial_group = parser.add_argument_group("Configuration")
 
+#######################
+#### Configuration ####
+#######################
+
 ## submodules
 ##------------------------------ config ---------------------- ##
 subparser_config = subparsers.add_parser(
@@ -34,7 +38,7 @@ subparser_initDB = subparsers.add_parser(
 )
 subparser_initDB.add_argument("path", help="Folder path to generate database.")
 subparser_initDB.add_argument("ID_file", help="ID_file is a csv file (include header) containing several columns per row according to the header provided: ##genus,species,name,NCBI_assembly_ID")
-subparser_initDB.add_argument("--kma_db", dest='kma_dbs', nargs='+', help="kma database(s) to download. Provide several input if desired. Not compatible with --index_kma. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
+subparser_initDB.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to download. Provide several input if desired. Not compatible with --index_kma. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
 subparser_initDB.add_argument("--no_def_kma", action="store_true", help="Only applicable if kma_db is ON. It discards default databases (bacteria & plasmids) from kma_db. Only user selected datbases indexed. [Default: OFF]")
 subparser_initDB.add_argument("--index_kma", action="store_true", help="Index the genomes downloaded for later usage during species identification. Not compatible with --kma_db options: available databases with broader taxonomic ranges. [Default: OFF]")
 subparser_initDB.add_argument("--no_ARIBA", action="store_true", help="It prevents downloading ARIBA databases. [Default: OFF]")
@@ -56,6 +60,10 @@ subparser_updateDB.add_argument("--index_kma", action="store_true",  help="Index
 subparser_updateDB.add_argument("--ARIBA_db", action="store_true", help="It downloads ARIBA databases. [Default: OFF]")
 subparser_updateDB.set_defaults(func=BacterialTyper.modules.database.updateDB_NCBI)
 ##-------------------------------------------------------------##
+
+########################
+#### Idenfitication ####
+########################
 
 ##--------------------------- prepareSamples ----------------- ##
 subparser_sample = subparsers.add_parser(
@@ -156,20 +164,30 @@ subparser_ident = subparsers.add_parser(
     #usage='BacterialGenotyper ident <input_folder> <output_folder> [-h|--help]',
     description='This module call ...',
 )
-subparser_ident.add_argument("input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
-subparser_ident.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
-subparser_ident.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
-subparser_ident.add_argument("--database", help="Folder containing kma indexed databases other than default folder provided [Default OFF].")
-subparser_ident.add_argument("--both_folder", help="Use default database folder and user provided database [Default OFF].")
-subparser_ident.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to check. Provide several input if desired. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
-subparser_ident.add_argument("--index_kma", action="store_true",  help="Use only indexed genomes downloaded and/or previously identified stored in default path database folder.[Default: OFF]")
-subparser_ident.add_argument("--both_kma_db", action="store_true", help="Provide this option if kma_db and index_kma options should be used for species identification.")
-subparser_ident.add_argument("--all_kma_db", action="store_true", help="Provide this option if all databases provided should be used for species identification.")
-subparser_ident.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].")
-subparser_ident.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
-subparser_ident.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
-subparser_ident.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
-subparser_ident.add_argument("--fast", action="store_true", help="Do not update database, just identify samples according to databases provided [Default OFF].")
+initial_group = subparser_ident.add_argument_group("Input/Output")
+initial_group.add_argument("input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz")
+initial_group.add_argument("output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory")
+initial_group.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+initial_group.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+initial_group.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+initial_group.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+
+parameters_group = subparser_ident.add_argument_group("Parameters")
+parameters_group.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].")
+parameters_group.add_argument("--fast", action="store_true", help="Do not update database, just identify samples according to databases provided [Default OFF].")
+
+kma_group = subparser_ident.add_argument_group("KMA Databases Configuration")
+kma_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to check. Provide several input if desired. If it is not available it would be downloaded and included in default database folder. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
+kma_group.add_argument("--kma_external_file", dest='kma_external_files', nargs='*', help="External fasta file to include in the search. It could be indexed or not. [Default OFF].")
+
+exclusive_group_name = subparser_ident.add_argument_group("Options")
+exclusive_group = exclusive_group_name.add_mutually_exclusive_group()
+exclusive_group.add_argument("--only_kma_db", action="store_true", help="Provide this option if only database(s) provided via --kma_db should be used for species identification.")
+exclusive_group.add_argument("--only_external_kma", action="store_true", help="Provide this option if only database(s) provided via --kma_external_file should be used for species identification.")
+exclusive_group.add_argument("--only_user_data", action="store_true",  help="Use only indexed genomes previously identified stored in default path database folder (user_data folder).[Default: OFF]")
+exclusive_group.add_argument("--only_genbank_data", action="store_true",  help="Use only reference genomes previously downloaded from NCBI stored in default path database folder (genbank folder).[Default: OFF]")
+exclusive_group.add_argument("--all_kma_db", action="store_true", help="Provide this option if all databases provided should be used for species identification. [Default ON].")
+
 subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run)
 ##-------------------------------------------------------------##
 
@@ -177,9 +195,9 @@ subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run)
 ##-------------------------- virulence ----------------------- ##
 
 
-
-#### Other options
-
+#######################
+#### Other options ####
+#######################
 
 ##----------------------- Depencencies ----------------------- ##
 ##------------------------------------------------------------ ##
