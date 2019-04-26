@@ -67,6 +67,7 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 					print('%r generated an exception: %s' % (details, exc))
 	
 	else:
+		## to do: implement single end mode
 		print ('+ No implementation yet. Sorry.')
 		exit()
 		
@@ -75,6 +76,9 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 	print ("+ Parse results now:")
 		
 	## parse results
+	name_excel = outdir + '/identification_summary.xlsx'
+	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') ## open excel handle
+	
 	for db2use in databases2use:
 		basename_db = os.path.basename(db2use)
 		results_summary = pd.DataFrame()
@@ -96,10 +100,13 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 			else:
 				print (colored('\tNo clear strain from database %s has been assigned to sample %s' %(basename_db, row['samples']), 'yellow'))
 				
-	results_summary = results_summary.set_index('sample')
-	name_excel = outdir + '/identification_summary.xlsx'
-	results_summary.to_excel(name_excel)
-	return (results_summary)
+		## subset dataframe	& print result
+		results_summary_toPrint = results_summary[['sample','#Template','Query_Coverage','Template_Coverage','Depth']] 
+		results_summary_toPrint = results_summary_toPrint.set_index('sample')		
+		results_summary_toPrint.to_excel(writer, sheet_name=basename_db) ## write excel handle
+	
+	writer.save() ## close excel handle	
+	return (name_excel, results_summary)
 
 ####################################
 def get_outfile(output_dir, name, index_name):
@@ -113,7 +120,11 @@ def run(options):
 
 	### species_identification_KMA -> most similar taxa
 	functions.pipeline_header()
-	functions.boxymcboxface("Species identification")
+
+	if (options.fast):
+		functions.boxymcboxface("Fast species identification module")
+	else:
+		functions.boxymcboxface("Species identification")
 	
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
@@ -128,16 +139,38 @@ def run(options):
 	threads_module = functions.optimize_threads(options.threads, pd_samples_retrieved.index.size)
 	
 	print ("+ Generate an species typification for each sample retrieved using two methods.")
-	print ("+ 1) Kmer alignment (KMA) identification")	
-	print ("+ 2) Antimicrobial Resistance Inference By Assembly (ARIBA) identification\n\n")	
+	print ("(1) Kmer alignment (KMA) identification")	
+	print ("(2) Antimicrobial Resistance Inference By Assembly (ARIBA) identification\n\n")	
 	
 	## get databases to check
-	database_folder = config.DATA["database"]
+	## according to user input: select databases to use
+	print ("\n\n+ Select databases to use for identification:")
+	database_folder = config.DATA["database"] ## default: set during configuration
 	retrieve_databases = species_identification_KMA.getdbs(database_folder)
+
+	if (options.database):
+		## 
+		print ("- User provides a database folder. Checking...")
+		## check databases integrity
+		
+		if (options.both_folder):
+			## use default and user provided
+			print ("- Use both databases: default database and folder user provided.")
+		
 	
 	########
-	KMA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
-
+	(excel_generated, dataFrame) = KMA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
+	
+	## update database for later usage
+	if (options.fast):
+		## skip it
+		print ("\n+ Check summary of results in file: " + excel_generated)		
+	else:
+		## update db
+		print ("")
+		## assembly, annotation, etc...
+		## rerun identification with new updated database
+	
 	########
 	ARIBA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
 

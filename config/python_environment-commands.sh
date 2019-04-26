@@ -31,6 +31,7 @@ pip install -r ./config/python_requirements.txt
 ## pip install -I --isolated termcolor 
 ## pip install -I --isolated ariba  ## dependencies: biopython, pysam, pymummer, dendropy, pyfastaq
 ## pip install -I --isolated openpyxl
+## pip install -I --isolated xlsxwriter
 ## 
 ## pip freeze > requirements.txt
 ##################################################

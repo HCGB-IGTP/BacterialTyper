@@ -27,7 +27,7 @@ from BacterialTyper import ariba_caller
 #### DATABASE	####
 ####################
 
-##########
+##################################################
 def download_kma_database(folder, database):
 
 	## types: bacteria, archaea, protozoa, fungi, plasmids, typestrains
@@ -101,6 +101,7 @@ def download_kma_database(folder, database):
 			functions.extract(tar_file, folder)	
 			
 			## not fully working
+			## to do: fix downloading databases
 			
 		else:
 			print (colored("*** ERROR: Some error ocurred during the downloading and file is corrupted ***", 'red'))
@@ -116,7 +117,7 @@ def download_kma_database(folder, database):
 			print (colored(string, 'red'))
 			return ("Error")
 
-##########
+##################################################
 def check_db_indexed(index_name):
 	my_index_list = [".comp.b", ".index.b", ".length.b", ".name", ".seq.b"]
 
@@ -148,7 +149,7 @@ def check_db_indexed(index_name):
 	
 	return(True)
 	
-##########
+##################################################
 def index_database(database_entries, kma_bin, index_name, option):
 	
 	########################################################################################
@@ -193,7 +194,7 @@ def index_database(database_entries, kma_bin, index_name, option):
 	return(return_code)
 
 
-##########	
+##################################################
 def getdbs(database_folder):
 	print ("+ Reading information from: " + database_folder)
 	## read folders within database
@@ -242,10 +243,11 @@ def getdbs(database_folder):
 		#### genbank	
 		elif (dbs == "genbank"):
 			print ("\t- Genbank: including information from different reference strains available.") ## include data from NCBI
-
+			## to do
 		#### user_data
 		elif (dbs == "user_data"):
 			print ("\t- User_data: including information from user previously generated results") ## include user data
+			## to do
 
 	#print (db_Dataframe.to_csv)
 	return (db_Dataframe)
@@ -254,7 +256,7 @@ def getdbs(database_folder):
 #### IDENTIFICATION	####
 ########################
 
-##########	
+##################################################
 def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads):
 	###
 	out_file_log = out_file + '.log'
@@ -268,26 +270,24 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads):
 
 	return(functions.system_call(cmd_kma_search))
 	
-##########
+##################################################
 def kma_ident_module(out_file, files, sample_name, index_name, threads):
 	## kma_ident_call
 	kma_bin = config.EXECUTABLES["kma"]
 	#return(kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads))
 
-##########
+##################################################
 def parse_kma_results(sample, out_file):
 	results = pd.read_csv(out_file, sep="\t")
-	#pd.set_option('display.max_colwidth', -1)
-	#pd.set_option('display.max_columns', None)
-	#print (results)
-	results_filter = results[results['Template_Coverage'] > 90]
+	results_filter = results[results['Template_Coverage'] > 90] 
+	## filter according to coverage of the template. 
 	return (results_filter)
 
-######
+##################################################
 def	help_options():
 	print ("\nUSAGE: python %s file1 file2 name xxc threads path\n"  %os.path.realpath(__file__))
 
-######
+##################################################
 def main():
 	## this code runs when call as a single script
 
@@ -301,10 +301,9 @@ def main():
 	## to do: implement main function
 	name = argv[1]
 	file_out = os.path.abspath(argv[2])
-
 	parse_kma_results(name, file_out)
 
-######
+##################################################
 if __name__== "__main__":
 	main()
 	
