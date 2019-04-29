@@ -19,14 +19,76 @@ import pandas as pd
 from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import species_identification_KMA
+from BacterialTyper import database_generator
 from BacterialTyper import ariba_caller
 from BacterialTyper.modules import sample_prepare
 
+## set defaults
 kma_bin = config.EXECUTABLES["kma"]
 
 ####################################
-def ARIBA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
-	functions.boxymcboxface("ARIBA Identification")
+def run(options):
+
+	## debugging messages
+	global Debug
+	if (options.debug):
+		Debug = True
+	else:
+		Debug = False
+
+	### species_identification_KMA -> most similar taxa
+	functions.pipeline_header()
+
+	if (options.fast):
+		functions.boxymcboxface("Fast species identification module")
+	else:
+		functions.boxymcboxface("Species identification")
+	
+	## absolute path for in & out
+	input_dir = os.path.abspath(options.input)
+	outdir = os.path.abspath(options.output_folder)
+
+	## get files
+	pd_samples_retrieved = sample_prepare.get_files(options, input_dir)
+	## generate output folder
+	functions.create_folder(outdir)
+
+	## optimize threads
+	threads_module = functions.optimize_threads(options.threads, pd_samples_retrieved.index.size)
+	
+	print ("+ Generate an species typification for each sample retrieved using two methods.")
+	print ("(1) Kmer alignment (KMA) identification")	
+	print ("(2) Antimicrobial Resistance Inference By Assembly (ARIBA) identification\n\n")	
+	
+	## get databases to check
+	retrieve_databases = get_options_db(options)
+	
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: retrieve_database **", 'yellow'))
+		print (retrieve_databases)
+	
+	exit()
+	
+	########
+	(excel_generated, dataFrame) = KMA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
+	
+	## update database for later usage
+	if (options.fast):
+		## skip it
+		print ("\n+ Check summary of results in file: " + excel_generated)		
+	else:
+		## update db
+		print ("")
+		## assembly, annotation, etc...
+		## rerun identification with new updated database
+	
+	########
+	ARIBA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
+
+	print ("+ Exiting identification module.")
+	exit()
+
 
 ####################################
 def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
@@ -45,14 +107,24 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 			else:
 				#databases2use.remove(db2use)
 				print (colored("\t**Databases %s is not correctly indexed. Not using it...\n" % db2use['db'], 'red'))
-	
-	print ("\n+ Send KMA identification jobs...")
 
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: databases2use\n" +  "\n".join(databases2use) + "\n**", 'yellow'))
+
+	## Start identification of samples
+	print ("\n+ Send KMA identification jobs...")
 	if (options.pair):
 		
 		cpu_here = int(cpu/len(databases2use))
 		if (cpu_here == 0):
 			cpu_here = 1
+
+		## debug message
+		if (Debug):
+			print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
+			print (colored("**DEBUG: cpu " +  str(cpu) + " **", 'yellow'))
+			print (colored("**DEBUG: cpu_here " +  str(cpu_here) + " **", 'yellow'))
 		
 		# We can use a with statement to ensure threads are cleaned up promptly
 		with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
@@ -106,12 +178,15 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 			#print ('\t- File: ' + result + '.spa')
 			results = species_identification_KMA.parse_kma_results(row['samples'], result + '.spa')
 
-
 			### Fix: check if db2use is plasmids as it could be several.
 			if (results.index.size > 1):
-				print (colored("Sample %s contains multiple strains." %row['samples'], 'yellow'))
-				print (colored(results.to_csv, 'yellow'))
-
+				if (basename_db == "plasmids.T"):
+					## let it be several entries
+					results['sample'] = row['samples']
+					results_summary = results_summary.append(results)
+				else:
+					print (colored("Sample %s contains multiple strains." %row['samples'], 'yellow'))
+					print (colored(results.to_csv, 'yellow'))
 			elif (results.index.size == 1):
 				results['sample'] = row['samples']
 				results_summary = results_summary.append(results)
@@ -134,29 +209,18 @@ def get_outfile(output_dir, name, index_name):
 	return(out_file)
 	
 ####################################
-def external_kma(list_files):
-	
-	external_file_returned = []
-	for f in list_files:
-		print (f)
-		status = species_identification_KMA.check_db_indexed(f)
-		if (status): #true
-			external_file_returned.append(f)
-		else: #false
-			dataBase = os.path.abspath(f)
-			basename_name = os.path.basename(dataBase)
-			status = species_identification_KMA.index_database(dataBase, kma_bin, basename_name, "new")
-			if (status): #true
-				external_file_returned.append(basename_name)
-			else:
-				print (colored("***ERROR: Database provided via --kma_external_file option (%s) was not indexed.\n" %f,'orange'))
-
-	return(external_file_returned)
-
-####################################
 def get_options_db(options):
 	print ("\n\n+ Select databases to use for identification:")
-	default_database_folder = config.DATA["database"] ## default: set during configuration
+	
+	### database folder to use
+	if (options.database):
+		database2use = options.database
+	else:
+		database2use = config.DATA["database"] ## default: set during configuration
+	
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: Database to use: " +  database2use + " **", 'yellow'))
 	
 	## according to user input: select databases to use
 	option_db = ""
@@ -180,31 +244,37 @@ def get_options_db(options):
 	## 3) only kma_db
 	############
 	elif (options.only_kma_db):
+		print ('\t- Selecting kma databases:')
 		if (options.kma_dbs):
 			options.kma_dbs = set(options.kma_dbs)
 			kma_dbs_string = ','.join(options.kma_dbs)
 			option_db = "kma:" + kma_dbs_string
-
 		else:
 			## rise error & exit
 			print (colored("***ERROR: No database provided via --kma_db option.\n",'red'))
 			exit()
-
+		
 	############
 	## 4) only external kma
 	############
 	elif (options.only_external_kma):
-		if (options.kma_external_file):
-			options.kma_external_file = set(options.kma_external_file)		
+		print ('\t- Get additional kma databases:')
+		if (options.kma_external_files):
+			options.kma_external_files = set(options.kma_external_files)		
 
 			## check if indexed and/or index if necessary
-			external_kma_dbs_string = external_kma(options.kma_external_files)
+			external_kma_dbs_list = external_kma(options.kma_external_files) ## fix
+			external_kma_dbs_string = ','.join(external_kma_dbs_list)
 			option_db = "kma_external:" + external_kma_dbs_string
 
 		else:
 			## rise error & exit
 			print (colored("***ERROR: No database provided via --kma_external_file option.\n",'red'))
 			exit()
+			
+		## rise attention
+		if (options.kma_dbs):
+			print (colored("***ATTENTION:\nDefatult databases and databases provided via --kma_dbs option would not be used as --only_external_kma option provided.\n",'red'))
 
 	############
 	## 5) all databases 
@@ -212,7 +282,7 @@ def get_options_db(options):
 	else:
 	
 		############
-		## default dbs + user
+		## default dbs + user kma dbs 
 		############
 		
 		print ('\t- Selecting kma databases:')
@@ -227,79 +297,75 @@ def get_options_db(options):
 		
 		for i in options.kma_dbs:
 			print (colored('\t\t+ %s' %i, 'green'))
-
 		
 		############
 		## External file
 		############
 		if (options.kma_external_files):
-			print ('\t- Get additional kma databases:')
-			options.kma_external_file = set(options.kma_external_files)		
+			print ('\n\n\t- Get additional kma databases:')
+			options.kma_external_files = set(options.kma_external_files)		
 			
 			## check if indexed and/or index if necessary
-			external_kma_dbs_list = external_kma(options.kma_external_files)
+			external_kma_dbs_list = external_kma(options.kma_external_files) ## fix
 			external_kma_dbs_string = ','.join(external_kma_dbs_list)
-
 			option_db = option_db + "#kma_external:" + external_kma_dbs_string
 
-			for i in external_kma_dbs_list:
-				print (colored('\t\t+ %s' %i, 'green'))
+		############
+		## Previously identified data
+		############
+		if (options.user_data):
+			option_db = option_db + '#user_data'
+		
+		############
+		## Genbank reference data
+		############
+		if (options.genbank_data):
+			option_db = option_db + '#genbank'
 
-		option_db = option_db + '#user_data'
-		option_db = option_db + '#genbank'
-
-	print (option_db)
-	exit()
-	return (option_db)
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: option_db: " +  option_db + " **", 'yellow'))
 	
+	### get dbs	
+	return (database_generator.getdbs(database2use, option_db, Debug))
+
 ####################################
-def run(options):
-
-	### species_identification_KMA -> most similar taxa
-	functions.pipeline_header()
-
-	if (options.fast):
-		functions.boxymcboxface("Fast species identification module")
-	else:
-		functions.boxymcboxface("Species identification")
+def external_kma(list_files):
 	
-	## absolute path for in & out
-	input_dir = os.path.abspath(options.input)
-	outdir = os.path.abspath(options.output_folder)
+	external_file_returned = []
+	for f in list_files:
+		f = os.path.abspath(f)
+		print (colored('\t+ %s' %f, 'green'))
+		status = species_identification_KMA.check_db_indexed(f)
+		if (status): #true
+			external_file_returned.append(f)
+			## debug message
+			if (Debug):
+				print (colored("**DEBUG: Database (%s) is indexed" %f + " **", 'yellow'))
+			
+		else: #false
+			## debug message
+			if (Debug):
+				print (colored("**DEBUG: Database (%s) is not indexed" %f + " **", 'yellow'))
 
-	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir)
-	## generate output folder
-	functions.create_folder(outdir)
+			dataBase = os.path.abspath(f)
+			basename_name = os.path.basename(dataBase)
+			
+			## debug message
+			if (Debug):
+				print (colored("**DEBUG: dataBase " + dataBase + " **", 'yellow'))
+				print (colored("**DEBUG: dataBase " + dataBase + " **", 'yellow'))
+			
+			status = species_identification_KMA.index_database(dataBase, kma_bin, dataBase, "new")
+			if (status): #true
+				external_file_returned.append(basename_name)
+			else:
+				print (colored("***ERROR: Database provided via --kma_external_file option (%s) was not indexed.\n" %f,'orange'))
 
-	## optimize threads
-	threads_module = functions.optimize_threads(options.threads, pd_samples_retrieved.index.size)
-	
-	print ("+ Generate an species typification for each sample retrieved using two methods.")
-	print ("(1) Kmer alignment (KMA) identification")	
-	print ("(2) Antimicrobial Resistance Inference By Assembly (ARIBA) identification\n\n")	
-	
-	## get databases to check
-	option_db = get_options_db(options)
-	
-	### get dbs
-	retrieve_databases = species_identification_KMA.getdbs(default_database_folder, option_db)
+	return(external_file_returned)
 
-	########
-	(excel_generated, dataFrame) = KMA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
-	
-	## update database for later usage
-	if (options.fast):
-		## skip it
-		print ("\n+ Check summary of results in file: " + excel_generated)		
-	else:
-		## update db
-		print ("")
-		## assembly, annotation, etc...
-		## rerun identification with new updated database
-	
-	########
-	ARIBA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
 
-	print ("+ Exiting identification module.")
-	exit()
+####################################
+def ARIBA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
+	functions.boxymcboxface("ARIBA Identification")
+

@@ -12,6 +12,7 @@ import re
 import sys
 from sys import argv
 from io import open
+from termcolor import colored
 
 ## import my modules
 from BacterialTyper import functions
@@ -23,7 +24,7 @@ def get_ARIBA_dbs():
 	return (dbs)
 
 ############################################################### 
-def download_ariba_databases(main_folder):
+def download_ariba_databases(main_folder, Debug):
 
 	## ToDo check if already download	
 	print("\n\n+ Download databases for Antimicrobial Resistance Identification By Assembly (ARIBA).")
@@ -37,16 +38,17 @@ def download_ariba_databases(main_folder):
 	for db_set in dbs:
 		functions.print_sepLine("-",30)
 		print (colored("+ " + db_set,'yellow'))
-		folder_set = functions.create_subfolder(db_set, ariba_folder)
-		ariba_getref(db_set, folder_set + "/" + db_set)
 		
-		if (ariba_getref == 'OK'):
+		folder_set = functions.create_subfolder(db_set, ariba_folder)
+		return_ariba_getref = ariba_getref(db_set, folder_set, Debug)
+		
+		if (return_ariba_getref == 'OK'):
 			## print citation for each database
 			functions.print_sepLine("'", 75)
 			hd.write(db_set)
 			hd.write('\n')
 		else:
-			print ("** ARIBA getref failed for " %db_set)
+			print (colored("** ARIBA getref failed for " + db_set, 'red'))
 	
 	hd.close()
 
@@ -95,7 +97,7 @@ def ariba_summary():
 	print ()
 	
 ##########
-def ariba_getref(database, outdir):
+def ariba_getref(database, outdir, Debug):
 	######################################################################################
 	## usage: ariba getref [options] <db> <outprefix>
 	######################################################################################
@@ -109,12 +111,78 @@ def ariba_getref(database, outdir):
 	##	argannot, card, megares, plasmidfinder, resfinder,
 	##	srst2_argannot, vfdb_core, vfdb_full, virulencefinder.
 
-	## download information in database folder provided by config
+	## folders
+	outdir_name = outdir + '/' + database
+	outdir_prepare_ref = outdir + '_prepareref'
 
-	print ("\t+ System module call 'getref' to retrieve information from a database:" + database)
-	cmd = 'ariba getref %s %s' %(database, outdir)
-	return(functions.system_call(cmd))
+	## download information in database folder provided by config
+	print ("\t+ Retrieve information from database: " + database)
+	cmd_getref = 'ariba getref %s %s' %(database, outdir_name)
+	download_ariba_cmd = functions.system_call(cmd_getref)
 	
+	if (download_ariba_cmd == 'OK'):
+		## debug message
+		if (Debug):
+			print (colored("**DEBUG: ariba getref %s succeed " %database + "**", 'yellow'))
+	
+	else: 
+		## rise error & exit
+		print (colored("***ERROR: ariba getref %s failed " %database + " **",'red'))
+		return('FAIL')
+
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: Run ariba prepareref %s " %database + "**", 'yellow'))
+
+	## get information
+	list_files = os.listdir(outdir)
+	fasta = ""
+	metadata = ""
+	for f in list_files:
+		if f.endswith('tsv'):
+			metadata = outdir + '/' + f
+		elif f.endswith('fa'):
+			fasta = outdir + '/' + f
+	
+	return(ariba_prepareref(fasta, metadata, outdir_prepare_ref))	
+	
+##########
+def ariba_prepareref(fasta, metadata, outfolder):
+	## prepareref
+	cmd_prepareref = 'ariba prepareref -f %s -m %s %s' %(fasta, metadata, outfolder)
+	return(functions.system_call(cmd_prepareref))
+	
+	######################################################################################
+	## usage: ariba prepareref [options] <outdir>
+	######################################################################################
+	## Prepare reference data for running the pipeline with "ariba run"
+	## positional arguments:
+	##   outdir                Output directory (must not already exist)
+	## optional arguments:
+	## -h, --help            show this help message and exit
+	## input files options:
+	##   -f FILENAME, --fasta FILENAME
+	## 		REQUIRED. Name of fasta file. Can be used more than once if your sequences are spread over more than on file
+	##   -m FILENAME, --metadata FILENAME
+	##      Name of tsv file of metadata about the input sequences. Can be used more than once if your metadata is spread over more than one file. Incompatible with --all_coding
+	##   --all_coding {yes,no}
+	##      Use this if you only have a fasta of presence absence sequences as input, and no metadata. Use "yes" if all sequences are coding, or "no" if they are all non- coding. Incompatible with -m/--metadata
+	## 
+	## cd-hit options:
+	##   --no_cdhit Do not run cd-hit. Each input sequence is put into its own "cluster". Incompatible with --cdhit_clusters.
+	##   --cdhit_clusters FILENAME --> File specifying how the sequences should be clustered. Will be used instead of running cdhit. Format is one cluster per line. Sequence names separated by whitespace. Incompatible with --no_cdhit
+	##   --cdhit_min_id FLOAT  Sequence identity threshold (cd-hit option -c) [0.9]
+  	## 	 --cdhit_min_length FLOAT Length difference cutoff (cd-hit option -s) [0.0]
+	##   --cdhit_max_memory INT Memory limit in MB (cd-hit option -M) [None]. Use 0 for unlimited.
+	##
+	## other options:
+	##   --min_gene_length INT -->  Minimum allowed length in nucleotides of reference genes [6]
+	##   --max_gene_length INT -->  Maximum allowed length in nucleotides of reference genes [10000]
+	##   --genetic_code INT   -->   Number of genetic code to use. Currently supported 1,4,11 [11]
+	##   --force               Overwrite output directory, if it already exists
+	##   --threads INT         Number of threads (currently only applies to cdhit)[1]
+	##  --verbose             Be verbose
+	######################################################################################
 
 ##########
 def ariba_pubmlstget(species, outdir):
@@ -165,7 +233,7 @@ def ariba_run():
 	##  --gene_nt_extend INT  Max number of nucleotides to extend ends of gene matches to look for start/stop codons [30]
 	##  --unique_threshold FLOAT (between 0 and 1) If proportion of bases in gene assembled more than once is <= this value, then the flag unique_contig is set [0.03]
 	##  --force               Overwrite output directory, if it already exists
-	## --noclean             Do not clean up intermediate files
+	##  --noclean             Do not clean up intermediate files
 	##  --tmp_dir TMP_DIR     Existing directory in which to create a temporary directory used for local assemblies
 	##  --verbose             Be verbose
 	######################################################################################

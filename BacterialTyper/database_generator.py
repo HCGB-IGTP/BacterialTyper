@@ -24,6 +24,7 @@ from termcolor import colored
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
+from BacterialTyper import ariba_caller
 
 ## import data
 dataDir = os.path.dirname(os.path.realpath(__file__)) + '/../../data/'
@@ -349,6 +350,133 @@ def init_DB(ID_file, folder):
 	data = NCBIdownload(strains2get, data2download, folder)
 	print ("+ Database has been updated: \n", data)
 	return (data)
+
+
+##################################################
+def getdbs(database_folder, option, debug):
+	## option = kma:archaea,plasmids,bacteria#kma_external:/path/to/file1,/path/to/file2#user_data#genbank **
+	
+	print ("\n\n+ Parsing information to retrieve databases:")
+	print ("+ Reading from database: " + database_folder)
+	## read folders within database
+	files = os.listdir(database_folder) ## ARIBA/KMA_db/genbank/user_data
+	
+	## init dataframe
+	colname = ["source", "db", "path"]
+	db_Dataframe  = pd.DataFrame(columns = colname)
+	
+	## user input
+	kma_dbs2use = []
+	option_list = option.split("#")
+	for option_item in option_list:
+		## debug message
+		if (debug):
+			print (colored("Option item: " + option_item,'yellow'))
+		
+		if (option_item.startswith('kma:')):
+			kma_dbs2use = option_item.split(":")[1].split(",")
+
+		elif (option_item.startswith('kma_external:')):
+			external = option_item.split(":")[1].split(",")
+			## add to dataframe			
+			for ext in external:
+				name_ext = os.path.basename(ext)
+				db_Dataframe.loc[len(db_Dataframe)] = ['KMA', name_ext, ext]
+		else:
+			kma_dbs2use.append(option_item) ## add user_data or genbank option if provided
+	
+	## debug message
+	if (debug):
+		print (colored("\nkma_dbs2use:\n\t" + "\n\t".join(kma_dbs2use), 'yellow'))
+	
+	### get information
+	for dbs in files:
+		
+		#### ARIBA
+		if (dbs == "ARIBA"):
+			ARIBA_dbs = ariba_caller.get_ARIBA_dbs()
+			lineList = [line.rstrip('\n') for line in open(database_folder + '/' + dbs + '_information.txt')]
+			
+			for ariba_db in ARIBA_dbs:
+				this_db = database_folder + '/' + dbs + '/' + ariba_db + '_prepareref/'
+				#print (this_db)
+				if os.path.exists(this_db + '00.info.txt'):
+					if ariba_db in lineList:
+						db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db]
+						print (colored("\t- ARIBA: including information from database: " + ariba_db, 'green'))
+					else:
+						print (colored("\t**ARIBA: database %s was not available." %ariba_db, 'red'))
+
+		#### KMA db
+		elif (dbs == "KMA_db"):
+			kma_dbs = os.listdir(database_folder + '/' + dbs)
+			for db in kma_dbs:
+				##
+				if db in kma_dbs2use:
+					print ("")
+				else:
+					## debug message
+					if (debug):
+						print (colored("Available but not to use:" + db , 'yellow'))
+
+					continue ## do not use this database
+		
+				this_db = database_folder + '/' + dbs + '/' + db
+				if os.path.exists(this_db):				
+					if (db == 'plasmids'):
+						prefix = '.T'
+					else:
+						prefix = '.ATG'
+
+					this_db_file = this_db + '/' + db + prefix
+					if os.path.isfile(this_db_file + '.comp.b'):
+						db_Dataframe.loc[len(db_Dataframe)] = ['KMA', db, this_db_file]
+						print (colored("\t- KMA_db: including information from database " + db, 'green'))
+					else:
+						print (colored("\t**KMA_db: Database %s was not available." %db, 'red'))
+		#### genbank	
+		elif (dbs == "genbank"):
+			## KMA databases
+			if dbs in kma_dbs2use:
+				print ("\t- Genbank: including information from different reference strains available.") ## include data from NCBI
+
+				## to do	
+				this_db = database_folder + '/' + dbs 
+				db_Dataframe.loc[len(db_Dataframe)] = ['genbank', 'genbank', this_db]
+				
+		
+		#### user_data
+		elif (dbs == "user_data"):
+			if dbs in kma_dbs2use:
+				print ("\t- User_data: including information from user previously generated results") ## include user data
+				## to do
+				this_db = database_folder + '/' + dbs 
+				db_Dataframe.loc[len(db_Dataframe)] = ['user_data', 'user_data', this_db]
+		
+		
+	## double check if missing
+	for sets in kma_dbs2use:
+		if db_Dataframe['db'].str.contains(sets).any():
+			continue
+		else:
+			## if missing: call download module
+			print ("+ Download missing KMA_db (%s) provided" %sets)
+			download_kma_database(database_folder + '/KMA_db/' + sets, sets, debug)
+
+			if (db == 'plasmids'):
+				prefix = '.T'
+			else:
+				prefix = '.ATG'
+				
+			this_db_file = database_folder + '/KMA_db/' + sets + '/' + sets + prefix
+			if os.path.isfile(this_db_file + '.comp.b'):
+				db_Dataframe.loc[len(db_Dataframe)] = ['KMA', sets, this_db_file]
+				print (colored("\t- KMA_db: including information from database " + sets, 'green'))
+			else:
+				print (colored("\t**KMA_db: Database %s was not available." %sets, 'red'))
+
+	return (db_Dataframe)
+
 
 ##########################################################################################
 def init_message():

@@ -41,7 +41,9 @@ subparser_initDB.add_argument("ID_file", help="ID_file is a csv file (include he
 subparser_initDB.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to download. Provide several input if desired. Not compatible with --index_kma. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
 subparser_initDB.add_argument("--no_def_kma", action="store_true", help="Only applicable if kma_db is ON. It discards default databases (bacteria & plasmids) from kma_db. Only user selected datbases indexed. [Default: OFF]")
 subparser_initDB.add_argument("--index_kma", action="store_true", help="Index the genomes downloaded for later usage during species identification. Not compatible with --kma_db options: available databases with broader taxonomic ranges. [Default: OFF]")
-subparser_initDB.add_argument("--no_ARIBA", action="store_true", help="It prevents downloading ARIBA databases. [Default: OFF]")
+subparser_initDB.add_argument("--no_ARIBA", action="store_true", help="It prevents downloading ARIBA databases and prepare them. [Default: OFF]")
+subparser_initDB.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+
 subparser_initDB.set_defaults(func=BacterialTyper.modules.database.initial_run)
 ##-------------------------------------------------------------##
 
@@ -53,11 +55,14 @@ subparser_updateDB = subparsers.add_parser(
     description='Given a file with information from known strains this module updates an initiated database with information from NCBI. Other options allow to update database from kma indexes or ARIBA databases.'
 )
 subparser_updateDB.add_argument("path", help="Folder path to generate database.")
-subparser_updateDB.add_argument("ID_file", help="ID_file is a csv file (include header) containing several columns per row according to the header provided: ##genus,species,name,NCBI_assembly_ID")
-subparser_updateDB.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to download. Provide several input if desired. Not compatible with --index_kma. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
-subparser_updateDB.add_argument("--no_def_kma", action="store_true", help="Only applicable if kma_db is ON. It discards default databases (bacteria & plasmids) from kma_db. Only user selected datbases indexed. [Default: OFF]")
-subparser_updateDB.add_argument("--index_kma", action="store_true",  help="Index the genomes downloaded for later usage during species identification. It prevents downloading available databases with broader taxonomic ranges. [Default: OFF]")
-subparser_updateDB.add_argument("--ARIBA_db", action="store_true", help="It downloads ARIBA databases. [Default: OFF]")
+options_group = subparser_updateDB.add_argument_group("Options")
+options_group.add_argument("--ID_file", help="ID_file is a csv file (include header) containing several columns per row according to the header provided: ##genus,species,name,NCBI_assembly_ID")
+options_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to download. Provide several input if desired. Not compatible with --index_kma. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
+options_group.add_argument("--no_def_kma", action="store_true", help="Only applicable if kma_db is ON. It discards default databases (bacteria & plasmids) from kma_db. Only user selected datbases indexed. [Default: OFF]")
+options_group.add_argument("--index_kma", action="store_true",  help="Index the genomes downloaded for later usage during species identification. It prevents downloading available databases with broader taxonomic ranges. [Default: OFF]")
+options_group.add_argument("--ARIBA_db", action="store_true", help="It downloads ARIBA databases and prepare them. [Default: OFF]")
+
+subparser_updateDB.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 subparser_updateDB.set_defaults(func=BacterialTyper.modules.database.updateDB_NCBI)
 ##-------------------------------------------------------------##
 
@@ -79,6 +84,7 @@ subparser_sample.add_argument("--batch", action="store_true", help="Provide this
 subparser_sample.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 subparser_sample.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 subparser_sample.add_argument("--copy", action="store_true", help="Instead of generating symbolic links, copy files into output folder. [Default OFF].")
+subparser_sample.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 subparser_sample.set_defaults(func=BacterialTyper.modules.sample_prepare.retrieve)
 ##-------------------------------------------------------------##
 
@@ -95,6 +101,7 @@ subparser_merge.add_argument("--threads", type=int, help="Number of CPUs to use 
 subparser_merge.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 subparser_merge.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 subparser_merge.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+subparser_merge.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 subparser_merge.set_defaults(func=BacterialTyper.modules.sample_prepare.merge)
 ##-------------------------------------------------------------##
 
@@ -113,7 +120,7 @@ subparser_fastqc.add_argument("--threads", type=int, help="Number of CPUs to use
 subparser_fastqc.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 subparser_fastqc.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 subparser_fastqc.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
-
+subparser_fastqc.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 subparser_fastqc.set_defaults(func=BacterialTyper.modules.qc.fastqc)
 ##-------------------------------------------------------------##
 
@@ -133,6 +140,7 @@ subparser_trimm.add_argument("--threads", type=int, help="Number of CPUs to use 
 subparser_trimm.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 subparser_trimm.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 subparser_trimm.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+subparser_trimm.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 subparser_trimm.set_defaults(func=BacterialTyper.modules.trimm.run)
 ##-------------------------------------------------------------##
 
@@ -171,10 +179,14 @@ initial_group.add_argument("--pair", action="store_true", help="Paired-end files
 initial_group.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 initial_group.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+initial_group.add_argument("--database", help="Directory containing several databases previously downloaded such as ARIBA, KMA, genbank and user_data folders. [Default: database provided during configuration].")
+initial_group.add_argument("--user_data", action="store_true", help="Use previously identified samples in user_data [Default OFF].")
+initial_group.add_argument("--genbank_data", action="store_true", help="Use reference genomes from NCBI stored in database folder [Default OFF].")
 
 parameters_group = subparser_ident.add_argument_group("Parameters")
-parameters_group.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].")
+parameters_group.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 parameters_group.add_argument("--fast", action="store_true", help="Do not update database, just identify samples according to databases provided [Default OFF].")
+parameters_group.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 
 kma_group = subparser_ident.add_argument_group("KMA Databases Configuration")
 kma_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to check. Provide several input if desired. If it is not available it would be downloaded and included in default database folder. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
@@ -182,12 +194,10 @@ kma_group.add_argument("--kma_external_file", dest='kma_external_files', nargs='
 
 exclusive_group_name = subparser_ident.add_argument_group("Options")
 exclusive_group = exclusive_group_name.add_mutually_exclusive_group()
+exclusive_group.add_argument("--only_user_data", action="store_true",  help="Use only indexed genomes previously identified stored in database folder.[Default: OFF]")
+exclusive_group.add_argument("--only_genbank_data", action="store_true",  help="Use only reference genomes previously downloaded from NCBI stored in database folder.[Default: OFF]")
 exclusive_group.add_argument("--only_kma_db", action="store_true", help="Provide this option if only database(s) provided via --kma_db should be used for species identification.")
 exclusive_group.add_argument("--only_external_kma", action="store_true", help="Provide this option if only database(s) provided via --kma_external_file should be used for species identification.")
-exclusive_group.add_argument("--only_user_data", action="store_true",  help="Use only indexed genomes previously identified stored in default path database folder (user_data folder).[Default: OFF]")
-exclusive_group.add_argument("--only_genbank_data", action="store_true",  help="Use only reference genomes previously downloaded from NCBI stored in default path database folder (genbank folder).[Default: OFF]")
-exclusive_group.add_argument("--all_kma_db", action="store_true", help="Provide this option if all databases provided should be used for species identification. [Default ON].")
-
 subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run)
 ##-------------------------------------------------------------##
 

@@ -24,24 +24,34 @@ def	help_options():
 	print ("\n*** If not paired-end provide 'na' for file_R2")
 
 ######	
-def trimmo_module(file_R1, file_R2, path_name, sample_name, threads):
-	trimmomatic_jar = config.EXECUTABLES['trimmomatic']
+def trimmo_module(file_R1, file_R2, path_name, sample_name, threads, Debug):
 	## check if it works
+	trimmomatic_jar = config.EXECUTABLES['trimmomatic']
 	
-	trimmomatic_adapters = config.DATA['trimmomatic_adapters']
 	## check if it exists
+	trimmomatic_adapters = config.DATA['trimmomatic_adapters']
+	if os.path.isfile(trimmomatic_adapters):
+		## debug message
+		if (Debug):
+			print (colored("**DEBUG: trimmomatic_adapters file exists **", 'yellow'))
+			print (trimmomatic_adapters)
+	else:
+		## rise error & exit
+		print (colored("***ERROR: Trimmomatic adapters file does not exist: " + trimmomatic_adapters,'red'))
+		exit()
 	
 	## call
 	return(trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threads, trimmomatic_adapters))
 
 ######
-def trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threads, trimmomatic_adapters):
+def trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
 	
 	## if not paired-end file provide for file_R2: "na"
 	
-	print ("+ Cutting adapters for sample: ", sample_name)
-	print ('\t-', file_R1)
-
+	## debug message
+	if (Debug):
+		print (colored("+ Cutting adapters for sample: " + sample_name, 'yellow'))
+		
 	## create folder
 	sample_folder = path_name + '/' + sample_name
 	functions.create_folder(path_name)
@@ -58,18 +68,20 @@ def trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threa
 	if (file_R2 == "na"):
 		trim_R1 = sample_folder + '/' + sample_name + '_trim.fastq'
 	else:
-		print ('\t-', file_R2)
+		#print ('\t-', file_R2)
 		trim_R1 = sample_folder + '/' + sample_name + '_trim_R1.fastq'
 		orphan_R1 = sample_folder + '/' + sample_name + '_orphan_R1.fastq'
 		trim_R2 = sample_folder + '/' + sample_name + '_trim_R2.fastq'
 		orphan_R2 = sample_folder + '/' + sample_name + '_orphan_R2.fastq'
-
+	
+	## set command
 	cmd = ""	
 	if (file_R2 == "na"):
 		cmd = "java -jar %s SE -threads %s -trimlog %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(trimmomatic_jar, threads, log_file, file_R1, trim_R1, trimmomatic_adapters, trimmo_log)
 	else:
 		cmd = "java -jar %s PE -threads %s -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(trimmomatic_jar, threads, log_file, file_R1, file_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters, trimmo_log)
 	
+	## system call & return
 	return(functions.system_call(cmd))	
 
 ######

@@ -17,6 +17,7 @@ import pandas as pd
 from sys import argv
 from io import open
 from termcolor import colored
+import shutil
 
 ## import my modules
 from BacterialTyper import functions
@@ -28,7 +29,7 @@ from BacterialTyper import ariba_caller
 ####################
 
 ##################################################
-def download_kma_database(folder, database):
+def download_kma_database(folder, database, debug):
 
 	## types: bacteria, archaea, protozoa, fungi, plasmids, typestrains
 	## Default: downloads all "bacterial,plasmids" genomes from KMA website
@@ -49,6 +50,11 @@ def download_kma_database(folder, database):
 	#protozoa.ATG	Protozoa	Protozoa library prefix=ATG
 	#archaea.ATG	Archaea	Archaea library prefix=ATG	
 	
+	## debug message
+	if (debug):
+		print (colored("Function call: download_kma_database " + folder + ' ' + database + '\n','yellow'))
+
+	## prefix
 	if (database == 'plasmids'):
 		prefix = '.T'
 	else:
@@ -57,20 +63,29 @@ def download_kma_database(folder, database):
 	index_name = folder + '/' + database + prefix	
 
 	## check if already download
+	return_code_down = False
 	if os.path.exists(folder):
 		return_code_down = check_db_indexed(index_name)
-		#print (return_code_down)
-	
-	if (return_code_down == False):
+		## debug message
+		if (debug):
+			print (colored("Folder database is already available:" + folder,'yellow'))
+		
+	if (return_code_down == False): ## folder does not exists
+
 		## Download data
 		print ("\t+ Downloading data now, it migth take a while....")
+
 		ftp_site = "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/20190107/"
+
+		## debug message
+		if (debug):
+			print (colored("Download files via function wget_download:",'yellow'))
+
 		url = ftp_site + database + '.tar.gz'
-		functions.wget_download(url, folder)
+		#functions.wget_download(url, folder)
 
 		md5_url = ftp_site + database + '.md5'
-		functions.wget_download(md5_url, folder)
-	
+		#functions.wget_download(md5_url, folder)
 		print ("\n\t+ Data succesfully downloaded.....")
 
 		## get files
@@ -96,13 +111,28 @@ def download_kma_database(folder, database):
 		## calculate md5 for file
 		result_md5 = functions.check_md5sum(md5_string, tar_file)
 		if (result_md5 == True):
+		
+			## debug message
+			if (debug):
+				print (colored("result md5sum matches code provided for file " + tar_file,'yellow'))
+
 			# extract
 			print ("\t+ Extracting database into destination folder: " + folder)
-			functions.extract(tar_file, folder)	
+			#functions.extract(tar_file, folder)	
 			
 			## not fully working
 			## to do: fix downloading databases
-			
+			if os.path.isfile(index_name + '.b'):
+				print ("")
+			else:
+				index_name2 = folder + '/' + database + '/' + database + prefix + '.b'
+				if os.path.isfile(index_name2):
+					files2copy = functions.get_fullpath_list(folder + '/' + database)
+					for f in files2copy:
+						shutil.move(f, folder) ## move content
+				
+				shutil.rmtree(folder + '/' + database)
+
 		else:
 			print (colored("*** ERROR: Some error ocurred during the downloading and file is corrupted ***", 'red'))
 			return ("Error")
@@ -126,7 +156,7 @@ def check_db_indexed(index_name):
 		##print (sufix)
 		my_file = index_name + sufix
 		if os.path.isfile(my_file):
-			print ("\t- " + my_file + ' exists...')
+			print ("\t" + my_file + ' exists...')
 		else:
 			if (sufix == '.index.b'):
 				continue
@@ -181,75 +211,18 @@ def index_database(fileToIndex, kma_bin, index_name, option):
 	#	-h			Shows this help message
 	#######################################################################################
 	
+	logFile = index_name + '.log'
+	
 	if (option == "new"):
-		print ("\n+ Generate and index entries for kmer alignment search...\n")
-		cmd_kma_index = "%s index -i %s -o %s" %(kma_bin, fileToIndex, index_name)
+		print ("\n+ Generate and index database for kmer alignment search...\n")
+		cmd_kma_index = "%s index -i %s -o %s 2> %s" %(kma_bin, fileToIndex, index_name, logFile)
 	elif (option == "add"):
 		print ("\n+ Updating database with new entries...\n")
-		cmd_kma_index = "%s index -i %s -o %s -t_db" %(kma_bin, fileToIndex, index_name)
+		cmd_kma_index = "%s index -i %s -o %s -t_db 2> %s" %(kma_bin, fileToIndex, index_name, logFile)
 
-	functions.system_call(cmd_kma_index)
-	
+	functions.system_call(cmd_kma_index)	
 	return_code = check_db_indexed(index_name)
 	return(return_code)
-
-
-##################################################
-def getdbs(database_folder, option):
-	print ("+ Reading information from: " + database_folder)
-	## read folders within database
-	files = os.listdir(database_folder) ## ARIBA/KMA_db/genbank/user_data
-	
-	## init dataframe
-	colname = ["source", "db", "path"]
-	db_Dataframe  = pd.DataFrame(columns = colname)
-	
-	for dbs in files:
-		#print (dbs)
-		print ("")
-
-		#### ARIBA
-		if (dbs == "ARIBA"):
-			ARIBA_dbs = ariba_caller.get_ARIBA_dbs()
-			lineList = [line.rstrip('\n') for line in open(database_folder + '/' + dbs + '_information.txt')]
-			
-			for ariba_db in ARIBA_dbs:
-				this_db = database_folder + '/' + dbs + '/' + ariba_db
-				#print (this_db)
-				if os.path.exists(this_db):
-					if ariba_db in lineList:
-						db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db]
-						print (colored("\t- ARIBA: including information from database: " + ariba_db, 'green'))
-					else:
-						print (colored("\t**ARIBA: database %s was not available." %ariba_db, 'red'))
-		
-		#### KMA db
-		elif (dbs == "KMA_db"):
-			kma_dbs = os.listdir(database_folder + '/' + dbs)
-			for db in kma_dbs:
-				this_db = database_folder + '/' + dbs + '/' + db
-				if os.path.exists(this_db):				
-					if (db == 'plasmids'):
-						prefix = '.T'
-					else:
-						prefix = '.ATG'
-
-					this_db_file = this_db + '/' + db + prefix
-					if os.path.isfile(this_db_file + '.comp.b'):
-						db_Dataframe.loc[len(db_Dataframe)] = ['KMA_db', db, this_db_file]
-						print (colored("\t- KMA_db: including information from database " + db, 'green'))
-					else:
-						print (colored("\t**KMA_db: Database %s was not available." %db, 'red'))
-		#### genbank	
-		elif (dbs == "genbank"):
-			print ("\t- Genbank: including information from different reference strains available.") ## include data from NCBI
-			## to do
-		#### user_data
-		elif (dbs == "user_data"):
-			print ("\t- User_data: including information from user previously generated results") ## include user data
-			## to do
-
-	return (db_Dataframe)
 
 ########################
 #### IDENTIFICATION	####
@@ -273,12 +246,12 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads):
 def kma_ident_module(out_file, files, sample_name, index_name, threads):
 	## kma_ident_call
 	kma_bin = config.EXECUTABLES["kma"]
-	return(kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads))
+	#return(kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads))
 
 ##################################################
 def parse_kma_results(sample, out_file):
 	results = pd.read_csv(out_file, sep="\t")
-	results_filter = results[results['Template_Coverage'] > 90] 
+	results_filter = results[results['Template_Coverage'] > 80] 
 	## filter according to coverage of the template. 
 	return (results_filter)
 

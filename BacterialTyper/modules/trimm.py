@@ -21,6 +21,13 @@ from BacterialTyper import config
 
 ##############################################
 def run(options):
+
+	## debugging messages
+	global Debug
+	if (options.debug):
+		Debug = True
+	else:
+		Debug = False
 	
 	functions.pipeline_header()
 	functions.boxymcboxface("Trimming samples")
@@ -31,7 +38,12 @@ def run(options):
 
 	## get files
 	pd_samples_retrieved = sample_prepare.get_files(options, input_dir)
-	#print (pd_samples_retrieved)
+	
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
+		print (pd_samples_retrieved)
+
 	## generate output folder
 	functions.create_folder(outdir)
 
@@ -44,7 +56,7 @@ def run(options):
 	if (options.pair):
 		# We can use a with statement to ensure threads are cleaned up promptly
 		with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
-			commandsSent = { executor.submit(trimmomatic_call.trimmo_module, row['R1'], row['R2'], outdir, row['samples'], threads_module): index for index, row in pd_samples_retrieved.iterrows() }
+			commandsSent = { executor.submit(trimmomatic_call.trimmo_module, row['R1'], row['R2'], outdir, row['samples'], threads_module, Debug): index for index, row in pd_samples_retrieved.iterrows() }
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
 				try:
@@ -57,7 +69,7 @@ def run(options):
 	else:
 		# We can use a with statement to ensure threads are cleaned up promptly
 		with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
-			commandsSent = { executor.submit(trimmomatic_call.trimmo_module, row['read'], 'na', outdir, row['samples'], threads_module): index for index, row in pd_samples_retrieved.iterrows() }
+			commandsSent = { executor.submit(trimmomatic_call.trimmo_module, row['read'], 'na', outdir, row['samples'], threads_module, Debug): index for index, row in pd_samples_retrieved.iterrows() }
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
 				try:
@@ -74,6 +86,10 @@ def run(options):
 	dir_symlinks = functions.create_subfolder('link_files', outdir)
 	files2symbolic = []
 	folders = os.listdir(outdir)
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: generate symbolic links for each file in " + dir_symlinks + "**", 'yellow'))
+		
 	for fold in folders:
 		if fold.endswith(".log"):
 			continue
