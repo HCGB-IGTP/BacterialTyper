@@ -5,7 +5,6 @@ __all__ = [
 	'assemble',
 	'trimm',
 	'sample_prepare',
-	'virulence_resistance',
 	'plasmidID_call',
 	'ident',
 	'variant_calling',

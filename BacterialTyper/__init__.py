@@ -15,6 +15,7 @@ __all__ = [
 	'functions',
 	'blast_parser',
 	'sampleParser',
+	'virulence_resistance',
 	'config',
 	'MLSTar',
 	'trimmomatic_call',
