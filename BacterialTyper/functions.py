@@ -43,7 +43,7 @@ def create_subfolder (name, path):
 	   	#print ("\tDirectory %s already exists" % subfolder_path)
 		return subfolder_path
 	else:  
-		print (colored("\tSuccessfully created the directory %s " % subfolder_path, 'yellow'))
+		print (colored("Successfully created the directory %s " % subfolder_path, 'yellow'))
 	
 	return subfolder_path
 ###############   
@@ -60,7 +60,7 @@ def create_folder (path):
 	   	#print ("\tDirectory %s already exists" %path)
 	   	return path
 	else:  
-		print (colored("\tSuccessfully created the directory %s " %path, 'yellow'))
+		print (colored("Successfully created the directory %s " %path, 'yellow'))
 	
 	return path
 ###############  
@@ -119,7 +119,8 @@ def subset_fasta(ident, fasta, out):
 
 ###############
 def extract(fileGiven, out):
-	xtract(fileGiven, destination=out, all=True)
+	cmd= xtract(fileGiven, destination=out, all=True)
+	print (cmd)
 ###############
 
 ###############

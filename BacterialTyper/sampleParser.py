@@ -173,7 +173,7 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False):
 	if (number_samples == 0):
 		print (colored("\n**ERROR: No samples were retrieved. Check the input provided\n",'red'))
 		exit()
-	print ("\t", number_samples," samples selected from the input provided...")
+	print (colored("\t" + str(number_samples) + " samples selected from the input provided...", 'yellow'))
 	return (df_samples)
 	
 ###############

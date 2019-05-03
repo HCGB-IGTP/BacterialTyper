@@ -10,6 +10,7 @@ __all__ = [
 	'variant_calling',
 	'run',
 	'test',
+	'profile',
 	'version',
 	'citation'
 ]

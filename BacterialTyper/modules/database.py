@@ -21,8 +21,18 @@ def initial_run(options):
 	else:
 		Debug = False
 
-	## create folder and call modules:	
+	## message header
 	functions.pipeline_header()
+	functions.boxymcboxface("Initiate Database")
+	
+	## print further information for ARIBA databases	
+	if (options.help_ARIBA):
+		print ("ARIBA databases information:")	
+		ariba_caller.help_ARIBA()
+		exit()
+
+
+	## create folder and call modules:	
 	functions.create_folder(os.path.abspath(options.path))
 
 	## NCBI
@@ -34,7 +44,7 @@ def initial_run(options):
 		print ()
 	else:
 		functions.print_sepLine("*",50)
-		ariba_caller.download_ariba_databases(options.path, Debug)
+		ariba_caller.download_ariba_databases(list_dbs, options.path, Debug)
 
 	### kma databases
 	functions.print_sepLine("*",50)
@@ -57,13 +67,22 @@ def updateDB_NCBI(options):
 	else:
 		Debug = False
 
-	## update database	
-	options.path = os.path.abspath(options.path)
+	## message header
 	functions.pipeline_header()
+	functions.boxymcboxface("Update Database")
 
+	options.path = os.path.abspath(options.path)
+	
 	## genbank
 	if (options.ID_file):
 		dataFile = database_generator.update_database(options.ID_file, options.path)
+
+	## print further information for ARIBA databases	
+	if (options.help_ARIBA):
+		print ("ARIBA databases information:")	
+		ariba_caller.help_ARIBA()
+		exit()
+
 	
 	## ARIBA
 	if (options.ARIBA_db):

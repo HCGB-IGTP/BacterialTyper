@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-This code calls species_identification_KMA and get the most similar taxa then use ariba_caller to check if pubmlst is downloaded and  get MLST profile.
+This code calls species_identification_KMA and get the most similar taxa.
 Jose F. Sanchez
 Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
 '''
@@ -20,7 +20,6 @@ from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import species_identification_KMA
 from BacterialTyper import database_generator
-from BacterialTyper import ariba_caller
 from BacterialTyper.modules import sample_prepare
 
 ## set defaults
@@ -56,23 +55,23 @@ def run(options):
 	## optimize threads
 	threads_module = functions.optimize_threads(options.threads, pd_samples_retrieved.index.size)
 	
-	print ("+ Generate an species typification for each sample retrieved using two methods.")
-	print ("(1) Kmer alignment (KMA) identification")	
-	print ("(2) Antimicrobial Resistance Inference By Assembly (ARIBA) identification\n\n")	
-	
+	print ("+ Generate an species typification for each sample retrieved using:")
+	print ("(1) Kmer alignment (KMA) software.")	
+	print ("(2) Pre-defined databases by KMA or user-defined databases.")	
+		
 	## get databases to check
 	retrieve_databases = get_options_db(options)
 	
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: retrieve_database **", 'yellow'))
+		pd.set_option('display.max_colwidth', -1)
+		pd.set_option('display.max_columns', None)
 		print (retrieve_databases)
 	
-	exit()
-	
 	########
-	(excel_generated, dataFrame) = KMA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
-	
+	#(excel_generated, dataFrame) = KMA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
+	excel_generated = ""
 	## update database for later usage
 	if (options.fast):
 		## skip it
@@ -83,9 +82,6 @@ def run(options):
 		## assembly, annotation, etc...
 		## rerun identification with new updated database
 	
-	########
-	ARIBA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
-
 	print ("+ Exiting identification module.")
 	exit()
 
@@ -98,7 +94,7 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 	databases2use = []
 	for	index, db2use in retrieve_databases.iterrows():
 		## index_name
-		if (db2use['source'] == 'KMA_db'):
+		if (db2use['source'] == 'KMA'):
 			print ('+ Check database: ' + db2use['db'])
 			index_status = species_identification_KMA.check_db_indexed(db2use['path'] )
 			if (index_status == True):
@@ -327,7 +323,7 @@ def get_options_db(options):
 		print (colored("**DEBUG: option_db: " +  option_db + " **", 'yellow'))
 	
 	### get dbs	
-	return (database_generator.getdbs(database2use, option_db, Debug))
+	return (database_generator.getdbs("KMA", database2use, option_db, Debug))
 
 ####################################
 def external_kma(list_files):
@@ -363,9 +359,4 @@ def external_kma(list_files):
 				print (colored("***ERROR: Database provided via --kma_external_file option (%s) was not indexed.\n" %f,'orange'))
 
 	return(external_file_returned)
-
-
-####################################
-def ARIBA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
-	functions.boxymcboxface("ARIBA Identification")
 

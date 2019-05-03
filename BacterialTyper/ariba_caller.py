@@ -17,14 +17,75 @@ from termcolor import colored
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
+from BacterialTyper.modules import citation
+
+## General
+dbs = ["argannot", "card", "megares", "plasmidfinder", "resfinder", "srst2_argannot", "vfdb_core", "vfdb_full", "virulencefinder"]
+conversion_dbs = {
+	"ARG-ANNOT":"argannot", 
+	"CARD":"card", 
+	"MEGARes":"megares", 
+	"PlasmidFinder":"plasmidfinder", 
+	"ResFinder":"resfinder", 
+	"srst2":"srst2_argannot", 
+	"VFDB":"vfdb_full", 
+	"VirulenceFinder":"virulencefinder"
+}
 
 ############################################################### 
-def get_ARIBA_dbs():
-	dbs = ["argannot", "card", "megares", "plasmidfinder", "resfinder", "srst2_argannot", "vfdb_core", "vfdb_full", "virulencefinder"]
-	return (dbs)
-
+def get_ARIBA_dbs(list_dbs):
+	db2returns = []
+	for i in list_dbs:
+		if (conversion_dbs[i] in dbs):
+			db2returns.append(conversion_dbs[i])
+	return (db2returns)
+	
 ############################################################### 
-def download_ariba_databases(main_folder, Debug):
+def help_ARIBA():
+
+	dict_ariba = citation.ariba_citation()
+	## to do: finish filling information for different databases
+	print ("")
+	functions.print_sepLine("*", 50)
+	print ("CARD: https://card.mcmaster.ca/")
+	print ("The Comprehensive Antibiotic Resistance Database (CARD) is a rigorously curated collection of characterized, peer-reviewed  resistance determinants and associated antibiotics, organized by the Antibiotic Resistance Ontology (ARO) and AMR gene detection models.")
+	print ('Citation:', dict_ariba['CARD'])
+	print ("")	
+	functions.print_sepLine("*", 50)
+	print ("VFDB: http://www.mgc.ac.cn/VFs/main.htm")
+	print ("The virulence factor database (VFDB) is an integrated and comprehensive online resource for curating information about virulence factors of bacterial pathogens. Since its inception in 2004, VFDB has been dedicated to providing up-to-date knowledge of VFs from various medically significant bacterial pathogens.")
+	print ('Citation:', dict_ariba['VFDB'])
+	print ("")	
+	functions.print_sepLine("*", 50)
+	print ("ARG-ANNOT:\n")
+	print ("...")
+	print ('Citation:', dict_ariba['ARG-ANNOT'])
+	print ("")	
+	functions.print_sepLine("*", 50)
+	print ("MEGARes: http://megares.meglab.org/")
+	print ("The MEGARes database contains sequence data for approximately 4,000 hand-curated antimicrobial resistance genes accompanied by an annotation structure that is optimized for use with high throughput sequencing.")
+	print ('Citation:', dict_ariba['MEGARes'])
+	print ("")	
+	functions.print_sepLine("*", 50)
+	print ("PlasmidFinder:\n")
+	print ("...")
+	print ('Citation:', dict_ariba['PlasmidFinder'])
+	print ("")	
+	functions.print_sepLine("*", 50)
+	print ("ResFinder:\n")
+	print ("The ResFinder database is a curated database of acquired resistance genes.")
+	print ('Citation:', dict_ariba['ResFinder'])
+	print ("")	
+	functions.print_sepLine("*", 50)
+	print ("srst2: https://github.com/katholt/srst2")
+	print ("...")
+	print ('Citation:', dict_ariba['srst2'])
+	print ("")
+	functions.print_sepLine("*", 50)
+	print ("")
+	
+############################################################### 
+def download_ariba_databases(list_dbs, main_folder, Debug):
 
 	## ToDo check if already download	
 	print("\n\n+ Download databases for Antimicrobial Resistance Identification By Assembly (ARIBA).")
@@ -32,9 +93,9 @@ def download_ariba_databases(main_folder, Debug):
 	## where database is one of: 
 	print ("+ Available databases:")
 	out_info = main_folder + '/ARIBA_information.txt'
-	hd = open(out_info, 'w')
+	hd = open(out_info, 'a')
 
-	dbs = get_ARIBA_dbs()
+	dbs = get_ARIBA_dbs(list_dbs)
 	for db_set in dbs:
 		functions.print_sepLine("-",30)
 		print (colored("+ " + db_set,'yellow'))
@@ -49,10 +110,31 @@ def download_ariba_databases(main_folder, Debug):
 			hd.write('\n')
 		else:
 			print (colored("** ARIBA getref failed for " + db_set, 'red'))
+			return ('FAIL')
 	
 	hd.close()
+	return('OK')
 
-
+##########
+def check_db_indexed(folder, option):
+	# get databases downloaded
+	lineList = [line.rstrip('\n') for line in open(folder + '../../' + 'ARIBA_information.txt')]
+	if os.path.isfile(folder + '00.info.txt'):
+		name = folder.split("_prepareref/")[0]
+		path_basename = os.path.basename(name)
+		if path_basename in lineList: ## double check
+			if (option == 'YES'):
+				print (colored("\t- ARIBA database: " + path_basename + " [ OK ]", 'green'))
+			return True
+		else:
+			if (option == 'YES'):
+				print (colored("\t- ARIBA database: " + path_basename + " [ ERROR ]", 'red'))
+			return False
+	else:
+		if (option == 'YES'):
+			print (colored("\t- ARIBA database: " + path_basename + " [ ERROR ]", 'red'))
+		return False
+	
 ##########
 def ariba_summary():
 	######################################################################################
@@ -202,7 +284,7 @@ def ariba_pubmlstget(species, outdir):
 	return(functions.system_call(cmd))
 	
 ##########
-def ariba_run():
+def ariba_run(database, files, outdir, threads):
 	######################################################################################
 	##	usage: ariba run [options] <prepareref_dir> <reads1.fq> <reads2.fq> <outdir>
 	##	Runs the local assembly pipeline. Input is dir made by prepareref, and paired reads
@@ -238,7 +320,14 @@ def ariba_run():
 	##  --verbose             Be verbose
 	######################################################################################
 
-	print ()
+	# outdir must not exist.
+
+	if (len(files) > 1):
+		cmd = 'ariba run %s %s %s %s --threads %s' %(database, files[0], files[1], outdir, threads)
+	else:
+		print ("") ## todo
+	##
+	return(functions.system_call(cmd))
 	
 ######
 def	help_options():
@@ -256,6 +345,7 @@ def main():
 		help_options()
 		exit()    	
 
+	help_ARIBA()
 		
 ######
 if __name__== "__main__":
