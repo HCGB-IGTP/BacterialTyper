@@ -120,7 +120,7 @@ def subset_fasta(ident, fasta, out):
 ###############
 def extract(fileGiven, out):
 	cmd= xtract(fileGiven, destination=out, all=True)
-	print (cmd)
+	#print (cmd)
 ###############
 
 ###############

@@ -20,56 +20,302 @@ from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import ariba_caller
 
-######
-def parse_vfdb(fileResults):
+#############################################################
+def parse_vfdb(folder, sampleName, fileResults, fileFlags, summary):
+	print ("\tCheck VFDB result: ", sampleName)
+	summary_data = pd.read_csv(summary, header=0, sep=',')
+	fileFlags_data = pd.read_csv(fileFlags, header=0, sep='\t')
+	original_data = pd.read_csv(fileResults, header=0, sep='\t')
+
+	## parse results
+	cluster = []
+	for column in summary_data:
+		if (column == 'name'):
+			continue
+		cluster_name = column.split(".match")[0]
+		cluster.append(cluster_name)
+
+	cluster_len = len(cluster)
+	print ("\t%s genes putatively involved in the strain virulence..." %cluster_len)
+
+	## subset
+	data = original_data.loc[original_data['cluster'].isin(cluster)]
+	
+	## create dataframe
+	colnames = ['Reference', 'VFDB ID', 'Protein-coding','Presence/Abscence', 'Species', 'Variants', 'Description', 'Additional information']
+	df_results = pd.DataFrame(columns=colnames, index=cluster)
+	cluster = data.groupby(['cluster'])
+	
+	for name, group in cluster:
+		#print ("#####################\n")
+		#print ("Group:", name)
+		#print ("Dataframe:\n", group)
+		#print ("#####################\n")		
+		## Example
+		##Original name: VFG002420(gb|NP_644838) (adsA) Adenosine synthase A [AdsA (VF0422)] [Staphylococcus aureus subsp. aureus MW2]
+		text_free = "".join(set(list(group['free_text'])))
+		text_search = re.search(r"Original name:\s(VF.*\d+)\((.*\d+)\)\s(\(.*)\[(.*)\]", text_free)
+		if text_search:
+			VF_id = text_search.group(1)
+			protein_id = text_search.group(2)
+			name_id = text_search.group(3)
+			species_id = text_search.group(4)
+		
+		else:
+			VF_id = '-'
+			protein_id = '-'
+			name_id = text_free
+			species_id = '-'
+		
+		
+		df_results.loc[name]['VFDB ID'] = VF_id
+		df_results.loc[name]['Reference'] = protein_id
+		df_results.loc[name]['Species'] = species_id
+		df_results.loc[name]['Description'] = name_id
+		
+		## coding or non-coding
+		sum_gene = int(group['gene'].sum())
+		if (sum_gene >= 1):
+			df_results.loc[name]['Protein-coding'] = 'yes'
+		else:
+			df_results.loc[name]['Protein-coding'] = 'no'
+			
+		## presence_absence
+		summary_var_Only=0
+		for var_Only in group['var_only']:
+			if (var_Only == '.'):
+				var_Only = 0
+			summary_var_Only = summary_var_Only + int(var_Only)			
+
+		if (summary_var_Only >= 1):
+			df_results.loc[name]['Presence/Abscence'] = 'no'
+		else:
+			df_results.loc[name]['Presence/Abscence'] = 'yes'
+
+		## sum types: has_known_var
+		summary = 0
+		for var_name in group['has_known_var']:
+			if (var_name == '.'):
+				var_name = 0
+			summary = summary + int(var_name)		
+
+		if (summary >= 1):
+			hash_known_var_data = group.loc[group['has_known_var'] == '1']
+			df_results.loc[name]['Variants'] = "; ".join(list(hash_known_var_data['known_var_change']))
+			
+			var_description = list(hash_known_var_data['var_description'])
+			desc_list = []
+			for desc in var_description:
+				text = desc.split(":.:")[1]
+				desc_list.append(text)
+			df_results.loc[name]['Additional information'] = "; ".join(set(desc_list))
+			
+		else:
+			df_results.loc[name]['Variants'] = summary
+			df_results.loc[name]['Additional information'] = '-'
+
+	#pd.set_option('display.max_colwidth', -1)
+	#pd.set_option('display.max_columns', None)
+	#print (df_results)
+
+	## generate excel sheet
+	name_excel = folder + '/' + sampleName + '_VFDB_summary.xlsx'
+	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') 	## open excel handle
+	df_results.to_excel(writer, sheet_name='summary') 		## write excel handle
+	original_data.to_excel(writer, sheet_name='VFDB_ARIBA_report') 		## write excel handle
+	fileFlags_data.to_excel(writer, sheet_name='flags') 		## write excel handle
+	writer.save()											## close excel handle		
+	return (name_excel)
+
+
+#############################################################
+def parse_card(folder, sampleName, fileResults, fileFlags, summary):
+	
+	print ("\tCheck CARD result: ", sampleName)
+	summary_data = pd.read_csv(summary, header=0, sep=',')
+	fileFlags_data = pd.read_csv(fileFlags, header=0, sep='\t')
+	original_data = pd.read_csv(fileResults, header=0, sep='\t')
+
+	## parse results
+	cluster = []
+	for column in summary_data:
+		if (column == 'name'):
+			continue
+		cluster_name = column.split(".match")[0]
+		cluster.append(cluster_name)
+
+	cluster_len = len(cluster)
+	print ("\t%s genes putatively involved in resistance to some antibiotics..." %cluster_len)
+
+	## subset
+	data = original_data.loc[original_data['cluster'].isin(cluster)]
+	
+	resistance=[]
+	freetext = set(list(data['free_text']))
+	for text in freetext:
+		search_freetext = re.search(r".*conferring resistance to (.*)", text)
+		if (search_freetext):
+			resistance.append(search_freetext.group(1))
+
+	resistance_String = "; ".join(set(resistance))
+	print ('\tPutative resistance(s) to: ' + resistance_String + ', ...')
+	
+	## create dataframe
+	colnames = ['Reference', 'ARO id', 'Protein-coding','Presence/Abscence', 'Variants', 'Description', 'Additional information']
+	df_results = pd.DataFrame(columns=colnames, index=cluster)
+	cluster = data.groupby(['cluster'])
+	
+	for name, group in cluster:
+		#print ("#####################\n")
+		#print ("Group:", name)
+		#print ("Dataframe:\n", group)
+		#print ("#####################\n")
+		ariba_ref_name = str(group['ref_name']).split('.')
+		df_results.loc[name]['ARO id'] = 'ARO:' + ariba_ref_name[1]
+		df_results.loc[name]['Reference'] = ariba_ref_name[2]
+		
+		## coding or non-coding
+		sum_gene = int(group['gene'].sum())
+		if (sum_gene >= 1):
+			df_results.loc[name]['Protein-coding'] = 'yes'
+		else:
+			df_results.loc[name]['Protein-coding'] = 'no'
+			
+		## presence_absence
+		summary_var_Only=0
+		for var_Only in group['var_only']:
+			if (var_Only == '.'):
+				var_Only = 0
+			summary_var_Only = summary_var_Only + int(var_Only)			
+
+		if (summary_var_Only >= 1):
+			df_results.loc[name]['Presence/Abscence'] = 'no'
+		else:
+			df_results.loc[name]['Presence/Abscence'] = 'yes'
+
+		## sum types: has_known_var
+		summary = 0
+		for var_name in group['has_known_var']:
+			if (var_name == '.'):
+				var_name = 0
+			summary = summary + int(var_name)		
+
+		if (summary >= 1):
+			hash_known_var_data = group.loc[group['has_known_var'] == '1']
+			df_results.loc[name]['Variants'] = "; ".join(list(hash_known_var_data['known_var_change']))
+			
+			var_description = list(hash_known_var_data['var_description'])
+			desc_list = []
+			for desc in var_description:
+				text = desc.split(":.:")[1]
+				desc_list.append(text)
+			df_results.loc[name]['Additional information'] = "; ".join(set(desc_list))
+			
+		else:
+			df_results.loc[name]['Variants'] = summary
+			df_results.loc[name]['Additional information'] = '-'
+
+		## other
+		description = "; ".join(set(list(group['free_text'])))
+		description = description.replace('b\'', '')
+		df_results.loc[name]['Description'] = description
+
+	#pd.set_option('display.max_colwidth', -1)
+	#pd.set_option('display.max_columns', None)
+	#print (df_results)
+
+	## generate excel sheet
+	name_excel = folder + '/' + sampleName + '_CARD_summary.xlsx'
+	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') 	## open excel handle
+	df_results.to_excel(writer, sheet_name='summary') 		## write excel handle
+	original_data.to_excel(writer, sheet_name='CARD_ARIBA_report') 		## write excel handle
+	fileFlags_data.to_excel(writer, sheet_name='flags') 		## write excel handle
+	writer.save()											## close excel handle	
+	return (name_excel)
+	
+#############################################################
+def parse_results(folder, sampleName, fileResults, fileFlags, summary):
 	print ("")
 
-######
-def parse_card(fileResults):
-	print ("+ Parsing CARD result file")
-	
-	data = pd.read_csv(fileResults, header=0, sep='\t')
-	
-	print (data)
-	
-	cluster_len = len(data.groupby(['cluster']))
-	print ("\n%s clusters generated...\n" %cluster_len)
-	
-	print (data.groupby(['cluster', 'var_type'])['reads'].count())
-	
-	#cluster = data.groupby(['cluster'])
-	#for cl in cluster:
-	#	print (cl)
-	#	var_type_len = len(cl.groupby(['var_type']))
-	
-	
-	## ariba_ref_name	ref_name	gene	var_only	flag	reads	cluster	ref_len	ref_base_assembled	pc_ident	ctg	ctg_len	ctg_cov	known_var	var_type	var_seq_type	known_var_change	has_known_var	ref_ctg_change	ref_ctg_effect	ref_start	ref_end	ref_nt	ctg_start	ctg_end	ctg_nt	smtls_total_depth	smtls_nts	smtls_nts_depth	var_description	free_text
-	## murA.3003776.BX571856.1.2257045_2258311.4633	murA.3003776.BX571856.1.2257045_2258311.4633	1	1	27	2998	murA_2	1266	1266	97.24	murA_2.l15.c4.ctg.1	2087	212.7	1	SNP	p	V65L	0	.	.	193	195	GTT	542	544	GTT	304;306;307	G;T;T	285;276;275	murA.3003776.BX571856.1.2257045_2258311.4633:1:1:V65L:.:b'murA or UDP-N-acetylglucosamine enolpyruvyl transferase catalyses the initial step in peptidoglycan biosynthesis and is inhibited by fosfomycin. Overexpression of murA through mutations confers fosfomycin resistance.'	Staphylococcus aureus murA with mutation conferring resistance to fosfomycin
+#############################################################
+def check_results(db2use, outdir_sample, outfolder):
+	vfdb = False
+	## iterate multi-index dataframe
+	for sample, data in outdir_sample.groupby(level='sample'): ## fix
+		for database, data2 in data.groupby(level='db'): ## fix
+			if (database != db2use):
+				continue
 
-	### CARD
-	### murA.3003776.BX571856.1.2257045_2258311.4633
-	# murA --> gene
-	# 3003776 --> ARO class
-	# BX571856.1 --> Reference genome id Genbank
-	# 2257045_2258311 --> Start & End coordinates
-	# 4633
+			folderResults = data2.loc[sample, db2use]['output']			
+			if db2use.endswith('card_prepareref/'):
+				results_parser('card', folderResults, sample, outfolder)
+			elif db2use.endswith('vfdb_full_prepareref/'):
+				vfdb = True
+				results_parser('vfdb_full', folderResults, sample, outfolder)
+			else:
+				results_parser('.', folderResults, sample, outfolder)
+
+	if (vfdb):
+		print ("\n\n")
+		functions.print_sepLine("*", 50)
+		print ("+ Check VFDB details in files downloaded from vfdb website:")
+		files_VFDB = check_VFDB(outfolder + '/VFDB_information')
+		functions.print_sepLine("*", 50)
+	return()
+
+##################################################################
+def results_parser(database, folderResults, sampleName, outfolder):	
+
+	### folder results
+	# assembled_seqs.fa.gz: reference sequences identified
+	# assemblies.fa.gz: query sequences retrieved from sample
+	# assembled_genes.fa.gz: encoding genes from assemblies.fa
+	# debug.report.tsv: initial report.tsv before filtering
+	# log.clusters.gz: log details for each cluster
+	# report.tsv: report for each sample
+	# version_info.txt: version and additional information
 	
-
-######
-def parse_results(fileResults):
-	print ("")
-
-######
-def results_parser(database, fileResults):	
+	##
+	list_files = os.listdir(folderResults)
+	
+	## init
+	assemblies=""
+	assemled_genes=""
+	fileResults=""
+	
+	## extract files
+	for f in list_files:
+		if f.endswith('.gz'):
+			functions.extract(folderResults + '/' + f, folderResults)
+		
+		if (f=='report.tsv'):
+			fileResults=folderResults + '/' + f
+		elif (f=='assemblies.fa.gz'):
+			assemblies=folderResults + '/assemblies.fa'
+		elif (f=='assembled_genes.fa.gz'):
+			assemled_genes=folderResults + '/assembled_genes.fa'
+	
+	print ("\n+ Parsing result file for sample: ", sampleName)
+	### expand flags
+	flagResults = folderResults + '/flags_explain.tsv'
+	fileFlags = ariba_caller.ariba_expandflag(fileResults, flagResults)
+	
+	## generate summary
+	summary_results = folderResults + '/report_summary_tmp'
+	fake_list = [fileResults]
+	ariba_caller.ariba_summary(summary_results, fake_list)
+	
 	###
 	if (database == 'vfdb_full'):
-		parse_vfdb(fileResults)
+		name_excel = parse_vfdb(outfolder, sampleName, fileResults, fileFlags, summary_results + '.csv')
 	elif (database == 'card'):
-		parse_card(fileResults)
+		name_excel = parse_card(outfolder, sampleName, fileResults, fileFlags, summary_results + '.csv')
 	else:
-		parse_results(fileResults)				
-
-######
+		name_excel= parse_results(outfolder, sampleName, fileResults, fileFlags, summary_results + '.csv')				
+	
+	print ('\tCheck additional information on ', name_excel)
+	
+#############################################################
 def check_VFDB(VFDB_path):
 	download_VFDB_files(VFDB_path)
 	## get files
@@ -86,7 +332,7 @@ def check_VFDB(VFDB_path):
 	print ('\nFor further details please visit: <http://www.mgc.ac.cn/VFs/main.htm>')
 	return (VFDB_files)
 	
-######
+#############################################################
 def download_VFDB_files(folder):
 	links = ("http://www.mgc.ac.cn/VFs/Down/VFs.xls.gz","http://www.mgc.ac.cn/VFs/Down/Comparative_tables_from_VFDB.tar.gz")	
 	filename_stamp = folder + '/download_timestamp.txt' 
@@ -121,7 +367,8 @@ def download_VFDB_files(folder):
 	files = os.listdir(folder)
 	for item in files:
 		#print (folder)
-		functions.extract(folder + '/' + item, folder)
+		if item.endswith('.gz'):
+			functions.extract(folder + '/' + item, folder)
 
 	## make stamp time
 	timefile = open(filename_stamp, 'w')    
@@ -129,7 +376,7 @@ def download_VFDB_files(folder):
 	timefile.write(string2write)
 	return()
 
-######
+#############################################################
 def subsetting_species(species, folder, excel_file):
 	print ('+ Subsetting information for species of interest')
 	subset_xlsx_file = folder + '/VFs_' + species + '.xls'
@@ -142,29 +389,6 @@ def subsetting_species(species, folder, excel_file):
 	ls_items = list(df_species2)								## get column headers
 	df_species2.to_excel(subset_xlsx_file, sheet_name=species, header=ls_items)
 
-######
-def check_CARD(folder):
-	##
-	# to do
-	# parse download file
-	# parse html file
-	# link = "https://card.mcmaster.ca/download"
-	# get timestamp for different entries
-	# get newest
-	# tmp_folder = functions.create_subfolder("tmp", folder)
-	# functions.wget(link, tmp_folder)
-	
-	link = "https://card.mcmaster.ca/download/0/broadstreet-v3.0.2.tar.gz"
-	
-	## folder would be in ARIBA databases, CARD folder additional data
-	functions.wget(link, folder)
-	
-	## extract files
-	files = os.listdir(folder)
-	for item in files:
-		functions.extract(folder + '/' + item, folder)
-	
-		
 ######
 def main():
 	## this code runs when call as a single script
@@ -190,7 +414,9 @@ def main():
 	# subset for species of interest	
 	#subsetting_species(species, folder, VFDB_files['VFs-xls'])
 
-	parse_card(argv[1])
+	sampleName = "test_sample"
+	folder = argv[4]
+	parse_vfdb(folder, sampleName, argv[1], argv[2], argv[3])
 
 ######
 def help_options():

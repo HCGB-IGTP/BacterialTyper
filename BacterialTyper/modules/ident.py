@@ -70,8 +70,8 @@ def run(options):
 		print (retrieve_databases)
 	
 	########
-	#(excel_generated, dataFrame) = KMA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
-	excel_generated = ""
+	(excel_generated, dataFrame) = KMA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
+	
 	## update database for later usage
 	if (options.fast):
 		## skip it

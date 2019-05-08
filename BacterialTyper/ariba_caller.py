@@ -13,6 +13,7 @@ import sys
 from sys import argv
 from io import open
 from termcolor import colored
+import pandas as pd
 
 ## import my modules
 from BacterialTyper import functions
@@ -136,7 +137,7 @@ def check_db_indexed(folder, option):
 		return False
 	
 ##########
-def ariba_summary():
+def ariba_summary(out, infileList):
 	######################################################################################
 	## usage: ariba summary [options] <outprefix> [report1.tsv report2.tsv ...]
 	######################################################################################
@@ -146,38 +147,27 @@ def ariba_summary():
 	##  infiles               Files to be summarised
 	##
 	## optional arguments:
-	##  -h, --help            show this help message and exit
-	##  -f FILENAME, --fofn FILENAME File of filenames of ariba reports to be summarised.
-	##                  Must be used if no input files listed after the 
-    ##                  outfile. The first column should be the filename. An
-    ##                  optional second column can be used to specify a sample
-    ##                  name for that file, which will be used instead of the
-    ##                  filename in output files. Columns separated by whitespace.
+	##  -h, --help      show this help message and exit
+	##  -f FILENAME		File of filenames of ariba reports to be summarised. Must be used if no input files listed after the outfile. The first column should be the filename. An optional second column can be used to specify a sample name for that file, which will be used instead of the filename in output files. Columns separated by whitespace.
 	##  --preset minimal|cluster_small|cluster_all|cluster_var_groups|all|all_no_filter
-	##                  Shorthand for setting --cluster_cols,--col_filter,--
-    ##                  row_filter,--v_groups,--variants. Using this overrides those options
-	##  --cluster_cols col1,col2,...
-    ##                  Comma separated list of cluster columns to include.
-    ##                  Choose from: assembled, match, ref_seq, pct_id,
-    ##                  ctg_cov, known_var, novel_var [match]
+	##                  Shorthand for setting --cluster_cols,--col_filter,--row_filter,--v_groups,--variants. Using this overrides those options
+	##  --cluster_cols col1,col2,...  Comma separated list of cluster columns to include. Choose from: assembled, match, ref_seq, pct_id, ctg_cov, known_var, novel_var [match]
 	##  --col_filter y|n      Choose whether columns where all values are "no" or "NA" are removed [y]
 	##  --no_tree             Do not make phandango tree
 	##  --row_filter y|n      Choose whether rows where all values are "no" or "NA" are removed [y]
 	##  --min_id FLOAT        Minimum percent identity cutoff to count as assembled [90]
-	##  --only_clusters Cluster_names
-    ##                  Only report data for the given comma-separated list of
-    ##                  cluster names, eg: cluster1,cluster2,cluster42
+	##  --only_clusters Cluster_names. Only report data for the given comma-separated list of cluster names, eg: cluster1,cluster2,cluster42
 	##  --v_groups      Show a group column for each group of variants
 	##  --known_variants      Report all known variants
 	##  --novel_variants      Report all novel variants
 	##  --verbose             Be verbose
-	##Files must be listed after the output file and/or the option --fofn must be
-	##used. If both used, all files in the filename specified by --fofn AND the
-	##files listed after the output file will be used as input.
 	######################################################################################
-
-	print ()
 	
+	logFile = out + '.log'
+	infileList_string = " ".join(infileList)
+	cmd_summary = 'ariba summary %s %s 2> %s' %(out, infileList_string, logFile)
+	return(functions.system_call(cmd_summary))
+
 ##########
 def ariba_getref(database, outdir, Debug):
 	######################################################################################
@@ -267,6 +257,49 @@ def ariba_prepareref(fasta, metadata, outfolder):
 	######################################################################################
 
 ##########
+def ariba_expandflag(input_file, output_file):
+	######################################################################################
+	## usage: ariba expandflag infile.tsv outfile.tsv
+	######################################################################################	
+	#	Expands the flag column in a report file from number to comma-separated list
+	#	of flag bits
+	#
+	#	positional arguments:
+	#	  infile      Name of input report TSV file
+	#	  outfile     Name of output report TSV file
+	######################################################################################
+	
+	## download information in database folder provided by config
+	#print ("+ Call ariba module 'expandflag' to add additional information to each entry.")
+	
+	## Somehow when I do expandflag of report.tsv file I get spaces convert to tabs and everything is 
+	## distorted. I had to make this 
+	
+	data = pd.read_csv(input_file, header=0, sep='\t')
+	list_data2 = set(list(data['flag']))
+	tmp_name = os.path.splitext(input_file)[0]
+	
+	## print only flag
+	flag_file = tmp_name + '-tmp.tsv'
+	flag_file_hd = open(flag_file, "w")	
+	flag_file_hd.write('#flag_name\tflag')
+	flag_file_hd.write('\n')
+	
+	for line in zip(list_data2, list_data2):
+		string = ('flag_{}\t{}'.format(*line))
+		flag_file_hd.write(string)
+		flag_file_hd.write('\n')
+	flag_file_hd.close()
+	
+	## generate description
+	flag_file_out = tmp_name + '-description.tsv'
+	cmd = 'ariba expandflag "%s" %s' %(flag_file, flag_file_out)
+	functions.system_call(cmd)
+	
+	os.remove(flag_file)	
+	return(flag_file_out)
+
+##########
 def ariba_pubmlstget(species, outdir):
 	######################################################################################
 	## usage: ariba pubmlstget [options] <"species in quotes"> <output_directory>
@@ -294,15 +327,12 @@ def ariba_run(database, files, outdir, threads):
 	##  reads_1               Name of fwd reads fastq file
 	##  reads_2               Name of rev reads fastq file
 	##  outdir                Output directory (must not already exist)
-
 	## optional arguments:
 	##  -h, --help            show this help message and exit
-
 	## nucmer options:
 	##  --nucmer_min_id INT   Minimum alignment identity (delta-filter -i) [90]
 	##  --nucmer_min_len INT  Minimum alignment length (delta-filter -i) [20]
 	##  --nucmer_breaklen INT Value to use for -breaklen when running nucmer [200]
-
 	## Assembly options:
 	##  --assembler {fermilite,spades} Assembler to use
 	##  --assembly_cov INT    Target read coverage when sampling reads for assembly [50]
@@ -327,7 +357,43 @@ def ariba_run(database, files, outdir, threads):
 	else:
 		print ("") ## todo
 	##
-	return(functions.system_call(cmd))
+	#return(functions.system_call(cmd))
+	return()
+	
+	#########################################################
+	# 	Column	Description
+	# 	1. ariba_ref_name	ariba name of reference sequence chosen from cluster (needs to rename to stop some tools breaking)
+	# 	2. ref_name	original name of reference sequence chosen from cluster, before renaming
+	# 	3. gene	1=gene, 0=non-coding (same as metadata column 2)
+	# 	4. var_only	1=variant only, 0=presence/absence (same as metadata column 3)
+	# 	5. flag	cluster flag
+	# 	6. reads	number of reads in this cluster
+	# 	7. cluster	name of cluster
+	# 	8. ref_len	 length of reference sequence
+	# 	9. ref_base_assembled	number of reference nucleotides assembled by this contig
+	# 	10. pc_ident	%identity between reference sequence and contig
+	# 	11. ctg	name of contig matching reference
+	# 	12. ctg_len	length of contig
+	# 	13. ctg_cov	mean mapped read depth of this contig
+	# 	14. known_var	is this a known SNP from reference metadata? 1 or 0
+	# 	15. var_type	The type of variant. Currently only SNP supported
+	# 	16. var_seq_type	Variant sequence type. if known_var=1, n or p for nucleotide or protein
+	# 	17. known_var_change	if known_var=1, the wild/variant change, eg I42L
+	# 	18. has_known_var	if known_var=1, 1 or 0 for whether or not the assembly has the variant
+	# 	19. ref_ctg_change	amino acid or nucleotide change between reference and contig, eg I42L
+	# 	20. ref_ctg_effect	effect of change between reference and contig, eg SYS, NONSYN (amino acid changes only)
+	# 	21. ref_start	start position of variant in reference
+	# 	22. ref_end	end position of variant in reference
+	# 	23. ref_nt	nucleotide(s) in reference at variant position
+	# 	24. ctg_start	start position of variant in contig
+	# 	25. ctg_end	end position of variant in contig
+	# 	26. ctg_nt	nucleotide(s) in contig at variant position
+	# 	27. smtls_total_depth	 total read depth at variant start position in contig, reported by mpileup
+	# 	28. smtls_nts	nucleotides on contig, as reported by mpileup. The first is the contig nucleotide
+	# 	29. smtls_nts_depth	depths on contig, as reported by mpileup. One number per nucleotide in the previous column
+	# 	30. var_description	description of variant from reference metdata
+	# 	31. free_text	other free text about reference sequence, from reference metadata
+	#########################################################
 	
 ######
 def	help_options():

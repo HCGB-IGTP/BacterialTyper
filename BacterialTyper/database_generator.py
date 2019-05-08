@@ -485,12 +485,6 @@ def getdbs(source,database_folder, option, debug):
 
 	return (db_Dataframe)
 
-
-##########################################################################################
-def init_message():
-	print ("***** Database generation for further processing. *****")
-
-
 ##########################################################################################
 def main():
 	## this code runs when call as a single script

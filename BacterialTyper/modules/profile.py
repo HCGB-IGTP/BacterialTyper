@@ -18,7 +18,7 @@ import pandas as pd
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
-from BacterialTyper import species_identification_KMA
+from BacterialTyper import virulence_resistance
 from BacterialTyper import database_generator
 from BacterialTyper import ariba_caller
 from BacterialTyper.modules import sample_prepare
@@ -134,6 +134,16 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir, retrieve_databases):
 
 	## Start identification of samples
 	print ("\n+ Send ARIBA identification jobs...")
+
+	## get outdir folders
+	outdir_samples = pd.DataFrame(columns=('sample', 'db', 'output'))
+	for index, row in pd_samples_retrieved.iterrows():
+		for db2use in databases2use:
+			tmp = get_outfile(outdir, row['samples'], db2use)
+			outdir_samples.loc[len(outdir_samples)] = (row['samples'], db2use, tmp)
+
+	## multi-index
+	outdir_samples = outdir_samples.set_index(['sample', 'db'])
 	
 	if (options.pair):
 		## message debug
@@ -142,12 +152,12 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir, retrieve_databases):
 		
 		#workers = (options.threads/2)
 		workers = options.threads
-				
+		
 		# We can use a with statement to ensure threads are cleaned up promptly
 		with concurrent.futures.ThreadPoolExecutor(max_workers=int(workers)) as executor:
 			for db2use in databases2use:
 				## send for each sample
-				commandsSent = { executor.submit(ariba_caller.ariba_run, db2use, (row['R1'], row['R2']), get_outfile(outdir, row['samples'], db2use), 1): index for index, row in pd_samples_retrieved.iterrows() }
+				commandsSent = { executor.submit(ariba_caller.ariba_run, db2use, (row['R1'], row['R2']), outdir_samples.loc[(row['samples'], db2use), 'output'], 1): index for index, row in pd_samples_retrieved.iterrows() }
 	
 				for cmd2 in concurrent.futures.as_completed(commandsSent):
 					details = commandsSent[cmd2]
@@ -157,7 +167,11 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir, retrieve_databases):
 						print ('***ERROR:')
 						print (cmd2)
 						print('%r generated an exception: %s' % (details, exc))
-	
+				
+				print ("+ Jobs finished for database %s\n+ Collecting information..." %db2use)
+				virulence_resistance.check_results(db2use, outdir_samples, outdir)
+				print ("")
+				
 	else:
 		## to do: implement single end mode
 		print ('+ No implementation yet. Sorry.')
