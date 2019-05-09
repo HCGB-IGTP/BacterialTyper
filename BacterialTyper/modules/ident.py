@@ -28,6 +28,9 @@ kma_bin = config.EXECUTABLES["kma"]
 ####################################
 def run(options):
 
+	## init time
+	start_time_total = time.time()
+
 	## debugging messages
 	global Debug
 	if (options.debug):
@@ -42,7 +45,11 @@ def run(options):
 		functions.boxymcboxface("Fast species identification module")
 	else:
 		functions.boxymcboxface("Species identification")
-	
+
+	print ("--------- Starting Process ---------")
+	functions.print_time()
+
+
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
 	outdir = os.path.abspath(options.output_folder)
@@ -71,7 +78,9 @@ def run(options):
 	
 	########
 	(excel_generated, dataFrame) = KMA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
-	
+	## functions.timestamp
+	start_time_partial = functions.timestamp(start_time_total)
+
 	## update database for later usage
 	if (options.fast):
 		## skip it
@@ -82,6 +91,12 @@ def run(options):
 		## assembly, annotation, etc...
 		## rerun identification with new updated database
 	
+	### timestamp
+	start_time_partial = functions.timestamp(start_time_partial)					
+	
+	print ("\n*************** Finish *******************")
+	start_time_partial = functions.timestamp(start_time_total)
+
 	print ("+ Exiting identification module.")
 	exit()
 

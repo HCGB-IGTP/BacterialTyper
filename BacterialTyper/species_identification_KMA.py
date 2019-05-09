@@ -118,20 +118,7 @@ def download_kma_database(folder, database, debug):
 
 			# extract
 			print ("\t+ Extracting database into destination folder: " + folder)
-			#functions.extract(tar_file, folder)	
-			
-			## not fully working
-			## to do: fix downloading databases
-			if os.path.isfile(index_name + '.b'):
-				print ("")
-			else:
-				index_name2 = folder + '/' + database + '/' + database + prefix + '.b'
-				if os.path.isfile(index_name2):
-					files2copy = functions.get_fullpath_list(folder + '/' + database)
-					for f in files2copy:
-						shutil.move(f, folder) ## move content
-				
-				shutil.rmtree(folder + '/' + database)
+			functions.extract(tar_file, folder)	
 
 		else:
 			print (colored("*** ERROR: Some error ocurred during the downloading and file is corrupted ***", 'red'))

@@ -14,6 +14,7 @@ from sys import argv
 from io import open
 from termcolor import colored
 import pandas as pd
+from ete3 import Tree
 
 ## import my modules
 from BacterialTyper import functions
@@ -216,7 +217,14 @@ def ariba_getref(database, outdir, Debug):
 		elif f.endswith('fa'):
 			fasta = outdir + '/' + f
 	
-	return(ariba_prepareref(fasta, metadata, outdir_prepare_ref))	
+	code = ariba_prepareref(fasta, metadata, outdir_prepare_ref)
+	if (code == 'OK'):
+		filename_stamp = outdir + '/.success'
+	else:
+		filename_stamp = outdir + '/.fail'
+
+	functions.print_time_stamp(filename_stamp)
+	return()		
 	
 ##########
 def ariba_prepareref(fasta, metadata, outfolder):
@@ -357,8 +365,11 @@ def ariba_run(database, files, outdir, threads):
 	else:
 		print ("") ## todo
 	##
-	#return(functions.system_call(cmd))
-	return()
+	functions.system_call(cmd)
+
+	## make stamp time
+	filename_stamp = outdir + '/.success'
+	functions.print_time_stamp(filename_stamp)
 	
 	#########################################################
 	# 	Column	Description
@@ -394,7 +405,62 @@ def ariba_run(database, files, outdir, threads):
 	# 	30. var_description	description of variant from reference metdata
 	# 	31. free_text	other free text about reference sequence, from reference metadata
 	#########################################################
+
+#############################################################
+def ariba_summary_all(outfile, dict_files):
+	fake_list = []
+	for files in dict_files:
+		fake_list.append(dict_files[files])
 	
+	outfile_tmp = outfile + '_tmp'
+	ariba_summary(outfile_tmp, fake_list)
+
+	## fix output
+	fix_ariba_summary(outfile_tmp + '.csv', outfile + '.csv', dict_files)
+	fix_ariba_summary(outfile_tmp + '.phandango.csv', outfile + '.phandango.csv', dict_files)
+	fix_phangando_tree(outfile_tmp + '.phandango.tre', outfile + '.phandango.tre', dict_files)
+	
+	os.remove(outfile_tmp + '.csv')
+	os.remove(outfile_tmp + '.phandango.csv')
+	os.remove(outfile_tmp + '.phandango.tre')
+	
+	return()
+	
+#############################################################
+def fix_ariba_summary(csv_file, outfile, dict_files):
+	summary_data = pd.read_csv(csv_file, header=0, sep=',')
+	## parse results
+	cluster = ['name']
+	for column in summary_data:
+		if (column == 'name'):
+			continue
+		cluster_name = column.replace(".match", "")
+		cluster.append(cluster_name)
+
+	## format summary data
+	summary_data.columns = cluster 
+	for index, row in summary_data.iterrows():
+		for key, value in dict_files.items():
+			if (value == row['name'] ):
+				summary_data.loc[index]['name'] = key
+	
+	summary_data = summary_data.set_index('name')
+	summary_data.to_csv(outfile)
+	return()
+	
+#############################################################
+def fix_phangando_tree(tree_file, outfile_name, dict_files): 
+	t = Tree(tree_file)
+	for leaf in t:
+		for key, value in dict_files.items():
+			if (value == leaf.name):
+				leaf.name = key
+
+	# We can also write into a file
+	t.write(format=1, outfile=outfile_name)
+	return()
+
+
 ######
 def	help_options():
 	print ("\nUSAGE: python %s file name xx threads path\n"  %os.path.realpath(__file__))

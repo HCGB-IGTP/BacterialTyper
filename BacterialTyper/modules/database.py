@@ -14,6 +14,9 @@ import os, sys
 ###############################################################
 def initial_run(options):
 
+	## init time
+	start_time_total = time.time()
+
 	## debugging messages
 	global Debug
 	if (options.debug):
@@ -24,7 +27,9 @@ def initial_run(options):
 	## message header
 	functions.pipeline_header()
 	functions.boxymcboxface("Initiate Database")
-	
+	print ("--------- Starting Process ---------")
+	functions.print_time()
+
 	## print further information for ARIBA databases	
 	if (options.help_ARIBA):
 		print ("ARIBA databases information:")	
@@ -39,12 +44,17 @@ def initial_run(options):
 	functions.print_sepLine("*",50)
 	dataFile = database_generator.init_DB(options.ID_file, options.path)
 
+	## functions.timestamp
+	start_time_partial = functions.timestamp(start_time_total)
+
 	## ARIBA
 	if (options.no_ARIBA):
 		print ()
 	else:
 		functions.print_sepLine("*",50)
 		ariba_caller.download_ariba_databases(list_dbs, options.path, Debug)
+		### timestamp
+		start_time_partial = functions.timestamp(start_time_partial)					
 
 	### kma databases
 	functions.print_sepLine("*",50)
@@ -53,12 +63,24 @@ def initial_run(options):
 		index_db_kma(kma_database, '/KMA_user')		
 	else:
 		kma_download(options, kma_database)		
+
+	### timestamp
+	start_time_partial = functions.timestamp(start_time_partial)					
 	
 	#### plasmid_data
 	##
+	
+	print ("\n*************** Finish *******************")
+	start_time_partial = functions.timestamp(start_time_total)
+
+	print ("+ Exiting Initiate Database module.")
+	exit()
 
 ###############################################################
 def updateDB_NCBI(options):
+	
+	## init time
+	start_time_total = time.time()
 
 	## debugging messages
 	global Debug
@@ -70,6 +92,8 @@ def updateDB_NCBI(options):
 	## message header
 	functions.pipeline_header()
 	functions.boxymcboxface("Update Database")
+	print ("--------- Starting Process ---------")
+	functions.print_time()
 
 	options.path = os.path.abspath(options.path)
 	
@@ -97,6 +121,11 @@ def updateDB_NCBI(options):
 	else:
 		kma_download(options, kma_database)		
 
+	print ("\n*************** Finish *******************")
+	start_time_partial = functions.timestamp(start_time_total)
+
+	print ("+ Exiting Update Database module.")
+	exit()
 
 ###############################################################
 def kma_download(options, database_folder):

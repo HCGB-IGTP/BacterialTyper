@@ -22,6 +22,9 @@ from BacterialTyper import config
 ##############################################
 def run(options):
 
+	## init time
+	start_time_total = time.time()
+
 	## debugging messages
 	global Debug
 	if (options.debug):
@@ -31,7 +34,9 @@ def run(options):
 	
 	functions.pipeline_header()
 	functions.boxymcboxface("Trimming samples")
-	
+	print ("--------- Starting Process ---------")
+	functions.print_time()
+
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
 	outdir = os.path.abspath(options.output_folder)
@@ -67,6 +72,7 @@ def run(options):
 					print('%r generated an exception: %s' % (details, exc))
 	
 	else:
+		## single end
 		# We can use a with statement to ensure threads are cleaned up promptly
 		with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
 			commandsSent = { executor.submit(trimmomatic_call.trimmo_module, row['read'], 'na', outdir, row['samples'], threads_module, Debug): index for index, row in pd_samples_retrieved.iterrows() }
@@ -81,7 +87,9 @@ def run(options):
 
 
 	print ("\n\n+ Trimming samples has finished...")
-	
+	## functions.timestamp
+	start_time_partial = functions.timestamp(start_time_total)
+
 	## get files generated and generate symbolic link
 	dir_symlinks = functions.create_subfolder('link_files', outdir)
 	files2symbolic = []
@@ -102,7 +110,7 @@ def run(options):
 					files2symbolic.append(this_folder + '/' + files)
 	
 	functions.get_symbolic_link(files2symbolic, dir_symlinks)
-					
+
 	if (options.skip_report):
 		print ("+ No report generation...")
 	else:
@@ -115,5 +123,7 @@ def run(options):
 		outdir_report = functions.create_subfolder("report", outdir)
 		multiQC_report.multiQC_module_call(my_outdir_list, "Trimmomatic", outdir_report)
 
+	print ("\n*************** Finish *******************")
+	start_time_partial = functions.timestamp(start_time_total)
 	print ("\n+ Exiting trimm module.")
 	exit()

@@ -25,7 +25,10 @@ from BacterialTyper.modules import sample_prepare
 
 ####################################
 def run(options):
-
+	
+	## init time
+	start_time_total = time.time()
+	
 	## debugging messages
 	global Debug
 	if (options.debug):
@@ -36,6 +39,8 @@ def run(options):
 	## message header
 	functions.pipeline_header()
 	functions.boxymcboxface("Virulence & Resistance profile module")
+	print ("--------- Starting Process ---------")
+	functions.print_time()
 
 	if (options.fast):
 		print ("")
@@ -64,9 +69,20 @@ def run(options):
 	## get databases to check
 	retrieve_databases = get_options_db(options)
 	
+	## functions.timestamp
+	start_time_partial = functions.timestamp(start_time_total)
+		
 	########
 	ARIBA_ident(options, pd_samples_retrieved, outdir, retrieve_databases)
 
+	## functions.timestamp
+	start_time_partial = functions.timestamp(start_time_partial)
+
+	print ("\n*************** Finish *******************")
+	start_time_partial = functions.timestamp(start_time_total)
+
+	print ("+ Exiting Virulence & Resistance profile module.")
+	exit()
 
 ####################################
 def get_options_db(options):
@@ -157,7 +173,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir, retrieve_databases):
 		with concurrent.futures.ThreadPoolExecutor(max_workers=int(workers)) as executor:
 			for db2use in databases2use:
 				## send for each sample
-				commandsSent = { executor.submit(ariba_caller.ariba_run, db2use, (row['R1'], row['R2']), outdir_samples.loc[(row['samples'], db2use), 'output'], 1): index for index, row in pd_samples_retrieved.iterrows() }
+				commandsSent = { executor.submit(ariba_run_caller, db2use, (row['R1'], row['R2']), outdir_samples.loc[(row['samples'], db2use), 'output'], 1): index for index, row in pd_samples_retrieved.iterrows() }
 	
 				for cmd2 in concurrent.futures.as_completed(commandsSent):
 					details = commandsSent[cmd2]
@@ -176,6 +192,51 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir, retrieve_databases):
 		## to do: implement single end mode
 		print ('+ No implementation yet. Sorry.')
 		exit()
+		
+	## ariba summary results all samples
+	print ("\n + Generate a summary file for all samples and one for each database employed...")
+
+	subfolder = functions.create_subfolder("ariba_summary", outdir)
+	for database, data in outdir_samples.groupby(level='db'): ## fix
+		report_files_databases = {}
+		for sample, data2 in data.groupby(level='sample'): ## fix
+			report_files_databases[sample] = data2.loc[sample, database]['output'] + '/report.tsv'
+
+		outfile_summary = subfolder + "/"			
+		if database.endswith('card_prepareref/'):
+			outfile_summary = outfile_summary + 'CARD_summary'
+		elif database.endswith('vfdb_full_prepareref/'):
+			outfile_summary = outfile_summary + 'VFDB_summary'
+		else:
+			outfile_summary = outfile_summary + 'Other_summary' ## todo: different databases provided different to VFDB and CARD would collapse file
+			
+		## call ariba summary
+		ariba_caller.ariba_summary_all(outfile_summary, report_files_databases)
+		
+	print ("\n+ Please check additional summary files generated at folder ", subfolder)
+	print ("+ Go to website: https://jameshadfield.github.io/phandango/#/")
+	print ("+ For each database upload files *phandango.csv and *phandango.tre and visualize results")
+	
+	## print additional help?
+	
+####################################
+def ariba_run_caller(db2use, list_files, folder_out, threads):
+	## check if already is done
+	# generate a stamp when finish parsing each file
+
+	## make stamp time
+	filename_stamp = folder_out + '/.success'
+	if os.path.isfile(filename_stamp):
+		stamp =	functions.read_time_stamp(filename_stamp)
+		print ("+ A previous download generated results on: ", stamp)
+		days_passed = functions.get_diff_time(stamp)
+		print ("+ %s days ago" %days_passed)		
+		if (Debug):
+			print (colored("**DEBUG: Input names " +  name + '\n' + output_dir + '\n' + index_name + " **\n", 'yellow'))
+	else:
+		ariba_caller.ariba_run(db2use, list_files, folder_out, threads)
+	
+	return()	
 
 ####################################
 def get_outfile(output_dir, name, index_name):

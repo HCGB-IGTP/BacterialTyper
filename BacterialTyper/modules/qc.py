@@ -23,9 +23,23 @@ from BacterialTyper import config
 
 ################################################
 def fastqc(options):
+	
+	## init time
+	start_time_total = time.time()
+	
+	## debugging messages
+	global Debug
+	if (options.debug):
+		Debug = True
+	else:
+		Debug = False	
+	
+	## 
 	functions.pipeline_header()
 	functions.boxymcboxface("Quality check")
-	
+	print ("--------- Starting Process ---------")
+	functions.print_time()
+
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
 	outdir = os.path.abspath(options.output_folder)
@@ -59,7 +73,10 @@ def fastqc(options):
 		exit()
 
 	print ("+ FASTQC for samples has finished...")
-	
+
+	## functions.timestamp
+	start_time_partial = functions.timestamp(start_time_total)
+
 	if (options.skip_report):
 		print ("+ No report generation...")
 	else:
@@ -75,10 +92,12 @@ def fastqc(options):
 
 		print ('\n+ A summary HTML report of each sample is generated in folder: %s' %outdir_report)
 
+	print ("\n*************** Finish *******************")
+	start_time_partial = functions.timestamp(start_time_total)
+
 	print ("+ Exiting qc module.")
 	exit()
 	
-
 ################################################
 def assembly_check(options):
 	print ("Hi there! lets call BUSCO\n")
