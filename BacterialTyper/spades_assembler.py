@@ -29,6 +29,7 @@ rename_seqs_script = tools.perl_scripts('rename_FASTA_seqs')
 ######
 def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads):
 
+	## make sure spades.py version > 3.8
 	print ('+ Running plasmid assembly...')
 	name = sample + '_plasmid'
 	options = '--plasmid '
