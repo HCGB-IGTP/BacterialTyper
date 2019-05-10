@@ -1,43 +1,81 @@
-EXECUTABLES = {
-	## Executables
-	'blastn': '/software/debian-8/bin/blastn',
-	'makeblastdb': '/software/debian-8/bin/makeblastdb',
-	'spades': '/imppc/labs/lslab/jsanchez/software/SPAdes-3.13.0-Linux/bin/spades.py',
-	'fastqc': '/software/debian-8/bin/fastqc',
-	'busco_bin': '',
-	'Phispy_folder': '/imppc/labs/lslab/jsanchez/git_repo/PhiSpy',
-	'prokka': '/software/debian-8/bin/prokka',
-	'trimmomatic':'/soft/bio/trimmomatic/trimmomatic.jar',
-	'Rscript': '/usr/bin/Rscript',
-	'java':'',
-	'kma':'/imppc/labs/lslab/jsanchez/git_repo/KmerFinder/kma/kma',
-	'plasmidID':'/imppc/labs/lslab/jsanchez/git_repo/plasmidID/plasmidID.sh'
-}
+#usr/bin/env python
+'''
+This module provides configuration for the pipeline
+Jose F. Sanchez
+Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+'''
+## useful imports
+import os
+import io
+import sys
+import re
+import shutil
+from io import open
+from sys import argv
+import subprocess
+from termcolor import colored
 
-PARAMETERS = {
-	## Parameters
-	'threads':2,
-}
+## import my modules
+from BacterialTyper import functions
+from BacterialTyper import extern_progs
+from BacterialTyper import install_dependencies
 
-DATA = {
-	## trimmomatic
-	'trimmomatic_adapters':'/imppc/labs/lslab/share/data/references/Trimmomatic_adapters.fa',
+##################
+def prog_to_default():
 
-	## database generated
-	'database':'/imppc/labs/lslab/jsanchez/Cristina_Prat_Project/BacterialTyper_test/database',
+	program_to_default = {
+		'ariba':'ariba',
+		'bowtie2': 'bowtie2',
+		'cdhit': 'cd-hit-est',
+		'nucmer' : 'nucmer',
+		'spades' : 'spades.py',
+		'kma':'kma',
+		'fastqc':'fastqc',
+		'busco':'run_BUSCO.py',
+		'tblastn':'tblastn',
+		'blastn':'blastn',
+		'makeblastdb':'makeblastdb',
+		'bowtie2':'bowtie2',
+		'busco':'run_BUSCO.py',
+		'prokka':'prokka',
 
-	## BUSCO datasets
-	'busco_bacteria': '/imppc/labs/lslab/jsanchez/software/BUSCO/datasets/bacteria_odb9',
-	'busco_firmicutes': '/imppc/labs/lslab/jsanchez/software/BUSCO/datasets/firmicutes_odb9',
+		#'trimmomatic':'trimmomatic.jar',
+		'hmmsearch':'hmmsearch',
 
-	## Virulence Factor Database
-	#'VFDB_VFs':'',
-	#'VFDB_Comparative_tables':'',
-	#'VFDB_set_folder':'',
+		'augustus':'augustus',
+		'Rscript':'Rscript',
+		'java':'java'
+		
+		## plasmid id
+		##	bedtools
+		##	samtools
+		##	circos
+		##	plasmidID
 
-	## MLSTar
-	#'MLSTar_profile_folder': '',
-	#'MLSTar_sequence_folder': '',
-}
+	}
+	return(program_to_default)
 
+
+##################
+def return_default(soft):
+	dict_programs = prog_to_default()
+	return (dict_programs[soft])	
+
+##################
+def get_exe(prog):
+	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
+	## give credit to them appropiately
+	'''Given a program name, return what we expect its exectuable to be called'''
+	exe = ""
+	if prog in os.environ: 
+		exe = os.environ[env_var] ## python environent variables
+	else:
+		exe = return_default(prog) ## install in the system
+
+	exe_path = shutil.which(exe)
+	if (exe_path):
+		return(exe_path) ## return which path
+	else:
+		print(colored("**ERROR: Programme %s could not be found." % prog,'red'))
+		return('ERROR')
 

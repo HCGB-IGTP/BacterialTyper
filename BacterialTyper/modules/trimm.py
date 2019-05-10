@@ -8,6 +8,7 @@ Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
 import os
 import sys
 import re
+import time
 from io import open
 import shutil
 import concurrent.futures
@@ -61,7 +62,7 @@ def run(options):
 	if (options.pair):
 		# We can use a with statement to ensure threads are cleaned up promptly
 		with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
-			commandsSent = { executor.submit(trimmomatic_call.trimmo_module, row['R1'], row['R2'], outdir, row['samples'], threads_module, Debug): index for index, row in pd_samples_retrieved.iterrows() }
+			commandsSent = { executor.submit(trimmomatic_call.trimmo_module, row['R1'], row['R2'], outdir, row['samples'], threads_module, Debug, options.adapters): index for index, row in pd_samples_retrieved.iterrows() }
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
 				try:

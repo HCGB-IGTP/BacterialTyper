@@ -23,7 +23,7 @@ from BacterialTyper import database_generator
 from BacterialTyper.modules import sample_prepare
 
 ## set defaults
-kma_bin = config.EXECUTABLES["kma"]
+kma_bin = config.get_exe("kma")
 
 ####################################
 def run(options):
@@ -224,10 +224,7 @@ def get_options_db(options):
 	print ("\n\n+ Select databases to use for identification:")
 	
 	### database folder to use
-	if (options.database):
-		database2use = options.database
-	else:
-		database2use = config.DATA["database"] ## default: set during configuration
+	database2use = options.database
 	
 	## debug message
 	if (Debug):

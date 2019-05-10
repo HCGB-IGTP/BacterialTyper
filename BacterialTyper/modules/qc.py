@@ -4,7 +4,6 @@ This code calls
 Jose F. Sanchez
 Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
 '''
-
 ## useful imports
 import time
 import io
@@ -53,7 +52,8 @@ def fastqc(options):
 	## threads_module = functions.optimize_threads(options.threads, pd_samples_retrieved.index.size) ## no threads implementation here. 1 CPU each
 	threads_module = 1
 	
-	print ("+ Checking quality for each sample retrieved...")	
+	print ("+ Checking quality for each sample retrieved...")
+	start_time_partial = start_time_total
 	
 	if (options.pair):
 		# We can use a with statement to ensure threads are cleaned up promptly
@@ -67,7 +67,6 @@ def fastqc(options):
 					print ('***ERROR:')
 					print (cmd2)
 					print('%r generated an exception: %s' % (details, exc))
-	
 	else:
 		print ('+ No implementation yet. Sorry.')
 		exit()
@@ -75,7 +74,7 @@ def fastqc(options):
 	print ("+ FASTQC for samples has finished...")
 
 	## functions.timestamp
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = functions.timestamp(start_time_partial)
 
 	if (options.skip_report):
 		print ("+ No report generation...")

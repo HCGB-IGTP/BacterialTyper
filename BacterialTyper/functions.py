@@ -31,7 +31,7 @@ import config
 def print_time ():
 	now = datetime.now()
 	date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
-	print (date_time)
+	print ('\t' + date_time + '\n')
 
 ###############   
 def gettime (start_time):
@@ -43,9 +43,9 @@ def gettime (start_time):
 ###############	
 def timestamp (start_time_partial):
 	h,m,s = gettime(start_time_partial)
-	print_sepLine("-", 25)
+	print_sepLine("-", 25, False)
 	print ('(Time spent: %i h %i min %i s)' %(int(h), int(m), int(s)))
-	print_sepLine("-", 25)
+	print_sepLine("-", 25, False)
 	return time.time()
 	
 ###############	
@@ -66,7 +66,7 @@ def read_time_stamp (out):
 ###############	
 def get_diff_time(stamp):
 	time_today = time.time()
-	elapsed = time_today - float(st)
+	elapsed = time_today - float(time_today)
 	days_passed = int((elapsed/3600)/24)
 	return(days_passed)
 
@@ -131,6 +131,12 @@ def printList2file(fileGiven, listGiven):
 	file_hd.write("\n".join(listGiven))
 	file_hd.close()  
 
+#################
+def readList_fromFile(fileGiven):
+	# open file and read content into list
+	lineList = [line.rstrip('\n') for line in open(fileGiven)]
+	return (lineList)
+
 ########################################################################
 ######## 					system call							######## 					
 ########################################################################
@@ -179,7 +185,7 @@ def extract(fileGiven, out):
 ###############
 def makeblastdb(DBname, fasta):
 	## generate blastdb for genome
-	makeblastDBexe = config.EXECUTABLES['makeblastdb']
+	makeblastDBexe = config.get_exe('makeblastdb')
 	
 	if (os.path.isfile(DBname + '.nhr')):
 		print ("+ BLAST database is already generated...")
@@ -196,7 +202,7 @@ def makeblastdb(DBname, fasta):
 ###############	
 def blastn(outFile, DBname, fasta, threads):
 	# blastn plasmids vs contigs
-	blastnexe = config.EXECUTABLES['blastn']
+	blastnexe = config.get_exe('blastn')
 	cmd_blastn = "%s -db %s -query %s -out %s -evalue 1e-20 -outfmt \'6 std qlen slen\' -num_threads %s" %(blastnexe, DBname, fasta, outFile, threads )
 	codeBlastn = system_call(cmd_blastn)
 	
@@ -232,16 +238,19 @@ def subset_fasta(ident, fasta, out):
 ############################################################################
 def pipeline_header():
 	print ("\n")
-	print_sepLine("#", 70)
+	print_sepLine("#", 70, False)
 	print('#', '{: ^66}'.format("BacterialTyper pipeline"), '#')
 	print('#', '{: ^66}'.format("Jose F. Sanchez & Lauro Sumoy"), '#')
 	print('#', '{: ^66}'.format("Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain"), '#')
-	print_sepLine("#", 70)
+	print_sepLine("#", 70, False)
 
 ###############
-def print_sepLine(char, num):
+def print_sepLine(char, num, color):
 	string = char * num
-	print (string)
+	if (color):
+		print (colored(string, color))
+	else:
+		print (string)
 
 ###############
 def boxymcboxface(message):

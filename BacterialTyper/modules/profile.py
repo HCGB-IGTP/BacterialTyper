@@ -14,6 +14,7 @@ from io import open
 import concurrent.futures
 from termcolor import colored
 import pandas as pd
+import shutil
 
 ## import my modules
 from BacterialTyper import functions
@@ -89,10 +90,7 @@ def get_options_db(options):
 	print ("\n\n+ Select databases to use for virulence and resistance profile generation:")
 	
 	### database folder to use
-	if (options.database):
-		database2use = options.database
-	else:
-		database2use = config.DATA["database"] ## default: set during configuration
+	database2use = options.database
 	
 	## debug message
 	if (Debug):
@@ -228,15 +226,13 @@ def ariba_run_caller(db2use, list_files, folder_out, threads):
 	filename_stamp = folder_out + '/.success'
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print ("+ A previous download generated results on: ", stamp)
-		days_passed = functions.get_diff_time(stamp)
-		print ("+ %s days ago" %days_passed)		
-		if (Debug):
-			print (colored("**DEBUG: Input names " +  name + '\n' + output_dir + '\n' + index_name + " **\n", 'yellow'))
+		print ("\tA previous command generated results on: ", stamp)
 	else:
+		if os.path.exists(folder_out):
+			shutil.rmtree(folder_out)
+
 		ariba_caller.ariba_run(db2use, list_files, folder_out, threads)
 	
-	return()	
 
 ####################################
 def get_outfile(output_dir, name, index_name):

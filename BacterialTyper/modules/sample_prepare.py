@@ -6,6 +6,7 @@ Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
 '''
 
 ## import useful modules
+import time
 import os
 import sys
 from io import open

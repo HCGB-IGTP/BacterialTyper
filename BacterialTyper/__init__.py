@@ -8,24 +8,26 @@
 
 
 __all__ = [
-	'config',
-	'modules',
-	'annotation',
-	'bacteriophage',
-	'functions',
-	'blast_parser',
-	'sampleParser',
-	'virulence_resistance',
-	'config',
+	'BUSCO_caller',
 	'MLSTar',
-	'trimmomatic_call',
+	'annotation',
+	'ariba_caller',
+	'bacteriophage',
+	'blast_parser',
+	'config',
 	'database_generator',
+	'extern_progs',
 	'fastqc_caller',
+	'functions',
+	'modules',
+	'multiQC_report',
+	'other_tools',
+	'sampleParser',
+	'set_configuration',
 	'spades_assembler',
 	'species_identification_KMA',
-	'extern_progs',
-	'multiQC_report'
-	
+	'trimmomatic_call',
+	'virulence_resistance'
 ]
 
 from BacterialTyper import *

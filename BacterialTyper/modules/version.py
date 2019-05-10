@@ -20,28 +20,28 @@ python_packages_BacterialTyper = ('ariba', 'bs4', 'dendropy', 'pyfastaq', 'pymum
 #########
 def print_all():
 
-	functions.print_sepLine("+", 50)
+	functions.print_sepLine("+", 50, False)
 	print ('External dependencies:\n')
-	functions.print_sepLine("+", 50)
+	functions.print_sepLine("+", 50, False)
 	extern_progs.dependencies()
 	print ('\n')
 
-	functions.print_sepLine("+", 50)
+	functions.print_sepLine("+", 50, False)
 	print ('Python:')
-	functions.print_sepLine("+", 50)
+	functions.print_sepLine("+", 50, False)
 	print ('Python version:', str(sys.version))
 	print ('\n')
-	functions.print_sepLine("+", 50)
+	functions.print_sepLine("+", 50, False)
 	print ('Python packages:')
 	check_python_packages(python_packages_BacterialTyper)        
-	functions.print_sepLine("+", 50)
+	functions.print_sepLine("+", 50, False)
 	print ('\n')
 
 	print ('Additional dependencies: databases, information, etc...')
 
-	functions.print_sepLine("*", 50)
+	functions.print_sepLine("*", 50, False)
 	print ("ARIBA databases version..")
-	functions.print_sepLine("*", 50)
+	functions.print_sepLine("*", 50, False)
 	print ("card -> ")
 	print ("megares  ->")
 	print ("plasmidfinder  ->")
@@ -58,9 +58,9 @@ def print_all():
 def only_us():
 	print ("Version to be included when properly finished...\n\n")
 
-	functions.print_sepLine("+", 50)
+	functions.print_sepLine("+", 50, False)
 	print ('BacterialTyper version: ' + pipeline_version)
-	functions.print_sepLine("+", 50)
+	functions.print_sepLine("+", 50, False)
 	print ('\n')
 
 

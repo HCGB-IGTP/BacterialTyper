@@ -119,7 +119,7 @@ def NCBIdownload(data, data2download, folder):
 			else:
 				data2download.loc[acc_ID]['plasmids'] = ""
 
-			functions.print_sepLine("+", 75)
+			functions.print_sepLine("+", 75, False)
 
 			
 	db_updated = update_db_data_file(data2download, folder)
@@ -225,7 +225,7 @@ def update_database_user_data(data, folder):
 			else:
 				data2update.loc[index]['plasmids'] = ""
 
-			functions.print_sepLine("+", 75)
+			functions.print_sepLine("+", 75, False)
 
 		
 	dataUpdated = update_db_data_file(data2update, folder)

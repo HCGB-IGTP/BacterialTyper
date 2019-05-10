@@ -23,32 +23,6 @@ from termcolor import colored
 from BacterialTyper import functions
 from BacterialTyper import config
 
-prog_to_default = {
-	'ariba':'ariba',
-   	'bowtie2': 'bowtie2',
-   	'cdhit': 'cd-hit-est',
-   	'nucmer' : 'nucmer',
-   	'spades' : 'spades.py',
-   	'kma':'kma',
-   	'fastqc':'fastqc'
-   	
-   	##	blastn
-   	##	makeblastdb
-	##	bowtie2
-	##	BUSCO
-	##	augustus
-	##	prokka
-	##	trimmomatic
-	
-	## plasmid id
-	##	bedtools
-	##	samtools
-	##	circos
-	##	plasmidID
-
-}
-	
-	
 prog_to_version_cmd = {
 	'bowtie2': ('--version', re.compile('.*bowtie2.*version (.*)$')),
 	'cdhit': ('', re.compile('CD-HIT version ([0-9\.]+) \(')),
@@ -56,7 +30,22 @@ prog_to_version_cmd = {
 	'spades': ('--version', re.compile('SPAdes\s+v([0-9\.]+)')),
 	'ariba':('version', re.compile('ARIBA version:\s([0-9\.]+)')),
 	'kma':('-v', re.compile('KMA-([0-9\.]+)')),
-	'fastqc':('-v', re.compile('FastQC\sv([0-9\.]+)'))
+	'fastqc':('-v', re.compile('FastQC\sv([0-9\.]+)')),
+	'busco':('--version', re.compile('BUSCO\s([0-9\.]+)')),
+
+	'tblastn':('-version', re.compile('tblastn:\s([0-9\.]+)')),
+	'blastn':('-version', re.compile('blastn:\s([0-9\.]+)')),
+	'makeblastdb':('-version', re.compile('makeblastdb:\s([0-9\.]+)')),
+	'bowtie2':('--version', re.compile('.*version\s([0-9\.]+)')),
+	'prokka':('-v', re.compile('prokka\s([0-9\.]+)')),
+
+	#'trimmomatic':'trimmomatic.jar',
+	'hmmsearch':('-h', re.compile('^\#.*MER\s(.*);.*')),
+
+	'augustus':('--version', re.compile('AUGUSTUS.*\(([0-9\.]+)\).*')),
+	'Rscript':('--version', re.compile('.*version\s([0-9\.]+).*')),
+	'java':('-version', re.compile('version\s\"([0-9\..*\_.*]+)\"'))
+
 }
 
 
@@ -67,6 +56,7 @@ min_versions = {
 	'spades': '3.11.0',
 	'kma':'1.2.2',
 	'fastqc':'0.11.4'
+	## spades version >3.9. plasmid mode
 }
 
 package_min_versions = {
@@ -81,36 +71,19 @@ package_min_versions = {
 ##################
 def dependencies():
 	progs = {}
+	prog_to_default = config.prog_to_default()
 	for prog in prog_to_default:
 		#print (prog)
-		prog_exe = get_exe(prog)
+		prog_exe = config.get_exe(prog)
 		#print (prog + '\t' + prog_exe)
 		prog_ver = get_version(prog, prog_exe)
 		progs[prog] = [prog_exe, prog_ver]
 
-	df_programs = pd.DataFrame.from_dict(progs, orient='index')
+	df_programs = pd.DataFrame.from_dict(progs, orient='index', columns=('Executable path', 'Version'))
 	df_programs = df_programs.stack().str.lstrip().unstack()
+	#pd.set_option('display.max_colwidth', -1)
+	#pd.set_option('display.max_columns', None)
 	print (df_programs)
-
-##################
-def get_exe(prog):
-	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
-	## give credit to them appropiately
-	'''Given a program name, return what we expect its exectuable to be called'''
-	exe = ""
-	if prog in os.environ: 
-		exe = os.environ[env_var] ## python environent variables
-	else:
-		exe = prog_to_default[prog] ## install in the system
-
-	exe_path = shutil.which(exe)
-	if (exe_path):
-		return(exe_path) ## return which path
-	else:
-		print(colored("**ERROR: Programme %s could not be found." % prog,'red'))
-		print(colored("**Check paths or install it in the system and add it to $PATH environment variable.",'red'))
-		exit()
-
 
 ##################
 def decode(x):
@@ -145,6 +118,9 @@ def get_version(prog, path):
 		if hits:
 			return hits.group(1)
 	
-	return 'ERROR - I tried to get the version of ' + prog + ' with: "' + cmd + '" and the output didn\'t match this regular expression: "' + regex.pattern + '"'
+	print (colored('ERROR - I tried to get the version of ' + prog + ' with: "' + cmd + '" and the output didn\'t match this regular expression: "' + regex.pattern + '"', 'red'))
+	return("n.a.")
+
+
 	
 

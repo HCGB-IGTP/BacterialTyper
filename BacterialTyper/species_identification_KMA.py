@@ -232,7 +232,7 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads):
 ##################################################
 def kma_ident_module(out_file, files, sample_name, index_name, threads):
 	## kma_ident_call
-	kma_bin = config.EXECUTABLES["kma"]
+	kma_bin = config.get_exe("kma")
 	return(kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads))
 
 ##################################################

@@ -16,7 +16,3 @@ __all__ = [
 ]
 
 from BacterialTyper.modules import *
-
-
-
-

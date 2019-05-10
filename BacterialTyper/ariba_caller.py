@@ -48,42 +48,42 @@ def help_ARIBA():
 	dict_ariba = citation.ariba_citation()
 	## to do: finish filling information for different databases
 	print ("")
-	functions.print_sepLine("*", 50)
-	print ("CARD: https://card.mcmaster.ca/")
+	functions.print_sepLine("*", 50, False)
+	print ("CARD:")
 	print ("The Comprehensive Antibiotic Resistance Database (CARD) is a rigorously curated collection of characterized, peer-reviewed  resistance determinants and associated antibiotics, organized by the Antibiotic Resistance Ontology (ARO) and AMR gene detection models.")
 	print ('Citation:', dict_ariba['CARD'])
 	print ("")	
-	functions.print_sepLine("*", 50)
-	print ("VFDB: http://www.mgc.ac.cn/VFs/main.htm")
+	functions.print_sepLine("*", 50, False)
+	print ("VFDB:")
 	print ("The virulence factor database (VFDB) is an integrated and comprehensive online resource for curating information about virulence factors of bacterial pathogens. Since its inception in 2004, VFDB has been dedicated to providing up-to-date knowledge of VFs from various medically significant bacterial pathogens.")
 	print ('Citation:', dict_ariba['VFDB'])
 	print ("")	
-	functions.print_sepLine("*", 50)
+	functions.print_sepLine("*", 50, False)
 	print ("ARG-ANNOT:\n")
 	print ("...")
 	print ('Citation:', dict_ariba['ARG-ANNOT'])
 	print ("")	
-	functions.print_sepLine("*", 50)
-	print ("MEGARes: http://megares.meglab.org/")
+	functions.print_sepLine("*", 50, False)
+	print ("MEGARes:")
 	print ("The MEGARes database contains sequence data for approximately 4,000 hand-curated antimicrobial resistance genes accompanied by an annotation structure that is optimized for use with high throughput sequencing.")
 	print ('Citation:', dict_ariba['MEGARes'])
 	print ("")	
-	functions.print_sepLine("*", 50)
+	functions.print_sepLine("*", 50, False)
 	print ("PlasmidFinder:\n")
 	print ("...")
 	print ('Citation:', dict_ariba['PlasmidFinder'])
 	print ("")	
-	functions.print_sepLine("*", 50)
+	functions.print_sepLine("*", 50, False)
 	print ("ResFinder:\n")
 	print ("The ResFinder database is a curated database of acquired resistance genes.")
 	print ('Citation:', dict_ariba['ResFinder'])
 	print ("")	
-	functions.print_sepLine("*", 50)
-	print ("srst2: https://github.com/katholt/srst2")
+	functions.print_sepLine("*", 50, False)
+	print ("srst2:")
 	print ("...")
 	print ('Citation:', dict_ariba['srst2'])
 	print ("")
-	functions.print_sepLine("*", 50)
+	functions.print_sepLine("*", 50, False)
 	print ("")
 	
 ############################################################### 
@@ -99,7 +99,7 @@ def download_ariba_databases(list_dbs, main_folder, Debug):
 
 	dbs = get_ARIBA_dbs(list_dbs)
 	for db_set in dbs:
-		functions.print_sepLine("-",30)
+		functions.print_sepLine("-",30, False)
 		print (colored("+ " + db_set,'yellow'))
 		
 		folder_set = functions.create_subfolder(db_set, ariba_folder)
@@ -107,7 +107,7 @@ def download_ariba_databases(list_dbs, main_folder, Debug):
 		
 		if (return_ariba_getref == 'OK'):
 			## print citation for each database
-			functions.print_sepLine("'", 75)
+			functions.print_sepLine("'", 75, False)
 			hd.write(db_set)
 			hd.write('\n')
 		else:
@@ -363,13 +363,15 @@ def ariba_run(database, files, outdir, threads):
 	if (len(files) > 1):
 		cmd = 'ariba run %s %s %s %s --threads %s' %(database, files[0], files[1], outdir, threads)
 	else:
+		## single end
 		print ("") ## todo
 	##
-	functions.system_call(cmd)
+	code = functions.system_call(cmd)
 
 	## make stamp time
-	filename_stamp = outdir + '/.success'
-	functions.print_time_stamp(filename_stamp)
+	if (code == 'OK'): 
+		filename_stamp = outdir + '/.success'
+		functions.print_time_stamp(filename_stamp)
 	
 	#########################################################
 	# 	Column	Description

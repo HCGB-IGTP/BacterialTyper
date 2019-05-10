@@ -246,10 +246,10 @@ def check_results(db2use, outdir_sample, outfolder):
 
 	if (vfdb):
 		print ("\n\n")
-		functions.print_sepLine("*", 50)
+		functions.print_sepLine("*", 50, False)
 		print ("+ Check VFDB details in files downloaded from vfdb website:")
 		files_VFDB = check_VFDB(outfolder + '/VFDB_information')
-		functions.print_sepLine("*", 50)
+		functions.print_sepLine("*", 50, False)
 	return()
 
 ##################################################################
