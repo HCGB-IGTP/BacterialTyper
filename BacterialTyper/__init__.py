@@ -23,7 +23,6 @@ __all__ = [
 	'multiQC_report',
 	'other_tools',
 	'sampleParser',
-	'set_configuration',
 	'spades_assembler',
 	'species_identification_KMA',
 	'trimmomatic_call',

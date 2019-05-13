@@ -24,39 +24,23 @@ from BacterialTyper import functions
 from BacterialTyper import config
 
 prog_to_version_cmd = {
+	'augustus':('--version', re.compile('AUGUSTUS.*\(([0-9\.]+)\).*')),
+	'ariba':('version', re.compile('ARIBA version:\s([0-9\.]+)')),
+	'blastn':('-version', re.compile('blastn:\s([0-9\.]+)')),
+	'busco':('--version', re.compile('BUSCO\s([0-9\.]+)')),
 	'bowtie2': ('--version', re.compile('.*bowtie2.*version (.*)$')),
 	'cdhit': ('', re.compile('CD-HIT version ([0-9\.]+) \(')),
-	'nucmer': ('--version', re.compile('([0-9]+\.[0-9\.]+.*$)')),
-	'spades': ('--version', re.compile('SPAdes\s+v([0-9\.]+)')),
-	'ariba':('version', re.compile('ARIBA version:\s([0-9\.]+)')),
-	'kma':('-v', re.compile('KMA-([0-9\.]+)')),
 	'fastqc':('-v', re.compile('FastQC\sv([0-9\.]+)')),
-	'busco':('--version', re.compile('BUSCO\s([0-9\.]+)')),
-
-	'tblastn':('-version', re.compile('tblastn:\s([0-9\.]+)')),
-	'blastn':('-version', re.compile('blastn:\s([0-9\.]+)')),
-	'makeblastdb':('-version', re.compile('makeblastdb:\s([0-9\.]+)')),
-	'bowtie2':('--version', re.compile('.*version\s([0-9\.]+)')),
-	'prokka':('-v', re.compile('prokka\s([0-9\.]+)')),
-
-	#'trimmomatic':'trimmomatic.jar',
 	'hmmsearch':('-h', re.compile('^\#.*MER\s(.*);.*')),
-
-	'augustus':('--version', re.compile('AUGUSTUS.*\(([0-9\.]+)\).*')),
+	'java':('-version', re.compile('version\s\"([0-9\..*\_.*]+)\"')),
+	'kma':('-v', re.compile('KMA-([0-9\.]+)')),
+	'prokka':('-v', re.compile('prokka\s([0-9\.]+)')),
+	'makeblastdb':('-version', re.compile('makeblastdb:\s([0-9\.]+)')),
+	'nucmer': ('--version', re.compile('([0-9]+\.[0-9\.]+.*$)')),
 	'Rscript':('--version', re.compile('.*version\s([0-9\.]+).*')),
-	'java':('-version', re.compile('version\s\"([0-9\..*\_.*]+)\"'))
-
-}
-
-
-min_versions = {
-	'bowtie2': '2.1.0',
-	'cdhit': '4.6',
-	'nucmer': '3.1',
-	'spades': '3.11.0',
-	'kma':'1.2.2',
-	'fastqc':'0.11.4'
-	## spades version >3.9. plasmid mode
+	'spades': ('--version', re.compile('SPAdes\s+v([0-9\.]+)')),
+	'tblastn':('-version', re.compile('tblastn:\s([0-9\.]+)'))
+	#'trimmomatic':'trimmomatic.jar',
 }
 
 package_min_versions = {
@@ -81,8 +65,8 @@ def dependencies():
 
 	df_programs = pd.DataFrame.from_dict(progs, orient='index', columns=('Executable path', 'Version'))
 	df_programs = df_programs.stack().str.lstrip().unstack()
-	#pd.set_option('display.max_colwidth', -1)
-	#pd.set_option('display.max_columns', None)
+	pd.set_option('display.max_colwidth', -1)
+	pd.set_option('display.max_columns', None)
 	print (df_programs)
 
 ##################

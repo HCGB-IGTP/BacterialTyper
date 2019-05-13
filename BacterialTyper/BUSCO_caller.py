@@ -165,7 +165,7 @@ def main():
 	if len(sys.argv) > 1:
 		print ("")
 	else:
-		help_options()
+		#help_options()
 		exit()
 	
 	BUSCO_check_dataset(sys.argv[1])

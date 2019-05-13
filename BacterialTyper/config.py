@@ -14,6 +14,7 @@ from io import open
 from sys import argv
 import subprocess
 from termcolor import colored
+from distutils.version import LooseVersion
 
 ## import my modules
 from BacterialTyper import functions
@@ -25,41 +26,67 @@ def prog_to_default():
 
 	program_to_default = {
 		'ariba':'ariba',
-		'bowtie2': 'bowtie2',
-		'cdhit': 'cd-hit-est',
-		'nucmer' : 'nucmer',
-		'spades' : 'spades.py',
-		'kma':'kma',
-		'fastqc':'fastqc',
-		'busco':'run_BUSCO.py',
-		'tblastn':'tblastn',
-		'blastn':'blastn',
-		'makeblastdb':'makeblastdb',
-		'bowtie2':'bowtie2',
-		'busco':'run_BUSCO.py',
-		'prokka':'prokka',
-
-		#'trimmomatic':'trimmomatic.jar',
-		'hmmsearch':'hmmsearch',
-
 		'augustus':'augustus',
+		'blastn':'blastn',
+		'bowtie2': 'bowtie2',
+		'busco':'run_BUSCO.py',
+		'cdhit': 'cd-hit-est',
+		'fastqc':'fastqc',
+		'hmmsearch':'hmmsearch',
+		'java':'java',
+		'kma':'kma',
+		'prokka':'prokka',
+		'makeblastdb':'makeblastdb',
+		'nucmer' : 'nucmer',
 		'Rscript':'Rscript',
-		'java':'java'
-		
-		## plasmid id
-		##	bedtools
-		##	samtools
-		##	circos
-		##	plasmidID
-
+		'spades' : 'spades.py',
+		'tblastn':'tblastn'
+		#'trimmomatic':'trimmomatic.jar',
 	}
 	return(program_to_default)
+
+	## plasmid id
+	##	bedtools
+	##	samtools
+	##	circos
+	##	plasmidID
 
 
 ##################
 def return_default(soft):
 	dict_programs = prog_to_default()
-	return (dict_programs[soft])	
+	return (dict_programs[soft])
+
+##################
+def min_version_programs():
+
+	min_versions = { ## update
+		'ariba':'2.13.5',
+		'augustus':'3.2.1',		
+		'blastn':'2.5',
+		'bowtie2': '2.1.0',
+		'busco':'3.1.0',
+		'cdhit': '4.6',
+		'fastqc':'0.11.4',
+		'hmmsearch':'3.1b2',
+		'java':'1.8.0_172',
+		'kma':'1.2.2',
+		'prokka':'1.12',
+		'makeblastdb':'2.5',
+		'nucmer': '3.1',
+		'Rscript':'3.5.1',
+		'spades':'3.9.0',		
+		'tblastn':'2.5'
+		#'trimmomatic':'trimmomatic.jar',
+	}
+	
+	return min_versions
+
+
+##################
+def return_min_version(soft):
+	version_programs = min_version_programs()
+	return (version_programs[soft])
 
 ##################
 def get_exe(prog):
@@ -72,10 +99,24 @@ def get_exe(prog):
 	else:
 		exe = return_default(prog) ## install in the system
 
-	exe_path = shutil.which(exe)
-	if (exe_path):
-		return(exe_path) ## return which path
-	else:
+	## get paths
+	exe_path_tmp = functions.my_which(exe)
+	#print (exe_path_tmp)
+
+	## get min_version
+	min_version = return_min_version(prog)
+	#print ("Min version: ", min_version)
+	
+	for p in exe_path_tmp:
+		prog_ver = extern_progs.get_version(prog, p)
+		#print ("Path: ", p , "\nVersion: ", prog_ver)
+		if LooseVersion(prog_ver) >= LooseVersion(min_version):
+			return (p)
+	
+	if (len(exe_path_tmp) == 0):
 		print(colored("**ERROR: Programme %s could not be found." % prog,'red'))
-		return('ERROR')
+	else:
+		print(colored("**ERROR: Programme %s version smaller than minimun version expected %s." %(prog,min_version),'red'))
+	
+	return('ERROR')
 

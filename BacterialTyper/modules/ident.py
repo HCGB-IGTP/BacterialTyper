@@ -22,9 +22,6 @@ from BacterialTyper import species_identification_KMA
 from BacterialTyper import database_generator
 from BacterialTyper.modules import sample_prepare
 
-## set defaults
-kma_bin = config.get_exe("kma")
-
 ####################################
 def run(options):
 
@@ -104,7 +101,10 @@ def run(options):
 ####################################
 def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 	functions.boxymcboxface("KMA Identification")
-
+	
+	## set defaults
+	kma_bin = config.get_exe("kma")
+	
 	## check status
 	databases2use = []
 	for	index, db2use in retrieve_databases.iterrows():
@@ -339,6 +339,9 @@ def get_options_db(options):
 
 ####################################
 def external_kma(list_files):
+	
+	## set defaults
+	kma_bin = config.get_exe("kma")
 	
 	external_file_returned = []
 	for f in list_files:
