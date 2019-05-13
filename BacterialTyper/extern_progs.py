@@ -39,8 +39,8 @@ prog_to_version_cmd = {
 	'nucmer': ('--version', re.compile('([0-9]+\.[0-9\.]+.*$)')),
 	'Rscript':('--version', re.compile('.*version\s([0-9\.]+).*')),
 	'spades': ('--version', re.compile('SPAdes\s+v([0-9\.]+)')),
-	'tblastn':('-version', re.compile('tblastn:\s([0-9\.]+)'))
-	#'trimmomatic':'trimmomatic.jar',
+	'tblastn':('-version', re.compile('tblastn:\s([0-9\.]+)')),
+	'trimmomatic':('-version', re.compile('([0-9\.]+)'))
 }
 
 package_min_versions = {
@@ -92,11 +92,17 @@ def get_version(prog, path):
 	cmd = path + ' ' + args
 	if prog == 'spades':
 		cmd_output = subprocess.Popen(['python3', path, args], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
+	elif prog == 'trimmomatic':
+		java_bin = config.get_exe('java')
+		java_jar = java_bin + ' -jar ' + path + ' ' + args
+		cmd_output = subprocess.Popen(java_jar, shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
 	else:
 		cmd_output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
+	## decode command
 	cmd_output = decode(cmd_output[0]).split('\n')[:-1] + decode(cmd_output[1]).split('\n')[:-1]
-
+	
+	## retrieve version information
 	for line in cmd_output:
 		hits = regex.search(line)
 		if hits:

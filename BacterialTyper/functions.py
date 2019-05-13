@@ -302,14 +302,22 @@ def optimize_threads(total, samples):
 
 #################
 def _access_check(fn, mode):
-	## this code belongs to shutil
+	## the original code belongs to shutil, slightly modified here
 	# https://github.com/python/cpython/blob/master/Lib/shutil.py
-    return (os.path.exists(fn) and os.access(fn, mode)
-            and not os.path.isdir(fn))
+	
+	if os.path.isdir(fn):
+		return False
+
+	if os.path.exists(fn):
+		if fn.endswith('.jar'):
+			return True
+
+		if os.access(fn, mode):
+			return True
 	
 #################
 def my_which(cmd, mode=os.F_OK | os.X_OK, path=None):
-	## this code belongs to shutil
+	## the original code belongs to shutil, slightly modified here
 	# https://github.com/python/cpython/blob/master/Lib/shutil.py
 
 	"""Given a command, mode, and a PATH string, return the path which
@@ -380,14 +388,19 @@ def my_which(cmd, mode=os.F_OK | os.X_OK, path=None):
 		# what file suffixes are executable, so just pass on cmd as-is.
 		files = [cmd]
 
+	#print (files)
+	#print (path)
+
 	return_paths = [] ## modification
 	seen = set()
 	for dir in path:
 		normdir = os.path.normcase(dir)
+		#print ("Normdir: ", normdir)
 		if not normdir in seen:
 			seen.add(normdir)
 			for thefile in files:
 				name = os.path.join(dir, thefile)
+				#print ("Name: ", name)
 				if _access_check(name, mode):
 					## return (name) ## previously, it would only return the first item
 					return_paths.append(name) ## modification

@@ -40,8 +40,8 @@ def prog_to_default():
 		'nucmer' : 'nucmer',
 		'Rscript':'Rscript',
 		'spades' : 'spades.py',
-		'tblastn':'tblastn'
-		#'trimmomatic':'trimmomatic.jar',
+		'tblastn':'tblastn',
+		'trimmomatic':'trimmomatic.jar'
 	}
 	return(program_to_default)
 
@@ -76,8 +76,8 @@ def min_version_programs():
 		'nucmer': '3.1',
 		'Rscript':'3.5.1',
 		'spades':'3.9.0',		
-		'tblastn':'2.5'
-		#'trimmomatic':'trimmomatic.jar',
+		'tblastn':'2.5',
+		'trimmomatic':'0.36'
 	}
 	
 	return min_versions
