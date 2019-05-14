@@ -19,9 +19,8 @@ import pandas as pd
 import patoolib ## to extract
 import shutil
 
-## import configuration
-import BacterialTyper 
-import config
+## import my modules
+from BacterialTyper import config
 
 ########################################################################
 ######## 					TIME								######## 					
@@ -137,6 +136,12 @@ def readList_fromFile(fileGiven):
 	lineList = [line.rstrip('\n') for line in open(fileGiven)]
 	return (lineList)
 
+######
+def retrieve_files(folder, string):
+	my_all_list = get_fullpath_list(folder)
+	matching = [s for s in my_all_list if s.endswith(string)]
+	return (matching)
+
 ########################################################################
 ######## 					system call							######## 					
 ########################################################################
@@ -240,7 +245,7 @@ def pipeline_header():
 	print ("\n")
 	print_sepLine("#", 70, False)
 	print('#', '{: ^66}'.format("BacterialTyper pipeline"), '#')
-	print('#', '{: ^66}'.format("Jose F. Sanchez & Lauro Sumoy"), '#')
+	print('#', '{: ^66}'.format("Jose F. Sanchez, Cristina Prat & Lauro Sumoy"), '#')
 	print('#', '{: ^66}'.format("Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain"), '#')
 	print_sepLine("#", 70, False)
 

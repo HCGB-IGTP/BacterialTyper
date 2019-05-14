@@ -18,10 +18,13 @@ from sys import argv
 import subprocess
 import pandas as pd
 from termcolor import colored
+from distutils.version import LooseVersion
+import pkg_resources
 
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
+from BacterialTyper import install_dependencies
 
 prog_to_version_cmd = {
 	'augustus':('--version', re.compile('AUGUSTUS.*\(([0-9\.]+)\).*')),
@@ -43,17 +46,34 @@ prog_to_version_cmd = {
 	'trimmomatic':('-version', re.compile('([0-9\.]+)'))
 }
 
-package_min_versions = {
-    'bs4': '4.1.0',
-    'dendropy': '4.1.0',
-    'pyfastaq': '3.12.0',
-    'pysam': '0.8.1',
-    'pymummer' : '0.7.1',
-}
-
+##################
+def return_default(soft):
+	dict_programs = config.prog_to_default()
+	return (dict_programs[soft])
+	
+##################
+def return_min_version(soft):
+	version_programs = config.min_version_programs()
+	return (version_programs[soft])
 
 ##################
-def dependencies():
+def python_packages_dependencies():
+	## ToDo set automatic from pip list
+	python_packages_BacterialTyper = ('ariba', 'bs4', 'dendropy', 'pyfastaq', 'pymummer', 'pysam')
+
+##################
+def return_min_version_package(package):
+	version_package = config.min_package_version()
+	return (version_package[package])
+
+##################
+def print_package_version():
+	my_packages = config.min_package_version()
+	for each in my_packages:
+		print ("{:.<15}{:.>15}".format("Module: %s" %each, my_packages[each]))
+
+##################
+def print_dependencies():
 	progs = {}
 	prog_to_default = config.prog_to_default()
 	for prog in prog_to_default:
@@ -112,5 +132,63 @@ def get_version(prog, path):
 	return("n.a.")
 
 
-	
+#########
+def check_python_packages(Debug, install):
+	## get all packages and min versions
+	my_packages = config.min_package_version()
+	for each in my_packages:
+		##	
+		min_version = my_packages[each]
+		installed = check_package_version(each) ## check version installed in system
+
+		## Not installed
+		if (installed == 'n.a.'):
+			print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ NOT FOUND ]"), 'red'))
+			if (Debug):
+				print ("\n**", each, min_version, installed, " **")			
+			if (install): # try to install
+				installed = install_dependencies.python_package_install(each, min_version)
+				if (Debug):
+					print ("\n**", each, min_version, installed, " **")			
+			else:
+				continue
+
+		# check version
+		if LooseVersion(installed) >= LooseVersion(min_version):
+			print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ OK ]"), 'green'))
+
+		else:
+			print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ FAILED ]"), 'red'))
+			#print (colored("Package %s\t[ FAILED ]" % each,'red'))
+			if (install):  # try to install
+				installed = install_dependencies.python_package_install(each, min_version)
+				if (Debug):
+					print ("\n**", each, min_version, installed, " **")	
+				if LooseVersion(installed) >= LooseVersion(min_version):
+					print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ OK ]"), 'green'))
+				else:
+					print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ FAILED (II) ]"), 'red'))
+					#print (colored("Package %s\t[ FAILED (II) ]" % each,'red'))
+					print ("+ Please install manually package: ", each, "\n\n")
+			else:
+				continue
+
+#########
+def check_package_version(package):
+	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
+	## give credit to them appropiately
+
+	try:
+		version = pkg_resources.get_distribution(package).version
+		return (version)
+	except:
+		
+		try:
+			exec('import ' + package)
+			version = eval(package + '.__version__')
+			return (version)
+
+		except:
+			return ('n.a.')
+		
 

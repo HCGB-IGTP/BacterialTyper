@@ -123,15 +123,15 @@ def run_module_SPADES(name, folder, file1, file2, threads):
 	path_to_plasmids = run_SPADES_plasmid_assembly(folder, file1, file2, name, SPADES_bin, threads)
 	
 	## discard plasmids from main
-	tmp_contigs, tmp_plasmids = discardPlasmids(path_to_contigs, path_to_plasmids, folder, name)
+	(tmp_contigs, tmp_plasmids) = discardPlasmids(path_to_contigs, path_to_plasmids, folder, name)
 	
 	## rename fasta sequences
-	new_contigs = tmp_contigs.split("fna.tmp") + '.fna'	
+	new_contigs = tmp_contigs.split(".fna.tmp")[0] + '.fna'	
 	rename_contigs(tmp_contigs, "scaffolds_chr", new_contigs)
 	
 	new_plasmids=""
 	if os.path.isfile(tmp_plasmids):
-		new_plasmids = tmp_contigs.split("fna.tmp") + '.fna'	
+		new_plasmids = tmp_plasmids.split(".fna.tmp")[0] + '.fna'	
 		rename_contigs(tmp_plasmids, "scaffolds_plasmids", new_plasmids)
 	
 	## contig stats
@@ -159,7 +159,7 @@ def discardPlasmids(contigs, plasmids, path, sample):
 	folder = functions.create_subfolder('blast_search', path)	
 	
 	## makeblastDB
-	DBname = folder + '/mainAssembly'
+	dbName = folder + '/mainAssembly'
 	functions.makeblastdb(dbName, contigs)
 	
 	## blastn command
@@ -186,33 +186,26 @@ def discardPlasmids(contigs, plasmids, path, sample):
 	for blast_record in parse(fh, eval_thresh=eval_thresh_float, aln_thresh=aln_thresh_given, length_thresh=min_length):
 		for hit in blast_record.hits:
 			for hsp in hit:
-				print('****Alignment****')
 				output_file.write('****Alignment****')
 				output_file.write('\n')
 				
-				print('query id: {}'.format(blast_record.qid))
 				output_file.write('query id: {}'.format(blast_record.qid))
 				output_file.write('\n')
 				
-				print('sequence: ', hsp.sid)
 				sequences2discard.append(hsp.sid)
 				output_file.write('sequence: %s' %hsp.sid)
 				output_file.write('\n')
 				
-				print('e value:', hsp.evalue)
 				output_file.write('e value: %s' %hsp.evalue)
 				output_file.write('\n')
 				
-				print('aln:', hsp.length)
 				output_file.write('aln: %s' %hsp.length)
 				output_file.write('\n')
 				
-				print('qlen:', hsp.qlen, ' [>', min_length, ' bp]')
 				output_file.write('qlen: %s [>%s]' %(hsp.qlen, min_length))
 				output_file.write('\n')
 				
 				aln = (int(hsp.qlen)/int(hsp.slen))*100
-				print ('aln/slen:', aln, ' [>', aln_thresh_given ,'%]')
 				output_file.write('aln/slen: %s [> %s]' %(aln, aln_thresh_given))
 				output_file.write('\n\n')
 
@@ -240,6 +233,7 @@ def discardPlasmids(contigs, plasmids, path, sample):
 
 	contig_out_file_handle.close()
 	plasmid_out_file_handle.close()	
+	
 	return (contig_out_file, plasmid_out_file)
 
 ######
@@ -279,7 +273,7 @@ def stats(new_contigs, new_plasmids):
 ######
 def rename_contigs(fasta_file, name, new_fasta):
 	## perl tools/perl/rename_FASTA_seqs.pl fasta_file name_file name2add ADD|REPLACE|BEGIN|ADD_BEGIN
-	perl_call = "%s %s %s %s REPLACE" %(rename_seqs_script, fasta_file, new_fasta, name)
+	perl_call = "perl %s %s %s %s REPLACE" %(rename_seqs_script, fasta_file, new_fasta, name)
 	return (functions.system_call(perl_call))
 	
 ######

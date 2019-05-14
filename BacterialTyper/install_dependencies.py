@@ -32,7 +32,11 @@ def install(software):
 	## try to install: 
 	print(colored("**Check paths or install it in the system and add it to $PATH environment variable.",'red'))
 
-	
+##################
+def python_package_install(package, version2install):
+	print (colored("Install missing python package: " + package, 'yellow'))
+	versioninstalled='0.1'
+	return (versioninstalled)
 
 ##################
 def install_BUSCO():

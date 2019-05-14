@@ -107,7 +107,7 @@ def BUSCO_download(name, ftp, folder):
 		shutil.rmtree(folder)
 		BUSCO_download(name, ftp, folder)
 		
-	return (subfolder)
+	return (folderName)
 
 ###############
 def BUSCO_check_dataset(folder):
@@ -153,10 +153,32 @@ def BUSCO_retrieve_sets(list_datasets, folder):
 			exit()
 	
 	## database: folder
+	dataset = {}
 	for elem in list_datasets:
 		ftp = data_df.loc[elem]['ftp_site']
-		BUSCO_download(elem, ftp, folder)
+		dataset[elem] = BUSCO_download(elem, ftp, folder)
 	
+	return (dataset)
+
+###############
+def BUSCO_run(dataset, fasta, threads, output_name, dataset_name):
+	busco_bin = config.get_exe('busco')
+
+	os.chdir(output_name)
+	logFile = dataset_name + '.log'
+	cmd = '%s -i %s -c %s --blast_single_core --mode genome -l %s -o %s > %s' %(busco_bin, fasta, threads, dataset, dataset_name, logFile)
+	functions.system_call(cmd)
+	
+	my_out_folder = output_name + '/run_' + dataset_name	
+	my_tsv_files = functions.retrieve_files(my_out_folder, '.tsv')
+	
+	if (len(my_tsv_files) > 1):
+		## timestamp
+		filename_stamp =  my_out_folder + '/.success'
+		functions.print_time_stamp(filename_stamp)
+
+	return()
+
 ###############
 def main():
 	## this code runs when call as a single script
@@ -169,7 +191,7 @@ def main():
 		exit()
 	
 	BUSCO_check_dataset(sys.argv[1])
-		
+	
 ######
 '''******************************************'''
 if __name__== "__main__":

@@ -41,7 +41,7 @@ def trimmo_module(file_R1, file_R2, path_name, sample_name, threads, Debug, trim
 		exit()
 	
 	## call
-	return(trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threads, trimmomatic_adapters))
+	return(trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threads, trimmomatic_adapters, Debug))
 
 ######
 def trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threads, trimmomatic_adapters, Debug):

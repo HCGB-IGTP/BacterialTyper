@@ -44,7 +44,6 @@ def ariba_citation():
 
 #########
 def print_all():
-	functions.pipeline_header()
 	print ("")
 	functions.print_sepLine("+", 50, 'yellow')
 	print ("\tSOFTWARE")
@@ -105,7 +104,7 @@ def only_us():
 
 #########
 def run(options):
-
+	functions.pipeline_header()
 	functions.boxymcboxface("Citation")
 	if (options.option == 'all'):
 		print (colored("\n+ BacterialTyper citation:", 'blue'))

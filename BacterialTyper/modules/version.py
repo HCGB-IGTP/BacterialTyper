@@ -5,26 +5,20 @@ Jose F. Sanchez
 Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
 '''
 
+## useful imports
+from termcolor import colored
+import os
+import sys
+
 ## import my modules
 from BacterialTyper import config, functions
-from termcolor import colored
-import os, sys
-
 from BacterialTyper import extern_progs
+
 #from BacterialTyper import __version__ as ariba_version ## to include when distributed
 pipeline_version = "0.0.2"
 
-## ToDo set automatic from pip list
-python_packages_BacterialTyper = ('ariba', 'bs4', 'dendropy', 'pyfastaq', 'pymummer', 'pysam')
-
 #########
 def print_all():
-
-	functions.print_sepLine("+", 50, False)
-	print ('External dependencies:\n')
-	functions.print_sepLine("+", 50, False)
-	extern_progs.dependencies()
-	print ('\n')
 
 	functions.print_sepLine("+", 50, False)
 	print ('Python:')
@@ -33,8 +27,14 @@ def print_all():
 	print ('\n')
 	functions.print_sepLine("+", 50, False)
 	print ('Python packages:')
-	check_python_packages(python_packages_BacterialTyper)        
+	extern_progs.print_package_version()
 	functions.print_sepLine("+", 50, False)
+	print ('\n')
+
+	functions.print_sepLine("+", 50, False)
+	print ('External dependencies:\n')
+	functions.print_sepLine("+", 50, False)
+	extern_progs.print_dependencies()
 	print ('\n')
 
 	print ('Additional dependencies: databases, information, etc...')
@@ -70,7 +70,7 @@ def run(options):
 	functions.boxymcboxface("Version")
 
 	if (options.option == 'all'):
-		print (colored("\n+ BacterialTyper citation:", 'yellow'))
+		print (colored("\n+ BacterialTyper version:", 'yellow'))
 		only_us()
 
 		print (colored("\n+ Other softwares employed in the pipeline", 'yellow'))
@@ -80,20 +80,3 @@ def run(options):
 		print (colored("\n+ BacterialTyper version:", 'yellow'))
 		only_us()
 
-#########
-def check_python_packages(givenList):
-	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
-	## give credit to them appropiately
-
-	for package in givenList:
-		try:
-			exec('import ' + package)
-			version = eval(package + '.__version__')
-			path = eval(package + '.__file__')
-			print (package + ' version: ' + version)
-    
-		except:
-			version = 'NOT_FOUND'
-			path = 'NOT_FOUND'
-			print (package + ' version: ' + version)
-	

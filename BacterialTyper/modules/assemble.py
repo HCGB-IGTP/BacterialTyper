@@ -89,16 +89,28 @@ def run(options):
 				print('%r generated an exception: %s' % (details, exc))
 		
 	## functions.timestamp
-	print ("Assembly of all samples finished: ")
+	print ("+ Assembly of all samples finished: ")
 	start_time_partial = functions.timestamp(start_time_partial_assembly)
 	start_time_partial_BUSCO = start_time_partial
 
-	## Check each 
-	qc.assembly_check(options)
+	### symbolic links
+	print ("+ Retrieve all genomes assembled...")
+	my_assembly_list = functions.retrieve_files(outdir, '_chromosome.fna')
+
+	## Check each using BUSCO
+	functions.boxymcboxface("BUSCO Assembly Quality check")
+	database_folder = os.path.abspath(options.database)
+	outdir_BUSCO = functions.create_subfolder("BUSCO", outdir)
+	BUSCO_Database = database_folder + '/BUSCO'
+	qc.BUSCO_call(options.BUSCO_dbs, my_assembly_list, BUSCO_Database, outdir_BUSCO, options.threads)
 	
 	## functions.timestamp
-	print ("Quality control of all samples finished: ")
+	print ("+ Quality control of all samples finished: ")
 	start_time_partial = functions.timestamp(start_time_partial_BUSCO)
+	
+	## generate plots
+	## multiqc report plot
+	## busco plot of samples or datasets per sample
 
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)
@@ -106,6 +118,7 @@ def run(options):
 	print ("+ Exiting Assembly module.")
 	exit()
 
+#############################################
 def check_sample_assembly(name, sample_folder, R1, R2, threads):
 	## check if previously assembled and succeeded
 	filename_stamp = sample_folder + '/.success'
