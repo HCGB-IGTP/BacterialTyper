@@ -102,37 +102,25 @@ subparser_updateDB.set_defaults(func=BacterialTyper.modules.database.updateDB_NC
 
 ##--------------------------- prepareSamples ----------------- ##
 subparser_sample = subparsers.add_parser(
-    'prepareSamples',
-    help='Retrieves FASTQ files for the same sample. Generates symbolic link.',
-    description='This module merges fastq files from a sequencing run where multiples files have been generated for the same sample e.g different lanes. It concatenates these files according the common identifier and generates a unique file, one per paired-read if necessary',
+    'prepareFQ',
+    help='Prepares FASTQ files from samples',
+    description='This module prepares fastq files from a sequencing run and merge them when multiples files have been generated for the same sample e.g different lanes. It concatenates these files according the common identifier and generates a unique file, one per paired-read if necessary',
 )
-subparser_sample.add_argument("--input", help="Folder containing fastq files. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. All files would be retrieved.", required=True)
-subparser_sample.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required=True)
-subparser_sample.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
-subparser_sample.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-subparser_sample.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
-subparser_sample.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
-subparser_sample.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
-subparser_sample.add_argument("--copy", action="store_true", help="Instead of generating symbolic links, copy files into output folder. [Default OFF].")
-subparser_sample.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
-subparser_sample.set_defaults(func=BacterialTyper.modules.sample_prepare.retrieve)
-##-------------------------------------------------------------##
+in_out_group_prepareFQ = subparser_sample.add_argument_group("Input/Output")
+in_out_group_prepareFQ.add_argument("--input", help="Folder containing fastq files. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. All files would be retrieved.", required=True)
+in_out_group_prepareFQ.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required=True)
+in_out_group_prepareFQ.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+in_out_group_prepareFQ.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+in_out_group_prepareFQ.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+in_out_group_prepareFQ.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
-##--------------------------- merge -------------------------- ##
-subparser_merge = subparsers.add_parser(
-    'mergeFQ',
-    help='Merges FASTQ files for the same sample.',
-    description='This module merges fastq files from a sequencing run where multiples files have been generated for the same sample e.g different lanes. It concatenates these files according the common identifier and generates a unique file, one per paired-read if necessary',
-)
-subparser_merge.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required=True)
-subparser_merge.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required=True)
-subparser_merge.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
-subparser_merge.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-subparser_merge.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
-subparser_merge.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
-subparser_merge.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
-subparser_merge.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
-subparser_merge.set_defaults(func=BacterialTyper.modules.sample_prepare.merge)
+options_group_prepareFQ = subparser_sample.add_argument_group("Options")
+options_group_prepareFQ.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+options_group_prepareFQ.add_argument("--copy", action="store_true", help="Instead of generating symbolic links, copy files into output folder. [Default OFF].")
+options_group_prepareFQ.add_argument("--merge", action="store_true", help="Merges FASTQ files for the same sample.")
+options_group_prepareFQ.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+
+subparser_sample.set_defaults(func=BacterialTyper.modules.sample_prepare.retrieve)
 ##-------------------------------------------------------------##
 
 ##--------------------------- fastqc ------------------------- ##
@@ -141,15 +129,19 @@ subparser_fastqc = subparsers.add_parser(
     help='Generates quality check for each sample using FASTQC.',
     description='This module call FASTQC for a quality check of each sample provided',
 )
-subparser_fastqc.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required=True)
-subparser_fastqc.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required=True)
-subparser_fastqc.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
-subparser_fastqc.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
-subparser_fastqc.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-subparser_fastqc.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
-subparser_fastqc.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
-subparser_fastqc.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
-subparser_fastqc.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+in_out_group_fastqc = subparser_fastqc.add_argument_group("Input/Output")
+in_out_group_fastqc.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required=True)
+in_out_group_fastqc.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required=True)
+in_out_group_fastqc.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+in_out_group_fastqc.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+in_out_group_fastqc.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+in_out_group_fastqc.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+
+options_group_fastqc = subparser_fastqc.add_argument_group("Options")
+options_group_fastqc.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
+options_group_fastqc.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+options_group_fastqc.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+
 subparser_fastqc.set_defaults(func=BacterialTyper.modules.qc.fastqc)
 ##-------------------------------------------------------------##
 
@@ -159,16 +151,20 @@ subparser_trimm = subparsers.add_parser(
     help='Trimms sequencing adapters from files.',
     description='This module trimms sequencing adapters that could be present in next generation sequencing files',
 )
-subparser_trimm.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required=True)
-subparser_trimm.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required=True)
-subparser_trimm.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
-subparser_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
-subparser_trimm.add_argument("--adapters", help="Adapter sequences to use for the trimming process", required=True)
-subparser_trimm.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-subparser_trimm.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
-subparser_trimm.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
-subparser_trimm.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
-subparser_trimm.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+in_out_group_trimm = subparser_trimm.add_argument_group("Input/Output")
+in_out_group_trimm.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required=True)
+in_out_group_trimm.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required=True)
+in_out_group_trimm.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+in_out_group_trimm.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+in_out_group_trimm.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+in_out_group_trimm.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+
+options_group_trimm = subparser_trimm.add_argument_group("Options")
+options_group_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
+options_group_trimm.add_argument("--adapters", help="Adapter sequences to use for the trimming process", required=True)
+options_group_trimm.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+options_group_trimm.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+
 subparser_trimm.set_defaults(func=BacterialTyper.modules.trimm.run)
 ##-------------------------------------------------------------##
 

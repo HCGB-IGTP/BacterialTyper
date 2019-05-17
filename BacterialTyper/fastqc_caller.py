@@ -20,7 +20,6 @@ matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from pandas.plotting import table
 from matplotlib.backends.backend_pdf import PdfPages
-
 import numpy as np
 
 ## import my modules

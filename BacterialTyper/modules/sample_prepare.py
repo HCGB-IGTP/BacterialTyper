@@ -17,11 +17,8 @@ from BacterialTyper import sampleParser
 from BacterialTyper import functions
 from BacterialTyper import config
 
-################################
-def merge(options):
-
-	## extract files
-	print ('+ Merge files from different sequencing lanes...')
+global merge
+merge = False
 
 ################################
 def get_files(options, input_dir):
@@ -60,8 +57,8 @@ def get_files(options, input_dir):
 	else:
 		samples_names = ['.*']
 	
-	##
-	pd_samples_retrieved = sampleParser.select_samples(files, samples_names, options.pair, exclude)
+	## get information	
+	pd_samples_retrieved = sampleParser.select_samples(files, samples_names, options.pair, exclude, merge)
 	return(pd_samples_retrieved)
 
 ################################
@@ -74,11 +71,23 @@ def retrieve(options):
 	input_dir = os.path.abspath(options.input)
 	outdir = os.path.abspath(options.output_folder)
 
+	## merge option
+	if (options.merge):
+		global merge
+		merge = True
+
 	## get files
 	pd_samples_retrieved = get_files(options, input_dir)
-	
+
 	## output: generate symbolic link or copy if desired	
 	functions.create_folder(outdir)
+
+	## merge option
+	if (options.merge):
+		print ("+ Sample files will be merged...")
+		sampleParser.one_file_per_sample(pd_samples_retrieved, outdir, options.threads)
+		return ()
+		
 	list_reads = []
 	if (options.copy):
 		print ("+ Sample files will be copied...")
