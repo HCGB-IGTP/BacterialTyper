@@ -31,6 +31,7 @@ prog_to_version_cmd = {
 	'ariba':('version', re.compile('ARIBA version:\s([0-9\.]+)')),
 	'blastn':('-version', re.compile('blastn:\s([0-9\.]+)')),
 	'busco':('--version', re.compile('BUSCO\s([0-9\.]+)')),
+	'busco_plot':('--version', re.compile('BUSCO\s([0-9\.]+)')),
 	'bowtie2': ('--version', re.compile('.*bowtie2.*version (.*)$')),
 	'cdhit': ('', re.compile('CD-HIT version ([0-9\.]+) \(')),
 	'fastqc':('-v', re.compile('FastQC\sv([0-9\.]+)')),

@@ -102,13 +102,16 @@ def run(options):
 	database_folder = os.path.abspath(options.database)
 	outdir_BUSCO = functions.create_subfolder("BUSCO", outdir)
 	BUSCO_Database = database_folder + '/BUSCO'
-	qc.BUSCO_call(options.BUSCO_dbs, my_assembly_list, BUSCO_Database, outdir_BUSCO, options.threads)
+	dataFrame_results = qc.BUSCO_call(options.BUSCO_dbs, my_assembly_list, BUSCO_Database, outdir_BUSCO, options.threads)
 	
 	## functions.timestamp
 	print ("+ Quality control of all samples finished: ")
 	start_time_partial = functions.timestamp(start_time_partial_BUSCO)
 	
 	## generate plots
+	print ("+ Generate summarizing plots...")
+	qc.BUSCO_plots(dataFrame_results, outdir, options.threads)	
+	
 	## multiqc report plot
 	## busco plot of samples or datasets per sample
 

@@ -224,7 +224,7 @@ def get_options_db(options):
 	print ("\n\n+ Select databases to use for identification:")
 	
 	### database folder to use
-	database2use = options.database
+	database2use = os.path.abspath(options.database)
 	
 	## debug message
 	if (Debug):

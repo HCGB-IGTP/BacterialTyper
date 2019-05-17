@@ -12,6 +12,8 @@ import re
 import sys
 from io import open
 import concurrent.futures
+import pandas as pd
+import shutil
 
 ## import my modules
 from BacterialTyper.modules import sample_prepare
@@ -132,8 +134,15 @@ def assembly_check(options):
 	
 	## Check each 
 	BUSCO_database = database_folder + '/BUSCO'
-	BUSCO_call(options.BUSCO_dbs, my_assembly_list, BUSCO_database, outdir, options.threads)
+	dataFrame_results = BUSCO_call(options.BUSCO_dbs, my_assembly_list, BUSCO_database, outdir, options.threads)
 	
+	print ("+ Quality control of all samples finished: ")
+	start_time_partial = functions.timestamp(start_time_partial_BUSCO)
+	
+	## generate plots
+	print ("+ Generate summarizing plots...")
+	BUSCO_plots(dataFrame_results, outdir, options.threads)	
+
 ################################################
 def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads):
 
@@ -150,10 +159,10 @@ def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads):
 	print ("+ Checking quality for each sample retrieved...")
 	
 	# We can use a with statement to ensure threads are cleaned up promptly
-	with concurrent.futures.ThreadPoolExecutor(max_workers=int(len(list_scaffolds))) as executor:
+	with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor: ## need to do 1 by one as there is a problem with the working directory
 		for DataSet in BUSCO_datasets:
 			## send for each sample
-			commandsSent = { executor.submit( BUSCO_runner, DataSet, sample, BUSCO_datasets[DataSet], output, threads_module): sample for sample in list_scaffolds }
+			commandsSent = { executor.submit( BUSCO_runner, DataSet, sample, BUSCO_datasets[DataSet], output, threads): sample for sample in list_scaffolds }
 
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
@@ -168,8 +177,68 @@ def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads):
 
 	print ("Finish here...")
 	os.chdir(path_here)
+	
+	short_summary = pd.DataFrame(columns=('Sample', 'Dataset', 'Summary File', 'Folder'))
 
 	## generate report
+	for DataSet in BUSCO_datasets:
+		for sample in list_scaffolds:
+			sample_name = os.path.basename(sample).split('_chromosome.fna')[0]
+			my_BUSCO_results_folder = output + '/' + sample_name + '/run_' + DataSet
+			my_short_tsv = 	my_BUSCO_results_folder + '/short_summary_' + DataSet + '.txt'
+			
+			if os.path.isfile(my_short_tsv):
+				short_summary.loc[len(short_summary)] = (sample_name, DataSet, my_short_tsv, my_BUSCO_results_folder)
+			
+	return (short_summary)
+
+################################################
+def BUSCO_plots(dataFrame_results, outdir, threads):
+	
+	list_datasets = set(dataFrame_results['Dataset'].tolist())
+	list_samples = set(dataFrame_results['Sample'].tolist())
+
+	plot_folder = functions.create_subfolder('BUSCO_plots', outdir)
+	outdir_busco_plot = []
+	
+	print ("+ Get results for all samples summarized by dataset:")
+	for dataset in list_datasets:
+		print ("\t+ Get results for: ", dataset)
+		plot_folder_dataset = functions.create_subfolder(dataset, plot_folder)
+		outdir_busco_plot.append(plot_folder_dataset)
+	
+		for index, row in dataFrame_results.iterrows():
+			if (dataset == row['Dataset']):
+				shutil.copy(row['Summary File'], plot_folder_dataset + '/short_summary_' + dataset + '_' + row['Sample'] + '.txt')
+		
+	print ("+ Get results for summarized by sample:")
+	for sample in list_samples:
+		print ("\t+ Get results for: ", sample)
+		plot_folder_sample = functions.create_subfolder(sample, plot_folder)
+		outdir_busco_plot.append(plot_folder_sample)
+
+		for index, row in dataFrame_results.iterrows():
+			if (sample == row['Sample']):
+				shutil.copy(row['Summary File'], plot_folder_sample + '/short_summary_' + row['Dataset'] + '_' + sample + '.txt')
+	
+	print ("+ Generate plots for each subset")
+	
+	# We can use a with statement to ensure threads are cleaned up promptly
+	with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor: ## need to do 1 by one as there is a problem with the working directory
+		## send for each sample
+		commandsSent = { executor.submit( BUSCO_caller.BUSCO_plot , plot): plot for plot in outdir_busco_plot }
+
+		for cmd2 in concurrent.futures.as_completed(commandsSent):
+			details = commandsSent[cmd2]
+			try:
+				data = cmd2.result()
+			except Exception as exc:
+				print ('***ERROR:')
+				print (cmd2)
+				print('%r generated an exception: %s' % (details, exc))
+			
+	print ("+ All plots generated...")
+	print ("+ Check results under folders in : ", plot_folder)		
 
 ################################################
 def BUSCO_runner(DataSet, sample, dataset_path, output, threads_module):
@@ -178,7 +247,12 @@ def BUSCO_runner(DataSet, sample, dataset_path, output, threads_module):
 	sample_name_dir = functions.create_subfolder(sample_name, output)
 
 	## run busco	
-	BUSCO_caller.BUSCO_run( dataset_path, sample, threads_module, sample_name_dir, DataSet)
+	code = BUSCO_caller.BUSCO_run( dataset_path, sample, threads_module, sample_name_dir, DataSet)
+	
+	if (code == 'FAIL'):
+		BUSCO_caller.BUSCO_run( dataset_path, sample, threads_module, sample_name_dir, DataSet)
+	else:
+		return ()
 
 
 	

@@ -162,22 +162,41 @@ def BUSCO_retrieve_sets(list_datasets, folder):
 
 ###############
 def BUSCO_run(dataset, fasta, threads, output_name, dataset_name):
-	busco_bin = config.get_exe('busco')
 
-	os.chdir(output_name)
-	logFile = dataset_name + '.log'
-	cmd = '%s -i %s -c %s --blast_single_core --mode genome -l %s -o %s > %s' %(busco_bin, fasta, threads, dataset, dataset_name, logFile)
-	functions.system_call(cmd)
-	
 	my_out_folder = output_name + '/run_' + dataset_name	
-	my_tsv_files = functions.retrieve_files(my_out_folder, '.tsv')
+	## timestamp
+	filename_stamp =  my_out_folder + '/.success'
+
+	print ("BUSCO: Dataset [%s]; Sample [%s]" %(dataset_name, fasta))
+		
+	## check previous run
+	if os.path.isfile(filename_stamp):
+		timestamp = functions.read_time_stamp(filename_stamp)
+		print ("\tSuccessfully run on date: ", timestamp)
+	else:
 	
-	if (len(my_tsv_files) > 1):
-		## timestamp
-		filename_stamp =  my_out_folder + '/.success'
-		functions.print_time_stamp(filename_stamp)
+		busco_bin = config.get_exe('busco')
+		os.chdir(output_name)
+		logFile = dataset_name + '.log'
+		cmd = '%s -i %s -f -c %s --blast_single_core --mode genome -l %s -o %s > %s' %(busco_bin, fasta, threads, dataset, dataset_name, logFile)
+		functions.system_call(cmd)
+	
+		if os.path.isfile(my_out_folder + '/short_summary_' + dataset_name + '.txt'):
+			## timestamp
+			functions.print_time_stamp(filename_stamp)
+		else:
+			print (colored("BUSCO failed: Dataset [%s]; Sample [%s]" %(dataset_name, fasta), 'red'))
+			return ('FAIL')
 
 	return()
+
+###############
+def BUSCO_plot(outfolder):
+	busco_plot_bin = config.get_exe('busco_plot')
+	#logFile = dataset_name + '.log'
+	cmd = '%s -wd %s' %(busco_plot_bin, outfolder)
+	functions.system_call(cmd)
+
 
 ###############
 def main():
