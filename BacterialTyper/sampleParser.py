@@ -203,8 +203,12 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 
 ###############    
 def gunzip_merge(outfile, list_files):
+	
+	list_files = list(list_files)
+	list_files.sort()
 	print ("\tMerging gz files into: ", outfile)
 	print ("\tFiles: ", list_files)
+
 	with open(outfile, 'wb') as wfp:
 		for fn in list_files:
 			with open(fn, 'rb') as rfp:
@@ -241,12 +245,11 @@ def one_file_per_sample(dataFrame, outdir, threads):
 					print (cmd2)
 					print('%r generated an exception: %s' % (details, exc))
 
-	print ('There are' , len(bigfile_list) , 'samples after merging for read' , read, '\n')
-	return bigfile_list
-
+	return()
+	
 ###############
 def help_options():
-	print ("\nUSAGE:\npython %s in_folder out_folder\n"  %os.path.abspath(argv[0]))
+	print ("\nUSAGE:\npython %s in_folder out_folder threads\n"  %os.path.abspath(sys.argv[0]))
 
 ######
 def main():
