@@ -59,7 +59,7 @@ def run(options):
 	outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir)
+	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq")
 	## generate output folder
 	functions.create_folder(outdir)
 

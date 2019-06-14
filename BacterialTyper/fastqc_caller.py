@@ -236,7 +236,7 @@ def main():
 	fastqc_bin = argv[5]
 
 	##
-	path_to_sample = run_module_fastqc(path, file1, file2, sample, fastqc_bin)
+	path_to_sample = call_fastqc(path, file1, file2, sample, fastqc_bin)
 	fastqc_files = get_files(path_to_sample)
 	
 	for files in fastqc_files:

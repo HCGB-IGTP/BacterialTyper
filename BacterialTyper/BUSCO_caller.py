@@ -161,7 +161,7 @@ def BUSCO_retrieve_sets(list_datasets, folder):
 	return (dataset)
 
 ###############
-def BUSCO_run(dataset, fasta, threads, output_name, dataset_name):
+def BUSCO_run(dataset, fasta, threads, output_name, dataset_name, mode):
 
 	my_out_folder = output_name + '/run_' + dataset_name	
 	## timestamp
@@ -178,7 +178,7 @@ def BUSCO_run(dataset, fasta, threads, output_name, dataset_name):
 		busco_bin = config.get_exe('busco')
 		os.chdir(output_name)
 		logFile = dataset_name + '.log'
-		cmd = '%s -i %s -f -c %s --blast_single_core --mode genome -l %s -o %s > %s' %(busco_bin, fasta, threads, dataset, dataset_name, logFile)
+		cmd = '%s -i %s -f -c %s --blast_single_core --mode %s -l %s -o %s > %s' %(busco_bin, fasta, threads, mode, dataset, dataset_name, logFile)
 		functions.system_call(cmd)
 	
 		if os.path.isfile(my_out_folder + '/short_summary_' + dataset_name + '.txt'):

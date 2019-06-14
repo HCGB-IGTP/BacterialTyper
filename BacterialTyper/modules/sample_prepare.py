@@ -21,7 +21,7 @@ global merge
 merge = False
 
 ################################
-def get_files(options, input_dir):
+def get_files(options, input_dir, mode):
 	## get list of input files
 	files = []
 	print ('+ Get input folder(s)')
@@ -57,9 +57,14 @@ def get_files(options, input_dir):
 	else:
 		samples_names = ['.*']
 	
-	## get information	
-	pd_samples_retrieved = sampleParser.select_samples(files, samples_names, options.pair, exclude, merge)
+	## get information
+	if mode == "fastq":
+		pd_samples_retrieved = sampleParser.select_samples(files, samples_names, options.pair, exclude, merge)
+	elif mode == "assembly":
+		pd_samples_retrieved = sampleParser.select_assembly_samples(files, samples_names, options.pair, exclude, merge)
+		
 	return(pd_samples_retrieved)
+
 
 ################################
 def retrieve(options):

@@ -47,7 +47,7 @@ def fastqc(options):
 	outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir)
+	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq")
 	## generate output folder
 	functions.create_folder(outdir)
 
@@ -134,7 +134,7 @@ def assembly_check(options):
 	
 	## Check each 
 	BUSCO_database = database_folder + '/BUSCO'
-	dataFrame_results = BUSCO_call(options.BUSCO_dbs, my_assembly_list, BUSCO_database, outdir, options.threads)
+	dataFrame_results = BUSCO_call(options.BUSCO_dbs, my_assembly_list, BUSCO_database, outdir, options.threads, "genome")
 	
 	print ("+ Quality control of all samples finished: ")
 	start_time_partial = functions.timestamp(start_time_partial_BUSCO)
@@ -144,7 +144,7 @@ def assembly_check(options):
 	BUSCO_plots(dataFrame_results, outdir, options.threads)	
 
 ################################################
-def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads):
+def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads, mode):
 
 	## get datasets
 	print ("+ Check folder provided as database for available BUSCO datasets...")
@@ -162,7 +162,7 @@ def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads):
 	with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor: ## need to do 1 by one as there is a problem with the working directory
 		for DataSet in BUSCO_datasets:
 			## send for each sample
-			commandsSent = { executor.submit( BUSCO_runner, DataSet, sample, BUSCO_datasets[DataSet], output, threads): sample for sample in list_scaffolds }
+			commandsSent = { executor.submit( BUSCO_runner, DataSet, sample, BUSCO_datasets[DataSet], output, threads, mode): sample for sample in list_scaffolds }
 
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
@@ -183,7 +183,13 @@ def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads):
 	## generate report
 	for DataSet in BUSCO_datasets:
 		for sample in list_scaffolds:
-			sample_name = os.path.basename(sample).split('_chromosome.fna')[0]
+			file_name = os.path.basename(sample)
+			sample_name =""
+			if file_name.endswith('_chromosome.fna'):
+				sample_name = file_name.split('_chromosome.fna')[0]
+			else: 
+				sample_name = file_name.split('.faa')[0]
+		
 			my_BUSCO_results_folder = output + '/' + sample_name + '/run_' + DataSet
 			my_short_tsv = 	my_BUSCO_results_folder + '/short_summary_' + DataSet + '.txt'
 			
@@ -191,6 +197,25 @@ def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads):
 				short_summary.loc[len(short_summary)] = (sample_name, DataSet, my_short_tsv, my_BUSCO_results_folder)
 			
 	return (short_summary)
+
+################################################
+def BUSCO_runner(DataSet, sample, dataset_path, output, threads_module, mode):
+	file_name = os.path.basename(sample)
+	sample_name =""
+	if file_name.endswith('_chromosome.fna'):
+		sample_name = file_name.split('_chromosome.fna')[0]
+	else: 
+		sample_name = file_name.split('.faa')[0]
+
+	sample_name_dir = functions.create_subfolder(sample_name, output)
+
+	## run busco	
+	code = BUSCO_caller.BUSCO_run( dataset_path, sample, threads_module, sample_name_dir, DataSet, mode)
+	
+	if (code == 'FAIL'):
+		BUSCO_caller.BUSCO_run( dataset_path, sample, threads_module, sample_name_dir, DataSet, mode)
+	else:
+		return ()
 
 ################################################
 def BUSCO_plots(dataFrame_results, outdir, threads):
@@ -239,22 +264,4 @@ def BUSCO_plots(dataFrame_results, outdir, threads):
 			
 	print ("+ All plots generated...")
 	print ("+ Check results under folders in : ", plot_folder)		
-
-################################################
-def BUSCO_runner(DataSet, sample, dataset_path, output, threads_module):
-	file_name = os.path.basename(sample)
-	sample_name = file_name.split('_chromosome.fna')[0]
-	sample_name_dir = functions.create_subfolder(sample_name, output)
-
-	## run busco	
-	code = BUSCO_caller.BUSCO_run( dataset_path, sample, threads_module, sample_name_dir, DataSet)
-	
-	if (code == 'FAIL'):
-		BUSCO_caller.BUSCO_run( dataset_path, sample, threads_module, sample_name_dir, DataSet)
-	else:
-		return ()
-
-
-	
-
 

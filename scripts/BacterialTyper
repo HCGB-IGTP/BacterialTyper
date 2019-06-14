@@ -68,7 +68,7 @@ subparser_initDB.set_defaults(func=BacterialTyper.modules.database.initial_run)
 ##----------------- update database ncbi---------------------- ##
 subparser_updateDB = subparsers.add_parser(
     'updateDB',
-    help='Updates a database with information from NCBI.',
+    help='Updates database.',
     description='Given a file with information from known strains this module updates an initiated database with information from NCBI. Other options allow to update database from kma indexes or ARIBA databases.'
 )
 subparser_updateDB.add_argument("--path", help="Folder path to database.", required= not any(elem in list_help_options for elem in sys.argv) )
@@ -126,7 +126,7 @@ subparser_sample.set_defaults(func=BacterialTyper.modules.sample_prepare.retriev
 ##--------------------------- fastqc ------------------------- ##
 subparser_fastqc = subparsers.add_parser(
     'fastqc',
-    help='Generates quality check for each sample using FASTQC.',
+    help='Fastq Quality check for sample.',
     description='This module call FASTQC for a quality check of each sample provided',
 )
 in_out_group_fastqc = subparser_fastqc.add_argument_group("Input/Output")
@@ -148,7 +148,7 @@ subparser_fastqc.set_defaults(func=BacterialTyper.modules.qc.fastqc)
 ##------------------------------ trimm ----------------------- ##
 subparser_trimm = subparsers.add_parser(
     'trimm',
-    help='Trimms sequencing adapters from files.',
+    help='Trimms sequencing adapters.',
     description='This module trimms sequencing adapters that could be present in next generation sequencing files',
 )
 in_out_group_trimm = subparser_trimm.add_argument_group("Input/Output")
@@ -171,12 +171,11 @@ subparser_trimm.set_defaults(func=BacterialTyper.modules.trimm.run)
 ##################
 #### Assembly ####
 ##################
-
 ##--------------------------- assemble ----------------------- ##
 subparser_assemble = subparsers.add_parser(
     'assemble',
-    help='Assembles samples from trimmed sequencing reads.',
-    description='This module assembles sequencing reads into contigs using spades.'
+    help='Assembly for each sample.',
+    description='This module assembles sequencing reads into contigs using spades. Input must be trimmed sequences.'
 )
 in_out_group_assembly = subparser_assemble.add_argument_group("Input/Output")
 in_out_group_assembly.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= '--help_BUSCO' not in sys.argv)
@@ -202,7 +201,7 @@ subparser_assemble.set_defaults(func=BacterialTyper.modules.assemble.run)
 ##--------------------- Assembly check ----------------------- ##
 subparser_assemblyQC = subparsers.add_parser(
     'assemblyQC',
-    help='Generates quality check for each assembly generated using basic statistics and BUSCO.',
+    help='Assembly quality check: statistics & BUSCO.',
     description='This module call...',
 )
 in_out_group_assembly_check = subparser_assemblyQC.add_argument_group("Input/Output")
@@ -225,8 +224,39 @@ options_group_assembly_check.add_argument("--debug", action="store_true", help="
 subparser_assemblyQC.set_defaults(func=BacterialTyper.modules.qc.assembly_check)
 ##-------------------------------------------------------------##
 
+####################
+#### Annotation ####
+####################
 ##--------------------------- annotate ----------------------- ##
+subparser_annotate = subparsers.add_parser(
+    'annot',
+    help='Annotation for each sample.',
+    description='This module annotates contig/scaffold assemblies and generates protein, gff and other annotation information. Input must be fasta/fna assemblies.'
+)
+list_help_options_annot = ('--help_Prokka', '--help_BUSCO')
+in_out_group_annot = subparser_annotate.add_argument_group("Input/Output")
+in_out_group_annot.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File could be: fasta /.fna", required= not any(elem in list_help_options_annot for elem in sys.argv) )
+in_out_group_annot.add_argument("--output_folder", help="Output folder. By default a directory named annotation is generated under the current working directory", required= not any(elem in list_help_options_annot for elem in sys.argv) )
+in_out_group_annot.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+in_out_group_annot.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+in_out_group_annot.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+
+dataset_group_annot = subparser_annotate.add_argument_group("Datasets")
+dataset_group_annot.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in list_help_options_annot for elem in sys.argv) )
+dataset_group_annot.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
+dataset_group_annot.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", required= not any(elem in list_help_options_annot for elem in sys.argv) )
+dataset_group_annot.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
+
+prokka_group_annot = subparser_annotate.add_argument_group("Prokka Options")
+prokka_group_annot.add_argument("--help_Prokka", action="store_true", help="Prokkaryotic annotation help information.")
+
+options_group_annot = subparser_annotate.add_argument_group("Options")
+options_group_annot.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+options_group_annot.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+
+subparser_annotate.set_defaults(func=BacterialTyper.modules.annot.run)
 ##-------------------------------------------------------------##
+
 
 ########################
 #### Identification ####
@@ -235,7 +265,7 @@ subparser_assemblyQC.set_defaults(func=BacterialTyper.modules.qc.assembly_check)
 ##--------------------------- identification ------------------##
 subparser_ident = subparsers.add_parser(
     'ident',
-    help='Generates species identification for each sample.',
+    help='Species identification for each sample.',
     description='This module call ...',
 )
 initial_group = subparser_ident.add_argument_group("Input/Output")
@@ -270,7 +300,7 @@ subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run)
 ##--------------------------- profile ------------------------ ##
 subparser_profile = subparsers.add_parser(
     'profile',
-    help='Generates a sample profile for virulence and resistance gene candidates.',
+    help='Virulence & Resistance profile.',
     description='This module call ...',
 )
 initial_group_profile = subparser_profile.add_argument_group("Input/Output")
@@ -297,6 +327,33 @@ subparser_profile.set_defaults(func=BacterialTyper.modules.profile.run)
 
 ##-------------------------------------------------------------##
 
+##--------------------------- MGE ---------------------------- ##
+subparser_MGE = subparsers.add_parser(
+    'MGE',
+    help='Mobile Genetic Elements (MGE) analysis.',
+    description='This module calls ...',
+)
+initial_group_MGE = subparser_MGE.add_argument_group("Input/Output")
+initial_group_MGE.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File could be: fasta /.fna", required= '--help_PhiSpy' not in sys.argv)
+initial_group_MGE.add_argument("--output_folder", help="Output folder. By default a directory named MGE_analysis is generated under the current working directory", required= '--help_PhiSpy' not in sys.argv)
+initial_group_MGE.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths.")
+initial_group_MGE.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+initial_group_MGE.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+
+#initial_group_MGE.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=True)
+#initial_group_MGE.add_argument("--user_data", action="store_true", help="Use previously identified samples in user_data [Default OFF].")
+#initial_group_MGE.add_argument("--genbank_data", action="store_true", help="Use reference genomes from NCBI stored in database folder [Default OFF].")
+
+parameters_group_MGE = subparser_MGE.add_argument_group("Parameters")
+parameters_group_MGE.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+parameters_group_MGE.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+
+phispy_options = subparser_MGE.add_argument_group("PhiSpy options")
+phispy_options.add_argument("--help_PhiSpy", action="store_true", help="It prints further information for PhiSpy analysis. [Default: OFF]")
+
+subparser_MGE.set_defaults(func=BacterialTyper.modules.MGE.run)
+##-------------------------------------------------------------##
+
 
 ##--------------------------- MLST --------------------------- ##
 ##-------------------------------------------------------------##
@@ -313,7 +370,7 @@ subparser_profile.set_defaults(func=BacterialTyper.modules.profile.run)
 ##-------------------------- version ------------------------- ##
 subparser_version = subparsers.add_parser(
     'version',
-    help='Print the different packages versions and other softwares versions.',
+    help='Packages & software versions.',
     description='This code generates prints an index of version number for the different packages and other softwares employed here',
 )
 subparser_version.add_argument("option", help="Print only this pipeline version or all packages versions.", choices=['only','all'])
@@ -324,7 +381,7 @@ subparser_version.set_defaults(func=BacterialTyper.modules.version.run)
 ##--------------------------- citation ------------------------##
 subparser_citation = subparsers.add_parser(
     'citation',
-    help='Print an index of citations for the different packages and other softwares employed here.',
+    help='Packages & software citations.',
     description='This code generates prints an index of citation for the different packages and other softwares employed here',
 )
 subparser_citation.add_argument("option", help="Print only this pipeline citation or all packages references.", choices=['only','all'])

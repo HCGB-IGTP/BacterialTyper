@@ -11,6 +11,8 @@ __all__ = [
 	'run',
 	'test',
 	'profile',
+	'MGE',
+	'annot',
 	'version',
 	'citation'
 ]

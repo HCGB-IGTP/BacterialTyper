@@ -16,6 +16,8 @@ from io import open
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
+import PhiSpy
+from PhiSpy_tools import genbank_to_seed
 
 perlDir = os.path.dirname(os.path.realpath(__file__)) + '/other_tools/perl'
 sys.path.append(perlDir)
@@ -25,6 +27,10 @@ get_longContigs_script = perlDir + '/get-long-contigs.pl'
 def get_long_seqs(sequence_file, output_file):
 	cmd="perl %s %s %s > %s" %(get_longContigs_script, sequence_file, 2000, output_file)
 	return(functions.system_call(cmd))
+
+######
+def convert_Genbank2seed():
+	return()
 
 ######
 def help_options():
@@ -40,18 +46,22 @@ def main():
 		help_options()
 		exit()
 	
+	PhiSpy.print_list()	
+	genbank_to_seed.usage()
+
+	
 	## argv
-	seq_file = os.path.abspath(argv[1])
-	folder = os.path.abspath(argv[2])
-	name = argv[3]
-	threads = int(argv[4])
+	#seq_file = os.path.abspath(argv[1])
+	#folder = os.path.abspath(argv[2])
+	#name = argv[3]
+	#threads = int(argv[4])
 	
 	## call
-	print ("")
-	folder_name = functions.create_subfolder(folder, name)
-	get_long_seqs(seq_file, folder_name + '/tmp.fasta')	
+	#print ("")
+	#folder_name = functions.create_subfolder(folder, name)
+	#get_long_seqs(seq_file, folder_name + '/tmp.fasta')	
 	
-	print ("\n+ Annotation of putative phages for sample %s has been generated in folder: %s" %(name, dir_annot))
+	#print ("\n+ Annotation of putative phages for sample %s has been generated in folder: %s" %(name, dir_annot))
 
 ######
 '''******************************************'''

@@ -199,6 +199,49 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 		exit()
 	print (colored("\t" + str(number_samples) + " samples selected from the input provided...", 'yellow'))
 	return (df_samples)
+
+
+###############
+def select_assembly_samples (list_samples, samples_prefix, pair=True, exclude=False):
+    
+    #Get all files in the folder "path_to_samples"    
+	sample_list = []
+	for names in samples_prefix:
+		for path_fasta in list_samples:	
+			fasta = os.path.basename(path_fasta)
+			samplename_search = re.search(r"(%s).*" % names, fasta)
+			enter = ""
+			if samplename_search:
+				if (exclude): ## exclude==True
+					enter = False
+				else: ## exclude==True
+					enter = True
+			else:
+				if (exclude): ## exclude==True
+					enter = True
+				else: ## exclude==True
+					enter = False
+					
+			if enter:
+				if fastq.endswith('.fna'):
+					sample_list.append(path_fasta)
+				elif fastq.endswith('fasta'):
+					sample_list.append(path_fasta)
+				else:
+					print ("** ERROR: ", path_fasta, 'is a file that is neither in fasta or .fna format, so it is not included')
+
+	## discard duplicates if any
+	non_duplicate_samples = list(set(sample_list))	
+	discard_samples = []
+
+	## df_samples is a pandas dataframe containing info
+	#print (df_samples)	
+	number_samples = df_samples.index.size
+	if (number_samples == 0):
+		print (colored("\n**ERROR: No samples were retrieved. Check the input provided\n",'red'))
+		exit()
+	print (colored("\t" + str(number_samples) + " samples selected from the input provided...", 'yellow'))
+	return (df_samples)
 	
 
 ###############    

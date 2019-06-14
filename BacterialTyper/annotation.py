@@ -18,10 +18,17 @@ import pandas as pd
 from BacterialTyper import functions
 from BacterialTyper import config
 
+### print info prokka
+def print_list_prokka():
+	prokka_bin = config.get_exe('prokka')
+	cmd = prokka_bin + " --listdb"
+	functions.system_call(cmd)
+
 ######
 def module_call(sequence_fasta, kingdom, path, name, threads):
-	prokka_bin = config.EXECUTABLES['prokka']
-	prokka_call(prokka_bin, sequence_fasta, kingdom, path, name, threads)
+	prokka_bin = config.get_exe('prokka')
+	dirname = prokka_call(prokka_bin, sequence_fasta, kingdom, path, name, threads)
+	return(dirname)	
 
 ######
 def prokka_call(prokka_bin, sequence_fasta, kingdom, path, name, threads):
