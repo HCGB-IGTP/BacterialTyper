@@ -11,6 +11,7 @@ import os
 import sys
 from io import open
 import shutil
+import pandas as pd
 
 ## import my modules
 from BacterialTyper import sampleParser
@@ -28,11 +29,17 @@ def get_files(options, input_dir, mode):
 	if (options.batch):
 		if os.path.isfile(input_dir):
 			print ('+ Batch file provided exists')
-			dir_list = [line.rstrip('\n') for line in open(input_dir)]
-			for d in dir_list:
-				if os.path.exists(d):
-					print ('+ Folder (%s) exists' %d)
-					files = files + functions.get_fullpath_list(d)
+			if mode == "assembly":
+				## csv file containing sample name and file path
+				pd_samples_retrieved = pd.read_csv(input_dir, sep=',',header=None)
+				pd_samples_retrieved.columns = ["samples", "assembly"]
+				return(pd_samples_retrieved)
+			else:
+				dir_list = [line.rstrip('\n') for line in open(input_dir)]
+				for d in dir_list:
+					if os.path.exists(d):
+						print ('+ Folder (%s) exists' %d)
+						files = files + functions.get_fullpath_list(d)
 	else:
 		if os.path.exists(input_dir):
 			print ('+ Input folder exists')
@@ -61,7 +68,7 @@ def get_files(options, input_dir, mode):
 	if mode == "fastq":
 		pd_samples_retrieved = sampleParser.select_samples(files, samples_names, options.pair, exclude, merge)
 	elif mode == "assembly":
-		pd_samples_retrieved = sampleParser.select_assembly_samples(files, samples_names, options.pair, exclude, merge)
+		pd_samples_retrieved = sampleParser.select_assembly_samples(files, samples_names, exclude)
 		
 	return(pd_samples_retrieved)
 

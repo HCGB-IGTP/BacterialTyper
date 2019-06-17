@@ -139,9 +139,12 @@ def assembly_check(options):
 	print ("+ Quality control of all samples finished: ")
 	start_time_partial = functions.timestamp(start_time_partial_BUSCO)
 	
-	## generate plots
-	print ("+ Generate summarizing plots...")
-	BUSCO_plots(dataFrame_results, outdir, options.threads)	
+	if (options.skip_report):
+		print ("+ No report generation...")
+	else:
+		## generate plots
+		print ("+ Generate summarizing plots...")
+		BUSCO_plots(dataFrame_results, outdir, options.threads)	
 
 ################################################
 def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads, mode):

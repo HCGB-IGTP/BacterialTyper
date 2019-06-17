@@ -127,7 +127,7 @@ def check_sample_assembly(name, sample_folder, R1, R2, threads):
 	filename_stamp = sample_folder + '/.success'
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print ("\tA previous command generated results on: ", stamp)
+		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
 	else:
 		# Call spades_assembler
 		spades_assembler.run_module_SPADES(name, sample_folder, R1, R2, threads)

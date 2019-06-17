@@ -202,12 +202,12 @@ subparser_assemble.set_defaults(func=BacterialTyper.modules.assemble.run)
 subparser_assemblyQC = subparsers.add_parser(
     'assemblyQC',
     help='Assembly quality check: statistics & BUSCO.',
-    description='This module call...',
+    description='This module calls BUSCO for the quality check of assemblies previously generated.',
 )
 in_out_group_assembly_check = subparser_assemblyQC.add_argument_group("Input/Output")
-in_out_group_assembly_check.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= '--help_BUSCO' not in sys.argv)
+in_out_group_assembly_check.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'. If not, provide full path using --batch option", required= '--help_BUSCO' not in sys.argv)
 in_out_group_assembly_check.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required= '--help_BUSCO' not in sys.argv)
-in_out_group_assembly_check.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+in_out_group_assembly_check.add_argument("--batch", action="store_true", help="Provide this option if input is a csv file containing the name and the path for each assembly. E.g.: sample1,/path/to/sample1/assembly/file.fasta")
 in_out_group_assembly_check.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_assembly_check.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
@@ -235,9 +235,9 @@ subparser_annotate = subparsers.add_parser(
 )
 list_help_options_annot = ('--help_Prokka', '--help_BUSCO')
 in_out_group_annot = subparser_annotate.add_argument_group("Input/Output")
-in_out_group_annot.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File could be: fasta /.fna", required= not any(elem in list_help_options_annot for elem in sys.argv) )
+in_out_group_annot.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'. If not, provide full path using --batch option", required= not any(elem in list_help_options_annot for elem in sys.argv) )
 in_out_group_annot.add_argument("--output_folder", help="Output folder. By default a directory named annotation is generated under the current working directory", required= not any(elem in list_help_options_annot for elem in sys.argv) )
-in_out_group_annot.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+in_out_group_annot.add_argument("--batch", action="store_true", help="Provide this option if input is a csv file containing the name and the path for each assembly. E.g.: sample1,/path/to/sample1/assembly/file.fasta")
 in_out_group_annot.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_annot.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
@@ -249,6 +249,8 @@ dataset_group_annot.add_argument("--help_BUSCO", action="store_true", help="Benc
 
 prokka_group_annot = subparser_annotate.add_argument_group("Prokka Options")
 prokka_group_annot.add_argument("--help_Prokka", action="store_true", help="Prokkaryotic annotation help information.")
+prokka_group_annot.add_argument("--kingdom", help="Select a kingdom fitting your samples.", choices=['Archaea','Bacteria','Mitochondria','Viruses'], required= not any(elem in list_help_options_annot for elem in sys.argv) )
+prokka_group_annot.add_argument("--genera", help="Select a genera fitting your samples.", choices=['Enterococcus','Escherichia','Staphylococcus', 'Other'])
 
 options_group_annot = subparser_annotate.add_argument_group("Options")
 options_group_annot.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
@@ -334,9 +336,9 @@ subparser_MGE = subparsers.add_parser(
     description='This module calls ...',
 )
 initial_group_MGE = subparser_MGE.add_argument_group("Input/Output")
-initial_group_MGE.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File could be: fasta /.fna", required= '--help_PhiSpy' not in sys.argv)
+initial_group_MGE.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'. If not, provide full path using --batch option", required= '--help_PhiSpy' not in sys.argv)
 initial_group_MGE.add_argument("--output_folder", help="Output folder. By default a directory named MGE_analysis is generated under the current working directory", required= '--help_PhiSpy' not in sys.argv)
-initial_group_MGE.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths.")
+initial_group_MGE.add_argument("--batch", action="store_true", help="Provide this option if input is a csv file containing the name and the path for each assembly. E.g.: sample1,/path/to/sample1/assembly/file.fasta")
 initial_group_MGE.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_MGE.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 

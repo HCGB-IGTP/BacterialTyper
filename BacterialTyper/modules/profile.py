@@ -226,7 +226,7 @@ def ariba_run_caller(db2use, list_files, folder_out, threads):
 	filename_stamp = folder_out + '/.success'
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print ("\tA previous command generated results on: ", stamp)
+		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
 	else:
 		if os.path.exists(folder_out):
 			shutil.rmtree(folder_out)

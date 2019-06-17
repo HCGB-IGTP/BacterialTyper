@@ -202,7 +202,7 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 
 
 ###############
-def select_assembly_samples (list_samples, samples_prefix, pair=True, exclude=False):
+def select_assembly_samples (list_samples, samples_prefix, exclude=False):
     
     #Get all files in the folder "path_to_samples"    
 	sample_list = []
@@ -223,24 +223,44 @@ def select_assembly_samples (list_samples, samples_prefix, pair=True, exclude=Fa
 					enter = False
 					
 			if enter:
-				if fastq.endswith('.fna'):
-					sample_list.append(path_fasta)
-				elif fastq.endswith('fasta'):
-					sample_list.append(path_fasta)
-				else:
-					print ("** ERROR: ", path_fasta, 'is a file that is neither in fasta or .fna format, so it is not included')
+				if fasta.endswith('.fna'):
+					if fasta.endswith('_chromosome.fna'):
+						sample_list.append(path_fasta)
+					#else:
+					#	print ("** Attention: ", path_fasta, 'is a file that is in fasta or .fna format but does not contain the tag "_chromosome.fna/.fasta", so it is not included')
+				elif fasta.endswith('.fasta'):
+					if fasta.endswith('_chromosome.fasta'):
+						sample_list.append(path_fasta)
+					#else:
+					#	print ("** Attention: ", path_fasta, 'is a file that is in fasta or .fna format but does not contain the tag "_chromosome.fna/.fasta", so it is not included')
 
+				else:
+					continue
+					
+				
 	## discard duplicates if any
 	non_duplicate_samples = list(set(sample_list))	
 	discard_samples = []
 
-	## df_samples is a pandas dataframe containing info
-	#print (df_samples)	
+	## initiate dataframe
+	name_columns = ("samples", "assembly")
+
+	## initiate dataframe
+	df_samples = pd.DataFrame(columns=name_columns)
+
+	## iterate list
+	for assembly_file in non_duplicate_samples:
+		assembly_name = os.path.basename(assembly_file)
+		file_name = assembly_name.split("_chromosome")[0]
+		df_samples.loc[len(df_samples)] = [file_name, assembly_file]
+
+	#print (non_duplicate_samples)
 	number_samples = df_samples.index.size
 	if (number_samples == 0):
 		print (colored("\n**ERROR: No samples were retrieved. Check the input provided\n",'red'))
 		exit()
 	print (colored("\t" + str(number_samples) + " samples selected from the input provided...", 'yellow'))
+
 	return (df_samples)
 	
 

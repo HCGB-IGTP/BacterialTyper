@@ -21,7 +21,6 @@ from BacterialTyper import config
 from BacterialTyper import annotation
 from BacterialTyper import BUSCO_caller
 from BacterialTyper.modules import qc
-
 from BacterialTyper.modules import sample_prepare
 
 ####################################
@@ -63,22 +62,42 @@ def run(options):
 
 	### time stamp
 	start_time_partial = start_time_total
-	start_time_partial_assembly = start_time_partial
 	
 	### symbolic links
 	print ("+ Retrieve all genomes assembled...")
 	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "assembly")
-	
-	print (pd_samples_retrieved)
-	exit()
-	
+
 	## annotate
-	my_dir_annot = {}
-	for assemblies in my_assembly_list:
-		sample_dir = outdir + '/sample'
-		name = 'sample'
-		dir_annot = annotation.module_call(sequence_fasta, options.kingdom, sample_dir, name, options.threads)	
-		my_dir_annot[name] = dir_annot
+	print ("+ Annotate assemblies using prokka:")
+	print ("\t-Option: kingdom = ", options.kingdom,"; Annotation mode")
+	if options.genera == 'Other':
+		print ("\t-Option: genera = Off; No genus-specific BLAST databases option provided")
+	else:
+		print ("\t-Option: genera = ", options.genera,"; Genus-specific BLAST databases option provided")
+
+	print ("\t-Option: addgenes; Add 'gene' features for each 'CDS' feature")
+	print ("\t-Option: addmrna;  Add 'mRNA' features for each 'CDS' feature")
+	print ("\t-Option: cdsrnaolap;  Allow [tr]RNA to overlap CDS")
+
+	## optimize threads
+	threads_module = functions.optimize_threads(options.threads, pd_samples_retrieved.index.size)
+
+	## send for each sample
+	with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
+		commandsSent = { executor.submit(annotation.module_call, row['assembly'], options.kingdom, options.genera, outdir + '/' + row['samples'], row['samples'] , threads_module): index for index, row in pd_samples_retrieved.iterrows() }
+		for cmd2 in concurrent.futures.as_completed(commandsSent):
+			details = commandsSent[cmd2]
+			try:
+				data = cmd2.result()
+			except Exception as exc:
+				print ('***ERROR:')
+				print (cmd2)
+				print('%r generated an exception: %s' % (details, exc))
+
+	## time stamp
+	start_time_partial = functions.timestamp(start_time_total)
+	
+	exit()
 	
 	## Check each annotation using BUSCO
 	functions.boxymcboxface("BUSCO Annotation Quality check")
@@ -91,9 +110,13 @@ def run(options):
 	print ("+ Quality control of all samples finished: ")
 	start_time_partial = functions.timestamp(start_time_partial_BUSCO)
 	
-	## generate plots
-	print ("+ Generate summarizing plots...")
-	qc.BUSCO_plots(dataFrame_results, outdir, options.threads)	
+	## summarize
+	if (options.skip_report):
+		print ("+ No report generation...")
+	else:
+		## generate plots
+		print ("+ Generate summarizing plots...")
+		qc.BUSCO_plots(dataFrame_results, outdir, options.threads)	
 	
 	## multiqc report plot
 	## busco plot of samples or datasets per sample
@@ -103,4 +126,4 @@ def run(options):
 
 	print ("+ Exiting Assembly module.")
 	exit()
-		
+

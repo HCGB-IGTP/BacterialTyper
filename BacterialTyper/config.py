@@ -43,6 +43,7 @@ def prog_to_default():
 		'spades' : 'spades.py',
 		'tblastn':'tblastn',
 		'trimmomatic':'trimmomatic.jar'
+		
 	}
 	return(program_to_default)
 

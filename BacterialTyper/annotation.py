@@ -13,6 +13,7 @@ import sys
 from sys import argv
 from io import open
 import pandas as pd
+from termcolor import colored
 
 ## import my modules
 from BacterialTyper import functions
@@ -25,18 +26,35 @@ def print_list_prokka():
 	functions.system_call(cmd)
 
 ######
-def module_call(sequence_fasta, kingdom, path, name, threads):
+def module_call(sequence_fasta, kingdom, genus, path, name, threads):
+	## check if previously assembled and succeeded
+	filename_stamp = path + '/.success'
+
+	if os.path.isdir(path):
+		if os.path.isfile(filename_stamp):
+			stamp =	functions.read_time_stamp(filename_stamp)
+			print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+			return ()
+	
+	## call prokka
 	prokka_bin = config.get_exe('prokka')
-	dirname = prokka_call(prokka_bin, sequence_fasta, kingdom, path, name, threads)
+	dirname = prokka_call(prokka_bin, sequence_fasta, kingdom, genus, path, name, threads)
+
+	## success stamps
+	filename_stamp = path + '/.success'
+	stamp =	functions.print_time_stamp(filename_stamp)
+
 	return(dirname)	
 
 ######
-def prokka_call(prokka_bin, sequence_fasta, kingdom, path, name, threads):
+def prokka_call(prokka_bin, sequence_fasta, kingdom, genus, outdir_name, name, threads):
 	## set parameters and options for prokka
 	print ("\n+ Starting annotation for: %s\n" %name)
-	outdir_name = path + '/' + name
-	log_file = path + '/' + name + '.log'
-	prokka = "%s --outdir %s --prefix %s --locustag %s --addgenes --addmrna --kingdom %s --cdsrnaolap --cpus %s %s 2> %s" %(prokka_bin, outdir_name, name, name, kingdom, threads, sequence_fasta, log_file)
+	log_file = outdir_name + '.log'
+	options = "--cdsrnaolap --addgenes --addmrna --kingdom " + kingdom
+	if genus != "Other":
+		options = options + " --usegenus --genus " + genus
+	prokka = "%s --outdir %s --prefix %s --locustag %s %s --cpus %s %s 2> %s" %(prokka_bin, outdir_name, name, name, options, threads, sequence_fasta, log_file)
 	functions.system_call(prokka)
 	return(outdir_name)
 
