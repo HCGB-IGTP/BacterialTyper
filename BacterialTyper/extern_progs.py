@@ -44,6 +44,7 @@ prog_to_version_cmd = {
 	'Rscript':('--version', re.compile('.*version\s([0-9\.]+).*')),
 	'spades': ('--version', re.compile('SPAdes\s+v([0-9\.]+)')),
 	'tblastn':('-version', re.compile('tblastn:\s([0-9\.]+)')),
+	'multiqc':('--version', re.compile('multiqc, version\s([0-9\.]+)')),
 	'trimmomatic':('-version', re.compile('([0-9\.]+)'))
 }
 

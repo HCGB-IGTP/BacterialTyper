@@ -21,6 +21,7 @@ from BacterialTyper import config
 from BacterialTyper import annotation
 from BacterialTyper import BUSCO_caller
 from BacterialTyper.modules import qc
+from BacterialTyper import multiQC_report
 from BacterialTyper.modules import sample_prepare
 
 ####################################
@@ -96,15 +97,54 @@ def run(options):
 
 	## time stamp
 	start_time_partial = functions.timestamp(start_time_total)
-	
-	exit()
-	
+
+	## retrieve information
+	givenList = []
+	protein_files = []
+	print ("+ Detail information for each sample could be identified in separate folders:")
+	for index, row in pd_samples_retrieved.iterrows():
+		fold_sample = outdir + '/' + row['samples'] + '/'
+		givenList.append(fold_sample)
+		protein_files.extend(functions.retrieve_files(fold_sample, '.faa'))
+		print ('\t- %s' %fold_sample)	
+
+	### report generation
+	if (options.skip_report):
+		print ("+ No annotation report generation...")
+	else:
+		### report generation
+		functions.boxymcboxface("Annotation report")
+
+		outdir_report = functions.create_subfolder("report", outdir)
+		
+		## check if previously report generated
+		filename_stamp = outdir_report + '/.success'
+		done=0
+		if os.path.isdir(outdir_report):
+			if os.path.isfile(filename_stamp):
+				stamp =	functions.read_time_stamp(filename_stamp)
+				print (colored("\tA previous report generated results on: %s" %stamp, 'yellow'))
+				done=1
+		
+		## generate report
+		if done==0:
+			## get subdirs generated and call multiQC report module
+			multiQC_report.multiQC_module_call(givenList, "Prokka", outdir_report, "-dd 1")
+			print ('\n+ A summary HTML report of each sample is generated in folder: %s' %outdir_report)
+		
+			## success stamps
+			filename_stamp = outdir_report + '/.success'
+			stamp =	functions.print_time_stamp(filename_stamp)
+
+	## time stamp
+	start_time_partial_BUSCO = functions.timestamp(start_time_total)
+
 	## Check each annotation using BUSCO
 	functions.boxymcboxface("BUSCO Annotation Quality check")
 	database_folder = os.path.abspath(options.database)
 	outdir_BUSCO = functions.create_subfolder("BUSCO", outdir)
 	BUSCO_Database = database_folder + '/BUSCO'
-	dataFrame_results = qc.BUSCO_call(options.BUSCO_dbs, my_dir_annot, BUSCO_Database, outdir_BUSCO, options.threads, "protein")
+	dataFrame_results = qc.BUSCO_call(options.BUSCO_dbs, protein_files, BUSCO_Database, outdir_BUSCO, options.threads, "proteins")
 	
 	## functions.timestamp
 	print ("+ Quality control of all samples finished: ")
@@ -124,6 +164,6 @@ def run(options):
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)
 
-	print ("+ Exiting Assembly module.")
+	print ("+ Exiting Annotation module.")
 	exit()
 

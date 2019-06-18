@@ -42,6 +42,7 @@ def prog_to_default():
 		'Rscript':'Rscript',
 		'spades' : 'spades.py',
 		'tblastn':'tblastn',
+		'multiqc':'multiqc',
 		'trimmomatic':'trimmomatic.jar'
 		
 	}
@@ -69,6 +70,7 @@ def min_version_programs():
 		'spades':'3.9.0',		
 		'tblastn':'2.5',
 		'trimmomatic':'0.36',
+		'multiqc':'1.7',
 		##
 		'python':'3.5'
 	}

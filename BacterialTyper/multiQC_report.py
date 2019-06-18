@@ -15,19 +15,19 @@ from sys import argv
 from BacterialTyper import functions
 from BacterialTyper import config
 
-###
-def multiQC_module_call(givenList, name, path):
+############
+def multiQC_module_call(givenList, name, path, option):
 	pathFile = list2file(givenList, path)
-	multiQC_call(pathFile, name, path)	
+	multiQC_call(pathFile, name, path, option)	
 	
-####
-def multiQC_call(pathFile, name, folder):
+############
+def multiQC_call(pathFile, name, folder, option):
 	multiqc_bin = "multiqc" ## if we activate the environment it should be in $PATH
 	## set options for call
-	cmd = "%s -o %s -n %s -l %s -p -i 'MultiQC report' -b 'HTML report generated for multiple samples and steps'" %(multiqc_bin, folder, name, pathFile)
+	cmd = "%s -o %s -n %s -l %s -p -i 'MultiQC report' -b 'HTML report generated for multiple samples and steps' %s" %(multiqc_bin, folder, name, pathFile, option)
 	return(functions.system_call(cmd))
 
-####
+############
 def list2file(givenList, path):
 	# generate a txt file containing information for 
 	name = path + '/' + 'samples.txt'
@@ -36,12 +36,12 @@ def list2file(givenList, path):
 	outfile.close()
 	return(name)
 
-######
+############
 def	help_options():
 	print ("\nUSAGE:\npython %s folder sample_list name\n"  %os.path.abspath(argv[0]))
 
 
-######
+############
 def main():
   	## control if options provided or help
 	if len(sys.argv) > 1:
@@ -58,8 +58,7 @@ def main():
 	## call
 	multiQC_call(samples_path, name, folder_name)
 		
-######
-
+############
 '''******************************************'''
 if __name__== "__main__":
 	main()

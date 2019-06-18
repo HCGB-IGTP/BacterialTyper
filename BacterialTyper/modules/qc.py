@@ -153,6 +153,9 @@ def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads, mode)
 	print ("+ Check folder provided as database for available BUSCO datasets...")
 	BUSCO_datasets = BUSCO_caller.BUSCO_retrieve_sets(datasets, database_folder)
 	
+	
+	print (list_scaffolds)
+	
 	## optimize threads
 	threads_module = functions.optimize_threads(threads, len(list_scaffolds))
 
@@ -188,10 +191,10 @@ def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads, mode)
 		for sample in list_scaffolds:
 			file_name = os.path.basename(sample)
 			sample_name =""
-			if file_name.endswith('_chromosome.fna'):
+			if file_name.endswith('_chromosome.fna'): ## mode genome
 				sample_name = file_name.split('_chromosome.fna')[0]
 			else: 
-				sample_name = file_name.split('.faa')[0]
+				sample_name = file_name.split('.faa')[0] ## mode proteins
 		
 			my_BUSCO_results_folder = output + '/' + sample_name + '/run_' + DataSet
 			my_short_tsv = 	my_BUSCO_results_folder + '/short_summary_' + DataSet + '.txt'
@@ -206,9 +209,9 @@ def BUSCO_runner(DataSet, sample, dataset_path, output, threads_module, mode):
 	file_name = os.path.basename(sample)
 	sample_name =""
 	if file_name.endswith('_chromosome.fna'):
-		sample_name = file_name.split('_chromosome.fna')[0]
+		sample_name = file_name.split('_chromosome.fna')[0] ## mode genome
 	else: 
-		sample_name = file_name.split('.faa')[0]
+		sample_name = file_name.split('.faa')[0] ## mode proteins
 
 	sample_name_dir = functions.create_subfolder(sample_name, output)
 
