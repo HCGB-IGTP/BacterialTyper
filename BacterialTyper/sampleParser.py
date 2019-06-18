@@ -202,14 +202,16 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 
 
 ###############
-def select_assembly_samples (list_samples, samples_prefix, exclude=False):
-    
+def select_other_samples (list_samples, samples_prefix, mode, extensions, exclude=False):
+
+	#print (list_samples, samples_prefix, mode, extensions)
+
     #Get all files in the folder "path_to_samples"    
 	sample_list = []
 	for names in samples_prefix:
-		for path_fasta in list_samples:	
-			fasta = os.path.basename(path_fasta)
-			samplename_search = re.search(r"(%s).*" % names, fasta)
+		for path_file in list_samples:	
+			f = os.path.basename(path_file)
+			samplename_search = re.search(r"(%s).*" % names, f)
 			enter = ""
 			if samplename_search:
 				if (exclude): ## exclude==True
@@ -223,36 +225,35 @@ def select_assembly_samples (list_samples, samples_prefix, exclude=False):
 					enter = False
 					
 			if enter:
-				if fasta.endswith('.fna'):
-					if fasta.endswith('_chromosome.fna'):
-						sample_list.append(path_fasta)
-					#else:
-					#	print ("** Attention: ", path_fasta, 'is a file that is in fasta or .fna format but does not contain the tag "_chromosome.fna/.fasta", so it is not included')
-				elif fasta.endswith('.fasta'):
-					if fasta.endswith('_chromosome.fasta'):
-						sample_list.append(path_fasta)
-					#else:
-					#	print ("** Attention: ", path_fasta, 'is a file that is in fasta or .fna format but does not contain the tag "_chromosome.fna/.fasta", so it is not included')
-
+				if mode == 'annotation':
+					if f.endswith(extensions):
+						sample_list.append(path_file)
 				else:
-					continue
+					if mode + '.' in f:
+						if f.endswith(extensions):
+							sample_list.append(path_file)
 					
-				
 	## discard duplicates if any
 	non_duplicate_samples = list(set(sample_list))	
 	discard_samples = []
 
 	## initiate dataframe
-	name_columns = ("samples", "assembly")
+	name_columns = ("samples", "tag", "file")
 
 	## initiate dataframe
 	df_samples = pd.DataFrame(columns=name_columns)
 
 	## iterate list
-	for assembly_file in non_duplicate_samples:
-		assembly_name = os.path.basename(assembly_file)
-		file_name = assembly_name.split("_chromosome")[0]
-		df_samples.loc[len(df_samples)] = [file_name, assembly_file]
+	for a_file in non_duplicate_samples:
+		a_name = os.path.basename(a_file)
+
+		if mode == 'annotation':
+			file_name, ext = os.path.splitext(a_name)
+			df_samples.loc[len(df_samples)] = [file_name, ext.split(".")[1], a_file]
+	
+		else:
+			file_name = a_name.split("_" + mode)[0]
+			df_samples.loc[len(df_samples)] = [file_name, mode, a_file]
 
 	#print (non_duplicate_samples)
 	number_samples = df_samples.index.size

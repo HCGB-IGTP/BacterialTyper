@@ -66,7 +66,14 @@ def run(options):
 	
 	### symbolic links
 	print ("+ Retrieve all genomes assembled...")
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "assembly")
+	
+	### batch provided
+	if options.batch:
+		## csv file containing sample name and file path
+		pd_samples_retrieved = pd.read_csv(options.batch, sep=',',header=None)
+		pd_samples_retrieved.columns = ["samples", "assembly"]
+	else:
+		pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "chromosome", ('.fna', '.fasta'))
 
 	## annotate
 	print ("+ Annotate assemblies using prokka:")

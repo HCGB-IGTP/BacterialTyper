@@ -153,9 +153,6 @@ def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads, mode)
 	print ("+ Check folder provided as database for available BUSCO datasets...")
 	BUSCO_datasets = BUSCO_caller.BUSCO_retrieve_sets(datasets, database_folder)
 	
-	
-	print (list_scaffolds)
-	
 	## optimize threads
 	threads_module = functions.optimize_threads(threads, len(list_scaffolds))
 
@@ -184,6 +181,7 @@ def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads, mode)
 	print ("Finish here...")
 	os.chdir(path_here)
 	
+	## init dataframe
 	short_summary = pd.DataFrame(columns=('Sample', 'Dataset', 'Summary File', 'Folder'))
 
 	## generate report

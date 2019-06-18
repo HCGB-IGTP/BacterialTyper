@@ -237,7 +237,7 @@ list_help_options_annot = ('--help_Prokka', '--help_BUSCO')
 in_out_group_annot = subparser_annotate.add_argument_group("Input/Output")
 in_out_group_annot.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'. If not, provide full path using --batch option", required= not any(elem in list_help_options_annot for elem in sys.argv) )
 in_out_group_annot.add_argument("--output_folder", help="Output folder. By default a directory named annotation is generated under the current working directory", required= not any(elem in list_help_options_annot for elem in sys.argv) )
-in_out_group_annot.add_argument("--batch", action="store_true", help="Provide this option if input is a csv file containing the name and the path for each assembly. E.g.: sample1,/path/to/sample1/assembly/file.fasta")
+in_out_group_annot.add_argument("--batch", help="Provide a csv file containing the name and the path for each assembly. No header. E.g.: sample1,/path/to/sample1/assembly/file.fasta")
 in_out_group_annot.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_annot.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
@@ -335,10 +335,13 @@ subparser_MGE = subparsers.add_parser(
     help='Mobile Genetic Elements (MGE) analysis.',
     description='This module calls ...',
 )
+list_help_options_MGE = ('--batch', '--help_PhiSpy', '--input_assemblies', '--input_plasmids', '--input_annotations')
 initial_group_MGE = subparser_MGE.add_argument_group("Input/Output")
-initial_group_MGE.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'. If not, provide full path using --batch option", required= '--help_PhiSpy' not in sys.argv)
+initial_group_MGE.add_argument("--input_assemblies", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'.\nIf not, provide full path using --batch option", required= not any(elem in list_help_options_MGE for elem in sys.argv) )
+initial_group_MGE.add_argument("--input_plasmids", help="Folder containing plasmid assemblies. Plasmid Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_plasmid(.fasta/.fna)'.\nIf not, provide full path using --batch option", required= not any(elem in list_help_options_MGE for elem in sys.argv) )
+initial_group_MGE.add_argument("--input_annotations", help="Folder containing annotation information for each assembly. GBF, GFF and faa files could be within a project folder or in the input folder. File must end with tag '.gff' and '.faa'.\nIf not, provide full path using --batch option",required= not any(elem in list_help_options_MGE for elem in sys.argv) )
 initial_group_MGE.add_argument("--output_folder", help="Output folder. By default a directory named MGE_analysis is generated under the current working directory", required= '--help_PhiSpy' not in sys.argv)
-initial_group_MGE.add_argument("--batch", action="store_true", help="Provide this option if input is a csv file containing the name and the path for each assembly. E.g.: sample1,/path/to/sample1/assembly/file.fasta")
+initial_group_MGE.add_argument("--batch", help="Provide a csv file containing the sample name, the type of file and the path for each file. No header. Provide as type of file: protein, gff or plasmid. E.g.: sample1,gff,/path/to/sample1/annotation/file.gff\nsample1,protein,/path/to/sample1/annotation/file.faa\nsample1,plasmid,/path/sample1/plasmid.fasta\nsample2,gff,/path/to/sample2/annotation/file.gff\nsample2,protein,/path/to/sample2/annotation/file.faa\nsample2,plasmid,/path/sample2/plasmid.fasta\n", required= not any(elem in list_help_options_MGE for elem in sys.argv) )
 initial_group_MGE.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_MGE.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
