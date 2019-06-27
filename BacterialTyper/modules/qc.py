@@ -47,7 +47,7 @@ def fastqc(options):
 	outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq")
+	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", "fastq")
 	## generate output folder
 	functions.create_folder(outdir)
 
@@ -71,7 +71,7 @@ def fastqc(options):
 					print (cmd2)
 					print('%r generated an exception: %s' % (details, exc))
 	else:
-		print ('+ No implementation yet. Sorry.')
+		print ('+ No implementation yet for single-end. Sorry.')
 		exit()
 
 	print ("+ FASTQC for samples has finished...")
@@ -90,7 +90,7 @@ def fastqc(options):
 			givenList.append(fold_sample)
 			print ('\t- %s' %fold_sample)	
 		outdir_report = functions.create_subfolder("report", outdir)
-		multiQC_report.multiQC_module_call(givenList, "FASTQC", outdir_report)
+		multiQC_report.multiQC_module_call(givenList, "FASTQC", outdir_report, "")
 
 		print ('\n+ A summary HTML report of each sample is generated in folder: %s' %outdir_report)
 

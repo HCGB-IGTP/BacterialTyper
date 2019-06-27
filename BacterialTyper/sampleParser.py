@@ -82,7 +82,7 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 				if (lane_search):
 					name_search = re.search(r"(.*)\_(L\d+)\_(R1|R2)\_(\d+)(\.f.*q)(\..*){0,1}", files)
 				else:
-					name_search = re.search(r"(.*)(\_1|_2)(\.f.*q)(\..*){0,1}", files)
+					name_search = re.search(r"(.*)\_(R1|1|R2|2)(\.f.*q)(\..*){0,1}", files)
 		else:
 			name_search = re.search(r"(.*)(\.f.*q)(\..*){0,1}", files)
 		
@@ -117,6 +117,8 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 			
 			#print (file_name)
 			#print (read_pair)
+			#print (ext)
+			#print (gz)
 
 			if (pair):
 				## get second pair
@@ -131,6 +133,8 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 						paired = dirN + '/' + file_name + '_trim_R1' + ext
 						R2_paired=False
 				else:
+				
+					#print (read_pair + ext + gz + '\n')
 					## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
 					if (lane_search):
 						if (read_pair == 'R1'):
@@ -140,13 +144,19 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 							paired = dirN + '/' + file_name + '_' + lane_id + '_R1_' + lane_file + ext
 							R2_paired=False
 					else:
-						if (read_pair == '_1'):
+						if (read_pair == '1'):
 							paired = dirN + '/' + file_name + '_2' + ext
+							R2_paired=True
+						elif (read_pair == 'R1'):
+							paired = dirN + '/' + file_name + '_R2' + ext
+							R2_paired=True
+						elif (read_pair == 'R2'):
+							paired = dirN + '/' + file_name + '_R1' + ext
 							R2_paired=True
 						else:
 							paired = dirN + '/' + file_name + '_1' + ext
 							R2_paired=False
-			
+		
 			found.append(file_name) ## save retrieved samples
 			
 			## if gunzipped
