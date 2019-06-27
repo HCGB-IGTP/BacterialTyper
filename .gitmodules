@@ -1,6 +1,6 @@
 [submodule "third_party/PhiSpy"]
 	path = third_party/PhiSpy
 	url = https://github.com/JFsanchezherrero/PhiSpy.git
-[submodule "third_party/IslandPath"]
+[submodule "third_party/IslandPath-DIMOB"]
 	path = third_party/IslandPath-DIMOB
 	url = https://github.com/JFsanchezherrero/islandpath
