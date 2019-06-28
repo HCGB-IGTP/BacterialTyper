@@ -10,7 +10,6 @@ import io
 import os
 import re
 import sys
-from io import open
 import concurrent.futures
 from termcolor import colored
 import pandas as pd

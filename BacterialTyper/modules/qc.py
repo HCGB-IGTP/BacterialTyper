@@ -149,6 +149,8 @@ def assembly_check(options):
 ################################################
 def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads, mode):
 
+	## mode= proteins|genome
+
 	## get datasets
 	print ("+ Check folder provided as database for available BUSCO datasets...")
 	BUSCO_datasets = BUSCO_caller.BUSCO_retrieve_sets(datasets, database_folder)

@@ -10,8 +10,8 @@ import io
 import os
 import re
 import sys
-from io import open
 import concurrent.futures
+from termcolor import colored
 
 ## import my modules
 from BacterialTyper import functions
@@ -102,7 +102,7 @@ def run(options):
 	database_folder = os.path.abspath(options.database)
 	outdir_BUSCO = functions.create_subfolder("BUSCO", outdir)
 	BUSCO_Database = database_folder + '/BUSCO'
-	dataFrame_results = qc.BUSCO_call(options.BUSCO_dbs, my_assembly_list, BUSCO_Database, outdir_BUSCO, options.threads)
+	dataFrame_results = qc.BUSCO_call(options.BUSCO_dbs, my_assembly_list, BUSCO_Database, outdir_BUSCO, options.threads, "genome")
 	
 	## functions.timestamp
 	print ("+ Quality control of all samples finished: ")
