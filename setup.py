@@ -4,13 +4,15 @@ import sys
 import glob
 from setuptools import setup, find_packages, Extension
 
-
+### subdmodules
 PhiSpy_files = [os.path.join('third_party', 'PhiSpy', x) for x in PhiSpy_files]
 PhiSpy_mod = Extension(
     "PhiSpy",
     PhiSpy_files,
     include_dirs=[os.path.join('third_party', 'PhiSpy')],
 )
+
+### add islandpath
 
 setup(
 	ext_modules=[PhiSpy_mod],
