@@ -32,6 +32,12 @@ def run(options):
 		Debug = True
 	else:
 		Debug = False
+		
+	### set as default paired_end mode
+	if (options.single_end):
+		options.pair = False
+	else:
+		options.pair = True
 	
 	functions.pipeline_header()
 	functions.boxymcboxface("Trimming samples")
@@ -59,33 +65,21 @@ def run(options):
 	
 	print ("+ Trimming adapters for each sample retrieved...")	
 	
-	if (options.pair):
-		# We can use a with statement to ensure threads are cleaned up promptly
-		with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
-			commandsSent = { executor.submit(trimmomatic_call.trimmo_module, row['R1'], row['R2'], outdir, row['samples'], threads_module, Debug, options.adapters): index for index, row in pd_samples_retrieved.iterrows() }
-			for cmd2 in concurrent.futures.as_completed(commandsSent):
-				details = commandsSent[cmd2]
-				try:
-					data = cmd2.result()
-				except Exception as exc:
-					print ('***ERROR:')
-					print (cmd2)
-					print('%r generated an exception: %s' % (details, exc))
+	# Group dataframe by sample name
+	sample_frame = pd_samples_retrieved.groupby(["name"])
 	
-	else:
-		## single end
-		# We can use a with statement to ensure threads are cleaned up promptly
-		with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
-			commandsSent = { executor.submit(trimmomatic_call.trimmo_module, row['read'], 'na', outdir, row['samples'], threads_module, Debug): index for index, row in pd_samples_retrieved.iterrows() }
-			for cmd2 in concurrent.futures.as_completed(commandsSent):
-				details = commandsSent[cmd2]
-				try:
-					data = cmd2.result()
-				except Exception as exc:
-					print ('***ERROR:')
-					print (cmd2)
-					print('%r generated an exception: %s' % (details, exc))
+	# We can use a with statement to ensure threads are cleaned up promptly
+	with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
+		commandsSent = { executor.submit(trimmomatic_call.trimmo_module, cluster["sample"].tolist(), outdir, name, threads_module, Debug, options.adapters): name for name, cluster in sample_frame }
 
+		for cmd2 in concurrent.futures.as_completed(commandsSent):
+			details = commandsSent[cmd2]
+			try:
+				data = cmd2.result()
+			except Exception as exc:
+				print ('***ERROR:')
+				print (cmd2)
+				print('%r generated an exception: %s' % (details, exc))
 
 	print ("\n\n+ Trimming samples has finished...")
 	## functions.timestamp

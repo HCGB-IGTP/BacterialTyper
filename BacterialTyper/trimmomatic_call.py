@@ -24,9 +24,10 @@ def	help_options():
 	print ("\n*** If not paired-end provide 'na' for file_R2")
 
 ######	
-def trimmo_module(file_R1, file_R2, path_name, sample_name, threads, Debug, trimmomatic_adapters):
+def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_adapters):
 	
-	trimmomatic_jar = "/software/debian-8/bio/trimmomatic-0.36/trimmomatic.jar" #config.EXECUTABLES['trimmomatic'] ## check if it works
+	#trimmomatic_jar = "/software/debian-8/bio/trimmomatic-0.36/trimmomatic.jar" #config.EXECUTABLES['trimmomatic'] ## check if it works
+	trimmomatic_jar = config.get_exe('trimmomatic')
 	
 	## check if it exists
 	#trimmomatic_adapters = config.DATA['trimmomatic_adapters']
@@ -41,16 +42,14 @@ def trimmo_module(file_R1, file_R2, path_name, sample_name, threads, Debug, trim
 		exit()
 	
 	## call
-	return(trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threads, trimmomatic_adapters, Debug))
+	return(trimmo_call(path_name, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug))
 
 ######
-def trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
+def trimmo_call(path_name, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
 	
 	##
 	java_path = config.get_exe('java')
-	
-	## if not paired-end file provide for file_R2: "na"
-	
+
 	## debug message
 	if (Debug):
 		print (colored("+ Cutting adapters for sample: " + sample_name, 'yellow'))
@@ -63,26 +62,33 @@ def trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threa
 	log_file = sample_folder + '/' + sample_name + '.log'
 	trimmo_log = path_name + '/' + sample_name + '.log'
 	
+	file_R1 = ""
+	file_R2 = ""
 	trim_R1 = ""
 	orphan_R1 = ""
 	trim_R2 = ""
 	orphan_R2 = ""
-	
-	if (file_R2 == "na"):
-		trim_R1 = sample_folder + '/' + sample_name + '_trim.fastq'
-	else:
+
+	## Paired or single end
+	if (len(files) == 2):
+		file_R1 = files[0]
+		file_R2 = files[1]
+
 		#print ('\t-', file_R2)
 		trim_R1 = sample_folder + '/' + sample_name + '_trim_R1.fastq'
 		orphan_R1 = sample_folder + '/' + sample_name + '_orphan_R1.fastq'
 		trim_R2 = sample_folder + '/' + sample_name + '_trim_R2.fastq'
 		orphan_R2 = sample_folder + '/' + sample_name + '_orphan_R2.fastq'
-	
+	else:
+		file_R1 = files[0]
+		trim_R1 = sample_folder + '/' + sample_name + '_trim.fastq'
+
 	## set command
 	cmd = ""	
-	if (file_R2 == "na"):
-		cmd = "%s -jar %s SE -threads %s -trimlog %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(java_path, trimmomatic_jar, threads, log_file, file_R1, trim_R1, trimmomatic_adapters, trimmo_log)
-	else:
+	if (len(files) == 2):
 		cmd = "%s -jar %s PE -threads %s -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(java_path, trimmomatic_jar, threads, log_file, file_R1, file_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters, trimmo_log)
+	else:
+		cmd = "%s -jar %s SE -threads %s -trimlog %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(java_path, trimmomatic_jar, threads, log_file, file_R1, trim_R1, trimmomatic_adapters, trimmo_log)
 	
 	## system call & return
 	return(functions.system_call(cmd))	

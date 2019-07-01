@@ -155,9 +155,9 @@ subparser_trimm = subparsers.add_parser(
     description='This module trimms sequencing adapters that could be present in next generation sequencing files',
 )
 in_out_group_trimm = subparser_trimm.add_argument_group("Input/Output")
-in_out_group_trimm.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required=True)
-in_out_group_trimm.add_argument("--output_folder", help="Output folder.", required=True)
-in_out_group_trimm.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+in_out_group_trimm.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= '--help_format' not in sys.argv)
+in_out_group_trimm.add_argument("--output_folder", help="Output folder.", required= '--help_format' not in sys.argv)
+in_out_group_trimm.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 in_out_group_trimm.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_trimm.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_trimm.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
@@ -167,6 +167,7 @@ options_group_trimm.add_argument("--skip_report", action="store_true", help="Do 
 options_group_trimm.add_argument("--adapters", help="Adapter sequences to use for the trimming process", required=True)
 options_group_trimm.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 options_group_trimm.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+options_group_trimm.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
 
 subparser_trimm.set_defaults(func=BacterialTyper.modules.trimm.run)
 ##-------------------------------------------------------------##

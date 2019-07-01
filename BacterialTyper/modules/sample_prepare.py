@@ -81,7 +81,7 @@ def retrieve(options):
 	input_dir = os.path.abspath(options.input)
 	outdir = os.path.abspath(options.output_folder)
 
-	### set as defaulta paired_end mode
+	### set as default paired_end mode
 	if (options.single_end):
 		options.pair = False
 	else:
