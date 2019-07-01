@@ -9,13 +9,14 @@ import BacterialTyper
 parser = argparse.ArgumentParser(
     prog='BacterialTyper',
     description='BacterialTyper: Bacterial Genotyping using NGS...'
+    #,epilog="(c) 2019. Jose F. Sanchez, Cristina Prat and Lauro Sumoy."
+    
 )
 subparsers = parser.add_subparsers(title='Available modules', help='', metavar='')
 
 #######################
 #### Configuration ####
 #######################
-
 ## submodules
 ##------------------------------ config ---------------------- ##
 subparser_config = subparsers.add_parser(
@@ -102,14 +103,14 @@ subparser_updateDB.set_defaults(func=BacterialTyper.modules.database.updateDB_NC
 
 ##--------------------------- prepareSamples ----------------- ##
 subparser_sample = subparsers.add_parser(
-    'prepareFQ',
+    'prep',
     help='Prepares FASTQ files from samples',
-    description='This module prepares fastq files from a sequencing run and merge them when multiples files have been generated for the same sample e.g different lanes. It concatenates these files according the common identifier and generates a unique file, one per paired-read if necessary',
+    description='This module prepares fastq files from a sequencing run. It could renamed, copy, link or merge them when multiples files have been generated for the same sample e.g different lanes. It concatenates these files according the common identifier and generates a unique file, one per paired-read if necessary',
 )
 in_out_group_prepareFQ = subparser_sample.add_argument_group("Input/Output")
-in_out_group_prepareFQ.add_argument("--input", help="Folder containing fastq files. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. All files would be retrieved.", required=True)
-in_out_group_prepareFQ.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required=True)
-in_out_group_prepareFQ.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+in_out_group_prepareFQ.add_argument("--input", help="Folder containing fastq files. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. All files would be retrieved.", required= '--help_format' not in sys.argv)
+in_out_group_prepareFQ.add_argument("--output_folder", help="Output folder.", required= '--help_format' not in sys.argv)
+in_out_group_prepareFQ.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 in_out_group_prepareFQ.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_prepareFQ.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_prepareFQ.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
@@ -117,7 +118,9 @@ in_out_group_prepareFQ.add_argument("--ex_sample", help="File containing a list 
 options_group_prepareFQ = subparser_sample.add_argument_group("Options")
 options_group_prepareFQ.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 options_group_prepareFQ.add_argument("--copy", action="store_true", help="Instead of generating symbolic links, copy files into output folder. [Default OFF].")
-options_group_prepareFQ.add_argument("--merge", action="store_true", help="Merges FASTQ files for the same sample.")
+options_group_prepareFQ.add_argument("--merge", action="store_true", help="Merges FASTQ files for the same sample [Default OFF].")
+options_group_prepareFQ.add_argument("--rename", help="File containing original name and final name for each sample separated by comma. No need to provide a name for each pair if paired-end files. If provided with option '--merge', the merge files would be renamed accordingly.")
+options_group_prepareFQ.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
 options_group_prepareFQ.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 
 subparser_sample.set_defaults(func=BacterialTyper.modules.sample_prepare.retrieve)
@@ -130,9 +133,9 @@ subparser_fastqc = subparsers.add_parser(
     description='This module call FASTQC for a quality check of each sample provided',
 )
 in_out_group_fastqc = subparser_fastqc.add_argument_group("Input/Output")
-in_out_group_fastqc.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required=True)
-in_out_group_fastqc.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required=True)
-in_out_group_fastqc.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+in_out_group_fastqc.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= '--help_format' not in sys.argv)
+in_out_group_fastqc.add_argument("--output_folder", help="Output folder.", required= '--help_format' not in sys.argv)
+in_out_group_fastqc.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 in_out_group_fastqc.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_fastqc.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_fastqc.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
@@ -141,7 +144,7 @@ options_group_fastqc = subparser_fastqc.add_argument_group("Options")
 options_group_fastqc.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
 options_group_fastqc.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 options_group_fastqc.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
-
+options_group_fastqc.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
 subparser_fastqc.set_defaults(func=BacterialTyper.modules.qc.fastqc)
 ##-------------------------------------------------------------##
 
@@ -153,7 +156,7 @@ subparser_trimm = subparsers.add_parser(
 )
 in_out_group_trimm = subparser_trimm.add_argument_group("Input/Output")
 in_out_group_trimm.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required=True)
-in_out_group_trimm.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required=True)
+in_out_group_trimm.add_argument("--output_folder", help="Output folder.", required=True)
 in_out_group_trimm.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
 in_out_group_trimm.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_trimm.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
@@ -179,7 +182,7 @@ subparser_assemble = subparsers.add_parser(
 )
 in_out_group_assembly = subparser_assemble.add_argument_group("Input/Output")
 in_out_group_assembly.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= '--help_BUSCO' not in sys.argv)
-in_out_group_assembly.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required= '--help_BUSCO' not in sys.argv)
+in_out_group_assembly.add_argument("--output_folder", help="Output folder.", required= '--help_BUSCO' not in sys.argv)
 in_out_group_assembly.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
 in_out_group_assembly.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_assembly.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
@@ -206,7 +209,7 @@ subparser_assemblyQC = subparsers.add_parser(
 )
 in_out_group_assembly_check = subparser_assemblyQC.add_argument_group("Input/Output")
 in_out_group_assembly_check.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'. If not, provide full path using --batch option", required= '--help_BUSCO' not in sys.argv)
-in_out_group_assembly_check.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required= '--help_BUSCO' not in sys.argv)
+in_out_group_assembly_check.add_argument("--output_folder", help="Output folder.", required= '--help_BUSCO' not in sys.argv)
 in_out_group_assembly_check.add_argument("--batch", action="store_true", help="Provide this option if input is a csv file containing the name and the path for each assembly. E.g.: sample1,/path/to/sample1/assembly/file.fasta")
 in_out_group_assembly_check.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_assembly_check.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
@@ -237,7 +240,7 @@ list_help_options_annot = ('--help_Prokka', '--help_BUSCO')
 in_out_group_annot = subparser_annotate.add_argument_group("Input/Output")
 in_out_group_annot.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'. If not, provide full path using --batch option", required= not any(elem in list_help_options_annot for elem in sys.argv) )
 in_out_group_annot.add_argument("--output_folder", help="Output folder. By default a directory named annotation is generated under the current working directory", required= not any(elem in list_help_options_annot for elem in sys.argv) )
-in_out_group_annot.add_argument("--batch", help="Provide a csv file containing the name and the path for each assembly. No header. E.g.: sample1,/path/to/sample1/assembly/file.fasta")
+in_out_group_annot.add_argument("--batch", help="Provide a csv file containing the name and the path for each assembly. No header. Provided it in format: name,tag,file. tag = chromosome/plasmid. E.g.:  sample1,chromosome,/path/to/sample1/assembly/file.fasta\nsample1,plasmid,/path/to/sample1/assembly/file.fasta")
 in_out_group_annot.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_annot.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
@@ -272,7 +275,7 @@ subparser_ident = subparsers.add_parser(
 )
 initial_group = subparser_ident.add_argument_group("Input/Output")
 initial_group.add_argument("--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required=True)
-initial_group.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required=True)
+initial_group.add_argument("--output_folder", help="Output folder.", required=True)
 initial_group.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
 initial_group.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 initial_group.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
@@ -307,7 +310,7 @@ subparser_profile = subparsers.add_parser(
 )
 initial_group_profile = subparser_profile.add_argument_group("Input/Output")
 initial_group_profile.add_argument("--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= '--help_ARIBA' not in sys.argv)
-initial_group_profile.add_argument("--output_folder", help="Output folder. By default a directory named trimm_sequences is generated under the current working directory", required= '--help_ARIBA' not in sys.argv)
+initial_group_profile.add_argument("--output_folder", help="Output folder.", required= '--help_ARIBA' not in sys.argv)
 initial_group_profile.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
 initial_group_profile.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 initial_group_profile.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
@@ -353,8 +356,17 @@ parameters_group_MGE = subparser_MGE.add_argument_group("Parameters")
 parameters_group_MGE.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 parameters_group_MGE.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 
+options_group_MGE = subparser_MGE.add_argument_group("Parameters")
+options_group_MGE.add_argument("--plasmid_analysis", action="store_true", help="Identify putative plasmids")
+options_group_MGE.add_argument("--phage_analysis", action="store_true", help="Identify putative phages inserted in the genome")
+options_group_MGE.add_argument("--GI_analysis", action="store_true", help="Identify putative Genomic Islands (GI)")
+
+
 phispy_options = subparser_MGE.add_argument_group("PhiSpy options")
 phispy_options.add_argument("--help_PhiSpy", action="store_true", help="It prints further information for PhiSpy analysis. [Default: OFF]")
+phispy_options.add_argument("--training_set", type=int, help="Choose a training set from the list of training sets. See additional details with --help_PhiSpy [Default: 0 (Generic)]", default=0)
+phispy_options.add_argument("--window_size", type=int, help="Window size of consecutive genes to look through to find phages. [Default: 20]", default=20)
+phispy_options.add_argument("--phage_genes", type=int, help="Number of consecutive genes in a region of window size that must be prophage genes to be called. [Default: 5]", default=5)
 
 subparser_MGE.set_defaults(func=BacterialTyper.modules.MGE.run)
 ##-------------------------------------------------------------##
