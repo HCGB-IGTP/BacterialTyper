@@ -124,52 +124,45 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 
 	## Start identification of samples
 	print ("\n+ Send KMA identification jobs...")
-	if (options.pair):
-		
-		cpu_here = int(cpu/len(databases2use))
-		if (cpu_here == 0):
-			cpu_here = 1
+	cpu_here = int(cpu/len(databases2use))
+	if (cpu_here == 0):
+		cpu_here = 1
 
-		## debug message
-		if (Debug):
-			print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
-			print (colored("**DEBUG: cpu " +  str(cpu) + " **", 'yellow'))
-			print (colored("**DEBUG: cpu_here " +  str(cpu_here) + " **", 'yellow'))
-		
-		# Group dataframe by sample name
-		sample_frame = pd_samples_retrieved.groupby(["name"])
-		
-		with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
-			for db2use in databases2use:
-				
-				## load database on memory
-				print ("+ Loading database on memory for faster identification.")
-				cmd_load_db = "%s shm -t_db %s -shmLvl 1" %(kma_bin, db2use)
-				return_code_load = functions.system_call(cmd_load_db)
-				
-				## send for each sample
-				commandsSent = { executor.submit(species_identification_KMA.kma_ident_module, get_outfile(outdir, name, db2use), cluster["sample"].tolist(), name, db2use, cpu_here): name for name, cluster in sample_frame }
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu " +  str(cpu) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu_here " +  str(cpu_here) + " **", 'yellow'))
 	
-				for cmd2 in concurrent.futures.as_completed(commandsSent):
-					details = commandsSent[cmd2]
-					try:
-						data = cmd2.result()
-					except Exception as exc:
-						print ('***ERROR:')
-						print (cmd2)
-						print('%r generated an exception: %s' % (details, exc))
+	# Group dataframe by sample name
+	sample_frame = pd_samples_retrieved.groupby(["name"])
 	
-				## remove database from memory
-				print ("+ Removing database from memory...")
-				cmd_rm_db = "%s shm -t_db %s -shmLvl 1 -destroy" %(kma_bin, db2use)
-				return_code_rm = functions.system_call(cmd_rm_db)
-				if (return_code_rm == 'FAIL'):
-					print (colored("***ERROR: Removing database from memory failed. Please do it! Execute command: %s" %cmd_rm_db,'red'))
-	
-	else:
-		## to do: implement single end mode
-		print ('+ No implementation yet. Sorry.')
-		exit()
+	with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
+		for db2use in databases2use:
+			
+			## load database on memory
+			print ("+ Loading database on memory for faster identification.")
+			cmd_load_db = "%s shm -t_db %s -shmLvl 1" %(kma_bin, db2use)
+			return_code_load = functions.system_call(cmd_load_db)
+			
+			## send for each sample
+			commandsSent = { executor.submit(species_identification_KMA.kma_ident_module, get_outfile(outdir, name, db2use), cluster["sample"].tolist(), name, db2use, cpu_here): name for name, cluster in sample_frame }
+
+			for cmd2 in concurrent.futures.as_completed(commandsSent):
+				details = commandsSent[cmd2]
+				try:
+					data = cmd2.result()
+				except Exception as exc:
+					print ('***ERROR:')
+					print (cmd2)
+					print('%r generated an exception: %s' % (details, exc))
+
+			## remove database from memory
+			print ("+ Removing database from memory...")
+			cmd_rm_db = "%s shm -t_db %s -shmLvl 1 -destroy" %(kma_bin, db2use)
+			return_code_rm = functions.system_call(cmd_rm_db)
+			if (return_code_rm == 'FAIL'):
+				print (colored("***ERROR: Removing database from memory failed. Please do it! Execute command: %s" %cmd_rm_db,'red'))
 		
 	###
 	print ("+ KMA identification call finished for all samples...")
