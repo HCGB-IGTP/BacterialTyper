@@ -158,14 +158,22 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 	non_duplicate_samples = list(set(sample_list))	
 	
 	## get fields
-	name_frame_samples = get_fields(non_duplicate_samples, pair)
-	
+	name_frame_samples = get_fields(non_duplicate_samples, pair)	
 	number_samples = name_frame_samples.index.size
+	total_samples = set(name_frame_samples['name'].to_list())
 	
+	### get some stats
 	if (number_samples == 0):
 		print (colored("\n**ERROR: No samples were retrieved. Check the input provided\n",'red'))
 		exit()
-	print (colored("\t" + str(number_samples) + " samples selected from the input provided...", 'yellow'))
+	print (colored("\t" + str(number_samples) + " files selected...", 'yellow'))
+	print (colored("\t" + str(len(total_samples)) + " samples selected...", 'yellow'))
+	if (pair):
+		print (colored("\tPaired-end mode selected...", 'yellow'))
+	else:
+		print (colored("\tSingle end mode selected...", 'yellow'))
+	
+	## return info
 	return (name_frame_samples)
 
 ###############
