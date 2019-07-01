@@ -19,7 +19,111 @@ import concurrent.futures
 from BacterialTyper import functions
 from BacterialTyper import config
 
-## todo check if 'link_files' folder exists within folder provided.
+###############
+def help_format():
+
+	functions.boxymcboxface("Name format for samples")
+
+	print ("Format for fastq files can be:\n")
+	functions.print_sepLine("*",20,"red")
+	print ("[1] Single end files")
+	functions.print_sepLine("*",20,"red")
+	print ("name.fastq.gz")
+	print ("name.fastq")
+	print ("name.fq")
+	print ("\n")
+
+	functions.print_sepLine("*",20,"red")
+	print ("[2] Paired-end files")
+	functions.print_sepLine("*",20,"red")
+	print ("Read1 => name_1.fastq.gz\tname_R1.fastq.gz")
+	print ("Read2 => name_2.fastq.gz\tname_R2.fastq.gz")
+	print ("\n")
+
+	functions.print_sepLine("*",55,"red")
+	print ("[3] Containing Lane information (*L00x* and/or *00x*):")
+	functions.print_sepLine("*",55,"red")
+	print ("name_L00x_R1.fastq.gz\tname_L00x_R2.fastq.gz")
+	print ("name_L00x_1.fastq.gz\tname_L00x_2.fastq.gz")
+	print ("name_L00x_R1_00x.fastq.gz\tname_L00x_R1_00x.fastq.gz")
+	print (" ** Merge lane files using module option merge module prep **")
+	print ("\n")
+
+	functions.print_sepLine("*",15,"red")
+	print ("[4] Extensions:")
+	functions.print_sepLine("*",15,"red")
+	print ("name_L00x_R2.fastq\tname_L00x_R2.fq\nname_L00x_R2.fastq.gz\tname_L00x_R2.fq.gz")
+	print ("\n")
+
+###############
+def get_fields(file_name_list, pair=True):
+
+	## init dataframe
+	name_columns = ("sample", "dirname", "name", "lane", "read_pair","lane_file","ext","gz")
+	name_frame = pd.DataFrame(columns=name_columns)
+	
+	## loop through list
+	for path_files in file_name_list:
+		
+		## get file name
+		file_name = os.path.basename(path_files)
+		dirN = os.path.dirname(path_files)
+
+		##	
+		trim_search = re.search(r".*trim.*", file_name)
+		lane_search = re.search(r".*\_L\d+\_.*", file_name)
+
+		## get name
+		if (pair):
+		
+			## pair could be: R1|R2 or 1|2
+			## lane should contain L00x			
+	
+			if (trim_search):
+				name_search = re.search(r"(.*)\_trim\_(R1|1|R2|2)(\.f.*q)(\..*){0,1}", file_name)
+			else:
+				## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
+				if (lane_search):
+					name_search = re.search(r"(.*)\_(L\d+)\_(R1|1|R2|2)(.*)(\.f.*q)(\..*){0,1}", file_name)
+				else:
+					name_search = re.search(r"(.*)\_(R1|1|R2|2)(\.f.*q)(\..*){0,1}", file_name)
+		else:
+			name_search = re.search(r"(.*)(\.f.*q)(\..*){0,1}", file_name)
+	
+		### declare
+		name= ""
+		lane= ""
+		read_pair= ""
+		lane_file= ""
+		ext= ""
+		gz= ""
+	
+		if name_search:
+			name = name_search.group(1)
+			if (pair):
+				## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
+				if (lane_search):
+					lane_id = name_search.group(2)
+					read_pair = name_search.group(3)
+					lane_file = name_search.group(4)
+					ext = name_search.group(5)
+					gz = name_search.group(6)
+				else:
+					## could exist or not
+					read_pair = name_search.group(2)
+					ext = name_search.group(3)
+					gz = name_search.group(4)
+			else:
+				ext = name_search.group(2)
+				gz = name_search.group(3)
+	
+			name_frame.loc [len(name_frame)] = (path_files, dirN, name, lane_id, read_pair, lane_file, ext, gz)
+	
+		else:
+			print ("*** ATTENTION: Sample did not match the possible parsing options...")
+			print (file_name)
+
+	return (name_frame)
 
 ###############
 def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merge=False):
@@ -52,164 +156,16 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 
 	## discard duplicates if any
 	non_duplicate_samples = list(set(sample_list))	
-	discard_samples = []
 	
-	##	
-	found = []
-
-	if (pair):
-		## initiate dataframe
-		name_columns = ("samples", "R1", "R2")
-	else:
-		## initiate dataframe
-		name_columns = ("samples", "read")
-
-	## initiate dataframe
-	df_samples = pd.DataFrame(columns=name_columns)
-
-	for path_files in non_duplicate_samples:
-		##	
-		files = os.path.basename(path_files)
-		trim_search = re.search(r".*trim.*", files)
-		lane_search = re.search(r".*L\d+.*", files)
-
-		## get name
-		if (pair):
-			if (trim_search):
-				name_search = re.search(r"(.*)\_trim\_(R1|R2)(\.f.*q)(\..*){0,1}", files)
-			else:
-				## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
-				if (lane_search):
-					name_search = re.search(r"(.*)\_(L\d+)\_(R1|R2)\_(\d+)(\.f.*q)(\..*){0,1}", files)
-				else:
-					name_search = re.search(r"(.*)\_(R1|1|R2|2)(\.f.*q)(\..*){0,1}", files)
-		else:
-			name_search = re.search(r"(.*)(\.f.*q)(\..*){0,1}", files)
-		
-		if name_search:
-			file_name = name_search.group(1)
-			
-			if not merge:
-				if file_name in found:
-					continue
-			
-			#print ("##")
-			#print (files)
-			
-			if (pair):
-				## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
-				if (lane_search):
-					lane_id = name_search.group(2)
-					read_pair = name_search.group(3)
-					lane_file = name_search.group(4)
-					ext = name_search.group(5)
-					gz = name_search.group(6)
-				else:
-					## could exist or not
-					read_pair = name_search.group(2)
-					ext = name_search.group(3)
-					gz = name_search.group(4)
-			else:
-				ext = name_search.group(2)
-				gz = name_search.group(3)
-			
-			dirN = os.path.dirname(path_files)
-			
-			#print (file_name)
-			#print (read_pair)
-			#print (ext)
-			#print (gz)
-
-			if (pair):
-				## get second pair
-				paired = ""
-				R2_paired = ""
-				
-				if (trim_search):
-					if (read_pair == 'R1'):
-						paired = dirN + '/' + file_name + '_trim_R2' + ext
-						R2_paired=True
-					else:
-						paired = dirN + '/' + file_name + '_trim_R1' + ext
-						R2_paired=False
-				else:
-				
-					#print (read_pair + ext + gz + '\n')
-					## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
-					if (lane_search):
-						if (read_pair == 'R1'):
-							paired = dirN + '/' + file_name + '_' + lane_id + '_R2_' + lane_file + ext
-							R2_paired=True
-						else:
-							paired = dirN + '/' + file_name + '_' + lane_id + '_R1_' + lane_file + ext
-							R2_paired=False
-					else:
-						if (read_pair == '1'):
-							paired = dirN + '/' + file_name + '_2' + ext
-							R2_paired=True
-						elif (read_pair == 'R1'):
-							paired = dirN + '/' + file_name + '_R2' + ext
-							R2_paired=True
-						elif (read_pair == 'R2'):
-							paired = dirN + '/' + file_name + '_R1' + ext
-							R2_paired=True
-						else:
-							paired = dirN + '/' + file_name + '_1' + ext
-							R2_paired=False
-		
-			found.append(file_name) ## save retrieved samples
-			
-			## if gunzipped
-			if gz:
-				unzip = path_files
-				if (pair):
-					unzip = dirN + '/' + file_name + read_pair + ext
-			
-				if os.path.isfile(unzip):
-					#discard_samples.append(path_files)
-					if (pair):
-						if os.path.isfile(paired):
-							## both files are unzipped and available
-							## save both files
-							if R2_paired:
-								df_samples.loc[len(df_samples)] = [file_name, unzip, paired]							
-							else:
-								df_samples.loc[len(df_samples)] = [file_name, paired, unzip]						
-					else:
-						df_samples.loc[len(df_samples)] = [file_name, path_files]							
-				else:
-					if (pair):
-						## gunzipped
-						## save both files
-						if os.path.isfile(paired + gz):
-							if R2_paired:
-								df_samples.loc[len(df_samples)] = [file_name, path_files, paired + gz]
-							else:
-								df_samples.loc[len(df_samples)] = [file_name, paired + gz, path_files]	
-					else:
-						df_samples.loc[len(df_samples)] = [file_name, path_files]
-			
-			else:
-				## not gunzipped files					
-				if (pair):
-					if os.path.isfile(paired):
-						## save both files
-						if R2_paired:
-							df_samples.loc[len(df_samples)] = [file_name, path_files, paired]
-						else:
-							df_samples.loc[len(df_samples)] = [file_name, paired, path_files]							
-				else:
-					df_samples.loc[len(df_samples)] = [file_name, path_files]							
-
-	## df_samples is a pandas dataframe containing info
-	#print (df_samples)	
-	number_samples = df_samples.index.size
+	## get fields
+	name_frame_samples = get_fields(non_duplicate_samples, pair)
+	number_samples = name_frame_samples.index.size
+	
 	if (number_samples == 0):
 		print (colored("\n**ERROR: No samples were retrieved. Check the input provided\n",'red'))
 		exit()
 	print (colored("\t" + str(number_samples) + " samples selected from the input provided...", 'yellow'))
-	return (df_samples)
-
+	return (name_frame_samples)
 
 ###############
 def select_other_samples (list_samples, samples_prefix, mode, extensions, exclude=False):
@@ -256,11 +212,9 @@ def select_other_samples (list_samples, samples_prefix, mode, extensions, exclud
 	## iterate list
 	for a_file in non_duplicate_samples:
 		a_name = os.path.basename(a_file)
-
 		if mode == 'annotation':
 			file_name, ext = os.path.splitext(a_name)
-			df_samples.loc[len(df_samples)] = [file_name, ext.split(".")[1], a_file]
-	
+			df_samples.loc[len(df_samples)] = [file_name, ext.split(".")[1], a_file]	
 		else:
 			file_name = a_name.split("_" + mode)[0]
 			df_samples.loc[len(df_samples)] = [file_name, mode, a_file]
@@ -280,8 +234,8 @@ def gunzip_merge(outfile, list_files):
 	
 	list_files = list(list_files)
 	list_files.sort()
-	print ("\tMerging gz files into: ", outfile)
-	print ("\tFiles: ", list_files)
+	print ("\tMerging files into: ", outfile)
+	#print ("\tFiles: ", list_files)
 
 	with open(outfile, 'wb') as wfp:
 		for fn in list_files:
@@ -294,32 +248,56 @@ def gunzip_merge(outfile, list_files):
 def one_file_per_sample(dataFrame, outdir, threads):
 	## merge sequencing files for sample, no matter of sector or lane generated.
 	
-	list_samples = set(dataFrame['samples'].tolist())
+	list_samples = set(dataFrame['name'].tolist())
 	print (colored("\t" + str(len(list_samples)) + " samples to be merged from the input provided...", 'yellow'))
 	
 	functions.create_folder(outdir)
-	print ("+ Merging sequencing files for samples") 	
+	print ("+ Merging sequencing files for samples")
 
-	pairs = ['R1', 'R2']
-	sample_frame = dataFrame.groupby("samples")
+	##
+	sample_frame = dataFrame.groupby(["name", "read_pair"])
+	
+	### get extension for files
+	ext_list = dataFrame.ext.unique()
+	gz_list = dataFrame.gz.unique()
+	ext = ext_list[0] + gz_list[0] ## might generate a bug if several extension or some zip/unzip files provided
 
 	# We can use a with statement to ensure threads are cleaned up promptly
 	with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor: ## need to do 1 by one as there is a problem with the working directory
-		for name, cluster in sample_frame: ## loop over samples
-			print ("\n\tSample: ", name)
-			## send for each sample
-			commandsSent = { executor.submit(gunzip_merge, outdir + '/' + name + '_' + pair + '.fq.gz', set(cluster[pair].tolist())): pair for pair in pairs }
-			
-			for cmd2 in concurrent.futures.as_completed(commandsSent):
-				details = commandsSent[cmd2]
-				try:
-					data = cmd2.result()
-				except Exception as exc:
-					print ('***ERROR:')
-					print (cmd2)
-					print('%r generated an exception: %s' % (details, exc))
+		commandsSent = { executor.submit(gunzip_merge, outdir + '/' + name[0] + '_' + name[1] + ext, set(cluster["sample"].tolist())): name for name, cluster in sample_frame }
+		for cmd2 in concurrent.futures.as_completed(commandsSent):
+			details = commandsSent[cmd2]
+			try:
+				data = cmd2.result()
+			except Exception as exc:
+				print ('***ERROR:')
+				print (cmd2)
+				print('%r generated an exception: %s' % (details, exc))
+				
+							
+	## return output name merged generated in dataframe
+	name_columns = ("name", "dirname", "read_pair", "sample", "ext", "gz")
+	name_frame = pd.DataFrame(columns=name_columns)
 
-	return()
+	## print to a file
+	merge_details = outdir + '/merge_details.txt'
+	merge_details_hd = open(merge_details, 'w')
+
+	for name, cluster in sample_frame: ## loop over samples
+		outfile = outdir + '/' + name[0] + '_' + name[1] + ext
+		
+		merge_details_hd.write("####################\n")		
+		merge_details_hd.write("Sample: " + name[0] + '\n')
+		merge_details_hd.write("Read: " + name[1] + '\n')
+		merge_details_hd.write("Files:\n")
+		merge_details_hd.write(",".join(cluster["sample"].tolist()))
+		merge_details_hd.write('\n')
+		merge_details_hd.write("####################\n")		
+		
+		name_frame.loc [len(name_frame)] = (name[0], outdir, name[1], outfile, ext_list[0], gz_list[0])
+
+	merge_details_hd.close()
+	return(name_frame)
 	
 ###############
 def help_options():

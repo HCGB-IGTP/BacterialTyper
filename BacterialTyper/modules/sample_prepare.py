@@ -69,6 +69,11 @@ def get_files(options, input_dir, mode, extension):
 ################################
 def retrieve(options):
 	
+	## help_format option
+	if (options.help_format):
+		sampleParser.help_format()
+		exit()
+		
 	functions.pipeline_header()
 	functions.boxymcboxface("Preparing samples")
 	
@@ -76,13 +81,19 @@ def retrieve(options):
 	input_dir = os.path.abspath(options.input)
 	outdir = os.path.abspath(options.output_folder)
 
+	### set as defaulta paired_end mode
+	if (options.single_end):
+		options.pair = False
+	else:
+		options.pair = True
+
 	## merge option
 	if (options.merge):
 		global merge
 		merge = True
 
 	## get files
-	pd_samples_retrieved = get_files(options, input_dir)
+	pd_samples_retrieved = get_files(options, input_dir, "fastq", "fastq")
 
 	## output: generate symbolic link or copy if desired	
 	functions.create_folder(outdir)
@@ -90,30 +101,69 @@ def retrieve(options):
 	## merge option
 	if (options.merge):
 		print ("+ Sample files will be merged...")
-		sampleParser.one_file_per_sample(pd_samples_retrieved, outdir, options.threads)
-		return ()
+		pd_samples_merged = sampleParser.one_file_per_sample(pd_samples_retrieved, outdir, options.threads)
 		
-	list_reads = []
-	if (options.copy):
-		print ("+ Sample files will be copied...")
-	for index, row in pd_samples_retrieved.iterrows():
-		if (options.pair):
-			#print(row['samples'], row['R1'], row['R2'])
-			if (options.copy):
-				shutil.copy(row['R1'], outdir)
-				shutil.copy(row['R2'], outdir)
-			else:
-				list_reads.append(row['R1'])
-				list_reads.append(row['R2'])
+		if (options.rename):
+			print ("+ Merge files will be renamed...")
+			pd_samples_retrieved = pd_samples_merged
 		else:
-			if (options.copy):
-				shutil.copy(row['read'], outdir)
-			else:
-				list_reads.append(row['read'])
+			print ("+ Sample files have been merged...")
+			print ("+ Process finished...")
+			exit ()
 
-	if (options.copy):
-		print ("+ Sample files have been copied...")
+	## Information returned and push into pd_samples_retrieved
+
+	### pd_samples_retrieved from pd_samples_merged
+	### name, read_pair, sample, ext, gz
+
+	### pd_samples_retrieved from get_files
+	### sample, dirname, name, lane, read_pair, lane_file, ext, gz
+
+	###
+	if (options.rename):
+		# rename files will be copied into the output folder provided
+		names_retrieved = pd.read_csv(options.rename, sep=',', index_col=0, squeeze=True, header=None).to_dict() ## read csv to dictionaru
+
+		## debug
+		#print ("")
+		#print (names_retrieved)
+		#print ("")
+		#print (pd_samples_retrieved)
+		#print ("")
+		
+		## rename files 		
+		for index, row in pd_samples_retrieved.iterrows():
+			renamed = row['dirname'] + '/' + names_retrieved[row['name']] + '_' + row['read_pair'] + row['ext'] + row['gz']
+			os.rename(row['sample'], renamed)
+			##elif (options.single_end): It should work for both
+
+		print ("+ Sample files have been renamed...")
+		
 	else:
-		print ("+ Sample files will be linked...")
-		functions.get_symbolic_link(list_reads, outdir)
+		## keep original names
+		if (options.copy):
+			print ("+ Sample files will be copied...")
+	
+		## LIST READS
+		list_reads = []
+		for index, row in pd_samples_retrieved.iterrows():
+			if (options.pair):
+				#print(row['samples'], row['R1'], row['R2'])
+				if (options.copy):
+					shutil.copy(row['R1'], outdir)
+					shutil.copy(row['R2'], outdir)
+				else:
+					list_reads.append(row['R1'])
+					list_reads.append(row['R2'])
+			elif options.single_end:
+				if (options.copy):
+					shutil.copy(row['read'], outdir)
+				else:
+					list_reads.append(row['read'])
+
+		if (options.copy):
+			print ("+ Sample files have been copied...")
+		else:
+			print ("+ Sample files will be linked...")
+			functions.get_symbolic_link(list_reads, outdir)
 	
