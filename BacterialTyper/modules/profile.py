@@ -19,6 +19,7 @@ import shutil
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
+from BacterialTyper import sampleParser
 from BacterialTyper import virulence_resistance
 from BacterialTyper import database_generator
 from BacterialTyper import ariba_caller
@@ -29,6 +30,11 @@ def run(options):
 	
 	## init time
 	start_time_total = time.time()
+	
+	## help_format option
+	if (options.help_format):
+		sampleParser.help_format()
+		exit()
 	
 	## debugging messages
 	global Debug
@@ -125,7 +131,6 @@ def get_options_db(options):
 	### get dbs	
 	return (database_generator.getdbs('ARIBA', database2use, option_db, Debug))
 
-
 ####################################
 def ARIBA_ident(options, pd_samples_retrieved, outdir, retrieve_databases):
 	functions.boxymcboxface("ARIBA Identification")
@@ -151,10 +156,14 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir, retrieve_databases):
 
 	## get outdir folders
 	outdir_samples = pd.DataFrame(columns=('sample', 'db', 'output'))
-	for index, row in pd_samples_retrieved.iterrows():
+
+	# Group dataframe by sample name
+	sample_frame = pd_samples_retrieved.groupby(["name"])
+
+	for name, cluster in sample_frame:
 		for db2use in databases2use:
-			tmp = get_outfile(outdir, row['samples'], db2use)
-			outdir_samples.loc[len(outdir_samples)] = (row['samples'], db2use, tmp)
+			tmp = get_outfile(outdir, name, db2use)
+			outdir_samples.loc[len(outdir_samples)] = (name, db2use, tmp)
 
 	## multi-index
 	outdir_samples = outdir_samples.set_index(['sample', 'db'])
@@ -166,13 +175,13 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir, retrieve_databases):
 		
 		#workers = (options.threads/2)
 		workers = options.threads
-		
+			
 		# We can use a with statement to ensure threads are cleaned up promptly
 		with concurrent.futures.ThreadPoolExecutor(max_workers=int(workers)) as executor:
 			for db2use in databases2use:
 				## send for each sample
-				commandsSent = { executor.submit(ariba_run_caller, db2use, (row['R1'], row['R2']), outdir_samples.loc[(row['samples'], db2use), 'output'], 1): index for index, row in pd_samples_retrieved.iterrows() }
-	
+				commandsSent = { executor.submit(ariba_run_caller, db2use, cluster["sample"].tolist(), outdir_samples.loc[(name, db2use), 'output'], 1): name for name, cluster in sample_frame }
+					
 				for cmd2 in concurrent.futures.as_completed(commandsSent):
 					details = commandsSent[cmd2]
 					try:

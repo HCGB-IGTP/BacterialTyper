@@ -36,6 +36,12 @@ def run(options):
 	else:
 		Debug = False
 
+	### set as default paired_end mode
+	if (options.single_end):
+		options.pair = False
+	else:
+		options.pair = True
+
 	## message header
 	functions.pipeline_header()
 	functions.boxymcboxface("Assembly module")
@@ -74,10 +80,13 @@ def run(options):
 
 	print ('+ Running modules SPADES...')
 
+	# Group dataframe by sample name
+	sample_frame = pd_samples_retrieved.groupby(["name"])
+
 	# We can use a with statement to ensure threads are cleaned up promptly
 	with concurrent.futures.ThreadPoolExecutor(max_workers=int(workers)) as executor:
 		## send for each sample
-		commandsSent = { executor.submit( check_sample_assembly, row['samples'], outdir + '/' + row['samples'],  row['R1'], row['R2'], threads_module): index for index, row in pd_samples_retrieved.iterrows() }
+		commandsSent = { executor.submit( check_sample_assembly, name, outdir + '/' + name,  cluster["sample"].tolist(), threads_module): name for name, cluster in sample_frame }
 
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
@@ -122,7 +131,7 @@ def run(options):
 	exit()
 
 #############################################
-def check_sample_assembly(name, sample_folder, R1, R2, threads):
+def check_sample_assembly(name, sample_folder, files, threads):
 	## check if previously assembled and succeeded
 	filename_stamp = sample_folder + '/.success'
 	if os.path.isfile(filename_stamp):
@@ -130,5 +139,5 @@ def check_sample_assembly(name, sample_folder, R1, R2, threads):
 		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
 	else:
 		# Call spades_assembler
-		spades_assembler.run_module_SPADES(name, sample_folder, R1, R2, threads)
+		spades_assembler.run_module_SPADES(name, sample_folder, files[0], files[1], threads)
 

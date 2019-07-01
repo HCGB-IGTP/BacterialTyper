@@ -17,12 +17,18 @@ import pandas as pd
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
+from BacterialTyper import sampleParser
 from BacterialTyper import species_identification_KMA
 from BacterialTyper import database_generator
 from BacterialTyper.modules import sample_prepare
 
 ####################################
 def run(options):
+
+	## help_format option
+	if (options.help_format):
+		sampleParser.help_format()
+		exit()
 
 	## init time
 	start_time_total = time.time()
@@ -33,6 +39,12 @@ def run(options):
 		Debug = True
 	else:
 		Debug = False
+		
+	### set as default paired_end mode
+	if (options.single_end):
+		options.pair = False
+	else:
+		options.pair = True
 
 	### species_identification_KMA -> most similar taxa
 	functions.pipeline_header()

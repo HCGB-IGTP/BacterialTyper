@@ -167,14 +167,14 @@ def BUSCO_call(datasets, list_scaffolds, database_folder, output, threads, mode)
 	print ("+ Check folder provided as database for available BUSCO datasets...")
 	BUSCO_datasets = BUSCO_caller.BUSCO_retrieve_sets(datasets, database_folder)
 	
-	## optimize threads
-	threads_module = functions.optimize_threads(threads, len(list_scaffolds))
-
 	## BUSCO needs to chdir to output folder
 	path_here = os.getcwd()
 	
 	print ("+ Checking quality for each sample retrieved...")
 	
+	## optimize threads: No need to optimize. There is a problem with the working dir of BUSCO and we need to change every time
+	## threads_module = functions.optimize_threads(threads, len(list_scaffolds))
+
 	# We can use a with statement to ensure threads are cleaned up promptly
 	with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor: ## need to do 1 by one as there is a problem with the working directory
 		for DataSet in BUSCO_datasets:
