@@ -147,19 +147,10 @@ def retrieve(options):
 		## LIST READS
 		list_reads = []
 		for index, row in pd_samples_retrieved.iterrows():
-			if (options.pair):
-				#print(row['samples'], row['R1'], row['R2'])
-				if (options.copy):
-					shutil.copy(row['R1'], outdir)
-					shutil.copy(row['R2'], outdir)
-				else:
-					list_reads.append(row['R1'])
-					list_reads.append(row['R2'])
-			elif options.single_end:
-				if (options.copy):
-					shutil.copy(row['read'], outdir)
-				else:
-					list_reads.append(row['read'])
+			if (options.copy):
+				shutil.copy(row['sample'], outdir)
+			else:
+				list_reads.append(row['sample'])
 
 		if (options.copy):
 			print ("+ Sample files have been copied...")
