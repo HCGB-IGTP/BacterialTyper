@@ -18,6 +18,7 @@ import shutil
 ## import my modules
 from BacterialTyper.modules import sample_prepare
 from BacterialTyper import fastqc_caller
+from BacterialTyper import sampleParser
 from BacterialTyper import multiQC_report
 from BacterialTyper import BUSCO_caller
 from BacterialTyper import functions
@@ -28,6 +29,11 @@ def fastqc(options):
 	
 	## init time
 	start_time_total = time.time()
+	
+	## help_format option
+	if (options.help_format):
+		sampleParser.help_format()
+		exit()
 	
 	## debugging messages
 	global Debug

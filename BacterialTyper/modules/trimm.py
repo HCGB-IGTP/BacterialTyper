@@ -17,6 +17,7 @@ import concurrent.futures
 from BacterialTyper import trimmomatic_call
 from BacterialTyper import multiQC_report
 from BacterialTyper.modules import sample_prepare
+from BacterialTyper import sampleParser
 from BacterialTyper import functions
 from BacterialTyper import config
 
@@ -25,6 +26,11 @@ def run(options):
 
 	## init time
 	start_time_total = time.time()
+
+	## help_format option
+	if (options.help_format):
+		sampleParser.help_format()
+		exit()
 
 	## debugging messages
 	global Debug
