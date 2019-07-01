@@ -116,10 +116,16 @@ def parse_fastqcFile(resultsfile, name):
 	return (statistics_df, status_df)
 	
 ############
-def run_module_fastqc(path, file1, file2, sample):	
+def run_module_fastqc(path, files, sample):	
 	## Arguments provided via ARGVs
 	fastqc_bin = config.get_exe('fastqc')
-	codeReturn = call_fastqc(path, file1, file2, sample, fastqc_bin)
+	
+	## check if paired end
+	if (len(files) < 2):
+		print ('+ No implementation yet for single-end. Sorry.')
+		exit()
+
+	codeReturn = call_fastqc(path, files[0], files[1], sample, fastqc_bin)
 	if codeReturn == 'FAIL':
 		exit()
 	path_to_sample = path + '/' + sample

@@ -236,9 +236,9 @@ def kma_ident_module(out_file, files, sample_name, index_name, threads):
 	return(kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads))
 
 ##################################################
-def parse_kma_results(sample, out_file):
+def parse_kma_results(out_file, cutoff):
 	results = pd.read_csv(out_file, sep="\t")
-	results_filter = results[results['Template_Coverage'] > 80] 
+	results_filter = results[results['Template_Coverage'] > cutoff] 
 	## filter according to coverage of the template. 
 	return (results_filter)
 
@@ -259,8 +259,9 @@ def main():
 	
 	## to do: implement main function
 	name = argv[1]
+	cutoff = 80
 	file_out = os.path.abspath(argv[2])
-	parse_kma_results(name, file_out)
+	parse_kma_results(file_out, cutoff)
 
 ##################################################
 if __name__== "__main__":

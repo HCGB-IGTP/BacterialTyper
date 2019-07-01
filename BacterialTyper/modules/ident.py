@@ -136,7 +136,9 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 			print (colored("**DEBUG: cpu " +  str(cpu) + " **", 'yellow'))
 			print (colored("**DEBUG: cpu_here " +  str(cpu_here) + " **", 'yellow'))
 		
-		# We can use a with statement to ensure threads are cleaned up promptly
+		# Group dataframe by sample name
+		sample_frame = pd_samples_retrieved.groupby(["name"])
+		
 		with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
 			for db2use in databases2use:
 				
@@ -146,7 +148,7 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 				return_code_load = functions.system_call(cmd_load_db)
 				
 				## send for each sample
-				commandsSent = { executor.submit(species_identification_KMA.kma_ident_module, get_outfile(outdir, row['samples'], db2use), (row['R1'], row['R2']), row['samples'], db2use, cpu_here): index for index, row in pd_samples_retrieved.iterrows() }
+				commandsSent = { executor.submit(species_identification_KMA.kma_ident_module, get_outfile(outdir, name, db2use), cluster["sample"].tolist(), name, db2use, cpu_here): name for name, cluster in sample_frame }
 	
 				for cmd2 in concurrent.futures.as_completed(commandsSent):
 					details = commandsSent[cmd2]
@@ -174,6 +176,7 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 	print ("+ Parse results now:")
 		
 	## parse results
+	cutoff = 80
 	name_excel = outdir + '/identification_summary.xlsx'
 	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') ## open excel handle
 	
@@ -183,25 +186,29 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 		pd.set_option('display.max_colwidth', -1)
 		pd.set_option('display.max_columns', None)
 
-		for index, row in pd_samples_retrieved.iterrows():
-			result = get_outfile(outdir, row['samples'], db2use)
+		for name, cluster in sample_frame:
+			result = get_outfile(outdir, name, db2use)
 			#print ('\t- File: ' + result + '.spa')
-			results = species_identification_KMA.parse_kma_results(row['samples'], result + '.spa')
+			results = species_identification_KMA.parse_kma_results(result + '.spa', cutoff)
 
 			### Fix: check if db2use is plasmids as it could be several.
 			if (results.index.size > 1):
 				if (basename_db == "plasmids.T"):
 					## let it be several entries
-					results['sample'] = row['samples']
+					results['sample'] = name
 					results_summary = results_summary.append(results)
 				else:
-					print (colored("Sample %s contains multiple strains." %row['samples'], 'yellow'))
+					print (colored("Sample %s contains multiple strains." %name, 'yellow'))
 					print (colored(results.to_csv, 'yellow'))
 			elif (results.index.size == 1):
-				results['sample'] = row['samples']
+				results['sample'] = name
 				results_summary = results_summary.append(results)
 			else:
-				print (colored('\tNo clear strain from database %s has been assigned to sample %s' %(basename_db, row['samples']), 'yellow'))
+				print (colored('\tNo clear strain from database %s has been assigned to sample %s' %(basename_db, name), 'yellow'))
+				## add empty line if no available
+				results['sample'] = name
+				results_summary = results_summary.append(results)
+
 				
 		## subset dataframe	& print result
 		results_summary_toPrint = results_summary[['sample','#Template','Query_Coverage','Template_Coverage','Depth']] 

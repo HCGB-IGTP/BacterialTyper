@@ -36,6 +36,12 @@ def fastqc(options):
 	else:
 		Debug = False	
 	
+	### set as default paired_end mode
+	if (options.single_end):
+		options.pair = False
+	else:
+		options.pair = True
+	
 	## 
 	functions.pipeline_header()
 	functions.boxymcboxface("Quality check")
@@ -58,21 +64,21 @@ def fastqc(options):
 	print ("+ Checking quality for each sample retrieved...")
 	start_time_partial = start_time_total
 	
-	if (options.pair):
-		# We can use a with statement to ensure threads are cleaned up promptly
-		with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
-			commandsSent = { executor.submit(fastqc_caller.run_module_fastqc, outdir, row['R1'], row['R2'], row['samples']): index for index, row in pd_samples_retrieved.iterrows() }
-			for cmd2 in concurrent.futures.as_completed(commandsSent):
-				details = commandsSent[cmd2]
-				try:
-					data = cmd2.result()
-				except Exception as exc:
-					print ('***ERROR:')
-					print (cmd2)
-					print('%r generated an exception: %s' % (details, exc))
-	else:
-		print ('+ No implementation yet for single-end. Sorry.')
-		exit()
+	# Group dataframe by sample name
+	sample_frame = pd_samples_retrieved.groupby(["name"])
+
+	# We can use a with statement to ensure threads are cleaned up promptly
+	with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
+		commandsSent = { executor.submit(fastqc_caller.run_module_fastqc, outdir, cluster["sample"].tolist(), name): name for name, cluster in sample_frame }
+		
+		for cmd2 in concurrent.futures.as_completed(commandsSent):
+			details = commandsSent[cmd2]
+			try:
+				data = cmd2.result()
+			except Exception as exc:
+				print ('***ERROR:')
+				print (cmd2)
+				print('%r generated an exception: %s' % (details, exc))
 
 	print ("+ FASTQC for samples has finished...")
 
@@ -85,8 +91,8 @@ def fastqc(options):
 		## get subdirs generated and call multiQC report module
 		givenList = []
 		print ("+ Detail information for each sample could be identified in separate folders:")
-		for index, row in pd_samples_retrieved.iterrows():
-			fold_sample = outdir + '/' + row['samples']
+		for name, cluster in sample_frame:
+			fold_sample = outdir + '/' + name
 			givenList.append(fold_sample)
 			print ('\t- %s' %fold_sample)	
 		outdir_report = functions.create_subfolder("report", outdir)

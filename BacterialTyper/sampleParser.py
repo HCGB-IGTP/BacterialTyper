@@ -92,7 +92,7 @@ def get_fields(file_name_list, pair=True):
 	
 		### declare
 		name= ""
-		lane= ""
+		lane_id= ""
 		read_pair= ""
 		lane_file= ""
 		ext= ""
@@ -159,6 +159,7 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 	
 	## get fields
 	name_frame_samples = get_fields(non_duplicate_samples, pair)
+	
 	number_samples = name_frame_samples.index.size
 	
 	if (number_samples == 0):
