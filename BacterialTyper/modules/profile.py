@@ -65,7 +65,7 @@ def run(options):
 	outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", "fastq")
+	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", "_trim_")
 	## generate output folder
 	functions.create_folder(outdir)
 
@@ -180,7 +180,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir, retrieve_databases):
 		with concurrent.futures.ThreadPoolExecutor(max_workers=int(workers)) as executor:
 			for db2use in databases2use:
 				## send for each sample
-				commandsSent = { executor.submit(ariba_run_caller, db2use, cluster["sample"].tolist(), outdir_samples.loc[(name, db2use), 'output'], 1): name for name, cluster in sample_frame }
+				commandsSent = { executor.submit(ariba_run_caller, db2use, sorted(cluster["sample"].tolist()), outdir_samples.loc[(name, db2use), 'output'], 1): name for name, cluster in sample_frame }
 					
 				for cmd2 in concurrent.futures.as_completed(commandsSent):
 					details = commandsSent[cmd2]

@@ -119,7 +119,7 @@ def parse_fastqcFile(resultsfile, name):
 def run_module_fastqc(path, files, sample):	
 	## Arguments provided via ARGVs
 	fastqc_bin = config.get_exe('fastqc')
-	
+
 	## check if paired end
 	if (len(files) < 2):
 		print ('+ No implementation yet for single-end. Sorry.')

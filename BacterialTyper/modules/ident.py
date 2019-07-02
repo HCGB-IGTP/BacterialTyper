@@ -63,7 +63,7 @@ def run(options):
 	outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", "fastq")
+	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", "_trim_")
 	## generate output folder
 	functions.create_folder(outdir)
 
@@ -158,7 +158,7 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 			return_code_load = functions.system_call(cmd_load_db)
 			
 			## send for each sample
-			commandsSent = { executor.submit(species_identification_KMA.kma_ident_module, get_outfile(outdir, name, db2use), cluster["sample"].tolist(), name, db2use, cpu_here): name for name, cluster in sample_frame }
+			commandsSent = { executor.submit(species_identification_KMA.kma_ident_module, get_outfile(outdir, name, db2use), sorted(cluster["sample"].tolist()), name, db2use, cpu_here): name for name, cluster in sample_frame }
 
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]

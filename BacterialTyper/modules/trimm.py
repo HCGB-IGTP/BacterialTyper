@@ -27,11 +27,26 @@ def run(options):
 	## init time
 	start_time_total = time.time()
 
-	## help_format option
+	##################################
+	### show help messages if desired	
+	##################################
 	if (options.help_format):
+		## help_format option
 		sampleParser.help_format()
 		exit()
-
+	elif (options.help_trimm_adapters):
+		## help on trimm adapters
+		trimmomatic_call.print_help_adapters()
+		exit()
+	elif (options.help_project):
+		## information for project
+		help.project_help()
+		exit()
+	elif (options.help_multiqc):
+		## information for Multiqc
+		multiQC_report.multiqc_help()
+		exit()
+		
 	## debugging messages
 	global Debug
 	if (options.debug):
@@ -52,18 +67,28 @@ def run(options):
 
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
-	outdir = os.path.abspath(options.output_folder)
+	outdir=""
+
+	## set mode: project/detached
+	if (options.project):
+		outdir = input_dir		
+	elif (options.detached):
+		outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", "fastq")
+	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", "raw")
 	
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
 		print (pd_samples_retrieved)
 
-	## generate output folder
-	functions.create_folder(outdir)
+	## generate output folder, if necessary
+	print ("\n+ Create output folder(s):")
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "trimm")
+	
+	if not options.project:
+		functions.create_folder(outdir)
 
 	## optimize threads
 	## number_samples = pd_samples_retrieved.index.size => Number samples
@@ -76,7 +101,7 @@ def run(options):
 	
 	# We can use a with statement to ensure threads are cleaned up promptly
 	with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
-		commandsSent = { executor.submit(trimmomatic_call.trimmo_module, cluster["sample"].tolist(), outdir, name, threads_module, Debug, options.adapters): name for name, cluster in sample_frame }
+		commandsSent = { executor.submit(trimmo_caller, sorted(cluster["sample"].tolist()), outdir_dict[name], name, threads_module, Debug, options.adapters): name for name, cluster in sample_frame }
 
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
@@ -92,39 +117,65 @@ def run(options):
 	start_time_partial = functions.timestamp(start_time_total)
 
 	## get files generated and generate symbolic link
-	dir_symlinks = functions.create_subfolder('link_files', outdir)
-	files2symbolic = []
-	folders = os.listdir(outdir)
-	## debug message
-	if (Debug):
-		print (colored("**DEBUG: generate symbolic links for each file in " + dir_symlinks + "**", 'yellow'))
+	if not options.project:
+		dir_symlinks = functions.create_subfolder('link_files', outdir)
+		files2symbolic = []
+		folders = os.listdir(outdir)
+
+		## debug message
+		if (Debug):
+			print (colored("**DEBUG: generate symbolic links for each file in " + dir_symlinks + "**", 'yellow'))
 		
-	for fold in folders:
-		if fold.endswith(".log"):
-			continue
-		else:
-			this_folder = outdir + '/' + fold
-			subfiles = os.listdir(this_folder)
-			for files in subfiles:
-				files_search = re.search(r".*trim_R\d{1}.*", files) ## only paired-end. Todo: single end
-				if files_search:
-					files2symbolic.append(this_folder + '/' + files)
+		for fold in folders:
+			if fold.endswith(".log"):
+				continue
+			else:
+				this_folder = outdir + '/' + fold
+				subfiles = os.listdir(this_folder)
+				for files in subfiles:
+					files_search = re.search(r".*trim_R\d{1}.*", files) ## only paired-end. Todo: single end
+					if files_search:
+						files2symbolic.append(this_folder + '/' + files)
 	
-	functions.get_symbolic_link(files2symbolic, dir_symlinks)
+		functions.get_symbolic_link(files2symbolic, dir_symlinks)
 
 	if (options.skip_report):
 		print ("+ No report generation...")
 	else:
 		print ("\n+ Generating a report using MultiQC module.")
+		outdir_report = functions.create_subfolder("report", outdir)
 	
 		## call multiQC report module
-		givenList = []
-		givenList.append(outdir)
+		givenList = [ v for v in outdir_dict.values() ]
 		my_outdir_list = set(givenList)
-		outdir_report = functions.create_subfolder("report", outdir)
-		multiQC_report.multiQC_module_call(my_outdir_list, "Trimmomatic", outdir_report,"")
+		
+		## debug message
+		if (Debug):
+			print (colored("\n**DEBUG: my_outdir_list for multiqc report **", 'yellow'))
+			print (my_outdir_list)
+			print ("\n")
 
+		trimm_report = functions.create_subfolder("trimm", outdir_report)
+		multiQC_report.multiQC_module_call(my_outdir_list, "Trimmomatic", trimm_report,"")
+		print ('\n+ A summary HTML report of each sample is generated in folder: %s' %trimm_report)
+		
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)
 	print ("\n+ Exiting trimm module.")
 	exit()
+	
+
+#############################################
+def trimmo_caller(list_reads, sample_folder, name, threads, Debug, adapters):
+	## check if previously assembled and succeeded
+	filename_stamp = sample_folder + '/.success'
+	if os.path.isfile(filename_stamp):
+		stamp =	functions.read_time_stamp(filename_stamp)
+		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+	else:
+		# Call trimmomatic
+		trimmomatic_call.trimmo_module(list_reads, sample_folder, name, threads, Debug, adapters)
+
+
+
+	

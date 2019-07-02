@@ -13,24 +13,24 @@ import re
 import subprocess
 import sys
 from sys import argv
+from termcolor import colored
 
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
 
-######
+################################################
 def	help_options():
 	print ("\nUSAGE:\npython %s Outfolder file_R1 file_R2 trimmomatic threads trimmomatic_adapters sample_name\n"  %os.path.abspath(argv[0]))
 	print ("\n*** If not paired-end provide 'na' for file_R2")
 
-######	
+################################################
 def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_adapters):
 	
-	#trimmomatic_jar = "/software/debian-8/bio/trimmomatic-0.36/trimmomatic.jar" #config.EXECUTABLES['trimmomatic'] ## check if it works
+	## get exe
 	trimmomatic_jar = config.get_exe('trimmomatic')
 	
 	## check if it exists
-	#trimmomatic_adapters = config.DATA['trimmomatic_adapters']
 	if os.path.isfile(trimmomatic_adapters):
 		## debug message
 		if (Debug):
@@ -45,9 +45,13 @@ def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_ada
 	return(trimmo_call(path_name, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug))
 
 ######
+def print_help_adapters():
+	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
+
+################################################
 def trimmo_call(path_name, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
 	
-	##
+	## get java exe
 	java_path = config.get_exe('java')
 
 	## debug message
@@ -93,7 +97,7 @@ def trimmo_call(path_name, sample_name, files, trimmomatic_jar, threads, trimmom
 	## system call & return
 	return(functions.system_call(cmd))	
 
-######
+################################################
 def main():
 
   	## control if options provided or help
@@ -115,7 +119,7 @@ def main():
 	## call
 	trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threads, trimmomatic_adapters)
 		
-######
+################################################
 
 '''******************************************'''
 if __name__== "__main__":

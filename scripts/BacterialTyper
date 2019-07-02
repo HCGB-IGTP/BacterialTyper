@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(
 subparsers = parser.add_subparsers(title='Available modules', help='', metavar='')
 
 ## help options list
-help_options = ('--help_format', '--help_BUSCO', '--help_project', '--help_Prokka', '--help_ARIBA', '--help_PhiSpy')
+help_options = ('--help_format', '--help_BUSCO', '--help_project', '--help_Prokka', '--help_ARIBA', '--help_PhiSpy', '--help_trimm_adapters', '--help_multiqc')
 
 #######################
 #### Configuration ####
@@ -50,6 +50,8 @@ subparser_help.add_argument("--help_BUSCO", action="store_true", help="...")
 subparser_help.add_argument("--help_Prokka", action="store_true", help="...")
 subparser_help.add_argument("--help_ARIBA", action="store_true", help="...")
 subparser_help.add_argument("--help_PhiSpy", action="store_true", help="...")
+subparser_help.add_argument("--help_trimm_adapters", action="store_true", help="Show additional information on trimm adapters.")
+subparser_help.add_argument("--help_multiqc", action="store_true", help="Show additional help on the multiQC module.")
 subparser_help.set_defaults(func=BacterialTyper.modules.info.run)
 ##-------------------------------------------------------------##
 
@@ -200,6 +202,7 @@ info_group_qc.add_argument("--help_BUSCO", action="store_true", help="Benchmarki
 info_group_qc.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 info_group_qc.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
 info_group_qc.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
+info_group_qc.add_argument("--help_multiqc", action="store_true", help="Show additional help on the multiQC module.")
 subparser_qc.set_defaults(func=BacterialTyper.modules.qc.run)
 ##-------------------------------------------------------------##
 
@@ -229,20 +232,30 @@ subparser_trimm = subparsers.add_parser(
     help='Trimms sequencing adapters.',
     description='This module trimms sequencing adapters that could be present in next generation sequencing files',
 )
+in_out_group_trimm_mode_name = subparser_trimm.add_argument_group("Mode")
+in_out_group_trimm_mode = in_out_group_trimm_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+in_out_group_trimm_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
+in_out_group_trimm_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining fastq reads. Provide a unique path o several using --batch option")
+
 in_out_group_trimm = subparser_trimm.add_argument_group("Input/Output")
-in_out_group_trimm.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= not any(elem in help_options for elem in sys.argv))
-in_out_group_trimm.add_argument("--output_folder", help="Output folder.", required= not any(elem in help_options for elem in sys.argv))
+in_out_group_trimm.add_argument("--input", help="Folder containing a project or reads, according to the mode selected. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv))
+in_out_group_trimm.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
 in_out_group_trimm.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 in_out_group_trimm.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_trimm.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_trimm.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
 options_group_trimm = subparser_trimm.add_argument_group("Options")
-options_group_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
-options_group_trimm.add_argument("--adapters", help="Adapter sequences to use for the trimming process", required= not any(elem in help_options for elem in sys.argv))
+options_group_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]. See details in --help_multiqc")
+options_group_trimm.add_argument("--adapters", help="Adapter sequences to use for the trimming process. See --help_trimm_adapters for further information.", required= not any(elem in help_options for elem in sys.argv))
 options_group_trimm.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-options_group_trimm.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
-options_group_trimm.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
+
+info_group_trimm = subparser_trimm.add_argument_group("Additional information")
+info_group_trimm.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+info_group_trimm.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
+info_group_trimm.add_argument("--help_trimm_adapters", action="store_true", help="Show additional information on trimm adapters.")
+info_group_trimm.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
+info_group_trimm.add_argument("--help_multiqc", action="store_true", help="Show additional help on the multiQC module.")
 
 subparser_trimm.set_defaults(func=BacterialTyper.modules.trimm.run)
 ##-------------------------------------------------------------##
@@ -256,9 +269,14 @@ subparser_assemble = subparsers.add_parser(
     help='Assembly for each sample.',
     description='This module assembles sequencing reads into contigs using spades. Input must be trimmed sequences.'
 )
+in_out_group_assembly_mode_name = subparser_assemble.add_argument_group("Mode")
+in_out_group_assembly_mode = in_out_group_assembly_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+in_out_group_assembly_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
+in_out_group_assembly_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining trimmed fastq reads. Provide a unique path o several using --batch option")
+
 in_out_group_assembly = subparser_assemble.add_argument_group("Input/Output")
 in_out_group_assembly.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= not any(elem in help_options for elem in sys.argv))
-in_out_group_assembly.add_argument("--output_folder", help="Output folder.", required= not any(elem in help_options for elem in sys.argv))
+in_out_group_assembly.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
 in_out_group_assembly.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 in_out_group_assembly.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_assembly.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
@@ -266,13 +284,18 @@ in_out_group_assembly.add_argument("--ex_sample", help="File containing a list o
 
 dataset_group_assembly = subparser_assemble.add_argument_group("Datasets")
 dataset_group_assembly.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
-dataset_group_assembly.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
 dataset_group_assembly.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", required= not any(elem in help_options for elem in sys.argv))
-dataset_group_assembly.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
 
 options_group_assembly = subparser_assemble.add_argument_group("Options")
 options_group_assembly.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-options_group_assembly.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+dataset_group_assembly.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]. See details in --help_multiqc")
+
+info_group_assemble = subparser_assemble.add_argument_group("Additional information")
+info_group_assemble.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+info_group_assemble.add_argument("--help_multiqc", action="store_true", help="Show additional help on the multiQC module.")
+info_group_assemble.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
+info_group_assemble.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
+info_group_assemble.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
 
 subparser_assemble.set_defaults(func=BacterialTyper.modules.assemble.run)
 ##-------------------------------------------------------------##

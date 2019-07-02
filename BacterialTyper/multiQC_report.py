@@ -10,6 +10,7 @@ import io
 import sys
 from io import open
 from sys import argv
+from termcolor import colored
 
 ## import my modules
 from BacterialTyper import functions
@@ -40,6 +41,9 @@ def list2file(givenList, path):
 def	help_options():
 	print ("\nUSAGE:\npython %s folder sample_list name\n"  %os.path.abspath(argv[0]))
 
+############
+def multiqc_help():
+	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
 ############
 def main():

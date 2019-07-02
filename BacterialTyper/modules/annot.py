@@ -10,7 +10,6 @@ import io
 import os
 import re
 import sys
-from io import open
 import concurrent.futures
 from termcolor import colored
 import pandas as pd
@@ -71,9 +70,16 @@ def run(options):
 	if options.batch:
 		## csv file containing sample name and file path
 		pd_samples_retrieved = pd.read_csv(options.batch, sep=',',header=None)
-		pd_samples_retrieved.columns = ["samples", "assembly"]
+		pd_samples_retrieved.columns = ["samples", "tag", "file"]
 	else:
-		pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "chromosome", ('.fna', '.fasta'))
+		fasta_ext = ('.fna', '.fasta')
+		genome_pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "chromosome", fasta_ext)
+	
+		print ("+ Retrieve all plasmids assembled...")
+		plasmid_pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "plasmid", fasta_ext)
+		
+		frames = [plasmid_pd_samples_retrieved, genome_pd_samples_retrieved]
+		pd_samples_retrieved = pd.concat(frames, ignore_index=True)
 
 	## annotate
 	print ("+ Annotate assemblies using prokka:")
@@ -92,7 +98,7 @@ def run(options):
 
 	## send for each sample
 	with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
-		commandsSent = { executor.submit(annotation.module_call, row['assembly'], options.kingdom, options.genera, outdir + '/' + row['samples'], row['samples'] , threads_module): index for index, row in pd_samples_retrieved.iterrows() }
+		commandsSent = { executor.submit(annotation.module_call, row['file'], options.kingdom, options.genera, outdir + '/' + row['samples'] + '_' + row['tag'], row['samples'] , threads_module): index for index, row in pd_samples_retrieved.iterrows() }
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
 			try:
@@ -110,10 +116,13 @@ def run(options):
 	protein_files = []
 	print ("+ Detail information for each sample could be identified in separate folders:")
 	for index, row in pd_samples_retrieved.iterrows():
-		fold_sample = outdir + '/' + row['samples'] + '/'
+		fold_sample = outdir + '/' + row['samples'] + '_' + row['tag'] + '/'
 		givenList.append(fold_sample)
-		protein_files.extend(functions.retrieve_files(fold_sample, '.faa'))
+		if row['tag'] != 'plasmid':
+			protein_files.extend(functions.retrieve_matching_files(fold_sample, '.faa'))
 		print ('\t- %s' %fold_sample)	
+
+	print (protein_files)
 
 	### report generation
 	if (options.skip_report):

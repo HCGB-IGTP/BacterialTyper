@@ -179,8 +179,6 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 ###############
 def select_other_samples (list_samples, samples_prefix, mode, extensions, exclude=False):
 
-	#print (list_samples, samples_prefix, mode, extensions)
-
     #Get all files in the folder "path_to_samples"    
 	sample_list = []
 	for names in samples_prefix:
@@ -215,6 +213,9 @@ def select_other_samples (list_samples, samples_prefix, mode, extensions, exclud
 	## initiate dataframe
 	name_columns = ("samples", "tag", "file")
 
+	## init dataframe
+	name_columns = ("sample", "dirname", "name", "ext", "tag")
+
 	## initiate dataframe
 	df_samples = pd.DataFrame(columns=name_columns)
 
@@ -227,6 +228,7 @@ def select_other_samples (list_samples, samples_prefix, mode, extensions, exclud
 		else:
 			file_name = a_name.split("_" + mode)[0]
 			df_samples.loc[len(df_samples)] = [file_name, mode, a_file]
+			
 
 	#print (non_duplicate_samples)
 	number_samples = df_samples.index.size

@@ -26,7 +26,7 @@ from BacterialTyper.other_tools import tools
 contig_stats_script = tools.perl_scripts('contig_stats')
 rename_seqs_script = tools.perl_scripts('rename_FASTA_seqs')
 
-######
+################################################
 def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads):
 
 	## make sure spades.py version > 3.8
@@ -45,7 +45,7 @@ def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads)
 
 	return (scaffolds_retrieved)
 
-######
+################################################
 def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 
 	print ('+ Running main assembly...')
@@ -60,10 +60,11 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 	
 	return (scaffolds_retrieved)
 
-######
+################################################
 def run_SPADES(path, file1, file2, name, SPADES_bin, options, threads):
 
-	sample_folder = functions.create_subfolder(name, path)
+	#sample_folder = functions.create_subfolder(name, path)
+	sample_folder = path
 	
 	## check if previously assembled and succeeded
 	filename_stamp = sample_folder + '/.success'
@@ -77,7 +78,7 @@ def run_SPADES(path, file1, file2, name, SPADES_bin, options, threads):
 	
 	## command	
 	cmd_SPADES = '%s %s-t %s -o %s -1 %s -2 %s > %s 2> %s' %(SPADES_bin, options, threads, sample_folder, file1, file2, logFile, logFile)
-	#code = functions.system_call(cmd_SPADES)
+	code = functions.system_call(cmd_SPADES)
 	code='OK'
 	
 	if (code == 'OK'):
@@ -87,7 +88,7 @@ def run_SPADES(path, file1, file2, name, SPADES_bin, options, threads):
 	
 	return('OK')
 
-######
+################################################
 def get_files(path):
 	files = os.listdir(path)
 	scaffolds_files = ()
@@ -106,8 +107,36 @@ def get_files(path):
 	else:
 		return scaffolds_files
 
-######
+
+################################################
 def run_module_SPADES(name, folder, file1, file2, threads):
+
+	print ("+ Calling spades assembly for sample...", name)	
+
+	## folder create: functions.create_folder(folder)
+	
+	## get configuration
+	SPADES_bin = config.get_exe('spades')
+	
+	## assembly main 
+	path_to_contigs = run_SPADES_assembly(folder, file1, file2, name, SPADES_bin, threads)
+
+	## contig stats
+	print ('+ Get assembly statistics:...\n')
+	contig_out = contig_stats(path_to_contigs)	
+		
+	## dump in screen
+	contig_out_file = open(contig_out, 'r')
+	contig_out_file_read = contig_out_file.read()
+	contig_out_file.close()
+	print (contig_out_file_read)
+	
+	## success stamps
+	filename_stamp = folder + '/.success'
+	stamp =	functions.print_time_stamp(filename_stamp)
+
+################################################
+def run_module_SPADES_old(name, folder, file1, file2, threads):
 
 	print ("+ Calling spades assembly for sample...", name)	
 
@@ -142,7 +171,7 @@ def run_module_SPADES(name, folder, file1, file2, threads):
 	filename_stamp = folder + '/.success'
 	stamp =	functions.print_time_stamp(filename_stamp)
 
-######
+################################################
 def discardPlasmids(contigs, plasmids, path, sample):
 	
 	## check if any plasmids
@@ -237,14 +266,14 @@ def discardPlasmids(contigs, plasmids, path, sample):
 	
 	return (contig_out_file, plasmid_out_file)
 
-######
+################################################
 def contig_stats(sequences):
 	file_out = sequences + '_stats.txt'
 	cmd_stats = 'perl %s %s > %s' %(contig_stats_script, sequences, file_out)
 	code_chr = functions.system_call(cmd_stats)
 	return (file_out)
 
-######
+################################################
 def stats(new_contigs, new_plasmids):	
 	## generate contig statistics
 	print ('+ Get assembly statistics:...\n')
@@ -271,17 +300,17 @@ def stats(new_contigs, new_plasmids):
 		plasmid_out_file.close()
 		print(plasmid_file_read)	
 	
-######
+################################################
 def rename_contigs(fasta_file, name, new_fasta):
 	## perl tools/perl/rename_FASTA_seqs.pl fasta_file name_file name2add ADD|REPLACE|BEGIN|ADD_BEGIN
 	perl_call = "perl %s %s %s %s REPLACE" %(rename_seqs_script, fasta_file, new_fasta, name)
 	return (functions.system_call(perl_call))
 	
-######
+################################################
 def	help_options():
 	print ("\nUSAGE: python %s file1 file2 name SPADES_bin threads path\n"  %os.path.realpath(__file__))
 
-######
+################################################
 def main():
 	## this code runs when call as a single script
 

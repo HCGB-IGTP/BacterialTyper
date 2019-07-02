@@ -21,6 +21,8 @@ from BacterialTyper import BUSCO_caller
 from BacterialTyper import ariba_caller
 from BacterialTyper import sampleParser
 from BacterialTyper import bacteriophage
+from BacterialTyper import trimmomatic_call
+from BacterialTyper import multiQC_report
 
 ##########################
 def run(options):
@@ -56,7 +58,17 @@ def run(options):
 		bacteriophage.help_PhiSpy()
 		exit()
 
+	## information for trimm adapters
+	if (options.help_trimm_adapters):
+		trimmomatic_call.print_help_adapters()
+		exit()
 
+	## information for Multiqc
+	if (options.help_multiqc):
+		multiQC_report.multiqc_help()
+		exit()
+
+	
 ##########################
 def project_help():
 	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
