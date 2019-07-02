@@ -14,6 +14,9 @@ parser = argparse.ArgumentParser(
 )
 subparsers = parser.add_subparsers(title='Available modules', help='', metavar='')
 
+## help options list
+help_options = ('--help_format', '--help_BUSCO', '--help_project', '--help_Prokka', '--help_ARIBA', '--help_PhiSpy')
+
 #######################
 #### Configuration ####
 #######################
@@ -29,6 +32,27 @@ subparser_config.add_argument("--debug", action="store_true", help="Show additio
 subparser_config.set_defaults(func=BacterialTyper.modules.set_configuration.run)
 ##-------------------------------------------------------------##
 
+#######################
+#### Help messages ####
+#######################
+
+##------------------------------ help ---------------------- ##
+subparser_help = subparsers.add_parser(
+    'info',
+    help='Print additional information & help messages ',
+    description='For different modules, options or parameters print additional information and help messages',
+)
+subparser_help_name = subparser_help.add_argument_group("Show additional help information")
+subparser_help = subparser_help_name.add_mutually_exclusive_group(required= True)
+subparser_help.add_argument("--help_project", action="store_true", help="...")
+subparser_help.add_argument("--help_format", action="store_true", help="...")
+subparser_help.add_argument("--help_BUSCO", action="store_true", help="...")
+subparser_help.add_argument("--help_Prokka", action="store_true", help="...")
+subparser_help.add_argument("--help_ARIBA", action="store_true", help="...")
+subparser_help.add_argument("--help_PhiSpy", action="store_true", help="...")
+subparser_help.set_defaults(func=BacterialTyper.modules.info.run)
+##-------------------------------------------------------------##
+
 ###################
 #### Databases ####
 ###################
@@ -40,7 +64,7 @@ subparser_initDB = subparsers.add_parser(
     description='Given a file with information from known strains this module initiates a database with information from NCBI and other sources: ARIBA databases and kma indexes.',
 )
 list_help_options = ('--help_ARIBA', '--help_BUSCO')
-subparser_initDB.add_argument("--path", help="Folder path to generate database.", required= not any(elem in list_help_options for elem in sys.argv) )
+subparser_initDB.add_argument("--path", help="Folder path to generate database.", required= not any(elem in help_options for elem in sys.argv) )
 subparser_initDB.add_argument("--ID_file", help="ID_file is a csv file (include header) containing several columns per row according to the header provided: ##genus,species,name,NCBI_assembly_ID", required= not any(elem in list_help_options for elem in sys.argv) )
 subparser_initDB.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 subparser_initDB.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
@@ -72,7 +96,7 @@ subparser_updateDB = subparsers.add_parser(
     help='Updates database.',
     description='Given a file with information from known strains this module updates an initiated database with information from NCBI. Other options allow to update database from kma indexes or ARIBA databases.'
 )
-subparser_updateDB.add_argument("--path", help="Folder path to database.", required= not any(elem in list_help_options for elem in sys.argv) )
+subparser_updateDB.add_argument("--path", help="Folder path to database.", required= not any(elem in help_options for elem in sys.argv) )
 options_group = subparser_updateDB.add_argument_group("Options")
 options_group.add_argument("--ID_file", help="ID_file is a csv file (include header) containing several columns per row according to the header provided: ##genus,species,name,NCBI_assembly_ID")
 options_group.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
@@ -102,50 +126,101 @@ subparser_updateDB.set_defaults(func=BacterialTyper.modules.database.updateDB_NC
 #########################
 
 ##--------------------------- prepareSamples ----------------- ##
-subparser_sample = subparsers.add_parser(
+subparser_prep = subparsers.add_parser(
     'prep',
     help='Prepares FASTQ files from samples',
     description='This module prepares fastq files from a sequencing run. It could renamed, copy, link or merge them when multiples files have been generated for the same sample e.g different lanes. It concatenates these files according the common identifier and generates a unique file, one per paired-read if necessary',
 )
-in_out_group_prepareFQ = subparser_sample.add_argument_group("Input/Output")
-in_out_group_prepareFQ.add_argument("--input", help="Folder containing fastq files. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. All files would be retrieved.", required= '--help_format' not in sys.argv)
-in_out_group_prepareFQ.add_argument("--output_folder", help="Output folder.", required= '--help_format' not in sys.argv)
-in_out_group_prepareFQ.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
-in_out_group_prepareFQ.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
-in_out_group_prepareFQ.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
-in_out_group_prepareFQ.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
-options_group_prepareFQ = subparser_sample.add_argument_group("Options")
-options_group_prepareFQ.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-options_group_prepareFQ.add_argument("--copy", action="store_true", help="Instead of generating symbolic links, copy files into output folder. [Default OFF].")
-options_group_prepareFQ.add_argument("--merge", action="store_true", help="Merges FASTQ files for the same sample [Default OFF].")
-options_group_prepareFQ.add_argument("--rename", help="File containing original name and final name for each sample separated by comma. No need to provide a name for each pair if paired-end files. If provided with option '--merge', the merge files would be renamed accordingly.")
-options_group_prepareFQ.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
-options_group_prepareFQ.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+in_out_group_prep_mode_name = subparser_prep.add_argument_group("Mode")
+in_out_group_prep_mode = in_out_group_prep_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+in_out_group_prep_mode.add_argument("--project", action="store_true", help="It initiates --output_folder folder to contain a project with samples, metadata, configuration etc. [Default]")
+in_out_group_prep_mode.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps.")
 
-subparser_sample.set_defaults(func=BacterialTyper.modules.sample_prepare.retrieve)
+in_out_group_prep = subparser_prep.add_argument_group("Input/Output")
+in_out_group_prep.add_argument("--input", help="Folder containing fastq files. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. All files would be retrieved.", required= not any(elem in help_options for elem in sys.argv))
+in_out_group_prep.add_argument("--output_folder", help="Output folder. Name for the project folder.", required= not any(elem in help_options for elem in sys.argv))
+in_out_group_prep.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
+in_out_group_prep.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+in_out_group_prep.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+in_out_group_prep.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+
+options_group_prep = subparser_prep.add_argument_group("Options")
+options_group_prep.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+options_group_prep.add_argument("--copy", action="store_true", help="Instead of generating symbolic links, copy files into output folder. [Default OFF].")
+options_group_prep.add_argument("--merge", action="store_true", help="Merges FASTQ files for the same sample [Default OFF].")
+options_group_prep.add_argument("--rename", help="File containing original name and final name for each sample separated by comma. No need to provide a name for each pair if paired-end files. If provided with option '--merge', the merge files would be renamed accordingly.")
+
+info_group_prep = subparser_prep.add_argument_group("Additional information")
+info_group_prep.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
+info_group_prep.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+
+subparser_prep.set_defaults(func=BacterialTyper.modules.sample_prepare.retrieve)
 ##-------------------------------------------------------------##
 
-##--------------------------- fastqc ------------------------- ##
-subparser_fastqc = subparsers.add_parser(
-    'fastqc',
-    help='Fastq Quality check for sample.',
-    description='This module call FASTQC for a quality check of each sample provided',
+##--------------------------- QC ------------------------- ##
+subparser_qc = subparsers.add_parser(
+    'QC',
+    help='Quality check for samples',
+    description='This module calls different programs attending the input provided: FASTQC for a quality check of raw reads; BUSCO for assembly and/or annotations provided for sample.',
 )
-in_out_group_fastqc = subparser_fastqc.add_argument_group("Input/Output")
-in_out_group_fastqc.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= '--help_format' not in sys.argv)
-in_out_group_fastqc.add_argument("--output_folder", help="Output folder.", required= '--help_format' not in sys.argv)
-in_out_group_fastqc.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
-in_out_group_fastqc.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
-in_out_group_fastqc.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
-in_out_group_fastqc.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+## other options
+annotation_options = ('--assembly', '--annotation')
+detached_options = ('--detached', '--output_folder')
 
-options_group_fastqc = subparser_fastqc.add_argument_group("Options")
-options_group_fastqc.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
-options_group_fastqc.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-options_group_fastqc.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
-options_group_fastqc.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
-subparser_fastqc.set_defaults(func=BacterialTyper.modules.qc.fastqc)
+in_out_group_qc_mode_name = subparser_qc.add_argument_group("Mode")
+in_out_group_qc_mode = in_out_group_qc_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+in_out_group_qc_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
+in_out_group_qc_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining samples, contigs or protein sequences. Provide a unique path o several using --batch option")
+
+in_out_group_qc = subparser_qc.add_argument_group("Input/Output")
+in_out_group_qc.add_argument("--input", help="Folder containing input. Project or raw reads, assembly or annotation fasta files according to mode option provided.", required= not any(elem in help_options for elem in sys.argv))
+in_out_group_qc.add_argument("--output_folder", help="Output folder. Required if '--detached' mode. Under '--project' mode, information will be stored following a designed scheme. See instructions for further details", required = '--detached' in sys.argv)
+in_out_group_qc.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+in_out_group_qc.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+in_out_group_qc.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+
+exclusive_group_qc_name = subparser_qc.add_argument_group("Options")
+exclusive_group_qc = exclusive_group_qc_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+exclusive_group_qc.add_argument("--raw_reads", action="store_true",  help="Check quality for each sample using FASTQC analysis. Input: reads (fastq/fq). See --help_format for further details.")
+exclusive_group_qc.add_argument("--assembly", action="store_true",  help="Check assembly completeness using BUSCO and descriptive statistics. Input: draft assemblies, scaffolds, contigs... See --help_BUSCO for additional details.")
+exclusive_group_qc.add_argument("--annotation", action="store_true",  help="Check annotation completenes using BUSCO statistics. Input: protein sequences in fasta format. See --help_BUSCO for additional details.")
+
+options_group_qc = subparser_qc.add_argument_group("Configuration")
+options_group_qc.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end. Only applicable if --raw_reads option.")
+options_group_qc.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
+options_group_qc.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+
+dataset_group_qc = subparser_qc.add_argument_group("Datasets")
+dataset_group_qc.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= any(elem in annotation_options for elem in sys.argv))
+dataset_group_qc.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", required= any(elem in annotation_options for elem in sys.argv))
+
+info_group_qc = subparser_qc.add_argument_group("Additional information")
+info_group_qc.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
+info_group_qc.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+info_group_qc.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
+info_group_qc.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
+subparser_qc.set_defaults(func=BacterialTyper.modules.qc.run)
+##-------------------------------------------------------------##
+
+#--------------------- Assembly check ----------------------- ##
+#subparser_assemblyQC = subparsers.add_parser(
+#    'assemblyQC',
+#    help='Assembly quality check: statistics & BUSCO.',
+#    description='This module calls BUSCO for the quality check of assemblies previously generated.',
+#)
+#in_out_group_assembly_check = subparser_assemblyQC.add_argument_group("Input/Output")
+#in_out_group_assembly_check.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'. If not, provide full path using --batch option", required= '--help_BUSCO' not in sys.argv)
+#in_out_group_assembly_check.add_argument("--output_folder", help="Output folder.", required= '--help_BUSCO' not in sys.argv)
+#in_out_group_assembly_check.add_argument("--batch", action="store_true", help="Provide this option if input is a csv file containing the name and the path for each assembly. E.g.: sample1,/path/to/sample1/assembly/file.fasta")
+#in_out_group_assembly_check.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+#in_out_group_assembly_check.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+#
+#options_group_assembly_check = subparser_assemblyQC.add_argument_group("Options")
+#options_group_assembly_check.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+#options_group_assembly_check.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+#
+#subparser_assemblyQC.set_defaults(func=BacterialTyper.modules.qc.assembly_check)
 ##-------------------------------------------------------------##
 
 ##------------------------------ trimm ----------------------- ##
@@ -155,8 +230,8 @@ subparser_trimm = subparsers.add_parser(
     description='This module trimms sequencing adapters that could be present in next generation sequencing files',
 )
 in_out_group_trimm = subparser_trimm.add_argument_group("Input/Output")
-in_out_group_trimm.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= '--help_format' not in sys.argv)
-in_out_group_trimm.add_argument("--output_folder", help="Output folder.", required= '--help_format' not in sys.argv)
+in_out_group_trimm.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= not any(elem in help_options for elem in sys.argv))
+in_out_group_trimm.add_argument("--output_folder", help="Output folder.", required= not any(elem in help_options for elem in sys.argv))
 in_out_group_trimm.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 in_out_group_trimm.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_trimm.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
@@ -164,7 +239,7 @@ in_out_group_trimm.add_argument("--ex_sample", help="File containing a list of s
 
 options_group_trimm = subparser_trimm.add_argument_group("Options")
 options_group_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
-options_group_trimm.add_argument("--adapters", help="Adapter sequences to use for the trimming process", required= '--help_format' not in sys.argv)
+options_group_trimm.add_argument("--adapters", help="Adapter sequences to use for the trimming process", required= not any(elem in help_options for elem in sys.argv))
 options_group_trimm.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 options_group_trimm.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 options_group_trimm.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
@@ -182,17 +257,17 @@ subparser_assemble = subparsers.add_parser(
     description='This module assembles sequencing reads into contigs using spades. Input must be trimmed sequences.'
 )
 in_out_group_assembly = subparser_assemble.add_argument_group("Input/Output")
-in_out_group_assembly.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= '--help_BUSCO' not in sys.argv)
-in_out_group_assembly.add_argument("--output_folder", help="Output folder.", required= '--help_BUSCO' not in sys.argv)
+in_out_group_assembly.add_argument("--input", help="Folder containing reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= not any(elem in help_options for elem in sys.argv))
+in_out_group_assembly.add_argument("--output_folder", help="Output folder.", required= not any(elem in help_options for elem in sys.argv))
 in_out_group_assembly.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 in_out_group_assembly.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_assembly.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_assembly.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
 dataset_group_assembly = subparser_assemble.add_argument_group("Datasets")
-dataset_group_assembly.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= '--help_BUSCO' not in sys.argv)
+dataset_group_assembly.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
 dataset_group_assembly.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
-dataset_group_assembly.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", required= '--help_BUSCO' not in sys.argv)
+dataset_group_assembly.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", required= not any(elem in help_options for elem in sys.argv))
 dataset_group_assembly.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
 
 options_group_assembly = subparser_assemble.add_argument_group("Options")
@@ -200,32 +275,6 @@ options_group_assembly.add_argument("--threads", type=int, help="Number of CPUs 
 options_group_assembly.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 
 subparser_assemble.set_defaults(func=BacterialTyper.modules.assemble.run)
-##-------------------------------------------------------------##
-
-##--------------------- Assembly check ----------------------- ##
-subparser_assemblyQC = subparsers.add_parser(
-    'assemblyQC',
-    help='Assembly quality check: statistics & BUSCO.',
-    description='This module calls BUSCO for the quality check of assemblies previously generated.',
-)
-in_out_group_assembly_check = subparser_assemblyQC.add_argument_group("Input/Output")
-in_out_group_assembly_check.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'. If not, provide full path using --batch option", required= '--help_BUSCO' not in sys.argv)
-in_out_group_assembly_check.add_argument("--output_folder", help="Output folder.", required= '--help_BUSCO' not in sys.argv)
-in_out_group_assembly_check.add_argument("--batch", action="store_true", help="Provide this option if input is a csv file containing the name and the path for each assembly. E.g.: sample1,/path/to/sample1/assembly/file.fasta")
-in_out_group_assembly_check.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
-in_out_group_assembly_check.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
-
-dataset_group_assembly_check = subparser_assemblyQC.add_argument_group("Datasets")
-dataset_group_assembly_check.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= '--help_BUSCO' not in sys.argv)
-dataset_group_assembly_check.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", required= '--help_BUSCO' not in sys.argv)
-dataset_group_assembly_check.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
-dataset_group_assembly_check.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
-
-options_group_assembly_check = subparser_assemblyQC.add_argument_group("Options")
-options_group_assembly_check.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-options_group_assembly_check.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
-
-subparser_assemblyQC.set_defaults(func=BacterialTyper.modules.qc.assembly_check)
 ##-------------------------------------------------------------##
 
 ####################
@@ -237,23 +286,22 @@ subparser_annotate = subparsers.add_parser(
     help='Annotation for each sample.',
     description='This module annotates contig/scaffold assemblies and generates protein, gff and other annotation information. Input must be fasta/fna assemblies.'
 )
-list_help_options_annot = ('--help_Prokka', '--help_BUSCO')
 in_out_group_annot = subparser_annotate.add_argument_group("Input/Output")
-in_out_group_annot.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'. If not, provide full path using --batch option", required= not any(elem in list_help_options_annot for elem in sys.argv) )
-in_out_group_annot.add_argument("--output_folder", help="Output folder. By default a directory named annotation is generated under the current working directory", required= not any(elem in list_help_options_annot for elem in sys.argv) )
+in_out_group_annot.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'. If not, provide full path using --batch option", required= not any(elem in help_options for elem in sys.argv) )
+in_out_group_annot.add_argument("--output_folder", help="Output folder. By default a directory named annotation is generated under the current working directory", required= not any(elem in help_options for elem in sys.argv) )
 in_out_group_annot.add_argument("--batch", help="Provide a csv file containing the name and the path for each assembly. No header. Provided it in format: name,tag,file. tag = chromosome/plasmid. E.g.:  sample1,chromosome,/path/to/sample1/assembly/file.fasta\nsample1,plasmid,/path/to/sample1/assembly/file.fasta")
 in_out_group_annot.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_annot.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
 dataset_group_annot = subparser_annotate.add_argument_group("Datasets")
-dataset_group_annot.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in list_help_options_annot for elem in sys.argv) )
+dataset_group_annot.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv) )
 dataset_group_annot.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
-dataset_group_annot.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", required= not any(elem in list_help_options_annot for elem in sys.argv) )
+dataset_group_annot.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", required= not any(elem in help_options for elem in sys.argv) )
 dataset_group_annot.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
 
 prokka_group_annot = subparser_annotate.add_argument_group("Prokka Options")
 prokka_group_annot.add_argument("--help_Prokka", action="store_true", help="Prokkaryotic annotation help information.")
-prokka_group_annot.add_argument("--kingdom", help="Select a kingdom fitting your samples.", choices=['Archaea','Bacteria','Mitochondria','Viruses'], required= not any(elem in list_help_options_annot for elem in sys.argv) )
+prokka_group_annot.add_argument("--kingdom", help="Select a kingdom fitting your samples.", choices=['Archaea','Bacteria','Mitochondria','Viruses'], required= not any(elem in help_options for elem in sys.argv) )
 prokka_group_annot.add_argument("--genera", help="Select a genera fitting your samples.", choices=['Enterococcus','Escherichia','Staphylococcus', 'Other'])
 
 options_group_annot = subparser_annotate.add_argument_group("Options")
@@ -275,13 +323,13 @@ subparser_ident = subparsers.add_parser(
     description='This module call ...',
 )
 initial_group = subparser_ident.add_argument_group("Input/Output")
-initial_group.add_argument("--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required=True)
-initial_group.add_argument("--output_folder", help="Output folder.", required=True)
+initial_group.add_argument("--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required = not any(elem in help_options for elem in sys.argv))
+initial_group.add_argument("--output_folder", help="Output folder.", required= not any(elem in help_options for elem in sys.argv))
 initial_group.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 initial_group.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 initial_group.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
-initial_group.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=True)
+initial_group.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
 initial_group.add_argument("--user_data", action="store_true", help="Use previously identified samples in user_data [Default OFF].")
 initial_group.add_argument("--genbank_data", action="store_true", help="Use reference genomes from NCBI stored in database folder [Default OFF].")
 initial_group.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
@@ -311,13 +359,13 @@ subparser_profile = subparsers.add_parser(
     description='This module call ...',
 )
 initial_group_profile = subparser_profile.add_argument_group("Input/Output")
-initial_group_profile.add_argument("--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= '--help_ARIBA' not in sys.argv)
-initial_group_profile.add_argument("--output_folder", help="Output folder.", required= '--help_ARIBA' not in sys.argv)
+initial_group_profile.add_argument("--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= not any(elem in help_options for elem in sys.argv))
+initial_group_profile.add_argument("--output_folder", help="Output folder.", required= not any(elem in help_options for elem in sys.argv))
 initial_group_profile.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
 initial_group_profile.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 initial_group_profile.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_profile.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
-initial_group_profile.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=True)
+initial_group_profile.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv))
 
 parameters_group_profile = subparser_profile.add_argument_group("Parameters")
 parameters_group_profile.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
@@ -342,10 +390,10 @@ subparser_MGE = subparsers.add_parser(
 )
 list_help_options_MGE = ('--batch', '--help_PhiSpy', '--input_assemblies', '--input_plasmids', '--input_annotations')
 initial_group_MGE = subparser_MGE.add_argument_group("Input/Output")
-initial_group_MGE.add_argument("--input_assemblies", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'.\nIf not, provide full path using --batch option", required= not any(elem in list_help_options_MGE for elem in sys.argv) )
-initial_group_MGE.add_argument("--input_plasmids", help="Folder containing plasmid assemblies. Plasmid Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_plasmid(.fasta/.fna)'.\nIf not, provide full path using --batch option", required= not any(elem in list_help_options_MGE for elem in sys.argv) )
-initial_group_MGE.add_argument("--input_annotations", help="Folder containing annotation information for each assembly. GBF, GFF and faa files could be within a project folder or in the input folder. File must end with tag '.gff' and '.faa'.\nIf not, provide full path using --batch option",required= not any(elem in list_help_options_MGE for elem in sys.argv) )
-initial_group_MGE.add_argument("--output_folder", help="Output folder. By default a directory named MGE_analysis is generated under the current working directory", required= '--help_PhiSpy' not in sys.argv)
+initial_group_MGE.add_argument("--input_assemblies", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'.\nIf not, provide full path using --batch option", required= not any(elem in help_options for elem in sys.argv) )
+initial_group_MGE.add_argument("--input_plasmids", help="Folder containing plasmid assemblies. Plasmid Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_plasmid(.fasta/.fna)'.\nIf not, provide full path using --batch option", required= not any(elem in help_options for elem in sys.argv) )
+initial_group_MGE.add_argument("--input_annotations", help="Folder containing annotation information for each assembly. GBF, GFF and faa files could be within a project folder or in the input folder. File must end with tag '.gff' and '.faa'.\nIf not, provide full path using --batch option",required= not any(elem in help_options for elem in sys.argv) )
+initial_group_MGE.add_argument("--output_folder", help="Output folder. By default a directory named MGE_analysis is generated under the current working directory", required= not any(elem in help_options for elem in sys.argv))
 initial_group_MGE.add_argument("--batch", help="Provide a csv file containing the sample name, the type of file and the path for each file. No header. Provide as type of file: protein, gff or plasmid. E.g.: sample1,gff,/path/to/sample1/annotation/file.gff\nsample1,protein,/path/to/sample1/annotation/file.faa\nsample1,plasmid,/path/sample1/plasmid.fasta\nsample2,gff,/path/to/sample2/annotation/file.gff\nsample2,protein,/path/to/sample2/annotation/file.faa\nsample2,plasmid,/path/sample2/plasmid.fasta\n", required= not any(elem in list_help_options_MGE for elem in sys.argv) )
 initial_group_MGE.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_MGE.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
@@ -358,7 +406,7 @@ parameters_group_MGE = subparser_MGE.add_argument_group("Parameters")
 parameters_group_MGE.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 parameters_group_MGE.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 
-options_group_MGE = subparser_MGE.add_argument_group("Parameters")
+options_group_MGE = subparser_MGE.add_argument_group("Options")
 options_group_MGE.add_argument("--plasmid_analysis", action="store_true", help="Identify putative plasmids")
 options_group_MGE.add_argument("--phage_analysis", action="store_true", help="Identify putative phages inserted in the genome")
 options_group_MGE.add_argument("--GI_analysis", action="store_true", help="Identify putative Genomic Islands (GI)")

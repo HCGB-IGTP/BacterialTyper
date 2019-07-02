@@ -254,13 +254,11 @@ def gunzip_merge(outfile, list_files):
 	return()
 	
 ###############    
-def one_file_per_sample(dataFrame, outdir, threads):
+def one_file_per_sample(dataFrame, outdir_dict, threads, outdir):
 	## merge sequencing files for sample, no matter of sector or lane generated.
 	
 	list_samples = set(dataFrame['name'].tolist())
 	print (colored("\t" + str(len(list_samples)) + " samples to be merged from the input provided...", 'yellow'))
-	
-	functions.create_folder(outdir)
 	print ("+ Merging sequencing files for samples")
 
 	##
@@ -273,7 +271,7 @@ def one_file_per_sample(dataFrame, outdir, threads):
 
 	# We can use a with statement to ensure threads are cleaned up promptly
 	with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor: ## need to do 1 by one as there is a problem with the working directory
-		commandsSent = { executor.submit(gunzip_merge, outdir + '/' + name[0] + '_' + name[1] + ext, set(cluster["sample"].tolist())): name for name, cluster in sample_frame }
+		commandsSent = { executor.submit(gunzip_merge, outdir_dict[name[0]] + '/' + name[0] + '_' + name[1] + ext, set(cluster["sample"].tolist())): name for name, cluster in sample_frame }
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
 			try:
@@ -289,11 +287,12 @@ def one_file_per_sample(dataFrame, outdir, threads):
 	name_frame = pd.DataFrame(columns=name_columns)
 
 	## print to a file
-	merge_details = outdir + '/merge_details.txt'
+	timestamp = functions.create_human_timestamp()
+	merge_details = outdir + '/' + timestamp + '_prep_mergeDetails.txt'
 	merge_details_hd = open(merge_details, 'w')
 
 	for name, cluster in sample_frame: ## loop over samples
-		outfile = outdir + '/' + name[0] + '_' + name[1] + ext
+		outfile = outdir_dict[name[0]] + '/' + name[0] + '_' + name[1] + ext
 		
 		merge_details_hd.write("####################\n")		
 		merge_details_hd.write("Sample: " + name[0] + '\n')
@@ -303,7 +302,7 @@ def one_file_per_sample(dataFrame, outdir, threads):
 		merge_details_hd.write('\n')
 		merge_details_hd.write("####################\n")		
 		
-		name_frame.loc [len(name_frame)] = (name[0], outdir, name[1], outfile, ext_list[0], gz_list[0])
+		name_frame.loc [len(name_frame)] = (name[0], outdir_dict[name[0]], name[1], outfile, ext_list[0], gz_list[0])
 
 	merge_details_hd.close()
 	return(name_frame)

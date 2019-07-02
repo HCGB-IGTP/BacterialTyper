@@ -68,13 +68,45 @@ def get_diff_time(stamp):
 	elapsed = time_today - float(time_today)
 	days_passed = int((elapsed/3600)/24)
 	return(days_passed)
+	
+###############	
+def create_human_timestamp():
+	now = datetime.now()
+	timeprint = now.strftime("%Y%m%d")
+	return timeprint
 
 
 ############################################################################
 ######## 					FILES/FOLDERS							######## 					
 ############################################################################
 
-###############   
+###############
+def outdir_project(outdir, project_mode, pd_samples, mode):
+
+	# Group dataframe by sample name
+	sample_frame = pd_samples.groupby(["name"])
+	
+	dict_outdir = {}	
+	for name, cluster in sample_frame:
+		if (project_mode):
+			#print ("Create subdir for every sample: ", mode)
+
+			## create sample
+			out_name = outdir + '/' + name
+			create_folder(out_name)
+			
+			## create subdir sub sample
+			out_mode = out_name + '/' + mode
+			dict_outdir[name] = out_mode
+			create_folder(out_mode)
+
+		else:
+			#print ("All samples share same folder")
+			dict_outdir[name] = outdir
+	
+	return (dict_outdir)
+
+###############
 def create_subfolder (name, path):
     ## create subfolder  ##	
 	subfolder_path = path + "/" + name
@@ -137,7 +169,7 @@ def readList_fromFile(fileGiven):
 	return (lineList)
 
 ######
-def retrieve_files(folder, string):
+def retrieve_matching_files(folder, string):
 	my_all_list = get_fullpath_list(folder)
 	matching = [s for s in my_all_list if s.endswith(string)]
 	return (matching)

@@ -14,7 +14,8 @@ __all__ = [
 	'MGE',
 	'annot',
 	'version',
-	'citation'
+	'citation',
+	'info'
 ]
 
 from BacterialTyper.modules import *

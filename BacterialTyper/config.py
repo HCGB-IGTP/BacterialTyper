@@ -45,6 +45,7 @@ def prog_to_default():
 		'multiqc':'multiqc',
 		'trimmomatic':'trimmomatic.jar'
 		
+	
 	}
 	return(program_to_default)
 
