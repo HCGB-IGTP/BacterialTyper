@@ -46,6 +46,7 @@ def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_ada
 
 ######
 def print_help_adapters():
+	## [TODO]
 	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
 ################################################

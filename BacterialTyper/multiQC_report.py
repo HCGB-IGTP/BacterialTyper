@@ -43,6 +43,7 @@ def	help_options():
 
 ############
 def multiqc_help():
+	## [TODO]
 	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
 ############

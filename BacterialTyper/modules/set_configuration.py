@@ -18,6 +18,7 @@ from BacterialTyper import extern_progs
 from BacterialTyper import functions
 from BacterialTyper import install_dependencies
 
+## [TODO]
 def run(options):
 
 	## init time

@@ -68,6 +68,11 @@ def run(options):
 		multiQC_report.multiqc_help()
 		exit()
 
+	## information for KMA Software
+	if (options.help_KMA):
+		species_identification_KMA.help_kma_database()
+		exit()
+
 	
 ##########################
 def project_help():

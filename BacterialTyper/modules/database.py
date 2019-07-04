@@ -13,7 +13,7 @@ from termcolor import colored
 ## import my modules
 from BacterialTyper import database_generator
 from BacterialTyper import ariba_caller
-from BacterialTyper import multiQC_report 
+from BacterialTyper import multiQC_report
 from BacterialTyper import species_identification_KMA
 from BacterialTyper import config 
 from BacterialTyper import functions
@@ -204,6 +204,7 @@ def kma_download(options, database_folder):
 
 ###############################################################
 def index_db_kma():
+	## [TODO]
 	## ToDo implement self index of database
 	print()
 
