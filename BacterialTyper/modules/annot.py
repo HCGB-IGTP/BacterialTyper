@@ -90,7 +90,7 @@ def run(options):
 	if (Debug):
 		print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
 		print (pd_samples_retrieved)
-	
+
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
 	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "annot")

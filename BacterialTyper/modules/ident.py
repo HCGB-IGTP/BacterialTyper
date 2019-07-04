@@ -221,7 +221,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 		final_dir = options.input + '/report/ident'
 		functions.create_folder(final_dir) 
 	else:
-		final_dir = outdir
+		final_dir = os.path.abspath(options.output_folder)
 		
 	name_excel = final_dir + '/identification_summary.xlsx'
 	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') ## open excel handle

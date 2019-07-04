@@ -113,7 +113,10 @@ def get_files(options, input_dir, mode, extension):
 
 	else:
 		samples_names = ['.*']
-		
+
+	## discard single_copy busco sequences generated
+	files = [s for s in files if "single_copy_busco_sequences" not in s]
+
 	## files list...
 	if (options.debug):
 		print (colored("\n**DEBUG: sample_prepare.get_files files list to check **", 'yellow'))

@@ -23,6 +23,7 @@ from BacterialTyper import sampleParser
 from BacterialTyper import bacteriophage
 from BacterialTyper import trimmomatic_call
 from BacterialTyper import multiQC_report
+from BacterialTyper.modules import MGE
 
 ##########################
 def run(options):
@@ -53,11 +54,6 @@ def run(options):
 		ariba_caller.help_ARIBA()
 		exit()
 
-	## information for PhiSpy
-	if (options.help_PhiSpy):
-		bacteriophage.help_PhiSpy()
-		exit()
-
 	## information for trimm adapters
 	if (options.help_trimm_adapters):
 		trimmomatic_call.print_help_adapters()
@@ -73,6 +69,20 @@ def run(options):
 		species_identification_KMA.help_kma_database()
 		exit()
 
+	## information for PhiSpy
+	if (options.help_PhiSpy):
+		bacteriophage.help_PhiSpy()
+		exit()
+		
+	## information for MGE module analysis
+	if (options.help_MGE_analysis):
+		MGE.help_MGE_analysis()
+		exit()
+
+	## information for PhiSpy
+	if (options.help_input_MGE):
+		MGE.help_input_MGE()
+		exit()
 	
 ##########################
 def project_help():

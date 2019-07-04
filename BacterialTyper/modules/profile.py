@@ -247,7 +247,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases):
 		final_dir = options.input + '/report/profile'
 		functions.create_folder(final_dir) 
 	else:
-		final_dir = outdir
+		final_dir = os.path.abspath(options.output_folder)
 
 	vfdb = False
 	subfolder = functions.create_subfolder("ariba_summary", final_dir)
@@ -268,13 +268,6 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases):
 			
 		## call ariba summary
 		ariba_caller.ariba_summary_all(outfile_summary, report_files_databases)
-	
-	
-	## debug message
-	if (Debug):
-		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
-
-	
 	
 	if (vfdb):
 		## print additional information for VFDB
