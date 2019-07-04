@@ -25,6 +25,7 @@ from termcolor import colored
 from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import ariba_caller
+from BacterialTyper import species_identification_KMA
 
 ## import data
 dataDir = os.path.dirname(os.path.realpath(__file__)) + '/../../data/'
@@ -469,7 +470,7 @@ def getdbs(source,database_folder, option, debug):
 			else:
 				## if missing: call download module
 				print ("+ Download missing KMA_db (%s) provided" %sets)
-				download_kma_database(database_folder + '/KMA_db/' + sets, sets, debug)
+				species_identification_KMA.download_kma_database(database_folder + '/KMA_db/' + sets, sets, debug)
 
 				if (db == 'plasmids'):
 					prefix = '.T'

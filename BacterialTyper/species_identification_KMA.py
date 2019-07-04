@@ -24,6 +24,15 @@ from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import ariba_caller
 
+########################
+#### INFORMATION	####
+########################
+
+##################################################
+def help_kma_database():
+	## [TODO]
+	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
+
 ####################
 #### DATABASE	####
 ####################
@@ -82,10 +91,10 @@ def download_kma_database(folder, database, debug):
 			print (colored("Download files via function wget_download:",'yellow'))
 
 		url = ftp_site + database + '.tar.gz'
-		#functions.wget_download(url, folder)
+		functions.wget_download(url, folder)
 
 		md5_url = ftp_site + database + '.md5'
-		#functions.wget_download(md5_url, folder)
+		functions.wget_download(md5_url, folder)
 		print ("\n\t+ Data succesfully downloaded.....")
 
 		## get files
@@ -227,7 +236,17 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads):
 		print ("Single end mode KMA search:\n")
 		cmd_kma_search = "%s -Sparse -i %s -o %s -t_db %s -shm 1 -t %s 2> %s" %(kma_bin, files[0], out_file, index_name, threads, out_file_log)
 
-	return(functions.system_call(cmd_kma_search))
+	code = functions.system_call(cmd_kma_search)
+
+	if (code == 'OK'):
+		## success stamps
+		basename_tag = os.path.basename(out_file)
+		folder = os.path.dirname(out_file)
+		filename_stamp = folder + '/.success_' + basename_tag
+		stamp =	functions.print_time_stamp(filename_stamp)
+		return('OK')
+	else:
+		return('FAIL')
 	
 ##################################################
 def kma_ident_module(out_file, files, sample_name, index_name, threads):

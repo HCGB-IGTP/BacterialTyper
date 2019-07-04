@@ -28,6 +28,8 @@ help_options = ('--help_format', '--help_BUSCO', '--help_project', '--help_Prokk
 #######################
 ## submodules
 ##------------------------------ config ---------------------- ##
+
+## [TODO]
 subparser_config = subparsers.add_parser(
     'config',
     help='Configure the pipeline',
@@ -121,10 +123,10 @@ subparser_prep = subparsers.add_parser(
     description='This module prepares fastq files from a sequencing run. It could renamed, copy, link or merge them when multiples files have been generated for the same sample e.g different lanes. It concatenates these files according the common identifier and generates a unique file, one per paired-read if necessary',
 )
 
-in_out_group_prep_mode_name = subparser_prep.add_argument_group("Mode")
-in_out_group_prep_mode = in_out_group_prep_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-in_out_group_prep_mode.add_argument("--project", action="store_true", help="It initiates --output_folder folder to contain a project with samples, metadata, configuration etc. [Default]")
-in_out_group_prep_mode.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps.")
+prep_mode_name = subparser_prep.add_argument_group("Mode")
+prep_mode = prep_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+prep_mode.add_argument("--project", action="store_true", help="It initiates --output_folder folder to contain a project with samples, metadata, configuration etc. [Default]")
+prep_mode.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps.")
 
 in_out_group_prep = subparser_prep.add_argument_group("Input/Output")
 in_out_group_prep.add_argument("--input", help="Folder containing fastq files. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. All files would be retrieved.", required= not any(elem in help_options for elem in sys.argv))
@@ -157,10 +159,10 @@ subparser_qc = subparsers.add_parser(
 annotation_options = ('--assembly', '--annotation')
 detached_options = ('--detached', '--output_folder')
 
-in_out_group_qc_mode_name = subparser_qc.add_argument_group("Mode")
-in_out_group_qc_mode = in_out_group_qc_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-in_out_group_qc_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-in_out_group_qc_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining samples, contigs or protein sequences. Provide a unique path o several using --batch option")
+qc_mode_name = subparser_qc.add_argument_group("Mode")
+qc_mode = qc_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+qc_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
+qc_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining samples, contigs or protein sequences. Provide a unique path o several using --batch option")
 
 in_out_group_qc = subparser_qc.add_argument_group("Input/Output")
 in_out_group_qc.add_argument("--input", help="Folder containing input. Project or raw reads, assembly or annotation fasta files according to mode option provided.", required= not any(elem in help_options for elem in sys.argv))
@@ -199,10 +201,10 @@ subparser_trimm = subparsers.add_parser(
     help='Trimms sequencing adapters.',
     description='This module trimms sequencing adapters that could be present in next generation sequencing files',
 )
-in_out_group_trimm_mode_name = subparser_trimm.add_argument_group("Mode")
-in_out_group_trimm_mode = in_out_group_trimm_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-in_out_group_trimm_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-in_out_group_trimm_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining fastq reads. Provide a unique path o several using --batch option")
+trimm_mode_name = subparser_trimm.add_argument_group("Mode")
+trimm_mode = trimm_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+trimm_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
+trimm_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining fastq reads. Provide a unique path o several using --batch option")
 
 in_out_group_trimm = subparser_trimm.add_argument_group("Input/Output")
 in_out_group_trimm.add_argument("--input", help="Folder containing a project or reads, according to the mode selected. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv))
@@ -236,10 +238,10 @@ subparser_assemble = subparsers.add_parser(
     help='Assembly for each sample.',
     description='This module assembles sequencing reads into contigs using spades. Input must be trimmed sequences.'
 )
-in_out_group_assembly_mode_name = subparser_assemble.add_argument_group("Mode")
-in_out_group_assembly_mode = in_out_group_assembly_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-in_out_group_assembly_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-in_out_group_assembly_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining trimmed fastq reads. Provide a unique path o several using --batch option")
+assembly_mode_name = subparser_assemble.add_argument_group("Mode")
+assembly_mode = assembly_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+assembly_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
+assembly_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining trimmed fastq reads. Provide a unique path o several using --batch option")
 
 in_out_group_assembly = subparser_assemble.add_argument_group("Input/Output")
 in_out_group_assembly.add_argument("--input", help="Folder containing a project or reads, according to the mode selected. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv))
@@ -276,10 +278,10 @@ subparser_annotate = subparsers.add_parser(
     help='Annotation for each sample.',
     description='This module annotates contig/scaffold assemblies and generates protein, gff and other annotation information. Input must be fasta/fna assemblies.'
 )
-in_out_group_annotate_mode_name = subparser_annotate.add_argument_group("Mode")
-in_out_group_annotate_mode = in_out_group_annotate_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-in_out_group_annotate_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-in_out_group_annotate_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining assemblies or scaffolds. Provide a unique path o several using --batch option")
+annotate_mode_name = subparser_annotate.add_argument_group("Mode")
+annotate_mode = annotate_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+annotate_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
+annotate_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining assemblies or scaffolds. Provide a unique path o several using --batch option")
 
 in_out_group_annot = subparser_annotate.add_argument_group("Input/Output")
 in_out_group_annot.add_argument("--input", help="Folder containing a project or assemblies. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv) )
@@ -322,35 +324,49 @@ subparser_space = subparsers.add_parser(' ', help='')
 subparser_ident = subparsers.add_parser(
     'ident',
     help='Species identification for each sample.',
-    description='This module call ...',
+    description='This module calls [TODO] ...',
 )
+ident_mode_name = subparser_ident.add_argument_group("Mode")
+ident_mode = ident_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+ident_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
+ident_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining assemblies or scaffolds. Provide a unique path o several using --batch option")
+
 initial_group = subparser_ident.add_argument_group("Input/Output")
 initial_group.add_argument("--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required = not any(elem in help_options for elem in sys.argv))
-initial_group.add_argument("--output_folder", help="Output folder.", required= not any(elem in help_options for elem in sys.argv))
+initial_group.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
 initial_group.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 initial_group.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 initial_group.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
-initial_group.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
-initial_group.add_argument("--user_data", action="store_true", help="Use previously identified samples in user_data [Default OFF].")
-initial_group.add_argument("--genbank_data", action="store_true", help="Use reference genomes from NCBI stored in database folder [Default OFF].")
-initial_group.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
 
-parameters_group = subparser_ident.add_argument_group("Parameters")
-parameters_group.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-parameters_group.add_argument("--fast", action="store_true", help="Do not update database, just identify samples according to databases provided [Default OFF].")
-parameters_group.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+dataset_group_ident = subparser_ident.add_argument_group("Datasets")
+dataset_group_ident.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
+dataset_group_ident.add_argument("--user_data", action="store_true", help="Use previously identified samples in user_data [Default OFF].")
+dataset_group_ident.add_argument("--genbank_data", action="store_true", help="Use reference genomes from NCBI stored in database folder [Default OFF].")
 
 kma_group = subparser_ident.add_argument_group("KMA Databases Configuration")
 kma_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to check. Provide several input if desired. If it is not available it would be downloaded and included in default database folder. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
 kma_group.add_argument("--kma_external_file", dest='kma_external_files', nargs='*', help="External fasta file to include in the search. It could be indexed or not. [Default OFF].")
 
-exclusive_group_name = subparser_ident.add_argument_group("Options")
-exclusive_group = exclusive_group_name.add_mutually_exclusive_group()
-exclusive_group.add_argument("--only_user_data", action="store_true",  help="Use only indexed genomes previously identified stored in database folder.[Default: OFF]")
-exclusive_group.add_argument("--only_genbank_data", action="store_true",  help="Use only reference genomes previously downloaded from NCBI stored in database folder.[Default: OFF]")
+exclusive_group_name_ident = subparser_ident.add_argument_group("Options")
+exclusive_group = exclusive_group_name_ident.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+exclusive_group.add_argument("--all_data", action="store_true",  help="Use all data available provided: kma databases, external db if provided, genbank, user data..")
+exclusive_group.add_argument("--only_user_data", action="store_true",  help="Use only indexed genomes previously identified stored in database folder.")
+exclusive_group.add_argument("--only_genbank_data", action="store_true",  help="Use only reference genomes previously downloaded from NCBI stored in database folder.")
 exclusive_group.add_argument("--only_kma_db", action="store_true", help="Provide this option if only database(s) provided via --kma_db should be used for species identification.")
 exclusive_group.add_argument("--only_external_kma", action="store_true", help="Provide this option if only database(s) provided via --kma_external_file should be used for species identification.")
+
+parameters_group = subparser_ident.add_argument_group("Parameters")
+parameters_group.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+parameters_group.add_argument("--KMA_cutoff", type=int, help="Similarity cutoff (%) for databases filtering. Range: 1-100. [Default = 80]", default=80)
+parameters_group.add_argument("--fast", action="store_true", help="Do not update database, just identify samples according to databases provided [Default OFF].")
+
+info_group_ident = subparser_ident.add_argument_group("Additional information")
+info_group_ident.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+info_group_ident.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
+info_group_ident.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
+info_group_ident.add_argument("--help_KMA", action="store_true", help="Show additional help on KMA software and options.")
+
 subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run)
 ##-------------------------------------------------------------##
 
@@ -425,6 +441,7 @@ subparser_MGE.set_defaults(func=BacterialTyper.modules.MGE.run)
 
 
 ##--------------------------- MLST --------------------------- ##
+## [TODO]
 ##-------------------------------------------------------------##
 
 
@@ -433,6 +450,7 @@ subparser_MGE.set_defaults(func=BacterialTyper.modules.MGE.run)
 #######################
 
 ##----------------------- Depencencies ----------------------- ##
+## [TODO]
 ##------------------------------------------------------------ ##
 
 ## space
@@ -457,9 +475,9 @@ subparser_help.add_argument("--help_ARIBA", action="store_true", help="...")
 subparser_help.add_argument("--help_PhiSpy", action="store_true", help="...")
 subparser_help.add_argument("--help_trimm_adapters", action="store_true", help="Show additional information on trimm adapters.")
 subparser_help.add_argument("--help_multiqc", action="store_true", help="Show additional help on the multiQC module.")
+subparser_help.add_argument("--help_KMA", action="store_true", help="Show additional help on KMA software and options.")
 subparser_help.set_defaults(func=BacterialTyper.modules.info.run)
 ##-------------------------------------------------------------##
-
 
 ##-------------------------- version ------------------------- ##
 subparser_version = subparsers.add_parser(
@@ -470,7 +488,6 @@ subparser_version = subparsers.add_parser(
 subparser_version.add_argument("option", help="Print only this pipeline version or all packages versions.", choices=['only','all'])
 subparser_version.set_defaults(func=BacterialTyper.modules.version.run)
 ##-------------------------------------------------------------##
-
 
 ##--------------------------- citation ------------------------##
 subparser_citation = subparsers.add_parser(

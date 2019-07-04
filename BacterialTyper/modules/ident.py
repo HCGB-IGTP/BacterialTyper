@@ -25,9 +25,22 @@ from BacterialTyper.modules import sample_prepare
 ####################################
 def run(options):
 
-	## help_format option
+	##################################
+	### show help messages if desired	
+	##################################
 	if (options.help_format):
+		## help_format option
 		sampleParser.help_format()
+		exit()
+
+	elif (options.help_project):
+		## information for project
+		help.project_help()
+		exit()
+	
+	elif (options.help_KMA):
+		## information for KMA Software
+		species_identification_KMA.help_kma_database()
 		exit()
 
 	## init time
@@ -48,34 +61,49 @@ def run(options):
 
 	### species_identification_KMA -> most similar taxa
 	functions.pipeline_header()
-
-	if (options.fast):
-		functions.boxymcboxface("Fast species identification module")
-	else:
-		functions.boxymcboxface("Species identification")
+	functions.boxymcboxface("Species identification")
 
 	print ("--------- Starting Process ---------")
 	functions.print_time()
 
-
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
-	outdir = os.path.abspath(options.output_folder)
+	outdir=""
+
+	## set mode: project/detached
+	global Project
+	if (options.project):
+		outdir = input_dir		
+		Project=True
+	elif (options.detached):
+		Project=False
+		outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", "_trim_")
-	## generate output folder
-	functions.create_folder(outdir)
-
-	## optimize threads
-	threads_module = functions.optimize_threads(options.threads, pd_samples_retrieved.index.size)
+	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "trim", ['_trim_'])
 	
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
+		print (pd_samples_retrieved)
+	
+	## generate output folder, if necessary
+	print ("\n+ Create output folder(s):")
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "ident")
+	
+	if not options.project:
+		functions.create_folder(outdir)
+
+	## let's start the process
 	print ("+ Generate an species typification for each sample retrieved using:")
 	print ("(1) Kmer alignment (KMA) software.")	
 	print ("(2) Pre-defined databases by KMA or user-defined databases.")	
 		
 	## get databases to check
 	retrieve_databases = get_options_db(options)
+	
+	## time stamp
+	start_time_partial = functions.timestamp(start_time_total)
 	
 	## debug message
 	if (Debug):
@@ -85,9 +113,10 @@ def run(options):
 		print (retrieve_databases)
 	
 	########
-	(excel_generated, dataFrame) = KMA_ident(options, threads_module, pd_samples_retrieved, outdir, retrieve_databases)
+	(excel_generated, dataFrame) = KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
+
 	## functions.timestamp
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = functions.timestamp(start_time_partial)
 
 	## update database for later usage
 	if (options.fast):
@@ -96,8 +125,8 @@ def run(options):
 	else:
 		## update db
 		print ("")
-		## assembly, annotation, etc...
-		## rerun identification with new updated database
+			## assembly, annotation, etc...
+			## rerun identification with new updated database
 	
 	### timestamp
 	start_time_partial = functions.timestamp(start_time_partial)					
@@ -108,9 +137,8 @@ def run(options):
 	print ("+ Exiting identification module.")
 	exit()
 
-
 ####################################
-def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
+def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, time_partial):
 	functions.boxymcboxface("KMA Identification")
 	
 	## set defaults
@@ -136,20 +164,25 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 
 	## Start identification of samples
 	print ("\n+ Send KMA identification jobs...")
-	cpu_here = int(cpu/len(databases2use))
+
+	## optimize threads
+	## workers:
+	max_workers_int = len(databases2use)
+	cpu_here = int(options.threads/max_workers_int)
 	if (cpu_here == 0):
 		cpu_here = 1
 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
-		print (colored("**DEBUG: cpu " +  str(cpu) + " **", 'yellow'))
+		print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
 		print (colored("**DEBUG: cpu_here " +  str(cpu_here) + " **", 'yellow'))
-	
+
 	# Group dataframe by sample name
 	sample_frame = pd_samples_retrieved.groupby(["name"])
 	
-	with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
+	## send for each sample
+	with concurrent.futures.ThreadPoolExecutor(max_workers=int(max_workers_int)) as executor:
 		for db2use in databases2use:
 			
 			## load database on memory
@@ -158,7 +191,7 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 			return_code_load = functions.system_call(cmd_load_db)
 			
 			## send for each sample
-			commandsSent = { executor.submit(species_identification_KMA.kma_ident_module, get_outfile(outdir, name, db2use), sorted(cluster["sample"].tolist()), name, db2use, cpu_here): name for name, cluster in sample_frame }
+			commandsSent = { executor.submit(send_kma_job, outdir_dict[name], sorted(cluster["sample"].tolist()), name, db2use, cpu_here): name for name, cluster in sample_frame }
 
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
@@ -176,13 +209,21 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 			if (return_code_rm == 'FAIL'):
 				print (colored("***ERROR: Removing database from memory failed. Please do it! Execute command: %s" %cmd_rm_db,'red'))
 		
+			## functions.timestamp
+			time_partial = functions.timestamp(time_partial)
+		
 	###
 	print ("+ KMA identification call finished for all samples...")
 	print ("+ Parse results now:")
 		
 	## parse results
-	cutoff = 80
-	name_excel = outdir + '/identification_summary.xlsx'
+	if Project:
+		final_dir = options.input + '/report/ident'
+		functions.create_folder(final_dir) 
+	else:
+		final_dir = outdir
+		
+	name_excel = final_dir + '/identification_summary.xlsx'
 	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') ## open excel handle
 	
 	for db2use in databases2use:
@@ -192,9 +233,9 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 		pd.set_option('display.max_columns', None)
 
 		for name, cluster in sample_frame:
-			result = get_outfile(outdir, name, db2use)
+			result = get_outfile(outdir_dict[name], name, db2use)
 			#print ('\t- File: ' + result + '.spa')
-			results = species_identification_KMA.parse_kma_results(result + '.spa', cutoff)
+			results = species_identification_KMA.parse_kma_results(result + '.spa', options.KMA_cutoff)
 
 			### Fix: check if db2use is plasmids as it could be several.
 			if (results.index.size > 1):
@@ -214,7 +255,6 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 				results['sample'] = name
 				results_summary = results_summary.append(results)
 
-				
 		## subset dataframe	& print result
 		results_summary_toPrint = results_summary[['sample','#Template','Query_Coverage','Template_Coverage','Depth']] 
 		results_summary_toPrint = results_summary_toPrint.set_index('sample')		
@@ -224,9 +264,38 @@ def KMA_ident(options, cpu, pd_samples_retrieved, outdir, retrieve_databases):
 	return (name_excel, results_summary)
 
 ####################################
+def send_kma_job(outdir_file, list_files, name, database, threads):
+
+	## get outfile
+	outfile = get_outfile(outdir_file, name, database)
+
+	## check if previously run and succeeded
+	basename_tag = os.path.basename(outfile)
+	filename_stamp = outdir_file + '/.success_' + basename_tag
+	if os.path.isfile(filename_stamp):
+		stamp =	functions.read_time_stamp(filename_stamp)
+		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+	else:
+
+		## debug message
+		if (Debug):
+			print (colored("**DEBUG: species_identification_KMA.kma_ident_module call**", 'yellow'))
+			print ("outfile = get_outfile(outdir_dict[name], name, db2use)")
+			print ("outfile: ", outfile)
+			print ("species_identification_KMA.kma_ident_module(outfile, list_files, name, database, threads) ")
+			print ("species_identification_KMA.kma_ident_module" + "\t" + outfile + "\t" + list_files + "\t" + name + "\t" + database + "\t" + str(threads) + "\n") 
+	
+		# Call KMA
+		species_identification_KMA.kma_ident_module(outfile, list_files, name, database, threads) 
+
+####################################
 def get_outfile(output_dir, name, index_name):
 	basename_tag = os.path.basename(index_name)
-	output_path = functions.create_subfolder(name, output_dir)
+	if not Project:
+		output_path = functions.create_subfolder(name, output_dir)
+	else:
+		output_path = output_dir
+		
 	out_file = output_path + '/' + name + '_' + basename_tag	
 	return(out_file)
 	
@@ -298,7 +367,7 @@ def get_options_db(options):
 	############
 	## 5) all databases 
 	############
-	else:
+	elif (options.all_data):
 	
 		############
 		## default dbs + user kma dbs 
@@ -332,14 +401,14 @@ def get_options_db(options):
 		############
 		## Previously identified data
 		############
-		if (options.user_data):
-			option_db = option_db + '#user_data'
+		#if (options.user_data):
+		option_db = option_db + '#user_data'
 		
 		############
 		## Genbank reference data
 		############
-		if (options.genbank_data):
-			option_db = option_db + '#genbank'
+		#if (options.genbank_data):
+		option_db = option_db + '#genbank'
 
 	## debug message
 	if (Debug):
