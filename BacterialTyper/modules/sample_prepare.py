@@ -12,6 +12,7 @@ import sys
 from io import open
 import shutil
 import pandas as pd
+from termcolor import colored
 
 ## import my modules
 from BacterialTyper import sampleParser
@@ -31,9 +32,27 @@ def get_files(options, input_dir, mode, extension):
 		if os.path.exists(input_dir):
 			print ('+ Input folder exists')
 			## get files in folder
-			files_tmp = functions.get_fullpath_list(input_dir)
-			files = [s for s in files_tmp if extension in s]
+			files = []
+			for ext in extension:
+				if mode == 'trim':
+					files_tmp = functions.get_fullpath_list(input_dir)
+					files = [s for s in files_tmp if ext in s]
+				else:
+					files_tmp = functions.retrieve_matching_files(input_dir, ext)				
+					files.extend(files_tmp)
 			
+			files = set(files)
+			
+		else:
+			## input folder does not exist...
+			if (options.debug):
+				print (colored("\n**DEBUG: sample_prepare.get_files input folder does not exists **", 'yellow'))
+				print (input_dir)
+				print ("\n")
+			
+			print (colored('***ERROR: input folder does not exist or it is not readable', 'red'))
+			exit()
+						
 	else:
 		### provide a single folder or a file with multiple paths (option batch)
 		if (options.batch):
@@ -43,12 +62,28 @@ def get_files(options, input_dir, mode, extension):
 					if os.path.exists(d):
 						print ('+ Folder (%s) exists' %d)
 						files = files + functions.get_fullpath_list(d)
+					else:
+						## input folder does not exist...
+						if (options.debug):
+							print (colored("\n**DEBUG: sample_prepare.get_files batch option; input folder does not exists **", 'yellow'))
+							print (d)
+							print ("\n")
+						
 		else:
 			if os.path.exists(input_dir):
 				print ('+ Input folder exists')
 				## get files in folder
 				files = functions.get_fullpath_list(input_dir)
+			else:
+				## input folder does not exist...
+				if (options.debug):
+					print (colored("\n**DEBUG: sample_prepare.get_files input folder does not exists **", 'yellow'))
+					print (input_dir)
+					print ("\n")
 	
+				print (colored('***ERROR: input folder does not exist or it is not readable', 'red'))
+				exit()
+
 	## get list of samples
 	samples_names = []
 	exclude=False
@@ -58,20 +93,37 @@ def get_files(options, input_dir, mode, extension):
 		samples_names = [line.rstrip('\n') for line in open(in_file)]
 		print ('+ Retrieve selected samples to obtain from the list files available.')		
 		exclude=False
+
+		## in sample list...
+		if (options.debug):
+			print (colored("\n**DEBUG: sample_prepare.get_files include sample list **", 'yellow'))
+			print (samples_names, '\n')
+
+
 	elif (options.ex_sample):
 		ex_file = os.path.abspath(options.ex_sample)
 		samples_names = [line.rstrip('\n') for line in open(ex_file)]
 		print ('+ Retrieve selected samples to exclude from the list files available.')		
 		exclude=True
-		#print (samples_names)
+
+		## in sample list...
+		if (options.debug):
+			print (colored("\n**DEBUG: sample_prepare.get_files exclude sample list **", 'yellow'))
+			print (samples_names, '\n')
+
 	else:
 		samples_names = ['.*']
+		
+	## files list...
+	if (options.debug):
+		print (colored("\n**DEBUG: sample_prepare.get_files files list to check **", 'yellow'))
+		print (files, '\n')
 
 	## get information
-	if mode == "fastq":
-		pd_samples_retrieved = sampleParser.select_samples(files, samples_names, options.pair, exclude, merge)
+	if mode in ['fastq', 'trim']:
+		pd_samples_retrieved = sampleParser.select_samples(files, samples_names, options.pair, exclude, merge, options.debug)
 	else:
-		pd_samples_retrieved = sampleParser.select_other_samples(files, samples_names, mode, extension, exclude)
+		pd_samples_retrieved = sampleParser.select_other_samples(options.project, files, samples_names, mode, extension, exclude, options.debug)
 		
 	return(pd_samples_retrieved)
 
@@ -133,7 +185,7 @@ def retrieve(options):
 	## merge option
 	if (options.merge):
 		print ("+ Sample files will be merged...")
-		pd_samples_merged = sampleParser.one_file_per_sample(pd_samples_retrieved, outdir_dict, options.threads, final_dir)
+		pd_samples_merged = sampleParser.one_file_per_sample(pd_samples_retrieved, outdir_dict, options.threads, final_dir, options.debug)
 		
 		if (options.rename):
 			print ("+ Merge files will be renamed...")

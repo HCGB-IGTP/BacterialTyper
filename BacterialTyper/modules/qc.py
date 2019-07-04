@@ -95,7 +95,7 @@ def fastqc(input_dir, outdir, options, start_time_total):
 	functions.boxymcboxface("FASTQC Quality check for samples")
 	
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", "raw")
+	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
 	
 	## debug message
 	if (Debug):
@@ -105,24 +105,37 @@ def fastqc(input_dir, outdir, options, start_time_total):
 
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
+	
+	## if not project, outdir contains the dir to put output
+	## in this case, in some other cases might not occur	
 	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "fastqc")
 	
 	if not options.project:
 		functions.create_folder(outdir)
 
-	## optimize threads
-	## threads_module = functions.optimize_threads(options.threads, pd_samples_retrieved.index.size) ## no threads implementation here. 1 CPU each
-	threads_module = 1
-	
 	print ("+ Checking quality for each sample retrieved...")
 	start_time_partial = start_time_total
 	
 	# Group dataframe by sample name
 	sample_frame = pd_samples_retrieved.groupby(["name"])
 
-	# We can use a with statement to ensure threads are cleaned up promptly
-	with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
-		commandsSent = { executor.submit(fastqc_caller.run_module_fastqc, outdir_dict[name], sorted( cluster["sample"].tolist() ), name): name for name, cluster in sample_frame }
+	## optimize threads
+	## workers:
+	name_list = set(pd_samples_retrieved["name"].tolist())
+	max_workers_int = len(name_list)
+	
+	## number_samples = pd_samples_retrieved.index.size => Number samples
+	threads_module = functions.optimize_threads(options.threads, max_workers_int) ## fix threads_module optimization
+
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
+		print (colored("**DEBUG: max workers " +  str(max_workers_int) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu/process " +  str(threads_module ) + " **", 'yellow'))
+
+	## send for each sample
+	with concurrent.futures.ThreadPoolExecutor(max_workers=int(max_workers_int)) as executor:
+		commandsSent = { executor.submit(fastqc_caller.run_module_fastqc, outdir_dict[name], sorted( cluster["sample"].tolist() ), name, threads_module): name for name, cluster in sample_frame }
 		
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
@@ -176,52 +189,78 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 	## absolute path for in & out
 	database_folder = os.path.abspath(options.database)
 
-	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "assemble", "fasta")
+	## get files and get dir for each sample according to mode
+	if mode == 'genome':
+		pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "assembly", "fna")
+
+		if not options.project:
+			outdir = functions.create_subfolder("assembly_qc", outdir)
+
+		BUSCO_outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "assembly_qc")
+
+	elif mode == 'proteins':
+		pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "annot", "faa") ##
+
+		if not options.project:
+			outdir = functions.create_subfolder("annot_qc", outdir)
+
+		BUSCO_outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "annot_qc")
+
+	## add column to dataframe
+	pd_samples_retrieved['busco_folder'] = ""
+	for index, row in pd_samples_retrieved.iterrows():
+		pd_samples_retrieved.at[index, 'busco_folder'] = BUSCO_outdir_dict[ row['name'] ] 
 
 	## debug message
-	if (Debug):
+	if (options.debug):
 		print (colored("**DEBUG: df_samples_busco **", 'yellow'))
-		print (df_samples_busco)
-
-	exit()
-
-	## get dir for each sample
-	BUSCO_outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "busco_qc")
-	
-	## initiate dataframe
-	name_columns = ("name", "assembly", "busco_qc")
-	df_samples_busco = pd.DataFrame(columns=name_columns)
-	for f in outdir_dict:
-		my_assembly_file = spades_assembler.get_files(outdir_dict[f])
-		df_samples_busco.loc[len(df_samples_busco)] = [(f, my_assembly_file, BUSCO_outdir_dict[f])]
+		print (pd_samples_retrieved)
 		
-	## debug message
-	if (Debug):
-		print (colored("**DEBUG: df_samples_busco **", 'yellow'))
-		print (df_samples_busco)
-
-	exit()
+		print (colored("**DEBUG: BUSCO_outdir_dict **", 'yellow'))
+		print (BUSCO_outdir_dict)
 
 	## Check each using BUSCO
-	functions.boxymcboxface("BUSCO Assembly Quality check")
 	database_folder = os.path.abspath(options.database)
-	dataFrame_results = BUSCO_call(options.BUSCO_dbs, df_samples_busco, options.threads, "genome")
+	BUSCO_Database = database_folder + '/BUSCO'
+	dataFrame_results = BUSCO_call(options.BUSCO_dbs, pd_samples_retrieved, BUSCO_Database, options.threads, mode)
+	
+	## debug message
+	if (options.debug):
+		print (colored("**DEBUG: dataFrame_results **", 'yellow'))
+		pd.set_option('display.max_colwidth', -1)
+		pd.set_option('display.max_columns', None)
+		print (dataFrame_results)
 	
 	## functions.timestamp
 	print ("+ Quality control of all samples finished: ")
-	start_time_partial = functions.timestamp(start_time_partial_BUSCO)
+	start_time_partial = functions.timestamp(start_time_total)
 	
 	## multiqc report plot
 	if (options.skip_report):
 		print ("+ No report generation...")
 	else:
+		print ("\n+ Generating a report using MultiQC module.")
+		outdir_report = functions.create_subfolder("report", outdir)
+
+		## get subdirs generated and call multiQC report module
+		givenList = []
+		print ("+ Detail information for each sample could be identified in separate folders.")
+		
+		## name folder according to mode
+		if mode == 'genome':
+			BUSCO_report = functions.create_subfolder("BUSCO_assembly", outdir_report)
+		elif mode == 'proteins':
+			BUSCO_report = functions.create_subfolder("BUSCO_annot", outdir_report)
+
 		## generate plots
 		print ("+ Generate summarizing plots...")
-		BUSCO_plots(dataFrame_results, outdir, options.threads)	
+		BUSCO_plots(dataFrame_results, BUSCO_report, options.threads)	
+		print ('\n+ A summary HTML report is generated in folder: %s' %BUSCO_report)
+
+	return(dataFrame_results)
 
 ################################################
-def BUSCO_call(datasets, pd_samples, database_folder, output, threads, mode):
+def BUSCO_call(datasets, pd_samples, database_folder, threads, mode):
 
 	## mode= proteins|genome
 
@@ -233,15 +272,12 @@ def BUSCO_call(datasets, pd_samples, database_folder, output, threads, mode):
 	path_here = os.getcwd()
 	
 	print ("+ Checking quality for each sample retrieved...")
-	
 	## optimize threads: No need to optimize. There is a problem with the working dir of BUSCO and we need to change every time
-	## threads_module = functions.optimize_threads(threads, len(list_scaffolds))
-
 	# We can use a with statement to ensure threads are cleaned up promptly
 	with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor: ## need to do 1 by one as there is a problem with the working directory
 		for DataSet in BUSCO_datasets:
 			## send for each sample
-			commandsSent = { executor.submit( BUSCO_runner, name, DataSet, row['sample'], BUSCO_datasets[DataSet], output, threads, mode): name for name, row in pd_samples }
+			commandsSent = { executor.submit( BUSCO_runner, row['name'], DataSet, row['sample'], BUSCO_datasets[DataSet], row['busco_folder'], threads, mode): name for name, row in pd_samples.iterrows() }
 
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
@@ -258,34 +294,28 @@ def BUSCO_call(datasets, pd_samples, database_folder, output, threads, mode):
 	os.chdir(path_here)
 	
 	## init dataframe
-	short_summary = pd.DataFrame(columns=('Sample', 'Dataset', 'Summary File', 'Folder'))
+	short_summary = pd.DataFrame(columns=('sample', 'dirname', 'name', 'ext', 'tag', 'busco_folder', 'busco_dataset', 'busco_summary', 'busco_results'))
 
-	## generate report
+	## generate results
 	for DataSet in BUSCO_datasets:
-		for sample in list_scaffolds:
-			file_name = os.path.basename(sample)
-			sample_name =""
-			if file_name.endswith('_chromosome.fna'): ## mode genome
-				sample_name = file_name.split('_chromosome.fna')[0]
-			else: 
-				sample_name = file_name.split('.faa')[0] ## mode proteins
-		
-			my_BUSCO_results_folder = output + '/' + sample_name + '/run_' + DataSet
+		for index, row in pd_samples.iterrows():
+			#my_BUSCO_results_folder = row['busco_folder'] + '/run_' + DataSet
+			my_BUSCO_results_folder = row['busco_folder'] + '/' + row['name'] + '/run_' + DataSet
 			my_short_tsv = 	my_BUSCO_results_folder + '/short_summary_' + DataSet + '.txt'
-			
 			if os.path.isfile(my_short_tsv):
-				short_summary.loc[len(short_summary)] = (sample_name, DataSet, my_short_tsv, my_BUSCO_results_folder)
+				short_summary.loc[len(short_summary)] = [ row['sample'], row['dirname'], row['name'], row['ext'], row['tag'], row['busco_folder'], DataSet, my_short_tsv, my_BUSCO_results_folder ]
 			
 	return (short_summary)
 
 ################################################
 def BUSCO_runner(sample_name, DataSet, sample, dataset_path, output, threads_module, mode):
 	#file_name = os.path.basename(sample)
-	sample_name_dir = functions.create_subfolder(sample_name, output)
+	sample_name_dir = functions.create_subfolder(sample_name, output) ## to check in detached mode
 
 	## run busco	
 	code = BUSCO_caller.BUSCO_run( dataset_path, sample, threads_module, sample_name_dir, DataSet, mode)
 	
+	## retry it just in case
 	if (code == 'FAIL'):
 		BUSCO_caller.BUSCO_run( dataset_path, sample, threads_module, sample_name_dir, DataSet, mode)
 	else:
@@ -293,9 +323,10 @@ def BUSCO_runner(sample_name, DataSet, sample, dataset_path, output, threads_mod
 
 ################################################
 def BUSCO_plots(dataFrame_results, outdir, threads):
-	
-	list_datasets = set(dataFrame_results['Dataset'].tolist())
-	list_samples = set(dataFrame_results['Sample'].tolist())
+
+	## DataFrame columns ('sample', 'dirname', 'name', 'ext', 'tag', 'busco_folder', 'busco_dataset', 'busco_summary', 'busco_results'))
+	list_datasets = set(dataFrame_results['busco_dataset'].tolist())
+	list_samples = set(dataFrame_results['name'].tolist())
 
 	plot_folder = functions.create_subfolder('BUSCO_plots', outdir)
 	outdir_busco_plot = []
@@ -307,8 +338,8 @@ def BUSCO_plots(dataFrame_results, outdir, threads):
 		outdir_busco_plot.append(plot_folder_dataset)
 	
 		for index, row in dataFrame_results.iterrows():
-			if (dataset == row['Dataset']):
-				shutil.copy(row['Summary File'], plot_folder_dataset + '/short_summary_' + dataset + '_' + row['Sample'] + '.txt')
+			if (dataset == row['busco_dataset']):
+				shutil.copy(row['busco_summary'], plot_folder_dataset + '/short_summary_' + dataset + '_' + row['name'] + '.txt')
 		
 	print ("+ Get results for summarized by sample:")
 	for sample in list_samples:
@@ -317,8 +348,8 @@ def BUSCO_plots(dataFrame_results, outdir, threads):
 		outdir_busco_plot.append(plot_folder_sample)
 
 		for index, row in dataFrame_results.iterrows():
-			if (sample == row['Sample']):
-				shutil.copy(row['Summary File'], plot_folder_sample + '/short_summary_' + row['Dataset'] + '_' + sample + '.txt')
+			if (sample == row['name']):
+				shutil.copy(row['busco_summary'], plot_folder_sample + '/short_summary_' + row['busco_dataset'] + '_' + sample + '.txt')
 	
 	print ("+ Generate plots for each subset")
 	

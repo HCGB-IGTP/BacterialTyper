@@ -12,6 +12,7 @@ import time
 from io import open
 import shutil
 import concurrent.futures
+from termcolor import colored
 
 ## import my modules
 from BacterialTyper import trimmomatic_call
@@ -76,7 +77,7 @@ def run(options):
 		outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", "raw")
+	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
 	
 	## debug message
 	if (Debug):
@@ -91,16 +92,26 @@ def run(options):
 		functions.create_folder(outdir)
 
 	## optimize threads
-	## number_samples = pd_samples_retrieved.index.size => Number samples
-	threads_module = functions.optimize_threads(options.threads, pd_samples_retrieved.index.size)
+	## workers:
+	name_list = set(pd_samples_retrieved["name"].tolist())
+	max_workers_int = len(name_list)
 	
+	## number_samples = pd_samples_retrieved.index.size => Number samples
+	threads_module = functions.optimize_threads(options.threads, max_workers_int) ## fix threads_module optimization
+
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
+		print (colored("**DEBUG: max workers " +  str(max_workers_int) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu/process " +  str(threads_module ) + " **", 'yellow'))
+
 	print ("+ Trimming adapters for each sample retrieved...")	
 	
 	# Group dataframe by sample name
 	sample_frame = pd_samples_retrieved.groupby(["name"])
 	
-	# We can use a with statement to ensure threads are cleaned up promptly
-	with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
+	## send for each sample
+	with concurrent.futures.ThreadPoolExecutor(max_workers=int(max_workers_int)) as executor:
 		commandsSent = { executor.submit(trimmo_caller, sorted(cluster["sample"].tolist()), outdir_dict[name], name, threads_module, Debug, options.adapters): name for name, cluster in sample_frame }
 
 		for cmd2 in concurrent.futures.as_completed(commandsSent):

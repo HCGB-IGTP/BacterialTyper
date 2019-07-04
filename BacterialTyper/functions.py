@@ -103,6 +103,7 @@ def outdir_project(outdir, project_mode, pd_samples, mode):
 		else:
 			#print ("All samples share same folder")
 			dict_outdir[name] = outdir
+			
 	
 	return (dict_outdir)
 

@@ -65,10 +65,10 @@ class fastqcObject:
 
 ############
 def	help_options():
-	print ("\nUSAGE:\npython %s folder file1 file2 name fastqc\n"  %os.path.realpath(__file__))
+	print ("\nUSAGE:\npython %s folder file1 file2 name fastqc threads\n"  %os.path.realpath(__file__))
 
 ############
-def call_fastqc(path, file1, file2, sample, fastqc_bin):	
+def call_fastqc(path, file1, file2, sample, fastqc_bin, threads):	
 	## call system for fastqc sample given
 	name = functions.create_subfolder(sample, path)
 	logFile = path + '/' + sample + '.log'
@@ -77,7 +77,7 @@ def call_fastqc(path, file1, file2, sample, fastqc_bin):
 		return ('OK')
 	
 	print ("+ Calling fastqc for samples...")	
-	cmd_fastqc = '%s --extract -o %s %s %s > %s 2> %s' %(fastqc_bin, name, file1, file2, logFile, logFile)
+	cmd_fastqc = '%s --extract -t %s -o %s %s %s > %s 2> %s' %(fastqc_bin, threads, name, file1, file2, logFile, logFile)
 	## send command	
 	return (functions.system_call( cmd_fastqc ))
 		
@@ -116,7 +116,7 @@ def parse_fastqcFile(resultsfile, name):
 	return (statistics_df, status_df)
 	
 ############
-def run_module_fastqc(path, files, sample):	
+def run_module_fastqc(path, files, sample, threads):	
 	## Arguments provided via ARGVs
 	fastqc_bin = config.get_exe('fastqc')
 
@@ -125,7 +125,7 @@ def run_module_fastqc(path, files, sample):
 		print ('+ No implementation yet for single-end. Sorry.')
 		exit()
 
-	codeReturn = call_fastqc(path, files[0], files[1], sample, fastqc_bin)
+	codeReturn = call_fastqc(path, files[0], files[1], sample, fastqc_bin, threads)
 	if codeReturn == 'FAIL':
 		exit()
 	path_to_sample = path + '/' + sample
@@ -240,9 +240,10 @@ def main():
 	file2 = os.path.abspath(argv[3])
 	sample = argv[4]
 	fastqc_bin = argv[5]
+	threads = argv[5]
 
 	##
-	path_to_sample = call_fastqc(path, file1, file2, sample, fastqc_bin)
+	path_to_sample = call_fastqc(path, file1, file2, sample, fastqc_bin, threads)
 	fastqc_files = get_files(path_to_sample)
 	
 	for files in fastqc_files:

@@ -163,16 +163,16 @@ def BUSCO_retrieve_sets(list_datasets, folder):
 ###############
 def BUSCO_run(dataset, fasta, threads, output_name, dataset_name, mode):
 
-	my_out_folder = output_name + '/run_' + dataset_name	
+	my_out_folder = output_name + '/run_' + dataset_name
 	## timestamp
 	filename_stamp =  my_out_folder + '/.success'
 
-	print ("BUSCO: Dataset [%s]; Sample [%s]" %(dataset_name, fasta))
+	print (colored("\tBUSCO Dataset [%s]; Sample [%s]" %(dataset_name, fasta), 'yellow'))
 		
 	## check previous run
 	if os.path.isfile(filename_stamp):
 		timestamp = functions.read_time_stamp(filename_stamp)
-		print ("\tSuccessfully run on date: ", timestamp)
+		print (colored("\tSuccessfully run on date: %s"  %timestamp, 'green'))
 	else:
 	
 		busco_bin = config.get_exe('busco')

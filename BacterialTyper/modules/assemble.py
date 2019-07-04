@@ -79,7 +79,7 @@ def run(options):
 		outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", "_trim_")
+	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "trim", ['_trim_'])
 	
 	## debug message
 	if (Debug):
@@ -98,24 +98,25 @@ def run(options):
 	start_time_partial_assembly = start_time_partial
 	
 	## optimize threads
-	workers = ""
-	if (options.threads > 12): ## if many cpus provided...
-		threads_module = functions.optimize_threads(options.threads, pd_samples_retrieved.index.size)
-		workers = pd_samples_retrieved.index.size
-	elif (options.threads > 6):
-		threads_module = int(options.threads/2)
-		workers = 2
-	else:
-		workers = 1
-		threads_module = options.threads
+	## workers:
+	name_list = set(pd_samples_retrieved["name"].tolist())
+	max_workers_int = len(name_list)
+	
+	## threads per job
+	threads_module = functions.optimize_threads(options.threads, max_workers_int) ## fix threads_module optimization
 
-	print ('+ Running modules SPADES...')
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
+		print (colored("**DEBUG: max workers " +  str(max_workers_int) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu/process " +  str(threads_module ) + " **", 'yellow'))
 
 	# Group dataframe by sample name
 	sample_frame = pd_samples_retrieved.groupby(["name"])
 
 	# We can use a with statement to ensure threads are cleaned up promptly
-	with concurrent.futures.ThreadPoolExecutor(max_workers=int(workers)) as executor:
+	print ('+ Running modules SPADES...')
+	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
 		## send for each sample
 		commandsSent = { executor.submit( check_sample_assembly, name, outdir_dict[name],  sorted(cluster["sample"].tolist()), threads_module): name for name, cluster in sample_frame }
 
@@ -129,15 +130,16 @@ def run(options):
 				print('%r generated an exception: %s' % (details, exc))
 		
 	## functions.timestamp
-	print ("+ Assembly of all samples finished: ")
+	print ("\n+ Assembly of all samples finished: ")
 	start_time_partial = functions.timestamp(start_time_partial_assembly)
-	start_time_partial_BUSCO = start_time_partial
 
 	### symbolic links
 	print ("+ Retrieve all genomes assembled...")
 	
 	### BUSCO check assembly
-	qc.BUSCO_check(input_dir, outdir, options, start_time_total_BUSCO, "genome")
+	results = qc.BUSCO_check(outdir, outdir, options, start_time_partial, "genome")
+	
+	## print to file results	 
 	
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)
@@ -158,7 +160,7 @@ def check_sample_assembly(name, sample_folder, files, threads):
 		if (Debug):
 			print (colored("**DEBUG: spades_assembler.run_module_SPADES call**", 'yellow'))
 			print ("spades_assembler.run_module_SPADES(name, sample_folder, files[0], files[1], threads)")
-			print ("spades_assembler.run_module_SPADES " + name + "\t" + sample_folder + "\t" + files[0] + "\t" + files[1] + "\t" + str(threads) + "\n")
+			print ("spades_assembler.run_module_SPADES " + name + "\t" + sample_folder + "\t" + files[0] + "\t" + files[1] + "\t" +str(threads) + "\n")
 	
 		# Call spades_assembler
 		spades_assembler.run_module_SPADES(name, sample_folder, files[0], files[1], threads)

@@ -15,6 +15,7 @@ from sys import argv
 from io import open
 from Bio import SeqIO
 import shutil
+from termcolor import colored
 
 ## import my modules
 from BacterialTyper import functions
@@ -63,8 +64,7 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 ################################################
 def run_SPADES(path, file1, file2, name, SPADES_bin, options, threads):
 
-	#sample_folder = functions.create_subfolder(name, path)
-	sample_folder = path
+	sample_folder = functions.create_subfolder(name, path)
 	
 	## check if previously assembled and succeeded
 	filename_stamp = sample_folder + '/.success'
@@ -120,20 +120,21 @@ def run_module_SPADES(name, folder, file1, file2, threads):
 	
 	## assembly main 
 	path_to_contigs = run_SPADES_assembly(folder, file1, file2, name, SPADES_bin, threads)
+	if path_to_contigs == 'FAIL':
+		print ("")	
+	else:
+		renamed = folder + '/' + name + '_assembly.fna'
+		shutil.copy(path_to_contigs, renamed)
 
-	## contig stats
-	print ('+ Get assembly statistics:...\n')
-	contig_out = contig_stats(path_to_contigs)	
+		## contig stats
+		print ('+ Get assembly statistics:...\n')
+		contig_out = contig_stats(renamed)	
 		
-	## dump in screen
-	contig_out_file = open(contig_out, 'r')
-	contig_out_file_read = contig_out_file.read()
-	contig_out_file.close()
-	print (contig_out_file_read)
-	
-	## success stamps
-	filename_stamp = folder + '/.success'
-	stamp =	functions.print_time_stamp(filename_stamp)
+		## dump in screen
+		contig_out_file = open(contig_out, 'r')
+		contig_out_file_read = contig_out_file.read()
+		contig_out_file.close()
+		print (contig_out_file_read)
 
 ################################################
 def run_module_SPADES_old(name, folder, file1, file2, threads):

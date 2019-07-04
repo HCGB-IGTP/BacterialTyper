@@ -56,7 +56,7 @@ def help_format():
 	print ("\n")
 
 ###############
-def get_fields(file_name_list, pair=True):
+def get_fields(file_name_list, pair=True, Debug=False):
 
 	## init dataframe
 	name_columns = ("sample", "dirname", "name", "lane", "read_pair","lane_file","ext","gz")
@@ -120,13 +120,16 @@ def get_fields(file_name_list, pair=True):
 			name_frame.loc [len(name_frame)] = (path_files, dirN, name, lane_id, read_pair, lane_file, ext, gz)
 	
 		else:
-			print ("*** ATTENTION: Sample did not match the possible parsing options...")
-			print (file_name)
+			## debug message
+			if (Debug):
+				print (colored("**DEBUG: sampleParser.get_fields **", 'yellow'))
+				print (colored("*** ATTENTION: Sample did not match the possible parsing options...", 'yellow'))
+				print (file_name)
 
 	return (name_frame)
 
 ###############
-def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merge=False):
+def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merge=False, Debug=False):
     
     #Get all files in the folder "path_to_samples"    
 	sample_list = []
@@ -152,13 +155,16 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 				elif fastq.endswith('fastq'):
 					sample_list.append(path_fastq)
 				else:
-					print ("** ERROR: ", path_fastq, 'is a file that is neither in fastq.gz or .fastq format, so it is not included')
+					## debug message
+					if (Debug):
+						print (colored("**DEBUG: sampleParser.select_samples **", 'yellow'))
+						print (colored("** ERROR: %s is a file that is neither in fastq.gz or .fastq format, so it is not included" %path_fastq, 'yellow'))
 
 	## discard duplicates if any
 	non_duplicate_samples = list(set(sample_list))	
 	
 	## get fields
-	name_frame_samples = get_fields(non_duplicate_samples, pair)	
+	name_frame_samples = get_fields(non_duplicate_samples, pair, Debug)	
 	number_samples = name_frame_samples.index.size
 	total_samples = set(name_frame_samples['name'].to_list())
 	
@@ -177,13 +183,20 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merg
 	return (name_frame_samples)
 
 ###############
-def select_other_samples (list_samples, samples_prefix, mode, extensions, exclude=False):
+def select_other_samples (project, list_samples, samples_prefix, mode, extensions, exclude=False, Debug=False):
+
+	## init dataframe
+	name_columns = ("sample", "dirname", "name", "ext", "tag")
+
+	## initiate dataframe
+	df_samples = pd.DataFrame(columns=name_columns)
 
     #Get all files in the folder "path_to_samples"    
 	sample_list = []
 	for names in samples_prefix:
 		for path_file in list_samples:	
 			f = os.path.basename(path_file)
+			dirN = os.path.dirname(path_file)
 			samplename_search = re.search(r"(%s).*" % names, f)
 			enter = ""
 			if samplename_search:
@@ -198,39 +211,42 @@ def select_other_samples (list_samples, samples_prefix, mode, extensions, exclud
 					enter = False
 					
 			if enter:
-				if mode == 'annotation':
-					if f.endswith(extensions):
-						sample_list.append(path_file)
+				
+				## project mode:
+				if project:
+					if mode == 'annot':
+						#### /path/to/folder/annot/name.faa
+						f_search = re.search(r".*\/%s\/(.*)\.%s$" %(mode, extensions), path_file)
+						if f_search:
+							file_name = f_search.group(1) 
+							df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, extensions, mode]	
+
+					elif mode== 'assembly':
+						#### name_assembly.faa
+						f_search = re.search(r"(.*)\_%s\.%s$" %(mode, extensions), f)
+						if f_search:
+							file_name = f_search.group(1) 
+							df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, extensions, mode]	
+					else:
+						## check
+						if mode + '.' in f:
+							if f.endswith(extensions):
+								file_name, ext = os.path.splitext(f)
+								df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, ext, mode]	
+
+				## detached mode
 				else:
-					if mode + '.' in f:
-						if f.endswith(extensions):
-							sample_list.append(path_file)
+					if f.endswith(extensions):
+						file_name, ext = os.path.splitext(f)
+						df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, ext, mode]	
 					
-	## discard duplicates if any
-	non_duplicate_samples = list(set(sample_list))	
-	discard_samples = []
-
-	## initiate dataframe
-	name_columns = ("samples", "tag", "file")
-
-	## init dataframe
-	name_columns = ("sample", "dirname", "name", "ext", "tag")
-
-	## initiate dataframe
-	df_samples = pd.DataFrame(columns=name_columns)
-
-	## iterate list
-	for a_file in non_duplicate_samples:
-		a_name = os.path.basename(a_file)
-		if mode == 'annotation':
-			file_name, ext = os.path.splitext(a_name)
-			df_samples.loc[len(df_samples)] = [file_name, ext.split(".")[1], a_file]	
-		else:
-			file_name = a_name.split("_" + mode)[0]
-			df_samples.loc[len(df_samples)] = [file_name, mode, a_file]
-			
-
-	#print (non_duplicate_samples)
+	
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: df_samples **", 'yellow'))
+		print (df_samples)
+	
+	##
 	number_samples = df_samples.index.size
 	if (number_samples == 0):
 		print (colored("\n**ERROR: No samples were retrieved. Check the input provided\n",'red'))
@@ -256,7 +272,7 @@ def gunzip_merge(outfile, list_files):
 	return()
 	
 ###############    
-def one_file_per_sample(dataFrame, outdir_dict, threads, outdir):
+def one_file_per_sample(dataFrame, outdir_dict, threads, outdir, Debug=False):
 	## merge sequencing files for sample, no matter of sector or lane generated.
 	
 	list_samples = set(dataFrame['name'].tolist())
@@ -273,7 +289,7 @@ def one_file_per_sample(dataFrame, outdir_dict, threads, outdir):
 
 	# We can use a with statement to ensure threads are cleaned up promptly
 	with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor: ## need to do 1 by one as there is a problem with the working directory
-		commandsSent = { executor.submit(gunzip_merge, outdir_dict[name[0]] + '/' + name[0] + '_' + name[1] + ext, set(cluster["sample"].tolist())): name for name, cluster in sample_frame }
+		commandsSent = { executor.submit(gunzip_merge, outdir_dict[name[0]] + '/' + name[0] + '_' + name[1] + ext, sorted(set(cluster["sample"].tolist()))): name for name, cluster in sample_frame }
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
 			try:
@@ -336,7 +352,7 @@ def main():
 			list_files.append(os.path.join(root,f))
 	
 	names = ['.*']
-	datareturn = select_samples(list_files, names, True, False, True)
+	datareturn = select_samples(list_files, names, True, False, True, True)
 	one_file_per_sample(datareturn, out_folder, threads)
 	
 ######
