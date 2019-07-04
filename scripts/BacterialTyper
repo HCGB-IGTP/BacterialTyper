@@ -331,13 +331,13 @@ ident_mode = ident_mode_name.add_mutually_exclusive_group(required= not any(elem
 ident_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
 ident_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining assemblies or scaffolds. Provide a unique path o several using --batch option")
 
-initial_group = subparser_ident.add_argument_group("Input/Output")
-initial_group.add_argument("--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required = not any(elem in help_options for elem in sys.argv))
-initial_group.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
-initial_group.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
-initial_group.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
-initial_group.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
-initial_group.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+initial_group_ident = subparser_ident.add_argument_group("Input/Output")
+initial_group_ident.add_argument("--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required = not any(elem in help_options for elem in sys.argv))
+initial_group_ident.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
+initial_group_ident.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
+initial_group_ident.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+initial_group_ident.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+initial_group_ident.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
 dataset_group_ident = subparser_ident.add_argument_group("Datasets")
 dataset_group_ident.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
@@ -356,10 +356,10 @@ exclusive_group.add_argument("--only_genbank_data", action="store_true",  help="
 exclusive_group.add_argument("--only_kma_db", action="store_true", help="Provide this option if only database(s) provided via --kma_db should be used for species identification.")
 exclusive_group.add_argument("--only_external_kma", action="store_true", help="Provide this option if only database(s) provided via --kma_external_file should be used for species identification.")
 
-parameters_group = subparser_ident.add_argument_group("Parameters")
-parameters_group.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-parameters_group.add_argument("--KMA_cutoff", type=int, help="Similarity cutoff (%) for databases filtering. Range: 1-100. [Default = 80]", default=80)
-parameters_group.add_argument("--fast", action="store_true", help="Do not update database, just identify samples according to databases provided [Default OFF].")
+parameters_group_ident = subparser_ident.add_argument_group("Parameters")
+parameters_group_ident.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+parameters_group_ident.add_argument("--KMA_cutoff", type=int, help="Similarity cutoff (%) for databases filtering. Range: 1-100. [Default = 80]", default=80)
+parameters_group_ident.add_argument("--fast", action="store_true", help="Do not update database, just identify samples according to databases provided [Default OFF].")
 
 info_group_ident = subparser_ident.add_argument_group("Additional information")
 info_group_ident.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
@@ -376,25 +376,37 @@ subparser_profile = subparsers.add_parser(
     help='Virulence & Resistance profile.',
     description='This module call ...',
 )
+profile_mode_name = subparser_profile.add_argument_group("Mode")
+profile_mode = profile_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+profile_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
+profile_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containining assemblies or scaffolds. Provide a unique path o several using --batch option")
+
 initial_group_profile = subparser_profile.add_argument_group("Input/Output")
 initial_group_profile.add_argument("--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= not any(elem in help_options for elem in sys.argv))
-initial_group_profile.add_argument("--output_folder", help="Output folder.", required= not any(elem in help_options for elem in sys.argv))
-initial_group_profile.add_argument("--pair", action="store_true", help="Paired-end files mode ON [Defaul OFF]. Pair tag must be indicated by '_1' or '_2'")
+initial_group_profile.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
+initial_group_profile.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 initial_group_profile.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 initial_group_profile.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_profile.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
-initial_group_profile.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv))
+
+dataset_group_profile = subparser_profile.add_argument_group("Datasets")
+dataset_group_profile.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
+dataset_group_profile.add_argument("--additional_database", action="store_true", help="## [TODO]")
 
 parameters_group_profile = subparser_profile.add_argument_group("Parameters")
 parameters_group_profile.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 parameters_group_profile.add_argument("--fast", action="store_true", help="Do not update database, just identify samples according to databases provided [Default OFF].")
-parameters_group_profile.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 
 ## ariba
 ariba_db_group_profile = subparser_profile.add_argument_group("ARIBA databases")
 ariba_db_group_profile.add_argument("--ARIBA_db", dest='ariba_dbs', nargs='*', help="ARIBA database(s) to download. Provide several input if desired. Not compatible with --no_ARIBA. [Default: CARD & VFDB]", choices=['CARD', 'MEGARes', 'VFDB', 'ResFinder', 'PlasmidFinder', 'VirulenceFinder', 'srst2', 'ARG-ANNOT'])
 ariba_db_group_profile.add_argument("--no_def_ARIBA", action="store_true", help="Only applicable if ARIBA_db is ON. It discards default databases (CARD & VFDB) from ARIBA_db. Only user selected datbases indexed. [Default: OFF]")
-ariba_db_group_profile.add_argument("--help_ARIBA", action="store_true", help="It prints further information for ARIBA databases. [Default: OFF]")
+
+info_group_profile = subparser_profile.add_argument_group("Additional information")
+info_group_profile.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+info_group_profile.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
+info_group_profile.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
+info_group_profile.add_argument("--help_ARIBA", action="store_true", help="Print further information for ARIBA databases")
 
 subparser_profile.set_defaults(func=BacterialTyper.modules.profile.run)
 

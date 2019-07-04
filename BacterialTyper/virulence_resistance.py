@@ -224,32 +224,28 @@ def parse_card(folder, sampleName, fileResults, fileFlags, summary):
 	
 #############################################################
 def parse_results(folder, sampleName, fileResults, fileFlags, summary):
-	print ("")
+	## [TODO]
+	print (colored("\n\n***** TODO: Implement if a different database provided (!= CARD, VFDB) *****\n\n", 'red'))
 
 #############################################################
-def check_results(db2use, outdir_sample, outfolder):
-	vfdb = False
+def check_results(db2use, outdir_sample):
+	
 	## iterate multi-index dataframe
+	## columns=('sample', 'dirname', 'db', 'output'))
 	for sample, data in outdir_sample.groupby(level='sample'): ## fix
 		for database, data2 in data.groupby(level='db'): ## fix
 			if (database != db2use):
 				continue
 
-			folderResults = data2.loc[sample, db2use]['output']			
+			folderResults = data2.loc[sample, db2use]['output']
+			outfolder = data2.loc[sample, db2use]['dirname']
 			if db2use.endswith('card_prepareref/'):
 				results_parser('card', folderResults, sample, outfolder)
 			elif db2use.endswith('vfdb_full_prepareref/'):
-				vfdb = True
 				results_parser('vfdb_full', folderResults, sample, outfolder)
 			else:
 				results_parser('.', folderResults, sample, outfolder)
 
-	if (vfdb):
-		print ("\n\n")
-		functions.print_sepLine("*", 50, False)
-		print ("+ Check VFDB details in files downloaded from vfdb website:")
-		files_VFDB = check_VFDB(outfolder + '/VFDB_information')
-		functions.print_sepLine("*", 50, False)
 	return()
 
 ##################################################################
@@ -306,7 +302,8 @@ def results_parser(database, folderResults, sampleName, outfolder):
 		name_excel = parse_vfdb(outfolder, sampleName, fileResults, fileFlags, summary_results)
 	elif (database == 'card'):
 		name_excel = parse_card(outfolder, sampleName, fileResults, fileFlags, summary_results)
-	else: ## to do
+	else: 
+		## [TODO]
 		name_excel= parse_results(outfolder, sampleName, fileResults, fileFlags, summary_results)				
 	
 	print ('\tCheck additional information on ', name_excel)

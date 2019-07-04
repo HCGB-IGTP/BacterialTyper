@@ -291,10 +291,10 @@ def send_kma_job(outdir_file, list_files, name, database, threads):
 ####################################
 def get_outfile(output_dir, name, index_name):
 	basename_tag = os.path.basename(index_name)
-	if not Project:
-		output_path = functions.create_subfolder(name, output_dir)
-	else:
+	if Project:
 		output_path = output_dir
+	else:
+		output_path = functions.create_subfolder(name, output_dir)
 		
 	out_file = output_path + '/' + name + '_' + basename_tag	
 	return(out_file)

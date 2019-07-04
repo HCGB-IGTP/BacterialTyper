@@ -360,11 +360,15 @@ def ariba_run(database, files, outdir, threads):
 
 	# outdir must not exist.
 
-	if (len(files) > 1):
+	if (len(files) == 2):
 		cmd = 'ariba run %s %s %s %s --threads %s' %(database, files[0], files[1], outdir, threads)
 	else:
-		## single end
-		print ("") ## todo
+	
+		## [TODO]
+		print (colored("\n\n***** TODO: Check what to do with single end when calling ARIBA *****\n\n", 'red'))
+		print (colored("\n\n***** No implementation yet *****\n\n", 'red'))
+		exit()
+
 	##
 	code = functions.system_call(cmd)
 
