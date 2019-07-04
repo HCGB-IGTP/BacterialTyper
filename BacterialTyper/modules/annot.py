@@ -36,50 +36,67 @@ def run(options):
 	else:
 		Debug = False
 
-	### species_identification_KMA -> most similar taxa
+	##################################
+	### show help messages if desired	
+	##################################
+	if (options.help_format):
+		## help_format option
+		sampleParser.help_format()
+		exit()
+
+	elif (options.help_BUSCO):
+		## information for BUSCO
+		BUSCO_caller.print_help_BUSCO()
+		exit()
+
+	elif (options.help_project):
+		## information for project
+		help.project_help()
+		exit()
+
+	elif (options.help_multiqc):
+		## information for Multiqc
+		multiQC_report.multiqc_help()
+
+	elif (options.help_Prokka):
+		## information for Prokka
+		annotation.print_list_prokka()
+		exit()
+
+	### 
 	functions.pipeline_header()
 	functions.boxymcboxface("Assembly annotation")
 
 	print ("--------- Starting Process ---------")
 	functions.print_time()
 
-	## print further information for Prokka	
-	if (options.help_Prokka):
-		annotation.print_list_prokka()
-		exit()
-	
-	## print further information for BUSCO databases	
-	if (options.help_BUSCO):
-		BUSCO_caller.print_help_BUSCO()
-		exit()
-	
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
-	outdir = os.path.abspath(options.output_folder)
+	outdir=""
 
-	## generate output folder
-	functions.create_folder(outdir)
+	## set mode: project/detached
+	if (options.project):
+		outdir = input_dir		
+	elif (options.detached):
+		outdir = os.path.abspath(options.output_folder)
 
-	### time stamp
-	start_time_partial = start_time_total
-	
 	### symbolic links
 	print ("+ Retrieve all genomes assembled...")
+
+	## get files
+	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "assembly", "fna")
+
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
+		print (pd_samples_retrieved)
 	
-	### batch provided
-	if options.batch:
-		## csv file containing sample name and file path
-		pd_samples_retrieved = pd.read_csv(options.batch, sep=',',header=None)
-		pd_samples_retrieved.columns = ["samples", "tag", "file"]
-	else:
-		fasta_ext = ('.fna', '.fasta')
-		genome_pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "chromosome", fasta_ext)
+	## generate output folder, if necessary
+	print ("\n+ Create output folder(s):")
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "annot")
 	
-		print ("+ Retrieve all plasmids assembled...")
-		plasmid_pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "plasmid", fasta_ext)
-		
-		frames = [plasmid_pd_samples_retrieved, genome_pd_samples_retrieved]
-		pd_samples_retrieved = pd.concat(frames, ignore_index=True)
+	if not options.project:
+		functions.create_folder(outdir)
 
 	## annotate
 	print ("+ Annotate assemblies using prokka:")
@@ -94,11 +111,22 @@ def run(options):
 	print ("\t-Option: cdsrnaolap;  Allow [tr]RNA to overlap CDS")
 
 	## optimize threads
-	threads_module = functions.optimize_threads(options.threads, pd_samples_retrieved.index.size)
+	## workers:
+	name_list = set(pd_samples_retrieved["name"].tolist())
+	max_workers_int = len(name_list)
+	
+	## number_samples = pd_samples_retrieved.index.size => Number samples
+	threads_module = functions.optimize_threads(options.threads, max_workers_int) ## fix threads_module optimization
+
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
+		print (colored("**DEBUG: max workers " +  str(max_workers_int) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu/process " +  str(threads_module ) + " **", 'yellow'))
 
 	## send for each sample
-	with concurrent.futures.ThreadPoolExecutor(max_workers=int(options.threads)) as executor:
-		commandsSent = { executor.submit(annotation.module_call, row['file'], options.kingdom, options.genera, outdir + '/' + row['samples'] + '_' + row['tag'], row['samples'] , threads_module): index for index, row in pd_samples_retrieved.iterrows() }
+	with concurrent.futures.ThreadPoolExecutor(max_workers=int(max_workers_int)) as executor:
+		commandsSent = { executor.submit(annot_caller, row['sample'], outdir_dict[row['name']], options, row['name'], threads_module): index for index, row in pd_samples_retrieved.iterrows() }
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
 			try:
@@ -111,18 +139,13 @@ def run(options):
 	## time stamp
 	start_time_partial = functions.timestamp(start_time_total)
 
-	## retrieve information
-	givenList = []
+	## get folders
+	givenList = [ v for v in outdir_dict.values() ]
 	protein_files = []
 	print ("+ Detail information for each sample could be identified in separate folders:")
-	for index, row in pd_samples_retrieved.iterrows():
-		fold_sample = outdir + '/' + row['samples'] + '_' + row['tag'] + '/'
-		givenList.append(fold_sample)
-		if row['tag'] != 'plasmid':
-			protein_files.extend(functions.retrieve_matching_files(fold_sample, '.faa'))
-		print ('\t- %s' %fold_sample)	
-
-	print (protein_files)
+	for folder in givenList:
+		print ('\t + ', folder)
+		protein_files.extend(functions.retrieve_matching_files(folder, '.faa'))
 
 	### report generation
 	if (options.skip_report):
@@ -130,13 +153,15 @@ def run(options):
 	else:
 		### report generation
 		functions.boxymcboxface("Annotation report")
-
 		outdir_report = functions.create_subfolder("report", outdir)
 		
+		PROKKA_report = functions.create_subfolder("annotation", outdir_report)
+		print ('\n+ A summary HTML report of each sample is generated in folder: %s' %PROKKA_report)
+		
 		## check if previously report generated
-		filename_stamp = outdir_report + '/.success'
+		filename_stamp = PROKKA_report + '/.success'
 		done=0
-		if os.path.isdir(outdir_report):
+		if os.path.isdir(PROKKA_report):
 			if os.path.isfile(filename_stamp):
 				stamp =	functions.read_time_stamp(filename_stamp)
 				print (colored("\tA previous report generated results on: %s" %stamp, 'yellow'))
@@ -145,41 +170,47 @@ def run(options):
 		## generate report
 		if done==0:
 			## get subdirs generated and call multiQC report module
-			multiQC_report.multiQC_module_call(givenList, "Prokka", outdir_report, "-dd 1")
-			print ('\n+ A summary HTML report of each sample is generated in folder: %s' %outdir_report)
+			multiQC_report.multiQC_module_call(givenList, "Prokka", PROKKA_report, "-dd 2")
+			print ('\n+ A summary HTML report of each sample is generated in folder: %s' %PROKKA_report)
 		
 			## success stamps
-			filename_stamp = outdir_report + '/.success'
+			filename_stamp = PROKKA_report + '/.success'
 			stamp =	functions.print_time_stamp(filename_stamp)
 
 	## time stamp
 	start_time_partial_BUSCO = functions.timestamp(start_time_total)
 
 	## Check each annotation using BUSCO
-	functions.boxymcboxface("BUSCO Annotation Quality check")
-	database_folder = os.path.abspath(options.database)
-	outdir_BUSCO = functions.create_subfolder("BUSCO", outdir)
-	BUSCO_Database = database_folder + '/BUSCO'
-	dataFrame_results = qc.BUSCO_call(options.BUSCO_dbs, protein_files, BUSCO_Database, outdir_BUSCO, options.threads, "proteins")
-	
-	## functions.timestamp
-	print ("+ Quality control of all samples finished: ")
-	start_time_partial = functions.timestamp(start_time_partial_BUSCO)
-	
-	## summarize
-	if (options.skip_report):
-		print ("+ No report generation...")
-	else:
-		## generate plots
-		print ("+ Generate summarizing plots...")
-		qc.BUSCO_plots(dataFrame_results, outdir, options.threads)	
-	
-	## multiqc report plot
-	## busco plot of samples or datasets per sample
+	results = qc.BUSCO_check(input_dir, outdir, options, start_time_partial_BUSCO, "proteins")
 
+	## print to file: results	 
+	
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)
 
 	print ("+ Exiting Annotation module.")
 	exit()
+
+
+#############################################
+def annot_caller(seq_file, sample_folder, options, name, threads):
+	## check if previously assembled and succeeded
+	filename_stamp = sample_folder + '/.success'
+
+	if os.path.isfile(filename_stamp):
+		stamp =	functions.read_time_stamp(filename_stamp)
+		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+	else:
+	
+		## debug message
+		if (Debug):
+			print (colored("**DEBUG: annotation.module_call call**", 'yellow'))
+			print (" annotation.module_call (seq_file, options.kingdom, options.genera, sample_folder, name, threads)")
+			print (" annotation.module_call " + seq_file + "\t" + options.kingdom + "\t" + options.genera + "\t" + sample_folder + "\t" + name + "\t" + str(threads))
+
+		# Call annotation
+		annotation.module_call(seq_file, options.kingdom, options.genera, sample_folder, name, threads)
+		
+		
+
 
