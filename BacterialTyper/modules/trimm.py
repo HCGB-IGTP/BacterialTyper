@@ -86,11 +86,11 @@ def run(options):
 
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "trimm")
-	
 	if not options.project:
 		functions.create_folder(outdir)
-
+	## for samples
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "trimm")
+	
 	## optimize threads
 	## workers:
 	name_list = set(pd_samples_retrieved["name"].tolist())

@@ -70,14 +70,14 @@ def	help_options():
 ############
 def call_fastqc(path, file1, file2, sample, fastqc_bin, threads):	
 	## call system for fastqc sample given
-	name = functions.create_subfolder(sample, path)
+	#name = functions.create_subfolder(sample, path)
 	logFile = path + '/' + sample + '.log'
 	
 	if os.path.isfile(logFile):
 		return ('OK')
 	
-	print ("+ Calling fastqc for samples...")	
-	cmd_fastqc = '%s --extract -t %s -o %s %s %s > %s 2> %s' %(fastqc_bin, threads, name, file1, file2, logFile, logFile)
+	##print ("+ Calling fastqc for samples...")	
+	cmd_fastqc = '%s --extract -t %s -o %s %s %s > %s 2> %s' %(fastqc_bin, threads, path, file1, file2, logFile, logFile)
 	## send command	
 	return (functions.system_call( cmd_fastqc ))
 		

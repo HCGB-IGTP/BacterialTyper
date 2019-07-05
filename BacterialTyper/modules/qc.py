@@ -108,11 +108,10 @@ def fastqc(input_dir, outdir, options, start_time_total):
 	
 	## if not project, outdir contains the dir to put output
 	## in this case, in some other cases might not occur	
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "fastqc")
-	
 	if not options.project:
 		functions.create_folder(outdir)
-
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "fastqc")
+	
 	print ("+ Checking quality for each sample retrieved...")
 	start_time_partial = start_time_total
 	
@@ -134,6 +133,7 @@ def fastqc(input_dir, outdir, options, start_time_total):
 		print (colored("**DEBUG: cpu/process " +  str(threads_module ) + " **", 'yellow'))
 
 	## send for each sample
+	print ("+ Calling fastqc for samples...")	
 	with concurrent.futures.ThreadPoolExecutor(max_workers=int(max_workers_int)) as executor:
 		commandsSent = { executor.submit(fastqc_caller.run_module_fastqc, outdir_dict[name], sorted( cluster["sample"].tolist() ), name, threads_module): name for name, cluster in sample_frame }
 		
@@ -199,7 +199,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		BUSCO_outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "assembly_qc")
 
 	elif mode == 'proteins':
-		pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "annot", "faa") ##
+		pd_samples_retrieved = sample_prepare.get_files(options, outdir, "annot", "faa") ##
 
 		if not options.project:
 			outdir = functions.create_subfolder("annot_qc", outdir)

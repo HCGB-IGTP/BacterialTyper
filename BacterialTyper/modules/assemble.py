@@ -88,10 +88,9 @@ def run(options):
 	
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "assemble")
-	
 	if not options.project:
 		functions.create_folder(outdir)
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "assemble")
 
 	### call assemble using spades
 	start_time_partial = start_time_total
@@ -150,7 +149,7 @@ def run(options):
 #############################################
 def check_sample_assembly(name, sample_folder, files, threads):
 	## check if previously assembled and succeeded
-	filename_stamp = sample_folder + '/.success'
+	filename_stamp = sample_folder + '/.success_all'
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
@@ -163,5 +162,10 @@ def check_sample_assembly(name, sample_folder, files, threads):
 			print ("spades_assembler.run_module_SPADES " + name + "\t" + sample_folder + "\t" + files[0] + "\t" + files[1] + "\t" +str(threads) + "\n")
 	
 		# Call spades_assembler
-		spades_assembler.run_module_SPADES(name, sample_folder, files[0], files[1], threads)
+		code = spades_assembler.run_module_SPADES(name, sample_folder, files[0], files[1], threads)
+		
+		if (code == 'OK'):
+			## success stamps
+			filename_stamp = sample_folder + '/.success_all'
+			stamp =	functions.print_time_stamp(filename_stamp)
 

@@ -92,10 +92,11 @@ def run(options):
 	
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "profile")
-	
 	if not options.project:
 		functions.create_folder(outdir)
+	## for each sample
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "profile")
+	
 
 	## fast mode
 	if (options.fast):

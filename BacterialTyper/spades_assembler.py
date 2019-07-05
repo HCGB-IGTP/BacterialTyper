@@ -49,32 +49,33 @@ def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads)
 ################################################
 def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 
-	print ('+ Running main assembly...')
+	##print ('+ Running main assembly...')
 	options = ''
 	message_return = run_SPADES(path, file1, file2, sample, SPADES_bin, options, threads)
 	if 	message_return == 'FAIL':	
 		print ("\n\n***ERROR: SPADES failed for sample " + sample)
+		return ('FAIL')
 
-	scaffolds_retrieved = get_files(path + '/' + sample)
+	scaffolds_retrieved = get_files(path)
 	if scaffolds_retrieved == 'FAIL':	
 		print ('\n\n***ERROR: No scaffolds assembly...')
 	
 	return (scaffolds_retrieved)
 
 ################################################
-def run_SPADES(path, file1, file2, name, SPADES_bin, options, threads):
+def run_SPADES(sample_folder, file1, file2, name, SPADES_bin, options, threads):
 
-	sample_folder = functions.create_subfolder(name, path)
+	##sample_folder = functions.create_subfolder(name, path)
 	
 	## check if previously assembled and succeeded
-	filename_stamp = sample_folder + '/.success'
+	filename_stamp = sample_folder + '/.success_assembly'
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
 		return('OK')
 
 	## call system for SPADES sample given
-	logFile = path + '/' + name + '.log'
+	logFile = sample_folder + '/' + name + '.log'
 	
 	## command	
 	cmd_SPADES = '%s %s-t %s -o %s -1 %s -2 %s > %s 2> %s' %(SPADES_bin, options, threads, sample_folder, file1, file2, logFile, logFile)
@@ -83,7 +84,7 @@ def run_SPADES(path, file1, file2, name, SPADES_bin, options, threads):
 	
 	if (code == 'OK'):
 		## success stamps
-		filename_stamp = sample_folder + '/.success'
+		filename_stamp = sample_folder + '/.success_assembly'
 		stamp =	functions.print_time_stamp(filename_stamp)
 	
 	return('OK')
@@ -112,7 +113,6 @@ def get_files(path):
 def run_module_SPADES(name, folder, file1, file2, threads):
 
 	print ("+ Calling spades assembly for sample...", name)	
-
 	## folder create: functions.create_folder(folder)
 	
 	## get configuration
@@ -135,6 +135,8 @@ def run_module_SPADES(name, folder, file1, file2, threads):
 		contig_out_file_read = contig_out_file.read()
 		contig_out_file.close()
 		print (contig_out_file_read)
+
+		return('OK')
 
 ################################################
 def run_module_SPADES_old(name, folder, file1, file2, threads):

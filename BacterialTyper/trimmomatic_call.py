@@ -50,7 +50,7 @@ def print_help_adapters():
 	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
 ################################################
-def trimmo_call(path_name, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
+def trimmo_call(sample_folder, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
 	
 	## get java exe
 	java_path = config.get_exe('java')
@@ -60,12 +60,12 @@ def trimmo_call(path_name, sample_name, files, trimmomatic_jar, threads, trimmom
 		print (colored("+ Cutting adapters for sample: " + sample_name, 'yellow'))
 		
 	## create folder
-	sample_folder = path_name + '/' + sample_name
-	functions.create_folder(path_name)
-	functions.create_folder(sample_folder)
+	#sample_folder = path_name + '/' + sample_name
+	#functions.create_folder(path_name)
+	#functions.create_folder(sample_folder)
 
-	log_file = sample_folder + '/' + sample_name + '.log'
-	trimmo_log = path_name + '/' + sample_name + '.log'
+	log_file = sample_folder + '/' + sample_name + '_call.log'
+	trimmo_log = sample_folder + '/' + sample_name + '.log'
 	
 	file_R1 = ""
 	file_R2 = ""
@@ -75,7 +75,9 @@ def trimmo_call(path_name, sample_name, files, trimmomatic_jar, threads, trimmom
 	orphan_R2 = ""
 
 	## Paired or single end
-	if (len(files) == 2):
+	## set command
+	cmd = ""	
+	if (len(files) == 2): ## paired-end
 		file_R1 = files[0]
 		file_R2 = files[1]
 
@@ -84,19 +86,26 @@ def trimmo_call(path_name, sample_name, files, trimmomatic_jar, threads, trimmom
 		orphan_R1 = sample_folder + '/' + sample_name + '_orphan_R1.fastq'
 		trim_R2 = sample_folder + '/' + sample_name + '_trim_R2.fastq'
 		orphan_R2 = sample_folder + '/' + sample_name + '_orphan_R2.fastq'
-	else:
+
+		cmd = "%s -jar %s PE -threads %s -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(java_path, trimmomatic_jar, threads, log_file, file_R1, file_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters, trimmo_log)
+
+	else: ## single end
 		file_R1 = files[0]
 		trim_R1 = sample_folder + '/' + sample_name + '_trim.fastq'
 
-	## set command
-	cmd = ""	
-	if (len(files) == 2):
-		cmd = "%s -jar %s PE -threads %s -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(java_path, trimmomatic_jar, threads, log_file, file_R1, file_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters, trimmo_log)
-	else:
 		cmd = "%s -jar %s SE -threads %s -trimlog %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(java_path, trimmomatic_jar, threads, log_file, file_R1, trim_R1, trimmomatic_adapters, trimmo_log)
-	
+
 	## system call & return
-	return(functions.system_call(cmd))	
+	code = functions.system_call(cmd)
+	if code == 'OK':
+		## success stamps
+		filename_stamp = sample_folder + '/.success'
+		stamp =	functions.print_time_stamp(filename_stamp)
+	
+		return('OK')	
+	else:
+		return('FAIL')
+	
 
 ################################################
 def main():

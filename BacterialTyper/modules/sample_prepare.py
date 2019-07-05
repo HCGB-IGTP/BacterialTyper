@@ -114,8 +114,12 @@ def get_files(options, input_dir, mode, extension):
 	else:
 		samples_names = ['.*']
 
-	## discard single_copy busco sequences generated
-	files = [s for s in files if "single_copy_busco_sequences" not in s]
+	## discard some files obtain
+	files = [s for s in files if 'single_copy_busco_sequences' not in s]
+	files = [s for s in files if 'orphan' not in s]
+	files = [s for s in files if 'augustus_output' not in s]
+	files = [s for s in files if 'hmmer_output' not in s]
+	files = [s for s in files if 'configs' not in s]
 
 	## files list...
 	if (options.debug):

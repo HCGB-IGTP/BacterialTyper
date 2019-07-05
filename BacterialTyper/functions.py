@@ -90,19 +90,19 @@ def outdir_project(outdir, project_mode, pd_samples, mode):
 	for name, cluster in sample_frame:
 		if (project_mode):
 			#print ("Create subdir for every sample: ", mode)
-
+			sample_dir = create_subfolder('data', outdir)		
+			
 			## create sample
-			out_name = outdir + '/' + name
-			create_folder(out_name)
+			sample_name_dir = create_subfolder(name, sample_dir)		
 			
 			## create subdir sub sample
-			out_mode = out_name + '/' + mode
-			dict_outdir[name] = out_mode
-			create_folder(out_mode)
+			mode_name_dir = create_subfolder(mode, sample_name_dir)		
+			dict_outdir[name] = mode_name_dir
 
 		else:
 			#print ("All samples share same folder")
-			dict_outdir[name] = outdir
+			sample_name_dir = create_subfolder(name, outdir)		
+			dict_outdir[name] = sample_name_dir
 			
 	
 	return (dict_outdir)
