@@ -97,7 +97,6 @@ def run(options):
 	## for each sample
 	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "profile")
 	
-
 	## fast mode
 	if (options.fast):
 		print ("")
@@ -118,7 +117,7 @@ def run(options):
 	ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases)
 	
 	## functions.timestamp
-	start_time_partial = functions.timestamp(start_time_partial)
+	#start_time_partial = functions.timestamp(start_time_partial)
 
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)
@@ -208,24 +207,23 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases):
 		print (colored("**DEBUG: outdir_samples **", 'yellow'))
 		print (outdir_samples)
 	
+	
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())
-	max_workers_int = len(name_list)
-
-	## number_samples = pd_samples_retrieved.index.size => Number samples
-	threads_module = functions.optimize_threads(options.threads, max_workers_int) ## fix threads_module optimization
+	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	max_workers_int = int(options.threads/threads_job)
 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
-		print (colored("**DEBUG: max workers " +  str(max_workers_int) + " **", 'yellow'))
-		print (colored("**DEBUG: cpu/process " +  str(threads_module ) + " **", 'yellow'))
+		print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
 
 	## send for each sample
-	with concurrent.futures.ThreadPoolExecutor(max_workers=int(max_workers_int)) as executor:
+	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
 		for db2use in databases2use:
 			## send for each sample
-			commandsSent = { executor.submit(ariba_run_caller, db2use, sorted(cluster["sample"].tolist()), outdir_samples.loc[(name, db2use), 'output'], threads_module): name for name, cluster in sample_frame }
+			commandsSent = { executor.submit(ariba_run_caller, db2use, sorted(cluster["sample"].tolist()), outdir_samples.loc[(name, db2use), 'output'], threads_job): name for name, cluster in sample_frame }
 				
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
@@ -237,8 +235,15 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases):
 					print('%r generated an exception: %s' % (details, exc))
 			
 			print ("+ Jobs finished for database %s\n+ Collecting information..." %db2use)
+
+			## functions.timestamp
+			start_time_partial = functions.timestamp(start_time_partial)
+
 			virulence_resistance.check_results(db2use, outdir_samples)
 			print ("")
+			
+			## functions.timestamp
+			start_time_partial = functions.timestamp(start_time_partial)
 				
 	## ariba summary results all samples
 	print ("\n + Generate a summary file for all samples and one for each database employed...")

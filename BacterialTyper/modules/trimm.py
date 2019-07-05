@@ -92,18 +92,15 @@ def run(options):
 	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "trimm")
 	
 	## optimize threads
-	## workers:
 	name_list = set(pd_samples_retrieved["name"].tolist())
-	max_workers_int = len(name_list)
-	
-	## number_samples = pd_samples_retrieved.index.size => Number samples
-	threads_module = functions.optimize_threads(options.threads, max_workers_int) ## fix threads_module optimization
+	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	max_workers_int = int(options.threads/threads_job)
 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
-		print (colored("**DEBUG: max workers " +  str(max_workers_int) + " **", 'yellow'))
-		print (colored("**DEBUG: cpu/process " +  str(threads_module ) + " **", 'yellow'))
+		print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
 
 	print ("+ Trimming adapters for each sample retrieved...")	
 	
@@ -111,8 +108,8 @@ def run(options):
 	sample_frame = pd_samples_retrieved.groupby(["name"])
 	
 	## send for each sample
-	with concurrent.futures.ThreadPoolExecutor(max_workers=int(max_workers_int)) as executor:
-		commandsSent = { executor.submit(trimmo_caller, sorted(cluster["sample"].tolist()), outdir_dict[name], name, threads_module, Debug, options.adapters): name for name, cluster in sample_frame }
+	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
+		commandsSent = { executor.submit(trimmo_caller, sorted(cluster["sample"].tolist()), outdir_dict[name], name, threads_job, Debug, options.adapters): name for name, cluster in sample_frame }
 
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]

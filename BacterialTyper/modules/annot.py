@@ -97,8 +97,6 @@ def run(options):
 		functions.create_folder(outdir)
 	## for samples
 	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "annot")
-	
-
 
 	## annotate
 	print ("+ Annotate assemblies using prokka:")
@@ -113,22 +111,19 @@ def run(options):
 	print ("\t-Option: cdsrnaolap;  Allow [tr]RNA to overlap CDS")
 
 	## optimize threads
-	## workers:
 	name_list = set(pd_samples_retrieved["name"].tolist())
-	max_workers_int = len(name_list)
-	
-	## number_samples = pd_samples_retrieved.index.size => Number samples
-	threads_module = functions.optimize_threads(options.threads, max_workers_int) ## fix threads_module optimization
+	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	max_workers_int = int(options.threads/threads_job)
 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
-		print (colored("**DEBUG: max workers " +  str(max_workers_int) + " **", 'yellow'))
-		print (colored("**DEBUG: cpu/process " +  str(threads_module ) + " **", 'yellow'))
+		print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
 
 	## send for each sample
-	with concurrent.futures.ThreadPoolExecutor(max_workers=int(max_workers_int)) as executor:
-		commandsSent = { executor.submit(annot_caller, row['sample'], outdir_dict[row['name']], options, row['name'], threads_module): index for index, row in pd_samples_retrieved.iterrows() }
+	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
+		commandsSent = { executor.submit(annot_caller, row['sample'], outdir_dict[row['name']], options, row['name'], threads_job): index for index, row in pd_samples_retrieved.iterrows() }
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
 			try:

@@ -96,19 +96,17 @@ def run(options):
 	start_time_partial = start_time_total
 	start_time_partial_assembly = start_time_partial
 	
-	## optimize threads
-	## workers:
-	name_list = set(pd_samples_retrieved["name"].tolist())
-	max_workers_int = len(name_list)
 	
-	## threads per job
-	threads_module = functions.optimize_threads(options.threads, max_workers_int) ## fix threads_module optimization
+	## optimize threads
+	name_list = set(pd_samples_retrieved["name"].tolist())
+	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	max_workers_int = int(options.threads/threads_job)
 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
-		print (colored("**DEBUG: max workers " +  str(max_workers_int) + " **", 'yellow'))
-		print (colored("**DEBUG: cpu/process " +  str(threads_module ) + " **", 'yellow'))
+		print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
 
 	# Group dataframe by sample name
 	sample_frame = pd_samples_retrieved.groupby(["name"])
@@ -117,7 +115,7 @@ def run(options):
 	print ('+ Running modules SPADES...')
 	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
 		## send for each sample
-		commandsSent = { executor.submit( check_sample_assembly, name, outdir_dict[name],  sorted(cluster["sample"].tolist()), threads_module): name for name, cluster in sample_frame }
+		commandsSent = { executor.submit( check_sample_assembly, name, outdir_dict[name],  sorted(cluster["sample"].tolist()), threads_job): name for name, cluster in sample_frame }
 
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]

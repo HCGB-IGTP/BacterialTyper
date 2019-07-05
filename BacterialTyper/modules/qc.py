@@ -119,23 +119,20 @@ def fastqc(input_dir, outdir, options, start_time_total):
 	sample_frame = pd_samples_retrieved.groupby(["name"])
 
 	## optimize threads
-	## workers:
 	name_list = set(pd_samples_retrieved["name"].tolist())
-	max_workers_int = len(name_list)
-	
-	## number_samples = pd_samples_retrieved.index.size => Number samples
-	threads_module = functions.optimize_threads(options.threads, max_workers_int) ## fix threads_module optimization
+	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	max_workers_int = int(options.threads/threads_job)
 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
-		print (colored("**DEBUG: max workers " +  str(max_workers_int) + " **", 'yellow'))
-		print (colored("**DEBUG: cpu/process " +  str(threads_module ) + " **", 'yellow'))
+		print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
 
 	## send for each sample
 	print ("+ Calling fastqc for samples...")	
 	with concurrent.futures.ThreadPoolExecutor(max_workers=int(max_workers_int)) as executor:
-		commandsSent = { executor.submit(fastqc_caller.run_module_fastqc, outdir_dict[name], sorted( cluster["sample"].tolist() ), name, threads_module): name for name, cluster in sample_frame }
+		commandsSent = { executor.submit(fastqc_caller.run_module_fastqc, outdir_dict[name], sorted( cluster["sample"].tolist() ), name, threads_job): name for name, cluster in sample_frame }
 		
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
@@ -308,16 +305,16 @@ def BUSCO_call(datasets, pd_samples, database_folder, threads, mode):
 	return (short_summary)
 
 ################################################
-def BUSCO_runner(sample_name, DataSet, sample, dataset_path, output, threads_module, mode):
+def BUSCO_runner(sample_name, DataSet, sample, dataset_path, output, threads, mode):
 	#file_name = os.path.basename(sample)
 	sample_name_dir = functions.create_subfolder(sample_name, output) ## to check in detached mode
 
 	## run busco	
-	code = BUSCO_caller.BUSCO_run( dataset_path, sample, threads_module, sample_name_dir, DataSet, mode)
+	code = BUSCO_caller.BUSCO_run( dataset_path, sample, threads, sample_name_dir, DataSet, mode)
 	
 	## retry it just in case
 	if (code == 'FAIL'):
-		BUSCO_caller.BUSCO_run( dataset_path, sample, threads_module, sample_name_dir, DataSet, mode)
+		BUSCO_caller.BUSCO_run( dataset_path, sample, threads, sample_name_dir, DataSet, mode)
 	else:
 		return ()
 
@@ -353,8 +350,18 @@ def BUSCO_plots(dataFrame_results, outdir, threads):
 	
 	print ("+ Generate plots for each subset")
 	
+	## optimize threads
+	threads_job = functions.optimize_threads(options.threads, len(outdir_busco_plot)) ## threads optimization
+	max_workers_int = int(options.threads/threads_job)
+
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
+		print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
+
 	# We can use a with statement to ensure threads are cleaned up promptly
-	with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor: ## need to do 1 by one as there is a problem with the working directory
+	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor: ## need to do 1 by one as there is a problem with the working directory
 		## send for each sample
 		commandsSent = { executor.submit( BUSCO_caller.BUSCO_plot , plot): plot for plot in outdir_busco_plot }
 

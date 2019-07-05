@@ -92,8 +92,7 @@ def run(options):
 	if not options.project:
 		functions.create_folder(outdir)
 	## for each sample
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "ident")
-	
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "ident_2")	
 	
 	## let's start the process
 	print ("+ Generate an species typification for each sample retrieved using:")
@@ -167,23 +166,21 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	print ("\n+ Send KMA identification jobs...")
 
 	## optimize threads
-	## workers:
-	max_workers_int = len(databases2use)
-	cpu_here = int(options.threads/max_workers_int)
-	if (cpu_here == 0):
-		cpu_here = 1
+	name_list = set(pd_samples_retrieved["name"].tolist())
+	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	max_workers_int = int(options.threads/threads_job)
 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
 		print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
-		print (colored("**DEBUG: cpu_here " +  str(cpu_here) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
 
 	# Group dataframe by sample name
 	sample_frame = pd_samples_retrieved.groupby(["name"])
 	
 	## send for each sample
-	with concurrent.futures.ThreadPoolExecutor(max_workers=int(max_workers_int)) as executor:
+	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
 		for db2use in databases2use:
 			
 			## load database on memory
@@ -192,7 +189,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			return_code_load = functions.system_call(cmd_load_db)
 			
 			## send for each sample
-			commandsSent = { executor.submit(send_kma_job, outdir_dict[name], sorted(cluster["sample"].tolist()), name, db2use, cpu_here): name for name, cluster in sample_frame }
+			commandsSent = { executor.submit(send_kma_job, outdir_dict[name], sorted(cluster["sample"].tolist()), name, db2use, threads_job): name for name, cluster in sample_frame }
 
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
