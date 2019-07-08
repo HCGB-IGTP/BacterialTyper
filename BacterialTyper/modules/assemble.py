@@ -12,16 +12,21 @@ import re
 import sys
 import concurrent.futures
 from termcolor import colored
+import pandas as pd
+import shutil
 
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
-
 from BacterialTyper import spades_assembler
 from BacterialTyper import annotation
 from BacterialTyper import BUSCO_caller
 from BacterialTyper.modules import qc
 from BacterialTyper.modules import sample_prepare
+
+##
+global assembly_stats
+assembly_stats = {}
 
 ####################################
 def run(options):
@@ -96,7 +101,6 @@ def run(options):
 	start_time_partial = start_time_total
 	start_time_partial_assembly = start_time_partial
 	
-	
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())
 	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
@@ -129,15 +133,50 @@ def run(options):
 	## functions.timestamp
 	print ("\n+ Assembly of all samples finished: ")
 	start_time_partial = functions.timestamp(start_time_partial_assembly)
+	
+	##
+	if (assembly_stats):
+		## get all assembly stats
+		outdir_report = functions.create_subfolder("report", outdir)
+		final_dir = functions.create_subfolder("assembly_stats", outdir_report)
 
+		#### summary and information
+		results_summary_toPrint_all = pd.DataFrame()
+		column_names = ("Sequences", "Total Length (bp)", "Total length (no Ns)", "A", "T", "C", "G", "A+T", "C+G", "N", 
+		"Capture Gaps", "Capture Gaps Length", "Capture Gaps Length/Total Length (%)", "Number Seqs", "% Seqs", 
+		"Total Length (bp)", "% Bases", "MinLen", "MaxLen", "Average Len", "Median Len", "N50", "L50", "Length (no Ns)")
+	
+		for stats in assembly_stats:
+			##
+			file_stats = assembly_stats[stats]
+			shutil.copy(file_stats, final_dir)
+		
+			tmp_name = os.path.splitext(file_stats)
+			#csv
+			csv_file = tmp_name[0] + '.csv'
+		
+			## subset dataframe	& print result
+			results_summary_toPrint = pd.read_csv(csv_file, sep=',', header=None).transpose()
+			results_summary_toPrint.columns = column_names
+			results_summary_toPrint['sample'] = stats
+		
+			## add all data
+			results_summary_toPrint_all = pd.concat([results_summary_toPrint_all, results_summary_toPrint], ignore_index=True)
+
+		## write to excel
+		name_excel_summary = final_dir + '/summary_stats.xlsx'
+		writer_summary = pd.ExcelWriter(name_excel_summary, engine='xlsxwriter') ## open excel handle
+		results_summary_toPrint_all = results_summary_toPrint_all.set_index('sample')			
+		results_summary_toPrint_all.to_excel(writer_summary, sheet_name="summary_all") ## write excel handle
+		writer_summary.save() ## close excel handle
+	
 	### symbolic links
 	print ("+ Retrieve all genomes assembled...")
 	
 	### BUSCO check assembly
 	results = qc.BUSCO_check(outdir, outdir, options, start_time_partial, "genome")
 	
-	## print to file results	 
-	
+	## print to file results	 	
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)
 
@@ -151,6 +190,8 @@ def check_sample_assembly(name, sample_folder, files, threads):
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		assembly_stats[name] = sample_folder + '/' + name + "_assembly.fna_stats.txt"
+
 	else:
 	
 		## debug message
@@ -162,8 +203,9 @@ def check_sample_assembly(name, sample_folder, files, threads):
 		# Call spades_assembler
 		code = spades_assembler.run_module_SPADES(name, sample_folder, files[0], files[1], threads)
 		
-		if (code == 'OK'):
+		if (code != 'FAIL'):
 			## success stamps
 			filename_stamp = sample_folder + '/.success_all'
 			stamp =	functions.print_time_stamp(filename_stamp)
+			assembly_stats[name] = code
 

@@ -121,22 +121,25 @@ def run_module_SPADES(name, folder, file1, file2, threads):
 	## assembly main 
 	path_to_contigs = run_SPADES_assembly(folder, file1, file2, name, SPADES_bin, threads)
 	if path_to_contigs == 'FAIL':
-		print ("")	
+		return ('FAIL')
 	else:
 		renamed = folder + '/' + name + '_assembly.fna'
 		shutil.copy(path_to_contigs, renamed)
 
 		## contig stats
-		print ('+ Get assembly statistics:...\n')
+		#print ('+ Get assembly statistics:...\n')
 		contig_out = contig_stats(renamed)	
 		
 		## dump in screen
-		contig_out_file = open(contig_out, 'r')
-		contig_out_file_read = contig_out_file.read()
-		contig_out_file.close()
-		print (contig_out_file_read)
+		#contig_out_file = open(contig_out, 'r')
+		#contig_out_file_read = contig_out_file.read()
+		#contig_out_file.close()
+		#print (contig_out_file_read)
 
-		return('OK')
+		## check statistics in file
+		print ("+ Check statistics for sample %s in file:\n%s" %(name, contig_out))
+
+		return(contig_out)
 
 ################################################
 def run_module_SPADES_old(name, folder, file1, file2, threads):
@@ -272,7 +275,7 @@ def discardPlasmids(contigs, plasmids, path, sample):
 ################################################
 def contig_stats(sequences):
 	file_out = sequences + '_stats.txt'
-	cmd_stats = 'perl %s %s > %s' %(contig_stats_script, sequences, file_out)
+	cmd_stats = 'perl %s %s 1000,10000 > %s' %(contig_stats_script, sequences, file_out)
 	code_chr = functions.system_call(cmd_stats)
 	return (file_out)
 
@@ -280,11 +283,12 @@ def contig_stats(sequences):
 def stats(new_contigs, new_plasmids):	
 	## generate contig statistics
 	print ('+ Get assembly statistics:...\n')
-	print (' + Main assembly:')
+	#print (' + Main assembly:')
 	
 	contig_out = contig_stats(new_contigs)	
 		
 	## dump in screen
+	
 	contig_out_file = open(contig_out, 'r')
 	contig_out_file_read = contig_out_file.read()
 	contig_out_file.close()

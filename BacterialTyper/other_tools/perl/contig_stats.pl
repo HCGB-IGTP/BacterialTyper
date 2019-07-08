@@ -102,7 +102,7 @@ foreach my $keys (sort {$a<=>$b} keys %parts_array) {
 }
 
 ##	Set	average   median N95	Count_Genomic_Contigs  		CountContigs_%  pb_this_set	pb_this_set_%	Reads_RNA_Count			 Reads_RNA_Count_%	Unmapped_contigs_Count				Unmapped_contigs_%							
-&printHeader("","#"); &printHeader(" Assembly Statistics ","#");  &printHeader("","#"); 
+##&printHeader("","#"); &printHeader(" Assembly Statistics ","#");  &printHeader("","#"); 
 my $path = join '/', @file[0..$#file-1];
 my $csv_file = $path."/".$name[0]."_stats.csv";
 print "Assembly Statisitcs for file: $fasta\n";
@@ -114,34 +114,33 @@ my $all_bases_noNs = $all_bases - $ALL_nucleotides{"N"};
 my $total_gaps_length = $gap_length/$all_bases*100;
 printf "Total length (no Ns): %.3e\n", $all_bases_noNs; print "\n";
 
-printf "%-25s %0.2f %s\n", "As", $ALL_nucleotides{"A"}/$all_bases*100, "%";
-printf "%-25s %0.2f %s\n", "Ts", $ALL_nucleotides{"T"}/$all_bases*100, "%";
-printf "%-25s %0.2f %s\n", "Cs", $ALL_nucleotides{"C"}/$all_bases*100, "%";
-printf "%-25s %0.2f %s\n", "Gs", $ALL_nucleotides{"G"}/$all_bases*100, "%";
-printf "%-25s %0.2f %s\n", "(A + T)s", ($ALL_nucleotides{"A"} + $ALL_nucleotides{"T"})/$all_bases*100, "%";
-printf "%-25s %0.2f %s\n", "(G + C)s", ($ALL_nucleotides{"G"} + $ALL_nucleotides{"C"})/$all_bases*100, "%";
-printf "%-25s %0.2f %s\n", "Ns", $ALL_nucleotides{"N"}/$all_bases*100, "%";
-printf "%-25s %i \n", "Capture Gaps", $gaps;
-printf "%-25s %i \n", "Capture Gaps Length", $gap_length;
-printf "%-25s %0.2f %s\n", "Capture Gaps Length/Total Length (%)", $total_gaps_length, "%";
+printf "%-25s %0.2f %s\n", "As:", $ALL_nucleotides{"A"}/$all_bases*100, "%";
+printf "%-25s %0.2f %s\n", "Ts:", $ALL_nucleotides{"T"}/$all_bases*100, "%";
+printf "%-25s %0.2f %s\n", "Cs:", $ALL_nucleotides{"C"}/$all_bases*100, "%";
+printf "%-25s %0.2f %s\n", "Gs:", $ALL_nucleotides{"G"}/$all_bases*100, "%";
+printf "%-25s %0.2f %s\n", "(A + T)s:", ($ALL_nucleotides{"A"} + $ALL_nucleotides{"T"})/$all_bases*100, "%";
+printf "%-25s %0.2f %s\n", "(G + C)s:", ($ALL_nucleotides{"G"} + $ALL_nucleotides{"C"})/$all_bases*100, "%";
+printf "%-25s %0.2f %s\n", "Ns:", $ALL_nucleotides{"N"}/$all_bases*100, "%";
+printf "%-25s %i \n", "Capture Gaps:", $gaps;
+printf "%-25s %i \n", "Capture Gaps Length:", $gap_length;
+printf "%-25s %0.2f %s\n", "Capture Gaps Length/Total Length (%):", $total_gaps_length, "%";
 
 open (CSV, ">$csv_file");
-print CSV "Sequences,$total_Contigs_all_sets\n";
-print CSV "Total Length (bp),$all_bases\n";
-print CSV "Total length (no Ns),".$all_bases_noNs."\n";
-print CSV "A,".( $ALL_nucleotides{"A"}/$all_bases*100)."\n";
-print CSV "T,".($ALL_nucleotides{"T"}/$all_bases*100)."\n";
-print CSV "C,".($ALL_nucleotides{"C"}/$all_bases*100)."\n";
-print CSV "G,".($ALL_nucleotides{"G"}/$all_bases*100)."\n";
-print CSV "A+T,".( ($ALL_nucleotides{"A"} + $ALL_nucleotides{"T"})/$all_bases*100)."\n";
-print CSV "C+G,".( ($ALL_nucleotides{"G"} + $ALL_nucleotides{"C"})/$all_bases*100)."\n";
-print CSV "N,".($ALL_nucleotides{"N"}/$all_bases*100)."\n";
-print CSV "Capture Gaps,".$gaps."\n";
-print CSV "Capture Gaps Length,".$gap_length."\n";
-print CSV "Capture Gaps Length/Total Length (%),".$total_gaps_length."\n";
+print CSV "$total_Contigs_all_sets\n";
+print CSV "$all_bases\n";
+print CSV "".$all_bases_noNs."\n";
+print CSV ( $ALL_nucleotides{"A"}/$all_bases*100)."\n";
+print CSV ($ALL_nucleotides{"T"}/$all_bases*100)."\n";
+print CSV ($ALL_nucleotides{"C"}/$all_bases*100)."\n";
+print CSV ($ALL_nucleotides{"G"}/$all_bases*100)."\n";
+print CSV ( ($ALL_nucleotides{"A"} + $ALL_nucleotides{"T"})/$all_bases*100)."\n";
+print CSV ( ($ALL_nucleotides{"G"} + $ALL_nucleotides{"C"})/$all_bases*100)."\n";
+print CSV ($ALL_nucleotides{"N"}/$all_bases*100)."\n";
+print CSV "$gaps\n";
+print CSV "$gap_length\n";
+print CSV "$total_gaps_length\n";
 
-print CSV "Set,Number Seqs,% Seqs,Total Length (bp),% Bases,MinLen,MaxLen,Average Len,Median Len,n50,N_set,N_total,Length (no Ns)\n";
-&printHeader("","#"); 
+##&printHeader("","#"); 
 
 foreach my $keys (sort {$a<=>$b} keys %parts_array) {
 	my @array;
@@ -161,13 +160,27 @@ foreach my $keys (sort {$a<=>$b} keys %parts_array) {
 	if ($total_N_this_set) {
 		$N_total_perc = sprintf ("%0.2f",($total_N_this_set/$all_bases*100));
 		$N_set_perc = sprintf ("%0.2f",($total_N_this_set/$total_pb_this_set*100));
-		printf "%-25s %0.2f\n", "Ns (%set) ", $N_set_perc;
-		printf "%-25s %0.2f\n", "Ns (%total) ", $N_total_perc;
+		printf "%-25s %0.2f\n", "Ns (%set):", $N_set_perc;
+		printf "%-25s %0.2f\n", "Ns (%total):", $N_total_perc;
 	}
 	my $all_bases_noNs_set = $total_pb_this_set - $total_N_this_set;
 	if (!$N_set_perc) {$N_set_perc=0;}
-	print CSV $set.",".$string2print_set.",".$N_set_perc.",".$N_total_perc.",".$all_bases_noNs_set."\n";	
-	printf "%-25s %.3e\n", "Total length (no Ns) ", $all_bases_noNs_set; print "\n";
+	printf "%-25s %.3e\n", "Total length (no Ns):", $all_bases_noNs_set; print "\n";
+	
+	if ($set eq ">1000 bp") {
+		my ($totalContigs, $percentage_contigs_returned, $bases, $percentage_pb_bases_this_set_print, $minReadLen, $maxReadLen, $avgReadLen, $medianLen, $n50, $L50) = split(",", $string2print_set);
+		print CSV $totalContigs."\n";
+		print CSV $percentage_contigs_returned."\n";
+		print CSV $bases."\n";
+		print CSV $percentage_pb_bases_this_set_print."\n";
+		print CSV $minReadLen."\n";
+		print CSV $maxReadLen."\n";
+		print CSV $avgReadLen."\n";
+		print CSV $medianLen."\n";
+		print CSV $n50."\n";
+		print CSV $L50."\n";
+		print CSV $all_bases_noNs_set."\n";
+	}
 	
 	&printHeader("","#"); 
 }
@@ -233,14 +246,14 @@ sub get_stats {
 	my $medianLen = calcMedian(@array);
 	my ($n50, $L50) = calcN50($array_ref, 50);
 
-	printf "%-25s %d\n" , "Total sequences", $totalContigs;
-	printf "%-25s %0.2f\n" , "Total sequences (%)", $percentage_contigs_returned;
-	printf "%-25s %.3e\n" , "Total bases", $bases;
-	printf "%-25s %0.2f\n" , "Total bases(%)", $percentage_pb_bases_this_set_print;
-	printf "%-25s %d\n" , "Min sequence length", $minReadLen;
-	printf "%-25s %d\n" , "Max sequence length", $maxReadLen;
-	printf "%-25s %0.2f\n", "Average sequence length", $avgReadLen;
-	printf "%-25s %0.2f\n", "Median sequence length", $medianLen;
+	printf "%-25s %d\n" , "Total sequences:", $totalContigs;
+	printf "%-25s %0.2f\n" , "Total sequences (%):", $percentage_contigs_returned;
+	printf "%-25s %.3e\n" , "Total bases:", $bases;
+	printf "%-25s %0.2f\n" , "Total bases(%):", $percentage_pb_bases_this_set_print;
+	printf "%-25s %d\n" , "Min sequence length:", $minReadLen;
+	printf "%-25s %d\n" , "Max sequence length:", $maxReadLen;
+	printf "%-25s %0.2f\n", "Average sequence length:", $avgReadLen;
+	printf "%-25s %0.2f\n", "Median sequence length:", $medianLen;
 	printf "%-25s %0.2f\n", "N50: ", $n50;
 	printf "%-25s %0.2f\n", "L50: ", $L50;
 	my $string = $totalContigs.",".$percentage_contigs_returned.",".$bases.",".$percentage_pb_bases_this_set_print.",".$minReadLen.",".$maxReadLen.",".$avgReadLen.",".$medianLen.",".$n50.",".$L50;

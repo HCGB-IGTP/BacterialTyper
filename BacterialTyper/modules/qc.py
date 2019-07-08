@@ -236,7 +236,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 	if (options.skip_report):
 		print ("+ No report generation...")
 	else:
-		print ("\n+ Generating a report using MultiQC module.")
+		print ("\n+ Generating a report BUSCO plot.")
 		outdir_report = functions.create_subfolder("report", outdir)
 
 		## get subdirs generated and call multiQC report module
@@ -252,7 +252,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		## generate plots
 		print ("+ Generate summarizing plots...")
 		BUSCO_plots(dataFrame_results, BUSCO_report, options.threads)	
-		print ('\n+ A summary HTML report is generated in folder: %s' %BUSCO_report)
+		print ('\n+ Check quality plots in folder: %s' %BUSCO_report)
 
 	return(dataFrame_results)
 
@@ -351,14 +351,8 @@ def BUSCO_plots(dataFrame_results, outdir, threads):
 	print ("+ Generate plots for each subset")
 	
 	## optimize threads
-	threads_job = functions.optimize_threads(options.threads, len(outdir_busco_plot)) ## threads optimization
-	max_workers_int = int(options.threads/threads_job)
-
-	## debug message
-	if (Debug):
-		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
-		print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
-		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
+	threads_job = 1  ## threads optimization
+	max_workers_int = threads
 
 	# We can use a with statement to ensure threads are cleaned up promptly
 	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor: ## need to do 1 by one as there is a problem with the working directory
