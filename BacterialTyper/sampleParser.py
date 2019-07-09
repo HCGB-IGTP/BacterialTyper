@@ -59,7 +59,7 @@ def help_format():
 def get_fields(file_name_list, pair=True, Debug=False):
 
 	## init dataframe
-	name_columns = ("sample", "dirname", "name", "lane", "read_pair","lane_file","ext","gz")
+	name_columns = ("sample", "dirname", "name", "lane", "read_pair","lane_file","ext","gz", "tag")
 	name_frame = pd.DataFrame(columns=name_columns)
 	
 	## loop through list
@@ -80,15 +80,15 @@ def get_fields(file_name_list, pair=True, Debug=False):
 			## lane should contain L00x			
 	
 			if (trim_search):
-				name_search = re.search(r"(.*)\_trim\_(R1|1|R2|2)(\.f.*q)(\..*){0,1}", file_name)
+				name_search = re.search(r"(.*)\_trim\_(R1|1|R2|2)\.(f.*q)(\..*){0,1}", file_name)
 			else:
 				## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
 				if (lane_search):
-					name_search = re.search(r"(.*)\_(L\d+)\_(R1|1|R2|2)(.*)(\.f.*q)(\..*){0,1}", file_name)
+					name_search = re.search(r"(.*)\_(L\d+)\_(R1|1|R2|2)(.*)\.(f.*q)(\..*){0,1}", file_name)
 				else:
-					name_search = re.search(r"(.*)\_(R1|1|R2|2)(\.f.*q)(\..*){0,1}", file_name)
+					name_search = re.search(r"(.*)\_(R1|1|R2|2)\.(f.*q)(\..*){0,1}", file_name)
 		else:
-			name_search = re.search(r"(.*)(\.f.*q)(\..*){0,1}", file_name)
+			name_search = re.search(r"(.*)\.(f.*q)(\..*){0,1}", file_name)
 	
 		### declare
 		name= ""
@@ -117,7 +117,7 @@ def get_fields(file_name_list, pair=True, Debug=False):
 				ext = name_search.group(2)
 				gz = name_search.group(3)
 	
-			name_frame.loc [len(name_frame)] = (path_files, dirN, name, lane_id, read_pair, lane_file, ext, gz)
+			name_frame.loc [len(name_frame)] = (path_files, dirN, name, lane_id, read_pair, lane_file, ext, gz, "reads")
 	
 		else:
 			## debug message
@@ -216,10 +216,11 @@ def select_other_samples (project, list_samples, samples_prefix, mode, extension
 				if project:
 					if mode == 'annot':
 						#### /path/to/folder/annot/name.faa
-						f_search = re.search(r".*\/%s\/(.*)\.%s$" %(mode, extensions), path_file)
-						if f_search:
-							file_name = f_search.group(1) 
-							df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, extensions, mode]	
+						for ext in extensions:
+							f_search = re.search(r".*\/%s\/(.*)\.%s$" %(mode, ext), path_file)
+							if f_search:
+								file_name = f_search.group(1) 
+								df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, ext, mode]	
 
 					elif mode== 'assembly':
 						#### name_assembly.faa

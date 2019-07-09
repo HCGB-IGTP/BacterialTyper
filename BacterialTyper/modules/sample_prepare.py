@@ -120,7 +120,8 @@ def get_files(options, input_dir, mode, extension):
 	files = [s for s in files if 'augustus_output' not in s]
 	files = [s for s in files if 'hmmer_output' not in s]
 	files = [s for s in files if 'configs' not in s]
-
+	files = [s for s in files if '00.0_0.cor.fastq.gz' not in s]
+	
 	## files list...
 	if (options.debug):
 		print (colored("\n**DEBUG: sample_prepare.get_files files list to check **", 'yellow'))

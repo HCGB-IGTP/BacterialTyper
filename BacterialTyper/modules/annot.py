@@ -95,6 +95,7 @@ def run(options):
 	print ("\n+ Create output folder(s):")
 	if not options.project:
 		functions.create_folder(outdir)
+	
 	## for samples
 	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "annot")
 
