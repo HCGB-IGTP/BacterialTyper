@@ -1,0 +1,42 @@
+### List of "ToDo"'s to do them all when I have time to do them
+
+##########
+## Main	##
+##########
+[TODO] scripts/BacterialTyper:: Config module: All
+[TODO] scripts/BacterialTyper:: Profile module: add help additional databases
+[TODO] scripts/BacterialTyper:: Identification module: add description
+[NEW] scripts/BacterialTyper:: MLST Module: All
+
+##############
+## Modules	##
+##############
+[TODO] BacterialTyper/modules/MGE.py :: Fix SettingWithCopyWarning warning message
+[TODO] BacterialTyper/modules/MGE.py :: Generate help and information message for MGE module
+[TODO] BacterialTyper/modules/database.py :: 	
+[TODO] BacterialTyper/modules/info.py :: Generate help and information message for project
+[TODO] BacterialTyper/modules/set_configuration.py :: All
+[TODO] BacterialTyper/modules/variant_calling.py :: All
+[TODO] BacterialTyper/modules/assemble.py :: Generate more comprehensive statistics
+[NEW] BacterialTyper/modules/qc.py :: Control FASTQC statistics for trimming
+[NEW] BacterialTyper/modules/qc.py :: Control BUSCO statistics for discarding samples if necessary
+[NEW] BacterialTyper/modules/ident.py :: Add MLST Information
+[NEW] BacterialTyper/modules/ident.py :: Sum plasmid and chromosome statistics
+[NEW] BacterialTyper/modules/profile.py :: Add excel information summarizing all results
+[NEW] BacterialTyper/modules/assemble.py :: Rename samples with shorter names
+
+
+##############
+## Scripts	##
+##############
+
+[TODO] BacterialTyper/ariba_caller.py :: Check what to do with single end when calling ARIBA
+[TODO] BacterialTyper/install_dependencies.py :: All
+[TODO] BacterialTyper/multiQC_report.py :: Generate help and information message for MultiQC
+[TODO] BacterialTyper/species_identification_KMA.py :: Generate help and information message for KMA
+[TODO] BacterialTyper/trimmomatic_call.py :: Generate help and information message for trimmomatic
+[TODO] BacterialTyper/virulence_resistance.py :: Implement if a different database provided (!= CARD, VFDB) 
+[TODO] BacterialTyper/extern_progs.py :: Add install dependencies
+[NEW] BacterialTyper/trimmomatic_call.py :: Implement new parameters for trimming given the quality check analysis
+[New] BacterialTyper/ariba_caller.py :: Different databases provided
+
