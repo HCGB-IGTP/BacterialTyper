@@ -25,7 +25,6 @@
 [NEW] BacterialTyper/modules/profile.py :: Add information summarizing results for other databases
 [NEW] BacterialTyper/modules/profile.py :: Add information summarizing all results: identified & found
 [NEW] BacterialTyper/modules/profile.py :: Add excel information summarizing all results
-[NEW] BacterialTyper/modules/assemble.py :: Rename samples with shorter names
 
 ##############
 ## Scripts	##

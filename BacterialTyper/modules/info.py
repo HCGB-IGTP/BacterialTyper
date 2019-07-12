@@ -74,14 +74,19 @@ def run(options):
 		bacteriophage.help_PhiSpy()
 		exit()
 		
-	## information for MGE module analysis
+	## information for MGE analysis
 	if (options.help_MGE_analysis):
 		MGE.help_MGE_analysis()
 		exit()
 
-	## information for PhiSpy
+	## information for MGE module
 	if (options.help_input_MGE):
 		MGE.help_input_MGE()
+		exit()
+		
+	## information for MLSTar Software
+	if (options.help_MLSTar):
+		MLSTar.help_MLSTar()
 		exit()
 	
 ##########################

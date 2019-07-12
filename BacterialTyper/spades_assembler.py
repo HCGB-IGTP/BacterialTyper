@@ -57,10 +57,14 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 		return ('FAIL')
 
 	scaffolds_retrieved = get_files(path)
+	new_contigs = path + '/' + sample + '_assembly.fna'
+	rename_contigs(scaffolds_retrieved, "scaffolds_" + sample, new_contigs)
+		
 	if scaffolds_retrieved == 'FAIL':	
 		print ('\n\n***ERROR: No scaffolds assembly...')
-	
-	return (scaffolds_retrieved)
+		return ('FAIL')
+			
+	return (new_contigs)
 
 ################################################
 def run_SPADES(sample_folder, file1, file2, name, SPADES_bin, options, threads):
@@ -120,25 +124,16 @@ def run_module_SPADES(name, folder, file1, file2, threads):
 	
 	## assembly main 
 	path_to_contigs = run_SPADES_assembly(folder, file1, file2, name, SPADES_bin, threads)
+	
 	if path_to_contigs == 'FAIL':
 		return ('FAIL')
 	else:
-		renamed = folder + '/' + name + '_assembly.fna'
-		shutil.copy(path_to_contigs, renamed)
-
 		## contig stats
 		#print ('+ Get assembly statistics:...\n')
-		contig_out = contig_stats(renamed)	
-		
-		## dump in screen
-		#contig_out_file = open(contig_out, 'r')
-		#contig_out_file_read = contig_out_file.read()
-		#contig_out_file.close()
-		#print (contig_out_file_read)
-
+		contig_out = contig_stats(path_to_contigs)	
+	
 		## check statistics in file
 		print ("+ Check statistics for sample %s in file:\n%s" %(name, contig_out))
-
 		return(contig_out)
 
 ################################################

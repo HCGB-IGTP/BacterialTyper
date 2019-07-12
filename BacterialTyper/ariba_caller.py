@@ -359,9 +359,10 @@ def ariba_run(database, files, outdir, threads):
 	######################################################################################
 
 	# outdir must not exist.
+	logFile = outdir + '_run.log'
 
 	if (len(files) == 2):
-		cmd = 'ariba run %s %s %s %s --threads %s' %(database, files[0], files[1], outdir, threads)
+		cmd = 'ariba run %s %s %s %s --threads %s 2> %s' %(database, files[0], files[1], outdir, threads, logFile)
 	else:
 	
 		## [TODO]

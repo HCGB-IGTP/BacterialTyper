@@ -20,7 +20,9 @@ from BacterialTyper import config
 from BacterialTyper import sampleParser
 from BacterialTyper import species_identification_KMA
 from BacterialTyper import database_generator
+from BacterialTyper import MLSTar
 from BacterialTyper.modules import sample_prepare
+
 
 ####################################
 def run(options):
@@ -42,6 +44,13 @@ def run(options):
 		## information for KMA Software
 		species_identification_KMA.help_kma_database()
 		exit()
+
+	elif (options.help_MLSTar):
+		## information for KMA Software
+		MLSTar.help_MLSTar()
+		exit()
+
+
 
 	## init time
 	start_time_total = time.time()
@@ -92,7 +101,7 @@ def run(options):
 	if not options.project:
 		functions.create_folder(outdir)
 	## for each sample
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "ident_2")	
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "ident")	
 	
 	## let's start the process
 	print ("+ Generate an species typification for each sample retrieved using:")
@@ -114,6 +123,13 @@ def run(options):
 	
 	########
 	(excel_generated, dataFrame) = KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
+	
+	## TODO: check what information contains dataFrame: one or all databases info
+	
+	## generate summary for sample: all databases
+	
+	## generate MLST call according to sampl	
+	
 
 	## functions.timestamp
 	start_time_partial = functions.timestamp(start_time_partial)

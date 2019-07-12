@@ -70,6 +70,7 @@ def run(options):
 	
 	## absolute path for in & out
 	options.database = os.path.abspath(options.database)
+	global input_dir
 	input_dir = os.path.abspath(options.input)
 	outdir=""
 
@@ -114,7 +115,7 @@ def run(options):
 	start_time_partial = functions.timestamp(start_time_total)
 		
 	########
-	ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases)
+	ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
 	
 	## functions.timestamp
 	#start_time_partial = functions.timestamp(start_time_partial)
@@ -166,7 +167,7 @@ def get_options_db(options):
 	return (database_generator.getdbs('ARIBA', database2use, option_db, Debug))
 
 ####################################
-def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases):
+def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial):
 	functions.boxymcboxface("ARIBA Identification")
 
 	## check status
@@ -207,7 +208,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases):
 		print (colored("**DEBUG: outdir_samples **", 'yellow'))
 		print (outdir_samples)
 	
-	
+
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())
 	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
@@ -250,18 +251,21 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases):
 
 	## parse results
 	if Project:
-		final_dir = options.input + '/report/profile'
+		final_dir = input_dir + '/report/profile'
 		functions.create_folder(final_dir) 
 	else:
 		final_dir = os.path.abspath(options.output_folder)
-
+	
+	## Generate final report for all samples
 	vfdb = False
 	subfolder = functions.create_subfolder("ariba_summary", final_dir)
 	for database, data in outdir_samples.groupby(level='db'): ## fix
 		report_files_databases = {}
 
 		for sample, data2 in data.groupby(level='sample'): ## fix
-			report_files_databases[sample] = data2.loc[sample, database]['output'] + '/report.tsv'
+			file_report = data2.loc[sample, database]['output'] + '/report.tsv'
+			if os.path.isfile(file_report): ## check if exists
+				report_files_databases[sample] = file_report
 
 		outfile_summary = subfolder + "/"			
 		if database.endswith('card_prepareref/'):

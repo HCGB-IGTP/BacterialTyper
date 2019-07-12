@@ -103,8 +103,19 @@ def outdir_project(outdir, project_mode, pd_samples, mode):
 			#print ("All samples share same folder")
 			sample_name_dir = create_subfolder(name, outdir)		
 			dict_outdir[name] = sample_name_dir
-			
-	
+
+	return (dict_outdir)
+
+###############
+def outdir_subproject(outdir, project_mode, pd_samples, mode):
+	## we assume we want to create within a project dir a subdir
+	# Group dataframe by sample name
+	sample_frame = pd_samples.groupby(["name"])
+	dict_outdir = {}	
+	for name, cluster in sample_frame:
+		mode_name_dir = create_subfolder(mode, outdir)		
+		dict_outdir[name] = mode_name_dir
+
 	return (dict_outdir)
 
 ###############
@@ -188,7 +199,9 @@ def system_call(cmd):
 		subprocess.check_output(cmd, shell = True)
 		return ('OK')
 	except subprocess.CalledProcessError as err:
+		print (colored("** ERROR **", 'red'))
 		print (colored(err.output, 'red'))
+		print (colored("** ERROR **", 'red'))
 		return ('FAIL')
 
 ###############

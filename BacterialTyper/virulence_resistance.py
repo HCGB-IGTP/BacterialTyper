@@ -267,19 +267,30 @@ def results_parser(database, folderResults, sampleName, outfolder):
 	assemblies=""
 	assemled_genes=""
 	fileResults=""
-	print ("\n+ Parsing result file for sample: ", sampleName)
+
+	## check if previously run and succeeded
+	filename_stamp = folderResults + '/.success'
+	if not os.path.isfile(filename_stamp):
+		print ("+ Finish parsing information for sample ", sampleName)
+		return()
+		
+	else: 
+		print ("\n+ Parsing result file for sample: ", sampleName)
+
 	print ("\n+ Extracting files if necessary:")
 	## extract files
 	for f in list_files:
-		if f.endswith('.gz'):
-			functions.extract(folderResults + '/' + f, folderResults)
+
+
+			if f.endswith('.gz'):
+				functions.extract(folderResults + '/' + f, folderResults)
 		
-		if (f=='report.tsv'):
-			fileResults=folderResults + '/' + f
-		elif (f=='assemblies.fa.gz'):
-			assemblies=folderResults + '/assemblies.fa'
-		elif (f=='assembled_genes.fa.gz'):
-			assemled_genes=folderResults + '/assembled_genes.fa'
+			if (f=='report.tsv'):
+				fileResults=folderResults + '/' + f
+			elif (f=='assemblies.fa.gz'):
+				assemblies=folderResults + '/assemblies.fa'
+			elif (f=='assembled_genes.fa.gz'):
+				assemled_genes=folderResults + '/assembled_genes.fa'
 	
 	print ("\n")
 	
@@ -307,6 +318,7 @@ def results_parser(database, folderResults, sampleName, outfolder):
 		name_excel= parse_results(outfolder, sampleName, fileResults, fileFlags, summary_results)				
 	
 	print ('\tCheck additional information on ', name_excel)
+	return()
 
 #############################################################
 def check_VFDB(VFDB_path):

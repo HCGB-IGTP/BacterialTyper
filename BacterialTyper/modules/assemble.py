@@ -141,6 +141,8 @@ def run(options):
 		## get all assembly stats
 		outdir_report = functions.create_subfolder("report", outdir)
 		final_dir = functions.create_subfolder("assembly_stats", outdir_report)
+		final_sub_dir = functions.create_subfolder("samples", final_dir)
+		
 
 		#### summary and information
 		results_summary_toPrint_all = pd.DataFrame()
@@ -151,7 +153,7 @@ def run(options):
 		for stats in assembly_stats:
 			##
 			file_stats = assembly_stats[stats]
-			shutil.copy(file_stats, final_dir)
+			shutil.copy(file_stats, final_sub_dir)
 		
 			tmp_name = os.path.splitext(file_stats)
 			#csv
