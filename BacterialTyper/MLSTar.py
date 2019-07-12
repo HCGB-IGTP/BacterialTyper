@@ -1,4 +1,4 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 '''
 This code generates a bacteriophage identification profile for each sample
 Jose F. Sanchez
@@ -13,25 +13,32 @@ import sys
 from sys import argv
 from io import open
 import pandas as pd
+from termcolor import colored
 
-import matplotlib
-matplotlib.use('agg')
-import matplotlib.pyplot as plt
-from pandas.plotting import table
-from matplotlib.backends.backend_pdf import PdfPages
+#import matplotlib
+#matplotlib.use('agg')
+#import matplotlib.pyplot as plt
+#from pandas.plotting import table
+#from matplotlib.backends.backend_pdf import PdfPages
 
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
+from BacterialTyper.other_tools import tools
+from BacterialTyper.data import data_files
 
-RscriptDir = os.path.dirname(os.path.realpath(__file__)) + '/../R'
-MLSTarR_script = RscriptDir + '/MLSTar_call.R'
-MLSTarR_plot = RscriptDir + '/MLSTar_plot.R'
-MLSTarR_download_seq = RscriptDir + '/MLSTar_downloadPubMLST_seq.R'
-MLSTarR_download_prf = RscriptDir + '/MLSTar_downloadPubMLST_profile.R'
+## R scripts
+MLSTarR_script = tools.R_scripts('MLSTar_call')
+MLSTarR_plot =tools.R_scripts('MLSTar_plot')
+MLSTarR_download_seq = tools.R_scripts('MLSTar_downloadPubMLST_seq')
+MLSTarR_download_prf = tools.R_scripts('MLSTar_downloadPubMLST_profile')
 
-## MLSTar available data
-MLSTar_species = os.path.dirname(os.path.realpath(__file__)) + '/../../data/MLSTar_species.txt'
+######
+def help_MLSTar():
+
+	print ("")
+	get_MLSTar_species()
+	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
 ######
 def run_MLSTar(species, scheme, name, path, fileGiven, threads):
@@ -46,10 +53,6 @@ def run_MLSTar(species, scheme, name, path, fileGiven, threads):
 	## call MLSTar for this sample
 	results = run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads)
 	return (results)
-
-######
-def help_options():
-	print ("\nUSAGE: python %s genome species scheme name rscript_bin threads profile_folder seq_folder path\n"  %os.path.realpath(__file__))
 
 ######
 def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads):
@@ -72,40 +75,46 @@ def update_MLSTar_profile_alleles():
 	
 ######
 def get_MLSTar_species():
+
+	## MLSTar available data
+	MLSTar_species = data_files.data_list("MLSTar_species")
+
 	# pandas from csv file
+	print (MLSTar_species)
 	data = pd.read_csv(MLSTar_species, header=0, sep=",")
-	#print (data)
+	print (data)
+	return(data)
 
-	fileName = "MLSTar_species"
-	data.to_csv(fileName + '.txt', sep='\t')
-
-	## plot table
-	pdf_name = fileName + '.pdf'
-	pp = PdfPages(pdf_name)
-
-	fig,ax = plt.subplots()
-	fig.patch.set_visible(False)
-	
-	ax.axis('off')
-	ax.axis('tight')
-	
-	## color according to kingdom
-	colors = data.applymap(lambda x: 'palegreen' if x== 'bacteria' else ('lightyellow' if x== 'eukarya' else ('lightsalmon' if x=='other' else 'white' )))
-	## https://www.rapidtables.com/web/color/html-color-codes.html
-	
-	tab = ax.table(
-		cellText=data.values,
-		colLabels=data.columns,
-		cellColours =colors.values,
-		colWidths=[0.26 for x in data.columns],
-		loc='center', colLoc = 'center', rowLoc='left', cellLoc='center')
-	tab.auto_set_font_size(False)
-	tab.set_fontsize(5)
-
-	fig.tight_layout()	
-	pp.savefig()
-	plt.close()
-	pp.close()	
+#	fileName = "MLSTar_species"
+#	data.to_csv(fileName + '.txt', sep='\t')
+#
+#	## plot table
+#	pdf_name = fileName + '.pdf'
+#	pp = PdfPages(pdf_name)
+#
+#	fig,ax = plt.subplots()
+#	fig.patch.set_visible(False)
+#	
+#	ax.axis('off')
+#	ax.axis('tight')
+#	
+#	## color according to kingdom
+#	colors = data.applymap(lambda x: 'palegreen' if x== 'bacteria' else ('lightyellow' if x== 'eukarya' else ('lightsalmon' if x=='other' else 'white' )))
+#	## https://www.rapidtables.com/web/color/html-color-codes.html
+#	
+#	tab = ax.table(
+#		cellText=data.values,
+#		colLabels=data.columns,
+#		cellColours =colors.values,
+#		colWidths=[0.26 for x in data.columns],
+#		loc='center', colLoc = 'center', rowLoc='left', cellLoc='center')
+#	tab.auto_set_font_size(False)
+#	tab.set_fontsize(5)
+#
+#	fig.tight_layout()	
+#	pp.savefig()
+#	plt.close()
+#	pp.close()	
 
 ######
 def call_plot(results):
@@ -208,6 +217,11 @@ def main():
 	results = run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads)
 
 	plot_MLST(results, profile_folder, rscript)
+
+######
+def help_options():
+	print ("\nUSAGE: python %s genome species scheme name rscript_bin threads profile_folder seq_folder path\n"  %os.path.realpath(__file__))
+
 		
 ######
 '''******************************************'''

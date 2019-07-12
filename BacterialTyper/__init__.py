@@ -8,6 +8,7 @@
 
 
 __all__ = [
+	'data',
 	'BUSCO_caller',
 	'MLSTar',
 	'annotation',

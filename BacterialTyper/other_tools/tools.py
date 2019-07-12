@@ -22,7 +22,7 @@ def perl_scripts(script):
 
 ####################################################################
 def R_scripts(script):
-	perlDir = os.path.dirname(os.path.realpath(__file__)) + '/R/'
+	RDir = os.path.dirname(os.path.realpath(__file__)) + '/R/'
 	list_R = functions.get_fullpath_list(RDir)
 	
 	dict_R = {}

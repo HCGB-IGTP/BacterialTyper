@@ -22,9 +22,10 @@
 [NEW] BacterialTyper/modules/qc.py :: Control BUSCO statistics for discarding samples if necessary
 [NEW] BacterialTyper/modules/ident.py :: Add MLST Information
 [NEW] BacterialTyper/modules/ident.py :: Sum plasmid and chromosome statistics
+[NEW] BacterialTyper/modules/profile.py :: Add information summarizing results for other databases
+[NEW] BacterialTyper/modules/profile.py :: Add information summarizing all results: identified & found
 [NEW] BacterialTyper/modules/profile.py :: Add excel information summarizing all results
 [NEW] BacterialTyper/modules/assemble.py :: Rename samples with shorter names
-
 
 ##############
 ## Scripts	##
@@ -39,4 +40,5 @@
 [TODO] BacterialTyper/extern_progs.py :: Add install dependencies
 [NEW] BacterialTyper/trimmomatic_call.py :: Implement new parameters for trimming given the quality check analysis
 [New] BacterialTyper/ariba_caller.py :: Different databases provided
+[New] BacterialTyper/BUSCO_caller.py :: Add warning if low quality assembly/annotation detected
 
