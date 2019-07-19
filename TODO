@@ -1,4 +1,4 @@
-### List of "ToDo"'s to do them all when I have time to do them
+### List of "ToDo"s to do them all when I have time to do them
 
 ##########
 ## Main	##
@@ -37,6 +37,8 @@
 [TODO] BacterialTyper/trimmomatic_call.py :: Generate help and information message for trimmomatic
 [TODO] BacterialTyper/virulence_resistance.py :: Implement if a different database provided (!= CARD, VFDB) 
 [TODO] BacterialTyper/extern_progs.py :: Add install dependencies
+[TODO] BacterialTyper/MLSTar.py :: Check time passed and download profile and sequence again if >?? days passed]
+[TODO] BacterialTyper/MLSTar.py :: update_MLSTar_profile_alleles()
 [NEW] BacterialTyper/trimmomatic_call.py :: Implement new parameters for trimming given the quality check analysis
 [New] BacterialTyper/ariba_caller.py :: Different databases provided
 [New] BacterialTyper/BUSCO_caller.py :: Add warning if low quality assembly/annotation detected

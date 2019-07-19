@@ -134,8 +134,6 @@ def run(options):
 	print ("\n+ Assembly of all samples finished: ")
 	start_time_partial = functions.timestamp(start_time_partial_assembly)
 	
-	## rename contig sequences
-	
 	##
 	if (assembly_stats):
 		## get all assembly stats

@@ -107,7 +107,7 @@ def outdir_project(outdir, project_mode, pd_samples, mode):
 	return (dict_outdir)
 
 ###############
-def outdir_subproject(outdir, project_mode, pd_samples, mode):
+def outdir_subproject(outdir, pd_samples, mode):
 	## we assume we want to create within a project dir a subdir
 	# Group dataframe by sample name
 	sample_frame = pd_samples.groupby(["name"])
