@@ -26,8 +26,12 @@ from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import extern_progs
 
+##################
 ## [TODO]
+## def install(software): edirect NCBI
 
+
+## [TODO]
 ##################
 def install(software):
 	print ("Install missing software: ", software)

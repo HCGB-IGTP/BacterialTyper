@@ -340,6 +340,14 @@ def get_data(ID_file, SEP):
 def get_number_lines(input_file):	
 	with open(input_file) as foo:
 		lines = len(foo.readlines())
+	foo.close()
+	return (lines)
+
+###############
+def get_info_file(input_file):	
+	with open(input_file) as f:
+	    lines = f.read().splitlines() 
+	f.close()
 	return (lines)
   	    
 #################

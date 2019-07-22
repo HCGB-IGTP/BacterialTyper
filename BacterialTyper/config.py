@@ -43,9 +43,10 @@ def prog_to_default():
 		'spades' : 'spades.py',
 		'tblastn':'tblastn',
 		'multiqc':'multiqc',
-		'trimmomatic':'trimmomatic.jar'
-		
-	
+		'trimmomatic':'trimmomatic.jar',
+		'efetch':'efetch',
+		'esearch':'esearch',
+		'xtract':'xtract'
 	}
 	return(program_to_default)
 
@@ -72,6 +73,11 @@ def min_version_programs():
 		'tblastn':'2.5',
 		'trimmomatic':'0.36',
 		'multiqc':'1.7',
+		
+		'efetch':'11.7',
+		'esearch':'11.7',
+		'xtract':'11.7',
+				
 		##
 		'python':'3.5'
 	}

@@ -10,6 +10,7 @@
 __all__ = [
 	'data',
 	'BUSCO_caller',
+	'edirect_caller',
 	'MLSTar',
 	'annotation',
 	'ariba_caller',

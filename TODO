@@ -18,10 +18,11 @@
 [TODO] BacterialTyper/modules/set_configuration.py :: All
 [TODO] BacterialTyper/modules/variant_calling.py :: All
 [TODO] BacterialTyper/modules/assemble.py :: Generate more comprehensive statistics
+[TODO] BacterialTyper/modules/ident.py :: Samples might not be assembly or might not be species information for some. Take into account
 [NEW] BacterialTyper/modules/qc.py :: Control FASTQC statistics for trimming
 [NEW] BacterialTyper/modules/qc.py :: Control BUSCO statistics for discarding samples if necessary
-[NEW] BacterialTyper/modules/ident.py :: Add MLST Information
 [NEW] BacterialTyper/modules/ident.py :: Sum plasmid and chromosome statistics
+
 [NEW] BacterialTyper/modules/profile.py :: Add information summarizing results for other databases
 [NEW] BacterialTyper/modules/profile.py :: Add information summarizing all results: identified & found
 [NEW] BacterialTyper/modules/profile.py :: Add excel information summarizing all results
@@ -32,6 +33,7 @@
 
 [TODO] BacterialTyper/ariba_caller.py :: Check what to do with single end when calling ARIBA
 [TODO] BacterialTyper/install_dependencies.py :: All
+[TODO] BacterialTyper/install_dependencies.py :: check and install edirect NCBI
 [TODO] BacterialTyper/multiQC_report.py :: Generate help and information message for MultiQC
 [TODO] BacterialTyper/species_identification_KMA.py :: Generate help and information message for KMA
 [TODO] BacterialTyper/trimmomatic_call.py :: Generate help and information message for trimmomatic
