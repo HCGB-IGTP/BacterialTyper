@@ -125,32 +125,50 @@ def run(options):
 	## functions.timestamp
 	start_time_partial = functions.timestamp(start_time_partial)
 	
-	## generate MLST call according to sample
-
+	######## EDirect identification
+	dataFrame_edirect = edirect_ident(dataFrame, outdir_dict)
+	
+	## functions.timestamp
+	start_time_partial = functions.timestamp(start_time_partial)
+	
 	######## MLST identification
-	dataFrame = MLST_ident(options, dataFrame, start_time_partial, outdir_dict, retrieve_databases)
-
-	exit()
+	MLST_results = MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect)
 
 	## functions.timestamp
 	start_time_partial = functions.timestamp(start_time_partial)
-
-	## update database for later usage
-	if (options.fast):
-		## skip it
-		print ("\n+ Check summary of results in file: " + excel_generated)		
-	else:
-		## update db
-		print ("")
-			## assembly, annotation, etc...
-			## rerun identification with new updated database
+	
+	## generate summary for sample: all databases
+	## MLST, plasmids, genome, etc
+	functions.boxymcboxface("Results Summary")
+	##
+	
+	##
+	print ("\n+ Check summary of results in file generated" )		
 	
 	### timestamp
 	start_time_partial = functions.timestamp(start_time_partial)					
-
-	## generate summary for sample: all databases
-	## MLST, plasmids, genome, etc
 	
+	######################################
+	## update database for later usage
+	######################################
+	if not options.fast:
+
+		functions.boxymcboxface("Update Sample Database")
+
+		## update db
+		print ("+ Update database with samples identified")		
+
+		## debug message
+		if (Debug):
+			print (colored("**DEBUG: dataFrame_edirect **", 'yellow'))
+			pd.set_option('display.max_colwidth', -1)
+			pd.set_option('display.max_columns', None)
+			print (dataFrame_edirect)
+
+				## dataFrame_edirect
+				## assembly, annotation, etc...
+				## rerun identification with new updated database
+
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)
 
@@ -326,11 +344,9 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 		results_summary_toPrint_sample = results_summary_toPrint_sample.set_index('Sample')		
 		results_summary_toPrint_sample.to_excel(writer_sample, sheet_name=name) ## write excel handle
 
-		writer_sample.save() ## close excel handle	
-	
+		writer_sample.save() ## close excel handle		
 	
 	print ("+ Finish this step...")
-
 	return (name_excel, results_summary)
 
 ####################################
@@ -371,32 +387,32 @@ def get_outfile(output_dir, name, index_name):
 		output_path = functions.create_subfolder(name, output_dir)
 		
 	out_file = output_path + '/' + name + '_' + basename_tag	
-	return(out_file)
+	return(out_file)	
 	
 ####################################
-def MLST_ident(options, dataFrame, time_partial, outdir_dict, retrieve_databases):
-	## [NEW] BacterialTyper/modules/ident.py :: Add MLST Information
+def edirect_ident(dataFrame, outdir_dict):
+	
+	## edirect	
+	functions.boxymcboxface("EDirect information")
+	print ("+ Connect to NCBI to get information from samples identified...")
 
 	# Group dataframe sample name
 	sample_results = dataFrame.groupby(["Sample"])
 
-	## edirect	
-	functions.boxymcboxface("EDirect information")
-	print ("+ Connect to NCBI to get information from samples identified...")
-	
-	## MLST for each species
-	MLST_taxa = {}
+	## create dataframe to return results
+	edirect_frame = pd.DataFrame(columns=("sample", "genus", "species", "strain", "BioSample", "genome", "Plasmids"))
+
 	for name, grouped in sample_results:
 		## use edirect to get Species_name and entry for later identification
-		#print (grouped)
+		edirect_folder = functions.create_subfolder('edirect', outdir_dict[name])
 		
+		## chromosome match
 		nucc_entry = grouped.loc[grouped['Database'] == 'bacteria.ATG']['#Template'].values[0].split()
 		## e.g. NZ_CP029680.1 Staphylococcus aureus strain AR_0215 chromosome, complete genome
 
-		edirect_folder = functions.create_subfolder('edirect', outdir_dict[name])
+		##
 		out_docsum_file = edirect_folder + '/nuccore_docsum.txt'
-		species_outfile = edirect_folder + '/taxa_ID.txt'
-		
+		species_outfile = edirect_folder + '/info.txt'
 		filename_stamp = edirect_folder + '/.success_species'
 				
 		if os.path.isfile(filename_stamp):
@@ -405,22 +421,36 @@ def MLST_ident(options, dataFrame, time_partial, outdir_dict, retrieve_databases
 
 		else: 
 			edirect_caller.generate_docsum_call('nuccore', nucc_entry[0], out_docsum_file)
-			edirect_caller.generate_xtract_call(out_docsum_file, 'DocumentSummary', 'Organism', species_outfile)
+			edirect_caller.generate_xtract_call(out_docsum_file, 'DocumentSummary', 'Organism,Strain,BioSample', species_outfile)
 			stamp =	functions.print_time_stamp(filename_stamp)
 
-		taxa_name = functions.get_info_file(species_outfile)
-		MLST_taxa[name] = taxa_name
+		## get information from edirect call
+		taxa_name_tmp = functions.get_info_file(species_outfile)
+		genus = taxa_name_tmp[0].split()[0] 		## genus
+		species = taxa_name_tmp[0].split()[1] 		## species
+		strain = taxa_name_tmp[0].split()[2] 		## strain
+		BioSample_name = taxa_name_tmp[0].split()[3]	## BioSample
+
+		## plasmid match
+		group_plasmid = grouped.loc[grouped['Database'] == 'plasmids.T' ]
+		plasmid_entries = group_plasmid['#Template'].tolist()
+			## e.g. NZ_CP029083.1 Staphylococcus aureus strain AR464 plasmid unnamed1, complete sequence
+		plasmid_entries_str = ",".join([i.split()[0] for i in plasmid_entries])
+
+		#("sample", "taxa", strain, genome "BioSample", "Plasmids"))
+		edirect_frame.loc[len(edirect_frame)] = (name, genus, species, strain, BioSample_name, nucc_entry[0], plasmid_entries_str)
 	
+	return (edirect_frame)
+
+####################################
+def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect):
+	## [NEW] BacterialTyper/modules/ident.py :: Add MLST Information
+
 	## debug message
 	if (Debug):
-		print (colored("**DEBUG: MLST_taxa identified**", 'yellow'))
-		print (MLST_taxa)
+		print (colored("**DEBUG: dataFrame_edirect identified**", 'yellow'))
+		print (dataFrame_edirect)
 
-	print ("+ Finish this step...")
-
-	## functions.timestamp
-	time_partial = functions.timestamp(time_partial)
-	
 	## MLST call	
 	functions.boxymcboxface("MLST typing")
 	print ("+ Create classical MLST typification of each sample according to species retrieved by kmer...")
@@ -436,17 +466,22 @@ def MLST_ident(options, dataFrame, time_partial, outdir_dict, retrieve_databases
 		print (colored("**DEBUG: assembly_samples_retrieved**", 'yellow'))
 		print (assembly_samples_retrieved)	
 	
-	## Generate MLST call according to species identified for each sample
-	
 	## PubMLST folder
 	path_database = os.path.abspath(options.database)
 	pubmlst_folder = functions.create_subfolder('PubMLST', path_database)
 	
-	rscript = "/soft/general/R-3.5.1-bioc-3.8/bin/Rscript" ##config.get_exe("Rscript") ## TODO: Fix and install MLSTar during installation
-	### for each sample
+	## TODO: Fix and install MLSTar during installation
+	rscript = "/soft/general/R-3.5.1-bioc-3.8/bin/Rscript" ##config.get_exe("Rscript") 
+
+	# init
 	MLST_results = {}
-	for sample, taxa in MLST_taxa.items():
-		MLSTar_taxa_name = MLSTar.get_MLSTar_species(taxa)
+
+	## Generate MLST call according to species identified for each sample
+	for index, row in dataFrame_edirect.iterrows():
+		MLSTar_taxa_name = MLSTar.get_MLSTar_species(row['genus'], row['species'] )
+		
+		if (MLSTar_taxa_name == 'NaN'):
+			continue
 		
 		## species folder
 		species_mlst_folder = functions.create_subfolder(MLSTar_taxa_name, pubmlst_folder)
@@ -473,22 +508,21 @@ def MLST_ident(options, dataFrame, time_partial, outdir_dict, retrieve_databases
 			if cluster['len'] < 10:
 				scheme2use = int(cluster['scheme'])
 				continue			
-			
+		
+		### 
+		sample = row['sample']
 		MLSTar_folder = functions.create_subfolder('MLST', outdir_dict[sample])
 		genome_file = assembly_samples_retrieved.loc[assembly_samples_retrieved['name'] == sample]['sample'].values[0]
 
 		## call MLST
 		(results, profile_folder) = MLSTar.run_MLSTar(path_database, rscript, MLSTar_taxa_name, scheme2use, sample, MLSTar_folder, genome_file, 2)
 		MLST_results[sample] = results
-		
-		## TODO: Fix MLSTar that complains when profile is already indexed by blast after first execution
-
 
 	## parse results for all samples		
 	#
-		
+
 	print ("+ Finish this step...")
-	exit()
+	return (MLST_results)
 
 ####################################
 def get_options_db(options):

@@ -6,7 +6,7 @@
 [TODO] scripts/BacterialTyper:: Config module: All
 [TODO] scripts/BacterialTyper:: Profile module: add help additional databases
 [TODO] scripts/BacterialTyper:: Identification module: add description
-[NEW] scripts/BacterialTyper:: MLST Module: All
+[TODO] Fix and install MLSTar during installation
 
 ##############
 ## Modules	##

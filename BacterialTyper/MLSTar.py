@@ -70,7 +70,8 @@ def run_MLSTar(database_folder, rscript, species, scheme, name, path, fileGiven,
 ##########################################
 def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads):
 	print ('+ Generating profile for sample...')
-	cmd_profiler = "%s %s --dir_profile %s --dir_seq %s --file %s --dir %s --name %s --threads %s" %(rscript, MLSTarR_script, profile_folder, seq_folder, fileGiven, path, name, threads)
+	logFile = path + '_logFile.txt'
+	cmd_profiler = "%s %s --dir_profile %s --dir_seq %s --file %s --dir %s --name %s --threads %s 2> %s" %(rscript, MLSTarR_script, profile_folder, seq_folder, fileGiven, path, name, threads, logFile)
 	callCode = functions.system_call(cmd_profiler)
 
 	if callCode == 'OK':
@@ -89,7 +90,7 @@ def update_MLSTar_profile_alleles():
 	# [TODO: update_MLSTar_profile_alleles():
 	
 ##########################################
-def get_MLSTar_species(taxa):
+def get_MLSTar_species(genus, species):
 
 	## This needs manual curation of the list of species included. 
 	## Update it periodically
@@ -101,22 +102,22 @@ def get_MLSTar_species(taxa):
 	data = pd.read_csv(MLSTar_species, header=0, sep=",")
 	
 	## check if name matches	
-	sp_exists = data.loc[data["Species description"] == taxa[0]]['MLSTar name']
+	taxa_name = genus + ' ' + species
+	sp_exists = data.loc[data["Species description"] == taxa_name]['MLSTar name']
 	if not sp_exists.empty: ## check if exists
 		return (sp_exists.values[0])
 	else:
 		## TODO: Check if it works
 		## Check if there is a genus entry in database
-		genus_tmp = taxa[0].split(" ")
-		genus = genus_tmp[0] + ' spp.'
-		genus_exist = data.loc[data["Species description"] == genus]['MLSTar name']
+		genus_name = genus + ' spp.'
+		genus_exist = data.loc[data["Species description"] == genus_name]['MLSTar name']
 
 		if not genus_exist.empty: ## check if exists
 			return (genus_exist.values[0])
 			
 	## we have a problem...
 	## neither a taxa or genus exists...
-	return ('na')
+	return ('NaN')
 		
 ##########################################
 def getPUBMLST(species, rscript, out_name):	

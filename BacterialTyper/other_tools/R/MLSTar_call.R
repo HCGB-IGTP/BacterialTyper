@@ -26,7 +26,7 @@ setwd(opt$dir)
 nameDir = paste0(opt$name, '_alleles')
 
 ## get files
-fastas_scheme <- list.files(path = opt$dir_seq, full.names = TRUE)
+fastas_scheme <- list.files(path = opt$dir_seq, full.names = TRUE, pattern = "\\.fas$")
 profile_scheme <- list.files(path = opt$dir_profile, full.names = TRUE)
 
 ## doMLST
