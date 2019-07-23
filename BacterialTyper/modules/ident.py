@@ -120,19 +120,19 @@ def run(options):
 		print (retrieve_databases)
 	
 	######## KMA identification
-	(excel_generated, dataFrame) = KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
+	dataFrame_kma = KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
 	
 	## functions.timestamp
 	start_time_partial = functions.timestamp(start_time_partial)
 	
 	######## EDirect identification
-	dataFrame_edirect = edirect_ident(dataFrame, outdir_dict)
+	dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict)
 	
 	## functions.timestamp
 	start_time_partial = functions.timestamp(start_time_partial)
 	
 	######## MLST identification
-	MLST_results = MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect)
+	MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, dataFrame_edirect)
 
 	## functions.timestamp
 	start_time_partial = functions.timestamp(start_time_partial)
@@ -141,8 +141,94 @@ def run(options):
 	## MLST, plasmids, genome, etc
 	functions.boxymcboxface("Results Summary")
 	##
+
+	#####################################
+	## Summary identification results  ##
+	#####################################
+
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
+		pd.set_option('display.max_colwidth', -1)
+		pd.set_option('display.max_columns', None)
+		print (dataFrame_kma)
+		print (dataFrame_edirect)
+		print (MLST_results)
+
+	## parse results
+	if Project:
+		final_dir = outdir + '/report/ident'
+		functions.create_folder(final_dir) 
+	else:
+		final_dir = outdir
+
+	excel_folder = functions.create_subfolder("samples", final_dir)
+	
+	# Group dataframe results summary by sample name
+	sample_results_summary = dataFrame_kma.groupby(["Sample"])
+
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: sample_results_summary **", 'yellow'))
+		print (sample_results_summary)
 	
 	##
+	results_summary_KMA = pd.DataFrame()
+	MLST_all = pd.DataFrame()
+	for name, grouped in sample_results_summary:
+		
+		## create a excel and txt for sample
+		name_sample_excel = excel_folder + '/' + name + '_ident.xlsx'
+		name_sample_csv = outdir_dict[name] + '/ident_summary.csv'
+
+		writer_sample = pd.ExcelWriter(name_sample_excel, engine='xlsxwriter') ## open excel handle
+		
+		## subset dataframe	& print result
+		results_summary_toPrint_sample = grouped[['Sample','#Template','Query_Coverage','Template_Coverage','Depth', 'Database']] 
+		results_summary_toPrint_sample.to_excel(writer_sample, sheet_name="KMA") ## write excel handle
+		results_summary_toPrint_sample.to_csv(name_sample_csv) ## write csv for sample
+		
+		## read MLST
+		sample_MLST = pd.read_csv(MLST_results[name], header=0, sep=',')
+
+		sample_MLST['genus'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'genus'].values[0]
+		sample_MLST['species'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'species'].values[0]
+		sample_MLST.to_excel(writer_sample, sheet_name="MLST") ## write excel handle
+		
+		## Return information to excel
+		MLST_all = pd.concat([MLST_all, sample_MLST]) 
+		
+		## close excel handle
+		writer_sample.save() 		
+
+	##
+	name_excel = final_dir + '/identification_summary.xlsx'
+	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') ## open excel handle
+
+	## KMA dataframe: print result for sources
+	results_summary_KMA = dataFrame_kma[['Sample','#Template','Query_Coverage','Template_Coverage','Depth', 'Database']] 
+	
+	## Sum plasmid and chromosome statistics ##
+	## sum coverage
+	total_coverage = results_summary_KMA.groupby('Sample')['Query_Coverage'].sum().reset_index()
+	
+	## debug message
+	if (Debug):
+		print ("*** Sum: Query_coverage ***")		
+		print (total_coverage)
+	
+	## TODO: FIX SUMMARY REPORT
+	print (results_summary_KMA)
+	results_summary_KMA = results_summary_KMA.set_index('Sample')
+	results_summary_KMA = results_summary_KMA.sort_values(by=['Sample', 'Database', 'Query_Coverage'],ascending=[True, True,True])
+	results_summary_KMA.to_excel(writer, sheet_name='KMA') ## write excel handle
+	
+	##
+	MLST_all.to_excel(writer, sheet_name='MLST')
+
+	## close excel handle
+	writer.save()
+
 	print ("\n+ Check summary of results in file generated" )		
 	
 	### timestamp
@@ -164,6 +250,10 @@ def run(options):
 			pd.set_option('display.max_colwidth', -1)
 			pd.set_option('display.max_columns', None)
 			print (dataFrame_edirect)
+
+		## Download
+		print (dataFrame_edirect)
+
 
 				## dataFrame_edirect
 				## assembly, annotation, etc...
@@ -254,16 +344,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	print ("+ KMA identification call finished for all samples...")
 	print ("+ Parse results now")
 		
-	## parse results
-	if Project:
-		final_dir = os.path.abspath(options.input) + '/report/ident'
-		functions.create_folder(final_dir) 
-	else:
-		final_dir = os.path.abspath(options.output_folder)
-		
-	name_excel = final_dir + '/identification_summary.xlsx'
-	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') ## open excel handle
-	
+	## parse results		
 	results_summary = pd.DataFrame()
 	for db2use in databases2use:
 		basename_db = os.path.basename(db2use)
@@ -301,53 +382,9 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 				## add empty line if no available
 				results['Sample'] = name
 				results_summary = results_summary.append(results)
-
-		## subset dataframe	& print result
-		results_summary_toPrint = results_summary[['Sample','#Template','Query_Coverage','Template_Coverage','Depth']] 
-		results_summary_toPrint = results_summary_toPrint.set_index('Sample')		
-		results_summary_toPrint.to_excel(writer, sheet_name=basename_db) ## write excel handle
-
-	writer.save() ## close excel handle	
-	
-	###########################################
-	## Sum plasmid and chromosome statistics ##
-	###########################################
-	
-	# Group dataframe results summary by sample name
-	sample_results_summary = results_summary.groupby(["Sample"])
-
-	## debug message
-	if (Debug):
-		print (colored("**DEBUG: results_summary **", 'yellow'))
-		print (results_summary)
-		print (colored("**DEBUG: sample_results_summary **", 'yellow'))
-		print (sample_results_summary)
-		
-	excel_folder = functions.create_subfolder("samples", final_dir)
-	for name, grouped in sample_results_summary:
-	
-		name_sample_excel = excel_folder + '/' + name + '_ident.xlsx'
-		writer_sample = pd.ExcelWriter(name_sample_excel, engine='xlsxwriter') ## open excel handle
-		
-		## sum coverage
-		sum_ref = sum(grouped["Query_Coverage"].tolist())
-
-		## debug message
-		if (Debug):
-			print ("*** Name: ", name, " ***")		
-			print ("*** Sum: ", sum_ref, " ***")		
-			print ("*** Dataframe ***")
-			print (grouped) 
-
-		## subset dataframe	& print result
-		results_summary_toPrint_sample = grouped[['Sample','#Template','Query_Coverage','Template_Coverage','Depth', 'Database']] 
-		results_summary_toPrint_sample = results_summary_toPrint_sample.set_index('Sample')		
-		results_summary_toPrint_sample.to_excel(writer_sample, sheet_name=name) ## write excel handle
-
-		writer_sample.save() ## close excel handle		
 	
 	print ("+ Finish this step...")
-	return (name_excel, results_summary)
+	return (results_summary)
 
 ####################################
 def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sample):
@@ -515,12 +552,10 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect):
 		genome_file = assembly_samples_retrieved.loc[assembly_samples_retrieved['name'] == sample]['sample'].values[0]
 
 		## call MLST
-		(results, profile_folder) = MLSTar.run_MLSTar(path_database, rscript, MLSTar_taxa_name, scheme2use, sample, MLSTar_folder, genome_file, 2)
+		(results, profile_folder) = MLSTar.run_MLSTar(path_database, rscript, MLSTar_taxa_name, scheme2use, sample, MLSTar_folder, genome_file, options.threads)
 		MLST_results[sample] = results
 
-	## parse results for all samples		
-	#
-
+	##	
 	print ("+ Finish this step...")
 	return (MLST_results)
 

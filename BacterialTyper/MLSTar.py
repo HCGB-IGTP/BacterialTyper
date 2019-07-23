@@ -69,16 +69,24 @@ def run_MLSTar(database_folder, rscript, species, scheme, name, path, fileGiven,
 
 ##########################################
 def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads):
+
 	print ('+ Generating profile for sample...')
-	logFile = path + '_logFile.txt'
-	cmd_profiler = "%s %s --dir_profile %s --dir_seq %s --file %s --dir %s --name %s --threads %s 2> %s" %(rscript, MLSTarR_script, profile_folder, seq_folder, fileGiven, path, name, threads, logFile)
-	callCode = functions.system_call(cmd_profiler)
+
+	## success timestamp
+	filename_stamp = path + '/.success'
+	if os.path.isfile(filename_stamp):
+		stamp =	functions.read_time_stamp(filename_stamp)
+		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		res_file = path + '/' + name + "_MLST_results.csv"
+		callCode = 'OK'
+		
+	else:
+		logFile = path + '_logFile.txt'
+		cmd_profiler = "%s %s --dir_profile %s --dir_seq %s --file %s --dir %s --name %s --threads %s 2> %s" %(rscript, MLSTarR_script, profile_folder, seq_folder, fileGiven, path, name, threads, logFile)
+		callCode = functions.system_call(cmd_profiler)
 
 	if callCode == 'OK':
 		res_file = path + '/' + name + "_MLST_results.csv"
-
-		## success timestamp
-		filename_stamp = path + '/.success'
 		stamp =	functions.print_time_stamp(filename_stamp)
 		return (res_file)
 	else:
@@ -88,6 +96,7 @@ def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threa
 def update_MLSTar_profile_alleles():
 	return("")
 	# [TODO: update_MLSTar_profile_alleles():
+	## check folder *_alleles/ and add information *_MLST_results.csv
 	
 ##########################################
 def get_MLSTar_species(genus, species):
