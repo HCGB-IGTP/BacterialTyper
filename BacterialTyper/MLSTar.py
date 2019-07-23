@@ -32,58 +32,242 @@ MLSTarR_script = tools.R_scripts('MLSTar_call')
 MLSTarR_plot =tools.R_scripts('MLSTar_plot')
 MLSTarR_download_seq = tools.R_scripts('MLSTar_downloadPubMLST_seq')
 MLSTarR_download_prf = tools.R_scripts('MLSTar_downloadPubMLST_profile')
+MLSTarR_getpubmlst = tools.R_scripts('MLSTar_getpubmlst')
 
-######
+##########################################
 def help_MLSTar():
-
-	print ("")
-	get_MLSTar_species()
 	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
+	get_MLSTar_species()
+	print ("")
 
-######
-def run_MLSTar(species, scheme, name, path, fileGiven, threads):
-
-	profile_folder = config.MLSTar['profile_folder']
-	seq_folder = config.MLSTar['sequence_folder']
-	rscript = config.EXECUTABLES['Rscript']
+##########################################
+def run_MLSTar(database_folder, rscript, species, scheme, name, path, fileGiven, threads):
 	
+	## fileGiven = fasta file
+
+	## PubMLST folder
+	pubmlst_folder = functions.create_subfolder('PubMLST', database_folder)
+	
+	## species folder
+	species_mlst_folder = functions.create_subfolder(species, pubmlst_folder)
+	
+	## scheme folder
+	scheme_name = 'scheme_' + str(scheme)
+	scheme_folder = functions.create_subfolder(scheme_name, species_mlst_folder)
+
+	## seq/profile folder
+	seq_folder = functions.create_subfolder('seq', scheme_folder)
+	profile_folder = functions.create_subfolder('prf', scheme_folder)
+
 	## check if profile and sequences are already downloaded
 	download_PubMLST(profile_folder, scheme, seq_folder, name, rscript, species)
 
 	## call MLSTar for this sample
 	results = run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads)
-	return (results)
+	
+	return (results, profile_folder)
 
-######
+##########################################
 def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads):
-	print ('+ Create sample folder...')
-	folder_path = functions.create_subfolder(name, path)
-
 	print ('+ Generating profile for sample...')
-	cmd_profiler = "%s %s --dir_profile %s --dir_seq %s --file %s --dir %s --name %s --threads %s" %(rscript, MLSTarR_script, profile_folder, seq_folder, fileGiven, folder_path, name, threads)
+	cmd_profiler = "%s %s --dir_profile %s --dir_seq %s --file %s --dir %s --name %s --threads %s" %(rscript, MLSTarR_script, profile_folder, seq_folder, fileGiven, path, name, threads)
 	callCode = functions.system_call(cmd_profiler)
 
 	if callCode == 'OK':
-		res_file = folder_path + '/' + name + "_results.txt"
+		res_file = path + '/' + name + "_MLST_results.csv"
+
+		## success timestamp
+		filename_stamp = path + '/.success'
+		stamp =	functions.print_time_stamp(filename_stamp)
 		return (res_file)
 	else:
-		exit()
+		return ('FAIL')
 
-######
+##########################################
 def update_MLSTar_profile_alleles():
 	return("")
+	# [TODO: update_MLSTar_profile_alleles():
 	
-######
-def get_MLSTar_species():
+##########################################
+def get_MLSTar_species(taxa):
+
+	## This needs manual curation of the list of species included. 
+	## Update it periodically
 
 	## MLSTar available data
 	MLSTar_species = data_files.data_list("MLSTar_species")
-
+	
 	# pandas from csv file
-	print (MLSTar_species)
 	data = pd.read_csv(MLSTar_species, header=0, sep=",")
-	print (data)
-	return(data)
+	
+	## check if name matches	
+	sp_exists = data.loc[data["Species description"] == taxa[0]]['MLSTar name']
+	if not sp_exists.empty: ## check if exists
+		return (sp_exists.values[0])
+	else:
+		## TODO: Check if it works
+		## Check if there is a genus entry in database
+		genus_tmp = taxa[0].split(" ")
+		genus = genus_tmp[0] + ' spp.'
+		genus_exist = data.loc[data["Species description"] == genus]['MLSTar name']
+
+		if not genus_exist.empty: ## check if exists
+			return (genus_exist.values[0])
+			
+	## we have a problem...
+	## neither a taxa or genus exists...
+	return ('na')
+		
+##########################################
+def getPUBMLST(species, rscript, out_name):	
+	## species is a comma separated string
+	#MLSTar_getpubmlst
+	cmd_getPUBMLST = "%s %s --species %s --output %s 2> /dev/null" %(rscript, MLSTarR_getpubmlst, species, out_name)
+	return(functions.system_call(cmd_getPUBMLST))
+
+##########################################
+def plot_MLST(results, profile, rscript):
+	path_folder = os.path.dirname(results)
+	cmd_plotter = "%s %s --output %s --folder_profile %s --file_result %s" %(rscript, MLSTarR_plot, path_folder, profile, results)
+	return(functions.system_call(cmd_plotter))
+	
+##########################################
+def download_PubMLST(profile_folder, scheme, seq_folder, name, rscript, species):
+
+	print ("##################################################")
+	print ("+ MLST profiling for sample: %s" %name)
+	print ("##################################################")
+	
+	## Check if profile exists
+	file_prof = profile_folder + '/profile_scheme' + str(scheme) + '.tab'
+
+	######################
+	## download profile ##
+	######################
+	if os.path.exists(file_prof):
+		print ('+ Profile file for scheme exists...')
+
+		## check if previously download profile and succeeded
+		filename_stamp = profile_folder + '/.success'
+
+		if os.path.isfile(filename_stamp):
+			stamp =	functions.read_time_stamp(filename_stamp)
+			print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		#
+		#else
+		# [TODO: Check time passed and download again if >?? days passed]
+		
+	else:
+		print ('+ Profile file for scheme will be downloaded...')
+		print ('+ Downloading profile...')
+		logFile = profile_folder + '_download.log'
+		cmd_profile = "%s %s --species %s --scheme %s --dir_profile %s 2> %s" %(rscript, MLSTarR_download_prf, species, scheme, profile_folder, logFile)
+		callCode = functions.system_call(cmd_profile)
+		
+		if (callCode == 'OK'):
+			## success timestamp
+			filename_stamp = profile_folder + '/.success'
+			stamp =	functions.print_time_stamp(filename_stamp)
+	
+	#######################
+	## download sequence ##
+	#######################
+	seq_bool = 0
+	if os.path.exists(seq_folder):
+		print ('+ Sequence folder exists...')
+		
+		## check if previously download sequence and succeeded
+		filename_stamp = seq_folder + '/.success'
+		
+		if os.path.isfile(filename_stamp):
+			stamp =	functions.read_time_stamp(filename_stamp)
+			print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+
+			########################################################################
+			#else
+			# [TODO: Check time passed and download again if >?? days passed]
+			########################################################################
+			#files = os.listdir(seq_folder)
+			#count_fas = 0		
+			#for f in files:
+			#	if f.endswith('.fas'):
+			#		count_fas += 1
+			#	else:				
+			#		os.remove(seq_folder + '/' + f)
+			#
+			#if count_fas > 6:
+			#	print ("+ Assuming sequences are previously downloaded...")
+			#else:
+			#	seq_bool = 1		
+			#	os.rmdir(seq_folder)
+			#	seq_folder_path = functions.create_folder(seq_folder)
+			
+		else:
+			print ('+ Sequence files for scheme will be downloaded...')
+			print ('+ Downloading sequences...')
+			logFile = seq_folder + '_download.log'
+			cmd_seq = "%s %s --species %s --scheme %s --dir_seq %s 2> %s" %(rscript, MLSTarR_download_seq, species, scheme, seq_folder, logFile)
+			callCode = functions.system_call(cmd_seq)
+			
+			if (callCode == 'OK'):
+				## success timestamp
+				filename_stamp = seq_folder + '/.success'
+				stamp =	functions.print_time_stamp(filename_stamp)
+
+##########################################
+def main():
+	## this code runs when call as a single script
+
+  	## control if options provided or help
+	if len(sys.argv) > 1:
+		print ("")
+	else:
+		help_options()
+		exit()
+	
+	#fileGiven = os.path.abspath(argv[1])
+	genome = os.path.abspath(argv[1])
+	species = argv[2]
+	rscript = argv[3]
+	database = os.path.abspath(argv[4])
+	name = argv[5]
+	path = os.path.abspath(argv[6])
+	
+	##
+	threads = 1
+	functions.create_folder(path)
+	
+	## PubMLST folder
+	pubmlst_folder = functions.create_subfolder('PubMLST', database)
+	
+	## species folder
+	species_mlst_folder = functions.create_subfolder(species, pubmlst_folder)
+
+	## output file
+	output_file = species_mlst_folder + '/PubMLST_available_scheme.csv'
+	
+	### get scheme available
+	getPUBMLST(species, rscript, output_file)
+	
+	## parse PubMLST results	
+	scheme = 1
+		
+	## call MLST
+	(results, profile_folder) = run_MLSTar(database, rscript, species, scheme, name, path, genome, threads)
+		
+	## plot MLST
+	plot_MLST(results, profile_folder, rscript)
+
+##########################################
+def help_options():
+	print ("\nUSAGE: python %s genome species rscript_bin database name path\n"  %os.path.realpath(__file__))
+
+		
+##########################################
+'''******************************************'''
+if __name__== "__main__":
+	main()
+
 
 #	fileName = "MLSTar_species"
 #	data.to_csv(fileName + '.txt', sep='\t')
@@ -115,115 +299,3 @@ def get_MLSTar_species():
 #	pp.savefig()
 #	plt.close()
 #	pp.close()	
-
-######
-def call_plot(results):
-	profile_folder = config.MLSTar['profile_folder']
-	rscript = config.EXECUTABLES['Rscript']
-	plot_MLST(results, profile_folder, rscript)
-	
-######
-def plot_MLST(results, profile, rscript):
-	path_folder = os.path.dirname(results)
-	cmd_plotter = "%s %s --output %s --folder_profile %s --file_result %s" %(rscript, MLSTarR_plot, path_folder, profile, results)
-	return(functions.system_call(cmd_plotter))
-	
-######
-def download_PubMLST(profile_folder, scheme, seq_folder, name, rscript, species):
-
-	print ("##################################################")
-	print ("+ MLST profiling for sample: %s" %name)
-	print ("##################################################")
-	
-	## Check if profile exist
-	file_prof = profile_folder + '/profile_scheme' + str(scheme) + '.tab'
-	
-	#print (file_prof)
-	
-	if os.path.exists(file_prof):
-		print ('+ Profile file for scheme exists...')
-	else:
-		print ('+ Profile file for scheme will be downloaded...')
-		
-		if os.path.exists(profile_folder):
-			print ('+ Profile folder already exists...')
-		else:
-			print ('+ Create profile folder...')
-			profile_folder_path = functions.create_folder(profile_folder)
-		
-		print ('+ Downloading profile...')
-		cmd_profile = "%s %s --species %s --scheme %s --dir_profile %s" %(rscript, MLSTarR_download_prf, species, scheme, profile_folder)
-		callCode = functions.system_call(cmd_profile)
-	
-	## Check if seqs exist
-	seq_bool = 0
-	if os.path.exists(seq_folder):
-		print ('+ Sequence folder exists...')
-		files = os.listdir(seq_folder)
-		count_fas = 0		
-		for f in files:
-			if f.endswith('.fas'):
-				count_fas += 1
-			else:				
-				os.remove(seq_folder + '/' + f)
-
-		if count_fas > 6:
-			print ("+ Assuming sequences are previously downloaded...")
-		else:
-			seq_bool = 1		
-			os.rmdir(seq_folder)
-			seq_folder_path = functions.create_folder(seq_folder)
-			
-	else:
-		print ('+ Create sequence folder...')
-		seq_folder_path = functions.create_folder(seq_folder)
-		seq_bool = 1
-		
-
-	if seq_bool == 1:
-		print ('+ Sequence files for scheme will be downloaded...')
-		print ('+ Downloading sequences...')
-		cmd_seq = "%s %s --species %s --scheme %s --dir_seq %s" %(rscript, MLSTarR_download_seq, species, scheme, seq_folder)
-		callCode = functions.system_call(cmd_seq)	
-
-
-######
-def main():
-	## this code runs when call as a single script
-
-  	## control if options provided or help
-	if len(sys.argv) > 1:
-		print ("")
-	else:
-		help_options()
-		exit()
-	
-	fileGiven = os.path.abspath(argv[1])
-	species = argv[2]
-	scheme = int(argv[3])
-	
-	name = argv[4]
-	rscript = argv[5]
-	threads = argv[6]
-	
-	profile_folder = os.path.abspath(argv[7])
-	seq_folder = os.path.abspath(argv[8])
-	path = os.path.abspath(argv[9])
-	
-	## start
-	download_PubMLST(profile_folder, scheme, seq_folder, name, rscript, species)
-	
-	## call MLSTar for this sample
-	results = run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads)
-
-	plot_MLST(results, profile_folder, rscript)
-
-######
-def help_options():
-	print ("\nUSAGE: python %s genome species scheme name rscript_bin threads profile_folder seq_folder path\n"  %os.path.realpath(__file__))
-
-		
-######
-'''******************************************'''
-if __name__== "__main__":
-	main()

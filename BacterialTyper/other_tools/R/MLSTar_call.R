@@ -1,5 +1,4 @@
 #!/usr/bin/env Rscript
-
 library("optparse")
 
 ## get options
@@ -9,7 +8,7 @@ option_list = list(
   make_option(c("-f", "--file"), type="character", help="fasta file", metavar="character"),
   make_option(c("-d", "--dir"), type="character", help="folder path", metavar="character"),
   make_option(c("-t", "--threads"), type="integer", default=2, help="threads", metavar="integer"),
-  make_option(c("-n", "--name"), type="character", help="threads", metavar="integer")  
+  make_option(c("-n", "--name"), type="character", help="name", metavar="integer")  
 );
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
@@ -37,7 +36,7 @@ x <- doMLST(
   schemeFastas = fastas_scheme,
   schemeProfile = profile_scheme,
   
-  write = "new",     # write fasta files for alleles found
+  write = "new",    # write fasta files for alleles found
   fdir = nameDir,	## there is a bug when generating fdir
   
   n_threads = opt$threads
@@ -47,7 +46,7 @@ x <- doMLST(
   # scov : Subject coverage threshold to be consider as a novel allele. A numeric between 0 and 1. Not recomended to set it below 0.7 . (Default 0.9) # @details  
 )
 
-res_file <- paste0(opt$dir, '/', opt$name, "_results.txt")
+res_file <- paste0(opt$dir, '/', opt$name, "_MLST_results.csv")
 
 ## get results
-write.table(x$result, file=res_file,sep = "\t", quote = FALSE) ## save to file
+write.table(x$result, file=res_file,sep = ",", quote = FALSE) ## save to file

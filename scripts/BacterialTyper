@@ -23,6 +23,8 @@ help_options = ('--help_format',
 				'--help_PhiSpy',
 				'--help_trimm_adapters',
 				'--help_multiqc',
+				'--help_KMA',
+				'--help_MLSTar',
 				'--help_MGE_analysis',
 				'--help_input_MGE')
 
@@ -375,6 +377,7 @@ info_group_ident.add_argument("--debug", action="store_true", help="Show additio
 info_group_ident.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
 info_group_ident.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
 info_group_ident.add_argument("--help_KMA", action="store_true", help="Show additional help on KMA software and options.")
+info_group_ident.add_argument("--help_MLSTar", action="store_true", help="Show additional help on MLSTar software and options.")
 
 subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run)
 ##-------------------------------------------------------------##
@@ -427,8 +430,6 @@ subparser_MGE = subparsers.add_parser(
     help='Mobile Genetic Elements (MGE) analysis.',
     description='This module calls ...',
 )
-list_help_options_MGE = ('--batch', '--help_PhiSpy', '--input_assemblies', '--input_plasmids', '--input_annotations')
-
 MGE_mode_name = subparser_MGE.add_argument_group("Mode")
 MGE_mode = MGE_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
 MGE_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
@@ -437,6 +438,7 @@ MGE_mode.add_argument("--detached", action="store_true", help="Isolated mode. Pr
 initial_group_MGE = subparser_MGE.add_argument_group("Input/Output")
 initial_group_MGE.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'.\nIf not, provide full path using --batch option", required = '--project' in sys.argv)
 initial_group_MGE.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
+initial_group_MGE.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 initial_group_MGE.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_MGE.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
@@ -452,7 +454,7 @@ options_group_MGE.add_argument("--GI_analysis", action="store_true", help="Ident
 options_group_MGE.add_argument("--all_data", action="store_true", help="Identify GIs, phages and plasmids.")
 
 phispy_options = subparser_MGE.add_argument_group("PhiSpy options")
-phispy_options.add_argument("--training_set", type=int, help="Choose a training set from the list of training sets. See additional details with --help_PhiSpy [Default: 0 (Generic)]", default=0)
+phispy_options.add_argument("--training_set", type=int, help="Choose a training set from the available training sets [Default: 0 (Generic)]. See additional details with --help_PhiSpy", default=0)
 phispy_options.add_argument("--window_size", type=int, help="Window size of consecutive genes to look through to find phages. [Default: 20]", default=20)
 phispy_options.add_argument("--phage_genes", type=int, help="Number of consecutive genes in a region of window size that must be prophage genes to be called. [Default: 5]", default=5)
 
@@ -472,14 +474,6 @@ subparser_MGE.set_defaults(func=BacterialTyper.modules.MGE.run)
 ##-------------------------------------------------------------##
 
 
-#######################
-#### Other options ####
-#######################
-
-##----------------------- Depencencies ----------------------- ##
-## [TODO]
-##------------------------------------------------------------ ##
-
 ## space
 subparser_space = subparsers.add_parser(' ', help='')
 
@@ -496,24 +490,15 @@ subparser_help_name = subparser_help.add_argument_group("Show additional help in
 subparser_help = subparser_help_name.add_mutually_exclusive_group(required= True)
 subparser_help.add_argument("--help_project", action="store_true", help="...")
 subparser_help.add_argument("--help_format", action="store_true", help="...")
-
 subparser_help.add_argument("--help_trimm_adapters", action="store_true", help="Show additional information on trimm adapters.")
-
 subparser_help.add_argument("--help_BUSCO", action="store_true", help="...")
 subparser_help.add_argument("--help_Prokka", action="store_true", help="...")
 subparser_help.add_argument("--help_multiqc", action="store_true", help="Show additional help on the multiQC module.")
-
 subparser_help.add_argument("--help_ARIBA", action="store_true", help="...")
 subparser_help.add_argument("--help_KMA", action="store_true", help="Show additional help on KMA software and options.")
-
 subparser_help.add_argument("--help_input_MGE", action="store_true", help="Print further information for input options under MGE module.")
 subparser_help.add_argument("--help_MGE_analysis", action="store_true", help="Print further information for Mobile Genetic Element module analysis.")
 subparser_help.add_argument("--help_PhiSpy", action="store_true", help="Print further information for PhiSpy analysis.")
-
-
-
-
-
 subparser_help.set_defaults(func=BacterialTyper.modules.info.run)
 ##-------------------------------------------------------------##
 

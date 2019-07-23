@@ -21,8 +21,8 @@ from BacterialTyper import sampleParser
 from BacterialTyper import species_identification_KMA
 from BacterialTyper import database_generator
 from BacterialTyper import MLSTar
+from BacterialTyper import edirect_caller
 from BacterialTyper.modules import sample_prepare
-
 
 ####################################
 def run(options):
@@ -49,8 +49,6 @@ def run(options):
 		## information for KMA Software
 		MLSTar.help_MLSTar()
 		exit()
-
-
 
 	## init time
 	start_time_total = time.time()
@@ -121,15 +119,18 @@ def run(options):
 		pd.set_option('display.max_columns', None)
 		print (retrieve_databases)
 	
-	########
+	######## KMA identification
 	(excel_generated, dataFrame) = KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
 	
-	## TODO: check what information contains dataFrame: one or all databases info
+	## functions.timestamp
+	start_time_partial = functions.timestamp(start_time_partial)
 	
-	## generate summary for sample: all databases
-	
-	## generate MLST call according to sampl	
-	
+	## generate MLST call according to sample
+
+	######## MLST identification
+	dataFrame = MLST_ident(options, dataFrame, start_time_partial, outdir_dict, retrieve_databases)
+
+	exit()
 
 	## functions.timestamp
 	start_time_partial = functions.timestamp(start_time_partial)
@@ -146,6 +147,9 @@ def run(options):
 	
 	### timestamp
 	start_time_partial = functions.timestamp(start_time_partial)					
+
+	## generate summary for sample: all databases
+	## MLST, plasmids, genome, etc
 	
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)
@@ -202,10 +206,10 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			## load database on memory
 			print ("+ Loading database on memory for faster identification.")
 			cmd_load_db = "%s shm -t_db %s -shmLvl 1" %(kma_bin, db2use)
-			return_code_load = functions.system_call(cmd_load_db)
+			#return_code_load = functions.system_call(cmd_load_db)
 			
 			## send for each sample
-			commandsSent = { executor.submit(send_kma_job, outdir_dict[name], sorted(cluster["sample"].tolist()), name, db2use, threads_job): name for name, cluster in sample_frame }
+			commandsSent = { executor.submit(send_kma_job, outdir_dict[name], sorted(cluster["sample"].tolist()), name, db2use, threads_job, cluster): name for name, cluster in sample_frame }
 
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
@@ -219,7 +223,9 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			## remove database from memory
 			print ("+ Removing database from memory...")
 			cmd_rm_db = "%s shm -t_db %s -shmLvl 1 -destroy" %(kma_bin, db2use)
-			return_code_rm = functions.system_call(cmd_rm_db)
+			#return_code_rm = functions.system_call(cmd_rm_db)
+			return_code_rm = 'OK'
+			
 			if (return_code_rm == 'FAIL'):
 				print (colored("***ERROR: Removing database from memory failed. Please do it! Execute command: %s" %cmd_rm_db,'red'))
 		
@@ -228,11 +234,11 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 		
 	###
 	print ("+ KMA identification call finished for all samples...")
-	print ("+ Parse results now:")
+	print ("+ Parse results now")
 		
 	## parse results
 	if Project:
-		final_dir = options.input + '/report/ident'
+		final_dir = os.path.abspath(options.input) + '/report/ident'
 		functions.create_folder(final_dir) 
 	else:
 		final_dir = os.path.abspath(options.output_folder)
@@ -240,52 +246,106 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	name_excel = final_dir + '/identification_summary.xlsx'
 	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') ## open excel handle
 	
+	results_summary = pd.DataFrame()
 	for db2use in databases2use:
 		basename_db = os.path.basename(db2use)
-		results_summary = pd.DataFrame()
 		pd.set_option('display.max_colwidth', -1)
 		pd.set_option('display.max_columns', None)
 
 		for name, cluster in sample_frame:
-			result = get_outfile(outdir_dict[name], name, db2use)
+		
+			## get result
+			## outdir_KMA
+			outdir_dict_kma = functions.outdir_subproject(outdir_dict[name], cluster, "kma")
+			result = get_outfile(outdir_dict_kma[name], name, db2use)
 			#print ('\t- File: ' + result + '.spa')
-			results = species_identification_KMA.parse_kma_results(result + '.spa', options.KMA_cutoff)
 
-			### Fix: check if db2use is plasmids as it could be several.
+			## get results using a cutoff value [Defaulta: 80]
+			results = species_identification_KMA.parse_kma_results(result + '.spa', options.KMA_cutoff)
+			results['Database'] = basename_db
+
+			### check if db2use is plasmids as it could be several.
 			if (results.index.size > 1):
 				if (basename_db == "plasmids.T"):
 					## let it be several entries
-					results['sample'] = name
+					results['Sample'] = name
 					results_summary = results_summary.append(results)
 				else:
 					print (colored("Sample %s contains multiple strains." %name, 'yellow'))
 					print (colored(results.to_csv, 'yellow'))
-			elif (results.index.size == 1):
-				results['sample'] = name
+		
+			elif (results.index.size == 1): ## 1 clear reference
+				results['Sample'] = name
 				results_summary = results_summary.append(results)
+		
 			else:
 				print (colored('\tNo clear strain from database %s has been assigned to sample %s' %(basename_db, name), 'yellow'))
 				## add empty line if no available
-				results['sample'] = name
+				results['Sample'] = name
 				results_summary = results_summary.append(results)
 
 		## subset dataframe	& print result
-		results_summary_toPrint = results_summary[['sample','#Template','Query_Coverage','Template_Coverage','Depth']] 
-		results_summary_toPrint = results_summary_toPrint.set_index('sample')		
+		results_summary_toPrint = results_summary[['Sample','#Template','Query_Coverage','Template_Coverage','Depth']] 
+		results_summary_toPrint = results_summary_toPrint.set_index('Sample')		
 		results_summary_toPrint.to_excel(writer, sheet_name=basename_db) ## write excel handle
-	
+
 	writer.save() ## close excel handle	
+	
+	###########################################
+	## Sum plasmid and chromosome statistics ##
+	###########################################
+	
+	# Group dataframe results summary by sample name
+	sample_results_summary = results_summary.groupby(["Sample"])
+
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: results_summary **", 'yellow'))
+		print (results_summary)
+		print (colored("**DEBUG: sample_results_summary **", 'yellow'))
+		print (sample_results_summary)
+		
+	excel_folder = functions.create_subfolder("samples", final_dir)
+	for name, grouped in sample_results_summary:
+	
+		name_sample_excel = excel_folder + '/' + name + '_ident.xlsx'
+		writer_sample = pd.ExcelWriter(name_sample_excel, engine='xlsxwriter') ## open excel handle
+		
+		## sum coverage
+		sum_ref = sum(grouped["Query_Coverage"].tolist())
+
+		## debug message
+		if (Debug):
+			print ("*** Name: ", name, " ***")		
+			print ("*** Sum: ", sum_ref, " ***")		
+			print ("*** Dataframe ***")
+			print (grouped) 
+
+		## subset dataframe	& print result
+		results_summary_toPrint_sample = grouped[['Sample','#Template','Query_Coverage','Template_Coverage','Depth', 'Database']] 
+		results_summary_toPrint_sample = results_summary_toPrint_sample.set_index('Sample')		
+		results_summary_toPrint_sample.to_excel(writer_sample, sheet_name=name) ## write excel handle
+
+		writer_sample.save() ## close excel handle	
+	
+	
+	print ("+ Finish this step...")
+
 	return (name_excel, results_summary)
 
 ####################################
-def send_kma_job(outdir_file, list_files, name, database, threads):
+def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sample):
+
+	## outdir_KMA
+	outdir_dict_kma = functions.outdir_subproject(outdir_file, dataFrame_sample, "kma")
 
 	## get outfile
-	outfile = get_outfile(outdir_file, name, database)
+	outfile = get_outfile(outdir_dict_kma[name], name, database)
 
 	## check if previously run and succeeded
 	basename_tag = os.path.basename(outfile)
-	filename_stamp = outdir_file + '/.success_' + basename_tag
+	filename_stamp = outdir_dict_kma[name] + '/.success_' + basename_tag
+	
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
@@ -294,10 +354,10 @@ def send_kma_job(outdir_file, list_files, name, database, threads):
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: species_identification_KMA.kma_ident_module call**", 'yellow'))
-			print ("outfile = get_outfile(outdir_dict[name], name, db2use)")
+			print ("outfile = get_outfile(outdir_dict_kma[name], name, db2use)")
 			print ("outfile: ", outfile)
 			print ("species_identification_KMA.kma_ident_module(outfile, list_files, name, database, threads) ")
-			print ("species_identification_KMA.kma_ident_module" + "\t" + outfile + "\t" + list_files + "\t" + name + "\t" + database + "\t" + str(threads) + "\n") 
+			print ("species_identification_KMA.kma_ident_module" + "\t" + outfile + "\t" + str(list_files) + "\t" + name + "\t" + database + "\t" + str(threads) + "\n") 
 	
 		# Call KMA
 		species_identification_KMA.kma_ident_module(outfile, list_files, name, database, threads) 
@@ -313,6 +373,123 @@ def get_outfile(output_dir, name, index_name):
 	out_file = output_path + '/' + name + '_' + basename_tag	
 	return(out_file)
 	
+####################################
+def MLST_ident(options, dataFrame, time_partial, outdir_dict, retrieve_databases):
+	## [NEW] BacterialTyper/modules/ident.py :: Add MLST Information
+
+	# Group dataframe sample name
+	sample_results = dataFrame.groupby(["Sample"])
+
+	## edirect	
+	functions.boxymcboxface("EDirect information")
+	print ("+ Connect to NCBI to get information from samples identified...")
+	
+	## MLST for each species
+	MLST_taxa = {}
+	for name, grouped in sample_results:
+		## use edirect to get Species_name and entry for later identification
+		#print (grouped)
+		
+		nucc_entry = grouped.loc[grouped['Database'] == 'bacteria.ATG']['#Template'].values[0].split()
+		## e.g. NZ_CP029680.1 Staphylococcus aureus strain AR_0215 chromosome, complete genome
+
+		edirect_folder = functions.create_subfolder('edirect', outdir_dict[name])
+		out_docsum_file = edirect_folder + '/nuccore_docsum.txt'
+		species_outfile = edirect_folder + '/taxa_ID.txt'
+		
+		filename_stamp = edirect_folder + '/.success_species'
+				
+		if os.path.isfile(filename_stamp):
+			stamp =	functions.read_time_stamp(filename_stamp)
+			print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+
+		else: 
+			edirect_caller.generate_docsum_call('nuccore', nucc_entry[0], out_docsum_file)
+			edirect_caller.generate_xtract_call(out_docsum_file, 'DocumentSummary', 'Organism', species_outfile)
+			stamp =	functions.print_time_stamp(filename_stamp)
+
+		taxa_name = functions.get_info_file(species_outfile)
+		MLST_taxa[name] = taxa_name
+	
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: MLST_taxa identified**", 'yellow'))
+		print (MLST_taxa)
+
+	print ("+ Finish this step...")
+
+	## functions.timestamp
+	time_partial = functions.timestamp(time_partial)
+	
+	## MLST call	
+	functions.boxymcboxface("MLST typing")
+	print ("+ Create classical MLST typification of each sample according to species retrieved by kmer...")
+
+	## get assembly files
+	input_dir = os.path.abspath(options.input)
+	assembly_samples_retrieved = sample_prepare.get_files(options, input_dir, "assembly", "fna")
+
+	## TODO: Samples might not be assembled...to take into account
+
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: assembly_samples_retrieved**", 'yellow'))
+		print (assembly_samples_retrieved)	
+	
+	## Generate MLST call according to species identified for each sample
+	
+	## PubMLST folder
+	path_database = os.path.abspath(options.database)
+	pubmlst_folder = functions.create_subfolder('PubMLST', path_database)
+	
+	rscript = "/soft/general/R-3.5.1-bioc-3.8/bin/Rscript" ##config.get_exe("Rscript") ## TODO: Fix and install MLSTar during installation
+	### for each sample
+	MLST_results = {}
+	for sample, taxa in MLST_taxa.items():
+		MLSTar_taxa_name = MLSTar.get_MLSTar_species(taxa)
+		
+		## species folder
+		species_mlst_folder = functions.create_subfolder(MLSTar_taxa_name, pubmlst_folder)
+
+		## output file
+		output_file = species_mlst_folder + '/PubMLST_available_scheme.csv'
+		filename_stamp = species_mlst_folder + '/.success_scheme'
+				
+		if os.path.isfile(filename_stamp):
+			stamp =	functions.read_time_stamp(filename_stamp)
+			print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+			# [TODO: Check time passed and download again if >?? days passed]
+			
+		else: 
+			### get scheme available
+			MLSTar.getPUBMLST(MLSTar_taxa_name, rscript, output_file)
+			stamp =	functions.print_time_stamp(filename_stamp)
+
+		## parse and get scheme for classical MLST
+		schemes_MLST = pd.read_csv(output_file, sep=',', header=0)
+		
+		##
+		for item, cluster in schemes_MLST.iterrows():
+			if cluster['len'] < 10:
+				scheme2use = int(cluster['scheme'])
+				continue			
+			
+		MLSTar_folder = functions.create_subfolder('MLST', outdir_dict[sample])
+		genome_file = assembly_samples_retrieved.loc[assembly_samples_retrieved['name'] == sample]['sample'].values[0]
+
+		## call MLST
+		(results, profile_folder) = MLSTar.run_MLSTar(path_database, rscript, MLSTar_taxa_name, scheme2use, sample, MLSTar_folder, genome_file, 2)
+		MLST_results[sample] = results
+		
+		## TODO: Fix MLSTar that complains when profile is already indexed by blast after first execution
+
+
+	## parse results for all samples		
+	#
+		
+	print ("+ Finish this step...")
+	exit()
+
 ####################################
 def get_options_db(options):
 	print ("\n\n+ Select databases to use for identification:")

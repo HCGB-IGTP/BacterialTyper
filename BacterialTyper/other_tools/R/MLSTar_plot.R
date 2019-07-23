@@ -1,5 +1,4 @@
 #!/usr/bin/env Rscript
-
 library("optparse")
 
 ## get options
@@ -22,7 +21,7 @@ if (is.null(opt$folder_profile)){
 library(MLSTar)
 
 ## get results
-result_get <- read.delim(file=opt$file_result, header=TRUE, sep="\t")
+result_get <- read.delim(file=opt$file_result, header=TRUE, sep=",")
 # convert data frame, character, retype columns
 resu <- as.data.frame(result_get, stringsAsFactors = FALSE)
 resu[] <- lapply(resu, as.character)
