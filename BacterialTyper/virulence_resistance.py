@@ -289,6 +289,7 @@ def identified_results(original_data, db2use_name, list_found_genes, assembly_th
 	## create dataframe for parsing results and later printing
 	colnames_identified = ['Status', 'ID', 'Protein-coding','Presence_Abscence', 'Variants', 'pc_ident', 'pc_len']
 	df_identified = pd.DataFrame(columns=colnames_identified, index=index_names)
+	df_identified.index.names = ['Genes']
 
 	## loop
 	for name, group in found_genes_cluster:
@@ -335,15 +336,16 @@ def identified_results(original_data, db2use_name, list_found_genes, assembly_th
 		## pc_len = (ref_base_assembled / ref_len)*100
 		ref_base = group['ref_base_assembled'].to_list()
 		ref_len = group['ref_len'].to_list()
-		pc_len = (ref_base[0]/ref_len[0])*100		
+		pc_float = float(ref_base[0]/ref_len[0])
+		pc_len = pc_float*100		
 		df_identified.loc[name]['pc_len'] = pc_len
-
+		
 		### status
 		if any(name in s for s in list_found_genes):
 			#print ("Gene: ", name, "-- Identify to confer resistance")
 			df_identified.loc[name]['Status'] = 'Identified'
 		else:
-			if pc_len > assembly_threshold:
+			if pc_float > float(assembly_threshold):
 				#print ("Gene: ", name, "-- Found, but not confering resistance.")
 				df_identified.loc[name]['Status'] = 'Found'
 			else:
@@ -352,7 +354,6 @@ def identified_results(original_data, db2use_name, list_found_genes, assembly_th
 	
 	### debugging
 	##print (df_identified)
-	
 	return (df_identified)
 	
 #############################################################

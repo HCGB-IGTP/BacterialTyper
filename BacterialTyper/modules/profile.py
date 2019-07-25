@@ -246,6 +246,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
 
 	## loop
+	results_df = pd.DataFrame()
 	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
 		for db2use in databases2use:
 			## send for each sample
@@ -267,10 +268,9 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 			
 			print ("+ Collecting information for each sample analyzed:")
 			## check results for each database
-			results_df = virulence_resistance.check_results(db2use, outdir_samples, options.ARIBA_cutoff)
-			
-			print (results_df)
-			
+			results_df_tmp = virulence_resistance.check_results(db2use, outdir_samples, options.ARIBA_cutoff)
+			results_df = pd.concat([results_df, results_df_tmp])
+						
 			## functions.timestamp
 			start_time_partial = functions.timestamp(start_time_partial)
 
@@ -287,8 +287,14 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 	else:
 		final_dir = os.path.abspath(options.output_folder)
 
+	##
 	vfdb = False
 	subfolder = functions.create_subfolder("ariba_summary", final_dir)
+
+	## open excel writer
+	name_excel = final_dir + '/profile_summary.xlsx'
+	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') 		
+
 	for database, data in outdir_samples.groupby(level='db'): ## fix
 		report_files_databases = {}
 
@@ -300,15 +306,50 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 		outfile_summary = subfolder + "/"			
 		if database.endswith('card_prepareref/'):
 			outfile_summary = outfile_summary + 'CARD_summary'
+			name_db = 'CARD'
 		elif database.endswith('vfdb_full_prepareref/'):
 			outfile_summary = outfile_summary + 'VFDB_summary'
+			name_db = 'VFDB'
 			vfdb=True
 		else:
 			outfile_summary = outfile_summary + 'Other_summary' ## todo: different databases provided different to VFDB and CARD would collapse file
-			
-		## call ariba summary to summarize results
-		ariba_caller.ariba_summary_all(outfile_summary, report_files_databases)
+			name_db = 'other' ## TODO: check if there are multiple 'other' databases
 	
+		## call ariba summary to summarize results
+		csv_all = ariba_caller.ariba_summary_all(outfile_summary, report_files_databases)
+		if not csv_all == 'NaN':
+			csv2excel = pd.read_csv(csv_all, header=0, sep=',')
+			## write excel
+			name_tab = name_db + '_found'
+			csv2excel.to_excel(writer, sheet_name=name_tab)
+	
+	## results_df contains excel and csv files for each sample and for each database
+	list_databases = set(results_df['database'].to_list())
+	for db in list_databases: 
+		df_db = results_df[results_df['database'] == db]['csv']
+		dict_samples = df_db.to_dict()	
+		
+		merge_df = pd.DataFrame()
+		for sample in dict_samples:
+
+			if os.path.isfile(dict_samples[sample]):
+				df = pd.read_csv(dict_samples[sample], header=0, sep=",")
+				df = df.set_index('Genes')
+				df2 = df.rename(columns={'Status':sample}, inplace=True)
+				df2 = df[[sample]]
+
+				## add to a common dataframe
+				merge_df = pd.concat([merge_df, df2], axis=1, sort=True)
+				merge_df.fillna("NaN", inplace=True)
+		
+		trans_df = merge_df.transpose()
+		## write excel
+		name_tab = db + '_all'
+		trans_df.to_excel(writer, sheet_name=name_tab)
+	
+	## close
+	writer.save()
+
 	######################################################
 	## print additional information for VFDB
 	######################################################
@@ -342,7 +383,8 @@ def ariba_run_caller(db2use, list_files, folder_out, threads, cutoff):
 			shutil.rmtree(folder_out) ## delete folder if exists but failed before
 
 		## call
-		code = ariba_caller.ariba_run(db2use, list_files, folder_out, threads, cutoff)
+		#code = ariba_caller.ariba_run(db2use, list_files, folder_out, threads, cutoff)
+		code = 'OK'
 		if code == 'FAIL':
 			print ("*** ERROR: System call failed for ", folder_out)		
 
