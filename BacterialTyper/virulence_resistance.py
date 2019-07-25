@@ -60,7 +60,7 @@ def parse_vfdb(folder, sampleName, fileResults, fileFlags, summary, assembly_cut
 	##########################
 	## generate excel sheet
 	##########################
-	name_excel = folder + '/' + sampleName + '_VFDB_summary.xlsx'
+	name_excel = folder + '/' + sampleName + '_VFDB_results.xlsx'
 	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') 	## open excel handle
 
 	## write excel handle
@@ -395,7 +395,7 @@ def check_results(db2use, outdir_sample, assembly_cutoff):
 				stamp =	functions.read_time_stamp(filename_stamp)
 				print (colored("\tA previous command generated results on: %s [%s]" %(stamp, sample), 'yellow'))
 				name_excel = outfolder + '/' + sample + '_' + name_db + '_results.xlsx'
-				name_csv = outfolder + '/' + sample + '_' + name_db + '_results.csv'
+				name_csv = outfolder + '/' + sample + '_' + name_db + '_summary.csv'
 
 			else:
 				(name_excel, name_csv) = results_parser(database, folderResults, sample, outfolder, assembly_cutoff)

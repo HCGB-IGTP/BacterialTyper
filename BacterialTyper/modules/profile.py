@@ -232,7 +232,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 	######################################################
 	## ariba assembly cutoff 
 	if not (options.ARIBA_cutoff):
-		options.ARIBA_cutoff = 90
+		options.ARIBA_cutoff = 0.90
 
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())

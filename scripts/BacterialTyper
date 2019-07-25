@@ -413,7 +413,7 @@ parameters_group_profile.add_argument("--fast", action="store_true", help="Do no
 ariba_db_group_profile = subparser_profile.add_argument_group("ARIBA databases")
 ariba_db_group_profile.add_argument("--ARIBA_db", dest='ariba_dbs', nargs='*', help="ARIBA database(s) to download. Provide several input if desired. Not compatible with --no_ARIBA. [Default: CARD & VFDB]", choices=['CARD', 'MEGARes', 'VFDB', 'ResFinder', 'PlasmidFinder', 'VirulenceFinder', 'srst2', 'ARG-ANNOT'])
 ariba_db_group_profile.add_argument("--no_def_ARIBA", action="store_true", help="Only applicable if ARIBA_db is ON. It discards default databases (CARD & VFDB) from ARIBA_db. Only user selected datbases indexed. [Default: OFF]")
-ariba_db_group_profile.add_argument("--ARIBA_cutoff", type=int, help="ARIBA assembly threshold cutoff percentage. [ Default: 90 %]", default=90)
+ariba_db_group_profile.add_argument("--ARIBA_cutoff", type=float, help="ARIBA assembly threshold cutoff [0-1]. [ Default: 0.90]", default=0.90)
 
 info_group_profile = subparser_profile.add_argument_group("Additional information")
 info_group_profile.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
