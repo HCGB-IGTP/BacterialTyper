@@ -26,10 +26,17 @@ def	help_options():
 
 ################################################
 def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_adapters):
+	## 
+	## This functions generates a trimmomatic call using java and trimmomatic from 
+	## the system with a minimun version (specified in config.py)
+	## Checks if adapter file exists
+	## Returns code from trimmo_call: OK/FAIL
+	##
 	
 	## get exe
 	trimmomatic_jar = config.get_exe('trimmomatic')
-	
+	java_path = config.get_exe('java')
+
 	## check if it exists
 	if os.path.isfile(trimmomatic_adapters):
 		## debug message
@@ -42,31 +49,31 @@ def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_ada
 		exit()
 	
 	## call
-	return(trimmo_call(path_name, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug))
+	return(trimmo_call(java_path, path_name, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug))
 
-######
+################################################
 def print_help_adapters():
 	## [TODO]
 	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
 ################################################
-def trimmo_call(sample_folder, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
-	
-	## get java exe
-	java_path = config.get_exe('java')
+def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
+	##
+	## Function to call trimmomatic using java. Can take single-end and pair-end files
+	## sample_folder must exists before calling this function. 
+	## It can be call from main or a module.
+	## Returns code OK/FAIL according if suceeded or failed the system call
+	## 
 
 	## debug message
 	if (Debug):
 		print (colored("+ Cutting adapters for sample: " + sample_name, 'yellow'))
 		
-	## create folder
-	#sample_folder = path_name + '/' + sample_name
-	#functions.create_folder(path_name)
-	#functions.create_folder(sample_folder)
-
+	## log files
 	log_file = sample_folder + '/' + sample_name + '_call.log'
 	trimmo_log = sample_folder + '/' + sample_name + '.log'
 	
+	## init
 	file_R1 = ""
 	file_R2 = ""
 	trim_R1 = ""
@@ -100,12 +107,10 @@ def trimmo_call(sample_folder, sample_name, files, trimmomatic_jar, threads, tri
 	if code == 'OK':
 		## success stamps
 		filename_stamp = sample_folder + '/.success'
-		stamp =	functions.print_time_stamp(filename_stamp)
-	
+		stamp =	functions.print_time_stamp(filename_stamp)	
 		return('OK')	
 	else:
-		return('FAIL')
-	
+		return('FAIL')	
 
 ################################################
 def main():

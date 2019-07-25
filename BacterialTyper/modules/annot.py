@@ -197,7 +197,7 @@ def annot_caller(seq_file, sample_folder, options, name, threads):
 
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 	else:
 	
 		## debug message

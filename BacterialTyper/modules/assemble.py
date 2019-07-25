@@ -191,7 +191,7 @@ def check_sample_assembly(name, sample_folder, files, threads):
 	filename_stamp = sample_folder + '/.success_all'
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 		assembly_stats[name] = sample_folder + '/' + name + "_assembly.fna_stats.txt"
 
 	else:

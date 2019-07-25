@@ -75,7 +75,7 @@ def run_SPADES(sample_folder, file1, file2, name, SPADES_bin, options, threads):
 	filename_stamp = sample_folder + '/.success_assembly'
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 		return('OK')
 
 	## call system for SPADES sample given

@@ -179,7 +179,7 @@ def trimmo_caller(list_reads, sample_folder, name, threads, Debug, adapters):
 	filename_stamp = sample_folder + '/.success'
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 	else:
 		# Call trimmomatic
 		trimmomatic_call.trimmo_module(list_reads, sample_folder, name, threads, Debug, adapters)

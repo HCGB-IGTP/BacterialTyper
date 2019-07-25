@@ -179,7 +179,7 @@ def run(options):
 		
 		## create a excel and txt for sample
 		name_sample_excel = excel_folder + '/' + name + '_ident.xlsx'
-		name_sample_csv = outdir_dict[name] + '/ident_summary.csv'
+		name_sample_csv = outdir_dict[name] + '/ident_summary.csv' ## check in detached mode
 
 		writer_sample = pd.ExcelWriter(name_sample_excel, engine='xlsxwriter') ## open excel handle
 		
@@ -218,7 +218,6 @@ def run(options):
 		print (total_coverage)
 	
 	## TODO: FIX SUMMARY REPORT
-	print (results_summary_KMA)
 	results_summary_KMA = results_summary_KMA.set_index('Sample')
 	results_summary_KMA = results_summary_KMA.sort_values(by=['Sample', 'Database', 'Query_Coverage'],ascending=[True, True,True])
 	results_summary_KMA.to_excel(writer, sheet_name='KMA') ## write excel handle
@@ -254,11 +253,12 @@ def run(options):
 		## Download
 		print (dataFrame_edirect)
 
-
-				## dataFrame_edirect
-				## assembly, annotation, etc...
-				## rerun identification with new updated database
-
+		## dataFrame_edirect
+		## assembly, annotation, etc...
+		## rerun identification with new updated database
+	else:
+		print ("+ No update of the database has been requested using option --fast")
+		
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)
 
@@ -401,7 +401,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 	
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 	else:
 
 		## debug message
@@ -454,7 +454,7 @@ def edirect_ident(dataFrame, outdir_dict):
 				
 		if os.path.isfile(filename_stamp):
 			stamp =	functions.read_time_stamp(filename_stamp)
-			print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+			print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 
 		else: 
 			edirect_caller.generate_docsum_call('nuccore', nucc_entry[0], out_docsum_file)
@@ -561,6 +561,11 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect):
 
 ####################################
 def get_options_db(options):
+	##
+	## Among all databases available and according to the input options,
+	## select the databases to use and set dataframe with this information
+	##
+	
 	print ("\n\n+ Select databases to use for identification:")
 	
 	### database folder to use
