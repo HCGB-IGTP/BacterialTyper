@@ -219,6 +219,9 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 	## Check each using BUSCO
 	database_folder = os.path.abspath(options.database)
 	BUSCO_Database = database_folder + '/BUSCO'
+	if not os.path.exists(BUSCO_Database):
+		functions.create_folder(BUSCO_Database)
+	## call
 	dataFrame_results = BUSCO_call(options.BUSCO_dbs, pd_samples_retrieved, BUSCO_Database, options.threads, mode)
 	
 	## debug message

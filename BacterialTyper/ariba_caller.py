@@ -368,7 +368,6 @@ def ariba_run(database, files, outdir, threads, threshold):
 	##  --nucmer_min_len INT 20
 	######################################################
 	
-
 	if (len(files) == 2):
 		cmd = 'ariba run --assembled_threshold %s %s %s %s %s --threads %s 2> %s' %(threshold, database, files[0], files[1], outdir, threads, logFile)
 	else:
