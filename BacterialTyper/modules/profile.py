@@ -290,6 +290,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 	##
 	vfdb = False
 	subfolder = functions.create_subfolder("ariba_summary", final_dir)
+	## subfolder_samples = functions.create_subfolder("samples", final_dir) ## TODO: Copy all xlsx files to a common folder. Is it necessary?
 
 	## open excel writer
 	name_excel = final_dir + '/profile_summary.xlsx'
@@ -383,8 +384,7 @@ def ariba_run_caller(db2use, list_files, folder_out, threads, cutoff):
 			shutil.rmtree(folder_out) ## delete folder if exists but failed before
 
 		## call
-		#code = ariba_caller.ariba_run(db2use, list_files, folder_out, threads, cutoff)
-		code = 'OK'
+		code = ariba_caller.ariba_run(db2use, list_files, folder_out, threads, cutoff)
 		if code == 'FAIL':
 			print ("*** ERROR: System call failed for ", folder_out)		
 

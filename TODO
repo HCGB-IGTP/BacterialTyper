@@ -13,19 +13,18 @@
 ##############
 [TODO] BacterialTyper/modules/MGE.py :: Fix SettingWithCopyWarning warning message
 [TODO] BacterialTyper/modules/MGE.py :: Generate help and information message for MGE module
-[TODO] BacterialTyper/modules/database.py :: 	
+[TODO] BacterialTyper/modules/database.py :: set sample user database
 [TODO] BacterialTyper/modules/info.py :: Generate help and information message for project
 [TODO] BacterialTyper/modules/set_configuration.py :: All
 [TODO] BacterialTyper/modules/variant_calling.py :: All
 [TODO] BacterialTyper/modules/assemble.py :: Generate more comprehensive statistics
 [TODO] BacterialTyper/modules/ident.py :: Samples might not be assembly or might not be species information for some. Take into account
+[TODO] BacterialTyper/modules/ident.py :: Fix summary report
+[TODO] BacterialTyper/modules/ident.py :: Sum plasmid and chromosome statistics
+[TODO] BacterialTyper/modules/ident.py :: Update database with samples identified and genomes to download
 [NEW] BacterialTyper/modules/qc.py :: Control FASTQC statistics for trimming
 [NEW] BacterialTyper/modules/qc.py :: Control BUSCO statistics for discarding samples if necessary
-[NEW] BacterialTyper/modules/ident.py :: Sum plasmid and chromosome statistics
-
 [NEW] BacterialTyper/modules/profile.py :: Add information summarizing results for other databases
-[NEW] BacterialTyper/modules/profile.py :: Add information summarizing all results: identified & found
-[NEW] BacterialTyper/modules/profile.py :: Add excel information summarizing all results
 
 ##############
 ## Scripts	##
@@ -35,6 +34,8 @@
 [TODO] BacterialTyper/install_dependencies.py :: All
 [TODO] BacterialTyper/install_dependencies.py :: check and install edirect NCBI
 [TODO] BacterialTyper/multiQC_report.py :: Generate help and information message for MultiQC
+[BUG] multiqc : Use -f or --force to overwrite existing reports
+
 [TODO] BacterialTyper/species_identification_KMA.py :: Generate help and information message for KMA
 [TODO] BacterialTyper/trimmomatic_call.py :: Generate help and information message for trimmomatic
 [TODO] BacterialTyper/virulence_resistance.py :: Implement if a different database provided (!= CARD, VFDB) 
