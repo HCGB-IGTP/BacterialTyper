@@ -438,14 +438,28 @@ def ariba_summary_all(outfile, dict_files):
 	fix_ariba_summary(outfile_tmp + '.phandango.csv', outfile + '.phandango.csv', dict_files)
 	fix_phangando_tree(outfile_tmp + '.phandango.tre', outfile + '.phandango.tre', dict_files)
 	
-	os.remove(outfile_tmp + '.csv')
-	os.remove(outfile_tmp + '.phandango.csv')
-	os.remove(outfile_tmp + '.phandango.tre')
-	
-	return()
+	if os.path.isfile(outfile_tmp + '.csv'):
+		os.remove(outfile_tmp + '.csv')
+	else:
+		return('NaN')
+
+	if os.path.isfile(outfile_tmp + '.phandango.csv'):
+		os.remove(outfile_tmp + '.phandango.csv')
+
+	if os.path.isfile(outfile_tmp + '.phandango.tre'):
+		os.remove(outfile_tmp + '.phandango.tre')
+
+
+	return(outfile + '.csv')
 	
 #############################################################
 def fix_ariba_summary(csv_file, outfile, dict_files):
+
+	if not os.path.isfile(csv_file):
+		## summary file not generated
+		print (colored("*** ERROR: summary file (%s) not generated ***" %csv_file, 'red'))
+		return()
+
 	summary_data = pd.read_csv(csv_file, header=0, sep=',')
 	## parse results
 	cluster = ['name']
@@ -468,6 +482,12 @@ def fix_ariba_summary(csv_file, outfile, dict_files):
 	
 #############################################################
 def fix_phangando_tree(tree_file, outfile_name, dict_files): 
+	
+	if not os.path.isfile(tree_file):
+		## summary file not generated
+		print (colored("*** ERROR: phandango tree file (%s) not generated ***" %tree_file, 'red'))
+		return()
+
 	t = Tree(tree_file)
 	for leaf in t:
 		for key, value in dict_files.items():
