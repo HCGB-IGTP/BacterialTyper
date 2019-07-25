@@ -98,12 +98,7 @@ def run(options):
 	## for each sample
 	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "profile")
 	
-	## fast mode
-	if (options.fast):
-		print ("")
-	else:
-		print ("")
-
+	###
 	print ("+ Generate a sample profile for virulence and resistance candidate genes for each sample retrieved using:")
 	print ("(1) Antimicrobial Resistance Inference By Assembly (ARIBA) software")
 	print ("(2) Pre-defined databases by different suppliers or user-defined databases.")
@@ -117,8 +112,24 @@ def run(options):
 	########
 	ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
 	
-	## functions.timestamp
-	#start_time_partial = functions.timestamp(start_time_partial)
+	######################################
+	## update database for later usage
+	######################################
+	if not options.fast:
+		## functions.timestamp
+		start_time_partial = functions.timestamp(start_time_partial)
+
+		functions.boxymcboxface("Update Sample Database")
+
+		## update db
+		print ("+ Update database with samples identified")		
+
+		## debug message
+		if (Debug):
+			print (colored("**DEBUG: results obtained **", 'yellow'))
+	
+	else:
+		print ("+ No update of the database has been requested using option --fast")
 
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)
@@ -128,6 +139,11 @@ def run(options):
 
 ####################################
 def get_options_db(options):
+	##
+	## Among all databases available and according to the input options,
+	## select the databases to use and set dataframe with this information
+	##
+	
 	print ("\n\n+ Select databases to use for virulence and resistance profile generation:")
 	
 	### database folder to use
@@ -170,13 +186,14 @@ def get_options_db(options):
 def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial):
 	functions.boxymcboxface("ARIBA Identification")
 
-	## check status
+	##################
+	## check status	##	
+	##################
 	databases2use = []
 	print ('+ Check databases status: ')
 	for	index, db2use in retrieve_databases.iterrows():
 		## index_name
 		if (db2use['source'] == 'ARIBA'):
-			
 			index_status = ariba_caller.check_db_indexed(db2use['path'], 'YES')
 			if (index_status == True):
 				#print (colored("\t+ Databases %s seems to be fine...\n\n" % db2use['db'], 'green'))
@@ -186,7 +203,9 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 	if (Debug):
 		print (colored("**DEBUG: databases2use\n" +  "\n".join(databases2use) + "\n**", 'yellow'))
 
+	######################################################
 	## Start identification of samples
+	######################################################
 	print ("\n+ Send ARIBA identification jobs...")
 
 	## get outdir folders
@@ -206,8 +225,14 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: outdir_samples **", 'yellow'))
-		print (outdir_samples)
-	
+		print (outdir_samples)	
+
+	######################################################
+	## send for each sample
+	######################################################
+	## ariba assembly cutoff 
+	if not (options.ARIBA_cutoff):
+		options.ARIBA_cutoff = 90
 
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())
@@ -220,11 +245,11 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 		print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
 		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
 
-	## send for each sample
+	## loop
 	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
 		for db2use in databases2use:
 			## send for each sample
-			commandsSent = { executor.submit(ariba_run_caller, db2use, sorted(cluster["sample"].tolist()), outdir_samples.loc[(name, db2use), 'output'], threads_job): name for name, cluster in sample_frame }
+			commandsSent = { executor.submit(ariba_run_caller, db2use, sorted(cluster["sample"].tolist()), outdir_samples.loc[(name, db2use), 'output'], threads_job, options.ARIBA_cutoff): name for name, cluster in sample_frame }
 				
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
@@ -235,17 +260,23 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 					print (cmd2)
 					print('%r generated an exception: %s' % (details, exc))
 			
-			print ("+ Jobs finished for database %s\n+ Collecting information..." %db2use)
+			print ("+ Jobs finished for database %s ..." %db2use)
 
 			## functions.timestamp
 			start_time_partial = functions.timestamp(start_time_partial)
-
-			virulence_resistance.check_results(db2use, outdir_samples)
-			print ("")
+			
+			print ("+ Collecting information for each sample analyzed:")
+			## check results for each database
+			results_df = virulence_resistance.check_results(db2use, outdir_samples, options.ARIBA_cutoff)
+			
+			print (results_df)
 			
 			## functions.timestamp
 			start_time_partial = functions.timestamp(start_time_partial)
-				
+
+	######################################################
+	## Generate final report for all samples
+	######################################################
 	## ariba summary results all samples
 	print ("\n + Generate a summary file for all samples and one for each database employed...")
 
@@ -255,8 +286,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 		functions.create_folder(final_dir) 
 	else:
 		final_dir = os.path.abspath(options.output_folder)
-	
-	## Generate final report for all samples
+
 	vfdb = False
 	subfolder = functions.create_subfolder("ariba_summary", final_dir)
 	for database, data in outdir_samples.groupby(level='db'): ## fix
@@ -276,25 +306,27 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 		else:
 			outfile_summary = outfile_summary + 'Other_summary' ## todo: different databases provided different to VFDB and CARD would collapse file
 			
-		## call ariba summary
+		## call ariba summary to summarize results
 		ariba_caller.ariba_summary_all(outfile_summary, report_files_databases)
 	
+	######################################################
+	## print additional information for VFDB
+	######################################################
 	if (vfdb):
-		## print additional information for VFDB
 		print ("\n\n")
 		functions.print_sepLine("*", 50, False)
 		print ("+ Check VFDB details in files downloaded from vfdb website:")
 		files_VFDB = virulence_resistance.check_VFDB(final_dir + '/VFDB_information')
 		functions.print_sepLine("*", 50, False)
 
+	######################################################
 	print ("\n+ Please check additional summary files generated at folder ", final_dir)
 	print ("+ Go to website: https://jameshadfield.github.io/phandango/#/")
 	print ("+ For each database upload files *phandango.csv and *phandango.tre and visualize results")
-	
 	## print additional help?
 	
 ####################################
-def ariba_run_caller(db2use, list_files, folder_out, threads):
+def ariba_run_caller(db2use, list_files, folder_out, threads, cutoff):
 	## check if already is done
 	# generate a stamp when finish parsing each file
 
@@ -302,17 +334,23 @@ def ariba_run_caller(db2use, list_files, folder_out, threads):
 	filename_stamp = folder_out + '/.success'
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		files_names = [os.path.basename(s) for s in list_files]
+		print (colored("\tA previous command generated results on: %s [Files: %s]" %(stamp, files_names), 'yellow'))
+	
 	else:
 		if os.path.exists(folder_out):
-			shutil.rmtree(folder_out)
+			shutil.rmtree(folder_out) ## delete folder if exists but failed before
 
-		ariba_caller.ariba_run(db2use, list_files, folder_out, threads)
-	
+		## call
+		code = ariba_caller.ariba_run(db2use, list_files, folder_out, threads, cutoff)
+		if code == 'FAIL':
+			print ("*** ERROR: System call failed for ", folder_out)		
 
 ####################################
 def get_outfile(output_dir, name, index_name):
-
+	##
+	##
+	
 	basename_tag = index_name.split("_prepareref/")[0]
 	basename = os.path.basename(basename_tag)
 

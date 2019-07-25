@@ -138,7 +138,7 @@ def check_db_indexed(folder, option):
 		return False
 	
 ##########
-def ariba_summary(out, infileList):
+def ariba_summary(out, infileList, options):
 	######################################################################################
 	## usage: ariba summary [options] <outprefix> [report1.tsv report2.tsv ...]
 	######################################################################################
@@ -166,7 +166,7 @@ def ariba_summary(out, infileList):
 	
 	logFile = out + '.log'
 	infileList_string = " ".join(infileList)
-	cmd_summary = 'ariba summary %s %s 2> %s' %(out, infileList_string, logFile)
+	cmd_summary = 'ariba summary %s %s %s 2> %s' %(options, out, infileList_string, logFile)
 	return(functions.system_call(cmd_summary))
 
 ##########
@@ -325,7 +325,7 @@ def ariba_pubmlstget(species, outdir):
 	return(functions.system_call(cmd))
 	
 ##########
-def ariba_run(database, files, outdir, threads):
+def ariba_run(database, files, outdir, threads, threshold):
 	######################################################################################
 	##	usage: ariba run [options] <prepareref_dir> <reads1.fq> <reads2.fq> <outdir>
 	##	Runs the local assembly pipeline. Input is dir made by prepareref, and paired reads
@@ -360,9 +360,17 @@ def ariba_run(database, files, outdir, threads):
 
 	# outdir must not exist.
 	logFile = outdir + '_run.log'
+	
+	######################################################
+	## default options: might be interesting to change?
+	##  --assembled_threshold 0.95
+	##  --nucmer_min_id INT	90
+	##  --nucmer_min_len INT 20
+	######################################################
+	
 
 	if (len(files) == 2):
-		cmd = 'ariba run %s %s %s %s --threads %s 2> %s' %(database, files[0], files[1], outdir, threads, logFile)
+		cmd = 'ariba run --assembled_threshold %s %s %s %s %s --threads %s 2> %s' %(threshold, database, files[0], files[1], outdir, threads, logFile)
 	else:
 	
 		## [TODO]
@@ -377,6 +385,9 @@ def ariba_run(database, files, outdir, threads):
 	if (code == 'OK'): 
 		filename_stamp = outdir + '/.success'
 		functions.print_time_stamp(filename_stamp)
+		return ('OK')
+	else:
+		return ('FAIL')
 	
 	#########################################################
 	# 	Column	Description
@@ -420,7 +431,8 @@ def ariba_summary_all(outfile, dict_files):
 		fake_list.append(dict_files[files])
 	
 	outfile_tmp = outfile + '_tmp'
-	ariba_summary(outfile_tmp, fake_list)
+	options = ''
+	ariba_summary(outfile_tmp, fake_list, options)
 
 	## fix output
 	fix_ariba_summary(outfile_tmp + '.csv', outfile + '.csv', dict_files)
