@@ -34,7 +34,6 @@
 [TODO] BacterialTyper/install_dependencies.py :: All
 [TODO] BacterialTyper/install_dependencies.py :: check and install edirect NCBI
 [TODO] BacterialTyper/multiQC_report.py :: Generate help and information message for MultiQC
-[BUG] multiqc : Use -f or --force to overwrite existing reports
 
 [TODO] BacterialTyper/species_identification_KMA.py :: Generate help and information message for KMA
 [TODO] BacterialTyper/trimmomatic_call.py :: Generate help and information message for trimmomatic

@@ -25,7 +25,10 @@ def multiQC_module_call(givenList, name, path, option):
 def multiQC_call(pathFile, name, folder, option):
 	multiqc_bin = "multiqc" ## if we activate the environment it should be in $PATH
 	## set options for call
-	cmd = "%s -o %s -n %s -l %s -p -i 'MultiQC report' -b 'HTML report generated for multiple samples and steps' %s" %(multiqc_bin, folder, name, pathFile, option)
+	cmd = "%s --force -o %s -n %s -l %s -p -i 'MultiQC report' -b 'HTML report generated for multiple samples and steps' %s" %(multiqc_bin, folder, name, pathFile, option)
+	
+	## if a report was previously generated in the folder 
+	## force to delete and generate a new one
 	return(functions.system_call(cmd))
 
 ############
