@@ -221,6 +221,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 	BUSCO_Database = database_folder + '/BUSCO'
 	if not os.path.exists(BUSCO_Database):
 		functions.create_folder(BUSCO_Database)
+
 	## call
 	dataFrame_results = BUSCO_call(options.BUSCO_dbs, pd_samples_retrieved, BUSCO_Database, options.threads, mode)
 	
@@ -257,6 +258,13 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		BUSCO_plots(dataFrame_results, BUSCO_report, options.threads)	
 		print ('\n+ Check quality plots in folder: %s' %BUSCO_report)
 
+	##	TODO 
+	##	get BUSCO statistics for discarding samples if necessary
+	##	dataframe = BUSCO_caller.BUSCO_stats(file, name, dataset)
+	## 	
+	##	to get a summary of statistics and given a cutoff, discard or advise to
+	##	discard some samples
+	
 	return(dataFrame_results)
 
 ################################################
@@ -301,9 +309,9 @@ def BUSCO_call(datasets, pd_samples, database_folder, threads, mode):
 		for index, row in pd_samples.iterrows():
 			#my_BUSCO_results_folder = row['busco_folder'] + '/run_' + DataSet
 			my_BUSCO_results_folder = row['busco_folder'] + '/' + row['name'] + '/run_' + DataSet
-			my_short_tsv = 	my_BUSCO_results_folder + '/short_summary_' + DataSet + '.txt'
+			my_short_txt = 	my_BUSCO_results_folder + '/short_summary_' + DataSet + '.txt'
 			if os.path.isfile(my_short_tsv):
-				short_summary.loc[len(short_summary)] = [ row['sample'], row['dirname'], row['name'], row['ext'], row['tag'], row['busco_folder'], DataSet, my_short_tsv, my_BUSCO_results_folder ]
+				short_summary.loc[len(short_summary)] = [ row['sample'], row['dirname'], row['name'], row['ext'], row['tag'], row['busco_folder'], DataSet, my_short_txt, my_BUSCO_results_folder ]
 			
 	return (short_summary)
 

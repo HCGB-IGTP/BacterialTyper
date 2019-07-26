@@ -192,6 +192,46 @@ def BUSCO_run(dataset, fasta, threads, output_name, dataset_name, mode):
 	return()
 
 ###############
+def BUSCO_stats(summary_file, sample, dataset):
+	lines_file = functions.get_info_file(summary_file)
+	list_entries_num = []
+	for l in lines_file:
+		## discard messages and blank lines
+		if not l.startswith("#") and l.strip():		
+			## print each line
+			## print (l)
+
+			if l.startswith("\tC:"):
+				l = l.replace('\t', '')
+				l = l.replace('[', ',')
+				l = l.replace(']', '')
+				l = l.replace('%', '')
+				entries = l.split(',')
+				
+				list_entries_pct = []
+				list_entries_dict = {}
+				for i in entries:
+					list_entries_pct.append((i.split(":")))
+					list_entries_dict[i.split(":")[0]] = i.split(":")[1]
+	
+			else:			
+				entries2 = l.split('\t')
+				name_search = re.search(r".*\((.*)\)$", entries2[2])
+				if name_search:
+					pct_group = list_entries_dict[ name_search.group(1) ]					
+
+				number = entries2[1] + ' (' + str(pct_group) + '%)'
+				list_entries_num.append((entries2[2],  number))
+	
+	list_entries_num = list_entries_num + list_entries_pct
+	stats = pd.DataFrame(list_entries_num, columns=('Type', sample))
+
+	stats_returned = stats.set_index('Type').transpose()
+	stats_returned['Database'] = dataset
+	return (stats_returned)
+	
+
+###############
 def BUSCO_plot(outfolder):
 	busco_plot_bin = config.get_exe('busco_plot')
 	#logFile = dataset_name + '.log'
@@ -204,13 +244,11 @@ def main():
 	## this code runs when call as a single script
 
   	## control if options provided or help
-	if len(sys.argv) > 1:
-		print ("")
-	else:
-		#help_options()
+	if not len(sys.argv) > 1:
+		print_help_BUSCO()
 		exit()
 	
-	BUSCO_check_dataset(sys.argv[1])
+	BUSCO_stats(sys.argv[1], 'example', 'dataset1')
 	
 ######
 '''******************************************'''
