@@ -59,8 +59,12 @@ def run_MLSTar(database_folder, rscript, species, scheme, name, path, fileGiven,
 	seq_folder = functions.create_subfolder('seq', scheme_folder)
 	profile_folder = functions.create_subfolder('prf', scheme_folder)
 
+	print ("##################################################")
+	print ("+ MLST profiling for sample: %s" %name)
+	print ("##################################################")
+
 	## check if profile and sequences are already downloaded
-	download_PubMLST(profile_folder, scheme, seq_folder, name, rscript, species)
+	download_PubMLST(profile_folder, scheme, seq_folder, rscript, species)
 
 	## call MLSTar for this sample
 	results = run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threads)
@@ -76,9 +80,9 @@ def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threa
 	filename_stamp = path + '/.success'
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 		res_file = path + '/' + name + "_MLST_results.csv"
-		callCode = 'OK'
+		return(res_file)
 		
 	else:
 		logFile = path + '_logFile.txt'
@@ -142,12 +146,8 @@ def plot_MLST(results, profile, rscript):
 	return(functions.system_call(cmd_plotter))
 	
 ##########################################
-def download_PubMLST(profile_folder, scheme, seq_folder, name, rscript, species):
+def download_PubMLST(profile_folder, scheme, seq_folder, rscript, species):
 
-	print ("##################################################")
-	print ("+ MLST profiling for sample: %s" %name)
-	print ("##################################################")
-	
 	## Check if profile exists
 	file_prof = profile_folder + '/profile_scheme' + str(scheme) + '.tab'
 
@@ -162,7 +162,7 @@ def download_PubMLST(profile_folder, scheme, seq_folder, name, rscript, species)
 
 		if os.path.isfile(filename_stamp):
 			stamp =	functions.read_time_stamp(filename_stamp)
-			print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+			print (colored("\tA previous command generated results on: %s [%s -- %s]" %(stamp, species, 'profile'), 'yellow'))
 		#
 		#else
 		# [TODO: Check time passed and download again if >?? days passed]
@@ -191,7 +191,7 @@ def download_PubMLST(profile_folder, scheme, seq_folder, name, rscript, species)
 		
 		if os.path.isfile(filename_stamp):
 			stamp =	functions.read_time_stamp(filename_stamp)
-			print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+			print (colored("\tA previous command generated results on: %s (%s -- %s)" %(stamp, species,'sequence'), 'yellow'))
 
 			########################################################################
 			#else

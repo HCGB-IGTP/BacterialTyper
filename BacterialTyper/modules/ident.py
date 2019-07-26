@@ -189,8 +189,9 @@ def run(options):
 		results_summary_toPrint_sample.to_csv(name_sample_csv) ## write csv for sample
 		
 		## read MLST
-		if not MLST_results:
+		if MLST_results:
 			sample_MLST = pd.read_csv(MLST_results[name], header=0, sep=',')
+			print (sample_MLST)
 
 			sample_MLST['genus'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'genus'].values[0]
 			sample_MLST['species'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'species'].values[0]
@@ -318,7 +319,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			## load database on memory
 			print ("+ Loading database on memory for faster identification.")
 			cmd_load_db = "%s shm -t_db %s -shmLvl 1" %(kma_bin, db2use)
-			return_code_load = functions.system_call(cmd_load_db)
+			#return_code_load = functions.system_call(cmd_load_db)
 			
 			## send for each sample
 			commandsSent = { executor.submit(send_kma_job, outdir_dict[name], sorted(cluster["sample"].tolist()), name, db2use, threads_job, cluster): name for name, cluster in sample_frame }
@@ -335,7 +336,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			## remove database from memory
 			print ("+ Removing database from memory...")
 			cmd_rm_db = "%s shm -t_db %s -shmLvl 1 -destroy" %(kma_bin, db2use)
-			return_code_rm = functions.system_call(cmd_rm_db)
+			#return_code_rm = functions.system_call(cmd_rm_db)
 			return_code_rm = 'OK'
 			
 			if (return_code_rm == 'FAIL'):
@@ -455,6 +456,10 @@ def edirect_ident(dataFrame, outdir_dict):
 	for name, grouped in sample_results:
 		## use edirect to get Species_name and entry for later identification
 		edirect_folder = functions.create_subfolder('edirect', outdir_dict[name])
+		
+		################################################
+		## TODO: What to do if multi-isolate sample?
+		################################################
 		
 		## chromosome match
 		nucc_entry = grouped.loc[grouped['Database'] == 'bacteria.ATG']['#Template'].values[0].split()
