@@ -189,14 +189,15 @@ def run(options):
 		results_summary_toPrint_sample.to_csv(name_sample_csv) ## write csv for sample
 		
 		## read MLST
-		sample_MLST = pd.read_csv(MLST_results[name], header=0, sep=',')
+		if not MLST_results:
+			sample_MLST = pd.read_csv(MLST_results[name], header=0, sep=',')
 
-		sample_MLST['genus'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'genus'].values[0]
-		sample_MLST['species'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'species'].values[0]
-		sample_MLST.to_excel(writer_sample, sheet_name="MLST") ## write excel handle
+			sample_MLST['genus'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'genus'].values[0]
+			sample_MLST['species'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'species'].values[0]
+			sample_MLST.to_excel(writer_sample, sheet_name="MLST") ## write excel handle
 		
-		## Return information to excel
-		MLST_all = pd.concat([MLST_all, sample_MLST]) 
+			## Return information to excel
+			MLST_all = pd.concat([MLST_all, sample_MLST]) 
 		
 		## close excel handle
 		writer_sample.save() 		
@@ -252,6 +253,9 @@ def run(options):
 
 		## Download
 		print (dataFrame_edirect)
+		
+		file_toprint = final_dir + '/edirect_info2download.csv'
+		dataFrame_edirect.to_csv(file_toprint)
 
 		## dataFrame_edirect
 		## assembly, annotation, etc...
@@ -314,7 +318,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			## load database on memory
 			print ("+ Loading database on memory for faster identification.")
 			cmd_load_db = "%s shm -t_db %s -shmLvl 1" %(kma_bin, db2use)
-			#return_code_load = functions.system_call(cmd_load_db)
+			return_code_load = functions.system_call(cmd_load_db)
 			
 			## send for each sample
 			commandsSent = { executor.submit(send_kma_job, outdir_dict[name], sorted(cluster["sample"].tolist()), name, db2use, threads_job, cluster): name for name, cluster in sample_frame }
@@ -331,7 +335,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			## remove database from memory
 			print ("+ Removing database from memory...")
 			cmd_rm_db = "%s shm -t_db %s -shmLvl 1 -destroy" %(kma_bin, db2use)
-			#return_code_rm = functions.system_call(cmd_rm_db)
+			return_code_rm = functions.system_call(cmd_rm_db)
 			return_code_rm = 'OK'
 			
 			if (return_code_rm == 'FAIL'):
@@ -370,8 +374,17 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 					results['Sample'] = name
 					results_summary = results_summary.append(results)
 				else:
+					print (colored("###########################################", 'yellow'))
 					print (colored("Sample %s contains multiple strains." %name, 'yellow'))
-					print (colored(results.to_csv, 'yellow'))
+					print (colored("###########################################", 'yellow'))
+					print (colored(results, 'yellow'))
+					print ('\n\n')
+					
+					## add both strains if detected	
+					results['Sample'] = name
+					results_summary = results_summary.append(results)
+					
+					## TODO: add multi-isolate flag
 		
 			elif (results.index.size == 1): ## 1 clear reference
 				results['Sample'] = name
@@ -449,7 +462,7 @@ def edirect_ident(dataFrame, outdir_dict):
 
 		##
 		out_docsum_file = edirect_folder + '/nuccore_docsum.txt'
-		species_outfile = edirect_folder + '/info.txt'
+		species_outfile = edirect_folder + '/info.csv'
 		filename_stamp = edirect_folder + '/.success_species'
 				
 		if os.path.isfile(filename_stamp):
@@ -458,15 +471,21 @@ def edirect_ident(dataFrame, outdir_dict):
 
 		else: 
 			edirect_caller.generate_docsum_call('nuccore', nucc_entry[0], out_docsum_file)
-			edirect_caller.generate_xtract_call(out_docsum_file, 'DocumentSummary', 'Organism,Strain,BioSample', species_outfile)
+			edirect_caller.generate_xtract_call(out_docsum_file, 'DocumentSummary', 'Organism,BioSample,Strain', species_outfile)
 			stamp =	functions.print_time_stamp(filename_stamp)
 
 		## get information from edirect call
 		taxa_name_tmp = functions.get_info_file(species_outfile)
-		genus = taxa_name_tmp[0].split()[0] 		## genus
-		species = taxa_name_tmp[0].split()[1] 		## species
-		strain = taxa_name_tmp[0].split()[2] 		## strain
-		BioSample_name = taxa_name_tmp[0].split()[3]	## BioSample
+		Oragnism = taxa_name_tmp[0].split(',')[0].split()
+		genus = Oragnism[0] 		## genus
+		species = Oragnism[1] 		## species
+		BioSample_name = taxa_name_tmp[0].split(',')[1]	## BioSample
+		
+		## sometimes strain is missing
+		if len(taxa_name_tmp[0].split(',')) > 2:
+			strain = taxa_name_tmp[0].split(',')[2] 		## strain
+		else:
+			strain = 'NaN'
 
 		## plasmid match
 		group_plasmid = grouped.loc[grouped['Database'] == 'plasmids.T' ]
@@ -481,7 +500,7 @@ def edirect_ident(dataFrame, outdir_dict):
 
 ####################################
 def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect):
-	## [NEW] BacterialTyper/modules/ident.py :: Add MLST Information
+	## Add MLST Information
 
 	## debug message
 	if (Debug):
@@ -507,13 +526,17 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect):
 	path_database = os.path.abspath(options.database)
 	pubmlst_folder = functions.create_subfolder('PubMLST', path_database)
 	
+	########################################################################################
 	## TODO: Fix and install MLSTar during installation
 	rscript = "/soft/general/R-3.5.1-bioc-3.8/bin/Rscript" ##config.get_exe("Rscript") 
+	########################################################################################
 
 	# init
 	MLST_results = {}
 
 	## Generate MLST call according to species identified for each sample
+	## TODO: What to do if multi-isolate sample?
+	
 	for index, row in dataFrame_edirect.iterrows():
 		MLSTar_taxa_name = MLSTar.get_MLSTar_species(row['genus'], row['species'] )
 		

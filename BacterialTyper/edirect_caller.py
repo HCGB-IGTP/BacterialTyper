@@ -44,7 +44,7 @@ def generate_xtract_call(docsum_file, pattern, element, outfile):
 	
 ###############
 def xtract_call(docsum_file, pattern, element, outfile, xtract_bin):
-	cmd = ("cat %s | %s -pattern %s -element %s > %s" %(docsum_file, xtract_bin, pattern, element, outfile))
+	cmd = ("cat %s | %s -pattern %s -sep ',' -element %s > %s" %(docsum_file, xtract_bin, pattern, element, outfile))
 	return(functions.system_call(cmd))	
 
 ###############

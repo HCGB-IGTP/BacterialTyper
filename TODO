@@ -24,8 +24,6 @@
 [TODO] BacterialTyper/modules/ident.py :: Sum plasmid and chromosome statistics
 [TODO] BacterialTyper/modules/ident.py :: Update database with samples identified and genomes to download
 [TODO] BacterialTyper/modules/ident.py :: Add information if multiisolates are detected
-[BUG] BacterialTyper/modules/ident.py :: Sometimes no strain is identified by NCBI and when obtaining BioSample raises and error
-
 [NEW] BacterialTyper/modules/qc.py :: Control FASTQC statistics for trimming
 [NEW] BacterialTyper/modules/qc.py :: Control BUSCO statistics for discarding samples if necessary
 [NEW] BacterialTyper/modules/profile.py :: Add information summarizing results for other databases
@@ -42,10 +40,12 @@
 [TODO] BacterialTyper/trimmomatic_call.py :: Generate help and information message for trimmomatic
 [TODO] BacterialTyper/virulence_resistance.py :: Implement if a different database provided (!= CARD, VFDB) 
 [TODO] BacterialTyper/extern_progs.py :: Add install dependencies
+
 [TODO] BacterialTyper/MLSTar.py :: Check time passed and download profile/sequence again if >?? days passed]
 [TODO] BacterialTyper/MLSTar.py :: update_MLSTar_profile_alleles()
 [TODO] BacterialTyper/MLSTar.py :: Add help MLSTar
 [TODO] BacterialTyper/MLSTar.py :: Check genus spp option to get PubMLST profiles
+
 [NEW] BacterialTyper/trimmomatic_call.py :: Implement new parameters for trimming given the quality check analysis
 [New] BacterialTyper/ariba_caller.py :: Different databases provided
 
