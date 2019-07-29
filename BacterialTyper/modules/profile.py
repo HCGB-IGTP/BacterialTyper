@@ -323,6 +323,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 			## write excel
 			name_tab = name_db + '_found'
 			csv2excel.to_excel(writer, sheet_name=name_tab)
+			csv2excel.save()
 	
 	## results_df contains excel and csv files for each sample and for each database
 	list_databases = set(results_df['database'].to_list())
