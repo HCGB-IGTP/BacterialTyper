@@ -220,16 +220,18 @@ def BUSCO_stats(summary_file, sample, dataset):
 				if name_search:
 					pct_group = list_entries_dict[ name_search.group(1) ]					
 
-				number = entries2[1] + ' (' + str(pct_group) + '%)'
-				list_entries_num.append((entries2[2],  number))
+					number = entries2[1] + ' (' + str(pct_group) + '%)'
+					list_entries_num.append((entries2[2],  number))
+				else:
+					list_entries_num.append((entries2[2], entries2[1]))
+					
 	
 	list_entries_num = list_entries_num + list_entries_pct
 	stats = pd.DataFrame(list_entries_num, columns=('Type', sample))
 
 	stats_returned = stats.set_index('Type').transpose()
 	stats_returned['Database'] = dataset
-	return (stats_returned)
-	
+	return (stats_returned)	
 
 ###############
 def BUSCO_plot(outfolder):
@@ -237,7 +239,6 @@ def BUSCO_plot(outfolder):
 	#logFile = dataset_name + '.log'
 	cmd = '%s -wd %s' %(busco_plot_bin, outfolder)
 	functions.system_call(cmd)
-
 
 ###############
 def main():

@@ -223,7 +223,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		functions.create_folder(BUSCO_Database)
 
 	## call
-	dataFrame_results = BUSCO_call(options.BUSCO_dbs, pd_samples_retrieved, BUSCO_Database, options.threads, mode)
+	(dataFrame_results, stats_results) = BUSCO_call(options.BUSCO_dbs, pd_samples_retrieved, BUSCO_Database, options.threads, mode)
 	
 	## debug message
 	if (options.debug):
@@ -258,20 +258,27 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		BUSCO_plots(dataFrame_results, BUSCO_report, options.threads)	
 		print ('\n+ Check quality plots in folder: %s' %BUSCO_report)
 
-	##	TODO 
-	##	get BUSCO statistics for discarding samples if necessary
-	##	dataframe = BUSCO_caller.BUSCO_stats(file, name, dataset)
-	## 	
-	##	to get a summary of statistics and given a cutoff, discard or advise to
-	##	discard some samples
+		##	TODO 
+		##	Parse BUSCO statistics in dataframe (stats_results) for discarding samples if necessary
+		##	given a cutoff, discard or advise to discard some samples
+
+		### print statistics
+		stats_results.to_csv(BUSCO_report + "/BUSCO_stats.csv")
+		name_excel = BUSCO_report + "/BUSCO_stats.xlsx"
+		writer = pd.ExcelWriter(name_excel, engine='xlsxwriter')
+		stats_results.to_excel(writer, sheet_name="BUSCO statistics")	
+		writer.save()
+		
+		print ('\n+ Check quality statistics in folder: %s' %BUSCO_report)
 	
 	return(dataFrame_results)
 
 ################################################
 def BUSCO_call(datasets, pd_samples, database_folder, threads, mode):
-
-	## mode= proteins|genome
-
+	## 
+	## argument mode = proteins or genome
+	##
+	
 	## get datasets
 	print ("+ Check folder provided as database for available BUSCO datasets...")
 	BUSCO_datasets = BUSCO_caller.BUSCO_retrieve_sets(datasets, database_folder)
@@ -303,6 +310,7 @@ def BUSCO_call(datasets, pd_samples, database_folder, threads, mode):
 	
 	## init dataframe
 	short_summary = pd.DataFrame(columns=('sample', 'dirname', 'name', 'ext', 'tag', 'busco_folder', 'busco_dataset', 'busco_summary', 'busco_results'))
+	stats_summary = pd.DataFrame()
 
 	## generate results
 	for DataSet in BUSCO_datasets:
@@ -310,10 +318,13 @@ def BUSCO_call(datasets, pd_samples, database_folder, threads, mode):
 			#my_BUSCO_results_folder = row['busco_folder'] + '/run_' + DataSet
 			my_BUSCO_results_folder = row['busco_folder'] + '/' + row['name'] + '/run_' + DataSet
 			my_short_txt = 	my_BUSCO_results_folder + '/short_summary_' + DataSet + '.txt'
-			if os.path.isfile(my_short_tsv):
-				short_summary.loc[len(short_summary)] = [ row['sample'], row['dirname'], row['name'], row['ext'], row['tag'], row['busco_folder'], DataSet, my_short_txt, my_BUSCO_results_folder ]
 			
-	return (short_summary)
+			if os.path.isfile(my_short_txt):
+				short_summary.loc[len(short_summary)] = [ row['sample'], row['dirname'], row['name'], row['ext'], row['tag'], row['busco_folder'], DataSet, my_short_txt, my_BUSCO_results_folder ]
+				my_stats = BUSCO_caller.BUSCO_stats(my_short_txt, row['name'], DataSet)
+				stats_summary = pd.concat([stats_summary, my_stats])
+		
+	return (short_summary, stats_summary)
 
 ################################################
 def BUSCO_runner(sample_name, DataSet, sample, dataset_path, output, threads, mode):
