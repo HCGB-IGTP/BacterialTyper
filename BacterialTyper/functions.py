@@ -185,7 +185,17 @@ def retrieve_matching_files(folder, string):
 	my_all_list = get_fullpath_list(folder)
 	matching = [s for s in my_all_list if s.endswith(string)]
 	return (matching)
+	
+#####
+def file2dictionary(file2read):
+	d = {}
+	with open(file2read) as f:
+		for line in f:
+			(key, val) = line.split()
+			d[key] = val
 
+	return(d)
+	
 ########################################################################
 ######## 					system call							######## 					
 ########################################################################
@@ -328,12 +338,15 @@ def progbar(curr, total, full_progbar):
 ########################################################################
 
 ###############
-def get_data(ID_file, SEP):	
+def get_data(ID_file, SEP, options):	
 	print ("+ Obtaining information from file: ", ID_file)
-	data = pd.read_csv(ID_file, header=0, sep=SEP)
-	print ("\n+ Data:")
-	print (data)
-	print ("\n\n")	
+	if options == 'index_col=0':
+		data = pd.read_csv(ID_file, sep=SEP, index_col=0)
+	else:
+		## fix for another example if any
+		print ()
+		
+		
 	return(data)
 
 ###############

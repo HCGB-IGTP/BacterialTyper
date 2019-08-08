@@ -19,6 +19,7 @@ from termcolor import colored
 from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import ariba_caller
+from BacterialTyper import card_trick_caller
 
 #############################################################
 def parse_vfdb(folder, sampleName, fileResults, fileFlags, summary, assembly_cutoff):
@@ -79,7 +80,7 @@ def parse_vfdb(folder, sampleName, fileResults, fileFlags, summary, assembly_cut
 	return (name_excel, name_csv)
 
 #############################################################
-def parse_card(folder, sampleName, fileResults, fileFlags, summary, assembly_cutoff):
+def parse_card(folder, sampleName, fileResults, fileFlags, summary, assembly_cutoff, card_trick_info):
 	## 
 	## Parses results from CARD database.
 	## Input is a folder for output results, sample name, and
@@ -92,6 +93,7 @@ def parse_card(folder, sampleName, fileResults, fileFlags, summary, assembly_cut
 	summary_data = pd.read_csv(summary, header=0, sep=',') 			## report_summary.csv :: parse information from ARIBA 
 	fileFlags_data = pd.read_csv(fileFlags, header=0, sep='\t')		## flags_explain.tsv :: ariba expand flag: explained flags
 	original_data = pd.read_csv(fileResults, header=0, sep='\t')	## report.tsv :: ariba report generated
+	card_ontology = functions.get_data(card_trick_info + '/aro.obo.csv', ',', 'index_col=0') 		## read card_info generated for card_trick parse
 	
 	## summary data
 	summary_data = summary_data.set_index('name')
@@ -105,29 +107,21 @@ def parse_card(folder, sampleName, fileResults, fileFlags, summary, assembly_cut
 	## subset
 	data = original_data.loc[original_data['cluster'].isin(summary_data.columns)]
 	
-	############################################################################
-	## try to catch resistance genes antibiotics from description
-	##
-	## TODO: Need more implementation and debugging
-	##
-	resistance=[]
-	freetext = set(list(data['free_text']))
-	for text in freetext:
-		search_freetext = re.search(r".*conferring resistance to (.*)", text)
-		if (search_freetext):
-			resistance.append(search_freetext.group(1))
-
-	resistance_String = "; ".join(set(resistance))
-	print ('\tPutative resistance(s) to: ' + resistance_String + ', ...')
-	
 	############################################################################	
 	## analyze each cluster confering resistance
 	############################################################################	
 	colnames = ['Reference', 'ID', 'Protein-coding','Presence/Abscence', 'Variants', 'Description', 'Additional information']
+	
+	## get results: confering resistance
 	df_results = found_results(colnames, data, list_found_genes, 'CARD')
 
 	## get results: found, identified, partial
 	df_identified = identified_results(original_data, "CARD", list_found_genes, assembly_cutoff)
+
+	############################################################################
+	## use card-trick python package to get ontology for each term
+	AROS_identified = list(df_identified['ID'])
+	information_ontology = card_trick_caller.get_info_CARD(AROS_identified, 'ARO', card_ontology)
 
 	##########################
 	## generate excel sheet
@@ -138,11 +132,12 @@ def parse_card(folder, sampleName, fileResults, fileFlags, summary, assembly_cut
 	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') 		
 	
 	## write excel handle
-	df_results.to_excel(writer, sheet_name='results') 				## write results
-	original_data.to_excel(writer, sheet_name='CARD_ARIBA_report') 	## Original data from ARIBA
-	summary_data.to_excel(writer, sheet_name='ARIBA_summary') 		## ARIBA summary generated
-	fileFlags_data.to_excel(writer, sheet_name='flags') 			## ARIBA flags explained
-	df_identified.to_excel(writer, sheet_name='identified') 		## Identified genes: ARIBA flags explained
+	df_results.to_excel(writer, sheet_name='results') 					## write results
+	df_identified.to_excel(writer, sheet_name='identified') 			## Identified genes: ARIBA flags explained
+	information_ontology.to_excel(writer, sheet_name='CARD_ontology') 	## CARD ontology
+	original_data.to_excel(writer, sheet_name='ARIBA_report') 			## Original data from ARIBA
+	summary_data.to_excel(writer, sheet_name='ARIBA_summary') 			## ARIBA summary generated
+	fileFlags_data.to_excel(writer, sheet_name='flags') 				## ARIBA flags explained
 	
 	name_csv = folder + '/' + sampleName + '_CARD_summary.csv'
 	df_identified.to_csv(name_csv)
@@ -244,7 +239,7 @@ def get_id(db2use_name, group):
 	### Get ID according to Database
 	if db2use_name == 'CARD':
 		ariba_ref_name = str(group['ref_name']).split('.')
-		info['ID'] = ariba_ref_name[1]
+		info['ID'] = 'ARO:' + ariba_ref_name[1]
 		info['reference'] = ariba_ref_name[2]
 
 	elif db2use_name == 'VFDB':
@@ -363,7 +358,7 @@ def parse_results(folder, sampleName, fileResults, fileFlags, summary):
 	#return(name_excel, name_csv)
 
 #############################################################
-def check_results(db2use, outdir_sample, assembly_cutoff):
+def check_results(db2use, outdir_sample, assembly_cutoff, card_trick_info):
 	## 
 	## outdir_sample is a dataframe containing information of the output folder generated by ariba. 
 	## It is index for each database and for each sample.
@@ -399,14 +394,14 @@ def check_results(db2use, outdir_sample, assembly_cutoff):
 				name_csv = outfolder + '/' + sample + '_' + name_db + '_summary.csv'
 
 			else:
-				(name_excel, name_csv) = results_parser(database, folderResults, sample, outfolder, assembly_cutoff)
+				(name_excel, name_csv) = results_parser(database, folderResults, sample, outfolder, assembly_cutoff, card_trick_info)
 
 			dataFrame_results.loc[sample] = (name_csv, name_excel, name_db) ## to return
 
 	return (dataFrame_results)
 
 ##################################################################
-def results_parser(database, folderResults, sampleName, outfolder, assembly_cutoff):	
+def results_parser(database, folderResults, sampleName, outfolder, assembly_cutoff, card_trick_info):	
 	## 
 	## Parse ARIBA results generated for all databases. There is a lot of information generated
 	## that is common for all databases and listed as an example in folder results here.
@@ -481,7 +476,7 @@ def results_parser(database, folderResults, sampleName, outfolder, assembly_cuto
 	if (database == 'vfdb_full'):
 		(name_excel, name_csv) = parse_vfdb(outfolder, sampleName, fileResults, fileFlags, summary_results, assembly_cutoff)
 	elif (database == 'card'):
-		(name_excel, name_csv) = parse_card(outfolder, sampleName, fileResults, fileFlags, summary_results, assembly_cutoff)
+		(name_excel, name_csv) = parse_card(outfolder, sampleName, fileResults, fileFlags, summary_results, assembly_cutoff, card_trick_info)
 	else: 
 		## [TODO] check results according to databases different than CARD/VFDB
 		(name_excel, name_csv) = parse_results(outfolder, sampleName, fileResults, fileFlags, summary_results)				

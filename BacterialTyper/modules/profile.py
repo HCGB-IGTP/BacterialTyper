@@ -24,6 +24,7 @@ from BacterialTyper import virulence_resistance
 from BacterialTyper import database_generator
 from BacterialTyper import ariba_caller
 from BacterialTyper.modules import sample_prepare
+from BacterialTyper import card_trick_caller
 
 ####################################
 def run(options):
@@ -190,6 +191,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 	## check status	##	
 	##################
 	databases2use = []
+	card_trick_info = ""
 	print ('+ Check databases status: ')
 	for	index, db2use in retrieve_databases.iterrows():
 		## index_name
@@ -198,11 +200,20 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 			if (index_status == True):
 				#print (colored("\t+ Databases %s seems to be fine...\n\n" % db2use['db'], 'green'))
 				databases2use.append(db2use['path'])
+			
+				## prepare card database ontology for later 		
+				if (db2use['db'] == 'card'):
+					card_trick_info = card_trick_caller.prepare_card_data(options.database)
+
+		## check status of other databases if any
+		# else:		
 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: databases2use\n" +  "\n".join(databases2use) + "\n**", 'yellow'))
-
+		if (card_trick_info):
+			print (colored("**DEBUG: card_trick_info: " + card_trick_info + " **", 'yellow'))
+		
 	######################################################
 	## Start identification of samples
 	######################################################
@@ -268,7 +279,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 			
 			print ("+ Collecting information for each sample analyzed:")
 			## check results for each database
-			results_df_tmp = virulence_resistance.check_results(db2use, outdir_samples, options.ARIBA_cutoff)
+			results_df_tmp = virulence_resistance.check_results(db2use, outdir_samples, options.ARIBA_cutoff, card_trick_info)
 			results_df = pd.concat([results_df, results_df_tmp])
 						
 			## functions.timestamp
