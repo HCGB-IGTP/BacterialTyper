@@ -87,51 +87,55 @@ def help_ARIBA():
 	print ("")
 	
 ############################################################### 
-def download_ariba_databases(list_dbs, main_folder, Debug):
+def download_ariba_databases(list_dbs, main_folder, Debug, threads):
 
 	## ToDo check if already download	
 	print("\n\n+ Download databases for Antimicrobial Resistance Identification By Assembly (ARIBA).")
 	ariba_folder = functions.create_subfolder("ARIBA", main_folder)
 	## where database is one of: 
 	print ("+ Available databases:")
-	out_info = main_folder + '/ARIBA_information.txt'
-	hd = open(out_info, 'a')
 
 	dbs = get_ARIBA_dbs(list_dbs)
 	for db_set in dbs:
+
 		functions.print_sepLine("-",30, False)
 		print (colored("+ " + db_set,'yellow'))
 		
 		folder_set = functions.create_subfolder(db_set, ariba_folder)
-		return_ariba_getref = ariba_getref(db_set, folder_set, Debug)
+	
+		## check if previously done
+		outdir_prepare_ref = folder_set + '_prepareref'
+		filename_stamp_prepare = outdir_prepare_ref + '/.success'
+		if os.path.isfile(filename_stamp_prepare):
+			stamp =	functions.read_time_stamp(filename_stamp_prepare)
+			print ("\t+ Database is downloaded in folder: ", folder_set)
+			print ("\t+ Data is available and indexed in folder: ", outdir_prepare_ref)
+			print (colored("\tDatabase was previously downloaded and prepared on: %s" %stamp, 'yellow'))
+			## [TODO]: Check if necessary to download again after several months/days
+			return_ariba_getref = 'OK'
+		else:
+			return_ariba_getref = ariba_getref(db_set, folder_set, Debug, threads)
 		
 		if (return_ariba_getref == 'OK'):
-			## print citation for each database
-			functions.print_sepLine("'", 75, False)
-			hd.write(db_set)
-			hd.write('\n')
+			#functions.print_sepLine("'", 75, False)
+			print()
 		else:
-			print (colored("** ARIBA getref failed for " + db_set, 'red'))
-			return ('FAIL')
-	
-	hd.close()
+			print (colored("** ARIBA getref failed or generated a warning for " + db_set, 'red'))
+			##return ('FAIL')
+	##
 	return('OK')
+
 
 ##########
 def check_db_indexed(folder, option):
 	# get databases downloaded
-	lineList = [line.rstrip('\n') for line in open(folder + '../../' + 'ARIBA_information.txt')]
+	#lineList = [line.rstrip('\n') for line in open(folder + '../../' + 'ARIBA_information.txt')]
+
 	if os.path.isfile(folder + '00.info.txt'):
-		name = folder.split("_prepareref/")[0]
-		path_basename = os.path.basename(name)
-		if path_basename in lineList: ## double check
-			if (option == 'YES'):
-				print (colored("\t- ARIBA database: " + path_basename + " [ OK ]", 'green'))
+		if os.path.isfile(folder + '.success'):
+			stamp =	functions.read_time_stamp(folder + '.success')
+			print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
 			return True
-		else:
-			if (option == 'YES'):
-				print (colored("\t- ARIBA database: " + path_basename + " [ ERROR ]", 'red'))
-			return False
 	else:
 		if (option == 'YES'):
 			print (colored("\t- ARIBA database: " + path_basename + " [ ERROR ]", 'red'))
@@ -170,7 +174,7 @@ def ariba_summary(out, infileList, options):
 	return(functions.system_call(cmd_summary))
 
 ##########
-def ariba_getref(database, outdir, Debug):
+def ariba_getref(database, outdir, Debug, threads):
 	######################################################################################
 	## usage: ariba getref [options] <db> <outprefix>
 	######################################################################################
@@ -190,14 +194,24 @@ def ariba_getref(database, outdir, Debug):
 
 	## download information in database folder provided by config
 	print ("\t+ Retrieve information from database: " + database)
-	cmd_getref = 'ariba getref %s %s' %(database, outdir_name)
-	download_ariba_cmd = functions.system_call(cmd_getref)
+
+	## check if previously downloaded and succeeded
+	filename_stamp = outdir + '/.success'
+
+	if os.path.isfile(filename_stamp):
+		stamp =	functions.read_time_stamp(filename_stamp)
+		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+
+	else:
+		cmd_getref = 'ariba getref %s %s' %(database, outdir_name)
+		download_ariba_cmd = functions.system_call(cmd_getref)
 	
 	if (download_ariba_cmd == 'OK'):
+		stamp =	functions.print_time_stamp(filename_stamp)
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: ariba getref %s succeed " %database + "**", 'yellow'))
-	
+
 	else: 
 		## rise error & exit
 		print (colored("***ERROR: ariba getref %s failed " %database + " **",'red'))
@@ -207,29 +221,36 @@ def ariba_getref(database, outdir, Debug):
 	if (Debug):
 		print (colored("**DEBUG: Run ariba prepareref %s " %database + "**", 'yellow'))
 
-	## get information
-	list_files = os.listdir(outdir)
-	fasta = ""
-	metadata = ""
-	for f in list_files:
-		if f.endswith('tsv'):
-			metadata = outdir + '/' + f
-		elif f.endswith('fa'):
-			fasta = outdir + '/' + f
+	## check if previously prepareref and succeeded
+	filename_stamp_prepare = outdir_prepare_ref + '/.success'
+	if os.path.isfile(filename_stamp_prepare):
+		stamp =	functions.read_time_stamp(filename_stamp_prepare)
+		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
 	
-	code = ariba_prepareref(fasta, metadata, outdir_prepare_ref)
-	if (code == 'OK'):
-		filename_stamp = outdir + '/.success'
 	else:
-		filename_stamp = outdir + '/.fail'
+		## get information
+		list_files = os.listdir(outdir)
+		fasta = ""
+		metadata = ""
+		for f in list_files:
+			if f.endswith('tsv'):
+				metadata = outdir + '/' + f
+			elif f.endswith('fa'):
+				fasta = outdir + '/' + f
+	
+		code = ariba_prepareref(fasta, metadata, outdir_prepare_ref, threads)
+		
+		if (code == 'OK'):
+			filename_stamp = outdir_prepare_ref + '/.success'
 
-	functions.print_time_stamp(filename_stamp)
+		functions.print_time_stamp(filename_stamp_prepare)
+
 	return()		
 	
 ##########
 def ariba_prepareref(fasta, metadata, outfolder):
 	## prepareref
-	cmd_prepareref = 'ariba prepareref -f %s -m %s %s' %(fasta, metadata, outfolder)
+	cmd_prepareref = 'ariba prepareref -f %s -m %s %s --threads %s' %(fasta, metadata, outfolder, threads)
 	return(functions.system_call(cmd_prepareref))
 	
 	######################################################################################
