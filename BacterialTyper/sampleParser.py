@@ -321,7 +321,7 @@ def one_file_per_sample(dataFrame, outdir_dict, threads, outdir, Debug=False):
 		merge_details_hd.write('\n')
 		merge_details_hd.write("####################\n")		
 		
-		name_frame.loc [len(name_frame)] = (name[0], outdir_dict[name[0]], name[1], outfile, ext_list[0], gz_list[0])
+		name_frame.loc[len(name_frame)] = (name[0], outdir_dict[name[0]], name[1], outfile, ext_list[0], gz_list[0])
 
 	merge_details_hd.close()
 	return(name_frame)

@@ -74,12 +74,6 @@ def prepare_card_data(database_folder):
 
 	## return folder name
 	return(CARD_folder)
-	
-
-
-
-
-
 
 
 def dead_code():
