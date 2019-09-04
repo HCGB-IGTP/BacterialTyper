@@ -24,6 +24,7 @@ from BacterialTyper import virulence_resistance
 from BacterialTyper import database_generator
 from BacterialTyper import ariba_caller
 from BacterialTyper.modules import sample_prepare
+from BacterialTyper.modules import database
 from BacterialTyper import card_trick_caller
 
 ####################################
@@ -181,7 +182,7 @@ def get_options_db(options):
 		print (colored("**DEBUG: Database to use: " +  option_db + " **", 'yellow'))
 	
 	### get dbs	
-	return (database_generator.getdbs('ARIBA', database2use, option_db, Debug))
+	return (database.getdbs('ARIBA', database2use, option_db, Debug))
 
 ####################################
 def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial):

@@ -56,68 +56,48 @@ subparser_space = subparsers.add_parser(' ', help='')
 #### Databases ####
 ###################
 
-##--------------------- initiate database -------------------- ##
-subparser_initDB = subparsers.add_parser(
-    'initDB',
-    help='Downloads and initiates a database for later use.',
-    description='Given a file with information from known strains this module initiates a database with information from NCBI and other sources: ARIBA databases and kma indexes.',
+##---------------------  database -------------------- ##
+subparser_database = subparsers.add_parser(
+    'database',
+    help='Initiates/updates a database for later use.',
+    description='This module initiates or updates a database with information from multiple sources: NCBI, ARIBA databases, KMA indexes, BUSCO, PubMLST...',
 )
-list_help_options = ('--help_ARIBA', '--help_BUSCO')
-subparser_initDB.add_argument("--path", help="Folder path to generate database.", required= not any(elem in help_options for elem in sys.argv) )
-subparser_initDB.add_argument("--ID_file", help="ID_file is a csv file (include header) containing several columns per row according to the header provided: ##genus,species,name,NCBI_assembly_ID", required= not any(elem in list_help_options for elem in sys.argv) )
-subparser_initDB.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
-subparser_initDB.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+
+initdb_input_options_group = subparser_database.add_argument_group("Input")
+initdb_input_options_group.add_argument("--path", help="Folder path to generate database.", required= not any(elem in help_options for elem in sys.argv) )
+subparser_database.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2) ## for ARIBA prepareref
+
+## NCBI
+initdb_NCBIoptions_group = subparser_database.add_argument_group("NBCI Data")
+initdb_NCBIoptions_group.add_argument("--ID_file", help="CSV file containing several columns per row according to the header provided: ##genus,species,name,NCBI_assembly_ID")
+initdb_NCBIoptions_group.add_argument("--descendant", help="Get related indexed genomes for a given NCBI taxomoy id", type=int)
 
 ## KMA
-initdb_KMAoptions_group = subparser_initDB.add_argument_group("KMA Databases")
-initdb_KMAoptions_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to download. Provide several input if desired. Not compatible with --index_kma. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
+initdb_KMAoptions_group = subparser_database.add_argument_group("KMA Databases")
+initdb_KMAoptions_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to download. Provide several input if desired. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
 initdb_KMAoptions_group.add_argument("--no_def_kma", action="store_true", help="Only applicable if kma_db is ON. It discards default databases (bacteria & plasmids) from kma_db. Only user selected datbases indexed. [Default: OFF]")
-initdb_KMAoptions_group.add_argument("--index_kma", action="store_true", help="Index the genomes downloaded for later usage during species identification. Not compatible with --kma_db options: available databases with broader taxonomic ranges. [Default: OFF]")
+##initdb_KMAoptions_group.add_argument("--index_kma", action="store_true", help="Index the genomes downloaded for later usage during species identification. Not compatible with --kma_db options: available databases with broader taxonomic ranges. [Default: OFF]")
 
 ## ariba
-initdb_ARIBAoptions_group = subparser_initDB.add_argument_group("ARIBA Databases")
+initdb_ARIBAoptions_group = subparser_database.add_argument_group("ARIBA Databases")
 initdb_ARIBAoptions_group.add_argument("--ARIBA_db", dest='ariba_dbs', nargs='*', help="ARIBA database(s) to download. Provide several input if desired. Not compatible with --no_ARIBA. [Default: CARD & VFDB]", choices=['CARD', 'MEGARes', 'VFDB', 'ResFinder', 'PlasmidFinder', 'VirulenceFinder', 'srst2', 'ARG-ANNOT'])
-initdb_ARIBAoptions_group.add_argument("--no_def_ARIBA", action="store_true", help="Only applicable if ARIBA_db is ON. It discards default databases (CARD & VFDB) from ARIBA_db. Only user selected datbases indexed. [Default: OFF]")
-initdb_ARIBAoptions_group.add_argument("--help_ARIBA", action="store_true", help="It prints further information for ARIBA databases. [Default: OFF]")
+initdb_ARIBAoptions_group.add_argument("--no_def_ARIBA", action="store_true", help="It discards default databases (CARD & VFDB) from ARIBA_db. Only user selected databases indexed. [Default: OFF]")
+initdb_ARIBAoptions_group.add_argument("--user_ARIBA_db_fasta", dest='ariba_users_fasta', nargs='*', help="User selected database: fasta sequences. [Default: OFF]")
+initdb_ARIBAoptions_group.add_argument("--user_ARIBA_db_metadata", dest='ariba_users_meta', nargs='*', help="User selected database: metadata. [Default: OFF]") 
 initdb_ARIBAoptions_group.add_argument("--no_ARIBA", action="store_true", help="It prevents downloading ARIBA databases. [Default: OFF]")
 
 ## BUSCO 
-initdb_BUSCOoptions_group = subparser_initDB.add_argument_group("BUSCO Datasets")
+initdb_BUSCOoptions_group = subparser_database.add_argument_group("BUSCO Datasets")
 initdb_BUSCOoptions_group.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option")
-initdb_BUSCOoptions_group.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
 
-subparser_initDB.set_defaults(func=BacterialTyper.modules.database.initial_run)
-##-------------------------------------------------------------##
+## help messages
+info_group_database = subparser_database.add_argument_group("Additional information")
+info_group_database.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+info_group_database.add_argument("--help_ARIBA", action="store_true", help="Print further information for ARIBA databases")
+info_group_database.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
+info_group_database.add_argument("--help_KMA", action="store_true", help="Show additional help on KMA software and options.")
 
-##----------------- update database ncbi---------------------- ##
-subparser_updateDB = subparsers.add_parser(
-    'updateDB',
-    help='Updates database.',
-    description='Given a file with information from known strains this module updates an initiated database with information from NCBI. Other options allow to update database from kma indexes or ARIBA databases.'
-)
-subparser_updateDB.add_argument("--path", help="Folder path to database.", required= not any(elem in help_options for elem in sys.argv) )
-options_group = subparser_updateDB.add_argument_group("Options")
-options_group.add_argument("--ID_file", help="ID_file is a csv file (include header) containing several columns per row according to the header provided: ##genus,species,name,NCBI_assembly_ID")
-options_group.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
-options_group.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-
-## KMA
-updatedb_KMAoptions_group = subparser_updateDB.add_argument_group("KMA Databases")
-updatedb_KMAoptions_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to download. Provide several input if desired. Not compatible with --index_kma. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains'])
-updatedb_KMAoptions_group.add_argument("--no_def_kma", action="store_true", help="Only applicable if kma_db is ON. It discards default databases (bacteria & plasmids) from kma_db. Only user selected datbases indexed. [Default: OFF]")
-updatedb_KMAoptions_group.add_argument("--index_kma", action="store_true", help="Index the genomes downloaded for later usage during species identification. Not compatible with --kma_db options: available databases with broader taxonomic ranges. [Default: OFF]")
-
-## ariba
-updatedb_ARIBAoptions_group = subparser_updateDB.add_argument_group("ARIBA Databases")
-updatedb_ARIBAoptions_group.add_argument("--ARIBA_db", dest='ariba_dbs', nargs='*', help="ARIBA database(s) to download. Provide several input if desired. [Default: CARD & VFDB]", choices=['CARD', 'MEGARes', 'VFDB', 'ResFinder', 'PlasmidFinder', 'VirulenceFinder', 'srst2', 'ARG-ANNOT'])
-updatedb_ARIBAoptions_group.add_argument("--no_def_ARIBA", action="store_true", help="Only applicable if ARIBA_db is ON. It discards default databases (CARD & VFDB) from ARIBA_db. Only user selected datbases indexed. [Default: OFF]")
-updatedb_ARIBAoptions_group.add_argument("--help_ARIBA", action="store_true", help="It prints further information for ARIBA databases. [Default: OFF]")
-
-## BUSCO 
-updatedb_BUSCOoptions_group = subparser_updateDB.add_argument_group("BUSCO Datasets")
-updatedb_BUSCOoptions_group.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option")
-updatedb_BUSCOoptions_group.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
-subparser_updateDB.set_defaults(func=BacterialTyper.modules.database.updateDB_NCBI)
+subparser_database.set_defaults(func=BacterialTyper.modules.database.run)
 ##-------------------------------------------------------------##
 
 ## space
@@ -297,7 +277,7 @@ annotate_mode.add_argument("--detached", action="store_true", help="Isolated mod
 in_out_group_annot = subparser_annotate.add_argument_group("Input/Output")
 in_out_group_annot.add_argument("--input", help="Folder containing a project or assemblies. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv) )
 in_out_group_annot.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
-in_out_group_annot.add_argument("--batch", help="Provide a csv file containing the name and the path for each assembly. No header. Provided it in format: name,tag,file. tag = chromosome/plasmid. e.g. sample1,chromosome,/path/to/sample1/assembly/file.fasta\nsample1,plasmid,/path/to/sample1/assembly/file.fasta")
+##in_out_group_annot.add_argument("--batch", help="Provide a csv file containing the name and the path for each assembly. No header. Provided it in format: name,tag,file. tag = chromosome/plasmid. e.g. sample1,chromosome,/path/to/sample1/assembly/file.fasta\nsample1,plasmid,/path/to/sample1/assembly/file.fasta")
 in_out_group_annot.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_annot.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 

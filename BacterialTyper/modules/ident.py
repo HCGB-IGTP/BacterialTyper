@@ -23,6 +23,8 @@ from BacterialTyper import database_generator
 from BacterialTyper import MLSTar
 from BacterialTyper import edirect_caller
 from BacterialTyper.modules import sample_prepare
+from BacterialTyper.modules import database
+
 
 ####################################
 def run(options):
@@ -319,7 +321,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			## load database on memory
 			print ("+ Loading database on memory for faster identification.")
 			cmd_load_db = "%s shm -t_db %s -shmLvl 1" %(kma_bin, db2use)
-			#return_code_load = functions.system_call(cmd_load_db)
+			return_code_load = functions.system_call(cmd_load_db)
 			
 			## send for each sample
 			commandsSent = { executor.submit(send_kma_job, outdir_dict[name], sorted(cluster["sample"].tolist()), name, db2use, threads_job, cluster): name for name, cluster in sample_frame }
@@ -336,8 +338,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			## remove database from memory
 			print ("+ Removing database from memory...")
 			cmd_rm_db = "%s shm -t_db %s -shmLvl 1 -destroy" %(kma_bin, db2use)
-			#return_code_rm = functions.system_call(cmd_rm_db)
-			return_code_rm = 'OK'
+			return_code_rm = functions.system_call(cmd_rm_db)
 			
 			if (return_code_rm == 'FAIL'):
 				print (colored("***ERROR: Removing database from memory failed. Please do it! Execute command: %s" %cmd_rm_db,'red'))
@@ -481,9 +482,9 @@ def edirect_ident(dataFrame, outdir_dict):
 
 		## get information from edirect call
 		taxa_name_tmp = functions.get_info_file(species_outfile)
-		Oragnism = taxa_name_tmp[0].split(',')[0].split()
-		genus = Oragnism[0] 		## genus
-		species = Oragnism[1] 		## species
+		Organism = taxa_name_tmp[0].split(',')[0].split()
+		genus = Organism[0] 		## genus
+		species = Organism[1] 		## species
 		BioSample_name = taxa_name_tmp[0].split(',')[1]	## BioSample
 		
 		## sometimes strain is missing
@@ -708,7 +709,7 @@ def get_options_db(options):
 		print (colored("**DEBUG: option_db: " +  option_db + " **", 'yellow'))
 	
 	### get dbs	
-	return (database_generator.getdbs("KMA", database2use, option_db, Debug))
+	return (database.getdbs("KMA", database2use, option_db, Debug))
 
 ####################################
 def external_kma(list_files):

@@ -339,16 +339,14 @@ def progbar(curr, total, full_progbar):
 
 ###############
 def get_data(ID_file, SEP, options):	
-	print ("+ Obtaining information from file: ", ID_file)
 	if options == 'index_col=0':
 		data = pd.read_csv(ID_file, sep=SEP, index_col=0)
+		return(data)
 	else:
-		## fix for another example if any
-		print ()
-		
-		
-	return(data)
-
+		data = pd.read_csv(ID_file, sep=SEP)
+		return(data)
+	## fix for another example if any
+	
 ###############
 def get_number_lines(input_file):	
 	with open(input_file) as foo:

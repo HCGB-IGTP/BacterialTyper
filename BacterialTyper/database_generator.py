@@ -13,120 +13,145 @@ import io
 import os
 import re
 import sys
-from sys import argv
-from io import open
 import pandas as pd
 import ncbi_genome_download as ngd
-from Bio import SeqIO
 import shutil
+from sys import argv
+from io import open
 from termcolor import colored
+from Bio import SeqIO
 
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import ariba_caller
 from BacterialTyper import species_identification_KMA
+from BacterialTyper.modules import database
 
 ## import data
 dataDir = os.path.dirname(os.path.realpath(__file__)) + '/../../data/'
 plasmid_groups = dataDir + '/available_plasmids_data.txt'
 
 ##########################################################################################
-def NCBIdownload(data, data2download, folder):	
-	
+def NCBI_DB(ID_file, data_folder, Debug):
+	## get file information
+	strains2get = functions.get_data(ID_file, ',', '')	
+
 	## set index
-	data = data.set_index('NCBI_assembly_ID', drop=False) ## set new index but keep column
-	data.index.names = ['ID'] ## rename index
-	data2download = data2download.set_index('ID')
+	strains2get = strains2get.set_index('NCBI_assembly_ID', drop=False) ## set new index but keep column
+	strains2get.index.names = ['ID'] ## rename index
+
+	#########
+	if Debug:
+		print (colored("DEBUG: NCBI data provided: ", 'yellow'))
+		print (strains2get)
+
+	print ("+ Create the database in folder: \n", data_folder)	
+	data2download=pd.DataFrame(columns=('ID','folder','genus','species','name','genome', 'chr', 'GFF','proteins','plasmids_number','plasmids_ID','plasmids'))
+	#data2download = data2download.set_index('ID')
+	print ()
 	
-	for index, row in data.iterrows():
+	## get data existing database
+	database_df = get_database(data_folder, Debug)
+	
+	#########
+	if Debug:
+		print (colored("DEBUG: NCBI genbank database retrieved: ", 'yellow'))
+		print (database_df)
+	
+	## loop and download
+	for index, row in strains2get.iterrows():
+		functions.print_sepLine("+", 75, False)
+		acc_ID = strains2get.loc[index]['NCBI_assembly_ID']
+		info = "Genus: " + strains2get.loc[index]['##genus'] + '\n' + "Species: " +  strains2get.loc[index]['species'] + '\n' + "Strain: " +  strains2get.loc[index]['name'] + '\n' + "ID accession: " +  acc_ID + '\n'
+		dir_path = data_folder + '/genbank/bacteria/' + acc_ID ## module ngd requires to download data in bacteria subfolder under genbank folder
 
-		acc_ID = data.loc[index]['NCBI_assembly_ID']
-		info = "Genus: " + data.loc[index]['##genus'] + '\n' + "Species: " +  data.loc[index]['species'] + '\n' + "Strain: " +  data.loc[index]['name'] + '\n' + "ID accession: " +  acc_ID + '\n'
-		dir_path = folder + '/genbank/bacteria/' + acc_ID
-		#print (info)
-
-		if acc_ID in data2download.index:
+		## check if already exists
+		if acc_ID in database_df.index:
 			print ("\n+ Data is already available in database for: ")
 			print (colored(info, 'green'))
+
 		else:
-			if os.path.exists(dir_path):
-				## path exist
-				print ("\n+ Data is already downloaded for: ")
-				print (colored(info, 'green'))
-			else:
-				print ("\n+ Downloading data for:")	
-				print (colored(info, 'green'))
-				ngd.download(section='genbank', file_format='fasta,gff,protein-fasta', assembly_accessions=acc_ID, output=folder,  group='bacteria')
+			## download
+			print ("\n+ Downloading data for:")	
+			print (colored(info, 'green'))
+			data_accID = NCBIdownload(acc_ID, strains2get, data_folder)
+			this_db = functions.get_data(data_accID, ',', 'index_col=0')
+			this_db = this_db.set_index('ID')
+			database_df = database_df.append(this_db)
 
+	## Generate/Update database
+	database_csv = data_folder + '/genbank_database.csv'
+	db_updated = update_db_data_file(database_df, database_csv)
+	print ("+ Database has been generated: \n", db_updated)
+	return (db_updated)
 
-			## set database
-			data2download.loc[acc_ID] = '.'
-			data2download.loc[acc_ID]['folder'] = dir_path
-			data2download.loc[acc_ID]['genus'] = data.loc[acc_ID]['##genus']
-			data2download.loc[acc_ID]['species'] = data.loc[acc_ID]['species']
-			data2download.loc[acc_ID]['name'] = data.loc[acc_ID]['name']
-
-			## check if files are gunzip
-			files = os.listdir(dir_path)
-			files_list = []		
-			for f in files:
-				if f.endswith('gz'):
-					files_list.append(f)
-					print ("\t- Extracting files: ", f)
-					functions.extract(dir_path + '/' + f, dir_path)
-					os.remove(dir_path + '/' + f)
-
-			## get files download
-			(genome, prot, gff) = get_files_download(dir_path)
+##########################################################################################
+def NCBIdownload(acc_ID, data, data_folder):	
 	
-			## check if any plasmids downloaded
-			plasmid_count = 0
-			plasmid_id = []
+	## download in data folder provided
+	ngd.download(section='genbank', file_format='fasta,gff,protein-fasta', assembly_accessions=acc_ID, output=data_folder, group='bacteria')
+
+	## module ngd requires to download data in bacteria subfolder under genbank folder
+	dir_path = data_folder + '/genbank/bacteria/' + acc_ID 
+
+	## check if files are gunzip
+	files = os.listdir(dir_path)
+	files_list = []		
+	for f in files:
+		if f.endswith('gz'):
+			files_list.append(f)
+			print ("\t- Extracting files: ", f)
+			functions.extract(dir_path + '/' + f, dir_path)
+			#os.remove(dir_path + '/' + f)
+
+	## get files download
+	(genome, prot, gff) = get_files_download(data_folder)
+
+	## check if any plasmids downloaded
+	plasmid_count = 0
+	plasmid_id = []
+	contig_out_file = dir_path + '/' + acc_ID + '_chromosome.fna'
+	plasmid_out_file = dir_path + '/' + acc_ID + '_plasmid.fna' 
+	
+	## open
+	contig_out_file_handle = open(contig_out_file, 'w')
+	for seq_record in SeqIO.parse(genome, "fasta"):
+		plasmid_search = re.search(r".*plasmid.*", seq_record.description)
+		if plasmid_search:
+			## count and get names for plasmids
+			plasmid_count += 1
+			name = str( seq_record.id )
+			plasmid_id.append(name)
 		
-			contig_out_file = dir_path + '/' + acc_ID + '_chromosome.fna'
-			plasmid_out_file = dir_path + '/' + acc_ID + '_plasmid.fna' 
-			
-			## open
-			contig_out_file_handle = open(contig_out_file, 'w')
-		
-			for seq_record in SeqIO.parse(genome, "fasta"):
-				plasmid_search = re.search(r".*plasmid.*", seq_record.description)
-				if plasmid_search:
-					plasmid_count += 1
-					name = str( seq_record.id )
-					plasmid_id.append(name)
-				
-					plasmid_out_file_handle = open(plasmid_out_file, 'a')
-					plasmid_out_file_handle.write(seq_record.format("fasta"))
-					plasmid_out_file_handle.write('\n')
-					plasmid_out_file_handle.close()
-				else:
-					contig_out_file_handle.write(seq_record.format("fasta"))
-					contig_out_file_handle.write('\n')
-				
-			##
+			### Separate plasmids from main sequence
+			plasmid_out_file_handle = open(plasmid_out_file, 'a')
+			plasmid_out_file_handle.write(seq_record.format("fasta"))
+			plasmid_out_file_handle.write('\n')
+			plasmid_out_file_handle.close()
+		else:
+			contig_out_file_handle.write(seq_record.format("fasta"))
+			contig_out_file_handle.write('\n')
 			contig_out_file_handle.close()
 
-		
-			## populate DB
-			data2download.loc[acc_ID]['genome'] = contig_out_file
-			data2download.loc[acc_ID]['GFF'] = gff
-			data2download.loc[acc_ID]['proteins'] = prot	
-			data2download.loc[acc_ID]['plasmids_number'] = plasmid_count
-			data2download.loc[acc_ID]['plasmids_ID'] = "::".join(plasmid_id)		
-			if plasmid_count > 0:
-				data2download.loc[acc_ID]['plasmids'] = plasmid_out_file
-			else:
-				data2download.loc[acc_ID]['plasmids'] = ""
+	## no plasmids found
+	if plasmid_count == 0:
+		plasmid_out_file = ""
 
-			functions.print_sepLine("+", 75, False)
+	data2download=pd.DataFrame(columns=('ID','folder','genus','species','name','genome', 'chr', 'GFF','proteins','plasmids_number','plasmids_ID','plasmids'))
+	data2download.loc[len(data2download)] = (acc_ID, dir_path, data.loc[acc_ID]['##genus'], data.loc[acc_ID]['species'], data.loc[acc_ID]['name'], genome, contig_out_file, gff, prot, plasmid_count, "::".join(plasmid_id), plasmid_out_file)
 
-			
-	db_updated = update_db_data_file(data2download, folder)
-	db_updated.to_csv(folder + "/database.csv")
-	return(folder + "/database.csv")
+	## dump to file
+	info_file = dir_path + '/info.txt'
+	data2download.to_csv(info_file)
+	
+	## timestamp
+	filename_stamp = dir_path + '/.success'
+	stamp =	functions.print_time_stamp(filename_stamp)
 
+	## return data
+	return(info_file)		
+	
 ##########################################################################################
 def get_files_download(folder):
 	## check if files are gunzip
@@ -145,24 +170,36 @@ def get_files_download(folder):
 	return(genome, prot, gff)			
 
 ##########################################################################################
-def update_database(strains2get_file, folder):
-	## get file information from database
-	database = functions.get_data(folder + '/database.csv', ',')	
-	strains2get = functions.get_data(strains2get_file, ',')	
-	
-	## download
-	data = NCBIdownload(strains2get, database, folder)
-	print ("+ Database has been updated: \n", data)
-	return (data)
+def get_database(folder, Debug):
+	## read database 
+	db_frame = database.getdbs('NCBI', folder, 'genbank', Debug)
+	data4db = pd.DataFrame()
+	for index, row in db_frame.iterrows():
+		print ('+ Reading information for sample: ', db_frame.loc[index]['db'])
+		timestamp = db_frame.loc[index]['path'] + '/.success'
+		if os.path.isfile(timestamp):
+			stamp =	functions.read_time_stamp(timestamp)
+			print (colored("\t+ Data downloaded on: %s" %stamp, 'yellow'))
+
+		this_file = db_frame.loc[index]['path'] + '/info.txt'
+		print (colored("\t+ Obtaining information from file: %s" %this_file, 'yellow'))
+		this_db = functions.get_data(this_file, ',', 'index_col=0')
+		data4db = data4db.append(this_db)
+
+	data4db = data4db.set_index('ID')
+	return(data4db)
 
 ##########################################################################################
-def update_db_data_file(data, folder):
-	if os.path.isfile(folder + "/database.csv"):
-		db2update = pd.read_csv(folder + "/database.csv", header=0)
-		db2update = db2update.set_index('ID')
+def update_db_data_file(data, csv):
+	if os.path.isfile(csv):
+		print ("+ Updating database")
+		print ("+ Obtaining information from database file: %s" %csv)
+		db2update = functions.get_data(csv, ',', 'index_col=0')
 		df = pd.concat([db2update, data], join='inner').drop_duplicates()
+		df.to_csv(csv)
 		return (df)
 	else:
+		data.to_csv(csv)
 		return (data)
 
 
@@ -233,6 +270,36 @@ def update_database_user_data(data, folder):
 	dataUpdated.to_csv(folder + "/database.csv")
 	return(folder + "/database.csv")
 
+##########################################################################################
+def get_files_folder(folder):
+	## check if files are gunzip
+	files = os.listdir(folder)
+	genome=""
+	plasmids=""
+	number=0
+	plasm_ids=[]
+	prot=()
+	gff=()
+
+	for f in files:
+		if f.endswith('plasmid.fna'):
+			plasmids = folder + '/' + f
+			for seq_record in SeqIO.parse(plasmids, "fasta"):
+				number += 1
+				name = str( seq_record.id )
+				plasm_ids.append(name)			
+		elif f.endswith('chromosome.fna'):
+			genome = folder + '/' + f
+		elif f.endswith('.gff'):
+			gff = folder + '/' + f
+		elif f.endswith('.faa'):
+			prot = folder + '/' + f
+			
+	return (genome, prot, gff, plasmids, number, "::".join(plasm_ids))
+
+## Download all genomes from a taxa and descendent
+## https://www.biostars.org/p/302533/	 ## > ncbi.get_descendant_taxa() 
+
 
 ##########################################################################################
 def plasmidID_user_data(folder):
@@ -257,6 +324,7 @@ def plasmidID_db_NCBI(path, name):
 	print ("+ Plasmids are availabe in file: " + plasmids_fna)
 
 	return(plasmids_fna)
+
 
 ##########################################################################################
 def download_plasmid_NCBI(folder, name):
@@ -312,257 +380,17 @@ def download_plasmid_NCBI(folder, name):
 	
 	print ("\n\n+ %s sequences have been downloaded from NCBI belonging to: %s" %(count, names))
 	return(sequence_folder, ids_download)
-		
-##########################################################################################
-def get_files_folder(folder):
-	## check if files are gunzip
-	files = os.listdir(folder)
-	genome=""
-	plasmids=""
-	number=0
-	plasm_ids=[]
-	prot=()
-	gff=()
 
-	for f in files:
-		if f.endswith('plasmid.fna'):
-			plasmids = folder + '/' + f
-			for seq_record in SeqIO.parse(plasmids, "fasta"):
-				number += 1
-				name = str( seq_record.id )
-				plasm_ids.append(name)			
-		elif f.endswith('chromosome.fna'):
-			genome = folder + '/' + f
-		elif f.endswith('.gff'):
-			gff = folder + '/' + f
-		elif f.endswith('.faa'):
-			prot = folder + '/' + f
-			
-	return (genome, prot, gff, plasmids, number, "::".join(plasm_ids))
 
 ##########################################################################################
-def init_DB(ID_file, folder):
-	## get file information
-	strains2get = functions.get_data(ID_file, ',')	
-	print ("+ Create the database in folder: \n", folder)	
-	data2download=pd.DataFrame(columns=('ID','folder','genus','species','name','genome','GFF','proteins','plasmids_number','plasmids_ID','plasmids'))
+def update_database(strains2get_file, folder):
+	## get file information from database
+	database = functions.get_data(folder + '/database.csv', ',')	
+	strains2get = functions.get_data(strains2get_file, ',')	
 	
 	## download
-	data = NCBIdownload(strains2get, data2download, folder)
+	data = NCBIdownload(strains2get, database, folder)
 	print ("+ Database has been updated: \n", data)
 	return (data)
 
-
-##################################################
-def getdbs(source,database_folder, option, debug):
-	## option = kma:archaea,plasmids,bacteria#kma_external:/path/to/file1,/path/to/file2#user_data#genbank **
-	
-	print ("\n\n+ Parsing information to retrieve databases:")
-	print ("+ Reading from database: " + database_folder)
-	## read folders within database
-	files = os.listdir(database_folder) ## ARIBA/KMA_db/genbank/user_data
-	
-	## init dataframe
-	colname = ["source", "db", "path"]
-	db_Dataframe  = pd.DataFrame(columns = colname)
-	
-	## user input
-	dbs2use = []
-	option_list = option.split("#")
-	for option_item in option_list:
-		## debug message
-		if (debug):
-			print (colored("Option item: " + option_item,'yellow'))
-		
-		if (option_item.startswith('kma:')):
-			dbs2use = option_item.split(":")[1].split(",")
-		elif (option_item.startswith('kma_external:')):
-			external = option_item.split(":")[1].split(",")
-			## add to dataframe			
-			for ext in external:
-				name_ext = os.path.basename(ext)
-				db_Dataframe.loc[len(db_Dataframe)] = ['KMA', name_ext, ext]
-		### ARIBA
-		elif (option_item.startswith('ARIBA:')):
-			dbs2use = option_item.split(":")[1].split(",")
-		else:
-			dbs2use.append(option_item) ## add ARIBA, user_data or genbank option if provided
-	
-	## debug message
-	if (debug):
-		print (colored("\ndbs2use:\n\t" + "\n\t".join(dbs2use), 'yellow'))
-	
-	if (source == 'ARIBA'):
-		### get information
-		for dbs in files:
-		
-			#### ARIBA
-			if (dbs == "ARIBA"):
-				ARIBA_dbs = ariba_caller.get_ARIBA_dbs(dbs2use) ## get names
-				for ariba_db in ARIBA_dbs:
-					this_db = database_folder + '/' + dbs + '/' + ariba_db + '_prepareref/'
-					if os.path.exists(this_db):
-						code_check_db = ariba_caller.check_db_indexed(this_db, 'NO')
-						if (code_check_db == True):
-							db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db]
-							print (colored("\t- ARIBA: including information from database: " + ariba_db, 'green'))
-					else:
-						print ("+ Database: ", ariba_db, " is not downloaded...")
-						print ("+ Download now:")
-						folder_db = functions.create_subfolder(ariba_db, database_folder + '/ARIBA')
-						code_db = ariba_caller.ariba_getref(ariba_db, folder_db, debug) ## get names
-					
-						if (code_db == 'OK'):
-							db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db]
-							print (colored("\t- ARIBA: including information from database: " + ariba_db, 'green'))
-
-	elif (source == 'KMA'):
-
-		### get information
-		for dbs in files:
-		
-			#### KMA db
-			if (dbs == "KMA_db"):
-				kma_dbs = os.listdir(database_folder + '/' + dbs)
-				for db in kma_dbs:
-					##
-					if db in dbs2use:
-						this_db = database_folder + '/' + dbs + '/' + db
-						if os.path.exists(this_db):				
-							if (db == 'plasmids'):
-								prefix = '.T'
-							else:
-								prefix = '.ATG'
-
-							this_db_file = this_db + '/' + db + prefix
-							if os.path.isfile(this_db_file + '.comp.b'):
-								db_Dataframe.loc[len(db_Dataframe)] = ['KMA', db, this_db_file]
-								print (colored("\t- KMA_db: including information from database " + db, 'green'))
-							else:
-								print (colored("\t**KMA_db: Database %s was not available." %db, 'red'))
-					else:
-						## debug message
-						if (debug):
-							print (colored("Available but not to use:" + db , 'yellow'))
-
-			#### genbank	
-			elif (dbs == "genbank"):
-				## KMA databases
-				if dbs in dbs2use:
-					print (colored("\t- genbank: including information from different reference strains available.", 'green')) ## include data from NCBI
-					## to do	
-					this_db = database_folder + '/' + dbs 
-					db_Dataframe.loc[len(db_Dataframe)] = ['genbank', 'genbank', this_db]
-				
-			#### user_data
-			elif (dbs == "user_data"):
-				if dbs in dbs2use:
-					print (colored("\t- user_data: including information from user previously generated results", 'green')) ## include user data
-					## to do
-					this_db = database_folder + '/' + dbs 
-					db_Dataframe.loc[len(db_Dataframe)] = ['user_data', 'user_data', this_db]
-		
-		
-		## double check if missing
-		for sets in dbs2use:
-			if db_Dataframe['db'].str.contains(sets).any():
-				continue
-			else:
-				## if missing: call download module
-				print ("+ Download missing KMA_db (%s) provided" %sets)
-				species_identification_KMA.download_kma_database(database_folder + '/KMA_db/' + sets, sets, debug)
-
-				if (db == 'plasmids'):
-					prefix = '.T'
-				else:
-					prefix = '.ATG'
-				
-				this_db_file = database_folder + '/KMA_db/' + sets + '/' + sets + prefix
-				if os.path.isfile(this_db_file + '.comp.b'):
-					db_Dataframe.loc[len(db_Dataframe)] = ['KMA', sets, this_db_file]
-					print (colored("\t- KMA_db: including information from database " + sets, 'green'))
-				else:
-					print (colored("\t**KMA_db: Database %s was not available." %sets, 'red'))
-
-	return (db_Dataframe)
-
-##########################################################################################
-def main():
-	## this code runs when call as a single script
-
-  	## control if options provided or help
-	if len(sys.argv) > 1:
-		print ("")
-	else:
-		help_options()
-		exit()
-	
-	## get arguments provided
-	option = argv[1]
-	folder = os.path.abspath(argv[2])
-	
-	if (option == "init_db"):
-		ID_file = os.path.abspath(argv[3])
-		init_DB(ID_file, folder)
-	elif (option == "update_NCBI"):
-		ID_file = os.path.abspath(argv[3])
-		update_database(ID_file, folder)
-	elif (option == "update_user_data"):
-		ID_file = os.path.abspath(argv[3])
-		update_database_user_data(ID_file, folder)
-	elif (option == "plasmidID_db_NCBI"):
-		plasmidID_db_NCBI(folder, argv[3])
-	elif (option == "plasmidID_user_data"):
-		plasmidID_user_data(folder)
-
-################################################################################
-def help_options():
-
-	print ("\nUSAGE: python %s option database_folder [ID_file]\n"  %os.path.realpath(__file__))
-	print ("+ Option:\n\t|-init_db\n\t|-update_NCBI\n\t|-update_user_data\n\t|-plasmidID_db_NCBI\n\t|-plasmidID_user_data\n")
-	print ("+ database_folder: path to the database [if does not exist will be created]")
-	print ("\n+ ID_file is a CSV file containing different values according to the option:")
-	print ("\n#####################")
-	print (" Option 1: init_db & update_NCBI:")
-	print ("#####################")
-	print ("ID_file format: ##genus,species,name,NCBI_assembly_ID")	
-	print ("---- Example 1 -------")
-	print ("##genus,species,name,NCBI_assembly_ID")
-	print ("Staphylococcus,aureus,MRSA252,GCx_0000001")
-	print ("Staphylococcus,epidermis,strain2,GCx_0000002")
-	print ("Staphylococcus,aureus,strain3,GCx_0000003")
-	print ("----------------------")
-	print ("\n#####################")
-	print (" Option 2: update_own_data:")
-	print ("#####################")
-	print ("ID_file format: ID,folder,genus,species,name")	
-	print ("** If genus,species or names is not known just leave it blank")
-	print ("---- Example 2 -------")	
-	print ("ID,folder,genus,species,name")
-	print ("sample1,/path/to/spades_assembly_folder1/,,,")
-	print ("sample2,/path/to/spades_assembly_folder2/,,,")
-	print ("----------------------")
-	print ("\n#####################")
-	print (" Option 3: plasmidID_db_NCBI")
-	print ("#####################")
-	print ("+ No ID_file provided. ")
-	print ("+ Provide a comma separated string instead with any of the groups below or 'all' to download them all:")
-	functions.get_data(plasmid_groups, ',')
-	print ("\n\n+ Example: python %s plasmidID_db_NCBI database_folder Firmicutes,Alphaproteobacteria" %os.path.realpath(__file__))
-	print ("----------------------")
-	print ("\n#####################")
-	print (" Option 4: plasmidID_user_data")
-	print ("#####################")
-	print ("+ No ID_file provided. ")
-	print ("+ Provide word: user. Plasmids previously identified from user samples would be added to the dabase generated for plasmidID identification.")
-	print ("----------------------")
-
-		
-################################################################################
-if __name__== "__main__":
-	main()
-	
-	
-## Download all genomes from a taxa and descendent
-## https://www.biostars.org/p/302533/	 ## > ncbi.get_descendant_taxa() 
 
