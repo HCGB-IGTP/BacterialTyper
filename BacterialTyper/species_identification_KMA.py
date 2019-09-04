@@ -74,7 +74,7 @@ def download_kma_database(folder, database, debug):
 	## check if already download
 	return_code_down = False
 	if os.path.exists(folder):
-		return_code_down = check_db_indexed(index_name)
+		return_code_down = check_db_indexed(index_name, folder)
 		## debug message
 		if (debug):
 			print (colored("Folder database is already available:" + folder,'yellow'))
@@ -89,7 +89,8 @@ def download_kma_database(folder, database, debug):
 		## debug message
 		if (debug):
 			print (colored("Download files via function wget_download:",'yellow'))
-
+		
+		## connect to url
 		url = ftp_site + database + '.tar.gz'
 		functions.wget_download(url, folder)
 
@@ -132,9 +133,9 @@ def download_kma_database(folder, database, debug):
 		else:
 			print (colored("*** ERROR: Some error ocurred during the downloading and file is corrupted ***", 'red'))
 			return ("Error")
-		
+			
 		## database should be unzipped and containing files...
-		return_code_extract = check_db_indexed(index_name)
+		return_code_extract = check_db_indexed(index_name, folder)
 		
 		if (return_code_extract):
 			print("+ Database (%s) succesfully extracted in folder: %s..." %(database, folder))
@@ -142,9 +143,14 @@ def download_kma_database(folder, database, debug):
 			string = "*** ERROR: Some error ocurred during the extraction of the database (%s). Please check folder (%s) and downloading and file is corrupted ***" %(database, folder)
 			print (colored(string, 'red'))
 			return ("Error")
+		
+		## print timestamp
+		filename_stamp = folder + '/.success'
+		stamp =	functions.print_time_stamp(filename_stamp)
+
 
 ##################################################
-def check_db_indexed(index_name):
+def check_db_indexed(index_name, folder):
 	my_index_list = [".comp.b", ".index.b", ".length.b", ".name", ".seq.b"]
 
 	print ("\t+ Checking if database has been previously indexed...")
@@ -158,7 +164,14 @@ def check_db_indexed(index_name):
 				continue
 			else:
 				return(False)
-			
+	
+	## check if previously assembled and succeeded
+	filename_stamp = folder + '/.success'
+	if os.path.isfile(filename_stamp):
+		stamp =	functions.read_time_stamp(filename_stamp)
+		print (colored("\tDatabase was downloaded on: %s" %stamp, 'yellow'))
+		## [TODO]: Check if necessary to download again after several months/days
+	
 	## dump in screen
 	names = index_name + '.name'
 	count = functions.get_number_lines(names)
@@ -176,7 +189,7 @@ def check_db_indexed(index_name):
 	return(True)
 	
 ##################################################
-def index_database(fileToIndex, kma_bin, index_name, option):
+def index_database(fileToIndex, kma_bin, index_name, option, folder):
 	
 	########################################################################################
 	## 								KMA_index-1.2.2							
@@ -217,7 +230,7 @@ def index_database(fileToIndex, kma_bin, index_name, option):
 		cmd_kma_index = "%s index -i %s -o %s -t_db 2> %s" %(kma_bin, fileToIndex, index_name, logFile)
 
 	functions.system_call(cmd_kma_index)	
-	return_code = check_db_indexed(index_name)
+	return_code = check_db_indexed(index_name, folder)
 	return(return_code)
 
 ########################
