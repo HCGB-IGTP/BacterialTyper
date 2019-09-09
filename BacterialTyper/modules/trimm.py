@@ -21,6 +21,7 @@ from BacterialTyper.modules import sample_prepare
 from BacterialTyper import sampleParser
 from BacterialTyper import functions
 from BacterialTyper import config
+from BacterialTyper.modules import info
 
 ##############################################
 def run(options):
@@ -41,7 +42,7 @@ def run(options):
 		exit()
 	elif (options.help_project):
 		## information for project
-		help.project_help()
+		info.project_help()
 		exit()
 	elif (options.help_multiqc):
 		## information for Multiqc

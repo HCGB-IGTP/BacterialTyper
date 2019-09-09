@@ -45,7 +45,7 @@ def run(options):
 		exit()
 	elif (options.help_project):
 		## information for project
-		help.project_help()
+		info.project_help()
 		exit()
 	elif (options.help_multiqc):
 		## information for Multiqc

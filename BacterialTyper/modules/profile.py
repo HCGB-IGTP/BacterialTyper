@@ -26,6 +26,7 @@ from BacterialTyper import ariba_caller
 from BacterialTyper.modules import sample_prepare
 from BacterialTyper.modules import database
 from BacterialTyper import card_trick_caller
+from BacterialTyper.modules import info
 
 ####################################
 def run(options):
@@ -43,7 +44,7 @@ def run(options):
 
 	if (options.help_project):
 		## information for project
-		help.project_help()
+		info.project_help()
 		exit()
 	
 	if (options.help_ARIBA):
