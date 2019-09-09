@@ -229,19 +229,28 @@ def select_other_samples (project, list_samples, samples_prefix, mode, extension
 							file_name = f_search.group(1) 
 							df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, extensions, mode]	
 					else:
-						## check
-						if mode + '.' in f:
-							if f.endswith(extensions):
-								file_name, ext = os.path.splitext(f)
-								df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, ext, mode]	
+						### get information
+						if mode == 'profile':
+							f_search = re.search(r".*\/(.*)\/%s\/(.*)\_(.*)\_%s$" %(mode,extensions), path_file)
+							if f_search:
+								if f_search.group(1) == f_search.group(2):
+									file_name = f_search.group(2)
+									db_name = f_search.group(3) 
+									df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, db_name, mode]	
+
+						elif mode == 'ident':
+							file_csv = 'ident_summary.csv'
+							f_search = re.search(r".*\/(.*)\/%s\/%s$" %(mode,file_csv), path_file)
+							if f_search:
+								name = f_search.group(1)
+								df_samples.loc[len(df_samples)] = [path_file, dirN, name, 'csv', mode]	
 
 				## detached mode
 				else:
 					if f.endswith(extensions):
 						file_name, ext = os.path.splitext(f)
-						df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, ext, mode]	
+						df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, db_name, mode]	
 					
-	
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: df_samples **", 'yellow'))

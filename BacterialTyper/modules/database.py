@@ -69,39 +69,66 @@ def run(options):
 	##########
 	## NCBI	##
 	##########
-	functions.print_sepLine("*",50, False)
+	## if any NCBI options provided
+	if any ([options.ID_file, options.descendant]):
+		## create folders
+		NCBI_folder = functions.create_subfolder('NCBI', options.path)
+		if (options.ID_file):
+			## get path and check if it is file
+			abs_path_file = os.path.abspath(options.ID_file)
+			if os.path.isfile(abs_path_file):
+				functions.print_sepLine("*",50, False)
+				print ("--------- Check NCBI ids provided ---------\n")
+				## get file information
+				print ("\t+ Obtaining information from file: %s" %abs_path_file)
+				strains2get = functions.get_data(abs_path_file, ',', '')
+				dataBase_NCBI = database_generator.NCBI_DB(strains2get, NCBI_folder, Debug)
 
-	## create folders
-	NCBI_folder = functions.create_subfolder('NCBI', options.path)
-	
-	if (options.ID_file):
-		## get path and check if it is file
-		abs_path_file = os.path.abspath(options.ID_file)
-		if os.path.isfile(abs_path_file):
+				#########
+				if Debug:
+					print (colored("DEBUG: NCBI data provided: ", 'yellow'))
+					print (dataFile)
 
-			print ("--------- Check NCBI ids provided ---------\n")
-			dataFile = database_generator.NCBI_DB(abs_path_file, NCBI_folder, Debug)
+				## functions.timestamp
+				start_time_partial = functions.timestamp(start_time_partial)
+				## strains downloaded would be included to a kma index
 
+		## Get all entries belonging to this taxon provided
+		if (options.descendant):
 			#########
 			if Debug:
-				print (colored("DEBUG: NCBI data provided: ", 'yellow'))
-				print (dataFile)
+				print (colored("DEBUG: NCBI descendant option: ON ", 'yellow'))
+			
+			functions.print_sepLine("*",70, False)
+			print ("--------- Check descendant NCBI taxonomy ids provided ---------\n")
+			dataBase_NCBI = database_generator.NCBI_descendant(options.descendant, NCBI_folder, Debug)
+			
+		## TODO
+		## update KMA database with NCBI information retrieved
+		
+	###############
+	## user_data ##
+	###############	
+	if options.project_folder:
+		## get absolute path
+		abs_project_folder = os.path.abspath(options.project_folder)
+		if os.path.exists(abs_project_folder):
+			#########
+			if Debug:
+				print (colored("DEBUG: User provides folder containing project", 'yellow'))
 
-			## functions.timestamp
-			start_time_partial = functions.timestamp(start_time_partial)
+			functions.print_sepLine("*",70, False)
+			print ("--------- Check user provided project folder ---------\n")
+			dataBase_user = database_generator.update_database_user_data(options.path, abs_project_folder, Debug, options)
+		else:
+			print (colored("ERROR: Folder provided does not exists: %s" %options.project_folder, 'red'))
+			exit()
 
-			## strains downloaded would be included to a kma index
-
-	## Get all entries belonging to this taxon provided
-	if (options.descendant):
-		#########
-		if Debug:
-			print (colored("DEBUG: NCBI descendant option: ON ", 'yellow'))
-							
 	##########
 	## ARIBA
 	##########
-	print ("\n--------- Check ARIBA parameters provided ---------")
+	functions.print_sepLine("*",50, False)
+	print ("--------- Check ARIBA parameters provided --------")
 	if (options.no_ARIBA):
 		print ("+ No ARIBA databases would be downloaded...")
 		
@@ -150,7 +177,7 @@ def run(options):
 	#########
 	print ()
 	functions.print_sepLine("*",50, False)
-	print ("--------- Check KMA parameters provided ---------")
+	print ("--------- Check KMA parameters provided ----------")
 	kma_database = options.path + '/KMA_db'	
 	functions.create_folder(kma_database)
 	
@@ -199,7 +226,9 @@ def run(options):
 	## BUSCO ##
 	###########
 	if (options.BUSCO_dbs):
-		print ("\n--------- Check BUSCO datasets provided ---------")
+		print ()
+		functions.print_sepLine("*",50, False)
+		print ("--------- Check BUSCO datasets provided ---------")
 		BUSCO_folder = functions.create_subfolder("BUSCO", options.path)
 
 		#########
@@ -211,14 +240,6 @@ def run(options):
 
 		### timestamp
 		start_time_partial = functions.timestamp(start_time_partial)					
-
-
-	###############
-	## user_data ##
-	###############
-
-
-
 
 	print ("\n*************** Finish *******************\n")
 	start_time_partial = functions.timestamp(start_time_total)
@@ -247,34 +268,26 @@ def getdbs(source, database_folder, option, debug):
 		## debug message
 		if (debug):
 			print (colored("Option item: " + option_item,'yellow'))
-		
 		if (option_item.startswith('kma:')):
 			dbs2use = option_item.split(":")[1].split(",")
-		
 		elif (option_item.startswith('kma_external:')):
 			external = option_item.split(":")[1].split(",")
-		
 			## add to dataframe			
 			for ext in external:
 				name_ext = os.path.basename(ext)
 				db_Dataframe.loc[len(db_Dataframe)] = ['KMA', name_ext, ext]
-		
 		### ARIBA
 		elif (option_item.startswith('ARIBA:')):
 			dbs2use = option_item.split(":")[1].split(",")
-		
 		### NCBI: genbank
 		elif (option_item.startswith('genbank')):
 			dbs2use.append('genbank')
-
 		### NCBI: taxonomy ID
 		elif (option_item.startswith('tax_id')):
 			dbs2use.append('taxonomy_id')
-
 		### user_data
 		elif (option_item.startswith('user_data')):
 			dbs2use.append('user_data')
-
 		else:
 			dbs2use.append(option_item) ## add ARIBA, user_data or genbank option if provided
 	
@@ -303,7 +316,6 @@ def getdbs(source, database_folder, option, debug):
 				print ("+ Download now:")
 				folder_db = functions.create_subfolder(ariba_db, database_folder + '/ARIBA')
 				code_db = ariba_caller.ariba_getref(ariba_db, folder_db, debug, 2) ## get names 
-			
 				if (code_db == 'OK'):
 					db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db]
 					print (colored("\t- ARIBA: including information from database: " + ariba_db, 'green'))
@@ -354,7 +366,6 @@ def getdbs(source, database_folder, option, debug):
 							if os.path.isfile(this_db_file + '.comp.b'):
 								db_Dataframe.loc[len(db_Dataframe)] = ['KMA', db, this_db_file]
 								print (colored("\t- KMA_db: including information from database " + db, 'green'))
-							
 							else:
 								print (colored("\t**KMA_db: Database %s was not available." %db, 'red'))
 
@@ -391,7 +402,7 @@ def getdbs(source, database_folder, option, debug):
 		db2use_abs = functions.create_subfolder(dbs2use[0], database_folder)
 
 		user_entries = os.listdir(db2use_abs)
-		for entry in genbank_entries:
+		for entry in user_entries:
 			this_db = db2use_abs + '/' + entry
 			db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, this_db]
 		

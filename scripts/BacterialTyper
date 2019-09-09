@@ -68,9 +68,17 @@ initdb_input_options_group.add_argument("--path", help="Folder path to generate 
 subparser_database.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2) ## for ARIBA prepareref
 
 ## NCBI
-initdb_NCBIoptions_group = subparser_database.add_argument_group("NBCI Data")
+initdb_NCBIoptions_group = subparser_database.add_argument_group("NCBI Data")
 initdb_NCBIoptions_group.add_argument("--ID_file", help="CSV file containing several columns per row according to the header provided: ##genus,species,name,NCBI_assembly_ID")
 initdb_NCBIoptions_group.add_argument("--descendant", help="Get related indexed genomes for a given NCBI taxomoy id", type=int)
+
+## user_data
+initdb_user_data_options_group = subparser_database.add_argument_group("Project data")
+initdb_user_data_options_group.add_argument("--project_folder", help="Folder containing previously identified samples under mode --project. For more information check --help_Database or --help_project option")
+initdb_user_data_options_group.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
+initdb_user_data_options_group.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+initdb_user_data_options_group.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+initdb_user_data_options_group.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 
 ## KMA
 initdb_KMAoptions_group = subparser_database.add_argument_group("KMA Databases")
@@ -93,9 +101,11 @@ initdb_BUSCOoptions_group.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', narg
 ## help messages
 info_group_database = subparser_database.add_argument_group("Additional information")
 info_group_database.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+info_group_database.add_argument("--help_Database", action="store_true", help="Print further information for this database module")
 info_group_database.add_argument("--help_ARIBA", action="store_true", help="Print further information for ARIBA databases")
 info_group_database.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
 info_group_database.add_argument("--help_KMA", action="store_true", help="Show additional help on KMA software and options.")
+info_group_database.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
 
 subparser_database.set_defaults(func=BacterialTyper.modules.database.run)
 ##-------------------------------------------------------------##

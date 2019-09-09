@@ -26,7 +26,11 @@ merge = False
 def get_files(options, input_dir, mode, extension):
 	## get list of input files
 	files = []
-	print ('+ Get input folder(s)')
+	
+	print ()
+	functions.print_sepLine("-",50, False)
+	print ('+ Mode: ', mode,'. Extension:', extension)
+	print ('+ Get input folder(s). ')
 	if (options.project):
 		### a folder containing a project is provided
 		if os.path.exists(input_dir):
@@ -121,7 +125,8 @@ def get_files(options, input_dir, mode, extension):
 	files = [s for s in files if 'hmmer_output' not in s]
 	files = [s for s in files if 'configs' not in s]
 	files = [s for s in files if '00.0_0.cor.fastq.gz' not in s]
-	
+	files = [s for s in files if 'report_summary' not in s]
+		
 	## files list...
 	if (options.debug):
 		print (colored("\n**DEBUG: sample_prepare.get_files files list to check **", 'yellow'))
@@ -131,7 +136,7 @@ def get_files(options, input_dir, mode, extension):
 	if mode in ['fastq', 'trim']:
 		pd_samples_retrieved = sampleParser.select_samples(files, samples_names, options.pair, exclude, merge, options.debug)
 	else:
-		pd_samples_retrieved = sampleParser.select_other_samples(options.project, files, samples_names, mode, extension, exclude, options.debug)
+		pd_samples_retrieved = sampleParser.select_other_samples(options.project, files, samples_names, mode, extension, exclude, options.debug)		
 		
 	return(pd_samples_retrieved)
 
