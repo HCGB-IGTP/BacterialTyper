@@ -192,6 +192,8 @@ def get_database(db_frame, Debug):
 			this_db = functions.get_data(this_file, ',', 'index_col=0')
 			data4db = data4db.append(this_db)
 
+		functions.print_sepLine("*",25, False)
+
 	## index by ID
 	if not data4db.empty:
 		data4db = data4db.set_index('ID')
@@ -201,10 +203,12 @@ def get_database(db_frame, Debug):
 ##########################################################################################
 def update_db_data_file(data, csv):
 	if os.path.isfile(csv):
-		print ("+ Updating database")
+		print ("\n+ Updating database")
 		print ("+ Obtaining information from database file: %s" %csv)
 		db2update = functions.get_data(csv, ',', 'index_col=0')
-		df = pd.concat([db2update, data], join='inner').drop_duplicates()
+		
+		## TODO: join and provide preference to db2update
+		df = pd.concat([db2update, data], join='inner', sort=True).drop_duplicates()
 		df.to_csv(csv)
 		return (df)
 	else:
@@ -251,11 +255,11 @@ def get_userData_info(options, project_folder):
 		## additional information: MGE, etc
 
 	## get profile information
-	pd_samples_profile = sample_prepare.get_files(options, project_folder, "profile", "summary.csv")
+	pd_samples_profile = sample_prepare.get_files(options, project_folder, "profile", ["csv"])
 	pd_samples_profile = pd_samples_profile.set_index('name')
 
 	## get identification information
-	pd_samples_ident = sample_prepare.get_files(options, project_folder, "ident", "summary.csv")
+	pd_samples_ident = sample_prepare.get_files(options, project_folder, "ident", ["csv"])
 	pd_samples_ident = pd_samples_ident.set_index('name')
 
 	## add other if necessary
@@ -269,7 +273,7 @@ def get_userData_info(options, project_folder):
 		## add other if necessary
 	
 	## merge
-	df = pd.concat([pd_samples_profile, pd_samples_ident], join='inner').drop_duplicates()
+	df = pd.concat([pd_samples_profile, pd_samples_ident], join='inner', sort=True).drop_duplicates()
 	## joining by inner we only get common columns among all
 
 	return(df)
@@ -277,7 +281,7 @@ def get_userData_info(options, project_folder):
 ##########################################################################################
 def update_database_user_data(database_folder, project_folder, Debug, options):
 
-	print ("+ Updating information from user data folder:")
+	print ("\n+ Updating information from user data folder:")
 	print (project_folder)
 	
 	## create folder
@@ -375,7 +379,6 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 			profile_files = cluster.loc[cluster['tag'] == 'profile']['sample'].to_list()
 			for f in profile_files:
 				shutil.copy(f, profile_dir)
-
 			
 			############################################
 			### Dump information
@@ -400,6 +403,10 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 			functions.print_sepLine("+", 75, False)
 
 	## update db		
+	if (options.debug):
+		print (colored("**DEBUG: user_data_db dataframe **", 'yellow'))
+		print (user_data_db)
+	
 	database_csv = own_data + '/user_database.csv'
 	dataUpdated = update_db_data_file(user_data_db, database_csv)
 	print ("+ Database has been generated: \n", database_csv)

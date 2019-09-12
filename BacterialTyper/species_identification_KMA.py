@@ -169,7 +169,7 @@ def check_db_indexed(index_name, folder):
 	filename_stamp = folder + '/.success'
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print (colored("\tDatabase was downloaded on: %s" %stamp, 'yellow'))
+		print (colored("\tDatabase was generated on: %s" %stamp, 'yellow'))
 		## [TODO]: Check if necessary to download again after several months/days
 	
 	## dump in screen
@@ -189,7 +189,7 @@ def check_db_indexed(index_name, folder):
 	return(True)
 	
 ##################################################
-def index_database(fileToIndex, kma_bin, index_name, option, folder):
+def index_database(fileToIndex, kma_bin, index_name, option, folder, type_option):
 	
 	########################################################################################
 	## 								KMA_index-1.2.2							
@@ -220,18 +220,108 @@ def index_database(fileToIndex, kma_bin, index_name, option, folder):
 	#	-h			Shows this help message
 	#######################################################################################
 	
-	logFile = index_name + '.log'
+	##
+	if os.path.isfile(index_name):
+		index_file_name = index_name
+	else:
+		index_file_name = folder + '/' + index_name
+		
+	logFile = index_file_name + '.log'
 	
+	## single file
+	if (type_option == 'batch'):
+		type_option = '-batch'
+	else:
+		type_option = '-i'
+	
+	## new or add to existing db
 	if (option == "new"):
 		print ("\n+ Generate and index database for kmer alignment search...\n")
-		cmd_kma_index = "%s index -i %s -o %s 2> %s" %(kma_bin, fileToIndex, index_name, logFile)
+		cmd_kma_index = "%s index %s %s -o %s 2> %s" %(kma_bin, type_option, fileToIndex, index_file_name, logFile)
 	elif (option == "add"):
 		print ("\n+ Updating database with new entries...\n")
-		cmd_kma_index = "%s index -i %s -o %s -t_db 2> %s" %(kma_bin, fileToIndex, index_name, logFile)
+		cmd_kma_index = "%s index %s %s -o %s -t_db %s 2> %s" %(kma_bin, type_option, fileToIndex, index_file_name, index_file_name, logFile)
 
-	functions.system_call(cmd_kma_index)	
-	return_code = check_db_indexed(index_name, folder)
+	code = functions.system_call(cmd_kma_index)	
+	if code == 'FAIL':
+		print (colored("Database generated an error during the index: %s" %index_name, 'red'))
+		print (colored("Stop.", 'red'))
+		exit()
+		
+	return_code = check_db_indexed(index_file_name, folder)
 	return(return_code)
+
+##################################################
+def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma_bin):
+
+	print ('+ Updating the KMA database: ', name)			
+
+	## check
+	if len(file_abs_paths) > 1:
+
+		## read db in fold_name and get index files
+		info = fold_name + '/' + name + '.db'
+		
+		## 
+		lineList = []
+		toIndexList = []
+		indexedList = []
+		
+		###
+		if os.path.exists(info):
+			lineList = functions.readList_fromFile(info)
+			option = 'add'
+
+		for f in file_abs_paths:
+			file_name = f
+			baseName = os.path.basename(file_name)
+			
+			## check if already index
+			if baseName in lineList:
+				print (colored('+ File %s is already available in database %s' %(baseName, name), 'green'))
+				indexedList.append(file_name)
+			else:
+				toIndexList.append(file_name)		
+		
+		if toIndexList:
+			## generate batch and call
+			info2 = fold_name + '/batch_entries.txt'
+			functions.printList2file(info2, toIndexList)
+			status = index_database(info2, kma_bin, name, option, fold_name, type_option)
+			
+			final_list = set(lineList + toIndexList + indexedList)
+			final_list_name = [os.path.basename(f) for f in final_list]
+			functions.printList2file(info, final_list_name)
+			count_files = len(toIndexList)
+			print ('+ %s sequences have been added to the database' %count_files)
+
+		else:
+			print ('\n+ No new sequences were added to the database.')
+			return (fold_name + '/' + name)			
+		
+	else:
+		file_name = file_abs_paths[0]
+		
+		## check if previously indexed
+		status = check_db_indexed(file_name, fold_name)
+		if (status): #true
+			## debug message
+			if (Debug):
+				print (colored("**DEBUG: Database (%s) is indexed" %file_name + " **", 'yellow'))
+			return (file_name)
+		
+		else: #false
+			## debug message
+			if (Debug):
+				print (colored("**DEBUG: Database (%s) is not indexed" %file_name + " **", 'yellow'))
+			
+			status = index_database(file_name, kma_bin, file_name, option, fold_name, type_option)
+
+	## return
+	if (status): #true
+		return (file_name)
+	else:
+		return False
 
 ########################
 #### IDENTIFICATION	####
@@ -260,7 +350,7 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads):
 		return('OK')
 	else:
 		return('FAIL')
-	
+
 ##################################################
 def kma_ident_module(out_file, files, sample_name, index_name, threads):
 	## kma_ident_call

@@ -41,15 +41,15 @@ def help_MLSTar():
 	print ("")
 
 ##########################################
-def run_MLSTar(database_folder, rscript, species, scheme, name, path, fileGiven, threads):
+def run_MLSTar(species_mlst_folder, rscript, species, scheme, name, path, fileGiven, threads):
 	
 	## fileGiven = fasta file
 
 	## PubMLST folder
-	pubmlst_folder = functions.create_subfolder('PubMLST', database_folder)
+	#pubmlst_folder = functions.create_subfolder('PubMLST', database_folder)
 	
 	## species folder
-	species_mlst_folder = functions.create_subfolder(species, pubmlst_folder)
+	#species_mlst_folder = functions.create_subfolder(species, pubmlst_folder)
 	
 	## scheme folder
 	scheme_name = 'scheme_' + str(scheme)

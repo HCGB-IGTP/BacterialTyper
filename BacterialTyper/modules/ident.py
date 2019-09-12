@@ -134,7 +134,7 @@ def run(options):
 	start_time_partial = functions.timestamp(start_time_partial)
 	
 	######## MLST identification
-	MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, dataFrame_edirect)
+	MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, dataFrame_edirect, retrieve_databases)
 
 	## functions.timestamp
 	start_time_partial = functions.timestamp(start_time_partial)
@@ -164,7 +164,10 @@ def run(options):
 	else:
 		final_dir = outdir
 
+	###
 	excel_folder = functions.create_subfolder("samples", final_dir)
+	print ('+ Print summary results in folder: ', final_dir)
+	print ('+ Print sample results in folder: ', excel_folder)
 	
 	# Group dataframe results summary by sample name
 	sample_results_summary = dataFrame_kma.groupby(["Sample"])
@@ -193,8 +196,6 @@ def run(options):
 		## read MLST
 		if MLST_results:
 			sample_MLST = pd.read_csv(MLST_results[name], header=0, sep=',')
-			print (sample_MLST)
-
 			sample_MLST['genus'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'genus'].values[0]
 			sample_MLST['species'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'species'].values[0]
 			sample_MLST.to_excel(writer_sample, sheet_name="MLST") ## write excel handle
@@ -207,6 +208,7 @@ def run(options):
 
 	##
 	name_excel = final_dir + '/identification_summary.xlsx'
+	print ('+ Summary information in excel file: ', name_excel)
 	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') ## open excel handle
 
 	## KMA dataframe: print result for sources
@@ -263,6 +265,7 @@ def run(options):
 		## dataFrame_edirect
 		## assembly, annotation, etc...
 		## rerun identification with new updated database
+
 	else:
 		print ("+ No update of the database has been requested using option --fast")
 		
@@ -283,9 +286,11 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	databases2use = []
 	for	index, db2use in retrieve_databases.iterrows():
 		## index_name
-		if (db2use['source'] == 'KMA'):
+		if (str(db2use['source']).startswith('KMA')):
 			print ('+ Check database: ' + db2use['db'])
-			index_status = species_identification_KMA.check_db_indexed(db2use['path'] )
+			fold_name = os.path.dirname(db2use['path'])
+			
+			index_status = species_identification_KMA.check_db_indexed(db2use['path'], fold_name )
 			if (index_status == True):
 				print (colored("\t+ Databases %s seems to be fine...\n\n" % db2use['db'], 'green'))
 				databases2use.append(db2use['path'])
@@ -444,6 +449,10 @@ def get_outfile(output_dir, name, index_name):
 ####################################
 def edirect_ident(dataFrame, outdir_dict):
 	
+	################################################
+	## TODO: What to do if multi-isolate sample?
+	################################################
+
 	## edirect	
 	functions.boxymcboxface("EDirect information")
 	print ("+ Connect to NCBI to get information from samples identified...")
@@ -457,10 +466,6 @@ def edirect_ident(dataFrame, outdir_dict):
 	for name, grouped in sample_results:
 		## use edirect to get Species_name and entry for later identification
 		edirect_folder = functions.create_subfolder('edirect', outdir_dict[name])
-		
-		################################################
-		## TODO: What to do if multi-isolate sample?
-		################################################
 		
 		## chromosome match
 		nucc_entry = grouped.loc[grouped['Database'] == 'bacteria.ATG']['#Template'].values[0].split()
@@ -483,8 +488,8 @@ def edirect_ident(dataFrame, outdir_dict):
 		## get information from edirect call
 		taxa_name_tmp = functions.get_info_file(species_outfile)
 		Organism = taxa_name_tmp[0].split(',')[0].split()
-		genus = Organism[0] 		## genus
-		species = Organism[1] 		## species
+		genus = Organism[0] 							## genus
+		species = Organism[1] 							## species
 		BioSample_name = taxa_name_tmp[0].split(',')[1]	## BioSample
 		
 		## sometimes strain is missing
@@ -505,8 +510,14 @@ def edirect_ident(dataFrame, outdir_dict):
 	return (edirect_frame)
 
 ####################################
-def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect):
+def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_databases):
 	## Add MLST Information
+
+	## TODO: Samples might not be assembled...to take into account and return 0
+	## TODO: Fix and install MLSTar during installation
+	## TODO: What to do if multi-isolate sample?
+	## TODO: Control if a different profile is provided via --MLST_profile
+	## TODO: Check time passed and download again if >?? days passed]
 
 	## debug message
 	if (Debug):
@@ -521,46 +532,42 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect):
 	input_dir = os.path.abspath(options.input)
 	assembly_samples_retrieved = sample_prepare.get_files(options, input_dir, "assembly", "fna")
 
-	## TODO: Samples might not be assembled...to take into account
-
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: assembly_samples_retrieved**", 'yellow'))
 		print (assembly_samples_retrieved)	
 	
-	## PubMLST folder
-	path_database = os.path.abspath(options.database)
-	pubmlst_folder = functions.create_subfolder('PubMLST', path_database)
-	
 	########################################################################################
-	## TODO: Fix and install MLSTar during installation
 	rscript = "/soft/general/R-3.5.1-bioc-3.8/bin/Rscript" ##config.get_exe("Rscript") 
 	########################################################################################
 
 	# init
 	MLST_results = {}
-
-	## Generate MLST call according to species identified for each sample
-	## TODO: What to do if multi-isolate sample?
+		
+	## get MLST_profile: default or provided
+	mlst_profile = retrieve_databases.loc[ retrieve_databases['db'] == 'PubMLST']['path'].item()
 	
+	## Generate MLST call according to species identified for each sample
 	for index, row in dataFrame_edirect.iterrows():
 		MLSTar_taxa_name = MLSTar.get_MLSTar_species(row['genus'], row['species'] )
 		
 		if (MLSTar_taxa_name == 'NaN'):
-			continue
-		
+			continue		
 		## species folder
-		species_mlst_folder = functions.create_subfolder(MLSTar_taxa_name, pubmlst_folder)
-
+		#species_mlst_folder = functions.create_subfolder(MLSTar_taxa_name, pubmlst_folder)
+		species_mlst = mlst_profile.split(',')[0]
+		species_mlst_folder = mlst_profile.split(',')[1]
+		
 		## output file
 		output_file = species_mlst_folder + '/PubMLST_available_scheme.csv'
 		filename_stamp = species_mlst_folder + '/.success_scheme'
-				
-		if os.path.isfile(filename_stamp):
-			stamp =	functions.read_time_stamp(filename_stamp)
-			print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
-			# [TODO: Check time passed and download again if >?? days passed]
-			
+		
+		## 
+		if MLSTar_taxa_name == species_mlst:		
+			if os.path.isfile(filename_stamp):
+				stamp =	functions.read_time_stamp(filename_stamp)
+				print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+
 		else: 
 			### get scheme available
 			MLSTar.getPUBMLST(MLSTar_taxa_name, rscript, output_file)
@@ -574,19 +581,67 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect):
 			if cluster['len'] < 10:
 				scheme2use = int(cluster['scheme'])
 				continue			
-		
 		### 
 		sample = row['sample']
 		MLSTar_folder = functions.create_subfolder('MLST', outdir_dict[sample])
 		genome_file = assembly_samples_retrieved.loc[assembly_samples_retrieved['name'] == sample]['sample'].values[0]
 
 		## call MLST
-		(results, profile_folder) = MLSTar.run_MLSTar(path_database, rscript, MLSTar_taxa_name, scheme2use, sample, MLSTar_folder, genome_file, options.threads)
+		(results, profile_folder) = MLSTar.run_MLSTar(species_mlst_folder, rscript, MLSTar_taxa_name, scheme2use, sample, MLSTar_folder, genome_file, options.threads)
 		MLST_results[sample] = results
 
 	##	
 	print ("+ Finish this step...")
 	return (MLST_results)
+
+####################################
+def get_kma_db(kma_dbs):
+	print ('\t- Selecting kma databases:')
+	kma_dbs_string = ','.join(kma_dbs)
+	option_db = "kma:" + kma_dbs_string
+	
+	for i in kma_dbs:
+		print (colored('\t\t+ %s' %i, 'green'))
+
+	return(option_db)
+
+####################################
+def get_external_kma(kma_external_files, Debug):
+	print ('\t- Get additional kma databases:')
+	## external sequences provided are indexed and generated in the same folder provided 
+	
+	option_db = ""
+	if (kma_external_files):
+		kma_external_files = set(kma_external_files)		
+		kma_external_files = [os.path.abspath(f) for f in kma_external_files]	
+		
+		## check if indexed and/or index if necessary
+		external_kma_dbs_list = []
+		
+		## set defaults
+		kma_bin = config.get_exe("kma")
+		for f in kma_external_files:
+			file_name = os.path.basename(f)
+			fold_name = os.path.dirname(f)
+			print (colored('\t\t+ %s' %file_name, 'green'))
+			print ()
+
+			## generate db
+			databaseKMA = species_identification_KMA.generate_db([f], file_name, fold_name, 'new', 'single', Debug, kma_bin)
+			if not databaseKMA:
+				print (colored("***ERROR: Database provided is not indexed.\n" %databaseKMA,'orange'))
+			else:
+				external_kma_dbs_list.append(databaseKMA)
+			
+		external_kma_dbs_string = ','.join(external_kma_dbs_list)
+		option_db = "kma_external:" + external_kma_dbs_string
+
+	else:
+		## rise error & exit
+		print (colored("***ERROR: No database provided via --kma_external_file option.\n",'red'))
+		exit()
+
+	return(option_db)				
 
 ####################################
 def get_options_db(options):
@@ -607,8 +662,26 @@ def get_options_db(options):
 	## according to user input: select databases to use
 	option_db = ""
 	
-	## Default
-	kma_dbs = ["bacteria", "plasmids"]
+	############################################################
+	## Default db KMA
+	############################################################
+	kma_dbs = []
+	if not options.only_kma_db: ## exclusive
+		kma_dbs = ["bacteria", "plasmids"]
+	
+	if (options.kma_dbs):
+		options.kma_dbs = options.kma_dbs + kma_dbs
+		options.kma_dbs = set(options.kma_dbs)		
+	else:
+		options.kma_dbs = kma_dbs
+
+	## rise error & exit if no dbs provided
+	if not (options.kma_dbs):
+		print (colored("***ERROR: No database provided via --kma_db option.\n",'red'))
+		exit()
+	############################################################
+
+	### Options:
 	
 	############
 	## 1) only user data: previously identified and added
@@ -623,129 +696,73 @@ def get_options_db(options):
 		option_db = "genbank"
 	
 	############
-	## 3) only kma_db
-	############
-	elif (options.only_kma_db):
-		print ('\t- Selecting kma databases:')
-		if (options.kma_dbs):
-			options.kma_dbs = set(options.kma_dbs)
-			kma_dbs_string = ','.join(options.kma_dbs)
-			option_db = "kma:" + kma_dbs_string
-		else:
-			## rise error & exit
-			print (colored("***ERROR: No database provided via --kma_db option.\n",'red'))
-			exit()
-		
-	############
-	## 4) only external kma
+	## 3) only external kma
 	############
 	elif (options.only_external_kma):
-		print ('\t- Get additional kma databases:')
-		if (options.kma_external_files):
-			options.kma_external_files = set(options.kma_external_files)		
-
-			## check if indexed and/or index if necessary
-			external_kma_dbs_list = external_kma(options.kma_external_files) ## fix
-			external_kma_dbs_string = ','.join(external_kma_dbs_list)
-			option_db = "kma_external:" + external_kma_dbs_string
-
-		else:
-			## rise error & exit
-			print (colored("***ERROR: No database provided via --kma_external_file option.\n",'red'))
-			exit()
-			
+		option_db = get_external_kma(options.kma_external_files, Debug)
 		## rise attention
 		if (options.kma_dbs):
 			print (colored("***ATTENTION:\nDefatult databases and databases provided via --kma_dbs option would not be used as --only_external_kma option provided.\n",'red'))
 
-	############
-	## 5) all databases 
-	############
-	elif (options.all_data):
-	
-		############
-		## default dbs + user kma dbs 
-		############
+	#################
+	## all databases 
+	#################
+	else:		
+		####################
+		## default KMA dbs
+		####################
+		option_db = get_kma_db(options.kma_dbs)
 		
-		print ('\t- Selecting kma databases:')
-		if (options.kma_dbs):
-			options.kma_dbs = options.kma_dbs + kma_dbs
-			options.kma_dbs = set(options.kma_dbs)		
-		else:
-			options.kma_dbs = kma_dbs
-
-		kma_dbs_string = ','.join(options.kma_dbs)
-		option_db = "kma:" + kma_dbs_string
-		
-		for i in options.kma_dbs:
-			print (colored('\t\t+ %s' %i, 'green'))
-		
-		############
+		#################
 		## External file
-		############
+		#################
 		if (options.kma_external_files):
-			print ('\n\n\t- Get additional kma databases:')
-			options.kma_external_files = set(options.kma_external_files)		
+			option_db_tmp = get_external_kma(options.kma_external_files, Debug)
+			option_db = option_db + '#' + option_db_tmp
 			
-			## check if indexed and/or index if necessary
-			external_kma_dbs_list = external_kma(options.kma_external_files) ## fix
-			external_kma_dbs_string = ','.join(external_kma_dbs_list)
-			option_db = option_db + "#kma_external:" + external_kma_dbs_string
-
-		############
+		#############################
 		## Previously identified data
-		############
-		#if (options.user_data):
-		option_db = option_db + '#user_data'
-		
-		############
+		#############################
+		if any([options.user_data, options.all_data]):
+			option_db = option_db + '#kma_user_data:user_data'
+	
+		#############################
 		## Genbank reference data
-		############
-		#if (options.genbank_data):
-		option_db = option_db + '#genbank'
+		#############################
+		if any([options.genbank_data, options.all_data]):
+			option_db = option_db + '#kma_NCBI:genbank'
 
+	###############
+	### PubMLST ###
+	###############
+	print ("\n\t - Select MLST profiles")	
+	option_db_PubMLST = 'MLST:PubMLST'
+	print (colored("\t\t + Default MLST profile under database provided: PubMLST", 'green'))
+
+	if options.MLST_profile:
+		## user provides a PubMLST profile
+		options.MLST_profile = os.path.abspath(options.MLST_profile)
+		option_db_PubMLST = option_db_PubMLST + '#MLST:'	+ options.MLST_profile
+		print (colored("\t\t + User provided MLST profile: %s" %options.MLST_profile, 'green'))
+	
+	###############
+	### get dbs
+	###############
+	print ("\n+ Parsing information to retrieve databases")
+	print ("+ Reading from database: " + database2use)
+	functions.print_sepLine("-",50, False)
+
+	###############
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: option_db: " +  option_db + " **", 'yellow'))
-	
-	### get dbs	
-	return (database.getdbs("KMA", database2use, option_db, Debug))
+		print (colored("**DEBUG: option_db_PubMLST : " +  option_db_PubMLST  + " **", 'yellow'))
 
-####################################
-def external_kma(list_files):
-	
-	## set defaults
-	kma_bin = config.get_exe("kma")
-	
-	external_file_returned = []
-	for f in list_files:
-		f = os.path.abspath(f)
-		print (colored('\t+ %s' %f, 'green'))
-		status = species_identification_KMA.check_db_indexed(f)
-		if (status): #true
-			external_file_returned.append(f)
-			## debug message
-			if (Debug):
-				print (colored("**DEBUG: Database (%s) is indexed" %f + " **", 'yellow'))
-			
-		else: #false
-			## debug message
-			if (Debug):
-				print (colored("**DEBUG: Database (%s) is not indexed" %f + " **", 'yellow'))
+	pd_KMA = database.getdbs("KMA", database2use, option_db, Debug)
+	pd_PubMLST = database.getdbs("MLST", database2use, option_db_PubMLST, Debug)
 
-			dataBase = os.path.abspath(f)
-			basename_name = os.path.basename(dataBase)
-			
-			## debug message
-			if (Debug):
-				print (colored("**DEBUG: dataBase " + dataBase + " **", 'yellow'))
-				print (colored("**DEBUG: dataBase " + dataBase + " **", 'yellow'))
-			
-			status = species_identification_KMA.index_database(dataBase, kma_bin, dataBase, "new")
-			if (status): #true
-				external_file_returned.append(basename_name)
-			else:
-				print (colored("***ERROR: Database provided via --kma_external_file option (%s) was not indexed.\n" %f,'orange'))
+	functions.print_sepLine("-",50, False)
 
-	return(external_file_returned)
-
+	## return both dataframes
+	pd_Merge = pd.concat([pd_KMA, pd_PubMLST], sort=True, ignore_index=True)
+	return (pd_Merge)

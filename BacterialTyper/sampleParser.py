@@ -197,7 +197,9 @@ def select_other_samples (project, list_samples, samples_prefix, mode, extension
 		for path_file in list_samples:	
 			f = os.path.basename(path_file)
 			dirN = os.path.dirname(path_file)
-			samplename_search = re.search(r"(%s).*" % names, f)
+			#samplename_search = re.search(r"(%s).*" % names, f)
+			samplename_search = re.search(r"(%s).*" % names, path_file)
+			
 			enter = ""
 			if samplename_search:
 				if (exclude): ## exclude==True
@@ -229,19 +231,15 @@ def select_other_samples (project, list_samples, samples_prefix, mode, extension
 							file_name = f_search.group(1) 
 							df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, extensions, mode]	
 					else:
-						### get information
-						if mode == 'profile':
-							f_search = re.search(r".*\/(.*)\/%s\/(.*)\_(.*)\_%s$" %(mode,extensions), path_file)
-							if f_search:
-								if f_search.group(1) == f_search.group(2):
-									file_name = f_search.group(2)
-									db_name = f_search.group(3) 
-									df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, db_name, mode]	
+						f_search = re.search(r".*\/(.*)\/%s\/(.*)\_summary\.%s$" %(mode, extensions[0]), path_file)
+						if f_search:
+							### get information
+							if mode == 'profile':
+								name = f_search.group(1)
+								db_name = f_search.group(2).split('_')[-1]
+								df_samples.loc[len(df_samples)] = [path_file, dirN, name, db_name, mode]	
 
-						elif mode == 'ident':
-							file_csv = 'ident_summary.csv'
-							f_search = re.search(r".*\/(.*)\/%s\/%s$" %(mode,file_csv), path_file)
-							if f_search:
+							elif mode == 'ident':
 								name = f_search.group(1)
 								df_samples.loc[len(df_samples)] = [path_file, dirN, name, 'csv', mode]	
 

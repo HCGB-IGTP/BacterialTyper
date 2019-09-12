@@ -29,12 +29,12 @@ def get_files(options, input_dir, mode, extension):
 	
 	print ()
 	functions.print_sepLine("-",50, False)
+	print ('+ Getting files from input folder... ')
 	print ('+ Mode: ', mode,'. Extension:', extension)
-	print ('+ Get input folder(s). ')
 	if (options.project):
 		### a folder containing a project is provided
 		if os.path.exists(input_dir):
-			print ('+ Input folder exists')
+			#print ('+ Input folder exists')
 			## get files in folder
 			files = []
 			for ext in extension:
