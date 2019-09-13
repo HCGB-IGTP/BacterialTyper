@@ -20,6 +20,7 @@ from BacterialTyper import config
 from BacterialTyper import functions
 from BacterialTyper import BUSCO_caller
 
+
 ###############################################################
 def run(options):
 
@@ -40,6 +41,8 @@ def run(options):
 	functions.boxymcboxface("Database")
 	print ("--------- Starting Process ---------")
 	functions.print_time()
+
+	kma_bin = config.get_exe("kma")
 
 	######################################################
 	## print further information if requested
@@ -77,8 +80,10 @@ def run(options):
 			## get path and check if it is file
 			abs_path_file = os.path.abspath(options.ID_file)
 			if os.path.isfile(abs_path_file):
+				print ()
 				functions.print_sepLine("*",50, False)
 				print ("--------- Check NCBI ids provided ---------\n")
+				functions.print_sepLine("*",70, False)
 				## get file information
 				print ("\t+ Obtaining information from file: %s" %abs_path_file)
 				strains2get = functions.get_data(abs_path_file, ',', '')
@@ -99,8 +104,10 @@ def run(options):
 			if Debug:
 				print (colored("DEBUG: NCBI descendant option: ON ", 'yellow'))
 			
+			print ()
 			functions.print_sepLine("*",70, False)
 			print ("--------- Check descendant NCBI taxonomy ids provided ---------\n")
+			functions.print_sepLine("*",70, False)
 			## [TODO]
 			dataBase_NCBI = database_generator.NCBI_descendant(options.descendant, NCBI_folder, Debug)
 			
@@ -109,11 +116,10 @@ def run(options):
 		##############################################################
 		print ('\n\n+ Update database for later identification analysis...')
 		list_of_files = dataBase_NCBI['genome'].tolist()
-		kma_bin = config.get_exe("kma")
 		kma_db = functions.create_subfolder('KMA_db', options.path)	
 		genbank_kma_db = functions.create_subfolder('genbank', kma_db)	
 		
-		print ('+ Database to update: ', user_kma_db)
+		print ('+ Database to update: ', genbank_kma_db)
 		species_identification_KMA.generate_db(list_of_files, 'genbank_KMA', genbank_kma_db, 'new', 'batch', Debug, kma_bin)
 
 		## time stamp
@@ -133,8 +139,10 @@ def run(options):
 			if Debug:
 				print (colored("DEBUG: User provides folder containing project", 'yellow'))
 
+			print ()
 			functions.print_sepLine("*",70, False)
 			print ("--------- Check user provided project folder ---------\n")
+			functions.print_sepLine("*",70, False)
 			dataBase_user = database_generator.update_database_user_data(options.path, abs_project_folder, Debug, options)
 		else:
 			print (colored("ERROR: Folder provided does not exists: %s" %options.project_folder, 'red'))
@@ -145,7 +153,6 @@ def run(options):
 		##############################################################
 		print ('\n\n+ Update database for later identification analysis...')
 		list_of_files = dataBase_user['genome'].tolist()
-		kma_bin = config.get_exe("kma")
 		kma_db = functions.create_subfolder('KMA_db', options.path)	
 		user_kma_db = functions.create_subfolder('user_data', kma_db)	
 		
@@ -158,8 +165,10 @@ def run(options):
 	##########
 	## ARIBA
 	##########
+	print ()
 	functions.print_sepLine("*",50, False)
 	print ("--------- Check ARIBA parameters provided --------")
+	functions.print_sepLine("*",50, False)
 	if (options.no_ARIBA):
 		print ("+ No ARIBA databases would be downloaded...")
 		

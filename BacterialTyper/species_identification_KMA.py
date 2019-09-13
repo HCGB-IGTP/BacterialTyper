@@ -177,15 +177,13 @@ def check_db_indexed(index_name, folder):
 	count = functions.get_number_lines(names)
 	
 	print ("\n\t+ Database seems OK and contains several entries (%s):\n" %count)
-
 	if (count > 50):
 		print ("\tToo many entries in the database.\n\tCheck file %s for further details." %names)
 	else:
-		names_hd = open(names, 'r')
-		names_hd_read = names_hd.read()
-		names_hd.close()
-		print (names_hd_read)
-	
+		entries = functions.readList_fromFile(names)
+		print (*entries, sep='\n')
+
+
 	return(True)
 	
 ##################################################
@@ -245,7 +243,7 @@ def index_database(fileToIndex, kma_bin, index_name, option, folder, type_option
 	code = functions.system_call(cmd_kma_index)	
 	if code == 'FAIL':
 		print (colored("Database generated an error during the index: %s" %index_name, 'red'))
-		print (colored("Stop.", 'red'))
+		print (colored("EXIT", 'red'))
 		exit()
 		
 	return_code = check_db_indexed(index_file_name, folder)
@@ -258,15 +256,12 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 
 	## check
 	if len(file_abs_paths) > 1:
-
 		## read db in fold_name and get index files
 		info = fold_name + '/' + name + '.db'
-		
 		## 
 		lineList = []
 		toIndexList = []
-		indexedList = []
-		
+		indexedList = []		
 		###
 		if os.path.exists(info):
 			lineList = functions.readList_fromFile(info)
@@ -288,20 +283,17 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 			info2 = fold_name + '/batch_entries.txt'
 			functions.printList2file(info2, toIndexList)
 			status = index_database(info2, kma_bin, name, option, fold_name, type_option)
-			
 			final_list = set(lineList + toIndexList + indexedList)
 			final_list_name = [os.path.basename(f) for f in final_list]
 			functions.printList2file(info, final_list_name)
 			count_files = len(toIndexList)
-			print ('+ %s sequences have been added to the database' %count_files)
-
+			print ('+ %s samples have been added to the database' %count_files)
 		else:
 			print ('\n+ No new sequences were added to the database.')
 			return (fold_name + '/' + name)			
 		
 	else:
 		file_name = file_abs_paths[0]
-		
 		## check if previously indexed
 		status = check_db_indexed(file_name, fold_name)
 		if (status): #true
@@ -309,14 +301,11 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 			if (Debug):
 				print (colored("**DEBUG: Database (%s) is indexed" %file_name + " **", 'yellow'))
 			return (file_name)
-		
 		else: #false
 			## debug message
 			if (Debug):
 				print (colored("**DEBUG: Database (%s) is not indexed" %file_name + " **", 'yellow'))
-			
 			status = index_database(file_name, kma_bin, file_name, option, fold_name, type_option)
-
 	## return
 	if (status): #true
 		return (file_name)
@@ -388,9 +377,6 @@ def main():
 ##################################################
 if __name__== "__main__":
 	main()
-	
-	
-	
 	
 ################################################################################################
 ## 										KMA v1.2.2

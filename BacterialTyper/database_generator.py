@@ -47,7 +47,7 @@ def NCBI_DB(strains2get, data_folder, Debug):
 	## get data existing database
 	print ("+ Create the database in folder: \n", data_folder)
 	## read database 
-	db_frame = database.getdbs('NCBI', folder, 'genbank', Debug)
+	db_frame = database.getdbs('NCBI', data_folder, 'genbank', Debug)
 	database_df = get_database(db_frame, Debug)
 	
 	#########
@@ -95,24 +95,38 @@ def NCBI_descendant(tax_ID, NCBI_folder, Debug):
 ##########################################################################################
 def NCBIdownload(acc_ID, data, data_folder):	
 	
-	## download in data folder provided
-	ngd.download(section='genbank', file_format='fasta,gff,protein-fasta', assembly_accessions=acc_ID, output=data_folder, group='bacteria')
-
 	## module ngd requires to download data in bacteria subfolder under genbank folder
 	dir_path = data_folder + '/genbank/bacteria/' + acc_ID 
+	download = False
+	if os.path.exists(dir_path):
+		print ('+ Folder already exists: ', dir_path)
+		## get files download
+		(genome, prot, gff) = get_files_download(dir_path)
+		if all([genome, prot, gff]):
+			download = False
+		else:
+			download = True
+	else:
+		download = True
+	
+	if download:
+		## download in data folder provided
+		ngd.download(section='genbank', file_format='fasta,gff,protein-fasta', assembly_accessions=acc_ID, output=data_folder, group='bacteria')
 
-	## check if files are gunzip
-	files = os.listdir(dir_path)
-	files_list = []		
-	for f in files:
-		if f.endswith('gz'):
-			files_list.append(f)
-			print ("\t- Extracting files: ", f)
-			functions.extract(dir_path + '/' + f, dir_path)
-			#os.remove(dir_path + '/' + f)
+		## check if files are gunzip
+		files = os.listdir(dir_path)
+		files_list = []		
+		for f in files:
+			if f.endswith('gz'):
+				files_list.append(f)
+				print ("\t- Extracting files: ", f)
+				functions.extract(dir_path + '/' + f, dir_path)
+				#os.remove(dir_path + '/' + f)
+	else:
+		print ('+ Data is already available, no need to download it again')
 
 	## get files download
-	(genome, prot, gff) = get_files_download(data_folder)
+	(genome, prot, gff) = get_files_download(dir_path)
 
 	## check if any plasmids downloaded
 	plasmid_count = 0
@@ -167,32 +181,32 @@ def get_files_download(folder):
 	gff=()
 
 	for f in files:
-		if f.endswith('.fna'):
+		if f.endswith('genomic.fna'):
 			genome = folder + '/' + f
-		elif f.endswith('.gff'):
+		elif f.endswith('genomic.gff'):
 			gff = folder + '/' + f
-		elif f.endswith('.faa'):
+		elif f.endswith('protein.faa'):
 			prot = folder + '/' + f
+
 	return(genome, prot, gff)			
 
 ##########################################################################################
 def get_database(db_frame, Debug):
 	data4db = pd.DataFrame()
 	for index, row in db_frame.iterrows():
-		print ('+ Reading information for sample: ', db_frame.loc[index]['db'])
-		timestamp = db_frame.loc[index]['path'] + '/.success'
-		if os.path.isfile(timestamp):
-			stamp =	functions.read_time_stamp(timestamp)
-			print (colored("\t+ Data generated on: %s" %stamp, 'yellow'))
-
 		## information
 		this_file = db_frame.loc[index]['path'] + '/info.txt'
 		if os.path.isfile(this_file):
+			print ('+ Reading information for sample: ', db_frame.loc[index]['db'])
 			print (colored("\t+ Obtaining information from file: %s" %this_file, 'yellow'))
 			this_db = functions.get_data(this_file, ',', 'index_col=0')
 			data4db = data4db.append(this_db)
+			timestamp = db_frame.loc[index]['path'] + '/.success'
+			if os.path.isfile(timestamp):
+				stamp =	functions.read_time_stamp(timestamp)
+				print (colored("\t+ Data generated on: %s" %stamp, 'yellow'))
 
-		functions.print_sepLine("*",25, False)
+			functions.print_sepLine("*",25, False)
 
 	## index by ID
 	if not data4db.empty:
