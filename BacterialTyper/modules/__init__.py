@@ -1,21 +1,22 @@
 __all__ = [
-	'database',
-	'qc',
-	'set_configuration',
-	'assemble',
-	'trimm',
-	'sample_prepare',
-	'plasmidID_call',
-	'ident',
-	'variant_calling',
-	'run',
-	'test',
-	'profile',
-	'MGE',
 	'annot',
-	'version',
+	'assemble',
 	'citation',
-	'info'
+	'cluster',
+	'database',
+	'ident',
+	'info',
+	'plasmidID_call',
+	'profile',
+	'qc',
+	'MGE',
+	'run',
+	'sample_prepare',
+	'set_configuration',
+	'test',
+	'trimm',
+	'variant_calling',
+	'version'
 ]
 
 from BacterialTyper.modules import *

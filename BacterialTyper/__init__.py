@@ -22,6 +22,7 @@ __all__ = [
 	'fastqc_caller',
 	'functions',
 	'MLSTar',
+	'min_hash_caller',
 	'modules',
 	'multiQC_report',
 	'other_tools',

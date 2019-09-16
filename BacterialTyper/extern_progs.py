@@ -46,7 +46,7 @@ prog_to_version_cmd = {
 	'tblastn':('-version', re.compile('tblastn:\s([0-9\.]+)')),
 	'multiqc':('--version', re.compile('multiqc, version\s([0-9\.]+)')),
 	'trimmomatic':('-version', re.compile('([0-9\.]+)')),
-
+	'mash':('', re.compile('Mash version ([0-9\.]+)')),
 	'esearch':('-help', re.compile('esearch ([0-9\.]+)')),
 	'efetch':('-help', re.compile('efetch ([0-9\.]+)')),
 	'xtract':('-version', re.compile('([0-9\.]+)')),

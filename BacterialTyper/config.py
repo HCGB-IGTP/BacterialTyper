@@ -46,6 +46,7 @@ def prog_to_default():
 		'trimmomatic':'trimmomatic.jar',
 		'efetch':'efetch',
 		'esearch':'esearch',
+		'mash':'mash',
 		'xtract':'xtract'
 	}
 	return(program_to_default)
@@ -73,7 +74,7 @@ def min_version_programs():
 		'tblastn':'2.5',
 		'trimmomatic':'0.36',
 		'multiqc':'1.7',
-		
+		'mash':'2.1.1',
 		'efetch':'11.7',
 		'esearch':'11.7',
 		'xtract':'11.7',

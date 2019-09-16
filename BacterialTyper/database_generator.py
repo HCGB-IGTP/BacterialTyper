@@ -26,8 +26,8 @@ from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import ariba_caller
 from BacterialTyper import species_identification_KMA
-from BacterialTyper.modules import database
 from BacterialTyper.modules import sample_prepare
+from BacterialTyper import min_hash_caller
 
 ## import data
 dataDir = os.path.dirname(os.path.realpath(__file__)) + '/../../data/'
@@ -47,7 +47,7 @@ def NCBI_DB(strains2get, data_folder, Debug):
 	## get data existing database
 	print ("+ Create the database in folder: \n", data_folder)
 	## read database 
-	db_frame = database.getdbs('NCBI', data_folder, 'genbank', Debug)
+	db_frame = getdbs('NCBI', data_folder, 'genbank', Debug)
 	database_df = get_database(db_frame, Debug)
 	
 	#########
@@ -255,7 +255,7 @@ def get_userData_files(options, project_folder):
 		print (pd_samples_annot)
 	
 	## merge
-	df = pd.concat([pd_samples_reads, pd_samples_annot, pd_samples_assembly], join='inner').drop_duplicates()
+	df = pd.concat([pd_samples_reads, pd_samples_annot, pd_samples_assembly], sort=True, join='inner').drop_duplicates()
 	## joining by inner we only get common columns among all
 
 	##
@@ -275,6 +275,10 @@ def get_userData_info(options, project_folder):
 	## get identification information
 	pd_samples_ident = sample_prepare.get_files(options, project_folder, "ident", ["csv"])
 	pd_samples_ident = pd_samples_ident.set_index('name')
+	
+	## get mash information
+	pd_samples_mash = sample_prepare.get_files(options, project_folder, "mash", ["msh"])
+	pd_samples_mash = pd_samples_ident.set_index('name')
 
 	## add other if necessary
 
@@ -284,10 +288,11 @@ def get_userData_info(options, project_folder):
 		print (pd_samples_profile)
 		print (colored("**DEBUG: pd_samples_ident **", 'yellow'))
 		print (pd_samples_ident)
-		## add other if necessary
+		print (colored("**DEBUG: pd_samples_mash **", 'yellow'))
+		print (pd_samples_mash)
 	
 	## merge
-	df = pd.concat([pd_samples_profile, pd_samples_ident], join='inner', sort=True).drop_duplicates()
+	df = pd.concat([pd_samples_profile, pd_samples_ident, pd_samples_ident], join='inner', sort=True).drop_duplicates()
 	## joining by inner we only get common columns among all
 
 	return(df)
@@ -317,7 +322,7 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 	project_all_data = pd.concat([project_data_df, project_info_df], join='inner').drop_duplicates()
 
 	## read database 
-	db_frame = database.getdbs('user_data', database_folder, 'user_data', Debug)
+	db_frame = getdbs('user_data', database_folder, 'user_data', Debug)
 	user_data_db = get_database(db_frame, Debug)
 	
 	## merge dataframe
@@ -394,6 +399,13 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 			for f in profile_files:
 				shutil.copy(f, profile_dir)
 			
+			##########
+			## mash profile
+			##########
+			mash_dir = functions.create_subfolder('mash', dir_sample)
+			mash_file = cluster.loc[cluster['tag'] == 'mash']['sample'].to_list()
+			shutil.copy(mash_file[0], mash_dir)
+			
 			############################################
 			### Dump information
 		
@@ -426,3 +438,343 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 	print ("+ Database has been generated: \n", database_csv)
 	return (dataUpdated)
 
+##################################################
+def getdbs(source, database_folder, option, debug):
+
+	## option = kma:archaea,plasmids,bacteria#kma_external:/path/to/file1,/path/to/file2#user_data#genbank **
+	## read folders within database
+	files = os.listdir(database_folder) ## ARIBA/KMA_db/genbank/user_data
+
+	## debug message
+	if (debug):
+		print (colored("Folders: " + str(files),'yellow'))
+		print ()
+	
+	## init dataframe
+	colname = ["source", "db", "path"]
+	db_Dataframe  = pd.DataFrame(columns = colname)
+	
+	## user input
+	dbs2use = []
+	option_list = option.split("#")
+	
+	for option_item in option_list:
+		
+		## debug message
+		if (debug):
+			print (colored("Option item: " + option_item,'yellow'))
+		
+		###
+		dbs2use_tmp = []
+		
+		## kma
+		if (option_item.startswith('kma')):
+			if (option_item.startswith('kma:')):
+				dbs2use_tmp = option_item.split(":")[1].split(",")
+
+			elif (option_item.startswith('kma_external:')):
+				external = option_item.split(":")[1].split(",")
+
+				## add to dataframe			
+				for ext in external:
+					name_ext = os.path.basename(ext)
+					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_External', name_ext, ext]
+
+			elif (option_item.startswith('kma_user_data:')):
+				dbs2use_tmp = option_item.split(":")[1].split(",")
+			
+			elif (option_item.startswith('kma_NCBI:')):
+				dbs2use_tmp = option_item.split(":")[1].split(",")
+			
+		### ARIBA
+		elif (option_item.startswith('ARIBA:')):
+			dbs2use = option_item.split(":")[1].split(",")
+		
+		### NCBI: genbank
+		elif (option_item.startswith('genbank')):
+			dbs2use.append('genbank')
+		
+		### NCBI: taxonomy ID
+		elif (option_item.startswith('tax_id')):
+			dbs2use.append('taxonomy_id')
+		
+		### user_data
+		elif (option_item.startswith('user_data')):
+			dbs2use.append('user_data')
+		
+		### MLST
+		elif (option_item.startswith('MLST')):
+			dbs2use_tmp = option_item.split(":")[1].split(",")
+
+		### Mash
+		elif (option_item.startswith('Mash')):
+			if (option_item.startswith('Mash_external_data:')):
+				external = option_item.split(":")[1].split(",")
+				## add to dataframe			
+				for ext in external:
+					name_ext = os.path.basename(ext)
+					name_ext_ = name_ext.split('.fna')[0]
+					db_Dataframe.loc[len(db_Dataframe)] = ['Mash_external', name_ext_, ext]
+			else:
+				dbs2use_tmp = option_item.split(":")[1].split(",")
+
+		### Other?
+		else:
+			dbs2use.append(option_item) ## add ARIBA, user_data or genbank option if provided
+
+		## get all		
+		dbs2use = dbs2use + dbs2use_tmp
+
+	## debug message
+	if (debug):
+		print (colored("\ndbs2use:\n\t" + "\n\t".join(dbs2use), 'yellow'))
+
+	####
+	return(getdbs_df(source, dbs2use, database_folder, debug, db_Dataframe))
+
+##################################################
+def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
+	
+	## init dataframe
+	#colname = ["source", "db", "path"]
+	#db_Dataframe  = pd.DataFrame(columns = colname)
+	
+	###############
+	#### ARIBA ####
+	###############
+	if (source == 'ARIBA'):
+		### Check if folder exists
+		functions.create_subfolder('ARIBA', database_folder)
+		
+		### get information
+		ARIBA_dbs = ariba_caller.get_ARIBA_dbs(dbs2use) ## get names
+		for ariba_db in ARIBA_dbs:
+			this_db = database_folder + '/ARIBA/' + ariba_db + '_prepareref/'
+			if os.path.exists(this_db):
+				code_check_db = ariba_caller.check_db_indexed(this_db, 'NO')
+				if (code_check_db == True):
+					db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db]
+					print (colored("\t- ARIBA: including information from database: " + ariba_db, 'green'))
+			else:
+				print ("+ Database: ", ariba_db, " is not downloaded...")
+				print ("+ Download now:")
+				folder_db = functions.create_subfolder(ariba_db, database_folder + '/ARIBA')
+				code_db = ariba_caller.ariba_getref(ariba_db, folder_db, debug, 2) ## get names 
+				if (code_db == 'OK'):
+					db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db]
+					print (colored("\t- ARIBA: including information from database: " + ariba_db, 'green'))
+
+	#############
+	#### KMA ####
+	#############
+	elif (source == 'KMA'):
+		### Check if folder exists
+		KMA_db_abs = functions.create_subfolder('KMA_db', database_folder)
+		kma_dbs = os.listdir(KMA_db_abs)
+
+		## debug message
+		if (debug):
+			print (colored("Folders KMA_db:" + str(kma_dbs) , 'yellow'))
+
+		### get information
+		for db in dbs2use:
+			this_db = KMA_db_abs + '/' + db
+			
+			#### genbank	
+			if (db == "genbank"):
+				## KMA databases exists
+				this_db_file = this_db + '/genbank_KMA'
+				if os.path.isfile(this_db_file + '.comp.b'):
+					print (colored("\t- genbank: including information from different reference strains available.", 'green')) ## include data from NCBI
+					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_genbank', 'genbank', this_db_file]
+		
+			#### user_data
+			elif (db == "user_data"):
+				## KMA databases exists
+				this_db_file = this_db + '/userData_KMA'
+				if os.path.isfile(this_db_file + '.comp.b'):
+					print (colored("\t- user_data: including information from user previously generated results", 'green')) ## include user data
+					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_user_data', 'user_data', this_db_file]
+					
+			
+			## default KMA databases: bacteria & plasmids
+			else:
+				##
+				if (db == 'plasmids'):
+					prefix = '.T'
+				else:
+					prefix = '.ATG'
+
+				this_db_file = this_db + '/' + db + prefix
+				if os.path.isfile(this_db_file + '.comp.b'):
+					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_db', db, this_db_file]
+					print (colored("\t- KMA: including information from database " + db, 'green'))
+				else:
+					print (colored("\t**KMA: Database %s was not available." %db, 'red'))
+
+					## if missing: call download module
+					print ("+ Download missing KMA_db (%s) provided" %db)
+					species_identification_KMA.download_kma_database(database_folder + '/KMA_db/' + db, db, debug)
+
+					if os.path.isfile(this_db_file + '.comp.b'):
+						db_Dataframe.loc[len(db_Dataframe)] = ['KMA_db', db, this_db_file]
+						print (colored("\t- KMA: including information from database " + db, 'green'))
+					else:
+						print (colored("\t**KMA: Database %s was not available." %db, 'red'))
+
+	##############
+	#### NCBI ####
+	##############
+	elif (source == 'NCBI'):
+
+		### Check if folder exists
+		db2use_abs = functions.create_subfolder(dbs2use[0], database_folder)
+		
+		### genbank entries downloaded
+		if dbs2use[0] == 'genbank':
+			##
+			if os.path.exists(db2use_abs + '/bacteria/'):
+				genbank_entries = os.listdir(db2use_abs + '/bacteria/')
+				for entry in genbank_entries:
+					this_db = db2use_abs + '/bacteria/' + entry
+					db_Dataframe.loc[len(db_Dataframe)] = ['NCBI:genbank', entry, this_db]
+
+		elif dbs2use[0] == 'tax_id':		
+			tax_id_entries = db2use_abs
+
+	###################
+	#### user_data ####
+	###################
+	elif (source == 'user_data'):
+		### Check if folder exists
+		db2use_abs = functions.create_subfolder(dbs2use[0], database_folder)
+
+		user_entries = os.listdir(db2use_abs)
+		for entry in user_entries:
+			this_db = db2use_abs + '/' + entry
+			db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, this_db]
+	
+	#################
+	#### PubMLST ####
+	#################
+	elif (source == 'MLST'):
+		### get information
+		for db in dbs2use:
+			if db == 'PubMLST':
+				### Check if folder exists
+				db2use_abs = functions.create_subfolder('PubMLST', database_folder)
+				list_profiles = os.listdir(db2use_abs)
+
+				for entry in list_profiles:
+					this_db = db2use_abs + '/' + entry
+					db_Dataframe.loc[len(db_Dataframe)] = ['MLST', 'PubMLST', entry + ',' + this_db]
+					print (colored("\t- MLST: including information from profile: " + entry, 'green'))
+					
+			else:
+					db_Dataframe.loc[len(db_Dataframe)] = ['MLST', 'user_profile', db]
+					print (colored("\t- MLST: including information from profile provided by user: " + db, 'green'))
+
+	##################
+	#### Min Hash ####
+	##################
+	elif (source == 'MASH'):
+
+		mash_bin = config.get_exe('mash')
+		db_Dataframe['original'] = ''
+	
+		### Check if folder exists
+		Mash_db_abs = functions.create_subfolder('Mash_db', database_folder)
+
+		### get information
+		for db in dbs2use:
+			this_db = Mash_db_abs + '/' + db
+
+			#### genbank	
+			if (db == "genbank"):
+				### Check if folder exists
+				db2use_abs = database_folder + '/NCBI/genbank/bacteria'
+				if os.path.exists(db2use_abs):
+					print (colored("\t- genbank: including information from different reference strains available.", 'green')) ## include data from NCBI
+					genbank_entries = os.listdir(db2use_abs)
+					for entry in genbank_entries:
+						print ('\t+ Reading information from sample: ', entry)
+						this_db = db2use_abs + '/' + entry
+						list_msh = functions.retrieve_matching_files(this_db, '.msh')
+						if (list_msh):
+							## print original in file
+							file2print = this_db + '/.original'
+							if not os.path.exists(file2print):
+								original = ""
+							else:
+								original = functions.readList_fromFile(file2print)
+
+							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry, list_msh[0], original[0]]
+						else:
+							## index assembly or reads...
+							list_fna = functions.retrieve_matching_files(this_db, 'genomic.fna')
+							
+							## print original in file
+							file2print = this_db + '/.original'
+							functions.printList2file(file2print, list_fna)
+							
+							## sketch
+							outfile = this_db + '/' + entry
+							this_db_file = min_hash_caller.sketch_database(list_fna, mash_bin, outfile, entry, this_db)
+							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry, outfile + '.msh', list_fna[0]]
+							functions.print_sepLine("*",50, False)
+	
+			#### user_data
+			elif (db == "user_data"):
+				print (colored("\t- user_data: including information from user previously generated results", 'green')) ## include user data
+				db2use_abs = functions.create_subfolder('user_data', database_folder)
+				user_entries = os.listdir(db2use_abs)
+				for entry in user_entries:
+					if entry == 'user_database.csv':
+						continue
+					
+					print ('\t+ Reading information from sample: ', entry)
+					this_db = db2use_abs + '/' + entry
+					this_mash_db = this_db + '/mash/' + entry + '.msh'
+					if os.path.exists(this_mash_db):
+						## print original in file
+						file2print = this_db + '/mash/.original'
+						if not os.path.exists(file2print):
+							original = ""
+						else:
+							original = functions.readList_fromFile(file2print)
+
+						##
+						db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, this_mash_db, original[0]]
+					else:
+						## index assembly or reads...
+						mash_abs = functions.create_subfolder('mash', this_db)
+						outfile = mash_abs + '/' + entry 
+						list_fna = functions.retrieve_matching_files(this_db + '/assembly', '.fna')
+
+						## print original in file
+						file2print = mash_abs + '/.original'
+						functions.printList2file(file2print, list_fna)
+
+						this_db_file = min_hash_caller.sketch_database(list_fna, mash_bin, outfile, entry, mash_abs)
+						db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, outfile + '.msh', list_fna[0]]
+						functions.print_sepLine("*",50, False)
+
+
+	#### external_data
+	if any(name in 'Mash_external' for name in db_Dataframe['source'].to_list()):
+		print (colored("\t- external_data: including information from external data provided by user", 'green')) ## include user data
+		db_Dataframe = db_Dataframe.set_index("db", drop = False)
+		frame = db_Dataframe[ db_Dataframe['source'] == 'Mash_external' ]
+		for index, row in frame.iterrows():
+			print ('\t+ Reading information for file: ', row['db'])
+			outfile = row['path'] + '.msh'
+			if not os.path.exists(outfile):
+				path_file = os.path.dirname(row['path'])
+				this_db_file = min_hash_caller.sketch_database([row['path']], mash_bin, row['path'], row['db'], path_file)
+				functions.print_sepLine("*",50, False)
+
+			db_Dataframe.loc[row['db']] = ['Mash_external', row['db'], outfile, row['path']]
+	
+	## index by id	
+	db_Dataframe = db_Dataframe.set_index("db", drop = False)			
+	return (db_Dataframe)
