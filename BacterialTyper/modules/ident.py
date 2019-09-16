@@ -23,7 +23,6 @@ from BacterialTyper import database_generator
 from BacterialTyper import MLSTar
 from BacterialTyper import edirect_caller
 from BacterialTyper.modules import sample_prepare
-from BacterialTyper.modules import database
 from BacterialTyper.modules import info
 
 ####################################
@@ -278,10 +277,9 @@ def run(options):
 ####################################
 def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, time_partial):
 	functions.boxymcboxface("KMA Identification")
-	
 	## set defaults
-	kma_bin = config.get_exe("kma")
-	
+	kma_bin = config.get_exe("kma")	
+
 	## check status
 	databases2use = []
 	for	index, db2use in retrieve_databases.iterrows():
@@ -369,7 +367,9 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			outdir_dict_kma = functions.outdir_subproject(outdir_dict[name], cluster, "kma")
 			result = get_outfile(outdir_dict_kma[name], name, db2use)
 			#print ('\t- File: ' + result + '.spa')
-
+			
+			continue
+			
 			## get results using a cutoff value [Defaulta: 80]
 			results = species_identification_KMA.parse_kma_results(result + '.spa', options.KMA_cutoff)
 			results['Database'] = basename_db
@@ -412,6 +412,9 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 	## outdir_KMA
 	outdir_dict_kma = functions.outdir_subproject(outdir_file, dataFrame_sample, "kma")
 
+	## set defaults
+	kma_bin = config.get_exe("kma")
+
 	## get outfile
 	outfile = get_outfile(outdir_dict_kma[name], name, database)
 
@@ -423,7 +426,6 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 		stamp =	functions.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 	else:
-
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: species_identification_KMA.kma_ident_module call**", 'yellow'))
@@ -432,8 +434,15 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 			print ("species_identification_KMA.kma_ident_module(outfile, list_files, name, database, threads) ")
 			print ("species_identification_KMA.kma_ident_module" + "\t" + outfile + "\t" + str(list_files) + "\t" + name + "\t" + database + "\t" + str(threads) + "\n") 
 	
+		## Sparse or not
+		#if any(name in basename_tag for name in ['userData_KMA', 'genbank_KMA']):
+		if (basename_tag == 'userData_KMA'):
+			option = ''
+		else:
+			option = '-Sparse'
+	
 		# Call KMA
-		species_identification_KMA.kma_ident_module(outfile, list_files, name, database, threads) 
+		species_identification_KMA.kma_ident_call(outfile, list_files, name, database, kma_bin, option, threads) 
 
 ####################################
 def get_outfile(output_dir, name, index_name):
@@ -679,8 +688,8 @@ def get_options_db(options):
 	if not (options.kma_dbs):
 		print (colored("***ERROR: No database provided via --kma_db option.\n",'red'))
 		exit()
-	############################################################
 
+	############################################################
 	### Options:
 	
 	############
@@ -758,8 +767,8 @@ def get_options_db(options):
 		print (colored("**DEBUG: option_db: " +  option_db + " **", 'yellow'))
 		print (colored("**DEBUG: option_db_PubMLST : " +  option_db_PubMLST  + " **", 'yellow'))
 
-	pd_KMA = database.getdbs("KMA", database2use, option_db, Debug)
-	pd_PubMLST = database.getdbs("MLST", database2use, option_db_PubMLST, Debug)
+	pd_KMA = database_generator.getdbs("KMA", database2use, option_db, Debug)
+	pd_PubMLST = database_generator.getdbs("MLST", database2use, option_db_PubMLST, Debug)
 
 	functions.print_sepLine("-",50, False)
 

@@ -258,10 +258,12 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 	if len(file_abs_paths) > 1:
 		## read db in fold_name and get index files
 		info = fold_name + '/' + name + '.db'
+
 		## 
 		lineList = []
 		toIndexList = []
 		indexedList = []		
+
 		###
 		if os.path.exists(info):
 			lineList = functions.readList_fromFile(info)
@@ -280,7 +282,7 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 		
 		if toIndexList:
 			## generate batch and call
-			info2 = fold_name + '/batch_entries.txt'
+			info2 = fold_name + '/.batch_entries.txt'
 			functions.printList2file(info2, toIndexList)
 			status = index_database(info2, kma_bin, name, option, fold_name, type_option)
 			final_list = set(lineList + toIndexList + indexedList)
@@ -317,16 +319,14 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 ########################
 
 ##################################################
-def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads):
+def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, option, threads):
 	###
 	out_file_log = out_file + '.log'
 	if len(files) == 2:
-		#print ("Paired-end mode KMA search:\n")
-		cmd_kma_search = "%s -Sparse -ipe %s %s -o %s -t_db %s -shm 1 -t %s 2> %s" %(kma_bin, files[0], files[1], out_file, index_name, threads, out_file_log)
+		cmd_kma_search = "%s -ipe %s %s -o %s -t_db %s -shm 1 -t %s %s 2> %s" %(kma_bin, files[0], files[1], out_file, index_name, threads, option, out_file_log)
 	else:
-		## to be tested
-		print ("Single end mode KMA search:\n")
-		cmd_kma_search = "%s -Sparse -i %s -o %s -t_db %s -shm 1 -t %s 2> %s" %(kma_bin, files[0], out_file, index_name, threads, out_file_log)
+		## TODO: test Single End
+		cmd_kma_search = "%s -i %s -o %s -t_db %s -shm 1 -t %s %s 2> %s" %(kma_bin, files[0], out_file, index_name, threads, option, out_file_log)
 
 	code = functions.system_call(cmd_kma_search)
 
@@ -339,12 +339,6 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads):
 		return('OK')
 	else:
 		return('FAIL')
-
-##################################################
-def kma_ident_module(out_file, files, sample_name, index_name, threads):
-	## kma_ident_call
-	kma_bin = config.get_exe("kma")
-	return(kma_ident_call(out_file, files, sample_name, index_name, kma_bin, threads))
 
 ##################################################
 def parse_kma_results(out_file, cutoff):
