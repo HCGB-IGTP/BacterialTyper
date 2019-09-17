@@ -201,7 +201,7 @@ def ariba_getref(database, outdir, Debug, threads):
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
-
+		download_ariba_cmd = 'OK'
 	else:
 		cmd_getref = 'ariba getref %s %s' %(database, outdir_name)
 		download_ariba_cmd = functions.system_call(cmd_getref)
@@ -248,7 +248,7 @@ def ariba_getref(database, outdir, Debug, threads):
 	return()		
 	
 ##########
-def ariba_prepareref(fasta, metadata, outfolder):
+def ariba_prepareref(fasta, metadata, outfolder, threads):
 	## prepareref
 	cmd_prepareref = 'ariba prepareref -f %s -m %s %s --threads %s' %(fasta, metadata, outfolder, threads)
 	return(functions.system_call(cmd_prepareref))
