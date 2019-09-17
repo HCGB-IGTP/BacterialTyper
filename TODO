@@ -57,6 +57,9 @@
 [TODO] BacterialTyper/ariba_caller.py :: Different databases provided
 [TODO] BacterialTyper/ariba_caller.py :: Check what to do with single end when calling ARIBA
 
+[TODO] BacterialTyper/database_generator.py :: Discard include report in user data database
+[TODO] BacterialTyper/database_generator.py :: Discard include report in user data database
+
 #####################
 ### Visualization ###
 #####################

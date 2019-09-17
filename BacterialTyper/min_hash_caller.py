@@ -97,10 +97,11 @@ def sketch_database(dict_files, folder, Debug):
 	return(siglist_file, siglist)		
 	
 ##################################################		
-def read_signature(sigfile, kmer):
+def read_signature(sigfile):
+	ksize_n=31
 	## code taken and adapted from: https://sourmash.readthedocs.io/en/latest/api-example.html
 	print ('+ Loading signature for comparison...')
-	sig = load_one_signature(sigfile, ksize=kmer, select_moltype='DNA')
+	sig = load_one_signature(sigfile, ksize=ksize_n, select_moltype='DNA')
 	return (sig)
 
 ##################################################
