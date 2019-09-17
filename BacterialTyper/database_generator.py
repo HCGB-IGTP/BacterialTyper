@@ -827,6 +827,7 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 			outfile = row['path'] + '.msh'
 			if not os.path.exists(outfile):
 				path_file = os.path.dirname(row['path'])
+				### TODO: Fix this
 				this_db_file = min_hash_caller.sketch_database([row['path']], mash_bin, row['path'], row['db'], path_file)
 				functions.print_sepLine("*",50, False)
 
