@@ -29,7 +29,6 @@
 [TODO] BacterialTyper/modules/ident.py :: Add information if multiisolates are detected
 [TODO] BacterialTyper/modules/ident.py :: parse data according to database: bacteria, plasmids or user data or genbank data provided
 
-
 [TODO] BacterialTyper/modules/qc.py :: Control FASTQC statistics for trimming
 [TODO] BacterialTyper/modules/qc.py :: Control BUSCO statistics for discarding samples if necessary
 [TODO] BacterialTyper/modules/profile.py :: Add information summarizing results for other databases
