@@ -349,19 +349,19 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			## functions.timestamp
 			time_partial = functions.timestamp(time_partial)
 		
-	###
+	## parse results		
 	print ("+ KMA identification call finished for all samples...")
 	print ("+ Parse results now")
-		
-	## parse results		
 	results_summary = pd.DataFrame()
 	for db2use in databases2use:
+		### [TODO]: parse data according to database: bacteria, plasmids or user data or genbank data provided
+		
 		basename_db = os.path.basename(db2use)
 		pd.set_option('display.max_colwidth', -1)
 		pd.set_option('display.max_columns', None)
 
+		###
 		for name, cluster in sample_frame:
-		
 			## get result
 			## outdir_KMA
 			outdir_dict_kma = functions.outdir_subproject(outdir_dict[name], cluster, "kma")
