@@ -24,6 +24,7 @@ from BacterialTyper import bacteriophage
 from BacterialTyper import trimmomatic_call
 from BacterialTyper import multiQC_report
 from BacterialTyper.modules import MGE
+from BacterialTyper import min_hash_caller
 
 ##########################
 def run(options):
@@ -88,6 +89,12 @@ def run(options):
 	if (options.help_MLSTar):
 		MLSTar.help_MLSTar()
 		exit()
+	
+	## information for Min Hash Software
+	if (options.help_Mash):
+		min_hash_caller.helpMash()
+		exit()
+		
 	
 ##########################
 def project_help():

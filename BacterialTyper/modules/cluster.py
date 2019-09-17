@@ -110,15 +110,17 @@ def run(options):
 	
 	## init dataframe
 	colname = ["source", "name", "path", "original"]
+	siglist_all = []
 	pd_samples_sketched  = pd.DataFrame(columns = colname)
 	mash_bin = config.get_exe('mash')
 	for index, row in pd_samples_retrieved.iterrows():
 		if index in retrieve_databases.index:
 			print (colored(' + No need to sketch sample (%s), already available within user data...' %index, 'yellow'))
 			continue
-		name_out = outdir_dict[index] + '/' + index
-		min_hash_caller.sketch_database([row['sample']], mash_bin, name_out, index, '')
-		pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, name_out + '.msh', row['sample'])
+
+		(sigfile, siglist) = min_hash_caller.sketch_database({ index: row['sample'] }, outdir_dict[index], Debug)
+		pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, sigfile[0], row['sample'])
+		siglist_all = siglist_all + siglist
 
 	## debug message
 	if (Debug):
@@ -126,18 +128,33 @@ def run(options):
 		print (pd_samples_sketched)
 
 	print ("\n+ Clustering sequences...")
-	tmp = retrieve_databases[['source', 'db', 'path', 'original']]
-	tmp = tmp.rename({'db': 'name'}).set_index('db')
 	pd_samples_sketched = pd_samples_sketched.set_index('name')
+	
+	####
+	if not retrieve_databases.empty: 
+		tmp = retrieve_databases[['source', 'db', 'path', 'original']]
+		tmp = tmp.rename({'db': 'name'}).set_index('db')
+	else:
+		tmp = retrieve_databases
+	
+	## merge both dataframes
 	cluster_df = pd.concat([pd_samples_sketched, tmp], join='inner', sort=True)
+	
+	## get missing sigfiles
+	#	min_hash_caller.read_signature
 	
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: cluster_df **", 'yellow'))
 		print (cluster_df)
-
-
-
+		print (colored("**DEBUG: Signatures **", 'yellow'))
+		print (siglist_all)
+	
+	## compare
+	(DataMatrix, labeltext) = min_hash_caller.compare(siglist_all, 'example_Mtb', Debug)
+	min_hash_caller.plot(DataMatrix, labeltext, 'example_Mtb', True)
+	
+	
 ############################################################	
 def get_options_db(options):
 	##
@@ -184,7 +201,8 @@ def get_options_db(options):
 	############
 	elif (options.only_project_data):
 		option_db = "Mash:project_data"
-		return()
+		pd_MASH = pd.DataFrame()
+		return(pd_MASH)
 
 	############
 	## 4) only external_data
