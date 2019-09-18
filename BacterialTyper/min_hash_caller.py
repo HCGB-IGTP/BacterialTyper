@@ -100,7 +100,7 @@ def sketch_database(dict_files, folder, Debug):
 def read_signature(sigfile):
 	ksize_n=31
 	## code taken and adapted from: https://sourmash.readthedocs.io/en/latest/api-example.html
-	print ('+ Loading signature for comparison...')
+	#print ('\t+ Loading signature for comparison...')
 	sig = load_one_signature(sigfile, ksize=ksize_n, select_moltype='DNA')
 	return (sig)
 
@@ -141,7 +141,6 @@ def compare(siglist, output, Debug):
 
 	### Write output
 	labeloutname = output + '.labels.txt'
-	csv_out = output + '.matrix.csv'
 
 	with open(labeloutname, 'w') as fp:
 		fp.write("\n".join(labeltext))

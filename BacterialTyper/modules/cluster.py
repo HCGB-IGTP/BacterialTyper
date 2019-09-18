@@ -65,9 +65,12 @@ def run(options):
 	outdir=""
 
 	## set mode: project/detached
+	global Project
 	if (options.project):
 		outdir = input_dir		
+		Project=True
 	elif (options.detached):
+		Project=False
 		outdir = os.path.abspath(options.output_folder)
 
 	## get files
@@ -104,8 +107,10 @@ def run(options):
 		pd.set_option('display.max_columns', None)
 		print (retrieve_databases)
 		
-	### Cluster project samples 
-	print ("\n+ Generate mash sketches for each sample analyzed...")
+	### Cluster project samples
+	
+	print (colored("\n+ Collect project data", 'green'))
+	print ("+ Generate mash sketches for each sample analyzed...")
 	pd_samples_retrieved = pd_samples_retrieved.set_index('name')
 	
 	## init dataframe
@@ -115,12 +120,21 @@ def run(options):
 	mash_bin = config.get_exe('mash')
 	for index, row in pd_samples_retrieved.iterrows():
 		if index in retrieve_databases.index:
-			print (colored(' + No need to sketch sample (%s), already available within user data...' %index, 'yellow'))
+			print (colored('\t+ Sketched signature (%s) available within user data...' %index, 'yellow'))
 			continue
 
-		(sigfile, siglist) = min_hash_caller.sketch_database({ index: row['sample'] }, outdir_dict[index], Debug)
-		pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, sigfile[0], row['sample'])
-		siglist_all = siglist_all + siglist
+		this_sig = outdir_dict[index] + '/' + index + '.sig'
+		if os.path.exists(this_sig):
+			pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, this_sig, row['sample'])
+
+			print (colored('\t+ Sketched signature available (%s) in project folder...' %index, 'green'))
+			continue
+
+		else:
+			## index assembly or reads...
+			(sigfile, siglist) = min_hash_caller.sketch_database({ index: row['sample'] }, outdir_dict[index], Debug)
+			pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, sigfile[0], row['sample'])
+			siglist_all = siglist_all + siglist
 
 	## debug message
 	if (Debug):
@@ -140,19 +154,44 @@ def run(options):
 	## merge both dataframes
 	cluster_df = pd.concat([pd_samples_sketched, tmp], join='inner', sort=True)
 	
-	## get missing sigfiles
-	#	min_hash_caller.read_signature
-	
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: cluster_df **", 'yellow'))
 		print (cluster_df)
 		print (colored("**DEBUG: Signatures **", 'yellow'))
 		print (siglist_all)
+
+	## get missing signature files
+	print ('\t+ Loading missing signature for comparison...')
+	list_signatures2read = cluster_df['path'].to_list()
+	for l in list_signatures2read:
+		siglist_all.append(min_hash_caller.read_signature(l))
+	###
+	siglist_all = set(siglist_all)
 	
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: Signatures **", 'yellow'))
+		print (siglist_all)
+		print (colored("**DEBUG: length siglist_all **", 'yellow'))
+		print (len(siglist_all))
+
+	## parse results
+	if Project:
+		final_dir = outdir + '/report/cluster'
+		functions.create_folder(final_dir) 
+	else:
+		final_dir = outdir
+
 	## compare
-	(DataMatrix, labeltext) = min_hash_caller.compare(siglist_all, 'example_Mtb', Debug)
-	min_hash_caller.plot(DataMatrix, labeltext, 'example_Mtb', True)
+	name = 'cluster_' + str(functions.create_human_timestamp())
+	tag_cluster_info = final_dir + '/' + name
+	print ('+ Saving results in folder: ', final_dir)
+	print ('\tFile name: ', name)
+	
+	pdf = True
+	(DataMatrix, labeltext) = min_hash_caller.compare(siglist_all, tag_cluster_info, Debug)
+	min_hash_caller.plot(DataMatrix, labeltext, tag_cluster_info, pdf)
 	
 	
 ############################################################	

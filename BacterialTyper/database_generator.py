@@ -482,7 +482,7 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 				### Check if folder exists
 				db2use_abs = database_folder + '/NCBI/genbank/bacteria'
 				if os.path.exists(db2use_abs):
-					print (colored("\t- genbank: including information from different reference strains available.", 'green')) ## include data from NCBI
+					print (colored("\n\t- genbank: including information from different reference strains available.", 'green')) ## include data from NCBI
 					genbank_entries = os.listdir(db2use_abs)
 					for entry in genbank_entries:
 						print ('\t+ Reading information from sample: ', entry)
@@ -492,7 +492,7 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 							## print original in file
 							file2print = this_db + '/.original'
 							if not os.path.exists(file2print):
-								original = ""
+								original = ['NaN']
 							else:
 								original = functions.readList_fromFile(file2print)
 
@@ -512,7 +512,7 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 	
 			#### user_data
 			elif (db == "user_data"):
-				print (colored("\t- user_data: including information from user previously generated results", 'green')) ## include user data
+				print (colored("\n\t- user_data: including information from user previously generated results", 'green')) ## include user data
 				db2use_abs = functions.create_subfolder('user_data', database_folder)
 				user_entries = os.listdir(db2use_abs)
 				for entry in user_entries:
@@ -526,7 +526,7 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 						## print original in file
 						file2print = this_db + '/mash/.original'
 						if not os.path.exists(file2print):
-							original = ""
+							original = ['NaN']
 						else:
 							original = functions.readList_fromFile(file2print)
 
