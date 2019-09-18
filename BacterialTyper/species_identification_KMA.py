@@ -270,12 +270,11 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 			option = 'add'
 
 		for f in file_abs_paths:
-			print (f)
 			baseName = os.path.basename(f)
 			
 			## check if already index
 			if baseName in lineList:
-				print (colored('+ File %s is already available in database %s' %(baseName, name), 'green'))
+				print (colored('\t+ File %s is already available in database %s' %(baseName, name), 'green'))
 				indexedList.append(f)
 			else:
 				toIndexList.append(f)		

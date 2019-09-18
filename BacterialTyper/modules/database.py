@@ -13,6 +13,7 @@ import pandas as pd
 
 ## import my modules
 from BacterialTyper import database_generator
+from BacterialTyper import database_user
 from BacterialTyper import ariba_caller
 from BacterialTyper import multiQC_report
 from BacterialTyper import species_identification_KMA
@@ -141,9 +142,9 @@ def run(options):
 
 			print ()
 			functions.print_sepLine("*",70, False)
-			print ("--------- Check user provided project folder ---------\n")
+			print ("--------- Check user provided project folder ---------")
 			functions.print_sepLine("*",70, False)
-			dataBase_user = database_generator.update_database_user_data(options.path, abs_project_folder, Debug, options)
+			dataBase_user = database_user.update_database_user_data(options.path, abs_project_folder, Debug, options)
 		else:
 			print (colored("ERROR: Folder provided does not exists: %s" %options.project_folder, 'red'))
 			exit()

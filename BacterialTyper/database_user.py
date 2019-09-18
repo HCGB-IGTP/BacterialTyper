@@ -1,0 +1,346 @@
+#usr/bin/env python
+'''
+This code prepares the database information for further analysis.
+Several functions are implemented for:
+	- Project data provided, updates/populates the database of interest
+
+Jose F. Sanchez
+Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+'''
+## useful imports
+import time
+import io
+import os
+import re
+import sys
+import pandas as pd
+import shutil
+from sys import argv
+from io import open
+from termcolor import colored
+from Bio import SeqIO
+import concurrent.futures
+
+## import my modules
+from BacterialTyper import functions
+from BacterialTyper import config
+from BacterialTyper import species_identification_KMA
+from BacterialTyper.modules import sample_prepare
+from BacterialTyper import min_hash_caller
+from BacterialTyper import database_generator
+
+##########################################################################################
+def update_database_user_data(database_folder, project_folder, Debug, options):
+
+	print ("\n+ Updating information from user data folder:")
+	print (project_folder)
+	
+	## create folder
+	own_data = functions.create_subfolder("user_data", database_folder)
+	
+	## Default missing options
+	options.project = True
+	options.debug = Debug
+	if not options.single_end:
+		options.pair = True
+
+	####################################
+	## get information
+	####################################
+	
+	## get user data files
+	project_data_df = get_userData_files(options, project_folder)
+	
+	## get user data info
+	project_info_df = get_userData_info(options, project_folder)
+	
+	## merge data
+	project_all_data = pd.concat([project_data_df, project_info_df], join='inner', sort=True).drop_duplicates()
+
+	## read database 
+	print ()
+	functions.print_sepLine("-", 75, False)
+	print ('\n+ Get database information')
+	db_frame = database_generator.getdbs('user_data', database_folder, 'user_data', Debug)
+	user_data_db = database_generator.get_database(db_frame, Debug)
+	
+	## merge dataframe
+	sample_frame = project_all_data.groupby("name")
+	
+	####################################
+	## optimize threads
+	####################################
+	name_list = project_all_data.index.values.tolist()
+	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	max_workers_int = int(options.threads/threads_job)
+
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
+		print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
+		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
+
+	
+	functions.print_sepLine("-", 75, False)
+	print ('\n+ Updating information using %s threads and %s parallel jobs' %(options.threads, max_workers_int))
+
+	####################################
+	## loop through frame using multiple threads
+	####################################
+	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
+		## send for each	
+		commandsSent = { executor.submit(update_sample, name, cluster, own_data, user_data_db, Debug): name for name, cluster in sample_frame }
+		for cmd2 in concurrent.futures.as_completed(commandsSent):
+			details = commandsSent[cmd2]
+			try:
+				data = cmd2.result()
+			except Exception as exc:
+				print ('***ERROR:')
+				print (cmd2)
+				print('%r generated an exception: %s' % (details, exc))
+	
+	functions.print_sepLine("+", 75, False)
+	print ("\n+ Retrieve information ...")
+
+	####################################
+	###### populate dataframe
+	####################################
+	for name, cluster in sample_frame:
+		###### dump to file
+		info_file = own_data + '/' + name + '/info.txt'
+		if os.path.exists(info_file):
+			dataGot = functions.get_data(info_file, ',', 'index_col=0')
+			dataGot = dataGot.set_index('ID')
+		
+			if (options.debug):
+				print (colored("**DEBUG: dataGot dataframe **", 'yellow'))
+				print (dataGot)
+	
+			user_data_db = pd.concat([user_data_db, dataGot], join='inner', sort=True).drop_duplicates()
+
+	if (options.debug):
+		print (colored("**DEBUG: user_data_db dataframe **", 'yellow'))
+		print (user_data_db)
+
+	functions.print_sepLine("+", 75, False)	
+
+	####################################
+	## update db		
+	####################################
+	database_csv = own_data + '/user_database.csv'
+	
+	dataUpdated = database_generator.update_db_data_file(user_data_db, database_csv)
+	print ("+ Database has been generated: \n", database_csv)
+	return (dataUpdated)
+
+
+##########################################################################################
+def get_userData_files(options, project_folder):
+	## get information regarding files
+
+	## get assembly files
+	pd_samples_assembly = sample_prepare.get_files(options, project_folder, "assembly", "fna")
+	pd_samples_assembly = pd_samples_assembly.set_index('name')
+
+	## get annotation files
+	pd_samples_annot = sample_prepare.get_files(options, project_folder, "annot", ['gbf', 'faa', 'gff'])
+	pd_samples_annot = pd_samples_annot.set_index('name')
+
+	## get trimmed ngs files
+	pd_samples_reads = sample_prepare.get_files(options, project_folder, "trim", ['_trim_'])
+	pd_samples_reads = pd_samples_reads.set_index('name')
+
+	## debug message
+	if (options.debug):
+		print (colored("**DEBUG: pd_samples_reads **", 'yellow'))
+		print (pd_samples_reads)
+		print (colored("**DEBUG: pd_samples_assembly **", 'yellow'))
+		print (pd_samples_assembly)
+		print (colored("**DEBUG: pd_samples_annot **", 'yellow'))
+		print (pd_samples_annot)
+	
+	## merge
+	df = pd.concat([pd_samples_reads, pd_samples_annot, pd_samples_assembly], sort=True, join='inner').drop_duplicates()
+	## joining by inner we only get common columns among all
+
+	##
+	return(df)
+	
+##########################################################################################
+def get_userData_info(options, project_folder):
+	## get information regarding: 
+		## genus, species (ident module)
+		## card & VFDB (profile module)
+		## additional information: MGE, etc
+
+	## get profile information
+	pd_samples_profile = sample_prepare.get_files(options, project_folder, "profile", ["csv"])
+	if not pd_samples_profile.empty:
+		pd_samples_profile = pd_samples_profile.set_index('name')
+
+	## get identification information
+	pd_samples_ident = sample_prepare.get_files(options, project_folder, "ident", ["csv"])
+	if not pd_samples_ident.empty:
+		pd_samples_ident = pd_samples_ident.set_index('name')
+	
+	## get mash information
+	pd_samples_mash = sample_prepare.get_files(options, project_folder, "mash", ["sig"])
+	if not pd_samples_mash.empty:
+		pd_samples_mash = pd_samples_mash.set_index('name')
+
+	## add other if necessary
+
+	## debug message	
+	if (options.debug):
+		print (colored("**DEBUG: pd_samples_profile **", 'yellow'))
+		print (pd_samples_profile)
+		print (colored("**DEBUG: pd_samples_ident **", 'yellow'))
+		print (pd_samples_ident)
+		print (colored("**DEBUG: pd_samples_mash **", 'yellow'))
+		print (pd_samples_mash)
+	
+	## merge
+	df = pd.concat([pd_samples_profile, pd_samples_ident, pd_samples_mash], join='inner', sort=True).drop_duplicates()
+	## joining by inner we only get common columns among all
+
+	return(df)
+
+############################################
+def update_sample(name, cluster, own_data, user_data_db, Debug):
+
+	## TODO: Implement threads here
+	## debug message	
+	if (Debug):
+		print (colored("**DEBUG: sample_frame groupby: name & cluster **", 'yellow'))
+		print (name)			
+		print (cluster)
+	
+	print ('\t+ Sending command for sample: ', name)
+
+	############################################
+	#### check information for this sample
+	############################################
+
+	## generate sample
+	dir_sample = functions.create_subfolder(name, own_data)
+	
+	if name in user_data_db.index:
+		print (colored("\t\t+ Data available in database for sample: %s. Checking integrity..." %name, 'yellow'))
+		#functions.print_sepLine("+", 75, False)
+
+	## data to generate
+	data2dump = pd.DataFrame(columns=('ID','folder','genus','species','name','genome', 'GFF','proteins', 'signature', 'profile', 'ident', 'reads'))
+	## iterate over files with different tags: reads, annot, assembly, profile, ident
+
+	##########
+	## assembly
+	##########
+	assembly_dir = functions.create_subfolder('assembly', dir_sample)
+	assembly_file = cluster.loc[cluster['tag'] == 'assembly']['sample'].to_list()
+	if assembly_file:
+		assembly_file_name = os.path.basename(assembly_file[0])
+		genome = assembly_dir + '/' + assembly_file_name
+		if not os.path.exists(genome):
+			shutil.copy(assembly_file[0], assembly_dir)
+	else:
+		genome = ""
+
+	##########
+	## annot
+	##########
+	annot_dir = functions.create_subfolder('annot', dir_sample)
+	annot_files = cluster.loc[cluster['tag'] == 'annot']['sample'].to_list()
+	prof = ""
+	gff = ""
+	if annot_files:
+		for f in annot_files:
+			file_name = os.path.basename(f)
+			if f.endswith('faa'):
+				prot = annot_dir + '/' + file_name
+				if os.path.exists(prot):
+					continue
+			elif f.endswith('gff'):
+				gff = annot_dir + '/' + file_name
+				if os.path.exists(gff):
+					continue
+			shutil.copy(f, annot_dir)
+	else:
+		gff = ""
+		prot = ""
+
+	##########
+	## trimm
+	##########
+	trimm_dir = functions.create_subfolder('trimm', dir_sample)
+	reads_files = cluster.loc[cluster['tag'] == 'reads']['sample'].to_list()
+	reads = []
+	if reads_files:
+		for f in reads_files:
+			file_name = os.path.basename(f)
+			reads_name = trimm_dir + '/' + file_name
+			reads.append(reads_name)
+			if not os.path.exists(reads_name):
+				shutil.copy(f, trimm_dir)
+
+	##########
+	## ident
+	##########
+	ident_dir = functions.create_subfolder('ident', dir_sample)
+	ident_file = cluster.loc[cluster['tag'] == 'ident']['sample'].to_list()
+	if ident_file:
+		file_name = os.path.basename(ident_file[0])
+		ident_file_name = ident_dir + '/' + file_name
+		if not os.path.exists(ident_file_name):
+			shutil.copy(ident_file[0], ident_dir)
+	else:
+		ident_file_name = ""
+	
+	##########
+	## profile
+	##########
+	profile_dir = functions.create_subfolder('profile', dir_sample)
+	profile_files = cluster.loc[cluster['tag'] == 'profile']['sample'].to_list()
+	profile_file = []
+	if profile_files:
+		for f in profile_files:
+			file_name = os.path.basename(f)
+			profile_file_name = profile_dir + '/' + file_name
+			profile_file.append(profile_file_name)
+			if not os.path.exists(profile_file_name):
+				shutil.copy(f, profile_dir)
+	
+	##########
+	## mash profile
+	##########
+	mash_dir = functions.create_subfolder('mash', dir_sample)
+	mash_file = cluster.loc[cluster['tag'] == 'mash']['sample'].to_list()
+	if mash_file:
+		file_name = os.path.basename(mash_file[0])
+		sig_file = mash_dir + '/' + file_name
+		if not os.path.exists(sig_file):
+			shutil.copy(mash_file[0], mash_dir)
+	else:
+		sig_file = ""
+	
+	############################################
+	### Dump information
+
+	## TODO: Add species and genus information when parsed from ident csv file
+	#####
+	data2dump.loc[len(data2dump)] = (name, dir_sample, 'genus', 'species', name, genome, gff, prot, sig_file, '::'.join(sorted(profile_file)), ident_file_name, '::'.join(sorted(reads)) )
+	#data2dump = data2dump.set_index('ID')
+	
+	###### dump to file
+	info_file = dir_sample + '/info.txt'
+	data2dump.to_csv(info_file)
+
+	###### dump file information to file
+	info_file2 = dir_sample + '/info_files.txt'
+	cluster.to_csv(info_file2)
+
+	###### timestamp
+	filename_stamp = dir_sample + '/.success'
+	stamp =	functions.print_time_stamp(filename_stamp)
+
+	return()
+

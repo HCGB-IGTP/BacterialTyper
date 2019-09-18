@@ -124,8 +124,10 @@ def run(options):
 		functions.boxymcboxface("Update Sample Database")
 
 		## update db
-		print ("+ Update database with samples identified")		
-
+		print ("+ Update database with samples identified")
+		## TODO: check if it works
+		dataBase_user = database_user.update_database_user_data(options.database, input_dir, Debug, options)		
+		
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: results obtained **", 'yellow'))

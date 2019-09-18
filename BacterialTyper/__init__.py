@@ -17,6 +17,7 @@ __all__ = [
 	'card_trick_caller',
 	'data',
 	'database_generator',
+	'database_user',
 	'edirect_caller',
 	'extern_progs',
 	'fastqc_caller',
