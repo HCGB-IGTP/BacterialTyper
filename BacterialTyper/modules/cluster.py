@@ -106,18 +106,26 @@ def run(options):
 		pd.set_option('display.max_colwidth', -1)
 		pd.set_option('display.max_columns', None)
 		print (retrieve_databases)
-		
+
+	## check if all samples in user_data or genbank are indexed
+	siglist_all = []
+	for index, row in retrieve_databases.iterrows():
+		if row['path'] == 'NaN':
+			## index assembly or reads...
+			(sigfile, siglist) = generate_sketch(row['folder'], row['original'], index, options.kmer_size, options.n_sketch, Debug)
+			retrieve_databases.loc[index]['path'] = sigfile[0]
+			retrieve_databases.loc[index]['ksize'] = options.kmer_size
+			retrieve_databases.loc[index]['num_sketch'] = options.n_sketch
+			siglist_all = siglist_all + siglist
+
 	### Cluster project samples
-	
 	print (colored("\n+ Collect project data", 'green'))
 	print ("+ Generate mash sketches for each sample analyzed...")
 	pd_samples_retrieved = pd_samples_retrieved.set_index('name')
 	
 	## init dataframe
-	colname = ["source", "name", "path", "original"]
-	siglist_all = []
+	colname = ["source", "name", "path", "original", "ksize", "num_sketch"]
 	pd_samples_sketched  = pd.DataFrame(columns = colname)
-	mash_bin = config.get_exe('mash')
 	for index, row in pd_samples_retrieved.iterrows():
 		if index in retrieve_databases.index:
 			print (colored('\t+ Sketched signature (%s) available within user data...' %index, 'yellow'))
@@ -125,15 +133,14 @@ def run(options):
 
 		this_sig = outdir_dict[index] + '/' + index + '.sig'
 		if os.path.exists(this_sig):
-			pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, this_sig, row['sample'])
-
+			pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, this_sig, row['sample'], options.kmer_size, options.n_sketch)
 			print (colored('\t+ Sketched signature available (%s) in project folder...' %index, 'green'))
 			continue
 
 		else:
 			## index assembly or reads...
-			(sigfile, siglist) = min_hash_caller.sketch_database({ index: row['sample'] }, outdir_dict[index], Debug)
-			pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, sigfile[0], row['sample'])
+			(sigfile, siglist) = generate_sketch(outdir_dict[index], row['sample'], index, options.kmer_size, options.n_sketch, Debug)
+			pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, sigfile[0], row['sample'], options.kmer_size, options.n_sketch)
 			siglist_all = siglist_all + siglist
 
 	## debug message
@@ -146,7 +153,7 @@ def run(options):
 	
 	####
 	if not retrieve_databases.empty: 
-		tmp = retrieve_databases[['source', 'db', 'path', 'original']]
+		tmp = retrieve_databases[['source', 'db', 'path', 'original', 'ksize', 'num_sketch']]
 		tmp = tmp.rename({'db': 'name'}).set_index('db')
 	else:
 		tmp = retrieve_databases
@@ -193,7 +200,7 @@ def run(options):
 	(DataMatrix, labeltext) = min_hash_caller.compare(siglist_all, tag_cluster_info, Debug)
 	min_hash_caller.plot(DataMatrix, labeltext, tag_cluster_info, pdf)
 	
-	
+
 ############################################################	
 def get_options_db(options):
 	##
@@ -276,3 +283,16 @@ def get_options_db(options):
 	## return both dataframes
 	return (pd_MASH)
 
+############################################################	
+def generate_sketch(folder, assembly, entry, ksize, n_sketch, Debug):
+
+	(sigfile, siglist) = min_hash_caller.sketch_database({ entry: assembly }, folder, Debug, ksize, n_sketch)
+	functions.print_sepLine("*",50, False)
+	
+	## print original in file
+	file2print = folder + '/.original'
+	list_fna = [assembly, str(ksize), str(n_sketch)]
+	functions.printList2file(file2print, list_fna)
+	return (sigfile, siglist)
+
+	

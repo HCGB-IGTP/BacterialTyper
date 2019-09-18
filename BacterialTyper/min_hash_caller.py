@@ -44,7 +44,7 @@ def helpMash():
 	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
 ##################################################		
-def sketch_database(dict_files, folder, Debug):	
+def sketch_database(dict_files, folder, Debug, ksize_n, num_sketch):	
 	#################################################
 	## code taken and adapted from: 
 	##	https://sourmash.readthedocs.io/en/latest/api-example.html
@@ -59,9 +59,9 @@ def sketch_database(dict_files, folder, Debug):
 		Debug =True/False (for developing purposes only)
 
 	'''''	
-	### Default: might be set as option
-	num_sketch=500
-	ksize_n=31
+	### Default: set as option
+	## num_sketch=5000
+	## ksize_n=31
 	
 	minhashes = {}
 	for name,g in dict_files.items():
@@ -85,6 +85,7 @@ def sketch_database(dict_files, folder, Debug):
 	siglist_file = []
 
 	### save as signature
+	functions.create_folder(folder)
 	for names,hashes in minhashes.items():
 		sig1 = SourmashSignature(hashes, name=names)
 		outfile_name = folder + '/' + names + '.sig'
@@ -132,12 +133,11 @@ def compare(siglist, output, Debug):
 	if Debug:
 		print (colored("\n*** DEBUG: compare minhashes *****\n", 'red'))
 		print (type(D))
+		print ('D:')
 		print (D)
+		print ("Labeltext:")
 		print (labeltext)
-
-	## Debug messages
-	if Debug:
-		print ('min similarity in matrix: {:.3f}', numpy.min(D))
+		print ('Min similarity in matrix: {:.3f}', numpy.min(D))
 
 	### Write output
 	labeloutname = output + '.labels.txt'
@@ -202,6 +202,14 @@ def plot(D, labeltext, filename, pdf):
 	print ('+ Wrote dendrogram to:', dendrogram_out)
 
 	### make the dendrogram+matrix:
+	
+	### Original code
+    ## fig = sourmash_fig.plot_composite_matrix(D, labeltext, show_labels=args.labels,
+    ##             show_indices=args.indices, vmin=args.vmin, vmax=args.vmax, force=args.force)
+	
+	## I get code from the source code for this function and use it here.
+	## Get to generate a slightly different image representation
+	
 	fig3 = pylab.figure(figsize=(11, 8))
 	ax1 = fig3.add_axes([0.09, 0.1, 0.2, 0.6])
 
@@ -230,6 +238,7 @@ def plot(D, labeltext, filename, pdf):
 	pylab.colorbar(im, cax=axcolor)
 	
 	fig3.savefig(matrix_out)
+
 	print ('+ Wrote matrix to:', matrix_out)	
 	
 ##################################################

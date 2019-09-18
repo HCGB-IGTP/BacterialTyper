@@ -469,6 +469,9 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 
 		mash_bin = config.get_exe('mash')
 		db_Dataframe['original'] = ''
+		db_Dataframe['ksize'] = ''
+		db_Dataframe['num_sketch'] = ''
+		db_Dataframe['folder'] = ''
 	
 		### Check if folder exists
 		Mash_db_abs = functions.create_subfolder('Mash_db', database_folder)
@@ -496,20 +499,14 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 							else:
 								original = functions.readList_fromFile(file2print)
 
-							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry, list_msh[0], original[0]]
+							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry, list_msh[0], original[0], original[1], original[2], this_db]
 						else:
 							## index assembly or reads...
 							list_fna = functions.retrieve_matching_files(this_db, 'genomic.fna')
-							
-							## print original in file
-							file2print = this_db + '/.original'
-							functions.printList2file(file2print, list_fna)
-							
-							## sketch
-							(sigfile, siglist) = min_hash_caller.sketch_database({ entry: list_fna[0] }, this_db, Debug)
-							db_Dataframe.loc[len(db_Dataframe)] = ('genbank', entry, sigfile[0], list_fna[0])
-							functions.print_sepLine("*",50, False)
-	
+
+							## not available
+							db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, 'NaN', list_fna[0], 'NaN', 'NaN', this_db]
+
 			#### user_data
 			elif (db == "user_data"):
 				print (colored("\n\t- user_data: including information from user previously generated results", 'green')) ## include user data
@@ -526,26 +523,19 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 						## print original in file
 						file2print = this_db + '/mash/.original'
 						if not os.path.exists(file2print):
-							original = ['NaN']
+							original = ['NaN', 'NaN', 'NaN']
 						else:
 							original = functions.readList_fromFile(file2print)
 
 						##
-						db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, this_mash_db, original[0]]
+						db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, this_mash_db, original[0], original[1], original[2], this_db + '/mash']
 					else:
-						## index assembly or reads...
-						mash_abs = functions.create_subfolder('mash', this_db)
+						## not available
 						list_fna = functions.retrieve_matching_files(this_db + '/assembly', '.fna')
-
-						## print original in file
-						file2print = mash_abs + '/.original'
-						functions.printList2file(file2print, list_fna)
-						(sigfile, siglist) = min_hash_caller.sketch_database({ entry: list_fna[0] }, mash_abs, Debug)
-						db_Dataframe.loc[len(db_Dataframe)] = ('user_data', entry, sigfile[0], list_fna[0])
-						functions.print_sepLine("*",50, False)
-
+						db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, 'NaN', list_fna[0], 'NaN', 'NaN', this_db + '/mash']
 
 	#### external_data
+	### TODO: Fix this
 	if any(name in 'Mash_external' for name in db_Dataframe['source'].to_list()):
 		print (colored("\t- external_data: including information from external data provided by user", 'green')) ## include user data
 		db_Dataframe = db_Dataframe.set_index("db", drop = False)
@@ -555,7 +545,6 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 			outfile = row['path'] + '.msh'
 			if not os.path.exists(outfile):
 				path_file = os.path.dirname(row['path'])
-				### TODO: Fix this
 				this_db_file = min_hash_caller.sketch_database([row['path']], mash_bin, row['path'], row['db'], path_file)
 				functions.print_sepLine("*",50, False)
 
