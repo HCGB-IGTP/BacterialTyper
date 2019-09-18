@@ -170,9 +170,11 @@ def get_exe(prog):
 			return (p)
 	
 	if (len(exe_path_tmp) == 0):
-		print(colored("**ERROR: Programme %s could not be found." % prog,'red'))
+		print(colored("\n**ERROR: Programme %s could not be found." % prog,'red'))
+		exit()
 	else:
-		print(colored("**ERROR: Programme %s version smaller than minimun version expected %s." %(prog,min_version),'red'))
-	
+		print(colored("\n**ERROR: Programme %s version smaller than minimun version expected %s." %(prog,min_version),'red'))
+		exit()
+			
 	return('ERROR')
 
