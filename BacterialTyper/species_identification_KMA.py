@@ -270,15 +270,15 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 			option = 'add'
 
 		for f in file_abs_paths:
-			file_name = f
-			baseName = os.path.basename(file_name)
+			print (f)
+			baseName = os.path.basename(f)
 			
 			## check if already index
 			if baseName in lineList:
 				print (colored('+ File %s is already available in database %s' %(baseName, name), 'green'))
-				indexedList.append(file_name)
+				indexedList.append(f)
 			else:
-				toIndexList.append(file_name)		
+				toIndexList.append(f)		
 		
 		if toIndexList:
 			## generate batch and call

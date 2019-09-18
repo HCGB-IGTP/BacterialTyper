@@ -12,13 +12,11 @@
 ## Modules	##
 ##############
 [TODO] BacterialTyper/modules/MGE.py :: Fix SettingWithCopyWarning warning message
-[TODO] BacterialTyper/modules/MGE.py :: Generate help and information message for MGE module
 
 [TODO] BacterialTyper/modules/database.py :: set sample user database
 [TODO] BacterialTyper/modules/database.py :: ariba user databases provided
 [TODO] BacterialTyper/modules/database.py :: NCBI_descendant
 
-[TODO] BacterialTyper/modules/info.py :: Generate help and information message for project
 [TODO] BacterialTyper/modules/set_configuration.py :: All
 [TODO] BacterialTyper/modules/variant_calling.py :: All
 [TODO] BacterialTyper/modules/assemble.py :: Generate more comprehensive statistics
@@ -40,10 +38,9 @@
 [TODO] BacterialTyper/install_dependencies.py :: All
 [TODO] BacterialTyper/install_dependencies.py :: check and install edirect NCBI
 
-[TODO] BacterialTyper/multiQC_report.py :: Generate help and information message for MultiQC
-[TODO] BacterialTyper/species_identification_KMA.py :: Generate help and information message for KMA (help_kma_database)
-
 [TODO] BacterialTyper/virulence_resistance.py :: Implement if a different database provided (!= CARD, VFDB) 
+[TODO] BacterialTyper/species_identification_KMA.py :: Implement if a different database provided for KMA
+
 [TODO] BacterialTyper/extern_progs.py :: Add install dependencies
 
 [TODO] BacterialTyper/MLSTar.py :: Check time passed and download profile/sequence again if >?? days passed]
@@ -51,14 +48,11 @@
 [TODO] BacterialTyper/MLSTar.py :: Add help MLSTar
 [TODO] BacterialTyper/MLSTar.py :: Check genus spp option to get PubMLST profiles
 
-[TODO] BacterialTyper/trimmomatic_call.py :: Generate help and information message for trimmomatic
 [TODO] BacterialTyper/trimmomatic_call.py :: Implement new parameters for trimming given the quality check analysis
 
 [TODO] BacterialTyper/ariba_caller.py :: Different databases provided
 [TODO] BacterialTyper/ariba_caller.py :: Check what to do with single end when calling ARIBA
 
-[TODO] BacterialTyper/database_generator.py :: Discard include report profile in user data database
-[TODO] BacterialTyper/database_generator.py :: Include sig files user data database
 [TODO] BacterialTyper/database_generator.py :: Include species and genus information in user data database
 
 
@@ -68,4 +62,13 @@
 https://pathogen.watch/
 https://microreact.org/about
 
+#####################
+### Documentation ###
+#####################
+
+[TODO] BacterialTyper/multiQC_report.py :: Generate help and information message for MultiQC
+[TODO] BacterialTyper/species_identification_KMA.py :: Generate help and information message for KMA (help_kma_database)
+[TODO] BacterialTyper/trimmomatic_call.py :: Generate help and information message for trimmomatic
+[TODO] BacterialTyper/modules/info.py :: Generate help and information message for project
+[TODO] BacterialTyper/modules/MGE.py :: Generate help and information message for MGE module
 

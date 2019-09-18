@@ -282,7 +282,7 @@ def get_userData_info(options, project_folder):
 	## get mash information
 	pd_samples_mash = sample_prepare.get_files(options, project_folder, "mash", ["sig"])
 	if not pd_samples_mash.empty:
-		pd_samples_mash = pd_samples_ident.set_index('name')
+		pd_samples_mash = pd_samples_mash.set_index('name')
 
 	## add other if necessary
 
@@ -296,7 +296,7 @@ def get_userData_info(options, project_folder):
 		print (pd_samples_mash)
 	
 	## merge
-	df = pd.concat([pd_samples_profile, pd_samples_ident, pd_samples_ident], join='inner', sort=True).drop_duplicates()
+	df = pd.concat([pd_samples_profile, pd_samples_ident, pd_samples_mash], join='inner', sort=True).drop_duplicates()
 	## joining by inner we only get common columns among all
 
 	return(df)
@@ -406,7 +406,7 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 	else:
 
 		## data to generate
-		data2dump = pd.DataFrame(columns=('ID','folder','genus','species','name','genome', 'GFF','proteins', 'signature'))
+		data2dump = pd.DataFrame(columns=('ID','folder','genus','species','name','genome', 'GFF','proteins', 'signature', 'profile', 'ident', 'reads'))
 		## iterate over files with different tags: reads, annot, assembly, profile, ident
 
 		##########
@@ -416,7 +416,8 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 		assembly_file = cluster.loc[cluster['tag'] == 'assembly']['sample'].to_list()
 		if assembly_file:
 			shutil.copy(assembly_file[0], assembly_dir)
-			genome = assembly_file[0]
+			assembly_file_name = os.path.basename(assembly_file[0])
+			genome = assembly_dir + '/' + assembly_file_name
 		else:
 			genome = ""
 	
@@ -430,10 +431,11 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 		if annot_files:
 			for f in annot_files:
 				shutil.copy(f, annot_dir)
+				file_name = os.path.basename(f)
 				if f.endswith('faa'):
-					prot = f
+					prot = annot_dir + '/' + file_name
 				elif f.endswith('gff'):
-					gff = f
+					gff = annot_dir + '/' + file_name
 		else:
 			gff = ""
 			prot = ""
@@ -444,8 +446,11 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 		trimm_dir = functions.create_subfolder('trimm', dir_sample)
 		reads_files = cluster.loc[cluster['tag'] == 'reads']['sample'].to_list()
 		if reads_files:
+			reads = []
 			for f in reads_files:
 				shutil.copy(f, trimm_dir)
+				file_name = os.path.basename(f)
+				reads.append(trimm_dir + '/' + file_name)
 
 		## profile and ident information would place in folders accordingly but would no be incorporated
 		## in the database file
@@ -457,6 +462,11 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 		ident_file = cluster.loc[cluster['tag'] == 'ident']['sample'].to_list()
 		if ident_file:
 			shutil.copy(ident_file[0], ident_dir)
+			file_name = os.path.basename(f)
+			ident_file_name = ident_dir + '/' + file_name
+		else:
+			ident_file_name = ""
+
 		
 		##########
 		## profile
@@ -466,6 +476,10 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 		if profile_files:
 			for f in profile_files:
 				shutil.copy(f, profile_dir)
+				file_name = os.path.basename(f)
+				profile_file_name = profile_dir + '/' + file_name
+		else:
+			profile_file_name = ""
 		
 		##########
 		## mash profile
@@ -474,15 +488,18 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 		mash_file = cluster.loc[cluster['tag'] == 'mash']['sample'].to_list()
 		if mash_file:
 			shutil.copy(mash_file[0], mash_dir)
-			sig = mash_file[0]
+			file_name = os.path.basename(f)
+			sig_file = mash_dir + '/' + file_name
 		else:
 			sig = ""
 		
 		############################################
 		### Dump information
 	
+		## TODO: Add species and genus information when parsed from ident csv file
+
 		#####
-		data2dump.loc[len(data2dump)] = (name, dir_sample, 'genus', 'species', name, genome, gff, prot, sig)
+		data2dump.loc[len(data2dump)] = (name, dir_sample, 'genus', 'species', name, genome, gff, prot, sig_file, profile_file_name, ident_file_name, '::'.join(reads))
 
 		###### dump to file
 		info_file = dir_sample + '/info.txt'

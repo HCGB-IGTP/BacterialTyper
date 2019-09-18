@@ -230,6 +230,14 @@ def select_other_samples (project, list_samples, samples_prefix, mode, extension
 						if f_search:
 							file_name = f_search.group(1) 
 							df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, extensions, mode]	
+
+					elif mode== 'mash':
+						#### name.sig
+						f_search = re.search(r".*\/%s\/(.*)\.%s$" %(mode, extensions[0]), path_file)
+						if f_search:
+							file_name = f_search.group(1) 
+							df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, extensions[0], mode]	
+
 					else:
 						f_search = re.search(r".*\/(.*)\/%s\/(.*)\_summary\.%s$" %(mode, extensions[0]), path_file)
 						if f_search:
@@ -237,7 +245,8 @@ def select_other_samples (project, list_samples, samples_prefix, mode, extension
 							if mode == 'profile':
 								name = f_search.group(1)
 								db_name = f_search.group(2).split('_')[-1]
-								df_samples.loc[len(df_samples)] = [path_file, dirN, name, db_name, mode]	
+								if not name.startswith('report'):
+									df_samples.loc[len(df_samples)] = [path_file, dirN, name, db_name, mode]	
 
 							elif mode == 'ident':
 								name = f_search.group(1)
@@ -257,8 +266,8 @@ def select_other_samples (project, list_samples, samples_prefix, mode, extension
 	##
 	number_samples = df_samples.index.size
 	if (number_samples == 0):
-		print (colored("\n**ERROR: No samples were retrieved. Check the input provided\n",'red'))
-		exit()
+		print (colored("\n**ERROR: No samples were retrieved for this option. Continue processing...\n",'red'))
+		return (df_samples)
 	print (colored("\t" + str(number_samples) + " samples selected from the input provided...", 'yellow'))
 
 	return (df_samples)
