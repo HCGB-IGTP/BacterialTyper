@@ -4,20 +4,20 @@
 ## Main	##
 ##########
 [TODO] scripts/BacterialTyper:: Config module: All
-[TODO] scripts/BacterialTyper:: Profile module: add help additional databases
-[TODO] scripts/BacterialTyper:: Identification module: add description
 [TODO] Fix and install MLSTar during installation
+[TODO] BacterialTyper/modules/set_configuration.py :: All
+[TODO] BacterialTyper/install_dependencies.py :: All
+[TODO] BacterialTyper/install_dependencies.py :: check and install edirect NCBI
+[TODO] BacterialTyper/extern_progs.py :: Add install dependencies
 
 ##############
 ## Modules	##
 ##############
 [TODO] BacterialTyper/modules/MGE.py :: Fix SettingWithCopyWarning warning message
 
-[TODO] BacterialTyper/modules/database.py :: set sample user database
 [TODO] BacterialTyper/modules/database.py :: ariba user databases provided
 [TODO] BacterialTyper/modules/database.py :: NCBI_descendant
 
-[TODO] BacterialTyper/modules/set_configuration.py :: All
 [TODO] BacterialTyper/modules/variant_calling.py :: All
 [TODO] BacterialTyper/modules/assemble.py :: Generate more comprehensive statistics
 
@@ -29,19 +29,20 @@
 
 [TODO] BacterialTyper/modules/qc.py :: Control FASTQC statistics for trimming
 [TODO] BacterialTyper/modules/qc.py :: Control BUSCO statistics for discarding samples if necessary
+
 [TODO] BacterialTyper/modules/profile.py :: Add information summarizing results for other databases
+[TODO] BacterialTyper/modules/profile.py :: check if it works database_user.update_database_user_data in profile
 
 ##############
 ## Scripts	##
 ##############
 
-[TODO] BacterialTyper/install_dependencies.py :: All
-[TODO] BacterialTyper/install_dependencies.py :: check and install edirect NCBI
+[TODO] BacterialTyper/virulence_resistance.py :: Implement if a different database provided (!= CARD, VFDB)
+[TODO] BacterialTyper/virulence_resistance.py :: Parse if a different database provided (!= CARD, VFDB)
 
-[TODO] BacterialTyper/virulence_resistance.py :: Implement if a different database provided (!= CARD, VFDB) 
 [TODO] BacterialTyper/species_identification_KMA.py :: Implement if a different database provided for KMA
-
-[TODO] BacterialTyper/extern_progs.py :: Add install dependencies
+[TODO] BacterialTyper/species_identification_KMA.py :: Download after n days passed?
+[TODO] BacterialTyper/species_identification_KMA.py :: Test single end
 
 [TODO] BacterialTyper/MLSTar.py :: Check time passed and download profile/sequence again if >?? days passed]
 [TODO] BacterialTyper/MLSTar.py :: update_MLSTar_profile_alleles()
@@ -53,8 +54,10 @@
 [TODO] BacterialTyper/ariba_caller.py :: Different databases provided
 [TODO] BacterialTyper/ariba_caller.py :: Check what to do with single end when calling ARIBA
 
-[TODO] BacterialTyper/database_generator.py :: Include species and genus information in user data database
-
+[TODO] BacterialTyper/database_user.py :: Include species and genus information in user data database
+[TODO] BacterialTyper/database_generator.py :: Add mash for external data
+[TODO] BacterialTyper/database_generator.py :: NCBI descendant
+[TODO] BacterialTyper/database_generator.py :: provide preference to db2update (update_db_data_file)
 
 #####################
 ### Visualization ###
@@ -71,4 +74,7 @@ https://microreact.org/about
 [TODO] BacterialTyper/trimmomatic_call.py :: Generate help and information message for trimmomatic
 [TODO] BacterialTyper/modules/info.py :: Generate help and information message for project
 [TODO] BacterialTyper/modules/MGE.py :: Generate help and information message for MGE module
+[TODO] scripts/BacterialTyper:: Profile module: add help additional databases
+[TODO] scripts/BacterialTyper:: Identification module: add description
+[TODO] BacterialTyper/BacterialTyper/min_hash_caller.py:: help message
 

@@ -47,27 +47,6 @@ def xtract_call(docsum_file, pattern, element, outfile, xtract_bin):
 	cmd = ("cat %s | %s -pattern %s -sep ',' -element %s > %s" %(docsum_file, xtract_bin, pattern, element, outfile))
 	return(functions.system_call(cmd))	
 
-###############
-def main():
-	## this code runs when call as a single script
-
-  	## control if options provided or help
-	if len(sys.argv) > 1:
-		print ("")
-	else:
-		help_edirect()
-		exit()
-
-	### TODO implement main function
-	## to call independently
-
-######
-'''******************************************'''
-if __name__== "__main__":
-	main()
-		
-	
-
 ## docsum Nucleotide entry
 ##esearch -db nuccore -query NZ_CP029083.1 | efetch -format docsum > docsum_nucleotide_entry.txt
 ##cat docsum_nucleotide_entry.txt | xtract -pattern DocumentSummary -element BioSample > BioSample.txt

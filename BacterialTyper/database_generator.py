@@ -218,7 +218,7 @@ def update_db_data_file(data, csv):
 		print ("+ Obtaining information from database file: %s" %csv)
 		db2update = functions.get_data(csv, ',', 'index_col=0')
 		
-		## TODO: join and provide preference to db2update
+		## TODO: provide preference to db2update
 		df = pd.concat([db2update, data], join='inner', sort=True).drop_duplicates()
 		df.to_csv(csv)
 		return (df)

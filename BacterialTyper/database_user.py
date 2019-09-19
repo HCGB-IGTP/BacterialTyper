@@ -208,7 +208,6 @@ def get_userData_info(options, project_folder):
 ############################################
 def update_sample(name, cluster, own_data, user_data_db, Debug):
 
-	## TODO: Implement threads here
 	## debug message	
 	if (Debug):
 		print (colored("**DEBUG: sample_frame groupby: name & cluster **", 'yellow'))
