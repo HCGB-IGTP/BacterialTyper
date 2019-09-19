@@ -111,12 +111,18 @@ def run(options):
 	siglist_all = []
 	for index, row in retrieve_databases.iterrows():
 		if row['path'] == 'NaN':
-			## index assembly or reads...
-			(sigfile, siglist) = generate_sketch(row['folder'], row['original'], index, options.kmer_size, options.n_sketch, Debug)
-			retrieve_databases.loc[index]['path'] = sigfile[0]
-			retrieve_databases.loc[index]['ksize'] = options.kmer_size
-			retrieve_databases.loc[index]['num_sketch'] = options.n_sketch
-			siglist_all = siglist_all + siglist
+			print ('.')
+		else:
+			print (row)
+			if all([ options.kmer_size == row['ksize'], options.n_sketch == row['num_sketch'] ]):
+				continue
+
+		## index assembly or reads...
+		(sigfile, siglist) = generate_sketch(row['folder'], row['original'], index, options.kmer_size, options.n_sketch, Debug)
+		retrieve_databases.loc[index]['path'] = sigfile[0]
+		retrieve_databases.loc[index]['ksize'] = options.kmer_size
+		retrieve_databases.loc[index]['num_sketch'] = options.n_sketch
+		siglist_all = siglist_all + siglist
 
 	### Cluster project samples
 	print (colored("\n+ Collect project data", 'green'))
@@ -171,8 +177,9 @@ def run(options):
 	## get missing signature files
 	print ('\t+ Loading missing signature for comparison...')
 	list_signatures2read = cluster_df['path'].to_list()
-	for l in list_signatures2read:
-		siglist_all.append(min_hash_caller.read_signature(l))
+	if not list_signatures2read:
+		for l in list_signatures2read:
+			siglist_all.append(min_hash_caller.read_signature(l))
 	###
 	siglist_all = set(siglist_all)
 	
