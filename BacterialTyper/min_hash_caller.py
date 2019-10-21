@@ -68,11 +68,8 @@ def sketch_database(dict_files, folder, Debug, ksize_n, num_sketch):
 		print ('\t+ Skecthing sample: ', name)
 		E = sourmash.MinHash(n=num_sketch, ksize=ksize_n)	## generate hash according to number of sketches and kmer size
 		for record in screed.open(g):
-			E.add_sequence(record.sequence[:50000], True)
-
-		## in add_sequence and for speed reasons, we’ll truncate the sequences to 50kb in length
-		## also, we set force=True to skip over k-mers containing characters other than ACTG, rather than raising an exception.
-														
+			E.add_sequence(record.sequence, True)
+		## in add_sequence and for speed reasons, we set force=True to skip over k-mers containing characters other than ACTG, rather than raising an exception.
 		minhashes[name]= E
 		
 	## Debug messages
@@ -98,11 +95,10 @@ def sketch_database(dict_files, folder, Debug, ksize_n, num_sketch):
 	return(siglist_file, siglist)		
 	
 ##################################################		
-def read_signature(sigfile):
-	ksize_n=31
+def read_signature(sigfile, ksize_n):
 	## code taken and adapted from: https://sourmash.readthedocs.io/en/latest/api-example.html
 	#print ('\t+ Loading signature for comparison...')
-	sig = load_one_signature(sigfile, ksize=ksize_n, select_moltype='DNA')
+	sig = load_one_signature(sigfile, ksize=ksize_n, select_moltype='DNA', ignore_md5sum=False)
 	return (sig)
 
 ##################################################
@@ -138,12 +134,14 @@ def compare(siglist, output, Debug):
 		print ("Labeltext:")
 		print (labeltext)
 		print ('Min similarity in matrix: {:.3f}', numpy.min(D))
-
+		
 	### Write output
 	labeloutname = output + '.labels.txt'
-
 	with open(labeloutname, 'w') as fp:
 		fp.write("\n".join(labeltext))
+
+	## save matrix as txt ub csv format file
+	numpy.savetxt(output, D, delimiter=",", header= ",".join(labeltext) )
 
 	## Debug messages
 	if Debug:
@@ -152,10 +150,6 @@ def compare(siglist, output, Debug):
 		print('saving distance matrix (binary file) to:', output)
 		print('saving distance matrix (csv file) to:', output)
 
-	## binary
-	with open(output, 'wb') as fp:
-		numpy.save(fp, D)
-		
 	## return numpy array
 	return (D, labeltext)
 
@@ -182,35 +176,39 @@ def plot(D, labeltext, filename, pdf):
 		dendrogram_out += '.png'
 		matrix_out += '.png'
 		hist_out += '.png'
-
-	# make the histogram
+	
+	###########################
+	### make the histogram
+	###########################
 	print ('+ Saving histogram of matrix values: ', hist_out)
 	fig = pylab.figure(figsize=(8,5))
 	pylab.hist(numpy.array(D.flat), bins=100)
 	fig.savefig(hist_out)
 
-	### make the dendrogram:
-	fig2 = pylab.figure(figsize=(8,5))
+	#######################################
+	### make the dendrogram: do clustering
+	## https://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html
+	#######################################
+	fig2 = pylab.figure(figsize=(11,8))
 	ax1 = fig2.add_axes([0.1, 0.1, 0.7, 0.8])
 	ax1.set_xticks([])
 	ax1.set_yticks([])
-
-	### do clustering
 	Y = sch.linkage(D, method='single')
 	Z1 = sch.dendrogram(Y, orientation='right', labels=labeltext)
 	fig2.savefig(dendrogram_out)
 	print ('+ Wrote dendrogram to:', dendrogram_out)
 
+	#######################################
 	### make the dendrogram+matrix:
-	
+	#######################################
+
 	### Original code
     ## fig = sourmash_fig.plot_composite_matrix(D, labeltext, show_labels=args.labels,
     ##             show_indices=args.indices, vmin=args.vmin, vmax=args.vmax, force=args.force)
-	
 	## I get code from the source code for this function and use it here.
 	## Get to generate a slightly different image representation
 	
-	fig3 = pylab.figure(figsize=(11, 8))
+	fig3 = pylab.figure(figsize=(15, 10))
 	ax1 = fig3.add_axes([0.09, 0.1, 0.2, 0.6])
 
 	# plot dendrogram
@@ -232,18 +230,22 @@ def plot(D, labeltext, filename, pdf):
 	im = axmatrix.matshow(D, aspect='auto', origin='lower',cmap=pylab.cm.YlGnBu, vmin=1, vmax=0)
 	axmatrix.set_xticks([])
 	axmatrix.set_yticks([])
+	
+	## https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.matshow.html
+	## https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.axes.Axes.imshow.html#matplotlib.axes.Axes.imshow
+	## cmap=pylab.cm.RdBu
+	## https://scipy-cookbook.readthedocs.io/items/Matplotlib_Show_colormaps.html
 
 	# Plot colorbar.
 	axcolor = fig3.add_axes([scale_xstart, 0.1, 0.02, 0.6])
-	pylab.colorbar(im, cax=axcolor)
-	
+	pylab.colorbar(im, cax=axcolor)	
 	fig3.savefig(matrix_out)
 
 	print ('+ Wrote matrix to:', matrix_out)	
 	
 ##################################################
 def	help_options():
-	print ("\nUSAGE: python %s\n"  %os.path.realpath(__file__))
+	print ("\nUSAGE: python %s fasta_1,ID1 fasta_2,ID2 ... fasta_n,IDn \n"  %os.path.realpath(__file__))
 
 ##################################################
 def main():
@@ -265,12 +267,16 @@ def main():
 	
 	## to do: implement main function
 	folder = "."
-	Debug = False
+	Debug = True
 	output = "test4"
 	pdf = True
 	
+	##
+	ksize_n = 51
+	num_sketch = 5000
+	
 	###
-	siglist = sketch_database(file_names_dict, folder, Debug)
+	(siglist_file, siglist) = sketch_database(file_names_dict, folder, Debug, ksize_n, num_sketch)
 	(D, labeltext) = compare(siglist, output, Debug)
 	plot(D, labeltext, output, pdf)
 

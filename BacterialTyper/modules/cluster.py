@@ -113,8 +113,9 @@ def run(options):
 		if row['path'] == 'NaN':
 			print ('.')
 		else:
-			print (row)
-			if all([ options.kmer_size == row['ksize'], options.n_sketch == row['num_sketch'] ]):
+			#print (row)
+			if all([ int(options.kmer_size) == int(row['ksize']), int(options.n_sketch) == int(row['num_sketch']) ]):
+				siglist_all.append( min_hash_caller.read_signature(row['path'], options.kmer_size))
 				continue
 
 		## index assembly or reads...
@@ -123,7 +124,7 @@ def run(options):
 		retrieve_databases.loc[index]['ksize'] = options.kmer_size
 		retrieve_databases.loc[index]['num_sketch'] = options.n_sketch
 		siglist_all = siglist_all + siglist
-
+	
 	### Cluster project samples
 	print (colored("\n+ Collect project data", 'green'))
 	print ("+ Generate mash sketches for each sample analyzed...")
@@ -179,7 +180,7 @@ def run(options):
 	list_signatures2read = cluster_df['path'].to_list()
 	if not list_signatures2read:
 		for l in list_signatures2read:
-			siglist_all.append(min_hash_caller.read_signature(l))
+			siglist_all.append(min_hash_caller.read_signature(l, options.kmer_size))
 	###
 	siglist_all = set(siglist_all)
 	
