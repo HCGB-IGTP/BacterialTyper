@@ -31,6 +31,7 @@ __all__ = [
 	'spades_assembler',
 	'species_identification_KMA',
 	'trimmomatic_call',
+	'variant_calling',
 	'virulence_resistance'
 ]
 

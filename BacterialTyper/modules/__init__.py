@@ -15,7 +15,6 @@ __all__ = [
 	'set_configuration',
 	'test',
 	'trimm',
-	'variant_calling',
 	'version'
 ]
 
