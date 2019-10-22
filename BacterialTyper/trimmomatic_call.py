@@ -56,6 +56,19 @@ def print_help_adapters():
 	## [TODO]
 	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
+	#######################################
+	## http://www.usadellab.org/cms/?page=trimmomatic
+	#
+	# ILLUMINACLIP:fasta_file.fa:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24
+	#
+	# This will perform the following:
+	#	Remove adapters (ILLUMINACLIP:fasta_file.fa:2:30:10)
+	#	Remove leading low quality or N bases (below quality 11) (LEADING:11)
+	#	Remove trailing low quality or N bases (below quality 11) (TRAILING:11)
+	#	Scan the read with a 4-base wide sliding window, cutting when the average quality per base drops below 20 (SLIDINGWINDOW:4:20)
+	#	Drop reads below the 24 bases long (MINLEN:24)
+	#######################################
+
 ################################################
 def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
 	##
