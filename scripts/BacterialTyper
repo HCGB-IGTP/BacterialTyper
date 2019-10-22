@@ -498,8 +498,8 @@ options_group_cluster.add_argument("--genbank_data", action="store_true",  help=
 options_group_cluster.add_argument("--only_external_data", action="store_true",  help="Use only reference genomes previously downloaded from NCBI stored in database folder.")
 
 parameters_minHash_group_cluster = subparser_cluster.add_argument_group("Parameters MinHash")
-parameters_minHash_group_cluster.add_argument("--n_sketch", type=int, help="Sketch size. Each sketch will have at most this many non-redundant min-hashes. [Default: 1000].", default=1000)
-parameters_minHash_group_cluster.add_argument("--kmer_size", type=int, help="Hashes will be based on strings of this many nucleotides. [Default: 31]", default=31)
+parameters_minHash_group_cluster.add_argument("--n_sketch", type=int, help="Sketch size. Each sketch will have at most this many non-redundant min-hashes. [Default: 5000].", default=5000)
+parameters_minHash_group_cluster.add_argument("--kmer_size", type=int, help="Hashes will be based on strings of this many nucleotides. [Default: 51]", default=51)
 
 info_group_cluster = subparser_cluster.add_argument_group("Additional information")
 info_group_cluster.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")

@@ -110,27 +110,30 @@ def run(options):
 	## check if all samples in user_data or genbank are indexed
 	siglist_all = []
 	for index, row in retrieve_databases.iterrows():
-		if row['path'] == 'NaN':
-			print ('.')
-		else:
+		if not row['path'] == 'NaN':
 			#print (row)
 			if all([ int(options.kmer_size) == int(row['ksize']), int(options.n_sketch) == int(row['num_sketch']) ]):
-				siglist_all.append( min_hash_caller.read_signature(row['path'], options.kmer_size))
+				siglist_all.append(min_hash_caller.read_signature(row['path'], options.kmer_size))
 				continue
 
 		## index assembly or reads...
 		(sigfile, siglist) = generate_sketch(row['folder'], row['original'], index, options.kmer_size, options.n_sketch, Debug)
-		retrieve_databases.loc[index]['path'] = sigfile[0]
+		retrieve_databases.loc[index]['path'] = sigfile
 		retrieve_databases.loc[index]['ksize'] = options.kmer_size
 		retrieve_databases.loc[index]['num_sketch'] = options.n_sketch
-		siglist_all = siglist_all + siglist
+		siglist_all.append(siglist)
 	
 	### Cluster project samples
 	print (colored("\n+ Collect project data", 'green'))
 	print ("+ Generate mash sketches for each sample analyzed...")
 	pd_samples_retrieved = pd_samples_retrieved.set_index('name')
 	
-	## init dataframe
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: pd_samples_retrieved **", 'yellow'))
+		print (pd_samples_retrieved)
+
+	## init dataframe for project data
 	colname = ["source", "name", "path", "original", "ksize", "num_sketch"]
 	pd_samples_sketched  = pd.DataFrame(columns = colname)
 	for index, row in pd_samples_retrieved.iterrows():
@@ -140,15 +143,25 @@ def run(options):
 
 		this_sig = outdir_dict[index] + '/' + index + '.sig'
 		if os.path.exists(this_sig):
-			pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, this_sig, row['sample'], options.kmer_size, options.n_sketch)
-			print (colored('\t+ Sketched signature available (%s) in project folder...' %index, 'green'))
-			continue
+			## File signature might exist
 
-		else:
-			## index assembly or reads...
-			(sigfile, siglist) = generate_sketch(outdir_dict[index], row['sample'], index, options.kmer_size, options.n_sketch, Debug)
-			pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, sigfile[0], row['sample'], options.kmer_size, options.n_sketch)
-			siglist_all = siglist_all + siglist
+			## read original
+			file2print = outdir_dict[index] + '/.original'
+			if not os.path.exists(file2print):
+				original = ['NaN']
+			else:
+				original = functions.readList_fromFile(file2print)
+				if all([ int(options.kmer_size) == int(original[1]), int(options.n_sketch) == int(original[2])]):
+					siglist_all.append(min_hash_caller.read_signature(this_sig, options.kmer_size)) 
+					pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, this_sig, row['sample'], options.kmer_size, options.n_sketch)
+					print (colored('\t+ Sketched signature available (%s) in project folder...' %index, 'green'))
+					continue			
+					
+		print (colored('\t+ Sketched signature to be generated: (%s)...' %index, 'yellow'))
+		## index assembly or reads...
+		(sigfile, siglist) = generate_sketch(outdir_dict[index], row['sample'], index, options.kmer_size, options.n_sketch, Debug)
+		pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, sigfile, row['sample'], options.kmer_size, options.n_sketch)
+		siglist_all.append(siglist)
 
 	## debug message
 	if (Debug):
@@ -177,12 +190,11 @@ def run(options):
 
 	## get missing signature files
 	print ('\t+ Loading missing signature for comparison...')
-	list_signatures2read = cluster_df['path'].to_list()
-	if not list_signatures2read:
-		for l in list_signatures2read:
-			siglist_all.append(min_hash_caller.read_signature(l, options.kmer_size))
-	###
-	siglist_all = set(siglist_all)
+	#list_signatures2read = cluster_df['path'].to_list()
+	#for l in list_signatures2read:
+	#	siglist_all += min_hash_caller.read_signature(l, options.kmer_size)
+	
+	### siglist_all = set(siglist_all)
 	
 	## debug message
 	if (Debug):
@@ -295,7 +307,7 @@ def get_options_db(options):
 def generate_sketch(folder, assembly, entry, ksize, n_sketch, Debug):
 
 	(sigfile, siglist) = min_hash_caller.sketch_database({ entry: assembly }, folder, Debug, ksize, n_sketch)
-	functions.print_sepLine("*",50, False)
+	#functions.print_sepLine("*",50, False)
 	
 	## print original in file
 	file2print = folder + '/.original'
