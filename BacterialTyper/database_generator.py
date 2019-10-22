@@ -467,7 +467,6 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 	##################
 	elif (source == 'MASH'):
 
-		mash_bin = config.get_exe('mash')
 		db_Dataframe['original'] = ''
 		db_Dataframe['ksize'] = ''
 		db_Dataframe['num_sketch'] = ''
@@ -536,6 +535,7 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 
 	#### external_data
 	### TODO: Fix this
+	mash_bin = config.get_exe('mash')
 	if any(name in 'Mash_external' for name in db_Dataframe['source'].to_list()):
 		print (colored("\t- external_data: including information from external data provided by user", 'green')) ## include user data
 		db_Dataframe = db_Dataframe.set_index("db", drop = False)

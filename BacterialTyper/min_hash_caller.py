@@ -141,7 +141,7 @@ def compare(siglist, output, Debug):
 		fp.write("\n".join(labeltext))
 
 	## save matrix as txt ub csv format file
-	numpy.savetxt(output, D, delimiter=",", header= ",".join(labeltext) )
+	numpy.savetxt(output + ".matrix.csv", D, delimiter=",", header= ",".join(labeltext) )
 
 	## Debug messages
 	if Debug:
@@ -162,18 +162,18 @@ def plot(D, labeltext, filename, pdf):
 	#################################################
 
 	# build filenames, decide on PDF/PNG output
-	dendrogram_out = filename + '.dendro'
+	#dendrogram_out = filename + '.dendro'
 	matrix_out = filename + '.matrix'
 	hist_out = filename + '.hist'
 
 	###
 	if pdf:
-		dendrogram_out += '.pdf'
+	#	dendrogram_out += '.pdf'
 		matrix_out += '.pdf'
 		hist_out += '.pdf'
 	
 	else:
-		dendrogram_out += '.png'
+	#	dendrogram_out += '.png'
 		matrix_out += '.png'
 		hist_out += '.png'
 	
@@ -189,14 +189,14 @@ def plot(D, labeltext, filename, pdf):
 	### make the dendrogram: do clustering
 	## https://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html
 	#######################################
-	fig2 = pylab.figure(figsize=(11,8))
-	ax1 = fig2.add_axes([0.1, 0.1, 0.7, 0.8])
-	ax1.set_xticks([])
-	ax1.set_yticks([])
-	Y = sch.linkage(D, method='single')
-	Z1 = sch.dendrogram(Y, orientation='right', labels=labeltext)
-	fig2.savefig(dendrogram_out)
-	print ('+ Wrote dendrogram to:', dendrogram_out)
+	#fig2 = pylab.figure(figsize=(11,8))
+	#ax1 = fig2.add_axes([0.1, 0.1, 0.7, 0.8])
+	#ax1.set_xticks([])
+	#ax1.set_yticks([])
+	#Y = sch.linkage(D, method='single')
+	#Z1 = sch.dendrogram(Y, orientation='right', labels=labeltext)
+	#fig2.savefig(dendrogram_out)
+	#print ('+ Wrote dendrogram to:', dendrogram_out)
 
 	#######################################
 	### make the dendrogram+matrix:
@@ -207,7 +207,8 @@ def plot(D, labeltext, filename, pdf):
     ##             show_indices=args.indices, vmin=args.vmin, vmax=args.vmax, force=args.force)
 	## I get code from the source code for this function and use it here.
 	## Get to generate a slightly different image representation
-	
+
+	Y = sch.linkage(D, method='single')
 	fig3 = pylab.figure(figsize=(15, 10))
 	ax1 = fig3.add_axes([0.09, 0.1, 0.2, 0.6])
 
@@ -240,7 +241,6 @@ def plot(D, labeltext, filename, pdf):
 	axcolor = fig3.add_axes([scale_xstart, 0.1, 0.02, 0.6])
 	pylab.colorbar(im, cax=axcolor)	
 	fig3.savefig(matrix_out)
-
 	print ('+ Wrote matrix to:', matrix_out)	
 	
 ##################################################
@@ -271,7 +271,7 @@ def main():
 	output = "test4"
 	pdf = True
 	
-	##
+	## Defaults
 	ksize_n = 51
 	num_sketch = 5000
 	
