@@ -255,7 +255,7 @@ def run(options):
 			pd.set_option('display.max_columns', None)
 			print (dataFrame_edirect)
 
-		## Download
+		## 	TODO: update database with samples identified
 		print (dataFrame_edirect)
 		
 		file_toprint = final_dir + '/edirect_info2download.csv'
