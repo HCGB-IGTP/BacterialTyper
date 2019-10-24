@@ -30,6 +30,7 @@ import numpy
 from sourmash import SourmashSignature, save_signatures, load_one_signature
 import matplotlib
 matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 import pylab
 import scipy.cluster.hierarchy as sch
@@ -154,7 +155,7 @@ def compare(siglist, output, Debug):
 	return (D, labeltext)
 
 ##################################################
-def plot(D, labeltext, filename, pdf):
+def plot(D, labeltext, filename, pdf, colorLabel):
 	#################################################
 	## code taken and adapted from: 
 	##	https://sourmash.readthedocs.io/en/latest/api-example.html
@@ -200,7 +201,7 @@ def plot(D, labeltext, filename, pdf):
 
 	#######################################
 	### make the dendrogram+matrix:
-	#######################################
+		#######################################
 
 	### Original code
     ## fig = sourmash_fig.plot_composite_matrix(D, labeltext, show_labels=args.labels,
@@ -213,7 +214,17 @@ def plot(D, labeltext, filename, pdf):
 	ax1 = fig3.add_axes([0.09, 0.1, 0.2, 0.6])
 
 	# plot dendrogram
+	## https://python-graph-gallery.com/400-basic-dendrogram/
 	Z1_2 = sch.dendrogram(Y, orientation='left', labels=labeltext)
+
+	if colorLabel:
+		## set label colors if desired
+		sch.dendrogram(Y, orientation='left', labels=labeltext)
+		ax = plt.gca()
+		xlbls = ax.get_ymajorticklabels()
+		for lbl in xlbls:
+			lbl.set_color(colorLabel[ lbl.get_text() ])
+
 	ax1.set_xticks([])
 	xstart = 0.45
 	width = 0.45
@@ -241,7 +252,14 @@ def plot(D, labeltext, filename, pdf):
 	axcolor = fig3.add_axes([scale_xstart, 0.1, 0.02, 0.6])
 	pylab.colorbar(im, cax=axcolor)	
 	fig3.savefig(matrix_out)
-	print ('+ Wrote matrix to:', matrix_out)	
+	print ('+ Wrote matrix to:', matrix_out)
+	
+	
+	# Assignment of colors to labels: 'a' is red, 'b' is green, etc.
+	#ax = plt.gca()
+
+	#outname = filename + '.matrix2.pdf'
+	#plt.savefig(outname)
 	
 ##################################################
 def	help_options():
@@ -278,7 +296,7 @@ def main():
 	###
 	(siglist_file, siglist) = sketch_database(file_names_dict, folder, Debug, ksize_n, num_sketch)
 	(D, labeltext) = compare(siglist, output, Debug)
-	plot(D, labeltext, output, pdf)
+	plot(D, labeltext, output, pdf, "")
 
 
 ##################################################

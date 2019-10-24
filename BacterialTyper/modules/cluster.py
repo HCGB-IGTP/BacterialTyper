@@ -111,7 +111,7 @@ def run(options):
 	siglist_all = []
 	for index, row in retrieve_databases.iterrows():
 		if not row['path'] == 'NaN':
-			#print (row)
+			print (row)
 			if all([ int(options.kmer_size) == int(row['ksize']), int(options.n_sketch) == int(row['num_sketch']) ]):
 				siglist_all.append(min_hash_caller.read_signature(row['path'], options.kmer_size))
 				continue
@@ -187,21 +187,22 @@ def run(options):
 		print (cluster_df)
 		print (colored("**DEBUG: Signatures **", 'yellow'))
 		print (siglist_all)
-
-	## get missing signature files
-	print ('\t+ Loading missing signature for comparison...')
-	#list_signatures2read = cluster_df['path'].to_list()
-	#for l in list_signatures2read:
-	#	siglist_all += min_hash_caller.read_signature(l, options.kmer_size)
-	
-	### siglist_all = set(siglist_all)
-	
-	## debug message
-	if (Debug):
-		print (colored("**DEBUG: Signatures **", 'yellow'))
-		print (siglist_all)
 		print (colored("**DEBUG: length siglist_all **", 'yellow'))
 		print (len(siglist_all))
+
+	## get colorLabels	
+	color_df = cluster_df.filter(["source"], axis=1)
+	color_df["color"] = "r" ## red::genbank
+
+	## project data
+	project_data = list( color_df[ color_df["source"] == "project_data"].index)
+	color_df.loc[ color_df.index.isin(project_data), "color"] = "g" ## green::project_data
+
+	## user_data
+	user_data = list( color_df[ color_df["source"] == "user_data"].index)
+	color_df.loc[color_df.index.isin(user_data), "color"] = "b" ## blue::user_data
+	
+	colorLabels = color_df['color'].to_dict()
 
 	## parse results
 	if Project:
@@ -215,10 +216,13 @@ def run(options):
 	tag_cluster_info = final_dir + '/' + name
 	print ('+ Saving results in folder: ', final_dir)
 	print ('\tFile name: ', name)
-	
-	pdf = True
 	(DataMatrix, labeltext) = min_hash_caller.compare(siglist_all, tag_cluster_info, Debug)
-	min_hash_caller.plot(DataMatrix, labeltext, tag_cluster_info, pdf)
+
+	## get colorLabels	
+	
+	## plot images
+	pdf = True
+	min_hash_caller.plot(DataMatrix, labeltext, tag_cluster_info, pdf, colorLabels)
 	
 
 ############################################################	
