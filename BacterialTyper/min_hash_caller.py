@@ -134,7 +134,7 @@ def compare(siglist, output, Debug):
 		print (D)
 		print ("Labeltext:")
 		print (labeltext)
-		print ('Min similarity in matrix: {:.3f}', numpy.min(D))
+		print ('Min similarity in matrix: {:.3f}', numpy.min(D)) ## use this to color accordingly
 		
 	### Write output
 	labeloutname = output + '.labels.txt'
@@ -165,26 +165,26 @@ def plot(D, labeltext, filename, pdf, colorLabel):
 	# build filenames, decide on PDF/PNG output
 	#dendrogram_out = filename + '.dendro'
 	matrix_out = filename + '.matrix'
-	hist_out = filename + '.hist'
+	#hist_out = filename + '.hist'
 
 	###
 	if pdf:
 	#	dendrogram_out += '.pdf'
 		matrix_out += '.pdf'
-		hist_out += '.pdf'
+	#	hist_out += '.pdf'
 	
 	else:
 	#	dendrogram_out += '.png'
 		matrix_out += '.png'
-		hist_out += '.png'
+	#	hist_out += '.png'
 	
 	###########################
 	### make the histogram
 	###########################
-	print ('+ Saving histogram of matrix values: ', hist_out)
-	fig = pylab.figure(figsize=(8,5))
-	pylab.hist(numpy.array(D.flat), bins=100)
-	fig.savefig(hist_out)
+	#print ('+ Saving histogram of matrix values: ', hist_out)
+	#fig = pylab.figure(figsize=(8,5))
+	#pylab.hist(numpy.array(D.flat), bins=100)
+	#fig.savefig(hist_out)
 
 	#######################################
 	### make the dendrogram: do clustering
@@ -217,8 +217,8 @@ def plot(D, labeltext, filename, pdf, colorLabel):
 	## https://python-graph-gallery.com/400-basic-dendrogram/
 	Z1_2 = sch.dendrogram(Y, orientation='left', labels=labeltext)
 
+	## set label colors if desired
 	if colorLabel:
-		## set label colors if desired
 		sch.dendrogram(Y, orientation='left', labels=labeltext)
 		ax = plt.gca()
 		xlbls = ax.get_ymajorticklabels()
@@ -238,8 +238,16 @@ def plot(D, labeltext, filename, pdf, colorLabel):
 	D = D[idx1, :]
 	D = D[:, idx1]
 
+ 	## use minimun distance matrix D to color accordingly
+	min_D = numpy.min(D) ## 
+	cmap_palette = ""
+	if min_D > 0.8:
+		cmap_palette = pylab.cm.YlGnBu
+	else:
+		cmap_palette = pylab.cm.YlGnBu
+
 	# show matrix
-	im = axmatrix.matshow(D, aspect='auto', origin='lower',cmap=pylab.cm.YlGnBu, vmin=1, vmax=0)
+	im = axmatrix.matshow(D, aspect='auto', origin='lower', cmap= cmap_palette, vmin=1, vmax=0)
 	axmatrix.set_xticks([])
 	axmatrix.set_yticks([])
 	
@@ -253,13 +261,6 @@ def plot(D, labeltext, filename, pdf, colorLabel):
 	pylab.colorbar(im, cax=axcolor)	
 	fig3.savefig(matrix_out)
 	print ('+ Wrote matrix to:', matrix_out)
-	
-	
-	# Assignment of colors to labels: 'a' is red, 'b' is green, etc.
-	#ax = plt.gca()
-
-	#outname = filename + '.matrix2.pdf'
-	#plt.savefig(outname)
 	
 ##################################################
 def	help_options():

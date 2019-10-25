@@ -163,28 +163,27 @@ def run(options):
 		pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, sigfile, row['sample'], options.kmer_size, options.n_sketch)
 		siglist_all.append(siglist)
 
-	## debug message
-	if (Debug):
-		print (colored("**DEBUG: pd_samples_sketched **", 'yellow'))
-		print (pd_samples_sketched)
-
 	print ("\n+ Clustering sequences...")
 	pd_samples_sketched = pd_samples_sketched.set_index('name')
 	
 	####
-	if not retrieve_databases.empty: 
-		tmp = retrieve_databases[['source', 'db', 'path', 'original', 'ksize', 'num_sketch']]
-		tmp = tmp.rename({'db': 'name'}).set_index('db')
+	if retrieve_databases.empty: 
+		cluster_df = pd_samples_sketched
 	else:
-		tmp = retrieve_databases
+		tmp = retrieve_databases[['source', 'db', 'path', 'original', 'ksize', 'num_sketch']]
+		tmp = tmp.rename({'db': 'name'}).set_index('name')
+		## merge both dataframes
+		cluster_df = pd.concat([pd_samples_sketched, tmp], join='inner', sort=True)
 	
-	## merge both dataframes
-	cluster_df = pd.concat([pd_samples_sketched, tmp], join='inner', sort=True)
 	
 	## debug message
 	if (Debug):
+		print (colored("**DEBUG: pd_samples_sketched **", 'yellow'))
+		print (pd_samples_sketched)
+		
 		print (colored("**DEBUG: cluster_df **", 'yellow'))
 		print (cluster_df)
+		
 		print (colored("**DEBUG: Signatures **", 'yellow'))
 		print (siglist_all)
 		print (colored("**DEBUG: length siglist_all **", 'yellow'))
