@@ -1,8 +1,10 @@
-#usr/bin/env python
+#!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This module calls MultiQC to generate HTML statistics reports 
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Calls MultiQC to generate HTML statistics reports 
 '''
 ## useful imports
 import os

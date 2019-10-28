@@ -1,3 +1,6 @@
+'''
+Main modules BacterialTyper
+'''
 __all__ = [
 	'annot',
 	'assemble',

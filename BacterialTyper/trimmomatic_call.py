@@ -1,8 +1,10 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This code calls Trimmomatic for the trimming of sequence adapter within fastq reads.
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Calls Trimmomatic for the trimming of sequence adapter within fastq reads.
 '''
 
 ## useful imports

@@ -1,16 +1,20 @@
-#usr/bin/env python
+#!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez                                      ##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain      ##
+##                                                      ## 
+## Original version credit for:                         ## 
+## https://gist.github.com/aziele/e060d1c0d1ef2acb4bd67e2fc0f165a6
+## https://www.biostars.org/p/253984/
+## 
+## New implementations: add qlen and slen and           ## 
+##                 control for aln & length thresh.     ## 
+##                                                      ## 
+##########################################################
 
 '''
-This module is for handling BLAST output lists (in -outfmt '6 std qlen slen' format).
-Original version credit for: 
-https://gist.github.com/aziele/e060d1c0d1ef2acb4bd67e2fc0f165a6
-https://www.biostars.org/p/253984/
-
-New implementations: add qlen and slen and control for aln & length thresh.
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Parses BLAST output lists (in -outfmt '6 std qlen slen' format).
 '''
-
 from itertools import groupby
 
 class Hsp:

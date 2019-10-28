@@ -1,8 +1,10 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This code calls card-trick module to parse CARD resistance information
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Calls card-trick module to parse CARD resistance information.
 '''
 ## useful imports
 import time

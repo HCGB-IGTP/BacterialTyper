@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This code calls species_identification_KMA and get the most similar taxa.
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Generates sample identification using KMA software and MLSTar. 
+Looks for similar entries on GenBank and retrieves them.  
 '''
 ## useful imports
 import time

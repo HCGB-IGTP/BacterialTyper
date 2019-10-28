@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This code calls 
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Generates sample quality control at raw reads, assembly or annotation level.
 '''
 ## useful imports
 import time

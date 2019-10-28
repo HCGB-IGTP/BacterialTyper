@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This code calls a configuration function to iniate and update the configuration of the pipeline.
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Sets configuration of the pipeline.
 '''
 ## useful imports
 import time

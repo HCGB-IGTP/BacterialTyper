@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This code calls ariba and virulence resistance script and generates a resistance and virulence profile for each sample.
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Generates a resistance and virulence profile for each sample.
 '''
 ## useful imports
 import time

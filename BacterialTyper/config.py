@@ -1,8 +1,10 @@
-#usr/bin/env python
+#!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This module provides configuration for the pipeline
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Provides configuration for the pipeline
 '''
 ## useful imports
 import os

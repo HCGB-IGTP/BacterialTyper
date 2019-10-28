@@ -1,11 +1,13 @@
-#usr/bin/env python
+#!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
 This code calls KMA software to find the best match (species identification) to the reads in one
 or more fastq files or one fasta file in a (kmer) database produced using the KMA program (Philip T.L.C. Clausen, 
 Frank M. Aarestrup & Ole Lund, "Rapid and precise alignment of raw reads against redundant databases with KMA", 
 BMC Bioinformatics, 2018;19:307.) 
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
 '''
 ## useful imports
 import time

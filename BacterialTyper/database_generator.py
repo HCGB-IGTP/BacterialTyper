@@ -1,11 +1,13 @@
-#usr/bin/env python
+#!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
 This code prepares the database information for further analysis.
 Several functions are implemented for:
 	- Manipulate data entries, update information
 	- Download NCBI assembly IDs provided
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
 '''
 ## useful imports
 import time

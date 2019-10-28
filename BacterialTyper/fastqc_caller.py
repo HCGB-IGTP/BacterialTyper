@@ -1,8 +1,10 @@
-#usr/bin/env python
+#!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez                                      ##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain      ##
+##########################################################
 '''
-This code calls fastqc analysis and parses results generated.
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Calls FASTQC analysis and parses results generated.
 '''
 ## useful imports
 import time

@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This code generates a bacteriophage identification profile for each sample
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Generates a multi locus sequence typing (MLST) using MLSTar R package.
+- Downloads profiles
+- Searches assembly fasta sequences
+- Plots MLST profiles
 '''
+
 ## useful imports
 import time
 import io
@@ -36,6 +42,9 @@ MLSTarR_getpubmlst = tools.R_scripts('MLSTar_getpubmlst')
 
 ##########################################
 def help_MLSTar():
+	'''
+	Provides help when script call as a single script.
+	'''
 	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 	get_MLSTar_species()
 	print ("")

@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This code generates prints an index of citation for the different packages and other softwares employed here.
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Prints an index of citation for the different packages and other softwares employed here.
 '''
 
 ## import my modules

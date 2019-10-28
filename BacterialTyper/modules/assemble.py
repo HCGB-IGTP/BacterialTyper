@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This code calls different submodules to assemble each sample using SPADES, check quality using BUSCO and annotate using PROKKA
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Assembles each sample using SPADES and checks quality using BUSCO
 '''
 ## useful imports
 import time

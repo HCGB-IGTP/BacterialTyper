@@ -1,8 +1,10 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This code generates a protein annotation using PROKKA for the genomes assembled generated
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Generates a protein annotation using PROKKA for the genomes assembled generated
 '''
 ## useful imports
 import time

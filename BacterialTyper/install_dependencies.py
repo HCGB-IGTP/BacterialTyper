@@ -1,8 +1,10 @@
-#usr/bin/env python
+#!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This module install external dependencies if not satistified
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Installs external dependencies if not satistified
 '''
 ## this modules is an idea from ARIBA (https://github.com/sanger-pathogens/ariba)
 ## give credit to them appropiately

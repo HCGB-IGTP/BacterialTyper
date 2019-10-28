@@ -1,8 +1,10 @@
-#usr/bin/en python3
+#!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
-This code prepares samples for further analysis.
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
+Prepares samples for further analysis.
 '''
 ## useful imports
 import time

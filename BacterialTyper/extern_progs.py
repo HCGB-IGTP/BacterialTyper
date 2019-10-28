@@ -1,11 +1,14 @@
-#usr/bin/env python
-'''
-This module provides external programs details
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
-'''
+#!/usr/bin/env python3
+##########################################################
 ## this modules is an idea from ARIBA (https://github.com/sanger-pathogens/ariba)
 ## give credit to them appropiately
+##
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
+'''
+Provides external programs details
+'''
 
 ## useful imports
 import os

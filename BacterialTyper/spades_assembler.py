@@ -1,9 +1,11 @@
-#usr/bin/env python
+#!/usr/bin/env python3
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
 '''
 This code calls SPADES assembler and plasmidSPADES.
 Retrieves plasmids if any and discard them from the main assembly.
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
 '''
 ## useful imports
 import time
