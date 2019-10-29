@@ -528,9 +528,17 @@ def edirect_ident(dataFrame, outdir_dict):
 		out_docsum_file_assembly = edirect_folder + '/assembly_docsum.txt'
 		AssemblyAcc_outfile = edirect_folder + '/AssemblyAcc.csv'
 		
+		## some error ocurred
+		if not functions.is_non_zero_file(out_docsum_file_assembly):
+			continue
+		
 		edirect_caller.generate_docsum_call('assembly', AssemblyAcc, out_docsum_file_assembly)
 		edirect_caller.generate_xtract_call(out_docsum_file_assembly, 'DocumentSummary', 'Genbank', AssemblyAcc_outfile)
-			
+		
+		## some error ocurred
+		if not functions.is_non_zero_file(AssemblyAcc_outfile):
+			continue
+		
 		##
 		GenbankAcc = functions.get_info_file(AssemblyAcc_outfile)
 
@@ -558,7 +566,9 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 	## TODO: What to do if multi-isolate sample?
 	## TODO: Control if a different profile is provided via --MLST_profile
 	## TODO: Check time passed and download again if >?? days passed]
-
+	
+	return ## skip by now
+	
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: dataFrame_edirect identified**", 'yellow'))

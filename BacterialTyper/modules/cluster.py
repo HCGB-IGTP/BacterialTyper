@@ -3,6 +3,7 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
+from _ast import If
 '''
 Clusters fasta files or fastq reads. Using: project data, genbank entries from database or previous samples. 
 '''
@@ -113,7 +114,10 @@ def run(options):
 	siglist_all = []
 	for index, row in retrieve_databases.iterrows():
 		if not row['path'] == 'NaN':
-			print (row)
+			if (Debug):
+				functions.print_sepLine("*",25, False)
+				print (row)
+				
 			if all([ int(options.kmer_size) == int(row['ksize']), int(options.n_sketch) == int(row['num_sketch']) ]):
 				siglist_all.append(min_hash_caller.read_signature(row['path'], options.kmer_size))
 				continue
@@ -173,7 +177,13 @@ def run(options):
 		cluster_df = pd_samples_sketched
 	else:
 		tmp = retrieve_databases[['source', 'db', 'path', 'original', 'ksize', 'num_sketch']]
-		tmp = tmp.rename({'db': 'name'}).set_index('name')
+		tmp = tmp.rename(columns={'db': 'name'})
+		tmp.set_index('name')
+		
+		if (Debug):
+			print (colored("**DEBUG: tmp **", 'yellow'))
+			print (tmp)	
+		
 		## merge both dataframes
 		cluster_df = pd.concat([pd_samples_sketched, tmp], join='inner', sort=True)
 	
@@ -188,10 +198,11 @@ def run(options):
 		
 		print (colored("**DEBUG: Signatures **", 'yellow'))
 		print (siglist_all)
+		
 		print (colored("**DEBUG: length siglist_all **", 'yellow'))
 		print (len(siglist_all))
 
-	## get colorLabels	
+	## Assign Colors colorLabels	
 	color_df = cluster_df.filter(["source"], axis=1)
 	color_df["color"] = "r" ## red::genbank
 
@@ -204,6 +215,10 @@ def run(options):
 	color_df.loc[color_df.index.isin(user_data), "color"] = "b" ## blue::user_data
 	
 	colorLabels = color_df['color'].to_dict()
+	
+	if Debug:
+		print(color_df)
+		print(colorLabels)
 
 	## parse results
 	if Project:
@@ -318,6 +333,6 @@ def generate_sketch(folder, assembly, entry, ksize, n_sketch, Debug):
 	file2print = folder + '/.original'
 	list_fna = [assembly, str(ksize), str(n_sketch)]
 	functions.printList2file(file2print, list_fna)
-	return (sigfile, siglist)
+	return (sigfile[0], siglist[0])
 
 	

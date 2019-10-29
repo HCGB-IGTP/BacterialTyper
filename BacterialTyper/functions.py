@@ -90,6 +90,12 @@ def create_human_timestamp():
 ############################################################################
 
 ###############
+def is_non_zero_file(fpath):  
+	# https://stackoverflow.com/a/15924160
+	'''Returns TRUE/FALSE if file exists and non zero'''
+	return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
+
+###############
 def outdir_project(outdir, project_mode, pd_samples, mode):
 
 	# Group dataframe by sample name

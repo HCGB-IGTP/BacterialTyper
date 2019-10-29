@@ -3,6 +3,7 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
+from _ast import If
 '''
 This code prepares the database information for further analysis.
 Several functions are implemented for:
@@ -443,6 +444,9 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 	#### NCBI ####
 	##############
 	elif (source == 'NCBI'):
+		
+		## TODO: get additional information from 
+		## info_file = dir_path + '/info.txt'
 
 		### Check if folder exists
 		db2use_abs = functions.create_subfolder(dbs2use[0], database_folder)
@@ -501,15 +505,11 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 		db_Dataframe['num_sketch'] = ''
 		db_Dataframe['folder'] = ''
 	
-		### Check if folder exists
-		Mash_db_abs = functions.create_subfolder('Mash_db', database_folder)
-
 		### get information
 		for db in dbs2use:
-			this_db = Mash_db_abs + '/' + db
-
 			#### genbank	
 			if (db == "genbank"):
+				
 				### Check if folder exists
 				db2use_abs = database_folder + '/NCBI/genbank/bacteria'
 				if os.path.exists(db2use_abs):
@@ -518,6 +518,23 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 					for entry in genbank_entries:
 						print ('\t+ Reading information from sample: ', entry)
 						this_db = db2use_abs + '/' + entry
+						
+						## get additional information from 
+						info_file = this_db + '/info.txt'
+						info_data = pd.read_csv(info_file).set_index('ID')
+						
+						info_data.fillna("NaN", inplace=True)
+						
+						## get readable name for each strain
+						entry_strain = info_data.loc[entry]['name']
+						
+						if entry_strain == 'NaN': ## TODO: debug if it works
+							entry_strain = entry
+							print()
+						else:
+							print ('\t\t+ Rename into: ', entry_strain)
+													
+																	 
 						list_msh = functions.retrieve_matching_files(this_db, '.sig')
 						if (list_msh):
 							## print original in file
@@ -527,13 +544,13 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 							else:
 								original = functions.readList_fromFile(file2print)
 
-							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry, list_msh[0], original[0], original[1], original[2], this_db]
+							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry_strain, list_msh[0], original[0], original[1], original[2], this_db]
 						else:
 							## index assembly or reads...
 							list_fna = functions.retrieve_matching_files(this_db, 'genomic.fna')
 
 							## not available
-							db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, 'NaN', list_fna[0], 'NaN', 'NaN', this_db]
+							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry_strain, 'NaN', list_fna[0], 'NaN', 'NaN', this_db]
 
 			#### user_data
 			elif (db == "user_data"):
