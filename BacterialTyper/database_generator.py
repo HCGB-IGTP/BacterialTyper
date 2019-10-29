@@ -34,9 +34,31 @@ from BacterialTyper import min_hash_caller
 
 ##########################################################################################
 def NCBI_DB(strains2get, data_folder, Debug):
+	"""Donwloads given taxa from NCBI if not available and updates database information.
+	
+	Parameters
+	-----------
+	
+	strains2get : dataframe 
+		Dataframe containing genus, species and NCBI_assembly_ID columns.
+	
+	data_folder : str
+		Database absolute path
+	
+	Debug : bool
+		True/false
+	
+	Returns
+	-------
+	
+	Dataframe of genbank database updated for all available entries.
+	
+	"""
+	
 	## set index
 	strains2get = strains2get.set_index('NCBI_assembly_ID', drop=False) ## set new index but keep column
 	strains2get.index.names = ['ID'] ## rename index
+	strains2get = strains2get.drop_duplicates()
 
 	#########
 	if Debug:
@@ -52,12 +74,17 @@ def NCBI_DB(strains2get, data_folder, Debug):
 	#########
 	if Debug:
 		print (colored("DEBUG: NCBI genbank database retrieved: ", 'yellow'))
+		print("db_frame")
+		print(db_frame)
+		print()
+		
+		print ("database_df")
 		print (database_df)
 	
 	## loop and download
 	for index, row in strains2get.iterrows():
 		functions.print_sepLine("+", 75, False)
-		acc_ID = strains2get.loc[index]['NCBI_assembly_ID']
+		acc_ID = index #strains2get.loc[index]['NCBI_assembly_ID']
 		info = "Genus: " + strains2get.loc[index]['genus'] + '\n' + "Species: " +  strains2get.loc[index]['species'] + '\n' + "Strain: " +  strains2get.loc[index]['name'] + '\n' + "ID accession: " +  acc_ID + '\n'
 		dir_path = data_folder + '/genbank/bacteria/' + acc_ID ## module ngd requires to download data in bacteria subfolder under genbank folder
 
@@ -363,7 +390,7 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 		kma_dbs = os.listdir(KMA_db_abs)
 
 		## debug message
-		if (debug):
+		if (Debug):
 			print (colored("Folders KMA_db:" + str(kma_dbs) , 'yellow'))
 
 		### get information

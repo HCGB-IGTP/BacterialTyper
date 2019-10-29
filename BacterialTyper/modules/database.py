@@ -23,7 +23,6 @@ from BacterialTyper import config
 from BacterialTyper import functions
 from BacterialTyper import BUSCO_caller
 
-
 ###############################################################
 def run(options):
 
@@ -95,7 +94,7 @@ def run(options):
 				#########
 				if Debug:
 					print (colored("DEBUG: NCBI data provided: ", 'yellow'))
-					print (dataFile)
+					print (options.ID_file)
 
 				## functions.timestamp
 				start_time_partial = functions.timestamp(start_time_partial)

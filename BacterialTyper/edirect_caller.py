@@ -19,8 +19,14 @@ from termcolor import colored
 from BacterialTyper import functions
 from BacterialTyper import config
 
+## additional information:
+## https://ncbi-hackathons.github.io/EDirectCookbook/
+
 ####################################
 def help_edirect():
+	'''
+	Prints edirect_caller script help options
+	'''
 	functions.boxymcboxface("ENTREZ DIRECT (EDirect)")
 	print ("+ Connects with NCBI entrez databases")
 	print ("+ Searches, retrieves, and parses data from NCBI databases through the Unix command line")

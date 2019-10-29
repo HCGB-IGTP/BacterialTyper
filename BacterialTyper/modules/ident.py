@@ -53,7 +53,7 @@ def run(options):
 		## information for KMA Software
 		MLSTar.help_MLSTar()
 		exit()
-
+	
 	## init time
 	start_time_total = time.time()
 
@@ -129,35 +129,49 @@ def run(options):
 	## functions.timestamp
 	start_time_partial = functions.timestamp(start_time_partial)
 	
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
+		pd.set_option('display.max_colwidth', -1)
+		pd.set_option('display.max_columns', None)
+		print ("dataframe_kma")
+		print (dataFrame_kma)
+	
 	######## EDirect identification
 	dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict)
 	
 	## functions.timestamp
 	start_time_partial = functions.timestamp(start_time_partial)
-	
-	######## MLST identification
-	MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, dataFrame_edirect, retrieve_databases)
-
-	## functions.timestamp
-	start_time_partial = functions.timestamp(start_time_partial)
-	
-	## generate summary for sample: all databases
-	## MLST, plasmids, genome, etc
-	functions.boxymcboxface("Results Summary")
-	##
-
-	#####################################
-	## Summary identification results  ##
-	#####################################
 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
 		pd.set_option('display.max_colwidth', -1)
 		pd.set_option('display.max_columns', None)
-		print (dataFrame_kma)
+		print ("dataFrame_edirect")
 		print (dataFrame_edirect)
+		
+	######## MLST identification
+	MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, dataFrame_edirect, retrieve_databases)
+
+	## functions.timestamp
+	start_time_partial = functions.timestamp(start_time_partial)
+	
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
+		pd.set_option('display.max_colwidth', -1)
+		pd.set_option('display.max_columns', None)
+		print ("MLST_results")
 		print (MLST_results)
+
+	## generate summary for sample: all databases
+	## MLST, plasmids, genome, etc
+	functions.boxymcboxface("Results Summary")
+	
+	#####################################
+	## Summary identification results  ##
+	#####################################
 
 	## parse results
 	if Project:
@@ -230,16 +244,14 @@ def run(options):
 	results_summary_KMA = results_summary_KMA.sort_values(by=['Sample', 'Database', 'Query_Coverage'],ascending=[True, True,True])
 	results_summary_KMA.to_excel(writer, sheet_name='KMA') ## write excel handle
 	
-	##
+	## write excel and close
 	MLST_all.to_excel(writer, sheet_name='MLST')
+	writer.save() ## close excel handle
 
-	## close excel handle
-	writer.save()
-
-	print ("\n+ Check summary of results in file generated" )		
+	print ("\n+ Check summary of results in file generated" )
 	
 	### timestamp
-	start_time_partial = functions.timestamp(start_time_partial)					
+	start_time_partial = functions.timestamp(start_time_partial)
 	
 	######################################
 	## update database for later usage
@@ -249,7 +261,7 @@ def run(options):
 		functions.boxymcboxface("Update Sample Database")
 
 		## update db
-		print ("+ Update database with samples identified")		
+		print ("+ Update database with samples identified")
 
 		## debug message
 		if (Debug):
@@ -258,15 +270,15 @@ def run(options):
 			pd.set_option('display.max_columns', None)
 			print (dataFrame_edirect)
 
-		## 	TODO: update database with samples identified
-		print (dataFrame_edirect)
-		
+		## dataFrame_edirect
 		file_toprint = final_dir + '/edirect_info2download.csv'
 		dataFrame_edirect.to_csv(file_toprint)
 
-		## dataFrame_edirect
-		## assembly, annotation, etc...
-		## rerun identification with new updated database
+		## update database with samples identified
+		data2download = dataFrame_edirect.filter(['genus','species', 'strain', 'genome'])
+		data2download = data2download.rename(columns={'genome': 'NCBI_assembly_ID', 'strain' : 'name'})
+		NCBI_folder = os.path.abspath(options.database) + '/NCBI'
+		database_generator.NCBI_DB(data2download, NCBI_folder, Debug)
 
 	else:
 		print ("+ No update of the database has been requested using option --fast")
@@ -365,13 +377,12 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 
 		###
 		for name, cluster in sample_frame:
+			
 			## get result
 			## outdir_KMA
 			outdir_dict_kma = functions.outdir_subproject(outdir_dict[name], cluster, "kma")
 			result = get_outfile(outdir_dict_kma[name], name, db2use)
 			#print ('\t- File: ' + result + '.spa')
-			
-			continue
 			
 			## get results using a cutoff value [Defaulta: 80]
 			results = species_identification_KMA.parse_kma_results(result + '.spa', options.KMA_cutoff)
@@ -409,7 +420,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	print ("+ Finish this step...")
 	return (results_summary)
 
-####################################
+###################################
 def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sample):
 
 	## outdir_KMA
@@ -445,7 +456,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 			option = '-Sparse'
 	
 		# Call KMA
-		species_identification_KMA.kma_ident_call(outfile, list_files, name, database, kma_bin, option, threads) 
+		species_identification_KMA.kma_ident_call(outfile, list_files, name, database, kma_bin, option, threads)
 
 ####################################
 def get_outfile(output_dir, name, index_name):
@@ -456,8 +467,9 @@ def get_outfile(output_dir, name, index_name):
 		output_path = functions.create_subfolder(name, output_dir)
 		
 	out_file = output_path + '/' + name + '_' + basename_tag	
-	return(out_file)	
+	return(out_file)
 	
+
 ####################################
 def edirect_ident(dataFrame, outdir_dict):
 	
@@ -485,7 +497,7 @@ def edirect_ident(dataFrame, outdir_dict):
 
 		##
 		out_docsum_file = edirect_folder + '/nuccore_docsum.txt'
-		species_outfile = edirect_folder + '/info.csv'
+		tmp_species_outfile = edirect_folder + '/info.csv'
 		filename_stamp = edirect_folder + '/.success_species'
 				
 		if os.path.isfile(filename_stamp):
@@ -494,21 +506,33 @@ def edirect_ident(dataFrame, outdir_dict):
 
 		else: 
 			edirect_caller.generate_docsum_call('nuccore', nucc_entry[0], out_docsum_file)
-			edirect_caller.generate_xtract_call(out_docsum_file, 'DocumentSummary', 'Organism,BioSample,Strain', species_outfile)
-			stamp =	functions.print_time_stamp(filename_stamp)
-
+			edirect_caller.generate_xtract_call(out_docsum_file, 'DocumentSummary', 'Organism,BioSample,AssemblyAcc,Strain', tmp_species_outfile)
+			
+		########################################	
 		## get information from edirect call
-		taxa_name_tmp = functions.get_info_file(species_outfile)
+		########################################	
+		taxa_name_tmp = functions.get_info_file(tmp_species_outfile)
 		Organism = taxa_name_tmp[0].split(',')[0].split()
 		genus = Organism[0] 							## genus
 		species = Organism[1] 							## species
 		BioSample_name = taxa_name_tmp[0].split(',')[1]	## BioSample
+		AssemblyAcc = taxa_name_tmp[0].split(',')[2] 	## AssemblyAcc
 		
 		## sometimes strain is missing
-		if len(taxa_name_tmp[0].split(',')) > 2:
-			strain = taxa_name_tmp[0].split(',')[2] 		## strain
+		if len(taxa_name_tmp[0].split(',')) > 3:
+			strain = taxa_name_tmp[0].split(',')[3] 	## strain
 		else:
 			strain = 'NaN'
+		
+		## get GenBank accession ID
+		out_docsum_file_assembly = edirect_folder + '/assembly_docsum.txt'
+		AssemblyAcc_outfile = edirect_folder + '/AssemblyAcc.csv'
+		
+		edirect_caller.generate_docsum_call('assembly', AssemblyAcc, out_docsum_file_assembly)
+		edirect_caller.generate_xtract_call(out_docsum_file_assembly, 'DocumentSummary', 'Genbank', AssemblyAcc_outfile)
+			
+		##
+		GenbankAcc = functions.get_info_file(AssemblyAcc_outfile)
 
 		## plasmid match
 		group_plasmid = grouped.loc[grouped['Database'] == 'plasmids.T' ]
@@ -516,8 +540,12 @@ def edirect_ident(dataFrame, outdir_dict):
 			## e.g. NZ_CP029083.1 Staphylococcus aureus strain AR464 plasmid unnamed1, complete sequence
 		plasmid_entries_str = ",".join([i.split()[0] for i in plasmid_entries])
 
+		## save edirect_frame
 		#("sample", "taxa", strain, genome "BioSample", "Plasmids"))
-		edirect_frame.loc[len(edirect_frame)] = (name, genus, species, strain, BioSample_name, nucc_entry[0], plasmid_entries_str)
+		edirect_frame.loc[len(edirect_frame)] = (name, genus, species, strain, BioSample_name, GenbankAcc[0], plasmid_entries_str)
+
+		stamp =	functions.print_time_stamp(filename_stamp)
+
 	
 	return (edirect_frame)
 
@@ -616,6 +644,7 @@ def get_kma_db(kma_dbs):
 		print (colored('\t\t+ %s' %i, 'green'))
 
 	return(option_db)
+	
 
 ####################################
 def get_external_kma(kma_external_files, Debug):
@@ -657,10 +686,11 @@ def get_external_kma(kma_external_files, Debug):
 
 ####################################
 def get_options_db(options):
-	##
-	## Among all databases available and according to the input options,
-	## select the databases to use and set dataframe with this information
-	##
+	'''
+	Selects databases to use and set dataframe with this 
+	information among all databases available and according 
+	to the input options.
+	'''
 	
 	print ("\n\n+ Select databases to use for identification:")
 	
