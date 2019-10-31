@@ -3,7 +3,6 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-from _ast import If
 '''
 Clusters fasta files or fastq reads. Using: project data, genbank entries from database or previous samples. 
 '''
@@ -331,7 +330,12 @@ def generate_sketch(folder, assembly, entry, ksize, n_sketch, Debug):
 	
 	## print original in file
 	file2print = folder + '/.original'
-	list_fna = [assembly, str(ksize), str(n_sketch)]
+	
+	## do not write full path because database can move.
+	## as long as mantains the folder organization it should work.
+	assembly_tmp_path = "../assembly/" + os.path.basename(assembly)
+	
+	list_fna = [assembly_tmp_path, str(ksize), str(n_sketch)]
 	functions.printList2file(file2print, list_fna)
 	return (sigfile[0], siglist[0])
 

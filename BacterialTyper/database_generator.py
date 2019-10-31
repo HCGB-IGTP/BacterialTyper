@@ -526,7 +526,7 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 						info_data.fillna("NaN", inplace=True)
 						
 						## get readable name for each strain
-						entry_strain = info_data.loc[entry]['name']
+						entry_strain = str(info_data.loc[entry]['name'])
 						
 						if entry_strain == 'NaN': ## TODO: debug if it works
 							entry_strain = entry
@@ -544,7 +544,7 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 							else:
 								original = functions.readList_fromFile(file2print)
 
-							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry_strain, list_msh[0], original[0], original[1], original[2], this_db]
+							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry_strain, list_msh[0], this_db + '/mash/' + original[0], original[1], original[2], this_db]
 						else:
 							## index assembly or reads...
 							list_fna = functions.retrieve_matching_files(this_db, 'genomic.fna')
@@ -573,7 +573,7 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 							original = functions.readList_fromFile(file2print)
 
 						##
-						db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, this_mash_db, original[0], original[1], original[2], this_db + '/mash']
+						db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, this_mash_db, this_db + '/mash/' + original[0], original[1], original[2], this_db + '/mash']
 					else:
 						## not available
 						list_fna = functions.retrieve_matching_files(this_db + '/assembly', '.fna')

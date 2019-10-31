@@ -88,7 +88,7 @@ def sketch_database(dict_files, folder, Debug, ksize_n, num_sketch):
 	functions.create_folder(folder)
 	for names,hashes in minhashes.items():
 		sig1 = SourmashSignature(hashes, name=names)
-		outfile_name = folder + '/' + names + '.sig'
+		outfile_name = folder + '/' + str(names) + '.sig'
 		with open(outfile_name, 'wt') as fp:
 			save_signatures([sig1], fp)
 
@@ -139,22 +139,23 @@ def compare(siglist, output, Debug):
 		print ('Min similarity in matrix: {:.3f}', numpy.min(D)) ## use this to color accordingly
 		
 	### Write output
+	labeltext_string = [str(x) for x in labeltext] ## generat strings, avoid if integers alone
 	labeloutname = output + '.labels.txt'
 	with open(labeloutname, 'w') as fp:
-		fp.write("\n".join(labeltext))
-
+		fp.write("\n".join(labeltext_string))
+		
 	## save matrix as txt ub csv format file
-	numpy.savetxt(output + ".matrix.csv", D, delimiter=",", header= ",".join(labeltext) )
+	numpy.savetxt(output + ".matrix.csv", D, delimiter=",", header= ",".join(labeltext_string) )
 
 	## Debug messages
 	if Debug:
-		print('saving labels:', labeltext)
+		print('saving labels:', labeltext_string)
 		print('saving labels to:', labeloutname)
 		print('saving distance matrix (binary file) to:', output)
 		print('saving distance matrix (csv file) to:', output)
 
 	## return numpy array
-	return (D, labeltext)
+	return (D, labeltext_string)
 
 ##################################################
 def plot(D, labeltext, filename, pdf, colorLabel):
