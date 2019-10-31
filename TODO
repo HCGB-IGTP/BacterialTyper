@@ -26,7 +26,6 @@
 [TODO] BacterialTyper/modules/ident.py :: Sum plasmid and chromosome statistics
 [TODO] BacterialTyper/modules/ident.py :: Add information if multiisolates are detected
 [TODO] BacterialTyper/modules/ident.py :: parse data according to database: bacteria, plasmids or user data or genbank data provided
-[TODO] BacterialTyper/modules/ident.py :: update database with samples identified from GenBank
 
 [TODO] BacterialTyper/modules/qc.py :: Control FASTQC statistics for trimming
 [TODO] BacterialTyper/modules/qc.py :: Control BUSCO statistics for discarding samples if necessary
@@ -55,7 +54,6 @@
 [TODO] BacterialTyper/ariba_caller.py :: Different databases provided
 [TODO] BacterialTyper/ariba_caller.py :: Check what to do with single end when calling ARIBA
 
-[TODO] BacterialTyper/database_user.py :: Include species and genus information in user data database
 [TODO] BacterialTyper/database_generator.py :: Add mash for external data
 [TODO] BacterialTyper/database_generator.py :: NCBI descendant
 [TODO] BacterialTyper/database_generator.py :: provide preference to db2update (update_db_data_file)
@@ -86,6 +84,8 @@ http://docutils.sourceforge.net/rst.html
 https://help.github.com/en/github/building-a-strong-community/adding-or-editing-wiki-pages
 https://guides.github.com/features/wikis/
 https://github.com/matplotlib/sampledoc
+
+Generate docstrings using http://rst.ninjs.org/
 
 
 

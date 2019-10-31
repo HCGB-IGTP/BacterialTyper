@@ -145,7 +145,7 @@ def run(options):
 
 	## debug message
 	if (Debug):
-		print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
+		print (colored("**DEBUG: retrieve results from NCBI **", 'yellow'))
 		pd.set_option('display.max_colwidth', -1)
 		pd.set_option('display.max_columns', None)
 		print ("dataFrame_edirect")
@@ -529,19 +529,20 @@ def edirect_ident(dataFrame, outdir_dict):
 		AssemblyAcc_outfile = edirect_folder + '/AssemblyAcc.csv'
 		
 		## some error ocurred
-		if not functions.is_non_zero_file(out_docsum_file_assembly):
+		if functions.is_non_zero_file(out_docsum_file_assembly):
 			continue
 		
 		edirect_caller.generate_docsum_call('assembly', AssemblyAcc, out_docsum_file_assembly)
-		edirect_caller.generate_xtract_call(out_docsum_file_assembly, 'DocumentSummary', 'Genbank', AssemblyAcc_outfile)
+		edirect_caller.generate_xtract_call(out_docsum_file_assembly, 'DocumentSummary', 'Genbank', AssemblyAcc_outfile) 
 		
-		## some error ocurred
-		if not functions.is_non_zero_file(AssemblyAcc_outfile):
-			continue
+		## Is it better to download Refseq or Genbank?
+		## https://www.quora.com/What-is-the-difference-between-Refseq-and-Genbank		
 		
-		##
 		GenbankAcc = functions.get_info_file(AssemblyAcc_outfile)
-
+		if Debug:
+			print("Sample: ", name)
+			print("Genbank Acc: ", GenbankAcc[0])
+		
 		## plasmid match
 		group_plasmid = grouped.loc[grouped['Database'] == 'plasmids.T' ]
 		plasmid_entries = group_plasmid['#Template'].tolist()
