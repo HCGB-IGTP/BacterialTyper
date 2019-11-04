@@ -78,12 +78,11 @@ def get_diff_time(stamp):
 	days_passed = int((elapsed/3600)/24)
 	return(days_passed)
 
-###############	
+###############    
 def create_human_timestamp():
 	now = datetime.now()
 	timeprint = now.strftime("%Y%m%d")
 	return timeprint
-
 
 ############################################################################
 ######## 					FILES/FOLDERS							######## 					
@@ -149,7 +148,7 @@ def create_subfolder (name, path):
 		print (colored("Successfully created the directory %s " % subfolder_path, 'yellow'))
 	
 	return subfolder_path
-    
+
 ###############  
 def create_folder (path):
     ## create subfolder  ##	

@@ -3,9 +3,10 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
+"""""
 Assembles each sample using SPADES and checks quality using BUSCO
-'''
+"""
+
 ## useful imports
 import time
 import io

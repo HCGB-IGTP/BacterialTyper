@@ -7,3 +7,14 @@ http://www.sphinx-doc.org/en/master/
 http://www.sphinx-doc.org/en/master/usage/quickstart.html
 
 https://github.com/matplotlib/sampledoc
+
+
+### 
+pip install sphinx
+pip install sphinxmark
+pip install rinohtype
+
+sphinx-quickstart
+
+make html
+sphinx-build -b rinoh source build/rinoh

@@ -291,6 +291,25 @@ def run(options):
 
 ####################################
 def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, time_partial):
+	"""Kmer identification
+	
+	Arguments:
+		options: options passed to the run main function (threads, KMA_cutoff, etc)
+		
+		pd_samples_retrieved: pandas dataframe for samples to process.
+				
+		outdir_dict: dictionary containing  
+		
+		retrieve_databases: 
+		
+		time_partial: timestamp for the process when started
+	
+	Returns:
+		results_summary: pandas dataframe containing identification information generated
+	
+	"""
+	
+	
 	functions.boxymcboxface("KMA Identification")
 	## set defaults
 	kma_bin = config.get_exe("kma")	
