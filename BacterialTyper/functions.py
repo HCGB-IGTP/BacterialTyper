@@ -77,7 +77,7 @@ def get_diff_time(stamp):
 	elapsed = time_today - float(time_today)
 	days_passed = int((elapsed/3600)/24)
 	return(days_passed)
-	
+
 ###############	
 def create_human_timestamp():
 	now = datetime.now()
