@@ -146,11 +146,13 @@ def run(options):
 		
 
 		#### summary and information
-		results_summary_toPrint_all = pd.DataFrame()
-		column_names = ("Sequences", "Total Length (bp)", "Total length (no Ns)", "A", "T", "C", "G", "A+T", "C+G", "N", 
-		"Capture Gaps", "Capture Gaps Length", "Capture Gaps Length/Total Length (%)", "Number Seqs", "% Seqs", 
-		"Total Length (bp)", "% Bases", "MinLen", "MaxLen", "Average Len", "Median Len", "N50", "L50", "Length (no Ns)")
-	
+		results_summary_toPrint_all = pd.DataFrame()		
+		column_names = ("Total Sequences", "Total Length (bp)", "Total length (no Ns)", 
+                "Adenine (A)", "Thymine (T)", "Cytosine (C)", "Guanine (G)", "A+T", "C+G", "Any Nucleotide (N)", 
+                "Capture Gaps", "Capture Gaps Length", "Capture Gaps Length/Total Length (%)", 
+                "Number Seqs > 10 kb", "% Seqs > 10 kb", "Total Length (bp) > 10 kb", "% Bases > 10 kb", 
+                "MinLen", "MaxLen", "Average Len", "Median Len", "N50", "L50", "Length (no Ns)")
+		
 		for stats in assembly_stats:
 			##
 			file_stats = assembly_stats[stats]
@@ -171,12 +173,31 @@ def run(options):
 		## write to excel
 		name_excel_summary = final_dir + '/summary_stats.xlsx'
 		writer_summary = pd.ExcelWriter(name_excel_summary, engine='xlsxwriter') ## open excel handle
+		
+		## filter important columns		
 		results_summary_toPrint_all = results_summary_toPrint_all.set_index('sample')			
-		results_summary_toPrint_all.to_excel(writer_summary, sheet_name="summary_all") ## write excel handle
+		results_summary_toPrint_all = results_summary_toPrint_all[["Total Sequences", "Total Length (bp)", "Total length (no Ns)",
+														"Adenine (A)", "Thymine (T)", "Cytosine (C)", "Guanine (G)", "A+T", "C+G", "Any Nucleotide (N)",
+                                                  		"MinLen", "MaxLen", "Average Len", "Median Len", "N50", "L50",
+                                                    	"Number Seqs > 10 kb", "% Seqs > 10 kb", "Total Length (bp) > 10 kb", "% Bases > 10 kb"]]
+		
+		
+		## >10 kb subset
+		subset_summary_toPrint_all = results_summary_toPrint_all[["Total Sequences", "Total Length (bp)", "Number Seqs > 10 kb", "% Bases > 10 kb", "Median Len", "N50", "L50"]]
+		subset_summary_toPrint_all.to_excel(writer_summary, sheet_name="summary") ## write excel handle
+		
+		## nucleotide tab
+		nucleotides_summary_toPrint_all = results_summary_toPrint_all[["Adenine (A)", "Thymine (T)", "Cytosine (C)", "Guanine (G)", "A+T", "C+G", "Any Nucleotide (N)"]]
+		nucleotides_summary_toPrint_all.to_excel(writer_summary, sheet_name="nucleotides") ## write excel handle
+		
+		results_summary_toPrint_all.to_excel(writer_summary, sheet_name="all_data") ## write excel handle
+		
 		writer_summary.save() ## close excel handle
 	
 	### symbolic links
 	print ("+ Retrieve all genomes assembled...")
+	
+	exit()
 	
 	### BUSCO check assembly
 	results = qc.BUSCO_check(outdir, outdir, options, start_time_partial, "genome")
@@ -190,6 +211,10 @@ def run(options):
 
 #############################################
 def check_sample_assembly(name, sample_folder, files, threads):
+	"""
+	Checks for each sample and calls run_module_SPADES if necessary. 
+	Populates dictionary assembly_stats with assembly stats information file
+	"""
 	## check if previously assembled and succeeded
 	filename_stamp = sample_folder + '/.success_all'
 	if os.path.isfile(filename_stamp):

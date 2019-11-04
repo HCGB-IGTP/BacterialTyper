@@ -31,8 +31,21 @@ rename_seqs_script = tools.perl_scripts('rename_FASTA_seqs')
 
 ################################################
 def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads):
-
-	## make sure spades.py version > 3.8
+	"""Generates plasmid assembly: call run_SPADES with plasmid option
+	
+	Arguments:
+		path : absolute path to store results. It must exists.
+		file1 : FASTQ R1 reads.
+		file2 : FASTQ R2 reads.
+		sample :	Sample name or tag to identify.
+		SPADES_bin : Binary executable for SPADES assembly software.
+	 	threads : Number of CPUs to use.
+	
+	Returns:
+		plasmids assembled, if succeded
+		FAIL 
+	"""
+	
 	print ('+ Running plasmid assembly...')
 	name = sample + '_plasmid'
 	options = '--plasmid '
@@ -42,15 +55,28 @@ def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads)
 		print ("\n\n***ERROR: plasmidSPADES failed for sample " + sample)	
 		exit()
 
-	scaffolds_retrieved = get_files(path + '/' + name)
-	if scaffolds_retrieved == 'FAIL':	
+	scaffolds_retrieved = functions.retrieve_matching_files(path + '/' + name, "scaffolds.fasta")
+	if scaffolds_retrieved == '':	
 		print ('\n\n***ATTENTION: No plasmids assembly...')
 
-	return (scaffolds_retrieved)
+	return (scaffolds_retrieved[0])
 
 ################################################
 def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
-
+	"""Generate main assembly: call run_SPADES and rename contigs
+	
+	Arguments:
+		path : absolute path to store results. It must exists.
+		file1 : FASTQ R1 reads.
+		file2 : FASTQ R2 reads.
+		sample :	Sample name or tag to identify.
+		SPADES_bin : Binary executable for SPADES assembly software.
+	 	threads : Number of CPUs to use.
+	
+	Returns:
+		contigs assembled renamed, if succeded
+		FAIL 
+	"""
 	##print ('+ Running main assembly...')
 	options = ''
 	message_return = run_SPADES(path, file1, file2, sample, SPADES_bin, options, threads)
@@ -58,11 +84,11 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 		print ("\n\n***ERROR: SPADES failed for sample " + sample)
 		return ('FAIL')
 
-	scaffolds_retrieved = get_files(path)
+	scaffolds_retrieved = functions.retrieve_matching_files(path, "scaffolds.fasta")
 	new_contigs = path + '/' + sample + '_assembly.fna'
-	rename_contigs(scaffolds_retrieved, "scaffolds_" + sample, new_contigs)
+	rename_contigs(scaffolds_retrieved[0], "scaffolds_" + sample, new_contigs)
 		
-	if scaffolds_retrieved == 'FAIL':	
+	if scaffolds_retrieved == '':	
 		print ('\n\n***ERROR: No scaffolds assembly...')
 		return ('FAIL')
 			
@@ -70,8 +96,22 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 
 ################################################
 def run_SPADES(sample_folder, file1, file2, name, SPADES_bin, options, threads):
-
-	##sample_folder = functions.create_subfolder(name, path)
+	"""Generate SPADES system call.
+	
+	Arguments:
+		sample_folder : absolute path to store results. It must exists.
+		file1 : FASTQ R1 reads.
+		file2 : FASTQ R2 reads.
+		name :	Sample name or tag to identify.
+		SPADES_bin : Binary executable for SPADES assembly software.
+		options : Plasmid assembly is possible if specificed via options (--plasmid). 
+	 	threads : Number of CPUs to use.
+	 
+	 Returns:
+	 	OK: If assembly succeeded generates timestamp file (.success_assembly) within sample_folder provided.
+	 	FAIL: If some error ocurred during the assembly.
+	 	
+	"""
 	
 	## check if previously assembled and succeeded
 	filename_stamp = sample_folder + '/.success_assembly'
@@ -86,40 +126,33 @@ def run_SPADES(sample_folder, file1, file2, name, SPADES_bin, options, threads):
 	## command	
 	cmd_SPADES = '%s %s-t %s -o %s -1 %s -2 %s > %s 2> %s' %(SPADES_bin, options, threads, sample_folder, file1, file2, logFile, logFile)
 	code = functions.system_call(cmd_SPADES)
-	code='OK'
 	
 	if (code == 'OK'):
 		## success stamps
 		filename_stamp = sample_folder + '/.success_assembly'
 		stamp =	functions.print_time_stamp(filename_stamp)
+		return('OK')
+
+	return "FAIL"
 	
-	return('OK')
-
-################################################
-def get_files(path):
-	files = os.listdir(path)
-	scaffolds_files = ()
-	
-	## get files generated with summary information
-	for f in files:
-		#print (f)
-		if f == 'scaffolds.fasta':
-			tmp = path + '/' + f 
-			#print (tmp)
-			
-			if os.path.isfile(tmp):
-				scaffolds_files = tmp
-	if not scaffolds_files:
-		return 'FAIL'
-	else:
-		return scaffolds_files
-
-
 ################################################
 def run_module_SPADES(name, folder, file1, file2, threads):
-
+	"""Prepare SPADES system call.
+	
+	Arguments:
+		name :	Sample name or tag to identify.
+		folder : absolute path to store results. It must exists.
+		file1 : FASTQ R1 reads.
+		file2 : FASTQ R2 reads.
+		threads : Number of CPUs to use.
+	 
+	 Returns:
+	 	Assembly statistics file, if succeeded.
+	 	FAIL: If some error ocurred during the assembly.
+	 	
+	"""
+	
 	print ("+ Calling spades assembly for sample...", name)	
-	## folder create: functions.create_folder(folder)
 	
 	## get configuration
 	SPADES_bin = config.get_exe('spades')
@@ -137,42 +170,6 @@ def run_module_SPADES(name, folder, file1, file2, threads):
 		## check statistics in file
 		print ("+ Check statistics for sample %s in file:\n%s" %(name, contig_out))
 		return(contig_out)
-
-################################################
-def run_module_SPADES_old(name, folder, file1, file2, threads):
-
-	print ("+ Calling spades assembly for sample...", name)	
-
-	## folder create
-	functions.create_folder(folder)
-	
-	## get configuration
-	SPADES_bin = config.get_exe('spades')
-	
-	## assembly main 
-	path_to_contigs = run_SPADES_assembly(folder, file1, file2, name, SPADES_bin, threads)
-
-	## assembly plasmids
-	path_to_plasmids = run_SPADES_plasmid_assembly(folder, file1, file2, name, SPADES_bin, threads)
-	
-	## discard plasmids from main
-	(tmp_contigs, tmp_plasmids) = discardPlasmids(path_to_contigs, path_to_plasmids, folder, name)
-	
-	## rename fasta sequences
-	new_contigs = tmp_contigs.split(".fna.tmp")[0] + '.fna'	
-	rename_contigs(tmp_contigs, "scaffolds_chr", new_contigs)
-	
-	new_plasmids=""
-	if os.path.isfile(tmp_plasmids):
-		new_plasmids = tmp_plasmids.split(".fna.tmp")[0] + '.fna'	
-		rename_contigs(tmp_plasmids, "scaffolds_plasmids", new_plasmids)
-	
-	## contig stats
-	stats(new_contigs, new_plasmids)
-	
-	## success stamps
-	filename_stamp = folder + '/.success'
-	stamp =	functions.print_time_stamp(filename_stamp)
 
 ################################################
 def discardPlasmids(contigs, plasmids, path, sample):
@@ -271,27 +268,39 @@ def discardPlasmids(contigs, plasmids, path, sample):
 
 ################################################
 def contig_stats(sequences):
+	"""Generate assembly statistics
+	
+	Calls additional perl script to generate contig statistics:
+	Usage:	
+	perl BacterialTyper/other_tools/perl/contig_stats.pl fasta_file 
+	- Provide a single fasta file for Contig Statistics...
+	- Default splitting sets: 0, 150, 500, 1000, 5000, 10000
+	- Provide new parts using a csv argument for the script: perl BacterialTyper/other_tools/perl/contig_stats.pl fasta_file 1000,10000
+	"""
 	file_out = sequences + '_stats.txt'
-	cmd_stats = 'perl %s %s 1000,10000 > %s' %(contig_stats_script, sequences, file_out)
+	cmd_stats = 'perl %s %s 1000,10000 > %s' %(contig_stats_script, sequences, file_out) ## [TODO] Generate this code in python
 	code_chr = functions.system_call(cmd_stats)
 	return (file_out)
 
 ################################################
-def stats(new_contigs, new_plasmids):	
+def stats(new_contigs, new_plasmids):
+	"""Generate assembly sequence statistics.
+	
+	For contigs and plasmids (if any) prints statistics in screen and in csv/txt files 
+	"""
 	## generate contig statistics
 	print ('+ Get assembly statistics:...\n')
-	#print (' + Main assembly:')
-	
+
+	## get contig statistics	
 	contig_out = contig_stats(new_contigs)	
-		
-	## dump in screen
-	
 	contig_out_file = open(contig_out, 'r')
 	contig_out_file_read = contig_out_file.read()
 	contig_out_file.close()
+	
+	## dump in screen
 	print (contig_out_file_read)
+	print ()	
 
-	print ('')	
 	if (new_plasmids == 'FAIL'):
 		print ('+ No plasmids identified...\n')
 	else:
@@ -306,8 +315,18 @@ def stats(new_contigs, new_plasmids):
 	
 ################################################
 def rename_contigs(fasta_file, name, new_fasta):
-	## perl tools/perl/rename_FASTA_seqs.pl fasta_file name_file name2add ADD|REPLACE|BEGIN|ADD_BEGIN
-	perl_call = "perl %s %s %s %s REPLACE" %(rename_seqs_script, fasta_file, new_fasta, name)
+	"""
+	Calls additional perl script to rename contigs:
+
+	Usage:
+	Please provide the next arguments:
+	perl BacterialTyper/other_tools/perl/rename_FASTA_seqs.pl fasta_file name_file name2add ADD|REPLACE|BEGIN|ADD_BEGIN
+	
+	ADD: will add the id plus a counter
+	REPLACE: will discard the previous name and add this unique id and counter
+	BEGIN: will keep the first split of the id and add at the beginning the given name
+	"""
+	perl_call = "perl %s %s %s %s REPLACE" %(rename_seqs_script, fasta_file, new_fasta, name) ## [TODO] Generate this code in python
 	return (functions.system_call(perl_call))
 	
 ################################################
@@ -316,9 +335,7 @@ def	help_options():
 
 ################################################
 def main():
-	## this code runs when call as a single script
-
-  	## control if options provided or help
+	  	## control if options provided or help
 	if len(sys.argv) > 1:
 		print ("")
 	else:
@@ -363,4 +380,39 @@ def main():
 if __name__== "__main__":
 	main()
 
+################################################
+def run_module_SPADES_old(name, folder, file1, file2, threads):
+
+	print ("+ Calling spades assembly for sample...", name)	
+
+	## folder create
+	functions.create_folder(folder)
+	
+	## get configuration
+	SPADES_bin = config.get_exe('spades')
+	
+	## assembly main 
+	path_to_contigs = run_SPADES_assembly(folder, file1, file2, name, SPADES_bin, threads)
+
+	## assembly plasmids
+	path_to_plasmids = run_SPADES_plasmid_assembly(folder, file1, file2, name, SPADES_bin, threads)
+	
+	## discard plasmids from main
+	(tmp_contigs, tmp_plasmids) = discardPlasmids(path_to_contigs, path_to_plasmids, folder, name)
+	
+	## rename fasta sequences
+	new_contigs = tmp_contigs.split(".fna.tmp")[0] + '.fna'	
+	rename_contigs(tmp_contigs, "scaffolds_chr", new_contigs)
+	
+	new_plasmids=""
+	if os.path.isfile(tmp_plasmids):
+		new_plasmids = tmp_plasmids.split(".fna.tmp")[0] + '.fna'	
+		rename_contigs(tmp_plasmids, "scaffolds_plasmids", new_plasmids)
+	
+	## contig stats
+	stats(new_contigs, new_plasmids)
+	
+	## success stamps
+	filename_stamp = folder + '/.success'
+	stamp =	functions.print_time_stamp(filename_stamp)
 

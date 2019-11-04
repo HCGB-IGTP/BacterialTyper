@@ -58,6 +58,9 @@
 [TODO] BacterialTyper/database_generator.py :: NCBI descendant
 [TODO] BacterialTyper/database_generator.py :: provide preference to db2update (update_db_data_file)
 
+[TODO] BacterialTyper/spades_assembler.py :: Generate perl code in python
+
+
 #####################
 ### Visualization ###
 #####################
