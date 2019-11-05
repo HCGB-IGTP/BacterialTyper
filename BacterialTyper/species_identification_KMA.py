@@ -3,12 +3,9 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
-This code calls KMA software to find the best match (species identification) to the reads in one
-or more fastq files or one fasta file in a (kmer) database produced using the KMA program (Philip T.L.C. Clausen, 
-Frank M. Aarestrup & Ole Lund, "Rapid and precise alignment of raw reads against redundant databases with KMA", 
-BMC Bioinformatics, 2018;19:307.) 
-'''
+"""
+Call KMA software to find the best match (species identification) in reads file or fasta file in a (kmer) database produced using the KMA program 
+"""
 ## useful imports
 import time
 import io
@@ -253,6 +250,34 @@ def index_database(fileToIndex, kma_bin, index_name, option, folder, type_option
 
 ##################################################
 def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma_bin):
+	"""Generates or updates index KMA databases for later kmer identification. 
+
+	Arguments:
+		file_abs_paths: list
+			List of absolute paths fasta genome files to include in the database.
+		
+		name: str
+			Database name
+		
+		fold_name: path
+			Directory path to store database generated.
+		
+		option: str
+			Generate a new database (option = 'new') or add to pre-existing database (option = 'add'). If database exists, automatically adds.
+		
+		type_option: str
+			Index genome fasta files one by one (option_type='single') or using a batch file containing multiple entries (option='batch').
+		
+		Debug: bool
+			True/False for debugging messages.
+		
+		kma_bin: path
+			Binary executable for KMA software
+	
+	Returns:
+		Absolute path to database generated	
+	"""
+
 
 	print ('+ Updating the KMA database: ', name)			
 
@@ -309,6 +334,7 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 			if (Debug):
 				print (colored("**DEBUG: Database (%s) is not indexed" %file_name + " **", 'yellow'))
 			status = index_database(file_name, kma_bin, file_name, option, fold_name, type_option)
+	
 	## return
 	if (status): #true
 		return (file_name)

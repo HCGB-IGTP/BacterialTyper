@@ -99,13 +99,26 @@ def run_SPADES(sample_folder, file1, file2, name, SPADES_bin, options, threads):
 	"""Generate SPADES system call.
 	
 	Arguments:
-		sample_folder : absolute path to store results. It must exists.
-		file1 : FASTQ R1 reads.
-		file2 : FASTQ R2 reads.
-		name :	Sample name or tag to identify.
-		SPADES_bin : Binary executable for SPADES assembly software.
-		options : Plasmid assembly is possible if specificed via options (--plasmid). 
-	 	threads : Number of CPUs to use.
+		sample_folder : str
+			Absolute path to store results. It must exists.
+		
+		file1 : path
+			FASTQ R1 reads.
+		
+		file2 : path
+			FASTQ R2 reads.
+		
+		name :	str
+			Sample name or tag to identify.
+		
+		SPADES_bin : path
+			 Binary executable for SPADES assembly software.
+		
+		options : str
+			Plasmid assembly is possible if specificed via options (--plasmid). 
+	 	
+	 	threads : int
+	 		 Number of CPUs to use.
 	 
 	 Returns:
 	 	OK: If assembly succeeded generates timestamp file (.success_assembly) within sample_folder provided.
@@ -140,11 +153,21 @@ def run_module_SPADES(name, folder, file1, file2, threads):
 	"""Prepare SPADES system call.
 	
 	Arguments:
-		name :	Sample name or tag to identify.
-		folder : absolute path to store results. It must exists.
-		file1 : FASTQ R1 reads.
-		file2 : FASTQ R2 reads.
-		threads : Number of CPUs to use.
+		
+		name :	str
+			Sample name or tag to identify.
+		
+		folder : path
+			absolute path to store results. It must exists.
+		
+		file1 : path
+			FASTQ R1 reads.
+		
+		file2 : path
+			FASTQ R2 reads.
+		
+		threads : int
+			Number of CPUs to use.
 	 
 	 Returns:
 	 	Assembly statistics file, if succeeded.

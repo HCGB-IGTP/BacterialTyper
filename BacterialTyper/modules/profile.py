@@ -3,7 +3,7 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-"""""
+"""
 Generates a resistance and virulence profile for each sample.
 """
 ## useful imports

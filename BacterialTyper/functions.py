@@ -37,19 +37,24 @@ from BacterialTyper import config
 
 ###############   
 def print_time ():
+	"""Prints time stamp in human readable format: month/day/year, hour:minute:seconds."""
 	now = datetime.now()
 	date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
 	print ('\t' + date_time + '\n')
 
 ###############   
 def gettime (start_time):
-    total_sec = time.time() - start_time
-    m, s = divmod(int(total_sec), 60)
-    h, m = divmod(m, 60)
-    return h, m, s
+	"""Obtains time stamp in human readable format: hour:minute:seconds from a time.time() format timestamp."""
+	total_sec = time.time() - start_time
+	m, s = divmod(int(total_sec), 60)
+	h, m = divmod(m, 60)
+	return h, m, s
 
 ###############	
 def timestamp (start_time_partial):
+	"""Prints a stamp of the time spent for a process in human readable format: hour:minute:seconds.
+	Returns time in format time.time().
+	"""
 	h,m,s = gettime(start_time_partial)
 	print_sepLine("-", 25, False)
 	print ('(Time spent: %i h %i min %i s)' %(int(h), int(m), int(s)))
@@ -58,6 +63,7 @@ def timestamp (start_time_partial):
 	
 ###############	
 def print_time_stamp (out):
+	"""Prints out timestamp in a file provided. Format: time.time()"""
 	timefile = open(out, 'w')    
 	string2write = str(time.time())
 	timefile.write(string2write)
@@ -65,6 +71,7 @@ def print_time_stamp (out):
 
 ###############	
 def read_time_stamp (out):
+	"""Reads timestamp from a file provided. Format: time.time()"""
 	st_hd = open(out, 'r')
 	st = st_hd.read()
 	st_hd.close()
@@ -73,6 +80,10 @@ def read_time_stamp (out):
 
 ###############	
 def get_diff_time(stamp):
+	"""Obtains the time spent for a process in days given a stamp in time.time() format.
+	Returns days passed since.
+	"""
+	
 	time_today = time.time()
 	elapsed = time_today - float(time_today)
 	days_passed = int((elapsed/3600)/24)
@@ -80,6 +91,7 @@ def get_diff_time(stamp):
 
 ###############    
 def create_human_timestamp():
+	"""Generates human timestamp for the date of day in format (yearmonthday): e.g. 20191011"""
 	now = datetime.now()
 	timeprint = now.strftime("%Y%m%d")
 	return timeprint
@@ -91,7 +103,7 @@ def create_human_timestamp():
 ###############
 def is_non_zero_file(fpath):  
 	# https://stackoverflow.com/a/15924160
-	'''Returns TRUE/FALSE if file exists and non zero'''
+	"""Returns TRUE/FALSE if file exists and non zero"""
 	return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
 
 ###############
@@ -134,11 +146,12 @@ def outdir_subproject(outdir, pd_samples, mode):
 
 ###############
 def create_subfolder (name, path):
-    ## create subfolder  ##	
+	"""Create a subfolder named 'name' in directory 'path'. Returns path created."""
+	## create subfolder  ##	
 	subfolder_path = path + "/" + name
 	access_rights = 0o755
 	
-    # define the access rights
+	# define the access rights
 	try:
 		os.mkdir(subfolder_path, access_rights)
 	except OSError:  
@@ -151,15 +164,17 @@ def create_subfolder (name, path):
 
 ###############  
 def create_folder (path):
-    ## create subfolder  ##	
+	"""Create a folder directory 'path'. Returns path created."""
+	
+	## create subfolder  ##	
 	access_rights = 0o755
 	
-    # define the access rights
+	# define the access rights
 	try:
 		os.mkdir(path, access_rights)
 	except OSError:  
-	   	#print ("\tDirectory %s already exists" %path)
-	   	return path
+		#print ("\tDirectory %s already exists" %path)
+		return path
 	else:  
 		print (colored("Successfully created the directory %s " %path, 'yellow'))
 	
@@ -167,6 +182,7 @@ def create_folder (path):
 
 ############### 
 def get_symbolic_link (sample_list, directory):
+	"""Creates symbolic links, using system call, for list of files given in directory provided"""
 	for samplex in sample_list:
 		cmd = 'ln -s %s %s' %(samplex, directory)
 		system_call(cmd)
@@ -184,12 +200,14 @@ def get_fullpath_list(dir_given):
 
 #################
 def printList2file(fileGiven, listGiven):
+	"""Prints list given in the output file provided. One item per row."""
 	file_hd = open(fileGiven, 'w')
 	file_hd.write("\n".join(listGiven))
 	file_hd.close()  
 
 #################
 def readList_fromFile(fileGiven):
+	"""Reads list from the input file provided. One item per row."""
 	# open file and read content into list
 	lineList = [line.rstrip('\n') for line in open(fileGiven)]
 	return (lineList)
@@ -313,6 +331,9 @@ def subset_fasta(ident, fasta, out):
 ######## 					AESTHETICS								######## 					
 ############################################################################
 def pipeline_header():
+	"""
+	Prints a common header for the pipeline including name, author, copyright and year.	    
+	"""
 	print ("\n")
 	print_sepLine("#", 70, False)
 	print('#', '{: ^66}'.format("BacterialTyper pipeline"), '#')

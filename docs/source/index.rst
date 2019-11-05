@@ -6,37 +6,27 @@
 BacterialTyper's documentation!
 ===============================
 
+This pipeline is composed of multiple modules.   
+
+.. only:: html
+   
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+
+   modules/assemble.rst
+   modules/qc.rst
+   modules/database.rst
+   modules/ident.rst
+   modules/profile.rst
    
-BacterialTyper main
-===================
-.. automodule:: BacterialTyper.scripts.BacterialTyper
-   :members:
+   submodules/functions.rst
 
-assemble
-========
-.. automodule:: BacterialTyper.modules.assemble
-   :members:
 
-qc
-==
-.. automodule:: BacterialTyper.modules.qc
-   :members:
 
-database
-========
-.. automodule:: BacterialTyper.modules.database
-   :members:
+Indices and tables
+==================
 
-ident
-=====
-.. automodule:: BacterialTyper.modules.ident
-   :members:
-
-profile
-=======
-.. automodule:: BacterialTyper.modules.profile
-   :members:
-   
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+ 

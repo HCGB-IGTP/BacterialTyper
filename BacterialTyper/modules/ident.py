@@ -3,10 +3,10 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
+"""
 Generates sample identification using KMA software and MLSTar. 
 Looks for similar entries on GenBank and retrieves them.  
-'''
+"""
 ## useful imports
 import time
 import io
@@ -30,6 +30,13 @@ from BacterialTyper.modules import info
 
 ####################################
 def run(options):
+	"""
+	Main function acting as an entry point to the module *ident*.
+	
+	Arguments:
+	
+	
+	"""
 
 	##################################
 	### show help messages if desired	
@@ -716,11 +723,9 @@ def get_external_kma(kma_external_files, Debug):
 
 ####################################
 def get_options_db(options):
-	'''
-	Selects databases to use and set dataframe with this 
-	information among all databases available and according 
-	to the input options.
-	'''
+	"""
+	Selects databases to use and set dataframe with this information among all databases available and according to the input options.
+	"""
 	
 	print ("\n\n+ Select databases to use for identification:")
 	

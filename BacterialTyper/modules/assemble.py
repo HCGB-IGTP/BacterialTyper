@@ -3,7 +3,7 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-"""""
+"""
 Assembles each sample using SPADES and checks quality using BUSCO
 """
 
@@ -212,9 +212,20 @@ def run(options):
 
 #############################################
 def check_sample_assembly(name, sample_folder, files, threads):
-	"""
-	Checks for each sample and calls run_module_SPADES if necessary. 
-	Populates dictionary assembly_stats with assembly stats information file
+	"""Checks wether a sample is assembled and calls run_module_SPADES if necessary.
+	
+	Arguments:
+		name: sample ID
+		
+		sample_folder: directory to generate assembly ouptut. It must exist.
+		
+		files: list containing files (fastq R1 & R2) for the sample to be assembled.
+		
+		threads: number of CPUs
+		
+	Returns:
+		Populates dictionary assembly_stats with assembly stats information file
+	
 	"""
 	## check if previously assembled and succeeded
 	filename_stamp = sample_folder + '/.success_all'

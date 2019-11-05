@@ -3,13 +3,12 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-from _ast import If
-'''
+"""
 This code prepares the database information for further analysis.
 Several functions are implemented for:
 	- Manipulate data entries, update information
 	- Download NCBI assembly IDs provided
-'''
+"""
 ## useful imports
 import time
 import io
@@ -37,22 +36,18 @@ from BacterialTyper import min_hash_caller
 def NCBI_DB(strains2get, data_folder, Debug):
 	"""Donwloads given taxa from NCBI if not available and updates database information.
 	
-	Parameters
-	-----------
+	Arguments:
+		strains2get : dataframe 
+			Dataframe containing genus, species and NCBI_assembly_ID columns.
 	
-	strains2get : dataframe 
-		Dataframe containing genus, species and NCBI_assembly_ID columns.
+		data_folder : str
+			Database absolute path
 	
-	data_folder : str
-		Database absolute path
-	
-	Debug : bool
-		True/false
+		Debug : bool
+			True/false
 	
 	Returns
-	-------
-	
-	Dataframe of genbank database updated for all available entries.
+		Dataframe of genbank database updated for all available entries.
 	
 	"""
 	
@@ -258,8 +253,32 @@ def update_db_data_file(data, csv):
 		
 ##################################################
 def getdbs(source, database_folder, option, debug):
-
-	## option = kma:archaea,plasmids,bacteria#kma_external:/path/to/file1,/path/to/file2#user_data#genbank **
+	"""Get databases available within the folder 'database_folder' provided.
+	
+	Arguments:
+		source: str
+			Type of database to search: ARIBA, KMA, NCBI, MLST, MASH. 
+		
+		database_folder: str
+			Path where the dabases was initiated
+		
+		option: str
+			String containing multiple entries separated by '#' that indicate the type of database entries to search within each source type.
+		
+			e.g.: 	source = KMA
+					option = kma:archaea,plasmids,bacteria#kma_external:/path/to/file1,/path/to/file2#user_data#genbank **
+					
+					source = NCBI
+					option = genbank
+					
+		debug: bool
+			True/False for debugging messages.
+	
+	Returns:
+		Returns dataframe containing absolute paths to the available databases for each type requested.
+		Dafaframe consists of columns for: "source", "db", "path"
+	"""
+	
 	## read folders within database
 	files = os.listdir(database_folder) ## ARIBA/KMA_db/genbank/user_data
 
@@ -347,12 +366,6 @@ def getdbs(source, database_folder, option, debug):
 	if (debug):
 		print (colored("\ndbs2use:\n\t" + "\n\t".join(dbs2use), 'yellow'))
 
-	####
-	return(getdbs_df(source, dbs2use, database_folder, debug, db_Dataframe))
-
-##################################################
-def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
-	
 	## init dataframe
 	#colname = ["source", "db", "path"]
 	#db_Dataframe  = pd.DataFrame(columns = colname)
@@ -391,7 +404,7 @@ def getdbs_df(source, dbs2use, database_folder, Debug, db_Dataframe):
 		kma_dbs = os.listdir(KMA_db_abs)
 
 		## debug message
-		if (Debug):
+		if (debug):
 			print (colored("Folders KMA_db:" + str(kma_dbs) , 'yellow'))
 
 		### get information
