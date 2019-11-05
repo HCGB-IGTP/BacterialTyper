@@ -4,7 +4,7 @@
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
 """
-Call KMA software to find the best match (species identification) in reads file or fasta file in a (kmer) database produced using the KMA program 
+Call KMA software to find the best match in reads file or fasta file in a (kmer) database produced using the KMA program 
 """
 ## useful imports
 import time
@@ -250,7 +250,7 @@ def index_database(fileToIndex, kma_bin, index_name, option, folder, type_option
 
 ##################################################
 def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma_bin):
-	"""Generates or updates index KMA databases for later kmer identification. 
+	"""Generate a call to create or update index KMA databases for later kmer identification. 
 
 	Arguments:
 		file_abs_paths: list
@@ -347,6 +347,38 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 
 ##################################################
 def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, option, threads):
+	"""Create kma system call for kmer identification. 
+	
+	Paired-end end or single end fastq files accepted. It generates a time stamp if succeeds.
+
+	Arguments:
+		out_file: str
+			Absolute path and basename for the output files generated with results.
+		
+		files: list
+			List of absolute paths for fastq files to search againts the database.
+		
+		fold_name: path
+			Directory path to store database generated.
+		
+		index_name: str
+			Database name
+		
+		kma_bin: path
+			Binary executable for KMA software.
+		
+		option: str
+			Additional options to pass to the system call.
+		
+		threads: int
+			Number of CPUs to use. 
+	
+	Returns:
+		OK if system call returned finish status.
+		
+		FAIL if system call failed.
+	"""
+
 	###
 	out_file_log = out_file + '.log'
 	if len(files) == 2:
@@ -369,6 +401,11 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, option, th
 
 ##################################################
 def parse_kma_results(out_file, cutoff):
+	"""Filters KMA results given a cutoff threshold.
+	
+	Returns:
+		Filtered dataframe.
+	"""
 	results = pd.read_csv(out_file, sep="\t")
 	results_filter = results[results['Template_Coverage'] > cutoff] 
 	## filter according to coverage of the template. 

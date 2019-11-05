@@ -41,6 +41,8 @@
 [TODO] BacterialTyper/virulence_resistance.py :: Parse if a different database provided (!= CARD, VFDB)
 
 [TODO] BacterialTyper/species_identification_KMA.py :: Implement if a different database provided for KMA
+[TODO] BacterialTyper/species_identification_KMA.py :: Implement if database (user_data or genbank) provided.
+
 [TODO] BacterialTyper/species_identification_KMA.py :: Download after n days passed?
 [TODO] BacterialTyper/species_identification_KMA.py :: Test single end
 

@@ -316,8 +316,9 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	
 	"""
 	
-	
+	### print header
 	functions.boxymcboxface("KMA Identification")
+
 	## set defaults
 	kma_bin = config.get_exe("kma")	
 
@@ -672,18 +673,6 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 	return (MLST_results)
 
 ####################################
-def get_kma_db(kma_dbs):
-	print ('\t- Selecting kma databases:')
-	kma_dbs_string = ','.join(kma_dbs)
-	option_db = "kma:" + kma_dbs_string
-	
-	for i in kma_dbs:
-		print (colored('\t\t+ %s' %i, 'green'))
-
-	return(option_db)
-	
-
-####################################
 def get_external_kma(kma_external_files, Debug):
 	print ('\t- Get additional kma databases:')
 	## external sequences provided are indexed and generated in the same folder provided 
@@ -723,8 +712,10 @@ def get_external_kma(kma_external_files, Debug):
 
 ####################################
 def get_options_db(options):
-	"""
-	Selects databases to use and set dataframe with this information among all databases available and according to the input options.
+	"""Select databases to use according to the input options.
+	
+	Returns:
+		Dataframe with database information among all databases available.
 	"""
 	
 	print ("\n\n+ Select databases to use for identification:")
@@ -788,7 +779,12 @@ def get_options_db(options):
 		####################
 		## default KMA dbs
 		####################
-		option_db = get_kma_db(options.kma_dbs)
+		print ('\t- Selecting kma databases:')
+		kma_dbs_string = ','.join(options.kma_dbs)
+		option_db = "kma:" + kma_dbs_string
+	
+		for i in options.kma_dbs:
+			print (colored('\t\t+ %s' %i, 'green'))
 		
 		#################
 		## External file

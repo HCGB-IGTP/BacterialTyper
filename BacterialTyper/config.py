@@ -3,9 +3,7 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
-Provides configuration for the pipeline
-'''
+"""Provides configuration for the pipeline."""
 ## useful imports
 import os
 import io
@@ -25,7 +23,8 @@ from BacterialTyper import install_dependencies
 
 ##################
 def prog_to_default():
-
+	"""Returns a dictionary containing file name for each software."""
+	
 	program_to_default = {
 		'ariba':'ariba',
 		'augustus':'augustus',
@@ -55,7 +54,8 @@ def prog_to_default():
 
 ##################
 def min_version_programs():
-
+	"""Returns a dictionary containing minimum version for each software."""
+	
 	min_versions = { ## update
 		'ariba':'2.13.5',
 		'augustus':'3.2.1',		
@@ -89,6 +89,8 @@ def min_version_programs():
 
 ##################
 def min_package_version():
+	"""Returns a dictionary containing minimum version for each python package."""
+	
 	package_min_versions = {
 		'appdirs':'1.4.3',
 		'ariba':'2.13.5',
@@ -150,7 +152,15 @@ def min_package_version():
 def get_exe(prog):
 	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
 	## give credit to them appropiately
-	'''Given a program name, return what we expect its exectuable to be called'''
+	"""Return absolute path of the executable program requested.
+	
+	Given a program name, it returns what we expect its exectuable to be called. It has to fulfilled a minimun version specified.
+	
+	Returns:
+		Absolute path for the executable requested
+		ERROR if no executable available in $PATH or not fulfilling the expected version.
+		
+	"""
 	exe = ""
 	if prog in os.environ: 
 		exe = os.environ[env_var] ## python environent variables
