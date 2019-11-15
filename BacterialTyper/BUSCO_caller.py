@@ -3,9 +3,9 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
+"""
 Calls BUSCO software for quality control of annotation and assembly datasets
-'''
+"""
 ## useful imports
 import time
 import io
@@ -22,6 +22,17 @@ from BacterialTyper import config
 
 ###############
 def busco_datasets():
+	"""BUSCO dataset information
+	
+	Returns a dataframe containing information for each dataset available in BUSCO website database.
+	
+	Dataframe contains several columns: "Taxonomic range","Dataset","ftp_site" indexed by Dataset
+	e.g. 
+		Dataset: "deltaepsilonsub",
+		Taxonomic range: "phylum Proteobacteria – Delta and Epsilon proteobacteria",
+		ftp_site: "http://busco.ezlab.org/v2/datasets/deltaepsilonsub_odb9.tar.gz")
+	
+	"""
 	busco_data = pd.DataFrame(columns=("Taxonomic range","Dataset","ftp_site"))
 	busco_data.loc[len(busco_data)] = ("All bacteria dataset","bacteria","http://busco.ezlab.org/v2/datasets/bacteria_odb9.tar.gz")
 	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria all","proteobacteria","http://busco.ezlab.org/v2/datasets/proteobacteria_odb9.tar.gz")
@@ -145,6 +156,21 @@ def BUSCO_check_dataset(folder):
 
 ###############
 def BUSCO_retrieve_sets(list_datasets, folder):
+	"""Retrieves datasets information available
+	
+	Arguments:
+		list_datasets: list of datasets of interest to check. 
+		
+		folder: absolute path to folder that will contain all datasets of interest.
+		e.g. /path/to/BUSCO_folder_provided/ 
+	
+	In 'folder', checks if datasets in 'list_datasets' are available or downloads them. 
+	Retrieves information using function 'busco_datasets' and checks if it is available or downloads it using 'BUSCO_download'. 
+	
+	Returns:
+		Dictionary containing for each dataset of interest (key), the absolute path to the folder containing information downloaded (value).
+		e.g. bacteria : /path/to/BUSCO_folder_provided/bacteria
+	"""
 
 	## check if name matches
 	data_df = busco_datasets()
