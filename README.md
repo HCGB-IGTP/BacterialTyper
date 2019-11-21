@@ -5,9 +5,5 @@ We present BacterialTyper, a pipeline for the analysis of bacterial WGS data tha
 
 The pipeline is written in Python with a modular architecture and based on open-source software and databases engines. Multiple tasks are performed by each of several modules including: preparation of raw data; assembly and annotation; bacterial strain identification; mobile genetic elements identification (plasmids, putative pathogenicity islands or phage insertions regions); generation of a virulence and resistance profile; clustering based on sequence similarity; phylogenetic analysis; integration of metadata, etc. The tool allows to compare samples with previously identified samples (collected and internal database) but it also uses, and updates periodically, external databases from different sources. 
 
-VERSION: 0.0.1
 
-AUTHORS: Jose F Sanchez-Herrero
-
-COPYRIGHT: 2019 Lauro Sumoy Lab, IGTP, Spain
-
+![Workflow](docs/source/images/workflow/all.jpg "BacterialTyper pipeline")
