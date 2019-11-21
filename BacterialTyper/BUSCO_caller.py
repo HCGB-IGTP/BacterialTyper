@@ -3,8 +3,7 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-"""
-Calls BUSCO software for quality control of annotation and assembly datasets
+"""Calls BUSCO software for quality control of annotation and assembly datasets
 """
 ## useful imports
 import time
@@ -27,11 +26,9 @@ def busco_datasets():
 	Returns a dataframe containing information for each dataset available in BUSCO website database.
 	
 	Dataframe contains several columns: "Taxonomic range","Dataset","ftp_site" indexed by Dataset
-	e.g. 
-		Dataset: "deltaepsilonsub",
-		Taxonomic range: "phylum Proteobacteria – Delta and Epsilon proteobacteria",
-		ftp_site: "http://busco.ezlab.org/v2/datasets/deltaepsilonsub_odb9.tar.gz")
-	
+	e.g. Dataset: "deltaepsilonsub",
+	e.g. Taxonomic range: "phylum Proteobacteria – Delta and Epsilon proteobacteria",
+	e.g. ftp_site: "http://busco.ezlab.org/v2/datasets/deltaepsilonsub_odb9.tar.gz")
 	"""
 	busco_data = pd.DataFrame(columns=("Taxonomic range","Dataset","ftp_site"))
 	busco_data.loc[len(busco_data)] = ("All bacteria dataset","bacteria","http://busco.ezlab.org/v2/datasets/bacteria_odb9.tar.gz")
