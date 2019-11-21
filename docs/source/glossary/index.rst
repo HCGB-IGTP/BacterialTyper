@@ -17,3 +17,17 @@ Glossary
 
   BUSCO
       aaa
+
+  ARIBA
+      A
+
+  NCBI Genbank
+      adsasd
+      
+  BIGSdb
+      asdads
+
+  KMA
+      adsad
+  
+  
