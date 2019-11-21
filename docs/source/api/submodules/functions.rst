@@ -1,5 +1,7 @@
 .. _functions:
 
+.. title:: General functions
+
 functions
 =========
 

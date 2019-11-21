@@ -1,3 +1,7 @@
+********
+Contents
+********
+
 Overview
 ========
 
@@ -5,9 +9,6 @@ Overview
 
     :Release: |version|
     :Date: |today|
-
-    Download `PDF <BacterialTyper_documentation.pdf>`_
-
 
 .. toctree::
    :maxdepth: 2

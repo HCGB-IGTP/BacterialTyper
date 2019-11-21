@@ -2,8 +2,21 @@
 
 .. title:: BacterialTyper documentation 
 
-BacterialTyper is pipeline composed of multiple modules.
+BacterialTyper is a pipeline composed of multiple modules written in Python_. 
 
-This is the documentation for BacterialTyper version |version|.
+.. image:: images/workflow/all.jpg
+   :width: 1500pt
 
-To get started, read the :doc:`User's Guide <users/index>`.
+This is the documentation for BacterialTyper version |version|. It includes:
+
+- A :doc:`User's Guide <user_guide/index>` to get started.
+- An example :doc:`Tutorial <tutorial/index>`.
+- :doc:`Developer Guidelines <devel/index>`.
+
+.. toctree::
+   :maxdepth: 1
+
+   contents.rst
+
+
+.. _Python: http://www.python.org/

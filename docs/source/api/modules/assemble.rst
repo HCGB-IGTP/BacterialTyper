@@ -1,11 +1,5 @@
-.. _assemble:
-
-Assemble module
-===============
-
-.. contents:: :local:
-
-See also `whatever`.
+assemble
+========
 
 Workflow
 --------

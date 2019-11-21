@@ -1,8 +1,15 @@
+.. title:: API guide
+
 API Overview
 ============
 
 .. toctree::
    :hidden:
+   
+.. only:: html
+
+    :Release: |version|
+    :Date: |today|
 
 .. contents:: :local:
 

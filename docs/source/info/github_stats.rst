@@ -1,6 +1,6 @@
 .. github_stats:
 
-GitHub Stats
-============
+Github statistics
+=================
 
 GitHub stats for 20xx/xx/xx - 20xx/xx/xx (tag: vX.X.X)

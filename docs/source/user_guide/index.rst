@@ -14,12 +14,6 @@ User's Guide
 
     installing.rst
     ../tutorial/index.rst
-    
-    ../info/whats_new.rst
-    ../info/history.rst
-    ../info/license.rst
-    ../info/credits.rst
-    ../info/citation.rst
-
-    ../info/github_stats.rst
+    modules/index.rst
+    ../info/index.rst
     
