@@ -1,5 +1,5 @@
-assemble
-========
+Assembly module
+===============
 
 .. _assembly-workflow:
 

@@ -65,7 +65,7 @@ Instructions to build the documentation for developer purposes.
 
 All documentation is built from the :file:`BacterialTyper/docs/` directory. 
 
-We will follow the rules for the documentation generated for the Matplotlib documentation configuration_.
+We will follow the rules for the documentation generated for the `Matplotlib documentation configuration`_.
  
 .. ###############################################
 .. _installing-dep-build-docs:
@@ -157,7 +157,7 @@ uses are useful for creating documentation.
 Referring to other documents and sections
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Sphinx_ allows internal references_ between documents.
+Sphinx_ allows `internal references`_ between documents.
 
 Documents can be linked with the ``:doc:`` directive:
 
@@ -208,7 +208,7 @@ Writing docstrings
 Most of the API documentation is written in docstrings. These are comment
 blocks in source code that explain how the code works.
 
-The Sphinx_ website also contains plenty of documentation details_ concerning ReST
+The Sphinx_ website also contains plenty of `documentation details concerning ReST`_
 markup and working with Sphinx in general.
 
 All new or edited docstrings should conform to the `numpydoc docstring guide`_.
@@ -261,13 +261,5 @@ An example docstring looks like:
 See original example in https://matplotlib.org/devel/documenting_mpl.html#example-docstring
 
 
-.. ###############################################
-.. References
-.. ###############################################
-.. _Sphinx: http://www.sphinx-doc.org/en/master/
-.. _reStructuredText: http://docutils.sourceforge.net/rst.html
-.. _details: https://www.sphinx-doc.org/en/master/contents.html
-.. _configuration: https://matplotlib.org/devel/documenting_mpl.html
-.. _api: https://en.wikipedia.org/wiki/Application_programming_interface
-.. _references: https://www.sphinx-doc.org/en/stable/usage/restructuredtext/roles.html
-.. _`numpydoc docstring guide`: https://numpydoc.readthedocs.io/en/latest/format.html
+.. ## Include linksReferences
+.. include:: ../links.inc
