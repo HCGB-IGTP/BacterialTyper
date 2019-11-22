@@ -7,6 +7,9 @@ Documentation is written using Sphinx_, a python documentation system built usin
 reStructuredText_ (ReST; ``.rst``). The docs configuration contains both 
 ReST files that contain pages in the documentation and configuration files for Sphinx_.
 
+.. ###############################################
+.. _docs-organization-folder:
+
 Organization
 ------------
 
@@ -62,15 +65,23 @@ All documentation is built from the :file:`BacterialTyper/docs/` directory.
 We will follow the rules for the documentation generated for the Matplotlib documentation configuration_.
  
 .. ###############################################
-.. _docs-organization-folder:
-
-.. ###############################################
 .. _installing-dep-build-docs:
 
 Installing dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-You may need to
+To build the docs, you will need to install several python modules as 
+documentation is generated from reStructuredText_ (ReST) using the 
+Sphinx_ documentation generation tool. 
+
+There are several extra requirements that are needed to build the documentation. 
+They are listed in :file:`config/docs/doc-requirements.txt`, which is shown below:
+
+.. include:: ../../../config/docs/doc-requirements.txt
+   :literal:
+
+.. note::
+  * You'll need a minimal working LaTeX distribution for many examples to run.
 
 
 .. ###############################################
