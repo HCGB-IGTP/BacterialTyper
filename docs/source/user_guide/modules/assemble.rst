@@ -1,6 +1,8 @@
 assemble
 ========
 
+.. _assembly-workflow:
+
 Workflow
 --------
 

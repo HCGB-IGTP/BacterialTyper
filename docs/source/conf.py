@@ -12,7 +12,7 @@
 #
 import os
 import sys
-from matplotlib.sphinxext.tests.tinypages.conf import latex_elements
+#from matplotlib.sphinxext.tests.tinypages.conf import latex_elements
 sys.path.insert(0, os.path.abspath('../..'))
 sys.setrecursionlimit(1500)
 
