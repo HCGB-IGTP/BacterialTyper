@@ -3,6 +3,8 @@
 Documentation
 =============
 
+.. contents:: Contents
+
 Documentation is written using Sphinx_, a python documentation system built using 
 reStructuredText_ (ReST; ``.rst``). The docs configuration contains both 
 ReST files that contain pages in the documentation and configuration files for Sphinx_.
@@ -54,6 +56,7 @@ document in order to make the most effective use of cross referencing.
    of the functions in BacterialTyper scripts and main modules. These sources consist 
    of python scripts that have ReST documentation built into their comments. 
 
+.. _buld-the-docs:
 
 Build the docs
 --------------
@@ -89,9 +92,53 @@ They are listed in :file:`config/docs/doc-requirements.txt`, which is shown belo
 
 Building documentation
 ^^^^^^^^^^^^^^^^^^^^^^
+The documentation sources are found in the :file:`docs/` directory in the trunk.
+The configuration file for Sphinx is :file:`docs/conf.py`. It controls which
+directories Sphinx parses, how the docs are built, and how the extensions are
+used. 
 
-To build the docs...
+To build the documentation in html format, cd into :file:`docs/` and run:
 
+.. code-block:: sh
+
+   make html
+
+To delete built files. It may help if you get errors about missing paths or broken links.
+
+.. code-block:: sh
+
+   make clean
+
+To generate a pdf file of the documentation.
+   
+.. code-block:: sh
+
+   make latexpdf
+
+
+.. note::
+
+   The ``SPHINXOPTS`` variable is set to ``-W --keep-going`` by default to build
+   the complete docs but exit with exit status 1 if there are warnings.  To unset
+   it, use
+
+   .. code-block:: sh
+   
+      make SPHINXOPTS= html
+   
+   You can use the ``O`` variable to set additional options:
+   
+   * ``make O=-j4 html`` runs a parallel build with 4 processes.
+   * ``make O=-Dplot_formats=png:100 html`` saves figures in low resolution.
+   * ``make O=-Dplot_gallery=0 html`` skips the gallery build.
+   
+   Multiple options can be combined using e.g. ``make O='-j4 -Dplot_gallery=0'
+   html``.
+   
+   On Windows, options needs to be set as environment variables, e.g. ``set O=-W
+   --keep-going -j4 & make html``.
+
+.. _writing-rest-pages:
 
 Writing ReST pages
 ------------------
@@ -153,12 +200,74 @@ will give the following link: :ref:`assembly-workflow`
    use hyphen separated, descriptive labels for section references. Since 
    underscores are widely used by Sphinx itself, use hyphens to separate words.
 
+.. _writing-docstrings:
+
+Writing docstrings
+==================
+
+Most of the API documentation is written in docstrings. These are comment
+blocks in source code that explain how the code works.
+
+The Sphinx_ website also contains plenty of documentation details_ concerning ReST
+markup and working with Sphinx in general.
+
+All new or edited docstrings should conform to the `numpydoc docstring guide`_.
+Much of the ReST syntax discussed above (:ref:`writing-rest-pages`) can be
+used for links and references.  These docstrings eventually populate files in 
+:file:`docs/api` directory and form the reference documentation for the
+library.
+
+Example docstring
+-----------------
+
+An example docstring looks like:
+
+.. code-block:: python
+
+    def hlines(xmin, xmax, colors='k', linestyles='solid',
+               label='', **kwargs):
+        """
+        Plot horizontal lines at each *y* from *xmin* to *xmax*.
+
+        Parameters
+        ----------
+        y : float or array-like
+            y-indexes where to plot the lines.
+
+        xmin, xmax : float or array-like
+            Respective beginning and end of each line. If scalars are
+            provided, all lines will have the same length.
+
+        colors : array-like of colors, default: 'k'
+
+        linestyles : {'solid', 'dashed', 'dashdot', 'dotted'}, default: 'solid'
+
+        label : str, default: ''
+
+        Returns
+        -------
+        lines : `~matplotlib.collections.LineCollection`
+
+        Other Parameters
+        ----------------
+        **kwargs : `~matplotlib.collections.LineCollection` properties
+
+        See also
+        --------
+        vlines : vertical lines
+        axhline: horizontal line across the axes
+        """
+
+See original example in https://matplotlib.org/devel/documenting_mpl.html#example-docstring
+
 
 .. ###############################################
 .. References
 .. ###############################################
 .. _Sphinx: http://www.sphinx-doc.org/en/master/
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
+.. _details: https://www.sphinx-doc.org/en/master/contents.html
 .. _configuration: https://matplotlib.org/devel/documenting_mpl.html
 .. _api: https://en.wikipedia.org/wiki/Application_programming_interface
 .. _references: https://www.sphinx-doc.org/en/stable/usage/restructuredtext/roles.html
+.. _`numpydoc docstring guide`: https://numpydoc.readthedocs.io/en/latest/format.html

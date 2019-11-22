@@ -3,20 +3,23 @@
 Installation
 ============
 
+.. contents::
+
+This is an installation guide for BacterialTyper. 
+
 .. note::
 
     If you wish to contribute to the project, it's recommended you
     :ref:`install the latest development version<install_from_source>`.
 
 
-This is an installation guide for BacterialTyper. 
-
 .. _virual-env-BacterialTyper:
 
 Python environment
 ------------------
 
-It is also recommended to install BacterialTyper and all its dependencies and modules under a python environment.
+It is recommended to install BacterialTyper and all its dependencies and modules under a python environment. 
+We encourage you to create a virtual environment before installing BacterialTyper.
 
 Create environment
 ^^^^^^^^^^^^^^^^^^
