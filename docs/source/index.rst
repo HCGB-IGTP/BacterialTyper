@@ -19,4 +19,4 @@ This is the documentation for BacterialTyper version |version|. It includes:
    contents.rst
 
 
-.. _Python: http://www.python.org/
+.. include:: links.inc

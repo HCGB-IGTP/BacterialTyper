@@ -27,6 +27,9 @@ Glossary
   BIGSdb
       asdads
 
+   Pypi
+      Python package index (Pypi, https://pypi.org/) is a repository of software for the Python programming language.
+
   KMA
       adsad
   
