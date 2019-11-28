@@ -9,6 +9,9 @@ Documentation is written using Sphinx_, a python documentation system built usin
 reStructuredText_ (ReST; ``.rst``). The docs configuration contains both 
 ReST files that contain pages in the documentation and configuration files for Sphinx_.
 
+The Sphinx_ website also contains plenty of `documentation details concerning ReST`_
+markup and working with Sphinx in general.
+
 .. ###############################################
 .. _docs-organization-folder:
 
@@ -207,9 +210,6 @@ Writing docstrings
 
 Most of the API documentation is written in docstrings. These are comment
 blocks in source code that explain how the code works.
-
-The Sphinx_ website also contains plenty of `documentation details concerning ReST`_
-markup and working with Sphinx in general.
 
 All new or edited docstrings should conform to the `numpydoc docstring guide`_.
 Much of the ReST syntax discussed above (:ref:`writing-rest-pages`) can be

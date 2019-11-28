@@ -2,5 +2,8 @@
 
 database_generator
 ==================
+
 .. automodule:: BacterialTyper.database_generator
     :members:
+
+    
