@@ -25,7 +25,6 @@ from BacterialTyper import sampleParser
 from BacterialTyper import virulence_resistance
 from BacterialTyper import database_generator
 from BacterialTyper import ariba_caller
-from BacterialTyper.modules import sample_prepare
 from BacterialTyper import card_trick_caller
 from BacterialTyper.modules import info
 
@@ -88,7 +87,7 @@ def run(options):
 		outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "trim", ['_trim_'])
+	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim_'])
 	
 	## debug message
 	if (Debug):

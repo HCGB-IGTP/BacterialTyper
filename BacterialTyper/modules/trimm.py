@@ -19,7 +19,6 @@ from termcolor import colored
 ## import my modules
 from BacterialTyper import trimmomatic_call
 from BacterialTyper import multiQC_report
-from BacterialTyper.modules import sample_prepare
 from BacterialTyper import sampleParser
 from BacterialTyper import functions
 from BacterialTyper import config
@@ -80,7 +79,7 @@ def run(options):
 		outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
+	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
 	
 	## debug message
 	if (Debug):

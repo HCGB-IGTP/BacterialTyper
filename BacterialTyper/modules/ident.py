@@ -25,7 +25,6 @@ from BacterialTyper import species_identification_KMA
 from BacterialTyper import database_generator
 from BacterialTyper import MLSTar
 from BacterialTyper import edirect_caller
-from BacterialTyper.modules import sample_prepare
 from BacterialTyper.modules import info
 
 ####################################
@@ -98,7 +97,7 @@ def run(options):
 		outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "trim", ['_trim_'])
+	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim_'])
 	
 	## debug message
 	if (Debug):
@@ -608,7 +607,7 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 
 	## get assembly files
 	input_dir = os.path.abspath(options.input)
-	assembly_samples_retrieved = sample_prepare.get_files(options, input_dir, "assembly", "fna")
+	assembly_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", "fna")
 
 	## debug message
 	if (Debug):

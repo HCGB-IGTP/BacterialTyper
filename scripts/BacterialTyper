@@ -271,7 +271,7 @@ info_group_assemble.add_argument("--help_format", action="store_true", help="Sho
 info_group_assemble.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
 info_group_assemble.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
 
-subparser_assemble.set_defaults(func=BacterialTyper.modules.assemble.run)
+subparser_assemble.set_defaults(func=BacterialTyper.modules.assemble.run_assembly)
 ##-------------------------------------------------------------##
 
 ####################

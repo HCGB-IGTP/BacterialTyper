@@ -27,7 +27,6 @@ import concurrent.futures
 from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import species_identification_KMA
-from BacterialTyper.modules import sample_prepare
 from BacterialTyper import min_hash_caller
 from BacterialTyper import database_generator
 
@@ -141,15 +140,15 @@ def get_userData_files(options, project_folder):
 	## get information regarding files
 
 	## get assembly files
-	pd_samples_assembly = sample_prepare.get_files(options, project_folder, "assembly", "fna")
+	pd_samples_assembly = sampleParser.get_files(options, project_folder, "assembly", "fna")
 	pd_samples_assembly = pd_samples_assembly.set_index('name')
 
 	## get annotation files
-	pd_samples_annot = sample_prepare.get_files(options, project_folder, "annot", ['gbf', 'faa', 'gff'])
+	pd_samples_annot = sampleParser.get_files(options, project_folder, "annot", ['gbf', 'faa', 'gff'])
 	pd_samples_annot = pd_samples_annot.set_index('name')
 
 	## get trimmed ngs files
-	pd_samples_reads = sample_prepare.get_files(options, project_folder, "trim", ['_trim_'])
+	pd_samples_reads = sampleParser.get_files(options, project_folder, "trim", ['_trim_'])
 	pd_samples_reads = pd_samples_reads.set_index('name')
 
 	## debug message
@@ -176,17 +175,17 @@ def get_userData_info(options, project_folder):
 		## additional information: MGE, etc
 
 	## get profile information
-	pd_samples_profile = sample_prepare.get_files(options, project_folder, "profile", ["csv"])
+	pd_samples_profile = sampleParser.get_files(options, project_folder, "profile", ["csv"])
 	if not pd_samples_profile.empty:
 		pd_samples_profile = pd_samples_profile.set_index('name')
 
 	## get identification information
-	pd_samples_ident = sample_prepare.get_files(options, project_folder, "ident", ["csv"])
+	pd_samples_ident = sampleParser.get_files(options, project_folder, "ident", ["csv"])
 	if not pd_samples_ident.empty:
 		pd_samples_ident = pd_samples_ident.set_index('name')
 	
 	## get mash information
-	pd_samples_mash = sample_prepare.get_files(options, project_folder, "mash", ["sig"])
+	pd_samples_mash = sampleParser.get_files(options, project_folder, "mash", ["sig"])
 	if not pd_samples_mash.empty:
 		pd_samples_mash = pd_samples_mash.set_index('name')
 

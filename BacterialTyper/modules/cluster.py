@@ -18,7 +18,6 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper.modules import sample_prepare
 from BacterialTyper import sampleParser
 from BacterialTyper import functions
 from BacterialTyper import config
@@ -76,7 +75,7 @@ def run(options):
 		outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "assembly", "fna")
+	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", "fna")
 
 	## debug message
 	if (Debug):

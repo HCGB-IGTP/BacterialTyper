@@ -29,7 +29,6 @@ from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import ariba_caller
 from BacterialTyper import species_identification_KMA
-from BacterialTyper.modules import sample_prepare
 from BacterialTyper import min_hash_caller
 
 ##########################################################################################
