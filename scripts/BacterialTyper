@@ -151,7 +151,7 @@ info_group_prep = subparser_prep.add_argument_group("Additional information")
 info_group_prep.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
 info_group_prep.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 
-subparser_prep.set_defaults(func=BacterialTyper.modules.sample_prepare.retrieve)
+subparser_prep.set_defaults(func=BacterialTyper.modules.sample_prepare.run_prep)
 ##-------------------------------------------------------------##
 
 ##--------------------------- QC ------------------------- ##

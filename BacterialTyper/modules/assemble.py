@@ -212,7 +212,7 @@ def run(options):
 
 #############################################
 def check_sample_assembly(name, sample_folder, files, threads):
-	"""Checks wether a sample is assembled and calls run_module_SPADES if necessary.
+	"""Checks wether a sample is assembled and calls run_module_assembly if necessary.
 	
 	Arguments:
 		name: sample ID
@@ -238,12 +238,12 @@ def check_sample_assembly(name, sample_folder, files, threads):
 	
 		## debug message
 		if (Debug):
-			print (colored("**DEBUG: spades_assembler.run_module_SPADES call**", 'yellow'))
-			print ("spades_assembler.run_module_SPADES(name, sample_folder, files[0], files[1], threads)")
-			print ("spades_assembler.run_module_SPADES " + name + "\t" + sample_folder + "\t" + files[0] + "\t" + files[1] + "\t" +str(threads) + "\n")
+			print (colored("**DEBUG: spades_assembler.run_module_assembly call**", 'yellow'))
+			print ("spades_assembler.run_module_assembly(name, sample_folder, files[0], files[1], threads)")
+			print ("spades_assembler.run_module_assembly " + name + "\t" + sample_folder + "\t" + files[0] + "\t" + files[1] + "\t" +str(threads) + "\n")
 	
 		# Call spades_assembler
-		code = spades_assembler.run_module_SPADES(name, sample_folder, files[0], files[1], threads)
+		code = spades_assembler.run_module_assembly(name, sample_folder, files[0], files[1], threads)
 		
 		if (code != 'FAIL'):
 			## success stamps

@@ -217,6 +217,7 @@ used for links and references.  These docstrings eventually populate files in
 :file:`docs/api` directory and form the reference documentation for the
 library.
 
+
 Example docstring
 -----------------
 
@@ -260,6 +261,7 @@ An example docstring looks like:
 
 See original example in https://matplotlib.org/devel/documenting_mpl.html#example-docstring
 
+Check and example for python documentation here: https://thomas-cokelaer.info/tutorials/sphinx/index.html
 
 .. ## Include linksReferences
 .. include:: ../links.inc

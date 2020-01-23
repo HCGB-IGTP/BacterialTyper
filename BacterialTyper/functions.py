@@ -214,6 +214,7 @@ def readList_fromFile(fileGiven):
 
 ######
 def retrieve_matching_files(folder, string):
+	"""Lists folder path provided and given a string to search, returns all files ending with the given string"""
 	my_all_list = get_fullpath_list(folder)
 	matching = [s for s in my_all_list if s.endswith(string)]
 	return (matching)
@@ -234,7 +235,8 @@ def file2dictionary(file2read):
 ########################################################################
 
 ###############
-def system_call(cmd):	
+def system_call(cmd):
+	"""Generates system call using subprocess.check_output"""
 	## call system
 	## send command
 	print (colored("[** System: %s **]" % cmd, 'green'))
