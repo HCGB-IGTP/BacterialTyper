@@ -8,7 +8,7 @@ __all__ = [
 	'cluster',
 	'database',
 	'ident',
-	'info',
+	'help_info',
 	'plasmidID_call',
 	'profile',
 	'qc',

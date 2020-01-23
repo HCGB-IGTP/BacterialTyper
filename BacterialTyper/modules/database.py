@@ -24,7 +24,7 @@ from BacterialTyper import functions
 from BacterialTyper import BUSCO_caller
 
 ###############################################################
-def run(options):
+def run_database(options):
 
 	## init time
 	start_time_total = time.time()

@@ -21,12 +21,12 @@ import pandas as pd
 from BacterialTyper import sampleParser
 from BacterialTyper import functions
 from BacterialTyper import config
-from BacterialTyper.modules import info
+from BacterialTyper.modules import help_info
 from BacterialTyper import database_generator
 from BacterialTyper import min_hash_caller
 
 ##############################################
-def run(options):
+def run_cluster(options):
 
 	## init time
 	start_time_total = time.time()
@@ -36,7 +36,7 @@ def run(options):
 	##################################
 	if (options.help_project):
 		## information for project
-		info.project_help()
+		help_info.project_help()
 		exit()
 	elif (options.help_Mash):
 		## information for Min Hash Software

@@ -25,10 +25,10 @@ from BacterialTyper import multiQC_report
 from BacterialTyper import BUSCO_caller
 from BacterialTyper import functions
 from BacterialTyper import config
-from BacterialTyper.modules import info
+from BacterialTyper.modules import help_info
 
 ################################################
-def run(options):
+def run_QC(options):
 
 	## init time
 	start_time_total = time.time()
@@ -46,7 +46,7 @@ def run(options):
 		exit()
 	elif (options.help_project):
 		## information for project
-		info.project_help()
+		help_info.project_help()
 		exit()
 	elif (options.help_multiqc):
 		## information for Multiqc

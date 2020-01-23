@@ -22,7 +22,7 @@ from BacterialTyper import multiQC_report
 from BacterialTyper import sampleParser
 from BacterialTyper import functions
 from BacterialTyper import config
-from BacterialTyper.modules import info
+from BacterialTyper.modules import help_info
 
 ##############################################
 def run(options):

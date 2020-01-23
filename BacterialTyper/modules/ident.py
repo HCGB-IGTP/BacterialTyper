@@ -25,10 +25,10 @@ from BacterialTyper import species_identification_KMA
 from BacterialTyper import database_generator
 from BacterialTyper import MLSTar
 from BacterialTyper import edirect_caller
-from BacterialTyper.modules import info
+from BacterialTyper.modules import help_info
 
 ####################################
-def run(options):
+def run_ident(options):
 	"""
 	Main function acting as an entry point to the module *ident*.
 	
@@ -47,7 +47,7 @@ def run(options):
 
 	elif (options.help_project):
 		## information for project
-		info.project_help()
+		help_info.project_help()
 		exit()
 	
 	elif (options.help_KMA):

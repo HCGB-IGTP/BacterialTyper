@@ -23,10 +23,10 @@ from BacterialTyper import annotation
 from BacterialTyper import BUSCO_caller
 from BacterialTyper.modules import qc
 from BacterialTyper import multiQC_report
-from BacterialTyper.modules import info
+from BacterialTyper.modules import help_info
 
 ####################################
-def run(options):
+def run_annotation(options):
 
 	## init time
 	start_time_total = time.time()
@@ -53,7 +53,7 @@ def run(options):
 
 	elif (options.help_project):
 		## information for project
-		info.project_help()
+		help_info.project_help()
 		exit()
 
 	elif (options.help_multiqc):
