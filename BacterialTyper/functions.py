@@ -3,6 +3,7 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
+from docutils.nodes import comment
 '''
 Common functions.
 - time
@@ -95,6 +96,7 @@ def create_human_timestamp():
 	now = datetime.now()
 	timeprint = now.strftime("%Y%m%d")
 	return timeprint
+###############
 
 ############################################################################
 ######## 					FILES/FOLDERS							######## 					
@@ -220,15 +222,22 @@ def retrieve_matching_files(folder, string):
 	return (matching)
 	
 #####
-def file2dictionary(file2read):
+def file2dictionary(file2read, split_char):
+	"""Read file and generate a dictionary"""
 	d = {}
 	with open(file2read) as f:
 		for line in f:
-			(key, val) = line.split()
+			(key, val) = line.split(split_char)
 			d[key] = val
 
 	return(d)
 	
+def file2dataframe(file2read):
+	"""Read csv file into pandas dataframe"""
+	d = pd.read_csv(file2read, comment="#")
+	return(d)
+
+
 	
 ########################################################################
 ######## 					system call							######## 					

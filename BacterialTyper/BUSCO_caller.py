@@ -18,35 +18,30 @@ from termcolor import colored
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
+from BacterialTyper import data
 
 ###############
 def busco_datasets():
 	"""BUSCO dataset information
 	
-	Returns a dataframe containing information for each dataset available in BUSCO website database.
+	:return: Dataframe containing information for each dataset available in file BUSCO_dataset.csv
 	
 	Dataframe contains several columns: "Taxonomic range","Dataset","ftp_site" indexed by Dataset
 	e.g. Dataset: "deltaepsilonsub",
 	e.g. Taxonomic range: "phylum Proteobacteria – Delta and Epsilon proteobacteria",
 	e.g. ftp_site: "http://busco.ezlab.org/v2/datasets/deltaepsilonsub_odb9.tar.gz")
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.data.data_files.data_list`
+		
+		- :func:`BacterialTyper.functions.file2dataframe`
+
+
 	"""
-	busco_data = pd.DataFrame(columns=("Taxonomic range","Dataset","ftp_site"))
-	busco_data.loc[len(busco_data)] = ("All bacteria dataset","bacteria","http://busco.ezlab.org/v2/datasets/bacteria_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria all","proteobacteria","http://busco.ezlab.org/v2/datasets/proteobacteria_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria – Alphaproteobacteria – Order Rhizobiales","rhizobiales","http://busco.ezlab.org/v2/datasets/rhizobiales_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria – Betaproteobacteria","betaproteobacteria","http://busco.ezlab.org/v2/datasets/betaproteobacteria_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria – Gammaproteobacteria all","gammaproteobacteria","http://busco.ezlab.org/v2/datasets/gammaproteobacteria_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria – Gammaproteobacteria – Order Enterobacteriales","enterobacteriales","http://busco.ezlab.org/v2/datasets/enterobacteriales_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria – Delta and Epsilon proteobacteria","deltaepsilonsub","http://busco.ezlab.org/v2/datasets/deltaepsilonsub_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Actinobacteria","actinobacteria","http://busco.ezlab.org/v2/datasets/actinobacteria_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Cyanobacteria","cyanobacteria","http://busco.ezlab.org/v2/datasets/cyanobacteria_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Firmcutes all","firmicutes","http://busco.ezlab.org/v2/datasets/firmicutes_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Firmcutes – Clostridia","clostridia","http://busco.ezlab.org/v2/datasets/clostridia_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Firmcutes – Bacilli – order Lactobacillales","lactobacillales","http://busco.ezlab.org/v2/datasets/lactobacillales_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Firmcutes – Bacilli – order Bacillales","bacillales","http://busco.ezlab.org/v2/datasets/bacillales_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Bacteroidetes","bacteroidetes","http://busco.ezlab.org/v2/datasets/bacteroidetes_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Spirochaetes","spirochaetes","http://busco.ezlab.org/v2/datasets/spirochaetes_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Tenericutes","tenericutes","http://busco.ezlab.org/v2/datasets/tenericutes_odb9.tar.gz")
+	## read from file: BUSCO_dataset.csv
+	BUSCO_dataset_file = data.data_files.data_list("BUSCO_dataset")
+	busco_data = functions.file2dataframe(BUSCO_dataset_file)	
 	busco_data = busco_data.set_index('Dataset')
 	return(busco_data)
 
