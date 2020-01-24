@@ -21,9 +21,6 @@ from BacterialTyper import sampleParser
 from BacterialTyper import functions
 from BacterialTyper import config
 
-global merge
-merge = False
-
 ################################
 def run_prep(options):
 	

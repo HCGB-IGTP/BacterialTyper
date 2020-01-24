@@ -24,12 +24,19 @@ from BacterialTyper import data
 def busco_datasets():
 	"""BUSCO dataset information
 	
-	:return: Dataframe containing information for each dataset available in file BUSCO_dataset.csv
+	:return: Dataframe containing information for each dataset available in file BUSCO_dataset.csv under data directory.
 	
-	Dataframe contains several columns: "Taxonomic range","Dataset","ftp_site" indexed by Dataset
-	e.g. Dataset: "deltaepsilonsub",
-	e.g. Taxonomic range: "phylum Proteobacteria – Delta and Epsilon proteobacteria",
-	e.g. ftp_site: "http://busco.ezlab.org/v2/datasets/deltaepsilonsub_odb9.tar.gz")
+	Dataframe contains several fields: "Dataset", "Taxonomic range" and "ftp_site". Dataframe is indexed by Dataset.
+	
+	+-----------------+----------------------------------------------------------+----------------------------------------------------------------+
+	| Dataset         | Taxonomic range                                          | ftp_site                                                       |
+	+=================+==========================================================+================================================================+
+	| deltaepsilonsub | phylum Proteobacteria – Delta and Epsilon proteobacteria | http://busco.ezlab.org/v2/datasets/deltaepsilonsub_odb9.tar.gz |
+	+-----------------+----------------------------------------------------------+----------------------------------------------------------------+
+	| bacteroidetes   | phylum Bacteroidetes                                     | http://busco.ezlab.org/v2/datasets/bacteroidetes_odb9.tar.gz   |
+	+-----------------+----------------------------------------------------------+----------------------------------------------------------------+
+	| tenericutes     + phylum Tenericutes                                       | http://busco.ezlab.org/v2/datasets/tenericutes_odb9.tar.gz     |
+	+-----------------+----------------------------------------------------------+----------------------------------------------------------------+
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
@@ -81,8 +88,51 @@ def print_available_BUSCO():
 
 ###############
 def BUSCO_download(name, ftp, folder):
+	"""Downloads BUSCO datasets provided
 	
-	print (colored("\n+ BUSCO dataset: " + name + " - v9 OrthoDB", 'yellow'))
+	This code checks if dataset is already available in folder provided. If not available proceeds to download it.
+	
+	It creates a subfolder (using :func:`BacterialTyper.functions.create_folder`) and downloads the dataset from ftp site provided (using :func:`BacterialTyper.functions.wget_download`).
+
+	The file donwloaded would gunzipped so it is decompressed (using  :func:`BacterialTyper.functions.extract`). 
+	
+	A timestamp is printed to reflect download data (using :func:`BacterialTyper.functions.print_time_stamp`).
+	
+	The data download is checked for integrity using the function :func:`BacterialTyper.BUSCO_caller.BUSCO_check_dataset`.
+
+	If the process failed, the whole process is retried (CAUTION: it might generate infinite loop).	
+	
+	:param name: Dataset name provided.
+	:param ftp: FTP site for dataset.
+	:param folder: Absolute path to folder to store results (e.g. database/BUSCO).
+	:type name: string
+	:type ftp: string
+	:type folder: string
+	
+	:returns: Folder absolute path containing downloaded dataset.
+	:rtype: string
+	:warnings: Returns **FAIL** if check process failed.
+	
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.create_folder`
+		
+		- :func:`BacterialTyper.functions.wget_download`
+		
+		- :func:`BacterialTyper.functions.extract`
+		
+		- :func:`BacterialTyper.functions.extract`
+		
+		- :func:`BacterialTyper.functions.print_time_stamp`
+		
+		- :func:`BacterialTyper.functions.print_sepLine`
+
+		- :func:`BacterialTyper.BUSCO_caller.BUSCO_check_dataset`
+
+	"""
+	
+	print (colored("\n+ BUSCO dataset: " + name + " - v9 OrthoDB", 'yellow')) ## modify OrthoDB version if changed
 	subfolder = folder + '/' + name
 	file_name = os.path.basename(ftp)
 	path_file = subfolder + '/' + file_name
@@ -112,6 +162,8 @@ def BUSCO_download(name, ftp, folder):
 		print (colored('*** Dataset failed. Try to download it again...','red'))
 		shutil.rmtree(folder)
 		BUSCO_download(name, ftp, folder)
+		
+		### CAUTION: check for infinite loop
 		
 	return (folderName)
 

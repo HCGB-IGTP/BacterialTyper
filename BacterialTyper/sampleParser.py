@@ -3,6 +3,8 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
+from _ast import If
+from sphinx.search import tr
 '''
 Prepares samples for further analysis.
 '''
@@ -131,7 +133,7 @@ def get_fields(file_name_list, pair=True, Debug=False):
 	return (name_frame)
 
 ###############
-def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merge=False, Debug=False):
+def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debug=False):
     
     #Get all files in the folder "path_to_samples"    
 	sample_list = []
@@ -350,6 +352,7 @@ def help_options():
 
 ################################
 def get_files(options, input_dir, mode, extension):
+	
 	## get list of input files
 	files = []
 	
@@ -461,9 +464,9 @@ def get_files(options, input_dir, mode, extension):
 
 	## get information
 	if mode in ['fastq', 'trim']:
-		pd_samples_retrieved = sampleParser.select_samples(files, samples_names, options.pair, exclude, merge, options.debug)
+		pd_samples_retrieved = select_samples(files, samples_names, options.pair, exclude, options.debug)
 	else:
-		pd_samples_retrieved = sampleParser.select_other_samples(options.project, files, samples_names, mode, extension, exclude, options.debug)		
+		pd_samples_retrieved = select_other_samples(options.project, files, samples_names, mode, extension, exclude, options.debug)		
 		
 	return(pd_samples_retrieved)
 

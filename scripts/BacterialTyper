@@ -464,7 +464,7 @@ info_group_MGE.add_argument("--help_input_MGE", action="store_true", help="Print
 info_group_MGE.add_argument("--help_MGE_analysis", action="store_true", help="Print further information for Mobile Genetic Element module analysis.")
 info_group_MGE.add_argument("--help_PhiSpy", action="store_true", help="Print further information for PhiSpy analysis.")
 
-subparser_MGE.set_defaults(func=BacterialTyper.modules.MGE.run)
+subparser_MGE.set_defaults(func=BacterialTyper.modules.MGE.run_MGE)
 ##-------------------------------------------------------------##
 
 

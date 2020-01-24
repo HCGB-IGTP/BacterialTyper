@@ -20,6 +20,7 @@ from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import spades_assembler
 from BacterialTyper import annotation
+from BacterialTyper import sampleParser
 from BacterialTyper import BUSCO_caller
 from BacterialTyper.modules import qc
 from BacterialTyper.modules import help_info
