@@ -18,6 +18,7 @@ Overview
    devel/index.rst
    glossary/index.rst
    tutorial/index.rst
+   data/index.rst
    
 
 Indices and tables

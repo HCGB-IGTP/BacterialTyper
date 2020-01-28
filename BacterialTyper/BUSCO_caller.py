@@ -3,6 +3,7 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
+from xlrd.formula import colname
 """Calls BUSCO software for quality control of annotation and assembly datasets
 """
 ## useful imports
@@ -26,7 +27,7 @@ def busco_datasets():
 	
 	:return: Dataframe containing information for each dataset available in file BUSCO_dataset.csv under data directory.
 	
-	Dataframe contains several fields: "Dataset", "Taxonomic range" and "ftp_site". Dataframe is indexed by Dataset.
+	Dataframe contains several fields: "Dataset", "Taxonomic range" and "ftp_site". Dataframe is indexed by Dataset. See an example:
 	
 	+-----------------+----------------------------------------------------------+----------------------------------------------------------------+
 	| Dataset         | Taxonomic range                                          | ftp_site                                                       |
@@ -38,17 +39,22 @@ def busco_datasets():
 	| tenericutes     + phylum Tenericutes                                       | http://busco.ezlab.org/v2/datasets/tenericutes_odb9.tar.gz     |
 	+-----------------+----------------------------------------------------------+----------------------------------------------------------------+
 	
+	.. seealso:: Additional information on BUSCO datasets available.
+	
+		- :doc:`BUSCO datasets <../../../data/BUSCO_datasets>` 
+	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
 		- :func:`BacterialTyper.data.data_files.data_list`
 		
 		- :func:`BacterialTyper.functions.file2dataframe`
 
-
+	
 	"""
 	## read from file: BUSCO_dataset.csv
 	BUSCO_dataset_file = data.data_files.data_list("BUSCO_dataset")
 	busco_data = functions.file2dataframe(BUSCO_dataset_file)	
+	busco_data.columns = ["Taxonomic range","Dataset","ftp_site"]
 	busco_data = busco_data.set_index('Dataset')
 	return(busco_data)
 
