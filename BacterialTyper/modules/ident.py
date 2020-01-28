@@ -35,6 +35,11 @@ def run_ident(options):
 	Arguments:
 	
 	
+	.. seealso:: Additional information to PubMLST available datasets.
+	
+		- :doc:`PubMLST datasets<../../../data/PubMLST_datasets>`
+	
+	
 	"""
 
 	##################################
@@ -586,6 +591,13 @@ def edirect_ident(dataFrame, outdir_dict):
 
 ####################################
 def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_databases):
+	
+	"""
+	.. seealso:: Additional information to PubMLST available datasets.
+	
+		- :doc:`PubMLST datasets<../../../data/PubMLST_datasets>`
+	"""
+	
 	## Add MLST Information
 
 	## TODO: Samples might not be assembled...to take into account and return 0

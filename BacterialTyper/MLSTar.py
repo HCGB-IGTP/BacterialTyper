@@ -116,7 +116,15 @@ def get_MLSTar_species(genus, species):
 
 	## This needs manual curation of the list of species included. 
 	## Update it periodically
-
+	## view-source:https://pubmlst.org/databases/ and retrieve fields from html
+	## saved in: data/PubMLST_datasets.csv
+	
+	"""
+	.. seealso:: Additional information to PubMLST available datasets.
+	
+		- :doc:`PubMLST datasets<../../../data/PubMLST_datasets>`
+	"""
+	
 	## MLSTar available data
 	MLSTar_species = data_files.data_list("MLSTar_species")
 	
@@ -142,7 +150,35 @@ def get_MLSTar_species(genus, species):
 	return ('NaN')
 		
 ##########################################
-def getPUBMLST(species, rscript, out_name):	
+def getPUBMLST(species, out_name):
+	"""
+	Using `MLSTar software`_ retrieve for the given `species` the available profiles in PubMLST_.  
+
+	It generates information in file `out_name` in csv format. 
+	
+	See example in :file:`/user_guide/results/getPubMLST_example.csv`
+	
+	.. include:: ../user_guide/results/getPubMLST_example.csv
+		:literal:
+	   
+	:param species: Sample name or tag to identify sample
+	:param rscript: Path to Rscript to generate system call.
+	:param out_name: Output file to generate profile information.
+
+	:type species: string
+	:type rscript: string
+	:type out_name: string
+
+	:return: OK/FAIL
+	:warnings: Returns **FAIL** if process stopped.
+	
+	.. include:: ../../links.inc
+
+	"""
+	
+	MLSTarR_getpubmlst = tools.R_scripts('MLSTar_getpubmlst')
+
+	
 	## species is a comma separated string
 	#MLSTar_getpubmlst
 	cmd_getPUBMLST = "%s %s --species %s --output %s 2> /dev/null" %(rscript, MLSTarR_getpubmlst, species, out_name)

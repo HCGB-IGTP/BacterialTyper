@@ -17,3 +17,4 @@ Data details provided along BacterialTyper project.
     
     ARIBA_explained.rst
     BUSCO_datasets.rst
+    PubMLST_datasets.rst

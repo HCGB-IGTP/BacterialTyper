@@ -24,3 +24,6 @@
 .. _KMA: http://www.genomicepidemiology.org/
 .. _BUSCO: https://busco.ezlab.org/
 .. _NCBI: https://www.ncbi.nlm.nih.gov/genome/
+.. _PubMLST: https://pubmlst.org/
+.. _`PubMLST databases`: https://pubmlst.org/databases/
+.. _`MLSTar software`: https://github.com/iferres/MLSTar
