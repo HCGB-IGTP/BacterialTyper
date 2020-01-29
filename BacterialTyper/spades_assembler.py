@@ -101,7 +101,7 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 	
 		- :func:`BacterialTyper.functions.retrieve_matching_files`
 	
-		- :func:`BacterialTyper.spades_assembler.rename_contigs`
+		- :func:`BacterialTyper.functions.rename_fasta_seqs`
 	"""
 	##print ('+ Running main assembly...')
 	options = ''
@@ -111,13 +111,24 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 		return ('FAIL')
 
 	scaffolds_retrieved = functions.retrieve_matching_files(path, "scaffolds.fasta")
-	new_contigs = path + '/' + sample + '_assembly.fna'
-	rename_contigs(scaffolds_retrieved[0], "scaffolds_" + sample, new_contigs)
-		
 	if scaffolds_retrieved == '':	
 		print ('\n\n***ERROR: No scaffolds assembly...')
 		return ('FAIL')
-			
+	
+	new_contigs = path + '/' + sample + '_assembly.fna'
+	id_conversion_file = functions.rename_fasta_seqs(scaffolds_retrieved[0], sample, new_contigs)
+	
+	if	id_conversion_file == 'FAIL':	
+		print ("\n\n***ERROR: Rename contigs failed for sample " + sample)
+		return ('FAIL')
+	else:
+		print ("+ Name conversion details saved in file " + id_conversion_file)
+	
+	
+	### Due to limiations with Genbank format, no more thatn 37 characters are supported for 
+	### locus tag identification. This might affect later annotation process and subsequent analysis
+	### https://github.com/tseemann/prokka/issues/337 
+		
 	return (new_contigs)
 
 ################################################
@@ -374,25 +385,6 @@ def contig_stats(assembly_file, csv_arg):
 	code_chr = functions.system_call(cmd_stats)
 	return (file_out)
 
-################################################
-def rename_contigs(fasta_file, name, new_fasta):
-	"""Rename contigs sequences
-
-	Usage:
-	Please provide the next arguments:
-	perl BacterialTyper/other_tools/perl/rename_FASTA_seqs.pl fasta_file name_file name2add ADD|REPLACE|BEGIN|ADD_BEGIN
-	
-	ADD: will add the id plus a counter
-	REPLACE: will discard the previous name and add this unique id and counter
-	BEGIN: will keep the first split of the id and add at the beginning the given name
-	"""
-	
-	## get rename_FASTA_seqs perl script
-	rename_seqs_script = tools.perl_scripts('rename_FASTA_seqs')
-
-	perl_call = "perl %s %s %s %s REPLACE" %(rename_seqs_script, fasta_file, new_fasta, name) ## [TODO] Generate this code in python
-	return (functions.system_call(perl_call))
-	
 ################################################
 def	help_options():
 	"""Help options when run spades_assembler.py as a single script

@@ -53,8 +53,9 @@ def busco_datasets():
 	"""
 	## read from file: BUSCO_dataset.csv
 	BUSCO_dataset_file = data.data_files.data_list("BUSCO_dataset")
-	busco_data = functions.file2dataframe(BUSCO_dataset_file)	
-	busco_data.columns = ["Taxonomic range","Dataset","ftp_site"]
+	busco_data_columns = ["Taxonomic range","Dataset","ftp_site"]
+	busco_data = functions.file2dataframe(BUSCO_dataset_file, names=busco_data_columns)
+	print(busco_data)
 	busco_data = busco_data.set_index('Dataset')
 	return(busco_data)
 
@@ -85,7 +86,7 @@ def print_help_BUSCO():
 ###############
 def print_available_BUSCO():
 	print_df = busco_datasets()
-	print_df = print_df[['Taxonomic range']]
+	print_df = print_df.set_index('Dataset')
 	pd.set_option('display.max_colwidth', -1)
 	functions.print_sepLine("-", 100, False)
 	print (print_df)
