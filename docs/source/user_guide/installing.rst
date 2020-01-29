@@ -72,7 +72,7 @@ Perl packages
 
 Check perl dependencies
 -----------------------
-Check perl depencies in file :file:`config/main/perl_lib_dependencies.txt`, which is shown below:
+Check perl depencies in file :file:`config/main/perl_lib_dependencies.csv`, which is shown below:
 
 .. csv-table::
    :header: "Package", "URL"

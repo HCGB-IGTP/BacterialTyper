@@ -158,7 +158,7 @@ def getPUBMLST(species, out_name):
 	
 	See example in :file:`/user_guide/results/getPubMLST_example.csv`
 	
-	.. include:: ../user_guide/results/getPubMLST_example.csv
+	.. include:: ../../user_guide/results/getPubMLST_example.csv
 		:literal:
 	   
 	:param species: Sample name or tag to identify sample
