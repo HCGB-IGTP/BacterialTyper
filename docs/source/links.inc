@@ -27,3 +27,4 @@
 .. _PubMLST: https://pubmlst.org/
 .. _`PubMLST databases`: https://pubmlst.org/databases/
 .. _`MLSTar software`: https://github.com/iferres/MLSTar
+.. _Prokka: https://github.com/tseemann/prokka

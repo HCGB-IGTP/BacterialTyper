@@ -8,9 +8,7 @@ Data
     :Release: |version|
     :Date: |today|
 
-.. contents:: Contents
-    
-Data details provided along BacterialTyper project.
+Data information and details provided along BacterialTyper project.
 
 .. toctree::
     :maxdepth: 2
