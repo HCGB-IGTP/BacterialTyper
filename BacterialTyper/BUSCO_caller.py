@@ -3,8 +3,8 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-from xlrd.formula import colname
-"""Calls BUSCO software for quality control of annotation and assembly datasets
+"""
+Calls BUSCO software for quality control of annotation and assembly datasets
 """
 ## useful imports
 import time
