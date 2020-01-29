@@ -20,7 +20,8 @@ from BacterialTyper import config
 
 ############
 def multiQC_module_call(givenList, name, path, option):
-	pathFile = list2file(givenList, path)
+	pathFile = path + '/' + 'samples.txt'
+	functions.printList2file(pathFile, givenList)
 	multiQC_call(pathFile, name, path, option)	
 	
 ############
@@ -32,15 +33,6 @@ def multiQC_call(pathFile, name, folder, option):
 	## if a report was previously generated in the folder 
 	## force to delete and generate a new one
 	return(functions.system_call(cmd))
-
-############
-def list2file(givenList, path):
-	# generate a txt file containing information for 
-	name = path + '/' + 'samples.txt'
-	outfile = open(name, "w")
-	outfile.write("\n".join(givenList))
-	outfile.close()
-	return(name)
 
 ############
 def	help_options():
