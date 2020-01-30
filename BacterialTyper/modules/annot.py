@@ -24,6 +24,7 @@ from BacterialTyper import BUSCO_caller
 from BacterialTyper.modules import qc
 from BacterialTyper import multiQC_report
 from BacterialTyper.modules import help_info
+from BacterialTyper import sampleParser
 
 ####################################
 def run_annotation(options):
