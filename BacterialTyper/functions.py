@@ -342,10 +342,7 @@ def subset_fasta(ident, fasta, out):
 
 ###############
 def rename_fasta_seqs(fasta_file, name, new_fasta):
-	## [TODO] Generate this code in python and do not call perl
-	"""Rename fasta sequences
-	
-	Rename fasta sequences provided in file :file:`fasta_file` using id :file:`name`. Save results in file :file:`new_fasta` provided.
+	"""Rename fasta sequences provided in file :file:`fasta_file` using id :file:`name`. Save results in file :file:`new_fasta` provided.
 	
 	Check for id character lenght do not exceed 37 characters as it might be a limitiation in further annotation and subsequent analysis. Read Prokka_ issue for further details: https://github.com/tseemann/prokka/issues/337.
 	
