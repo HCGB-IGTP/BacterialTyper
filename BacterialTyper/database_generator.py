@@ -6,7 +6,9 @@
 """
 This code prepares the database information for further analysis.
 Several functions are implemented for:
+	
 	- Manipulate data entries, update information
+	
 	- Download NCBI assembly IDs provided
 """
 ## useful imports
@@ -35,18 +37,41 @@ from BacterialTyper import min_hash_caller
 def NCBI_DB(strains2get, data_folder, Debug):
 	"""Donwloads given taxa from NCBI if not available and updates database information.
 	
-	Arguments:
-		strains2get : dataframe 
-			Dataframe containing genus, species and NCBI_assembly_ID columns.
+	This function checks in the given folder if strain of interest is available. If not it would connect to NCBI using python module ncbi_genome_download and downloads some information.
 	
-		data_folder : str
-			Database absolute path
+	:param strains2get: dataframe containing genus, species and NCBI assembly columns among others. See example below.
+	:param data_folder: Absolute path to database NCBI folder.
+	:param Debug: Print messages for debugging purposes if desired. 
+	:type strains2get: dataframe
+	:type data_folder: string
+	:type Debug: bool
+	:return: Dataframe of genbank database updated for all available entries.
+
+	See example of dataframe :file:`strains2get` in file: :file:`/devel/results/strains2get_NCBI_DB.csv` here:
 	
-		Debug : bool
-			True/false
+	.. include:: ../../devel/results/strains2get_NCBI_DB.csv
+		:literal:
+		
+	See example of the return dataframe, containing database information updated in file: :file:`/devel/results/genbank_database.csv` here:
 	
-	Returns
-		Dataframe of genbank database updated for all available entries.
+	.. include:: ../../devel/results/genbank_database.csv
+		:literal:
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.create_folder`
+	
+		- :func:`BacterialTyper.functions.get_data`
+	
+		- :func:`BacterialTyper.database_generator.get_dbs`
+	
+		- :func:`BacterialTyper.database_generator.get_database`
+		
+		- :func:`BacterialTyper.database_generator.NCBIdownload`
+		
+		- :func:`BacterialTyper.database_generator.update_db_data_file`
+		
+	.. include:: ../../links.inc	 	
 	
 	"""
 	
@@ -54,7 +79,9 @@ def NCBI_DB(strains2get, data_folder, Debug):
 	strains2get = strains2get.set_index('NCBI_assembly_ID', drop=False) ## set new index but keep column
 	strains2get.index.names = ['ID'] ## rename index
 	strains2get = strains2get.drop_duplicates()
-
+	
+	Debug = True
+	
 	#########
 	if Debug:
 		print (colored("DEBUG: NCBI data provided: ", 'yellow'))
@@ -62,6 +89,8 @@ def NCBI_DB(strains2get, data_folder, Debug):
 
 	## get data existing database
 	print ("+ Create the database in folder: \n", data_folder)
+	functions.create_folder(data_folder)
+	
 	## read database 
 	db_frame = getdbs('NCBI', data_folder, 'genbank', Debug)
 	database_df = get_database(db_frame, Debug)
