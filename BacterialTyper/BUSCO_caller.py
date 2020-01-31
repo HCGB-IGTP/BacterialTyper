@@ -129,8 +129,6 @@ def BUSCO_download(name, ftp, folder):
 		
 		- :func:`BacterialTyper.functions.extract`
 		
-		- :func:`BacterialTyper.functions.extract`
-		
 		- :func:`BacterialTyper.functions.print_time_stamp`
 		
 		- :func:`BacterialTyper.functions.print_sepLine`

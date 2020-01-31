@@ -3,8 +3,6 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-from _ast import If
-from sphinx.search import tr
 '''
 Prepares samples for further analysis.
 '''
