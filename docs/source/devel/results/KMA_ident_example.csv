@@ -1,0 +1,6 @@
+,#Template,Num,Score,Expected,Template_length,Query_Coverage,Template_Coverage,Depth,tot_query_Coverage,tot_template_Coverage,tot_depth,q_value,p_value,Database,Sample
+0,"NZ_XXXXXXXX.1 Genus1 species1 strain XX1, complete genome",2741,10280054,387,151627,90.29,99.7,67.8,90.29,99.7,67.8,10278892.09,1e-26,bacteria.ATG,xx1
+1,"NZ_XXXXXXXX.1 Genus1 species1 strain XX1, complete genome",2920,9182440,447,158184,88.5,97.53,58.05,88.5,97.53,58.05,9181096.14,1e-26,bacteria.ATG,xx2
+2,"NZ_ZZZZZZZZ.1 Genus1 species2 strain XZ3, complete genome",2741,8250887,311,151627,90.35,99.78,54.42,90.35,99.78,54.42,8249953.74,1e-26,bacteria.ATG,xx3
+3,"NZ_XXXXXXXX.1 Genus1 species1 strain XX1 plasmid pXX_1, complete sequence",5150,5865869,15463,88511,3.65,94.2,66.27,3.66,94.35,66.37,5819641.2,1e-26,plasmids.T,xx2
+4,"NZ_ZZZZZZZZ.1 Genus2 species3 strain XZ3 plasmid pXZ_1, complete sequence",5150,7047008,16621,88511,4.18,93.85,79.62,4.19,94.01,79.74,6997298.75,1e-26,plasmids.T,xx3

@@ -29,3 +29,4 @@
 .. _`MLSTar software`: https://github.com/iferres/MLSTar
 .. _Prokka: https://github.com/tseemann/prokka
 .. _`IslandPath-DIMOB`: https://github.com/brinkmanlab/islandpath
+.. _edirect: https://www.ncbi.nlm.nih.gov/books/NBK179288/

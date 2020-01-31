@@ -302,21 +302,46 @@ def run_ident(options):
 
 ####################################
 def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, time_partial):
-	"""Kmer identification
+	"""Kmer identification using software KMA_.
 	
-	Arguments:
-		options: options passed to the run main function (threads, KMA_cutoff, etc)
-		
-		pd_samples_retrieved: pandas dataframe for samples to process.
-				
-		outdir_dict: dictionary containing  
-		
-		retrieve_databases: 
-		
-		time_partial: timestamp for the process when started
+	:param options: options passed to the :func:`BacterialTyper.modules.ident.run_ident` main function (threads, KMA_cutoff, etc). See details in...
+	:param pd_samples_retrieved: pandas dataframe for samples to process.
+	:param outdir_dict: dictionary containing information for each sample of the output folder for this process.
+	:param retrieve_databases: 
+	:param time_partial: timestamp of start time of the process.
 	
-	Returns:
-		results_summary: pandas dataframe containing identification information generated
+	:type options: 
+	:type pd_samples_retrieved: pandas.DataFrame()
+	:type outdir_dict: Dictionary
+	:type retrieve_databases: pandas.DataFrame()
+	:type time_partial: 
+	
+	:return: Information of the identification. See example below.
+	:rtype: pandas.DataFrame()
+	
+	See example of returned dataframe in file :file:`/devel/results/KMA_ident_example.csv` here:
+	
+	.. include:: ../../devel/results/KMA_ident_example.csv
+		:literal:
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.config.get_exe`
+	
+		- :func:`BacterialTyper.functions.boxymcboxface`
+		
+		- :func:`BacterialTyper.functions.outdir_subproject`
+		
+		- :func:`BacterialTyper.modules.ident.send_kma_job`
+		
+		- :func:`BacterialTyper.modules.ident.get_outfile`
+	
+		- :func:`BacterialTyper.species_identification_KMA.check_db_indexed`
+	
+		- :func:`BacterialTyper.species_identification_KMA.parse_kma_results`
+	
+		
+	.. include:: ../../links.inc	
 	
 	"""
 	
@@ -424,7 +449,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 				if (basename_db == "plasmids.T"):
 					## let it be several entries
 					results['Sample'] = name
-					results_summary = results_summary.append(results)
+					results_summary = results_summary.append(results, ignore_index=True)
 				else:
 					print (colored("###########################################", 'yellow'))
 					print (colored("Sample %s contains multiple strains." %name, 'yellow'))
@@ -434,21 +459,26 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 					
 					## add both strains if detected	
 					results['Sample'] = name
-					results_summary = results_summary.append(results)
+					results_summary = results_summary.append(results, ignore_index=True)
 					
 					## TODO: add multi-isolate flag
 		
 			elif (results.index.size == 1): ## 1 clear reference
 				results['Sample'] = name
-				results_summary = results_summary.append(results)
+				results_summary = results_summary.append(results, ignore_index=True)
 		
 			else:
 				print (colored('\tNo clear strain from database %s has been assigned to sample %s' %(basename_db, name), 'yellow'))
 				## add empty line if no available
 				results['Sample'] = name
-				results_summary = results_summary.append(results)
+				results_summary = results_summary.append(results, ignore_index=True)
 	
 	print ("+ Finish this step...")
+	
+	## debug message
+	if (Debug):
+		results_summary.to_csv(quotechar='"')
+	
 	return (results_summary)
 
 ###################################
@@ -503,6 +533,47 @@ def get_outfile(output_dir, name, index_name):
 
 ####################################
 def edirect_ident(dataFrame, outdir_dict):
+	"""Connect to NCBI for information retrieval
+	
+	This functions uses the software edirect_ to connect to NCBI and retrieve some information regarding samples, assemblies, publications, etc.
+	
+	:param dataFrame: pandas dataframe for samples to process. Result from :func:`BacterialTyper.modules.ident.KMA_ident`. See example in file :file:`/devel/results/KMA_ident_example.csv`.
+	:param outdir_dict: dictionary containing information for each sample of the output folder for this process.
+	
+	:type dataFrame: pandas.DataFrame()
+	:type outdir_dict: Dictionary
+	
+	:return: Information of the identification 
+	:rtype: pandas.DataFrame()
+	
+	See example of returned dataframe in file :file:`/devel/results/edirect_download_results.csv` here:
+	
+	.. include:: ../../devel/results/edirect_download_results.csv
+		:literal:
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.get_info_file`
+		
+		- :func:`BacterialTyper.functions.read_time_stamp`
+	
+		- :func:`BacterialTyper.functions.print_time_stamp`
+
+		- :func:`BacterialTyper.functions.optimize_threads`
+	
+		- :func:`BacterialTyper.functions.create_subfolder`
+	
+		- :func:`BacterialTyper.functions.boxymcboxface`
+		
+		- :func:`BacterialTyper.functions.is_non_zero_file`
+	
+		- :func:`BacterialTyper.edirect_caller.generate_docsum_call`
+		
+		- :func:`BacterialTyper.edirect_caller.generate_xtract_call`
+		
+	.. include:: ../../links.inc	
+	"""
+	
 	
 	################################################
 	## TODO: What to do if multi-isolate sample?
@@ -560,7 +631,7 @@ def edirect_ident(dataFrame, outdir_dict):
 		AssemblyAcc_outfile = edirect_folder + '/AssemblyAcc.csv'
 		
 		## some error ocurred
-		if functions.is_non_zero_file(out_docsum_file_assembly):
+		if not functions.is_non_zero_file(out_docsum_file_assembly):
 			continue
 		
 		edirect_caller.generate_docsum_call('assembly', AssemblyAcc, out_docsum_file_assembly)

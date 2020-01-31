@@ -156,9 +156,9 @@ def getPUBMLST(species, out_name):
 
 	It generates information in file `out_name` in csv format. 
 	
-	See example in :file:`/user_guide/results/getPubMLST_example.csv`
+	See example in :file:`/devel/results/getPubMLST_example.csv`
 	
-	.. include:: ../../user_guide/results/getPubMLST_example.csv
+	.. include:: ../../devel/results/getPubMLST_example.csv
 		:literal:
 	   
 	:param species: Sample name or tag to identify sample
