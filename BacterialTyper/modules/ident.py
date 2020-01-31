@@ -537,7 +537,7 @@ def edirect_ident(dataFrame, outdir_dict):
 	
 	This functions uses the software edirect_ to connect to NCBI and retrieve some information regarding samples, assemblies, publications, etc.
 	
-	:param dataFrame: pandas dataframe for samples to process. Result from :func:`BacterialTyper.modules.ident.KMA_ident`. See example in file :file:`/devel/results/KMA_ident_example.csv`.
+	:param dataFrame: pandas dataframe for samples to process. Result from :func:`BacterialTyper.modules.ident.KMA_ident`.
 	:param outdir_dict: dictionary containing information for each sample of the output folder for this process.
 	
 	:type dataFrame: pandas.DataFrame()
@@ -573,8 +573,6 @@ def edirect_ident(dataFrame, outdir_dict):
 		
 	.. include:: ../../links.inc	
 	"""
-	
-	
 	################################################
 	## TODO: What to do if multi-isolate sample?
 	################################################
@@ -662,22 +660,62 @@ def edirect_ident(dataFrame, outdir_dict):
 
 ####################################
 def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_databases):
+	"""Generate MLST profile idenfitication
 	
-	"""
+	This functions uses the `MLSTar software`_ to retrieve Multi locus sequence typing (MLST) profiles from PubMLST_ for the given species previously identified by KMA. It generates MLST profiling for each sample. 
+	
+	:param options: options passed to the :func:`BacterialTyper.modules.ident.run_ident` main function (threads, KMA_cutoff, etc). See details in...
+	:param dataFrame: pandas dataframe for samples to process. Result from :func:`BacterialTyper.modules.ident.KMA_ident`.
+	:param outdir_dict: dictionary containing information for each sample of the output folder for this process.
+	:param dataFrame_edirect: pandas dataframe resulted from :func:`BacterialTyper.modules.ident.edirect_ident`.
+	:param retrieve_databases: 
+	
+	:type options: 
+	:type dataFrame: pandas.DataFrame()
+	:type outdir_dict: Dictionary
+	:type dataFrame_edirect: pandas.DataFrame()
+	:type retrieve_databases: pandas.DataFrame()
+	
+	:return: Information of the MLST identification. Dictionary keys are samples and values are the absolute path to file generate by :func:`BacterialTyper.MLSTar.run_doMLST` containing MLST information.
+	:rtype: Dictionary
+
+	
+	See example of returned dataframe in file :file:`/devel/results/doMLST_result_example.csv` here:
+	
+	.. include:: ../../devel/results/doMLST_result_example.csv
+		:literal:
+	
 	.. seealso:: Additional information to PubMLST available datasets.
 	
 		- :doc:`PubMLST datasets<../../../data/PubMLST_datasets>`
-	"""
 	
-	## Add MLST Information
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.read_time_stamp`
+	
+		- :func:`BacterialTyper.functions.create_subfolder`
+		
+		- :func:`BacterialTyper.functions.boxymcboxface`
+		
+		- :func:`BacterialTyper.MLSTar.run_MLSTar`
+		
+		- :func:`BacterialTyper.sampleParser.get_files`
+		
+		- :func:`BacterialTyper.MLSTar.get_MLSTar_species`
+		
+	.. include:: ../../links.inc	
+	"""
 
 	## TODO: Samples might not be assembled...to take into account and return 0
 	## TODO: Fix and install MLSTar during installation
+	########################################################################################
+	rscript = "/soft/general/R-3.5.1-bioc-3.8/bin/Rscript" ##config.get_exe("Rscript") 
+	########################################################################################
+
 	## TODO: What to do if multi-isolate sample?
 	## TODO: Control if a different profile is provided via --MLST_profile
 	## TODO: Check time passed and download again if >?? days passed]
-	
-	return ## skip by now
 	
 	## debug message
 	if (Debug):
@@ -697,10 +735,6 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 		print (colored("**DEBUG: assembly_samples_retrieved**", 'yellow'))
 		print (assembly_samples_retrieved)	
 	
-	########################################################################################
-	rscript = "/soft/general/R-3.5.1-bioc-3.8/bin/Rscript" ##config.get_exe("Rscript") 
-	########################################################################################
-
 	# init
 	MLST_results = {}
 		
@@ -712,43 +746,46 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 		MLSTar_taxa_name = MLSTar.get_MLSTar_species(row['genus'], row['species'] )
 		
 		if (MLSTar_taxa_name == 'NaN'):
-			continue		
-		## species folder
-		#species_mlst_folder = functions.create_subfolder(MLSTar_taxa_name, pubmlst_folder)
-		species_mlst = mlst_profile.split(',')[0]
-		species_mlst_folder = mlst_profile.split(',')[1]
+			print (colored("\t- Not available PubMLST profile for sample [%s] identified as %s %s" %(row['sample'], row['genus'], row['species'])), 'orange')
 		
-		## output file
-		output_file = species_mlst_folder + '/PubMLST_available_scheme.csv'
-		filename_stamp = species_mlst_folder + '/.success_scheme'
-		
-		## 
-		if MLSTar_taxa_name == species_mlst:		
-			if os.path.isfile(filename_stamp):
-				stamp =	functions.read_time_stamp(filename_stamp)
-				print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		else:
 
-		else: 
-			### get scheme available
-			MLSTar.getPUBMLST(MLSTar_taxa_name, rscript, output_file)
-			stamp =	functions.print_time_stamp(filename_stamp)
-
-		## parse and get scheme for classical MLST
-		schemes_MLST = pd.read_csv(output_file, sep=',', header=0)
-		
-		##
-		for item, cluster in schemes_MLST.iterrows():
-			if cluster['len'] < 10:
-				scheme2use = int(cluster['scheme'])
-				continue			
-		### 
-		sample = row['sample']
-		MLSTar_folder = functions.create_subfolder('MLST', outdir_dict[sample])
-		genome_file = assembly_samples_retrieved.loc[assembly_samples_retrieved['name'] == sample]['sample'].values[0]
-
-		## call MLST
-		(results, profile_folder) = MLSTar.run_MLSTar(species_mlst_folder, rscript, MLSTar_taxa_name, scheme2use, sample, MLSTar_folder, genome_file, options.threads)
-		MLST_results[sample] = results
+			## species folder
+			#species_mlst_folder = functions.create_subfolder(MLSTar_taxa_name, pubmlst_folder)
+			species_mlst = mlst_profile.split(',')[0]
+			species_mlst_folder = mlst_profile.split(',')[1]
+			
+			## output file
+			output_file = species_mlst_folder + '/PubMLST_available_scheme.csv'
+			filename_stamp = species_mlst_folder + '/.success_scheme'
+			
+			## 
+			if MLSTar_taxa_name == species_mlst:		
+				if os.path.isfile(filename_stamp):
+					stamp =	functions.read_time_stamp(filename_stamp)
+					print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+	
+			else: 
+				### get scheme available
+				MLSTar.getPUBMLST(MLSTar_taxa_name, rscript, output_file)
+				stamp =	functions.print_time_stamp(filename_stamp)
+	
+			## parse and get scheme for classical MLST
+			schemes_MLST = pd.read_csv(output_file, sep=',', header=0)
+			
+			##
+			for item, cluster in schemes_MLST.iterrows():
+				if cluster['len'] < 10:
+					scheme2use = int(cluster['scheme'])
+					continue			
+			### 
+			sample = row['sample']
+			MLSTar_folder = functions.create_subfolder('MLST', outdir_dict[sample])
+			genome_file = assembly_samples_retrieved.loc[assembly_samples_retrieved['name'] == sample]['sample'].values[0]
+	
+			## call MLST
+			(results, profile_folder) = MLSTar.run_MLSTar(species_mlst_folder, rscript, MLSTar_taxa_name, scheme2use, sample, MLSTar_folder, genome_file, options.threads)
+			MLST_results[sample] = results
 
 	##	
 	print ("+ Finish this step...")

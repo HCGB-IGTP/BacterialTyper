@@ -114,33 +114,40 @@ def update_MLSTar_profile_alleles():
 ##########################################
 def get_MLSTar_species(genus, species):
 
-	## This needs manual curation of the list of species included. 
-	## Update it periodically
-	## view-source:https://pubmlst.org/databases/ and retrieve fields from html
-	## saved in: data/PubMLST_datasets.csv
-	
 	"""
-	.. seealso:: Additional information to PubMLST available datasets.
+	Retrieve the correct name within `PubMLST databases`_ for the given species and/or genus specified.
 	
-		- :doc:`PubMLST datasets<../../../data/PubMLST_datasets>`
+	:param genus: Genus name.
+	:param species: Species name.
+	:type genus: string
+	:type species: string
+
+	:returns: Name in the PubMLST database for the taxa of interest. Returns `NaN` if not available. 
+	
+	Available datasets are stored in file :file:`/data/PubMLST_datasets.csv`. See available :doc:`PubMLST datasets<../../../data/PubMLST_datasets>`.
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.data.data_files.data_list`
+	
 	"""
 	
 	## MLSTar available data
-	MLSTar_species = data_files.data_list("MLSTar_species")
+	MLSTar_species = data_files.data_list("PubMLST_datasets")
 	
 	# pandas from csv file
-	data = pd.read_csv(MLSTar_species, header=0, sep=",")
+	data = pd.read_csv(MLSTar_species, names=["Kingdom","name","Species"], sep=",")
 	
 	## check if name matches	
 	taxa_name = genus + ' ' + species
-	sp_exists = data.loc[data["Species description"] == taxa_name]['MLSTar name']
+	sp_exists = data.loc[data["Species"] == taxa_name]['name']
 	if not sp_exists.empty: ## check if exists
 		return (sp_exists.values[0])
 	else:
 		## TODO: Check if it works
 		## Check if there is a genus entry in database
 		genus_name = genus + ' spp.'
-		genus_exist = data.loc[data["Species description"] == genus_name]['MLSTar name']
+		genus_exist = data.loc[data["Species"] == genus_name]['name']
 
 		if not genus_exist.empty: ## check if exists
 			return (genus_exist.values[0])
@@ -152,7 +159,7 @@ def get_MLSTar_species(genus, species):
 ##########################################
 def getPUBMLST(species, out_name):
 	"""
-	Using `MLSTar software`_ retrieve for the given `species` the available profiles in PubMLST_.  
+	Using `MLSTar software`_ retrieve for the given `species` the available schemes in PubMLST_.  
 
 	It generates information in file `out_name` in csv format. 
 	

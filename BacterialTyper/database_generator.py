@@ -47,7 +47,11 @@ def NCBI_DB(strains2get, data_folder, Debug):
 	:type Debug: bool
 	:return: Dataframe of genbank database updated for all available entries.
 
-	See example of dataframe :file:`strains2get` in file: :file:`/devel/results/strains2get_NCBI_DB.csv` here:
+	Columns for the dataframe :file:`strains2get` consist of:
+	
+	sample,genus,species,strain,BioSample,genome,Plasmids
+ 
+	See and example in file: :file:`/devel/results/strains2get_NCBI_DB.csv` and shown here:
 	
 	.. include:: ../../devel/results/strains2get_NCBI_DB.csv
 		:literal:
@@ -80,7 +84,7 @@ def NCBI_DB(strains2get, data_folder, Debug):
 	strains2get.index.names = ['ID'] ## rename index
 	strains2get = strains2get.drop_duplicates()
 	
-	Debug = True
+	Debug=True
 	
 	#########
 	if Debug:
@@ -129,7 +133,7 @@ def NCBI_DB(strains2get, data_folder, Debug):
 	## Generate/Update database
 	database_csv = data_folder + '/genbank_database.csv'
 	db_updated = update_db_data_file(database_df, database_csv)
-	print ("+ Database has been generated: \n", db_updated)
+	print ("+ Database has been generated in file: ", database_csv)
 	return (db_updated)
 
 ##########################################################################################
