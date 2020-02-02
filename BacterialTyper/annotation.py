@@ -3,9 +3,16 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
-Generates a protein annotation using PROKKA for the genomes assembled generated
-'''
+"""
+It generates a protein annotation using Prokka_ for the genomes assembled generated
+
+Prokka_ contains several databases with known parameters for several kingdom and genus. Prokka option `--usegenus` is set as default.
+	Several options are available for kingdom and genus. See details below and see output from :code:`prokka --listdb`
+	shown in :func:`BacterialTyper.annotation.print_list_prokka`.If no genus matches user desired option, use option "Other".
+
+.. include:: ../../links.inc	 	
+"""
+
 ## useful imports
 import time
 import io
@@ -23,12 +30,66 @@ from BacterialTyper import config
 
 ### print info prokka
 def print_list_prokka():
+	"""
+	Prints Prokka_ databases that has installed to use. It is the output from the call: 
+	
+	.. code-block:: sh
+
+		prokka --listdb
+	
+	.. include:: ../../devel/results/print_list_prokka.txt
+		:literal:
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.config_exe`
+		
+		- :func:`BacterialTyper.functions.system_call`
+	
+	.. include:: ../../links.inc	 	
+	"""
 	prokka_bin = config.get_exe('prokka')
 	cmd = prokka_bin + " --listdb"
 	functions.system_call(cmd)
 
 ######
 def module_call(sequence_fasta, kingdom, genus, path, name, threads):
+	"""
+	Function that checks and generates annotation.
+	
+	- It uses Prokka_ via :func:`BacterialTyper.annotation.prokka_call`.
+	
+	- It checks if previously generated using :func:`BacterialTyper.functions.read_time_stamp`. 
+	
+	- Once finished, it prints timestamp (:func:`BacterialTyper.functions.print_time_stamp`). 
+	
+	:param sequence_fasta: Assembled sequences in fasta file format. 
+	:param kingdom: Available kingdoms mode for Prokka software: Archaea|Bacteria|Mitochondria|Viruses
+	:param genus: Available genus options for Prokka software. See details above.
+	:param path: Absolute path to the output folder to include results.
+	:param name: Sample name and tag to include in the annotation report and files.
+	:param threads: Number of CPUs to use.
+	  
+	:type sequence_fasta: string
+	:type kingdom: string
+	:type genus: string 
+	:type path: string 
+	:type name: string 
+	:type threads: integer 
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.config_exe`
+		
+		- :func:`BacterialTyper.functions.read_time_stamp`
+		
+		- :func:`BacterialTyper.functions.print_time_stamp`
+				
+		- :func:`BacterialTyper.annotation.prokka_call`	
+
+	.. include:: ../../links.inc	 	
+	"""
+	
 	## check if previously assembled and succeeded
 	filename_stamp = path + '/.success'
 
@@ -50,6 +111,39 @@ def module_call(sequence_fasta, kingdom, genus, path, name, threads):
 
 ######
 def prokka_call(prokka_bin, sequence_fasta, kingdom, genus, outdir_name, name, threads):
+	"""Create system call for Prokka_ software. 
+	
+	It generates genome annotation using Prokka software. 
+		
+	:param prokka_bin: Path to the prokka binary file.
+	:param sequence_fasta: Assembled sequences in fasta file format. 
+	:param kingdom: Available kingdoms mode for Prokka software: Archaea|Bacteria|Mitochondria|Viruses
+	:param genus: Available genus options for Prokka software. See details above.
+	:param outdir_name: Absolute path to the output folder to include results.
+	:param name: Sample name and tag to include in the annotation report and files.
+	:param threads: Number of CPUs to use.
+	  
+	:type prokka_bin: string
+	:type sequence_fasta: string
+	:type kingdom: string
+	:type genus: string 
+	:type outdir_name: string 
+	:type name: string 
+	:type threads: integer 
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.config_exe`
+		
+		- :func:`BacterialTyper.functions.read_time_stamp`
+		
+		- :func:`BacterialTyper.functions.print_time_stamp`
+				
+		- :func:`BacterialTyper.annotation.prokka_call`	
+	
+	.. include:: ../../links.inc
+	"""
+	
 	## set parameters and options for prokka
 	print ("\n+ Starting annotation for: %s\n" %name)
 	log_file = outdir_name + '/run.log'
