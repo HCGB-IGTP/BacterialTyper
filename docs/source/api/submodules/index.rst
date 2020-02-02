@@ -13,28 +13,30 @@ Developer guidelines for BacterialTyper scripts.
 .. toctree::
    :maxdepth: 2
     
-   functions.rst
-   BUSCO_caller.rst   
-   blast_parser.rst   
-   edirect_caller.rst  
-   install_dependencies.rst  
-   spades_assembler.rst
-   MLSTar.rst     
-   card_trick_caller.rst   
-   extern_progs.rst    
-   min_hash_caller.rst    
-   species_identification_KMA.rst
    annotation.rst    
-   config.rst        
-   fastqc_caller.rst   
-   multiQC_report.rst  
-   trimmomatic_call.rst
    ariba_caller.rst   
-   database_generator.rst  
-   other_tools.rst       
-   variant_calling.rst
    bacteriophage.rst  
+   blast_parser.rst   
+   BUSCO_caller.rst   
+   card_trick_caller.rst   
+   config.rst        
+   database_generator.rst  
    database_user.rst      
+   edirect_caller.rst  
+   extern_progs.rst    
+   fastqc_caller.rst   
+   functions.rst
+   genomic_island.rst
    get_descendant.rst  
+   install_dependencies.rst  
+   min_hash_caller.rst    
+   MLSTar.rst     
+   multiQC_report.rst  
+   other_tools.rst       
    sampleParser.rst       
+   spades_assembler.rst
+   species_identification_KMA.rst
+   trimmomatic_call.rst
+   variant_calling.rst
    virulence_resistance.rst
+    

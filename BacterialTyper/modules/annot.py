@@ -23,11 +23,11 @@ from BacterialTyper import annotation
 from BacterialTyper import BUSCO_caller
 from BacterialTyper.modules import qc
 from BacterialTyper import multiQC_report
-from BacterialTyper.modules import sample_prepare
-from BacterialTyper.modules import info
+from BacterialTyper.modules import help_info
+from BacterialTyper import sampleParser
 
 ####################################
-def run(options):
+def run_annotation(options):
 
 	## init time
 	start_time_total = time.time()
@@ -54,7 +54,7 @@ def run(options):
 
 	elif (options.help_project):
 		## information for project
-		info.project_help()
+		help_info.project_help()
 		exit()
 
 	elif (options.help_multiqc):
@@ -87,7 +87,7 @@ def run(options):
 	print ("+ Retrieve all genomes assembled...")
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "assembly", "fna")
+	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", "fna")
 
 	## debug message
 	if (Debug):

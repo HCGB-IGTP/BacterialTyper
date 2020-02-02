@@ -4,8 +4,9 @@
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
 """
-This code calls SPADES assembler and plasmidSPADES.
-Retrieves plasmids if any and discard them from the main assembly.
+This script calls SPADES assembler and plasmidSPADES. It also generates descriptive statistics of the assembly process.
+
+This script can be called as a single script if desired or called from the BacterialTyper module assemble or as a python api.
 """
 ## useful imports
 import time
@@ -25,31 +26,39 @@ from BacterialTyper import config
 from BacterialTyper.blast_parser import parse
 from BacterialTyper.other_tools import tools
 
-## perl scripts
-contig_stats_script = tools.perl_scripts('contig_stats')
-rename_seqs_script = tools.perl_scripts('rename_FASTA_seqs')
-
 ################################################
 def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads):
-	"""Generates plasmid assembly: call run_SPADES with plasmid option
+	"""Generate plasmid assembly using SPADES
 	
-	Arguments:
-		path : absolute path to store results. It must exists.
-		file1 : FASTQ R1 reads.
-		file2 : FASTQ R2 reads.
-		sample :	Sample name or tag to identify.
-		SPADES_bin : Binary executable for SPADES assembly software.
-	 	threads : Number of CPUs to use.
+	- Calls SPADES to assemble plasmids using --plasmid option (using :func:`BacterialTyper.spades_assembler.SPADES_systemCall`) 
 	
-	Returns:
-		plasmids assembled, if succeded
-		FAIL 
+	- SPADES generates a file named as *scaffolds.fasta* within the directory provided. This function retrieves path to contigs/scaffolds assembled (using :func:`BacterialTyper.functions.retrieve_matching_files`).
+	
+	:param path: Absolute path to folder.
+	:param file1: Absolute path to fastq reads (R1).
+	:param file2: Absolute path to fastq reads (R2).
+	:param sample: Sample name or tag to identify sample
+	:param SPADES_bin: Binary executable for SPADES assembly software.
+	:param threads: Number of CPUs to use.
+	:type path: string
+	:type file1: string
+	:type file2: string
+	:type name: string
+	:type threads: integer
+	:return: Plasmid contigs/scaffolds assembled.
+	:rtype: string : Path to assembly fasta file.
+	:warnings: Returns **FAIL** if assembly process stopped.
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.spades_assembler.SPADES_systemCall`
+	
+		- :func:`BacterialTyper.functions.retrieve_matching_files`
 	"""
-	
 	print ('+ Running plasmid assembly...')
 	name = sample + '_plasmid'
 	options = '--plasmid '
-	message_return = run_SPADES(path, file1, file2, name, SPADES_bin, options, threads)
+	message_return = SPADES_systemCall(path, file1, file2, name, SPADES_bin, options, threads)
 
 	if 	message_return == 'FAIL':	
 		print ("\n\n***ERROR: plasmidSPADES failed for sample " + sample)	
@@ -63,67 +72,102 @@ def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads)
 
 ################################################
 def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
-	"""Generate main assembly: call run_SPADES and rename contigs
+	"""Generate main assembly using SPADES
 	
-	Arguments:
-		path : absolute path to store results. It must exists.
-		file1 : FASTQ R1 reads.
-		file2 : FASTQ R2 reads.
-		sample :	Sample name or tag to identify.
-		SPADES_bin : Binary executable for SPADES assembly software.
-	 	threads : Number of CPUs to use.
+	- Calls SPADES to assemble reads (using :func:`BacterialTyper.spades_assembler.SPADES_systemCall`) 
 	
-	Returns:
-		contigs assembled renamed, if succeded
-		FAIL 
+	- SPADES generates a file named as *scaffolds.fasta* within the directory provided. This function retrieves path to contigs/scaffolds assembled (using :func:`BacterialTyper.functions.retrieve_matching_files`).
+	
+	- Renames contigs retrieved using sample name (using :func:`BacterialTyper.spades_assembler.rename_contigs`).
+		
+	:param path: Absolute path to folder.
+	:param file1: Absolute path to fastq reads (R1).
+	:param file2: Absolute path to fastq reads (R2).
+	:param sample: Sample name or tag to identify sample
+	:param SPADES_bin: Binary executable for SPADES assembly software.
+	:param threads: Number of CPUs to use.
+	:type path: string
+	:type file1: string
+	:type file2: string
+	:type name: string
+	:type threads: integer
+	:return: Contigs/scaffolds assembled renamed.
+	:rtype: string : Path to assembly fasta file.
+	:warnings: Returns **FAIL** if assembly process stopped.
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.spades_assembler.SPADES_systemCall`
+	
+		- :func:`BacterialTyper.functions.retrieve_matching_files`
+	
+		- :func:`BacterialTyper.functions.rename_fasta_seqs`
 	"""
 	##print ('+ Running main assembly...')
 	options = ''
-	message_return = run_SPADES(path, file1, file2, sample, SPADES_bin, options, threads)
+	message_return = SPADES_systemCall(path, file1, file2, sample, SPADES_bin, options, threads)
 	if 	message_return == 'FAIL':	
 		print ("\n\n***ERROR: SPADES failed for sample " + sample)
 		return ('FAIL')
 
 	scaffolds_retrieved = functions.retrieve_matching_files(path, "scaffolds.fasta")
-	new_contigs = path + '/' + sample + '_assembly.fna'
-	rename_contigs(scaffolds_retrieved[0], "scaffolds_" + sample, new_contigs)
-		
 	if scaffolds_retrieved == '':	
 		print ('\n\n***ERROR: No scaffolds assembly...')
 		return ('FAIL')
-			
+	
+	new_contigs = path + '/' + sample + '_assembly.fna'
+	id_conversion_file = functions.rename_fasta_seqs(scaffolds_retrieved[0], sample, new_contigs)
+	
+	if	id_conversion_file == 'FAIL':	
+		print ("\n\n***ERROR: Rename contigs failed for sample " + sample)
+		return ('FAIL')
+	else:
+		print ("+ Name conversion details saved in file " + id_conversion_file)
+	
+	
+	### Due to limiations with Genbank format, no more thatn 37 characters are supported for 
+	### locus tag identification. This might affect later annotation process and subsequent analysis
+	### https://github.com/tseemann/prokka/issues/337 
+		
 	return (new_contigs)
 
 ################################################
-def run_SPADES(sample_folder, file1, file2, name, SPADES_bin, options, threads):
+def SPADES_systemCall(sample_folder, file1, file2, name, SPADES_bin, options, threads):
 	"""Generate SPADES system call.
 	
-	Arguments:
-		sample_folder : str
-			Absolute path to store results. It must exists.
-		
-		file1 : path
-			FASTQ R1 reads.
-		
-		file2 : path
-			FASTQ R2 reads.
-		
-		name :	str
-			Sample name or tag to identify.
-		
-		SPADES_bin : path
-			 Binary executable for SPADES assembly software.
-		
-		options : str
-			Plasmid assembly is possible if specificed via options (--plasmid). 
-	 	
-	 	threads : int
-	 		 Number of CPUs to use.
-	 
-	 Returns:
-	 	OK: If assembly succeeded generates timestamp file (.success_assembly) within sample_folder provided.
-	 	FAIL: If some error ocurred during the assembly.
-	 	
+	It calls system for SPADES and generates time stamp file in the folder provided (sample_folder + '/.success_assembly') for later analysis.
+	
+	Steps:
+	
+	- It generates system call for SPADES assembly (using :func:`BacterialTyper.functions.system_call`). 
+	
+	- It generates timestamp file (See :func:`BacterialTyper.functions.print_time_stamp`).
+	
+	:param sample_folder: Absolute path to store results. It must exists.
+	:param file1: Absolute path to fastq reads (R1).
+	:param file2: Absolute path to fastq reads (R2).
+	:param name: Sample name or tag to identify sample.
+	:param SPADES_bin: Binary executable for SPADES assembly software.
+	:param options: Plasmid assembly is possible if specificed via options (--plasmid).
+	:param threads: Number of CPUs to use.
+	
+	:type name: string
+	:type sample_folder: string
+	:type file1: string
+	:type file2: string
+	:type SPADES_bin: string
+	:type options: string
+	:type threads: integer
+	
+	:return: Returns **OK** if assembly process succeeded and fasta file is generated.
+	:rtype: string.
+	:warnings: Returns **FAIL** if assembly process stopped.
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.system_call`
+	
+		- :func:`BacterialTyper.functions.print_time_stamp`
 	"""
 	
 	## check if previously assembled and succeeded
@@ -149,30 +193,44 @@ def run_SPADES(sample_folder, file1, file2, name, SPADES_bin, options, threads):
 	return "FAIL"
 	
 ################################################
-def run_module_SPADES(name, folder, file1, file2, threads):
-	"""Prepare SPADES system call.
+def run_module_assembly(name, folder, file1, file2, threads):
+	"""Assembly main module call.
 	
-	Arguments:
+	It calls assembly function to process data provided and returns genome statistics. Steps: 
+	
+	- Retrieves SPADES_ executable (See details :func:`BacterialTyper.config.get_exe`) using the minimun version required (See :func:`BacterialTyper.config.min_version_programs` for details)
+	
+	- It generates a call to SPADES_ assembler (See :func:`BacterialTyper.spades_assembler.run_SPADES_assembly`). 
 		
-		name :	str
-			Sample name or tag to identify.
-		
-		folder : path
-			absolute path to store results. It must exists.
-		
-		file1 : path
-			FASTQ R1 reads.
-		
-		file2 : path
-			FASTQ R2 reads.
-		
-		threads : int
-			Number of CPUs to use.
-	 
-	 Returns:
-	 	Assembly statistics file, if succeeded.
-	 	FAIL: If some error ocurred during the assembly.
-	 	
+	- If assembly succeeds and fasta file is generated under the directory provided, contig statistics are generated (:func:`BacterialTyper.spades_assembler.contig_stats`).
+	
+	- It retrieves spades executable using 
+	
+	:param name: Sample name or tag to identify sample
+	:param folder: Absolute path to folder.
+	:param file1: Absolute path to fastq reads (R1).
+	:param file2: Absolute path to fastq reads (R2).
+	:param threads: Number of CPUs to use.
+	:type name: string
+	:type folder: string
+	:type file1: string
+	:type file2: string
+	:type threads: integer
+	:return: Assembly statistics file.
+	:rtype: string : Path to file assembly statistics file.
+	:warnings: Returns **FAIL** if assembly process stopped.
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.config.get_exe`
+	
+		- :func:`BacterialTyper.spades_assembler.run_SPADES_assembly`
+	
+		- :func:`BacterialTyper.config.min_version_programs`
+	
+		- :func:`BacterialTyper.spades_assembler.contig_stats`
+	
+	.. include:: ../../links.inc	 	
 	"""
 	
 	print ("+ Calling spades assembly for sample...", name)	
@@ -188,7 +246,7 @@ def run_module_SPADES(name, folder, file1, file2, threads):
 	else:
 		## contig stats
 		#print ('+ Get assembly statistics:...\n')
-		contig_out = contig_stats(path_to_contigs)	
+		contig_out = contig_stats(path_to_contigs, "1000,10000")	
 	
 		## check statistics in file
 		print ("+ Check statistics for sample %s in file:\n%s" %(name, contig_out))
@@ -290,75 +348,68 @@ def discardPlasmids(contigs, plasmids, path, sample):
 	return (contig_out_file, plasmid_out_file)
 
 ################################################
-def contig_stats(sequences):
+def contig_stats(assembly_file, csv_arg):
 	"""Generate assembly statistics
 	
-	Calls additional perl script to generate contig statistics:
-	Usage:	
-	perl BacterialTyper/other_tools/perl/contig_stats.pl fasta_file 
-	- Provide a single fasta file for Contig Statistics...
-	- Default splitting sets: 0, 150, 500, 1000, 5000, 10000
-	- Provide new parts using a csv argument for the script: perl BacterialTyper/other_tools/perl/contig_stats.pl fasta_file 1000,10000
+	Calls additional perl script to generate contig statistics. Steps:
+	
+	- Retrieve information of additional perl script location (using :func:`BacterialTyper.other_tools.tools.perl_scripts`)
+	
+	- Create system call (using :func:`BacterialTyper.functions.system_call`) and return output statistic file created.
+	
+	:param assembly_file: Absolute path to assembly fasta file.
+	:type assembly_file: string
+	:param csv_arg: Comma separated values for splitting sets. Default: 1000,10000
+	:type csv_arg: string
+	:return: Text file containing statistics for later analysis.
+	:rtype: string
+	
+	The perl script contig_stats.pl has a mandatory argument which is a single fasta file and default splitting sets are: 1000, 10000. User can provide new parts using a csv argument for the script:
+	
+	.. code-block:: sh
+
+		perl BacterialTyper/other_tools/perl/contig_stats.pl fasta_file 1000,10000
+		
+
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.system_call`
+		
+		- :func:`BacterialTyper.other_tools.tools.perl_scripts`
 	"""
-	file_out = sequences + '_stats.txt'
-	cmd_stats = 'perl %s %s 1000,10000 > %s' %(contig_stats_script, sequences, file_out) ## [TODO] Generate this code in python
+	contig_stats_script = tools.perl_scripts('contig_stats')
+
+	
+	file_out = assembly_file + '_stats.txt'
+	cmd_stats = 'perl %s %s %s > %s' %(contig_stats_script, assembly_file, csv_arg, file_out) ## [TODO] Generate this code in python
 	code_chr = functions.system_call(cmd_stats)
 	return (file_out)
 
 ################################################
-def stats(new_contigs, new_plasmids):
-	"""Generate assembly sequence statistics.
-	
-	For contigs and plasmids (if any) prints statistics in screen and in csv/txt files 
-	"""
-	## generate contig statistics
-	print ('+ Get assembly statistics:...\n')
-
-	## get contig statistics	
-	contig_out = contig_stats(new_contigs)	
-	contig_out_file = open(contig_out, 'r')
-	contig_out_file_read = contig_out_file.read()
-	contig_out_file.close()
-	
-	## dump in screen
-	print (contig_out_file_read)
-	print ()	
-
-	if (new_plasmids == 'FAIL'):
-		print ('+ No plasmids identified...\n')
-	else:
-		print ('+ Plasmids assembly')
-		plasmid_out = contig_stats(new_plasmids)	
-
-		## dump in screen
-		plasmid_out_file = open(plasmid_out, 'r')
-		plasmid_file_read = plasmid_out_file.read()
-		plasmid_out_file.close()
-		print(plasmid_file_read)	
-	
-################################################
-def rename_contigs(fasta_file, name, new_fasta):
-	"""
-	Calls additional perl script to rename contigs:
-
-	Usage:
-	Please provide the next arguments:
-	perl BacterialTyper/other_tools/perl/rename_FASTA_seqs.pl fasta_file name_file name2add ADD|REPLACE|BEGIN|ADD_BEGIN
-	
-	ADD: will add the id plus a counter
-	REPLACE: will discard the previous name and add this unique id and counter
-	BEGIN: will keep the first split of the id and add at the beginning the given name
-	"""
-	perl_call = "perl %s %s %s %s REPLACE" %(rename_seqs_script, fasta_file, new_fasta, name) ## [TODO] Generate this code in python
-	return (functions.system_call(perl_call))
-	
-################################################
 def	help_options():
+	"""Help options when run spades_assembler.py as a single script
+	
+	Parameters reflected here refer to spades_assembler.py main function.
+	
+	:param file1: Absolute path to fastq reads (R1).
+	:param file2: Absolute path to fastq reads (R2).
+	:param sample: Sample name or tag to identify sample
+	:param SPADES_bin: Binary executable for SPADES assembly software.
+	:param threads: Number of CPUs to use.
+	:param path: Absolute path to folder.
+	
+	:type file1: string
+	:type file2: string
+	:type sample: string
+	:type SPADES_bin: string
+	:type threads: integer
+	:type path: string	
+	"""
 	print ("\nUSAGE: python %s file1 file2 name SPADES_bin threads path\n"  %os.path.realpath(__file__))
 
 ################################################
 def main():
-	  	## control if options provided or help
+	## control if options provided or help
 	if len(sys.argv) > 1:
 		print ("")
 	else:
@@ -394,9 +445,32 @@ def main():
 		new_plasmids = new_plasmids_list[0]
 		rename_contigs(tmp_plasmids, "scaffolds_plasmids", new_plasmids)
 	
-	## contig stats
-	stats(new_contigs, new_plasmids)	
-		
+	
+	## generate contig statistics
+	print ('+ Get assembly statistics:...\n')
+
+	## get contig statistics	
+	contig_out = contig_stats(new_contigs, "1000,10000")	
+	contig_out_file = open(contig_out, 'r')
+	contig_out_file_read = contig_out_file.read()
+	contig_out_file.close()
+	
+	## dump in screen
+	print (contig_out_file_read)
+	print ()	
+
+	if (new_plasmids == 'FAIL'):
+		print ('+ No plasmids identified...\n')
+	else:
+		print ('+ Plasmids assembly')
+		plasmid_out = contig_stats(new_plasmids, "1000,10000")	
+
+		## dump in screen
+		plasmid_out_file = open(plasmid_out, 'r')
+		plasmid_file_read = plasmid_out_file.read()
+		plasmid_out_file.close()
+		print(plasmid_file_read)	
+	
 ######
 
 '''******************************************'''

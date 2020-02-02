@@ -14,8 +14,8 @@ Developer guidelines for BacterialTyper modules.
    :maxdepth: 2
 
    assemble.rst
-   qc.rst
    database.rst
    ident.rst
+   qc.rst
    profile.rst
    

@@ -3,7 +3,8 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-"""Calls BUSCO software for quality control of annotation and assembly datasets
+"""
+Calls BUSCO software for quality control of annotation and assembly datasets
 """
 ## useful imports
 import time
@@ -18,35 +19,43 @@ from termcolor import colored
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
+from BacterialTyper import data
 
 ###############
 def busco_datasets():
 	"""BUSCO dataset information
 	
-	Returns a dataframe containing information for each dataset available in BUSCO website database.
+	:return: Dataframe containing information for each dataset available in file BUSCO_dataset.csv under data directory.
 	
-	Dataframe contains several columns: "Taxonomic range","Dataset","ftp_site" indexed by Dataset
-	e.g. Dataset: "deltaepsilonsub",
-	e.g. Taxonomic range: "phylum Proteobacteria – Delta and Epsilon proteobacteria",
-	e.g. ftp_site: "http://busco.ezlab.org/v2/datasets/deltaepsilonsub_odb9.tar.gz")
+	Dataframe contains several fields: "Dataset", "Taxonomic range" and "ftp_site". Dataframe is indexed by Dataset. See an example:
+	
+	+-----------------+----------------------------------------------------------+----------------------------------------------------------------+
+	| Dataset         | Taxonomic range                                          | ftp_site                                                       |
+	+=================+==========================================================+================================================================+
+	| deltaepsilonsub | phylum Proteobacteria – Delta and Epsilon proteobacteria | http://busco.ezlab.org/v2/datasets/deltaepsilonsub_odb9.tar.gz |
+	+-----------------+----------------------------------------------------------+----------------------------------------------------------------+
+	| bacteroidetes   | phylum Bacteroidetes                                     | http://busco.ezlab.org/v2/datasets/bacteroidetes_odb9.tar.gz   |
+	+-----------------+----------------------------------------------------------+----------------------------------------------------------------+
+	| tenericutes     + phylum Tenericutes                                       | http://busco.ezlab.org/v2/datasets/tenericutes_odb9.tar.gz     |
+	+-----------------+----------------------------------------------------------+----------------------------------------------------------------+
+	
+	.. seealso:: Additional information on BUSCO datasets available.
+	
+		- :doc:`BUSCO datasets <../../../data/BUSCO_datasets>` 
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.data.data_files.data_list`
+		
+		- :func:`BacterialTyper.functions.file2dataframe`
+
+	
 	"""
-	busco_data = pd.DataFrame(columns=("Taxonomic range","Dataset","ftp_site"))
-	busco_data.loc[len(busco_data)] = ("All bacteria dataset","bacteria","http://busco.ezlab.org/v2/datasets/bacteria_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria all","proteobacteria","http://busco.ezlab.org/v2/datasets/proteobacteria_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria – Alphaproteobacteria – Order Rhizobiales","rhizobiales","http://busco.ezlab.org/v2/datasets/rhizobiales_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria – Betaproteobacteria","betaproteobacteria","http://busco.ezlab.org/v2/datasets/betaproteobacteria_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria – Gammaproteobacteria all","gammaproteobacteria","http://busco.ezlab.org/v2/datasets/gammaproteobacteria_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria – Gammaproteobacteria – Order Enterobacteriales","enterobacteriales","http://busco.ezlab.org/v2/datasets/enterobacteriales_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Proteobacteria – Delta and Epsilon proteobacteria","deltaepsilonsub","http://busco.ezlab.org/v2/datasets/deltaepsilonsub_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Actinobacteria","actinobacteria","http://busco.ezlab.org/v2/datasets/actinobacteria_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Cyanobacteria","cyanobacteria","http://busco.ezlab.org/v2/datasets/cyanobacteria_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Firmcutes all","firmicutes","http://busco.ezlab.org/v2/datasets/firmicutes_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Firmcutes – Clostridia","clostridia","http://busco.ezlab.org/v2/datasets/clostridia_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Firmcutes – Bacilli – order Lactobacillales","lactobacillales","http://busco.ezlab.org/v2/datasets/lactobacillales_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Firmcutes – Bacilli – order Bacillales","bacillales","http://busco.ezlab.org/v2/datasets/bacillales_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Bacteroidetes","bacteroidetes","http://busco.ezlab.org/v2/datasets/bacteroidetes_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Spirochaetes","spirochaetes","http://busco.ezlab.org/v2/datasets/spirochaetes_odb9.tar.gz")
-	busco_data.loc[len(busco_data)] = ("phylum Tenericutes","tenericutes","http://busco.ezlab.org/v2/datasets/tenericutes_odb9.tar.gz")
+	## read from file: BUSCO_dataset.csv
+	BUSCO_dataset_file = data.data_files.data_list("BUSCO_dataset")
+	busco_data_columns = ["Taxonomic range","Dataset","ftp_site"]
+	busco_data = functions.file2dataframe(BUSCO_dataset_file, names=busco_data_columns)
+	print(busco_data)
 	busco_data = busco_data.set_index('Dataset')
 	return(busco_data)
 
@@ -77,7 +86,7 @@ def print_help_BUSCO():
 ###############
 def print_available_BUSCO():
 	print_df = busco_datasets()
-	print_df = print_df[['Taxonomic range']]
+	print_df = print_df.set_index('Dataset')
 	pd.set_option('display.max_colwidth', -1)
 	functions.print_sepLine("-", 100, False)
 	print (print_df)
@@ -86,8 +95,49 @@ def print_available_BUSCO():
 
 ###############
 def BUSCO_download(name, ftp, folder):
+	"""Downloads BUSCO datasets provided
 	
-	print (colored("\n+ BUSCO dataset: " + name + " - v9 OrthoDB", 'yellow'))
+	This code checks if dataset is already available in folder provided. If not available proceeds to download it.
+	
+	It creates a subfolder (using :func:`BacterialTyper.functions.create_folder`) and downloads the dataset from ftp site provided (using :func:`BacterialTyper.functions.wget_download`).
+
+	The file donwloaded would gunzipped so it is decompressed (using  :func:`BacterialTyper.functions.extract`). 
+	
+	A timestamp is printed to reflect download data (using :func:`BacterialTyper.functions.print_time_stamp`).
+	
+	The data download is checked for integrity using the function :func:`BacterialTyper.BUSCO_caller.BUSCO_check_dataset`.
+
+	If the process failed, the whole process is retried (CAUTION: it might generate infinite loop).	
+	
+	:param name: Dataset name provided.
+	:param ftp: FTP site for dataset.
+	:param folder: Absolute path to folder to store results (e.g. database/BUSCO).
+	:type name: string
+	:type ftp: string
+	:type folder: string
+	
+	:returns: Folder absolute path containing downloaded dataset.
+	:rtype: string
+	:warnings: Returns **FAIL** if check process failed.
+	
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.create_folder`
+		
+		- :func:`BacterialTyper.functions.wget_download`
+		
+		- :func:`BacterialTyper.functions.extract`
+		
+		- :func:`BacterialTyper.functions.print_time_stamp`
+		
+		- :func:`BacterialTyper.functions.print_sepLine`
+
+		- :func:`BacterialTyper.BUSCO_caller.BUSCO_check_dataset`
+
+	"""
+	
+	print (colored("\n+ BUSCO dataset: " + name + " - v9 OrthoDB", 'yellow')) ## modify OrthoDB version if changed
 	subfolder = folder + '/' + name
 	file_name = os.path.basename(ftp)
 	path_file = subfolder + '/' + file_name
@@ -117,6 +167,8 @@ def BUSCO_download(name, ftp, folder):
 		print (colored('*** Dataset failed. Try to download it again...','red'))
 		shutil.rmtree(folder)
 		BUSCO_download(name, ftp, folder)
+		
+		### CAUTION: check for infinite loop
 		
 	return (folderName)
 

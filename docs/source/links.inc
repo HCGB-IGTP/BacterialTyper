@@ -11,7 +11,6 @@
 .. _`internal references`: https://www.sphinx-doc.org/en/stable/usage/restructuredtext/roles.html
 .. _`numpydoc docstring guide`: https://numpydoc.readthedocs.io/en/latest/format.html
 .. _Python: http://www.python.org/
-.. _`BacterialTyper github`: https://github.com/JFsanchezherrero/BacterialTyper
 .. _`PyPI files page`: https://pypi.org/
 .. _`pip installing instructions`: https://packaging.python.org/tutorials/installing-packages
 
@@ -38,3 +37,17 @@
 .. #### Sites
 .. _IGTP: http://www.germanstrias.org/
 .. _HCGB: http://www.germanstrias.org/technology-services/genomica-bioinformatica/
+
+.. _`BacterialTyper github`: https://github.com/JFsanchezherrero/BacterialTyper
+.. _multiQC: https://multiqc.info/
+.. _Spades: http://cab.spbu.ru/software/spades/
+.. _ARIBA: http://sanger-pathogens.github.io/ariba/
+.. _KMA: http://www.genomicepidemiology.org/
+.. _BUSCO: https://busco.ezlab.org/
+.. _NCBI: https://www.ncbi.nlm.nih.gov/genome/
+.. _PubMLST: https://pubmlst.org/
+.. _`PubMLST databases`: https://pubmlst.org/databases/
+.. _`MLSTar software`: https://github.com/iferres/MLSTar
+.. _Prokka: https://github.com/tseemann/prokka
+.. _`IslandPath-DIMOB`: https://github.com/brinkmanlab/islandpath
+.. _edirect: https://www.ncbi.nlm.nih.gov/books/NBK179288/

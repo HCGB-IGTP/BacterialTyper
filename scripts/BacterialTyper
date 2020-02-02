@@ -111,7 +111,7 @@ info_group_database.add_argument("--help_BUSCO", action="store_true", help="Benc
 info_group_database.add_argument("--help_KMA", action="store_true", help="Show additional help on KMA software and options.")
 info_group_database.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
 
-subparser_database.set_defaults(func=BacterialTyper.modules.database.run)
+subparser_database.set_defaults(func=BacterialTyper.modules.database.run_database)
 ##-------------------------------------------------------------##
 
 ## space
@@ -151,7 +151,7 @@ info_group_prep = subparser_prep.add_argument_group("Additional information")
 info_group_prep.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
 info_group_prep.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 
-subparser_prep.set_defaults(func=BacterialTyper.modules.sample_prepare.retrieve)
+subparser_prep.set_defaults(func=BacterialTyper.modules.sample_prepare.run_prep)
 ##-------------------------------------------------------------##
 
 ##--------------------------- QC ------------------------- ##
@@ -197,7 +197,7 @@ info_group_qc.add_argument("--debug", action="store_true", help="Show additional
 info_group_qc.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
 info_group_qc.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
 info_group_qc.add_argument("--help_multiqc", action="store_true", help="Show additional help on the multiQC module.")
-subparser_qc.set_defaults(func=BacterialTyper.modules.qc.run)
+subparser_qc.set_defaults(func=BacterialTyper.modules.qc.run_QC)
 ##-------------------------------------------------------------##
 
 ##------------------------------ trimm ----------------------- ##
@@ -271,7 +271,7 @@ info_group_assemble.add_argument("--help_format", action="store_true", help="Sho
 info_group_assemble.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
 info_group_assemble.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
 
-subparser_assemble.set_defaults(func=BacterialTyper.modules.assemble.run)
+subparser_assemble.set_defaults(func=BacterialTyper.modules.assemble.run_assembly)
 ##-------------------------------------------------------------##
 
 ####################
@@ -315,7 +315,7 @@ info_group_annot.add_argument("--help_multiqc", action="store_true", help="Show 
 info_group_annot.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
 info_group_annot.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
 
-subparser_annotate.set_defaults(func=BacterialTyper.modules.annot.run)
+subparser_annotate.set_defaults(func=BacterialTyper.modules.annot.run_annotation)
 ##-------------------------------------------------------------##
 
 ## space
@@ -376,7 +376,7 @@ info_group_ident.add_argument("--help_project", action="store_true", help="Show 
 info_group_ident.add_argument("--help_KMA", action="store_true", help="Show additional help on KMA software and options.")
 info_group_ident.add_argument("--help_MLSTar", action="store_true", help="Show additional help on MLSTar software and options.")
 
-subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run)
+subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run_ident)
 ##-------------------------------------------------------------##
 
 ##--------------------------- profile ------------------------ ##
@@ -418,7 +418,7 @@ info_group_profile.add_argument("--help_format", action="store_true", help="Show
 info_group_profile.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
 info_group_profile.add_argument("--help_ARIBA", action="store_true", help="Print further information for ARIBA databases")
 
-subparser_profile.set_defaults(func=BacterialTyper.modules.profile.run)
+subparser_profile.set_defaults(func=BacterialTyper.modules.profile.run_profile)
 
 ##-------------------------------------------------------------##
 
@@ -464,7 +464,7 @@ info_group_MGE.add_argument("--help_input_MGE", action="store_true", help="Print
 info_group_MGE.add_argument("--help_MGE_analysis", action="store_true", help="Print further information for Mobile Genetic Element module analysis.")
 info_group_MGE.add_argument("--help_PhiSpy", action="store_true", help="Print further information for PhiSpy analysis.")
 
-subparser_MGE.set_defaults(func=BacterialTyper.modules.MGE.run)
+subparser_MGE.set_defaults(func=BacterialTyper.modules.MGE.run_MGE)
 ##-------------------------------------------------------------##
 
 
@@ -510,7 +510,7 @@ info_group_cluster.add_argument("--help_format", action="store_true", help="Show
 info_group_cluster.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
 info_group_cluster.add_argument("--help_Mash", action="store_true", help="Print further information for Mash analysis.")
 
-subparser_cluster.set_defaults(func=BacterialTyper.modules.cluster.run)
+subparser_cluster.set_defaults(func=BacterialTyper.modules.cluster.run_cluster)
 ##-------------------------------------------------------------##
 
 
@@ -521,7 +521,7 @@ subparser_space = subparsers.add_parser(' ', help='')
 #############################
 #### Additional messages ####
 #############################
-##------------------------------ help ---------------------- ##
+##------------------------------ Information help ---------------------- ##
 subparser_help = subparsers.add_parser(
     'info',
     help='Print additional information & help messages ',
@@ -540,7 +540,7 @@ subparser_help.add_argument("--help_KMA", action="store_true", help="Show additi
 subparser_help.add_argument("--help_input_MGE", action="store_true", help="Print further information for input options under MGE module.")
 subparser_help.add_argument("--help_MGE_analysis", action="store_true", help="Print further information for Mobile Genetic Element module analysis.")
 subparser_help.add_argument("--help_PhiSpy", action="store_true", help="Print further information for PhiSpy analysis.")
-subparser_help.set_defaults(func=BacterialTyper.modules.info.run)
+subparser_help.set_defaults(func=BacterialTyper.modules.help_info.run_info)
 ##-------------------------------------------------------------##
 
 ##-------------------------- version ------------------------- ##

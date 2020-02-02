@@ -217,6 +217,7 @@ used for links and references.  These docstrings eventually populate files in
 :file:`docs/api` directory and form the reference documentation for the
 library.
 
+
 Example docstring
 -----------------
 
@@ -224,42 +225,28 @@ An example docstring looks like:
 
 .. code-block:: python
 
-    def hlines(xmin, xmax, colors='k', linestyles='solid',
-               label='', **kwargs):
-        """
-        Plot horizontal lines at each *y* from *xmin* to *xmax*.
+   """
+   def rename_fasta_seqs(fasta_file, name, new_fasta):
+   
+      Rename fasta sequences provided in file :file:`fasta_file` using id :file:`name`. Save results in file :file:`new_fasta` provided.
+      
+      Check for id character lenght do not exceed 37 characters as it might be a limitiation in further annotation and subsequent analysis. Read Prokka_ issue for further details: https://github.com/tseemann/prokka/issues/337.
+      
+      :param fasta_file: Absolute path to fasta file.
+      :type fasta_file: string
+      :param name: String to add every fasta sequence header.
+      :type name: string
+      :param new_fasta: Name for the new fasta file (Absolute path).
+      :type new_fasta: string
+      :return: Path to tabular delimited file containing conversion from all to new id for each sequence.
+      :warnings: Returns FAIL if name is >37 characters.
+      
+      .. include:: ../../links.inc
+      """     
+   
+See some other example in https://matplotlib.org/devel/documenting_mpl.html#example-docstring
 
-        Parameters
-        ----------
-        y : float or array-like
-            y-indexes where to plot the lines.
-
-        xmin, xmax : float or array-like
-            Respective beginning and end of each line. If scalars are
-            provided, all lines will have the same length.
-
-        colors : array-like of colors, default: 'k'
-
-        linestyles : {'solid', 'dashed', 'dashdot', 'dotted'}, default: 'solid'
-
-        label : str, default: ''
-
-        Returns
-        -------
-        lines : `~matplotlib.collections.LineCollection`
-
-        Other Parameters
-        ----------------
-        **kwargs : `~matplotlib.collections.LineCollection` properties
-
-        See also
-        --------
-        vlines : vertical lines
-        axhline: horizontal line across the axes
-        """
-
-See original example in https://matplotlib.org/devel/documenting_mpl.html#example-docstring
-
+Check and example for python documentation here: https://thomas-cokelaer.info/tutorials/sphinx/index.html
 
 .. ## Include linksReferences
 .. include:: ../links.inc

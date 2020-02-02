@@ -29,7 +29,7 @@ from BacterialTyper.modules import MGE
 from BacterialTyper import min_hash_caller
 
 ##########################
-def run(options):
+def run_info(options):
 
 	## project help
 	if (options.help_project):

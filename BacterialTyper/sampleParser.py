@@ -131,7 +131,7 @@ def get_fields(file_name_list, pair=True, Debug=False):
 	return (name_frame)
 
 ###############
-def select_samples (list_samples, samples_prefix, pair=True, exclude=False, merge=False, Debug=False):
+def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debug=False):
     
     #Get all files in the folder "path_to_samples"    
 	sample_list = []
@@ -347,6 +347,126 @@ def one_file_per_sample(dataFrame, outdir_dict, threads, outdir, Debug=False):
 ###############
 def help_options():
 	print ("\nUSAGE:\npython %s in_folder out_folder threads\n"  %os.path.abspath(sys.argv[0]))
+
+################################
+def get_files(options, input_dir, mode, extension):
+	
+	## get list of input files
+	files = []
+	
+	print ()
+	functions.print_sepLine("-",50, False)
+	print ('+ Getting files from input folder... ')
+	print ('+ Mode: ', mode,'. Extension:', extension)
+	if (options.project):
+		### a folder containing a project is provided
+		if os.path.exists(input_dir):
+			#print ('+ Input folder exists')
+			## get files in folder
+			files = []
+			for ext in extension:
+				if mode == 'trim':
+					files_tmp = functions.get_fullpath_list(input_dir)
+					files = [s for s in files_tmp if ext in s]
+				else:
+					files_tmp = functions.retrieve_matching_files(input_dir, ext)				
+					files.extend(files_tmp)
+			
+			files = set(files)
+			
+		else:
+			## input folder does not exist...
+			if (options.debug):
+				print (colored("\n**DEBUG: sample_prepare.get_files input folder does not exists **", 'yellow'))
+				print (input_dir)
+				print ("\n")
+			
+			print (colored('***ERROR: input folder does not exist or it is not readable', 'red'))
+			exit()
+						
+	else:
+		### provide a single folder or a file with multiple paths (option batch)
+		if (options.batch):
+			if os.path.isfile(input_dir):
+				dir_list = [line.rstrip('\n') for line in open(input_dir)]
+				for d in dir_list:
+					if os.path.exists(d):
+						print ('+ Folder (%s) exists' %d)
+						files = files + functions.get_fullpath_list(d)
+					else:
+						## input folder does not exist...
+						if (options.debug):
+							print (colored("\n**DEBUG: sample_prepare.get_files batch option; input folder does not exists **", 'yellow'))
+							print (d)
+							print ("\n")
+						
+		else:
+			if os.path.exists(input_dir):
+				print ('+ Input folder exists')
+				## get files in folder
+				files = functions.get_fullpath_list(input_dir)
+			else:
+				## input folder does not exist...
+				if (options.debug):
+					print (colored("\n**DEBUG: sample_prepare.get_files input folder does not exists **", 'yellow'))
+					print (input_dir)
+					print ("\n")
+	
+				print (colored('***ERROR: input folder does not exist or it is not readable', 'red'))
+				exit()
+
+	## get list of samples
+	samples_names = []
+	exclude=False
+
+	if (options.in_sample):
+		in_file = os.path.abspath(options.in_sample)
+		samples_names = [line.rstrip('\n') for line in open(in_file)]
+		print ('+ Retrieve selected samples to obtain from the list files available.')		
+		exclude=False
+
+		## in sample list...
+		if (options.debug):
+			print (colored("\n**DEBUG: sample_prepare.get_files include sample list **", 'yellow'))
+			print (samples_names, '\n')
+
+
+	elif (options.ex_sample):
+		ex_file = os.path.abspath(options.ex_sample)
+		samples_names = [line.rstrip('\n') for line in open(ex_file)]
+		print ('+ Retrieve selected samples to exclude from the list files available.')		
+		exclude=True
+
+		## in sample list...
+		if (options.debug):
+			print (colored("\n**DEBUG: sample_prepare.get_files exclude sample list **", 'yellow'))
+			print (samples_names, '\n')
+
+	else:
+		samples_names = ['.*']
+
+	## discard some files obtain
+	files = [s for s in files if 'single_copy_busco_sequences' not in s]
+	files = [s for s in files if 'orphan' not in s]
+	files = [s for s in files if 'augustus_output' not in s]
+	files = [s for s in files if 'hmmer_output' not in s]
+	files = [s for s in files if 'configs' not in s]
+	files = [s for s in files if '00.0_0.cor.fastq.gz' not in s]
+	files = [s for s in files if 'report_summary' not in s]
+		
+	## files list...
+	if (options.debug):
+		print (colored("\n**DEBUG: sample_prepare.get_files files list to check **", 'yellow'))
+		##print ('DO NOT PRINT THIS LIST: It could be very large...')
+		print (files, '\n')
+
+	## get information
+	if mode in ['fastq', 'trim']:
+		pd_samples_retrieved = select_samples(files, samples_names, options.pair, exclude, options.debug)
+	else:
+		pd_samples_retrieved = select_other_samples(options.project, files, samples_names, mode, extension, exclude, options.debug)		
+		
+	return(pd_samples_retrieved)
 
 ######
 def main():

@@ -4,8 +4,8 @@
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
 '''
-Prepares the database information for further analysis.
-Several functions are implemented for:
+Prepares the database information for further analysis. Several functions are implemented for:
+	
 	- Project data provided, updates/populates the database of interest
 
 '''
@@ -27,15 +27,54 @@ import concurrent.futures
 from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import species_identification_KMA
-from BacterialTyper.modules import sample_prepare
 from BacterialTyper import min_hash_caller
 from BacterialTyper import database_generator
+from BacterialTyper import sampleParser
 
 ##########################################################################################
 def update_database_user_data(database_folder, project_folder, Debug, options):
+	"""
+	Updates user_data folder within the database folder provided.
+	
+	It would generate single subfolder for each sample previously analyzed and it would store main information and result files for later interpretation, comparison and/or summarization with new samples analyzed.
+	
+	:param database_folder:
+	:param project_folder:
+	:param Debug:
+	:param options:
+	
+	:type database_folder:
+	:type project_folder:
+	:type Debug:
+	:type options:
+	
+	:returns: Updated database result from :func:`BacterialTyper.database_generator.update_db_data_file`.
+	:rtype: Dataframe
+	
+	:warnings: Returns **FAIL** if check process failed.
+	
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.create_subfolder`
+		
+		- :func:`BacterialTyper.functions.get_data`
+		
+		- :func:`BacterialTyper.functions.optimize_threads`
+		
+		- :func:`BacterialTyper.database_user.get_userData_files`
+		
+		- :func:`BacterialTyper.database_user.update_sample`
+		
+		- :func:`BacterialTyper.database_generator.getdbs`
+		
+		- :func:`BacterialTyper.database_generator.get_database`
+		
+		- :func:`BacterialTyper.database_generator.update_db_data_file`
 
-	print ("\n+ Updating information from user data folder:")
-	print (project_folder)
+	"""
+	
+	print ("\n+ Updating information from user data folder: ", project_folder)
 	
 	## create folder
 	own_data = functions.create_subfolder("user_data", database_folder)
@@ -58,9 +97,19 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 	
 	## merge data
 	project_all_data = pd.concat([project_data_df, project_info_df], join='inner', sort=True).drop_duplicates()
+	project_all_data.index.name = 'name'
 
-	## read database 
-	print ()
+	## debug messages:
+	if Debug:
+		print("project_data_df")
+		print(project_data_df)
+		
+		print("project_info_df")
+		print(project_info_df)
+
+		print("project_all_data")
+		print(project_all_data)
+	
 	functions.print_sepLine("-", 75, False)
 	print ('\n+ Get database information')
 	db_frame = database_generator.getdbs('user_data', database_folder, 'user_data', Debug)
@@ -118,7 +167,8 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 				print (colored("**DEBUG: dataGot dataframe **", 'yellow'))
 				print (dataGot)
 	
-			user_data_db = pd.concat([user_data_db, dataGot], join='inner', sort=True).drop_duplicates()
+			user_data_db = pd.concat([user_data_db, dataGot], join='outer', sort=True).drop_duplicates()
+			## concatenating by outer we get all available entries
 
 	if (options.debug):
 		print (colored("**DEBUG: user_data_db dataframe **", 'yellow'))
@@ -141,15 +191,15 @@ def get_userData_files(options, project_folder):
 	## get information regarding files
 
 	## get assembly files
-	pd_samples_assembly = sample_prepare.get_files(options, project_folder, "assembly", "fna")
+	pd_samples_assembly = sampleParser.get_files(options, project_folder, "assembly", "fna")
 	pd_samples_assembly = pd_samples_assembly.set_index('name')
 
 	## get annotation files
-	pd_samples_annot = sample_prepare.get_files(options, project_folder, "annot", ['gbf', 'faa', 'gff'])
+	pd_samples_annot = sampleParser.get_files(options, project_folder, "annot", ['gbf', 'faa', 'gff'])
 	pd_samples_annot = pd_samples_annot.set_index('name')
 
 	## get trimmed ngs files
-	pd_samples_reads = sample_prepare.get_files(options, project_folder, "trim", ['_trim_'])
+	pd_samples_reads = sampleParser.get_files(options, project_folder, "trim", ['_trim_'])
 	pd_samples_reads = pd_samples_reads.set_index('name')
 
 	## debug message
@@ -176,17 +226,17 @@ def get_userData_info(options, project_folder):
 		## additional information: MGE, etc
 
 	## get profile information
-	pd_samples_profile = sample_prepare.get_files(options, project_folder, "profile", ["csv"])
+	pd_samples_profile = sampleParser.get_files(options, project_folder, "profile", ["csv"])
 	if not pd_samples_profile.empty:
 		pd_samples_profile = pd_samples_profile.set_index('name')
 
 	## get identification information
-	pd_samples_ident = sample_prepare.get_files(options, project_folder, "ident", ["csv"])
+	pd_samples_ident = sampleParser.get_files(options, project_folder, "ident", ["csv"])
 	if not pd_samples_ident.empty:
 		pd_samples_ident = pd_samples_ident.set_index('name')
 	
 	## get mash information
-	pd_samples_mash = sample_prepare.get_files(options, project_folder, "mash", ["sig"])
+	pd_samples_mash = sampleParser.get_files(options, project_folder, "mash", ["sig"])
 	if not pd_samples_mash.empty:
 		pd_samples_mash = pd_samples_mash.set_index('name')
 

@@ -1,0 +1,3 @@
+,sample,genus,species,strain,BioSample,genome,Plasmids
+0,sample1,Genus,specie1,strain1,SAMN0XXXXX,GCA_YYYYYYYYY.1,NZ_ZZZZZZZZ.1
+1,sample2,Genus,specie2,strain2,SAMN1XXXXX,GCA_XXXXXXXXX.1,"NZ_ZZZZZZZZ.1,NZ_WWWWWWWW.1"

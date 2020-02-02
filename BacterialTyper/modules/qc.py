@@ -19,17 +19,16 @@ import shutil
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper.modules import sample_prepare
 from BacterialTyper import fastqc_caller
 from BacterialTyper import sampleParser
 from BacterialTyper import multiQC_report
 from BacterialTyper import BUSCO_caller
 from BacterialTyper import functions
 from BacterialTyper import config
-from BacterialTyper.modules import info
+from BacterialTyper.modules import help_info
 
 ################################################
-def run(options):
+def run_QC(options):
 
 	## init time
 	start_time_total = time.time()
@@ -47,7 +46,7 @@ def run(options):
 		exit()
 	elif (options.help_project):
 		## information for project
-		info.project_help()
+		help_info.project_help()
 		exit()
 	elif (options.help_multiqc):
 		## information for Multiqc
@@ -97,7 +96,7 @@ def fastqc(input_dir, outdir, options, start_time_total):
 	functions.boxymcboxface("FASTQC Quality check for samples")
 	
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
+	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
 	
 	## debug message
 	if (Debug):
@@ -190,7 +189,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 
 	## get files and get dir for each sample according to mode
 	if mode == 'genome':
-		pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "assembly", "fna")
+		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", "fna")
 
 		if not options.project:
 			outdir = functions.create_subfolder("assembly_qc", outdir)
@@ -198,7 +197,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		BUSCO_outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "assemble_qc")
 
 	elif mode == 'proteins':
-		pd_samples_retrieved = sample_prepare.get_files(options, outdir, "annot", ["faa"]) ##
+		pd_samples_retrieved = sampleParser.get_files(options, outdir, "annot", ["faa"]) ##
 
 		if not options.project:
 			outdir = functions.create_subfolder("annot_qc", outdir)

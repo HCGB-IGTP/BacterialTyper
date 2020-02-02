@@ -19,11 +19,10 @@ from termcolor import colored
 ## import my modules
 from BacterialTyper import trimmomatic_call
 from BacterialTyper import multiQC_report
-from BacterialTyper.modules import sample_prepare
 from BacterialTyper import sampleParser
 from BacterialTyper import functions
 from BacterialTyper import config
-from BacterialTyper.modules import info
+from BacterialTyper.modules import help_info
 
 ##############################################
 def run(options):
@@ -44,7 +43,7 @@ def run(options):
 		exit()
 	elif (options.help_project):
 		## information for project
-		info.project_help()
+		help_info.project_help()
 		exit()
 	elif (options.help_multiqc):
 		## information for Multiqc
@@ -80,7 +79,7 @@ def run(options):
 		outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sample_prepare.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
+	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
 	
 	## debug message
 	if (Debug):

@@ -114,25 +114,40 @@ def update_MLSTar_profile_alleles():
 ##########################################
 def get_MLSTar_species(genus, species):
 
-	## This needs manual curation of the list of species included. 
-	## Update it periodically
+	"""
+	Retrieve the correct name within `PubMLST databases`_ for the given species and/or genus specified.
+	
+	:param genus: Genus name.
+	:param species: Species name.
+	:type genus: string
+	:type species: string
 
+	:returns: Name in the PubMLST database for the taxa of interest. Returns `NaN` if not available. 
+	
+	Available datasets are stored in file :file:`/data/PubMLST_datasets.csv`. See available :doc:`PubMLST datasets<../../../data/PubMLST_datasets>`.
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.data.data_files.data_list`
+	
+	"""
+	
 	## MLSTar available data
-	MLSTar_species = data_files.data_list("MLSTar_species")
+	MLSTar_species = data_files.data_list("PubMLST_datasets")
 	
 	# pandas from csv file
-	data = pd.read_csv(MLSTar_species, header=0, sep=",")
+	data = pd.read_csv(MLSTar_species, names=["Kingdom","name","Species"], sep=",")
 	
 	## check if name matches	
 	taxa_name = genus + ' ' + species
-	sp_exists = data.loc[data["Species description"] == taxa_name]['MLSTar name']
+	sp_exists = data.loc[data["Species"] == taxa_name]['name']
 	if not sp_exists.empty: ## check if exists
 		return (sp_exists.values[0])
 	else:
 		## TODO: Check if it works
 		## Check if there is a genus entry in database
 		genus_name = genus + ' spp.'
-		genus_exist = data.loc[data["Species description"] == genus_name]['MLSTar name']
+		genus_exist = data.loc[data["Species"] == genus_name]['name']
 
 		if not genus_exist.empty: ## check if exists
 			return (genus_exist.values[0])
@@ -142,7 +157,35 @@ def get_MLSTar_species(genus, species):
 	return ('NaN')
 		
 ##########################################
-def getPUBMLST(species, rscript, out_name):	
+def getPUBMLST(species, out_name):
+	"""
+	Using `MLSTar software`_ retrieve for the given `species` the available schemes in PubMLST_.  
+
+	It generates information in file `out_name` in csv format. 
+	
+	See example in :file:`/devel/results/getPubMLST_example.csv`
+	
+	.. include:: ../../devel/results/getPubMLST_example.csv
+		:literal:
+	   
+	:param species: Sample name or tag to identify sample
+	:param rscript: Path to Rscript to generate system call.
+	:param out_name: Output file to generate profile information.
+
+	:type species: string
+	:type rscript: string
+	:type out_name: string
+
+	:return: OK/FAIL
+	:warnings: Returns **FAIL** if process stopped.
+	
+	.. include:: ../../links.inc
+
+	"""
+	
+	MLSTarR_getpubmlst = tools.R_scripts('MLSTar_getpubmlst')
+
+	
 	## species is a comma separated string
 	#MLSTar_getpubmlst
 	cmd_getPUBMLST = "%s %s --species %s --output %s 2> /dev/null" %(rscript, MLSTarR_getpubmlst, species, out_name)

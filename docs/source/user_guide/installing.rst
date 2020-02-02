@@ -1,3 +1,4 @@
+.. ################################################
 .. _installing:
 
 Installation
@@ -17,6 +18,7 @@ We encourage you to create a virtual environment before installing BacterialType
     If you wish to contribute to the project, it's recommended you
        :ref:`install the latest development version<install-from-source>`.
 
+.. ################################################
 .. _virtual-env-BacterialTyper:
 
 Python environment
@@ -34,7 +36,9 @@ To do so, run :file:`config/main/python_environment-commands.sh`, which is shown
 .. include:: ../../../config/main/python_environment-commands.sh
    :literal:
    
-Execute the file from the directory :file:`BacterialTyper/` as::
+Execute the file from the directory :file:`BacterialTyper/` as:
+
+.. code-block:: sh
 
    sh config/main/python_environment-commands.sh
    
@@ -51,8 +55,46 @@ To do so, run :file:`config/main/activate_environment.sh`, which is shown below:
 .. include:: ../../../config/main/activate_environment.sh
    :literal:
 
-Execute the file from the directory :file:`BacterialTyper/` as::
+Execute the file from the directory :file:`BacterialTyper/` as:
+
+.. code-block:: sh
+  
    sh config/main/activate_environment.sh
+
+.. ################################################
+.. _perl_packages:
+
+Perl packages
+=============
+
+.. ################################################
+.. perl-libs:
+
+Check perl dependencies
+-----------------------
+Check perl depencies in file :file:`config/main/perl_lib_dependencies.csv`, which is shown below:
+
+.. csv-table::
+   :header: "Package", "URL"
+   :file: ../../../config/main/perl_lib_dependencies.csv
+
+.. ################################################
+.. _install-perl_packages:
+
+Install perl packages
+---------------------
+
+There is shell script available for the perl package modules installation (file :file:`config/main/perl_lib_installer.sh`). 
+
+.. include:: ../../../config/main/perl_lib_installer.sh
+   :literal:
+ 
+Execute the file from the directory :file:`BacterialTyper/` as:
+
+.. code-block:: sh
+
+   sh config/main/perl_lib_installer.sh
+   
 
 .. ################################################
 .. _install-BacterialTyper:
@@ -74,17 +116,20 @@ Requirements and dependencies
 -----------------------------
 
 There are several extra python module requirements that are needed. 
-They are listed in :file:`config/main/python_requirements.txt`, which is shown below:
+They are listed in :file:`config/main/python_requirements.txt` and summarized in the following table:
 
-.. include:: ../../../config/main/python_requirements.txt
-   :literal:
+.. csv-table::
+   :header: "Package", "Version"
+   :file: ../../../config/main/python_requirements.csv
    
 Additionally, several third-party software packages are also required. 
 They are listed in :file:`config/main/DEPENDENCIES`, which is shown below:
 
-.. include:: ../../../config/main/DEPENDENCIES
-   :literal:
 
+.. csv-table::
+   :header: "Third Party software"
+   :file: ../../../config/main/DEPENDENCIES
+   
 .. ################################################
 .. _install-from-pip:
 
@@ -93,7 +138,10 @@ Installing from pip
 
 Follow the `pip installing instructions`_ to learn about installing packages.
 
-Type::
+Type:
+
+.. code-block:: sh
+
    python -m pip install BacterialTyper
 
 .. ################################################

@@ -22,6 +22,7 @@ __all__ = [
 	'extern_progs',
 	'fastqc_caller',
 	'functions',
+	'genomic_island',
 	'MLSTar',
 	'min_hash_caller',
 	'modules',

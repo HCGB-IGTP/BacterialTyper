@@ -30,6 +30,7 @@ import shutil
 
 ## import my modules
 from BacterialTyper import config
+from BacterialTyper.other_tools import tools
 
 ########################################################################
 ######## 					TIME								######## 					
@@ -95,6 +96,7 @@ def create_human_timestamp():
 	now = datetime.now()
 	timeprint = now.strftime("%Y%m%d")
 	return timeprint
+###############
 
 ############################################################################
 ######## 					FILES/FOLDERS							######## 					
@@ -214,27 +216,36 @@ def readList_fromFile(fileGiven):
 
 ######
 def retrieve_matching_files(folder, string):
+	"""Lists folder path provided and given a string to search, returns all files ending with the given string"""
 	my_all_list = get_fullpath_list(folder)
 	matching = [s for s in my_all_list if s.endswith(string)]
 	return (matching)
 	
 #####
-def file2dictionary(file2read):
+def file2dictionary(file2read, split_char):
+	"""Read file and generate a dictionary"""
 	d = {}
 	with open(file2read) as f:
 		for line in f:
-			(key, val) = line.split()
+			(key, val) = line.split(split_char)
 			d[key] = val
 
 	return(d)
 	
+def file2dataframe(file2read, names):
+	"""Read csv file into pandas dataframe"""
+	d = pd.read_csv(file2read, comment="#", names=names)
+	return(d)
+
+
 	
 ########################################################################
 ######## 					system call							######## 					
 ########################################################################
 
 ###############
-def system_call(cmd):	
+def system_call(cmd):
+	"""Generates system call using subprocess.check_output"""
 	## call system
 	## send command
 	print (colored("[** System: %s **]" % cmd, 'green'))
@@ -326,6 +337,54 @@ def subset_fasta(ident, fasta, out):
 			output_FASTA.write(head)
 			output_FASTA.write(str(record.seq))
 			output_FASTA.write("\n")
+	
+	output_FASTA.close()
+
+###############
+def rename_fasta_seqs(fasta_file, name, new_fasta):
+	"""Rename fasta sequences provided in file :file:`fasta_file` using id :file:`name`. Save results in file :file:`new_fasta` provided.
+	
+	Check for id character lenght do not exceed 37 characters as it might be a limitiation in further annotation and subsequent analysis. Read Prokka_ issue for further details: https://github.com/tseemann/prokka/issues/337.
+	
+	:param fasta_file: Absolute path to fasta file.
+	:type fasta_file: string
+	:param name: String to add every fasta sequence header.
+	:type name: string
+	:param new_fasta: Name for the new fasta file (Absolute path).
+	:type new_fasta: string
+	:return: Path to tabular delimited file containing conversion from all to new id for each sequence.
+	:warnings: Returns FAIL if name is >37 characters.
+	
+	.. include:: ../../links.inc	 	
+	"""
+
+	output_FASTA = open(new_fasta, 'w')
+	id_conversion = open(new_fasta + "_conversionID.txt", 'w')
+	
+	if len(name) > 37:
+		print (colored("** ERROR **", 'red'))
+		print (colored("BacterialTyper.functions.rename_fasta_seqs():: name id is > 37 characters.", 'red'))
+		print (colored("** ERROR **", 'red'))
+		return ('FAIL')
+	
+	counter_seqs = 0
+	for record in SeqIO.parse(fasta_file, "fasta"):
+		old_id = record.description
+		counter_seqs += 1
+		new_id = name + "_" + str(counter_seqs)
+		head = ">" + new_id + "\n"
+		output_FASTA.write(head)
+		output_FASTA.write(str(record.seq))
+		output_FASTA.write("\n")
+		
+		id_conversion.write(old_id + "\t" + new_id)
+		id_conversion.write("\n")
+	
+	output_FASTA.close()
+	id_conversion.close()
+		
+	return (new_fasta + "_conversionID.txt")
+	
 
 ############################################################################
 ######## 					AESTHETICS								######## 					
@@ -338,7 +397,7 @@ def pipeline_header():
 	print_sepLine("#", 70, False)
 	print('#', '{: ^66}'.format("BacterialTyper pipeline"), '#')
 	print('#', '{: ^66}'.format("Jose F. Sanchez, Cristina Prat & Lauro Sumoy"), '#')
-	print('#', '{: ^66}'.format("Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain"), '#')
+	print('#', '{: ^66}'.format("Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain"), '#')
 	print_sepLine("#", 70, False)
 
 ###############
