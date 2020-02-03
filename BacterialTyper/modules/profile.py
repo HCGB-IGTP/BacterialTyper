@@ -27,6 +27,7 @@ from BacterialTyper import database_generator
 from BacterialTyper import ariba_caller
 from BacterialTyper import card_trick_caller
 from BacterialTyper.modules import help_info
+from BacterialTyper import database_user
 
 ####################################
 def run_profile(options):
