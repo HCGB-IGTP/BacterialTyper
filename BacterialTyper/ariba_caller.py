@@ -3,9 +3,9 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
-Calls ARIBA software for several databases and custom dataset
-'''
+"""
+Calls ARIBA_ software for several databases and custom dataset.
+"""
 ## useful imports
 import time
 import io
@@ -23,21 +23,27 @@ from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper.modules import citation
 
-## General
-dbs = ["argannot", "card", "megares", "plasmidfinder", "resfinder", "srst2_argannot", "vfdb_core", "vfdb_full", "virulencefinder"]
-conversion_dbs = {
-	"ARG-ANNOT":"argannot", 
-	"CARD":"card", 
-	"MEGARes":"megares", 
-	"PlasmidFinder":"plasmidfinder", 
-	"ResFinder":"resfinder", 
-	"srst2":"srst2_argannot", 
-	"VFDB":"vfdb_full", 
-	"VirulenceFinder":"virulencefinder"
-}
-
 ############################################################### 
 def get_ARIBA_dbs(list_dbs):
+
+	## General
+	dbs = [
+		"argannot", "card", "megares", 
+		"plasmidfinder", "resfinder", 
+		"srst2_argannot", "vfdb_core", 
+		"vfdb_full", "virulencefinder"]
+	
+	conversion_dbs = {
+		"ARG-ANNOT":"argannot", 
+		"CARD":"card", 
+		"MEGARes":"megares", 
+		"PlasmidFinder":"plasmidfinder", 
+		"ResFinder":"resfinder", 
+		"srst2":"srst2_argannot", 
+		"VFDB":"vfdb_full", 
+		"VirulenceFinder":"virulencefinder"
+	}
+	
 	db2returns = []
 	for i in list_dbs:
 		if (conversion_dbs[i] in dbs):
@@ -130,6 +136,20 @@ def download_ariba_databases(list_dbs, main_folder, Debug, threads):
 
 ##########
 def check_db_indexed(folder, option):
+	"""Check if ARIBA_ database is indexed.
+	
+	In the given folder it looks for '00.info.txt' file.
+	
+	:param folder: Absolute path to database folder.
+	:param option: Whether to print more information messages or not [Yes/No]. 
+	
+	:type folder: string 
+	:type option: string
+	:returns: Boolean True/False.
+	 
+	.. include:: ../../links.inc
+	"""
+	
 	# get databases downloaded
 	#lineList = [line.rstrip('\n') for line in open(folder + '../../' + 'ARIBA_information.txt')]
 

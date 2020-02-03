@@ -1,4 +1,4 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 '''
 This code generates a bacteriophage identification profile for each sample
 Jose F. Sanchez
@@ -122,5 +122,3 @@ def main():
 '''******************************************'''
 if __name__== "__main__":
 	main()
-
-
