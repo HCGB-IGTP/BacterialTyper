@@ -365,7 +365,7 @@ def check_results(db2use, outdir_sample, assembly_cutoff, card_trick_info):
 	"""
 	.. seealso:: Additional information to ARIBA results generated.
 	
-		- :doc:`ARIBA results explained <../../../data/ARIBA_explained>`
+		- :ref:`ARIBA-explained`
 	
 	"""
 	
@@ -415,8 +415,7 @@ def results_parser(database, folderResults, sampleName, outfolder, assembly_cuto
 	"""
 	.. seealso:: Additional information to ARIBA results generated.
 	
-		- :doc:`ARIBA results explained <../../../data/ARIBA_explained>`
-	
+		- :ref:`ARIBA-explained`
 	"""
 	
 	## 
@@ -632,4 +631,6 @@ def help_options():
 '''******************************************'''
 if __name__== "__main__":
 	main()
-		
+
+## http://www.mgc.ac.cn/cgi-bin/VFs/gene.cgi?GeneID=VFG049753
+## http://www.mgc.ac.cn/cgi-bin/VFs/vfs.cgi?VFID=VF0403#VF0403

@@ -1,0 +1,5 @@
+[13:45:11] Looking for databases in: /software/prokka-1.12/bin/../db
+[13:45:11] * Kingdoms: Archaea Bacteria Mitochondria Viruses
+[13:45:11] * Genera: Enterococcus Escherichia Staphylococcus
+[13:45:11] * HMMs: HAMAP
+[13:45:11] * CMs: Bacteria Viruses

@@ -206,7 +206,7 @@ will give the following link: :ref:`assembly-workflow`
 .. _writing-docstrings:
 
 Writing docstrings
-==================
+------------------
 
 Most of the API documentation is written in docstrings. These are comment
 blocks in source code that explain how the code works.
@@ -219,7 +219,7 @@ library.
 
 
 Example docstring
------------------
+^^^^^^^^^^^^^^^^^
 
 An example docstring looks like:
 

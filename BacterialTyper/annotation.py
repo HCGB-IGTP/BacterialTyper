@@ -131,6 +131,11 @@ def prokka_call(prokka_bin, sequence_fasta, kingdom, genus, outdir_name, name, t
 	:type name: string 
 	:type threads: integer 
 	
+	.. seealso:: Check description of output files generated in:
+	
+		- :ref:`Prokka-output-files`
+
+
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
 		- :func:`BacterialTyper.functions.config_exe`
