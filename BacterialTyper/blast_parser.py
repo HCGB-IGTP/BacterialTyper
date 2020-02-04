@@ -3,6 +3,8 @@
 ## Jose F. Sanchez                                      ##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain      ##
 ##                                                      ## 
+##########################################################
+##                                                      ## 
 ## Original version credit for:                         ## 
 ## https://gist.github.com/aziele/e060d1c0d1ef2acb4bd67e2fc0f165a6
 ## https://www.biostars.org/p/253984/
@@ -12,30 +14,38 @@
 ##                                                      ## 
 ##########################################################
 
-'''
-Parses BLAST output lists (in -outfmt '6 std qlen slen' format).
-'''
+"""
+Script that parses BLAST output lists (in -outfmt '6 std qlen slen' format).
+
+The original version was retrieved from:  
+
+- https://gist.github.com/aziele/e060d1c0d1ef2acb4bd67e2fc0f165a6
+
+- https://www.biostars.org/p/253984/
+
+New implementation required query length (qlen) and subject lenght (slen) in the BLAST format input file. It allows to parse for alignment & length threshold. 
+
+"""
+
 from itertools import groupby
 
 class Hsp:
     """Store information about single HSP in an alignment hit. 
-    Members: 
-    qid       Query Id
-    sid       Subject Id
-    pident    Percentage of identical matches
-    length    Alignment length
-    mismatch  Number of mismatches
-    gaps      Total number of gaps
-    qstart    Start of alignment in query
-    qend      End of alignment in query
-    sstart    Start of alignment in subject
-    send      End of alignment in subject
-    evalue    Expect value
-    bitscore  Bit score
-
-	Additional:
-	qlen	  Query length
-	slen	  Subject length
+    
+    :param qid: Query Id
+    :param sid: Subject Id
+    :param pident: Percentage of identical matches
+    :param length: Alignment length
+    :param mismatch: Number of mismatches
+    :param gaps: Total number of gaps
+    :param qstart: Start of alignment in query
+    :param qend: End of alignment in query
+    :param sstart: Start of alignment in subject
+    :param send: End of alignment in subject
+    :param evalue: Expect value
+    :param bitscore: Bit score
+	:param qlen: Query length
+	:param slen: Subject length
     """
 
     def __init__(self,entry):
@@ -82,9 +92,9 @@ class Hsp:
 
 class BlastRecord:
     """Object representing a Blast Record. 
-    Arguments: 
-    qid       - Query sequence id
-    hits      - Blast hits
+    
+    :param qid: Query sequence id
+    :param hits: Blast hits
     """
 
     def __init__(self, qid=None, hits=None):
@@ -174,11 +184,19 @@ class BlastRecord:
 #This is a generator function!
 def parse(handle, eval_thresh=10, aln_thresh=0, length_thresh=0):
      """Generator function to iterate over Blast records.
-     Arguments: 
-     handle      - input file handle containg Blast tabular output -outfmt '6 std qlen slen'
-     eval_thresh - E-value cutoff for Blast results. (1-eX)
-     aln_thresh	 - Alingment cutoff (%)
-     length_thresh - Cutoff for a given length provided (bp)
+     
+     :param handle: input file handle containg Blast tabular output -outfmt '6 std qlen slen'
+     :param eval_thresh: E-value cutoff for Blast results. (1-eX)
+     :param aln_thresh: Alingment cutoff (%)
+     :param length_thresh: Cutoff for a given length provided (bp)
+     
+     :type handle: string
+     :type eval_thresh: integer
+     :type aln_thresh: integer
+     :type length_thresh: integer
+     
+     :returns: BlastRecord objetct.
+     
      """
      for qid, blasts in groupby(handle, lambda l: l.split()[0]):
          hits = []

@@ -7,8 +7,8 @@
 It generates a protein annotation using Prokka_ for the genomes assembled generated
 
 Prokka_ contains several databases with known parameters for several kingdom and genus. Prokka option `--usegenus` is set as default.
-	Several options are available for kingdom and genus. See details below and see output from :code:`prokka --listdb`
-	shown in :func:`BacterialTyper.annotation.print_list_prokka`.If no genus matches user desired option, use option "Other".
+Several options are available for kingdom and genus. See details below and see output from :code:`prokka --listdb`
+shown in :func:`BacterialTyper.annotation.print_list_prokka`.If no genus matches user desired option, use option "Other".
 
 .. include:: ../../links.inc	 	
 """
