@@ -48,20 +48,34 @@ def helpMash():
 
 ##################################################		
 def sketch_database(dict_files, folder, Debug, ksize_n, num_sketch):	
-	#################################################
-	## code taken and adapted from: 
-	##	https://sourmash.readthedocs.io/en/latest/api-example.html
-	## 	https://github.com/dib-lab/sourmash/blob/master/sourmash/commands.py
-	#################################################
+	"""	
+	This function generates a sourmash index, also called sketch, of the sequences 
+	provided in the folder specified.
+	
+	For speed reasons, we set force=True in add_sequence step to skip over k-mers containing 
+	characters other than ACTG, rather than raising an exception.
 
-	'''''
-	This function generates a sourmash index, also called sketch, of the sequences provided via the dictionary
-	in the folder specified. 
-		dict_files = keys are the names of the files and values are the path to the fasta file
-		folder = abs path of folder	
-		Debug =True/False (for developing purposes only)
-
-	'''''	
+	:param dict_files: keys are the names of the files and values are the path to the fasta file
+	:param folder:
+	:param Debug: True/False to print developing messages.
+	:param ksize_n: Kmer size value.
+	:param num_sketch: Number of sketches to include in the hash signature. 
+	
+	:type dict_files: Dictionary
+	:type folder: string 
+	:type Debug: bool
+	:type ksize_n: integer
+	:type num_sketch: integet
+	
+	:returns: List of SourmashSignature signatures (siglist) and absolute path files generated (siglist_file).  
+	
+	This function depends on sourmash python module (https://sourmash.readthedocs.io/en/latest/). The code to implement this API function was taken and adapted from: 
+	 
+		- https://sourmash.readthedocs.io/en/latest/api-example.html
+	
+		- https://github.com/dib-lab/sourmash/blob/master/sourmash/commands.py
+	
+	"""
 	### Default: set as option
 	## num_sketch=5000
 	## ksize_n=31
