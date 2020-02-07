@@ -22,6 +22,8 @@ import pandas as pd
 from sys import argv
 from io import open
 from termcolor import colored
+from Bio import Phylo
+from io import StringIO
 
 ## import modules sourmash
 import csv
@@ -172,6 +174,26 @@ def compare(siglist, output, Debug):
 	return (D, labeltext_string)
 
 ##################################################
+def getNewick(node, newick, parentdist, leaf_names):
+	#################################################
+	## code taken and adapted from: 
+	## https://github.com/scipy/scipy/issues/8274
+	## https://stackoverflow.com/questions/28222179/save-dendrogram-to-newick-format/31878514#31878514
+	#################################################
+	
+	if node.is_leaf():
+		return "%s:%.2f%s" % (leaf_names[node.id], parentdist - node.dist, newick)
+	else:
+		if len(newick) > 0:
+			newick = "):%.2f%s" % (parentdist - node.dist, newick)
+		else:
+			newick = ");"
+		newick = getNewick(node.get_left(), newick, node.dist, leaf_names)
+		newick = getNewick(node.get_right(), ",%s" % (newick), node.dist, leaf_names)
+		newick = "(%s" % (newick)
+		return newick
+
+##################################################
 def plot(D, labeltext, filename, pdf, colorLabel):
 	#################################################
 	## code taken and adapted from: 
@@ -221,8 +243,8 @@ def plot(D, labeltext, filename, pdf, colorLabel):
 		#######################################
 
 	### Original code
-    ## fig = sourmash_fig.plot_composite_matrix(D, labeltext, show_labels=args.labels,
-    ##             show_indices=args.indices, vmin=args.vmin, vmax=args.vmax, force=args.force)
+	## fig = sourmash_fig.plot_composite_matrix(D, labeltext, show_labels=args.labels,
+	##			 show_indices=args.indices, vmin=args.vmin, vmax=args.vmax, force=args.force)
 	## I get code from the source code for this function and use it here.
 	## Get to generate a slightly different image representation
 
@@ -278,6 +300,7 @@ def plot(D, labeltext, filename, pdf, colorLabel):
 	pylab.colorbar(im, cax=axcolor)	
 	fig3.savefig(matrix_out)
 	print ('+ Wrote matrix to:', matrix_out)
+	return(Y)
 	
 ##################################################
 def	help_options():
@@ -287,7 +310,7 @@ def	help_options():
 def main():
 	## this code runs when call as a single script
 
-  	## control if options provided or help
+	## control if options provided or help
 	if len(sys.argv) > 1:
 		print ("")
 	else:
@@ -304,7 +327,7 @@ def main():
 	## to do: implement main function
 	folder = "."
 	Debug = True
-	output = "test4"
+	output = "test"
 	pdf = True
 	
 	## Defaults
@@ -314,8 +337,24 @@ def main():
 	###
 	(siglist_file, siglist) = sketch_database(file_names_dict, folder, Debug, ksize_n, num_sketch)
 	(D, labeltext) = compare(siglist, output, Debug)
-	plot(D, labeltext, output, pdf, "")
-
+	Y = plot(D, labeltext, output, pdf, "")
+	tree = sch.to_tree(Y, False)
+	Newick_tree = getNewick(tree, "", D, labeltext)
+	
+	Newick_tree_file = output + '.nwk'
+	functions.printList2file(Newick_tree_file, [Newick_tree])
+	
+	handle = StringIO(Newick_tree)
+	treePhylo = Phylo.read(handle, "newick")
+	
+	leaves_tree = []
+	for leaf in treePhylo.get_terminals(): 
+		leaves_tree.append(leaf.name)
+		print (leaf.name)
+	
+	Newick_tree_leaves =  output + '.leaves.txt'
+	functions.printList2file(Newick_tree_leaves, leaves_tree)
+	
 
 ##################################################
 if __name__== "__main__":
