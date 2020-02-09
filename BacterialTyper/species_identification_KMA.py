@@ -4,7 +4,9 @@
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
 """
-Call KMA software to find the best match in reads file or fasta file in a (kmer) database produced using the KMA program 
+Call KMA_ software to find the best match in reads file or fasta file in a (kmer) database produced using the KMA program 
+
+.. include:: ../../links.inc 
 """
 ## useful imports
 import time
@@ -29,6 +31,9 @@ from BacterialTyper import ariba_caller
 
 ##################################################
 def help_kma_database():
+	"""
+	KMA_ software description message.
+	"""
 	## [TODO]
 	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
@@ -38,6 +43,18 @@ def help_kma_database():
 
 ##################################################
 def download_kma_database(folder, database, debug):
+	"""
+	
+	:param folder:
+	:param database:
+	:param string:
+	
+	:type folder:
+	:type database:
+	:type string:
+	
+	
+	"""
 
 	## types: bacteria, archaea, protozoa, fungi, plasmids, typestrains
 	## Default: downloads all "bacterial,plasmids" genomes from KMA website
@@ -187,6 +204,32 @@ def check_db_indexed(index_name, folder):
 	
 ##################################################
 def index_database(fileToIndex, kma_bin, index_name, option, folder, type_option):
+	"""
+	Calls KMA_ software to index fasta files into a database for later KMA identification.
+	
+	:param fileToIndex: Fasta file to include in the database.
+	:param kma_bin: Absolute path to kma executable binary. 
+	:param index_name: Name for the database.
+	:param option: Option to create or update a database.
+	:param folder: Absolute path to folder containing database.
+	:param type_option: Option to index the database with batch: batch [Default: Off].
+	
+	:type fileToIndex: string
+	:type kma_bin: string 
+	:type index_name: string 
+	:type option: string 
+	:type folder: string 
+	:type type_option: string 	 
+	
+	:returns: It returns message from :func:`BacterialTyper.species_identification_KMA.check_db_indexed`.
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.system_call`
+		
+		- :func:`BacterialTyper.species_identification_KMA.check_db_indexed`
+	
+	"""	
 	
 	########################################################################################
 	## 								KMA_index-1.2.2							
@@ -252,32 +295,36 @@ def index_database(fileToIndex, kma_bin, index_name, option, folder, type_option
 def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma_bin):
 	"""Generate a call to create or update index KMA databases for later kmer identification. 
 
-	Arguments:
-		file_abs_paths: list
-			List of absolute paths fasta genome files to include in the database.
-		
-		name: str
-			Database name
-		
-		fold_name: path
-			Directory path to store database generated.
-		
-		option: str
-			Generate a new database (option = 'new') or add to pre-existing database (option = 'add'). If database exists, automatically adds.
-		
-		type_option: str
-			Index genome fasta files one by one (option_type='single') or using a batch file containing multiple entries (option='batch').
-		
-		Debug: bool
-			True/False for debugging messages.
-		
-		kma_bin: path
-			Binary executable for KMA software
+	:param file_abs_paths: List of absolute paths fasta genome files to include in the database.
+	:param name: Database name.
+	:param fold_name: Directory path to store database generated.
+	:param option: Generate a new database (option = 'new') or add to pre-existing database (option = 'add'). If database exists, automatically adds.
+	:param type_option: Index genome fasta files one by one (option_type='single') or using a batch file containing multiple entries (option='batch').
+	:param kma_bin:	Binary executable for KMA software 
+	:param Debug: True/False for debugging messages.
 	
-	Returns:
-		Absolute path to database generated	
-	"""
+	:type file_abs_paths: list
+	:type name: string
+	:type fold_name: string
+	:type option: string
+	:type type_option: string 
+	:type kma_bin:
+	:type Debug: bool
+		
+	:returns: Absolute path to database generated
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.readList_fromFile`
+		
+		- :func:`BacterialTyper.functions.printList2file`
+		
+		- :func:`BacterialTyper.species_identification_KMA.check_db_indexed`
 
+		- :func:`BacterialTyper.species_identification_KMA.index_database`
+
+		
+	"""
 
 	print ('+ Updating the KMA database: ', name)			
 
