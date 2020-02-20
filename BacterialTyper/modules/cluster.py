@@ -236,7 +236,10 @@ def run_cluster(options):
 	
 	## plot images
 	pdf = True
-	min_hash_caller.plot(DataMatrix, labeltext, tag_cluster_info, pdf, colorLabels)
+	cluster_returned = min_hash_caller.plot(DataMatrix, labeltext, tag_cluster_info, pdf, colorLabels)
+	
+	## generate newick tree 
+	min_hash_caller.get_Newick_tree(cluster_returned, DataMatrix, labeltext, tag_cluster_info)	
 	
 
 ############################################################	

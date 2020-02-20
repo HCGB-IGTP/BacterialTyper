@@ -303,6 +303,24 @@ def plot(D, labeltext, filename, pdf, colorLabel):
 	return(Y)
 	
 ##################################################
+
+def get_Newick_tree(cluster_hierachy, DataMatrix, labeltext, output):
+	tree = sch.to_tree(cluster_hierachy, False)
+	Newick_tree = getNewick(tree, "", DataMatrix, labeltext)
+	
+	Newick_tree_file = output + '.nwk'
+	functions.printList2file(Newick_tree_file, [Newick_tree])
+	
+	handle = StringIO(Newick_tree)
+	treePhylo = Phylo.read(handle, "newick")
+	
+	leaves_tree = []
+	for leaf in treePhylo.get_terminals(): 
+		leaves_tree.append(leaf.name)
+	
+	Newick_tree_leaves =  output + '.leaves.txt'
+	functions.printList2file(Newick_tree_leaves, leaves_tree)
+
 def	help_options():
 	print ("\nUSAGE: python %s fasta_1,ID1 fasta_2,ID2 ... fasta_n,IDn \n"  %os.path.realpath(__file__))
 
