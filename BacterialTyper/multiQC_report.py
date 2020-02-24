@@ -107,7 +107,7 @@ def main():
 	name = argv[3]
 
 	## call
-	multiQC_call(samples_path, name, folder_name)
+	multiQC_call(samples_path, name, folder_name,"")
 		
 ############
 '''******************************************'''
