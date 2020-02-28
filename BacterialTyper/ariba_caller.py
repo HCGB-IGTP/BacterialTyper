@@ -25,6 +25,8 @@ from BacterialTyper.modules import citation
 
 ############################################################### 
 def get_ARIBA_dbs(list_dbs):
+	
+	
 
 	## General
 	dbs = [
@@ -97,41 +99,69 @@ def help_ARIBA():
 ############################################################### 
 def download_ariba_databases(list_dbs, main_folder, Debug, threads):
 
-	## ToDo check if already download	
+	"""Download ARIBA_ databases.
+	
+	Using ARIBA software this function retrieves desired databases and prepare them for later analysis.
+	
+	:param list_dbs: List of databases to download.
+	:param main_folder: Absolute path to database folder.
+	:param Debug: True/false for printing developer messages
+	:param threads: Number of CPUs to use.
+	
+	:type list_dbs: string 
+	:type main_folder: string
+	:type Debug: Boolean
+	:type threads: integer
+	
+	 .. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.create_subfolder`
+		
+		- :func:`BacterialTyper.functions.read_time_stamp`
+		
+		- :func:`BacterialTyper.ariba_caller.get_ARIBA_dbs`
+	
+		- :func:`BacterialTyper.ariba_caller.ariba_getref`		
+		
+	 
+	.. include:: ../../links.inc
+	"""
+
 	print("\n\n+ Download databases for Antimicrobial Resistance Identification By Assembly (ARIBA).")
 	ariba_folder = functions.create_subfolder("ARIBA", main_folder)
-	## where database is one of: 
-	print ("+ Available databases:")
 
+	## print ARIBA databases: 
+	print ("+ Available databases:")
 	dbs = get_ARIBA_dbs(list_dbs)
+	
 	for db_set in dbs:
 
 		functions.print_sepLine("-",30, False)
 		print (colored("+ " + db_set,'yellow'))
 		
+		## prepare folders
 		folder_set = functions.create_subfolder(db_set, ariba_folder)
+		outdir_prepare_ref = folder_set + '_prepareref'
+
+		## stamp time file
+		filename_stamp_prepare = outdir_prepare_ref + '/.success'
 	
 		## check if previously done
-		outdir_prepare_ref = folder_set + '_prepareref'
-		filename_stamp_prepare = outdir_prepare_ref + '/.success'
 		if os.path.isfile(filename_stamp_prepare):
 			stamp =	functions.read_time_stamp(filename_stamp_prepare)
 			print ("\t+ Database is downloaded in folder: ", folder_set)
 			print ("\t+ Data is available and indexed in folder: ", outdir_prepare_ref)
 			print (colored("\tDatabase was previously downloaded and prepared on: %s" %stamp, 'yellow'))
+		
 			## [TODO]: Check if necessary to download again after several months/days
 			return_ariba_getref = 'OK'
 		else:
 			return_ariba_getref = ariba_getref(db_set, folder_set, Debug, threads)
 		
 		if (return_ariba_getref == 'OK'):
-			#functions.print_sepLine("'", 75, False)
 			print()
 		else:
 			print (colored("** ARIBA getref failed or generated a warning for " + db_set, 'red'))
-			##return ('FAIL')
-	##
-	return('OK')
 
 
 ##########
@@ -147,12 +177,14 @@ def check_db_indexed(folder, option):
 	:type option: string
 	:returns: Boolean True/False.
 	 
+	 
+	 .. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.read_time_stamp`
+	 
 	.. include:: ../../links.inc
 	"""
 	
-	# get databases downloaded
-	#lineList = [line.rstrip('\n') for line in open(folder + '../../' + 'ARIBA_information.txt')]
-
 	if os.path.isfile(folder + '00.info.txt'):
 		if os.path.isfile(folder + '.success'):
 			stamp =	functions.read_time_stamp(folder + '.success')
@@ -165,34 +197,51 @@ def check_db_indexed(folder, option):
 	
 ##########
 def ariba_summary(out, infileList, options):
-	######################################################################################
-	## usage: ariba summary [options] <outprefix> [report1.tsv report2.tsv ...]
-	######################################################################################
-	## Make a summary of multiple ARIBA report files, and also make Phandango files
-	## positional arguments:
-	##  outprefix             Prefix of output files
-	##  infiles               Files to be summarised
-	##
-	## optional arguments:
-	##  -h, --help      show this help message and exit
-	##  -f FILENAME		File of filenames of ariba reports to be summarised. Must be used if no input files listed after the outfile. The first column should be the filename. An optional second column can be used to specify a sample name for that file, which will be used instead of the filename in output files. Columns separated by whitespace.
-	##  --preset minimal|cluster_small|cluster_all|cluster_var_groups|all|all_no_filter
-	##                  Shorthand for setting --cluster_cols,--col_filter,--row_filter,--v_groups,--variants. Using this overrides those options
-	##  --cluster_cols col1,col2,...  Comma separated list of cluster columns to include. Choose from: assembled, match, ref_seq, pct_id, ctg_cov, known_var, novel_var [match]
-	##  --col_filter y|n      Choose whether columns where all values are "no" or "NA" are removed [y]
-	##  --no_tree             Do not make phandango tree
-	##  --row_filter y|n      Choose whether rows where all values are "no" or "NA" are removed [y]
-	##  --min_id FLOAT        Minimum percent identity cutoff to count as assembled [90]
-	##  --only_clusters Cluster_names. Only report data for the given comma-separated list of cluster names, eg: cluster1,cluster2,cluster42
-	##  --v_groups      Show a group column for each group of variants
-	##  --known_variants      Report all known variants
-	##  --novel_variants      Report all novel variants
-	##  --verbose             Be verbose
-	######################################################################################
+	"""Create ARIBA summary
+	
+	This function calls ARIBA_ summary and generates a summary of multiple ARIBA report files. It also creates Phandango_ files.
+	
+	:param out: Prefix of output files
+	:param infileList: Files to be summarised
+	:param options: Additional options for ariba summary. See details below. Provide them within quotes.
+	
+	:type out: string
+	:type infileList: list
+	:type options: string
+	
+	:returns: functions.system_call message
+	
+	.. note:: Additional options for ariba_summary (as specified by ARIBA_)
+	
+		--cluster_cols col_ids			Comma separated list of cluster columns to include. Choose from: assembled, match, ref_seq, pct_id, ctg_cov, known_var, novel_var [match]
+
+		--no_tree             Do not make phandango tree
+
+		--min_id FLOAT        Minimum percent identity cutoff to count as assembled [90]
+
+		--only_clusters Cluster_names			Only report data for the given comma-separated list of cluster names, eg: cluster1,cluster2,cluster42
+		
+		--v_groups      Show a group column for each group of variants
+		
+		--known_variants      Report all known variants
+		
+		--novel_variants      Report all novel variants
+	
+		--col_filter string			Choose whether columns where all values are "no" or "NA" are removed [yes/no]
+
+		--row_filter string			Choose whether rows where all values are "no" or "NA" are removed [yes/no]
+
+
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.system_call`
+	
+	"""
 	
 	logFile = out + '.log'
 	infileList_string = " ".join(infileList)
 	cmd_summary = 'ariba summary %s %s %s 2> %s' %(options, out, infileList_string, logFile)
+	
 	return(functions.system_call(cmd_summary))
 
 ##########
@@ -369,7 +418,8 @@ def ariba_pubmlstget(species, outdir):
 	
 ##########
 def ariba_run(database, files, outdir, threads, threshold):
-	"""
+	"""ARIBA search call
+	
 	Given a database, it generates an ARIBA search of the reads provided. Results would be later processed using :func:`BacterialTyper.virulence_resistance.check_results` and :func:`BacterialTyper.virulence_resistance.results_parser`
 	
 	:param database: Folder containing ARIBA database previously indexed.
@@ -468,18 +518,48 @@ def ariba_run(database, files, outdir, threads, threshold):
 	
 #############################################################
 def ariba_summary_all(outfile, dict_files):
-	fake_list = []
-	for files in dict_files:
-		fake_list.append(dict_files[files])
+	"""Create final ARIBA summary 
 	
+	Generates a temporal summary of all the reports generated by ARIBA (using :func:`BacterialTyper.ariba_caller.ariba_summary`). The result is a csv file and newick tree for later Phandango_ visualization.
+	
+	These files contained for each entry a ".match" string appended. Using :func:`BacterialTyper.ariba_caller.fix_ariba_summary` and :func:`BacterialTyper.ariba_caller.fix_phandando_tree`, we would removed this ".match" and prepare files 
+	
+	Final result files are a csv file (containing code colors) and newick tree for later Phandango_ visualization.
+	
+	:param outfile:
+	:param dict_files: 
+	
+	:type outfile:
+	:type dict_files: 
+	
+	:return: Output file
+	:rtype: string
+		
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.ariba_caller.ariba_summary`
+		
+		- :func:`BacterialTyper.ariba_caller.fix_ariba_summary` 
+		
+		- :func:`BacterialTyper.ariba_caller.fix_phandango_tree`
+	
+	"""
+	
+	## Create tmp list of files 
+	file_list = []
+	for files in dict_files:
+		file_list.append(dict_files[files])
+	
+	## call ariba_summary
 	outfile_tmp = outfile + '_tmp'
 	options = ''
-	ariba_summary(outfile_tmp, fake_list, options)
+	ariba_summary(outfile_tmp, file_list, options)
 
 	## fix output
 	fix_ariba_summary(outfile_tmp + '.csv', outfile + '.csv', dict_files)
 	fix_ariba_summary(outfile_tmp + '.phandango.csv', outfile + '.phandango.csv', dict_files)
-	fix_phangando_tree(outfile_tmp + '.phandango.tre', outfile + '.phandango.tre', dict_files)
+	fix_phangando_tree(outfile_tmp + '.phandango.tre', outfile + '.phandango.tree', dict_files)
 	
 	if os.path.isfile(outfile_tmp + '.csv'):
 		os.remove(outfile_tmp + '.csv')
@@ -489,8 +569,8 @@ def ariba_summary_all(outfile, dict_files):
 	if os.path.isfile(outfile_tmp + '.phandango.csv'):
 		os.remove(outfile_tmp + '.phandango.csv')
 
-	if os.path.isfile(outfile_tmp + '.phandango.tre'):
-		os.remove(outfile_tmp + '.phandango.tre')
+	if os.path.isfile(outfile_tmp + '.phandango.tree'):
+		os.remove(outfile_tmp + '.phandango.tree')
 
 
 	return(outfile + '.csv')

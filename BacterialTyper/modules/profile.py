@@ -329,9 +329,11 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 			name_db = 'VFDB'
 			vfdb=True
 		else:
-			outfile_summary = outfile_summary + 'Other_summary' ## todo: different databases provided different to VFDB and CARD would collapse file
-			name_db = 'other' ## TODO: check if there are multiple 'other' databases
-	
+			## TODO: check if there are multiple 'other' databases
+			## Different databases provided (different to VFDB and CARD) would collapse file
+			outfile_summary = outfile_summary + 'Other_summary' 
+			name_db = 'other' 
+			
 		## call ariba summary to summarize results
 		csv_all = ariba_caller.ariba_summary_all(outfile_summary, report_files_databases)
 		if not csv_all == 'NaN':

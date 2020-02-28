@@ -4,7 +4,9 @@
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
 '''
-Calls sourmash and generates signatures for each genome, clusterizes and generates plots. 
+Calls sourmash_ and generates signatures for each genome, clusterizes and generates plots. 
+
+.. include:: ../../links.inc	 
 '''
 #################################################
 ## code taken and adapted from: 
@@ -50,7 +52,8 @@ def helpMash():
 
 ##################################################		
 def sketch_database(dict_files, folder, Debug, ksize_n, num_sketch):	
-	"""	
+	"""Sketch sequence files
+	
 	This function generates a sourmash index, also called sketch, of the sequences 
 	provided in the folder specified.
 	
@@ -71,11 +74,24 @@ def sketch_database(dict_files, folder, Debug, ksize_n, num_sketch):
 	
 	:returns: List of SourmashSignature signatures (siglist) and absolute path files generated (siglist_file).  
 	
-	This function depends on sourmash python module (https://sourmash.readthedocs.io/en/latest/). The code to implement this API function was taken and adapted from: 
+	
+	.. attention:: The code to implement this API function was taken and adapted from: 
 	 
 		- https://sourmash.readthedocs.io/en/latest/api-example.html
 	
 		- https://github.com/dib-lab/sourmash/blob/master/sourmash/commands.py
+		
+	
+	.. seealso:: This function depends on sourmash python module (https://sourmash.readthedocs.io/en/latest/). Some functions employed are:
+	
+		- :func:`sourmash.MinHash`
+		
+		- :func:`sourmash.SourmashSignature`
+		
+		- :func:`sourmash.MinHash.add_sequence`
+		
+		
+	.. include:: ../../links.inc	 
 	
 	"""
 	### Default: set as option
@@ -115,6 +131,27 @@ def sketch_database(dict_files, folder, Debug, ksize_n, num_sketch):
 	
 ##################################################		
 def read_signature(sigfile, ksize_n):
+	"""Loads signatures stored in files
+	
+	Signature generated are stored as MinHashes in JSON format file. Sourmash implements a function to load signatures.
+	
+	This function here is just a shortcut for the :func:`sourmash.load_one_signature` function in sourmash_.
+	
+	:param sigfile: Hash signature stored in JSON format
+	:param ksize_n: Kmer size.
+	
+	:type sigfile: string
+	:type ksize_n: integer
+	
+	
+	.. seealso:: This function depends on sourmash python module (https://sourmash.readthedocs.io/en/latest/). Some functions employed are:
+	
+		- :func:`sourmash.load_one_signature`
+		
+	
+	.. include:: ../../links.inc	 
+	"""
+	
 	## code taken and adapted from: https://sourmash.readthedocs.io/en/latest/api-example.html
 	#print ('\t+ Loading signature for comparison...')
 	sig = load_one_signature(sigfile, ksize=ksize_n, select_moltype='DNA', ignore_md5sum=False)
@@ -174,12 +211,35 @@ def compare(siglist, output, Debug):
 	return (D, labeltext_string)
 
 ##################################################
-def getNewick(node, newick, parentdist, leaf_names):
-	#################################################
-	## code taken and adapted from: 
-	## https://github.com/scipy/scipy/issues/8274
-	## https://stackoverflow.com/questions/28222179/save-dendrogram-to-newick-format/31878514#31878514
-	#################################################
+def generateNewick(node, newick, parentdist, leaf_names):
+	"""Generates Newick tree
+	
+	This functions generates a newick tree given the a tree object (output from the scipy cluster hierarchy to_tree), the labels and the corresponding matrix distance.
+	
+	.. note:: scipy.cluster.hierarchy.to_tree
+	
+		Converts a linkage matrix into an easy-to-use tree object. 
+	
+	:param node: Tree object (scipy.cluster.hierarchy.to_tree)
+	:param newick: Newick tree format
+	:param parendist: node.dist or distance matrix
+	:param leaf_names: list of labels
+	 
+	:type newick: string
+	:type parendist: matrix
+	:type leaf_names: list
+	 
+	As generateNewick tree is called recursively to create the tree with the parents and children nodes, the first call the argument newick can be empty ("").
+	
+	.. attention:: The original code was taken and adapted from: 
+	
+		- https://github.com/scipy/scipy/issues/8274
+	
+		- https://stackoverflow.com/questions/28222179/save-dendrogram-to-newick-format/31878514#31878514
+	
+	
+	.. include:: ../../links.inc	 
+	"""
 	
 	if node.is_leaf():
 		return "%s:%.2f%s" % (leaf_names[node.id], parentdist - node.dist, newick)
@@ -188,8 +248,8 @@ def getNewick(node, newick, parentdist, leaf_names):
 			newick = "):%.2f%s" % (parentdist - node.dist, newick)
 		else:
 			newick = ");"
-		newick = getNewick(node.get_left(), newick, node.dist, leaf_names)
-		newick = getNewick(node.get_right(), ",%s" % (newick), node.dist, leaf_names)
+		newick = generateNewick(node.get_left(), newick, node.dist, leaf_names)
+		newick = generateNewick(node.get_right(), ",%s" % (newick), node.dist, leaf_names)
 		newick = "(%s" % (newick)
 		return newick
 
@@ -201,21 +261,14 @@ def plot(D, labeltext, filename, pdf, colorLabel):
 	## 	https://github.com/dib-lab/sourmash/blob/master/sourmash/commands.py
 	#################################################
 
-	# build filenames, decide on PDF/PNG output
-	#dendrogram_out = filename + '.dendro'
 	matrix_out = filename + '.matrix'
-	#hist_out = filename + '.hist'
 
-	###
+	### decide on PDF/PNG output
 	if pdf:
-	#	dendrogram_out += '.pdf'
 		matrix_out += '.pdf'
-	#	hist_out += '.pdf'
 	
 	else:
-	#	dendrogram_out += '.png'
 		matrix_out += '.png'
-	#	hist_out += '.png'
 	
 	###########################
 	### make the histogram
@@ -305,8 +358,16 @@ def plot(D, labeltext, filename, pdf, colorLabel):
 ##################################################
 
 def get_Newick_tree(cluster_hierachy, DataMatrix, labeltext, output):
+	"""
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.functions.printList2file`
+		
+	"""
+	
 	tree = sch.to_tree(cluster_hierachy, False)
-	Newick_tree = getNewick(tree, "", DataMatrix, labeltext)
+	Newick_tree = generateNewick(tree, "", DataMatrix, labeltext)
 	
 	Newick_tree_file = output + '.nwk'
 	functions.printList2file(Newick_tree_file, [Newick_tree])
@@ -352,26 +413,15 @@ def main():
 	ksize_n = 51
 	num_sketch = 5000
 	
-	###
+	### create signatures and compare them
 	(siglist_file, siglist) = sketch_database(file_names_dict, folder, Debug, ksize_n, num_sketch)
 	(D, labeltext) = compare(siglist, output, Debug)
+	
+	## create plot
 	Y = plot(D, labeltext, output, pdf, "")
-	tree = sch.to_tree(Y, False)
-	Newick_tree = getNewick(tree, "", D, labeltext)
 	
-	Newick_tree_file = output + '.nwk'
-	functions.printList2file(Newick_tree_file, [Newick_tree])
-	
-	handle = StringIO(Newick_tree)
-	treePhylo = Phylo.read(handle, "newick")
-	
-	leaves_tree = []
-	for leaf in treePhylo.get_terminals(): 
-		leaves_tree.append(leaf.name)
-		print (leaf.name)
-	
-	Newick_tree_leaves =  output + '.leaves.txt'
-	functions.printList2file(Newick_tree_leaves, leaves_tree)
+	## create newick tree file
+	get_Newick_tree(Y, D, labeltext, output)
 	
 
 ##################################################

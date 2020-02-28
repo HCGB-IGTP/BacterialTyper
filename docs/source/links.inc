@@ -33,6 +33,8 @@
 .. _ARIBA: http://sanger-pathogens.github.io/ariba/
 .. _KMA: http://www.genomicepidemiology.org/
 .. _BUSCO: https://busco.ezlab.org/
+.. _Phandango: https://jameshadfield.github.io/phandango/#/
+.. _sourmash: https://sourmash.readthedocs.io/en/latest/index.html
 
 .. #### Twitter links
 .. _JF: https://twitter.com/JFSanchezBioinf
