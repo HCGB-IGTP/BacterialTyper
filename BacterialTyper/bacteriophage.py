@@ -19,8 +19,8 @@ from BacterialTyper import functions
 from BacterialTyper import config
 
 ## import phispy modules
-import PhiSpy
-from PhiSpy_tools import genbank_to_seed
+import PhiSpyModules
+#from PhiSpy_tools import genbank_to_seed
 
 perlDir = os.path.dirname(os.path.realpath(__file__)) + '/other_tools/perl'
 sys.path.append(perlDir)
@@ -76,6 +76,7 @@ def ident_bacteriophage(gbk_file, outdir, training_set, window_size, phage_genes
 	else:
 		return('FAIL')
 
+
 ######
 def help_PhiSpy():
 	print ("\n** phiSpy additional information **")
@@ -84,7 +85,7 @@ def help_PhiSpy():
 	print ("https://github.com/linsalrob/PhiSpy\n")
 	
 	print ("Choose among different training sets for a better phage identification:\n")
-	PhiSpy.print_list()	
+	PhiSpyModules.print_list()	
 	print ("\n")
 
 ######
@@ -101,7 +102,7 @@ def main():
 		help_options()
 		exit()
 	
-	PhiSpy.print_list()	
+	PhiSpyModules.print_list()	
 	genbank_to_seed.usage()
 
 	
