@@ -21,6 +21,13 @@ from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper import data
 
+## TODO: append busco build lib to path
+##sys.path.append(path2busco/busco/build/lib)
+
+## TODO: append BUSCO Augustus path
+## export AUGUSTUS_CONFIG_PATH=BUSCO/augustus_config/
+
+
 ###############
 def busco_datasets():
 	"""BUSCO dataset information
