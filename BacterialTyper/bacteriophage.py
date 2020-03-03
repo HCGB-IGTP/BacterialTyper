@@ -21,39 +21,14 @@ from BacterialTyper import config
 ## import phispy modules
 import PhiSpyModules
 #from PhiSpy_tools import genbank_to_seed
-
-perlDir = os.path.dirname(os.path.realpath(__file__)) + '/other_tools/perl'
-sys.path.append(perlDir)
-get_longContigs_script = perlDir + '/get-long-contigs.pl'
+# Contribution: https://github.com/linsalrob/PhiSpy/PhiSpyModules/writers.py
 
 ## [TODO]
 
 ######
-def get_long_seqs(sequence_file, output_file):
-	cmd="perl %s %s %s > %s" %(get_longContigs_script, sequence_file, 2000, output_file)
-	return(functions.system_call(cmd))
-
-######
-def convert_Genbank2seed(gbk_file, path):
-	print (colored("\n\n***** TODO: Debug Implement genbank2seed call *****\n\n", 'red'))	
-	code = genbank_to_seed.convert_contigs(["", gbk_file, path])
-	if (code == 'OK'):
-		## success stamps
-		filename_stamp = path + '/.success_genbank2seed'
-		stamp =	functions.print_time_stamp(filename_stamp)
-
-	return(code)
-
-######
 def ident_bacteriophage(gbk_file, outdir, training_set, window_size, phage_genes, Debug):
-	
-	## convert genbank2seed
-	print ("+ Convert genbank file into seed format")
-	
-	outdir_gbk = outdir + '/gbk2seed'
-	
-	## check if previously assembled and succeeded
-	filename_stamp = outdir_gbk + '/.success_genbank2seed'
+	"""Call PhiSpy to identify putative bacteriophages.
+	"""
 
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
@@ -77,9 +52,19 @@ def ident_bacteriophage(gbk_file, outdir, training_set, window_size, phage_genes
 		return('FAIL')
 
 
+	## prophage_coordiantes.csv_
+	## "#prophage_ID", "Contig","Start","End","attL_Start","attL_End","attR_Start","attR_End","attL_Seq","attR_Seq","Longest_Repeat_flanking_phage" 
+
+	## prophage.gff3
+	# Contribution: https://github.com/linsalrob/PhiSpy/PhiSpyModules/writers.py
+
+
+
+
+
 ######
 def help_PhiSpy():
-	print ("\n** phiSpy additional information **")
+	print ("\n** PhiSpy additional information **")
 	print ("phiSpy is a program for identifying prophages from among microbial genome sequences\n")
 	print ("(c) 2008-2018 Sajia Akhter, Katelyn McNair, Rob Edwards, San Diego State University, San Diego, CA")
 	print ("https://github.com/linsalrob/PhiSpy\n")
