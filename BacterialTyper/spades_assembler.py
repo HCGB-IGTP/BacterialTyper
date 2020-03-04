@@ -115,20 +115,18 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 		print ('\n\n***ERROR: No scaffolds assembly...')
 		return ('FAIL')
 	
+	### Due to limiations with Genbank format, no more thatn 37 characters are supported for 
+	### locus tag identification. This might affect later annotation process and subsequent analysis
+	### https://github.com/tseemann/prokka/issues/337 
 	new_contigs = path + '/' + sample + '_assembly.fna'
 	id_conversion_file = functions.rename_fasta_seqs(scaffolds_retrieved[0], sample, new_contigs)
-	
+		
 	if	id_conversion_file == 'FAIL':	
 		print ("\n\n***ERROR: Rename contigs failed for sample " + sample)
 		return ('FAIL')
 	else:
 		print ("+ Name conversion details saved in file " + id_conversion_file)
 	
-	
-	### Due to limiations with Genbank format, no more thatn 37 characters are supported for 
-	### locus tag identification. This might affect later annotation process and subsequent analysis
-	### https://github.com/tseemann/prokka/issues/337 
-		
 	return (new_contigs)
 
 ################################################

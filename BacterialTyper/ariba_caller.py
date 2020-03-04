@@ -188,7 +188,7 @@ def check_db_indexed(folder, option):
 	if os.path.isfile(folder + '00.info.txt'):
 		if os.path.isfile(folder + '.success'):
 			stamp =	functions.read_time_stamp(folder + '.success')
-			print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+			print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 			return True
 	else:
 		if (option == 'YES'):
@@ -271,7 +271,7 @@ def ariba_getref(database, outdir, Debug, threads):
 
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 		download_ariba_cmd = 'OK'
 	else:
 		cmd_getref = 'ariba getref %s %s' %(database, outdir_name)
@@ -296,7 +296,7 @@ def ariba_getref(database, outdir, Debug, threads):
 	filename_stamp_prepare = outdir_prepare_ref + '/.success'
 	if os.path.isfile(filename_stamp_prepare):
 		stamp =	functions.read_time_stamp(filename_stamp_prepare)
-		print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 	
 	else:
 		## get information

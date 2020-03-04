@@ -96,7 +96,7 @@ def module_call(sequence_fasta, kingdom, genus, path, name, threads):
 	if os.path.isdir(path):
 		if os.path.isfile(filename_stamp):
 			stamp =	functions.read_time_stamp(filename_stamp)
-			print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+			print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 			return ()
 	
 	## call prokka
