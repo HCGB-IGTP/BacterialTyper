@@ -119,11 +119,11 @@ There are several extra python module requirements that are needed and are summa
 
 .. csv-table::
    :header: "Package", "Version"
-   :file: ../../../config/main/python_requirements.csv
+   :file: ../../../config/main/python_requirements_summary.csv
 
-Additionally, these modules might have extra dependencies. All modules required are listed in :file:`config/main/python_requirements.txt`.
+Additionally, these modules might have extra dependencies. All modules required are listed in :file:`config/main/python_requirements.csv`.
 
-.. include:: ../../../config/main/python_requirements.txt
+.. include:: ../../../config/main/python_requirements.csv
    :literal:
 
 Also, several third-party software packages are also required. 

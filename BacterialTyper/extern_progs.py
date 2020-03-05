@@ -63,6 +63,15 @@ def return_default(soft):
 	
 ##################
 def return_min_version(soft):
+	"""Retrieve version for a given software
+	
+	Retrieves minimun version for the software of interest stored in :file:`config.main.software_requirements.csv' using the function :func:`BacterialTyper.config.min_version_programs`.
+	
+	.. seealso:: Additional information on BacterialTyper configuration and requirements
+	
+		- :doc:`Configuration <../../../user_guide/installing>` 
+
+	"""
 	version_programs = config.min_version_programs()
 	return (version_programs[soft])
 
@@ -111,12 +120,31 @@ def decode(x):
 	return s
 
 ##################
-def get_version(prog, path):
+def get_version(prog, path, Debug=False):
 	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
 	## give credit to them appropiately
-	'''Given a program name and expected path, tries to determine its version.
-	Returns tuple (bool, version). First element True iff found version ok.
-	Second element is version string (if found), otherwise an error message'''
+	"""Get version of software
+	
+	Given a program name and expected path, tries to determine its version.
+	
+	:param prog:
+	:param path:
+	:param Debug:
+	
+	:type prog:
+	:type path:
+	:type Debug:
+	
+	:returns: tuple (bool, string). First element True if found version ok.
+	Second element is version. Returns NA message if no found and raises attention error message.
+	
+	.. attention:: Be aware of Copyright
+	
+		The code implemented here was retrieved and modified from ARIBA (https://github.com/sanger-pathogens/ariba)
+		
+		Give them credit accordingly.
+	"""
+
 	assert prog in prog_to_version_cmd
 	args, regex = prog_to_version_cmd[prog]
 	cmd = path + ' ' + args
@@ -138,7 +166,9 @@ def get_version(prog, path):
 		if hits:
 			return hits.group(1)
 	
-	print (colored('ERROR - I tried to get the version of ' + prog + ' with: "' + cmd + '" and the output didn\'t match this regular expression: "' + regex.pattern + '"', 'red'))
+	if Debug:
+		print (colored('Attention: I tried to get the version of ' + prog + ' with: "' + cmd + '" and the output didn\'t match this regular expression: "' + regex.pattern + '"', 'red'))
+
 	return("n.a.")
 
 

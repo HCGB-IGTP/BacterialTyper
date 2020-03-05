@@ -1,4 +1,4 @@
-.. _config:
+.. _configuration:
 
 config
 ======

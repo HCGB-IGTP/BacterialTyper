@@ -3,9 +3,9 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
+"""
 Sets configuration of the pipeline.
-'''
+"""
 ## useful imports
 import time
 import io
@@ -41,6 +41,7 @@ def run(options):
 	## install or only check
 	option_install = False
 	if (options.option == 'install'):
+		print ("\nCheck dependencies, modules or third party software...")
 		print ("\nTry to install all missing dependencies, modules or third party software...")
 		option_install = True
 	elif (options.option == 'only_check'):

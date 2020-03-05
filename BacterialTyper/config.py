@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-##########################################################
-## Jose F. Sanchez										##
-## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
-##########################################################
+##############################################################
+## Jose F. Sanchez			      							##
+## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain		##
+##############################################################
 """Provides configuration for the pipeline."""
 ## useful imports
 import os
@@ -54,8 +54,14 @@ def prog_to_default():
 
 ##################
 def min_version_programs():
-	"""Returns a dictionary containing minimum version for each software."""
+	"""Returns a dictionary containing minimum version for each software.
 	
+	Reads information from :file:`config/main/software_requirements.csv`.
+	
+	:returns: dictionary
+	"""
+	
+	## ToDO: read requirements file:: software_requirements.csv
 	min_versions = { ## update
 		'ariba':'2.13.5',
 		'augustus':'3.2.1',		
@@ -82,15 +88,21 @@ def min_version_programs():
 		'xtract':'11.7',
 				
 		##
-		'python':'3.5'
+		'python':'3.6'
 	}
 	
 	return min_versions
 
 ##################
 def min_package_version():
-	"""Returns a dictionary containing minimum version for each python package."""
+	"""Returns a dictionary containing minimum version for each python package.
+
+	Reads information from :file:`config/main/python_requirements.csv`.
 	
+	:returns: dictionary
+	"""
+	
+	## ToDO: read requirements file:: python_requirements.txt
 	package_min_versions = {
 		'appdirs':'1.4.3',
 		'ariba':'2.13.5',
@@ -149,16 +161,36 @@ def min_package_version():
 	return package_min_versions
 
 ##################
-def get_exe(prog):
-	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
-	## give credit to them appropiately
+def get_exe(prog, Debug=False):
 	"""Return absolute path of the executable program requested.
 	
-	Given a program name, it returns what we expect its exectuable to be called. It has to fulfilled a minimun version specified.
+	Given a program name it returns its exectuable to be called. It has to fulfilled a minimun version specified.
 	
-	Returns:
-		Absolute path for the executable requested
-		ERROR if no executable available in $PATH or not fulfilling the expected version.
+	:param prog: Software name
+	
+	:type prog: string
+	
+	:returns: Absolute path for the executable requested
+	
+	:warning: if no executable available in $PATH or not fulfilling the expected version.
+	
+	.. seealso:: This function depends on other BacterialTyper functions:
+		
+		- :func:`BacterialTyper.config`
+
+		- :func:`BacterialTyper.extern_progs.return_default`
+		
+		- :func:`BacterialTyper.extern_progs.retrun_min_version`
+		
+		- :func:`BacterialTyper.extern_progs.get_version`
+		
+		- :func:`BacterialTyper.extern_progs.my_which`
+		
+	.. attention:: Be aware of Copyright
+	
+		The code implemented here was retrieved and modified from ARIBA (https://github.com/sanger-pathogens/ariba)
+		
+		Give them credit accordingly.
 		
 	"""
 	exe = ""
@@ -168,16 +200,24 @@ def get_exe(prog):
 		exe = extern_progs.return_default(prog) ## install in the system
 
 	## get paths
-	exe_path_tmp = functions.my_which(exe)
+	exe_path_tmp = my_which(exe)
 	#print (exe_path_tmp)
 
 	## get min_version
 	min_version = extern_progs.return_min_version(prog)
 	#print ("Min version: ", min_version)
 	
+	## debugging messages
+	debug=False
+	if Debug:
+		debug=True
+	
 	for p in exe_path_tmp:
-		prog_ver = extern_progs.get_version(prog, p)
+		prog_ver = extern_progs.get_version(prog, p, Debug=debug)
 		#print ("Path: ", p , "\nVersion: ", prog_ver)
+		if (prog_ver == 'n.a.'):
+			continue
+		
 		if LooseVersion(prog_ver) >= LooseVersion(min_version):
 			return (p)
 	
@@ -189,4 +229,120 @@ def get_exe(prog):
 		exit()
 			
 	return('ERROR')
+
+#################
+def _access_check(fn, mode=os.F_OK | os.X_OK):
+	"""Check exec permission
+	
+	This function checks wether a given path is a folder or file and wether it is 
+	executable and accessible. It also works if a java jar file provided.
+	
+	:param fn: Absolute path file
+	:param mode: Value to pass as the mode parameter of access()
+	
+	:type fn: string
+	:type mode: string
+	
+	`mode` defaults to:
+	
+		- os.F_OK: Value to pass as the mode parameter of access() to test the existence of path.
+		
+		- os.X_OK: Value to include in the mode parameter of access() to determine if path can be executed.
+	
+	.. attention:: Be aware of Copyright
+	
+		The code implemented here was retrieved and modified from shutil (https://github.com/python/cpython/blob/master/Lib/shutil.py).
+		
+		Give them credit accordingly.
+		
+		We modified the code to work if java jar files provided.
+	"""
+	## the original code belongs to shutil, slightly modified here
+	# https://github.com/python/cpython/blob/master/Lib/shutil.py
+	
+	if os.path.isdir(fn):
+		return False
+
+	if os.path.exists(fn):
+		if fn.endswith('.jar'):
+			return True
+
+		if os.access(fn, mode):
+			return True
+	
+#################
+def my_which(cmd):
+	"""Return the absolute path to the executable
+	
+	Given a command return the absolute path(s), if any.
+	
+	:param cmd: Software command name 
+	:returns: List of absolute paths(s) of the given command.
+	
+	.. attention:: Be aware of Copyright
+	
+		The code implemented here was retrieved and modified from shutil (https://github.com/python/cpython/blob/master/Lib/shutil.py).
+		
+		Give them credit accordingly.
+		
+		We modified the code to return multiple paths in a list if available different installed binaries in $PATH.
+
+	"""
+	# If we're given a path with a directory part, look it up directly rather
+	# than referring to PATH directories. This includes checking relative to the
+	# current directory, e.g. ./script
+	if os.path.dirname(cmd):
+		if _access_check(cmd):
+			return cmd
+		return None
+
+	use_bytes = isinstance(cmd, bytes)
+
+	path=None
+
+	if path is None:
+		path = os.environ.get("PATH", None)
+
+	if path is None:
+		try:
+			path = os.confstr("CS_PATH")
+		except (AttributeError, ValueError):
+			# os.confstr() or CS_PATH is not available
+			path = os.defpath
+		# bpo-35755: Don't use os.defpath if the PATH environment variable is
+		# set to an empty string
+
+	# PATH='' doesn't match, whereas PATH=':' looks in the current directory
+	if not path:
+		return None
+
+	if use_bytes:
+		path = os.fsencode(path)
+		path = path.split(os.fsencode(os.pathsep))
+	else:
+		path = os.fsdecode(path)
+		path = path.split(os.pathsep)
+
+	# On other platforms you don't have things like PATHEXT to tell you
+	# what file suffixes are executable, so just pass on cmd as-is.
+	files = [cmd]
+
+	return_paths = [] ## modification
+	seen = set()
+	for dir in path:
+		normdir = os.path.normcase(dir)
+		#print ("Normdir: ", normdir)
+		if not normdir in seen:
+			seen.add(normdir)
+			for thefile in files:
+				name = os.path.join(dir, thefile)
+				#print ("Name: ", name)
+				if _access_check(name):
+					## return (name) ## previously, it would only return the first item
+					return_paths.append(name) ## modification
+	
+	if (len(return_paths) >= 1):
+		return return_paths
+	else:
+		return None
 
