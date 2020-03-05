@@ -329,7 +329,7 @@ subparser_space = subparsers.add_parser(' ', help='')
 subparser_ident = subparsers.add_parser(
     'ident',
     help='Species identification for each sample.',
-    description='This module calls [TODO] ...',
+    description='This module calls a kmer strategy for a species and strain identification',
 )
 ident_mode_name = subparser_ident.add_argument_group("Mode")
 ident_mode = ident_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
@@ -383,7 +383,7 @@ subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run_ident)
 subparser_profile = subparsers.add_parser(
     'profile',
     help='Virulence & Resistance profile.',
-    description='This module call ...',
+    description='This module generates a resistance and virulence profile using several databases ...',
 )
 profile_mode_name = subparser_profile.add_argument_group("Mode")
 profile_mode = profile_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
@@ -426,7 +426,7 @@ subparser_profile.set_defaults(func=BacterialTyper.modules.profile.run_profile)
 subparser_MGE = subparsers.add_parser(
     'MGE',
     help='Mobile Genetic Elements (MGE) analysis.',
-    description='This module calls ...',
+    description='This module idenfies Mobile Genetic elements: plasmids, bacteriophages and genomic islands',
 )
 MGE_mode_name = subparser_MGE.add_argument_group("Mode")
 MGE_mode = MGE_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
@@ -466,7 +466,6 @@ info_group_MGE.add_argument("--help_PhiSpy", action="store_true", help="Print fu
 
 subparser_MGE.set_defaults(func=BacterialTyper.modules.MGE.run_MGE)
 ##-------------------------------------------------------------##
-
 
 ##--------------------------- cluster ---------------------------- ##
 subparser_cluster = subparsers.add_parser(
@@ -512,8 +511,6 @@ info_group_cluster.add_argument("--help_Mash", action="store_true", help="Print 
 
 subparser_cluster.set_defaults(func=BacterialTyper.modules.cluster.run_cluster)
 ##-------------------------------------------------------------##
-
-
 
 ## space
 subparser_space = subparsers.add_parser(' ', help='')

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-##########################################################
-## Jose F. Sanchez										##
-## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
-##########################################################
-'''
+##############################################################
+## Jose F. Sanchez											##
+## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain		##
+##############################################################
+"""
 Generates a functional assembly annotation and checks quality using BUSCO
-'''
+"""
 ## useful imports
 import time
 import io
