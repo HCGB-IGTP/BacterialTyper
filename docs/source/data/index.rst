@@ -15,3 +15,4 @@ Data information and details provided along BacterialTyper project.
     
     BUSCO_datasets.rst
     PubMLST_datasets.rst
+    trimmomatic_adapters.rst

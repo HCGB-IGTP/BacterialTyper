@@ -3,9 +3,9 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
+"""
 Calls Trimmomatic for the trimming of sequence adapter within fastq reads.
-'''
+"""
 
 ## useful imports
 import time
@@ -20,11 +20,6 @@ from termcolor import colored
 ## import my modules
 from BacterialTyper import functions
 from BacterialTyper import config
-
-################################################
-def	help_options():
-	print ("\nUSAGE:\npython %s Outfolder file_R1 file_R2 trimmomatic threads trimmomatic_adapters sample_name\n"  %os.path.abspath(argv[0]))
-	print ("\n*** If not paired-end provide 'na' for file_R2")
 
 ################################################
 def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_adapters):
@@ -55,8 +50,34 @@ def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_ada
 
 ################################################
 def print_help_adapters():
+	"""Trimmomatic adapters information
+	
+	BacterialTyper includes a file :file:`BacterialTyper.data.available_Trimmomatic_adapters.fasta` with default sequencing adapters provided by Trimmomatic_ (v0.39).
+	
+	User can provide using the option --adatpers different sequencing adapters.
+	
+	.. seealso:: Additional information on Trimmomatic adapters available.
+	
+		- :doc:`Trimmomatic adapters <../../../data/trimmomatic_adapters>` 
+	
+	.. include:: ../../links.inc 
+	"""
 	## [TODO]
-	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
+	print (colored("\n\n ***** TODO: Generate this help message *****\n\n", 'red'))
+	
+	print("BacterialTyper includes a file with default sequencing adapters provided by Trimmomatic (v0.39).")
+	print("See additional details in the documentation.\n")
+	
+	print("Users can provide any sequencing adapter of interest using the option --adatpers in fasta format file.")
+
+################################################
+def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
+	##
+	## Function to call trimmomatic using java. Can take single-end and pair-end files
+	## sample_folder must exists before calling this function. 
+	## It can be call from main or a module.
+	## Returns code OK/FAIL according if suceeded or failed the system call
+	## 
 
 	#######################################
 	## http://www.usadellab.org/cms/?page=trimmomatic
@@ -71,14 +92,6 @@ def print_help_adapters():
 	#	Drop reads below the 24 bases long (MINLEN:24)
 	#######################################
 
-################################################
-def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
-	##
-	## Function to call trimmomatic using java. Can take single-end and pair-end files
-	## sample_folder must exists before calling this function. 
-	## It can be call from main or a module.
-	## Returns code OK/FAIL according if suceeded or failed the system call
-	## 
 
 	## debug message
 	if (Debug):
@@ -126,6 +139,12 @@ def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, t
 		return('OK')	
 	else:
 		return('FAIL')	
+
+
+################################################
+def	help_options():
+	print ("\nUSAGE:\npython %s Outfolder file_R1 file_R2 trimmomatic threads trimmomatic_adapters sample_name\n"  %os.path.abspath(argv[0]))
+	print ("\n*** If not paired-end provide 'na' for file_R2")
 
 ################################################
 def main():

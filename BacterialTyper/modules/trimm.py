@@ -23,6 +23,7 @@ from BacterialTyper import sampleParser
 from BacterialTyper import functions
 from BacterialTyper import config
 from BacterialTyper.modules import help_info
+from BacterialTyper.data.data_files import data_list
 
 ##############################################
 def run(options):
@@ -109,6 +110,16 @@ def run(options):
 	# Group dataframe by sample name
 	sample_frame = pd_samples_retrieved.groupby(["name"])
 	
+	# Trimming adapters
+	if (options.adapters):
+		# Adapter file provided
+		options.adapters = os.path.abspath(options.adapters)
+		print("\t- Adapters file provided...")
+	else:
+		# Get default adpaters file
+		print("\t- Default Trimmomatic adapters (v0.39) will be used...")
+		options.adapters = data_list("available_Trimmomatic_adapters")
+		
 	## send for each sample
 	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
 		commandsSent = { executor.submit(trimmo_caller, sorted(cluster["sample"].tolist()), outdir_dict[name], name, threads_job, Debug, options.adapters): name for name, cluster in sample_frame }

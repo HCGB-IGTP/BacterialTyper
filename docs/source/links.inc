@@ -17,7 +17,7 @@
 .. #### BacterialTyper additional software links
 .. _CARD: https://card.mcmaster.ca/
 .. _VFDB: http://www.mgc.ac.cn/VFs/
-.. _trimmomatic: http://www.usadellab.org/cms/?page=trimmomatic
+.. _Trimmomatic: http://www.usadellab.org/cms/?page=trimmomatic
 .. _PhisPy: https://github.com/linsalrob/PhiSpy
 .. _NCBI: https://www.ncbi.nlm.nih.gov/
 .. _perl: https://perldoc.perl.org/
