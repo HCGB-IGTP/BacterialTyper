@@ -1,4 +1,7 @@
 appdirs==1.4.3
+ariba==2.14.4
+beautifulsoup4==4.8.2
+bio==0.1.0
 biopython==1.76
 bz2file==0.98
 card-trick==0.2.0
@@ -10,6 +13,7 @@ coloredlogs==14.0
 colormath==3.0.0
 cycler==0.10.0
 decorator==4.4.2
+DendroPy==4.4.0
 deprecation==2.0.7
 ete3==3.1.1
 fastobo==0.7.2
@@ -38,7 +42,10 @@ patool==1.12
 PhiSpy==3.7.8
 pronto==2.0.1
 pycparser==2.19
+pyfastaq==3.17.0
+pymummer==0.10.3
 pyparsing==2.4.6
+pysam==0.15.4
 python-dateutil==2.8.1
 pytz==2019.3
 PyYAML==5.3
@@ -48,6 +55,7 @@ scipy==1.4.1
 screed==1.0.4
 simplejson==3.17.0
 six==1.14.0
+soupsieve==2.0
 sourmash==3.2.2
 spectra==0.0.11
 termcolor==1.1.0
