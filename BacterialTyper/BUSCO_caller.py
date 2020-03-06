@@ -62,7 +62,6 @@ def busco_datasets():
 	BUSCO_dataset_file = data.data_files.data_list("BUSCO_dataset")
 	busco_data_columns = ["Taxonomic range","Dataset","ftp_site"]
 	busco_data = functions.file2dataframe(BUSCO_dataset_file, names=busco_data_columns)
-	print(busco_data)
 	busco_data = busco_data.set_index('Dataset')
 	return(busco_data)
 
@@ -214,18 +213,16 @@ def BUSCO_check_dataset(folder):
 def BUSCO_retrieve_sets(list_datasets, folder):
 	"""Retrieves datasets information available
 	
-	Arguments:
-		list_datasets: list of datasets of interest to check. 
-		
-		folder: absolute path to folder that will contain all datasets of interest.
-		e.g. /path/to/BUSCO_folder_provided/ 
+	This functions checks in 'folder' if datasets in 'list_datasets' are available or downloads them if necessary. 
+	Retrieves information using function :func:`BacterialTyper.busco_caller.busco_datasets` and checks if it is available or downloads it using :func:`BacterialTyper.BUSCO_caller.BUSCO_download`. 
+
+	:param list_datasets: list of datasets of interest to check.
+	:param folder: absolute path to folder that will contain all datasets of interest.
+	 
+	:type list_datasets: list
+	:type folder: string
 	
-	In 'folder', checks if datasets in 'list_datasets' are available or downloads them. 
-	Retrieves information using function 'busco_datasets' and checks if it is available or downloads it using 'BUSCO_download'. 
-	
-	Returns:
-		Dictionary containing for each dataset of interest (key), the absolute path to the folder containing information downloaded (value).
-		e.g. bacteria : /path/to/BUSCO_folder_provided/bacteria
+	:returns: Dictionary containing for each dataset of interest (key), the absolute path to the folder containing information downloaded (value).
 	"""
 
 	## check if name matches

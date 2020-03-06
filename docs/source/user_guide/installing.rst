@@ -75,8 +75,8 @@ Check perl dependencies
 Check perl depencies in file :file:`config/main/perl_lib_dependencies.csv`, which is shown below:
 
 .. csv-table::
-   :header: "Package", "URL"
-   :file: ../../../data/perl_lib_dependencies_summary.csv
+   :header: "Package", "Version"
+   :file: ../data/perl_lib_dependencies_summary.csv
 
 .. ################################################
 .. _install-perl_packages:
@@ -119,7 +119,7 @@ There are several extra python module requirements that are needed and are summa
 
 .. csv-table::
    :header: "Package", "Version"
-   :file: ../../../data/python_requirements_summary.csv
+   :file: ../data/python_requirements_summary.csv
 
 Additionally, these modules might have extra dependencies. All modules required are listed in :file:`config/main/python_requirements.csv`.
 
