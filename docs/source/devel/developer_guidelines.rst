@@ -15,6 +15,7 @@ ARIBA results description
 File :file:`devel/info/ARIBA_explained.csv` contains the description of the columns in the ARIBA result file generated.
 
 .. csv-table::
+   :widths: 4,25
    :header: "Column", "Description"
    :file: info/ARIBA_explained.csv
 
@@ -29,13 +30,24 @@ File :file:`devel/info/prokka_output_files.csv` contains the description of the 
 See additional details in: https://github.com/tseemann/prokka#output-files>
 
 .. csv-table::
+   :widths: 4,25
    :header: "Extension", "Description"
    :file: info/prokka_output_files.csv
    
-   
-   
-   
-.. include:: ../links.inc
 
+.. _PhiSpy-training-sets:
+
+PhiSpy training Sets available
+------------------------------
+
+File :file:`devel/info/PhiSpy_training-sets.txt` contains the description of the different training sets available for bacteriophage analysis using PhiSpy_.
+
+.. csv-table::
+   :widths: auto
+   :header-rows: 1
+   :file: info/PhiSpy_training-sets.txt
+
+
+.. include:: ../links.inc
    
    
