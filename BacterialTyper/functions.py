@@ -464,3 +464,9 @@ def optimize_threads(total, samples):
 		cpu = 1
 	
 	return(cpu)
+
+#################
+def parse_sublist(lst, ind): 
+	## extract elemnts of the list
+	## Original Code: https://www.geeksforgeeks.org/python-get-first-element-of-each-sublist/
+	return [item[ind] for item in lst]
