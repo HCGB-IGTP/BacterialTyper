@@ -194,6 +194,13 @@ def get_symbolic_link (sample_list, directory):
 
 #################
 def get_fullpath_list(dir_given):
+	"""Retrieve full absolute path for the files within a directory specified.
+	
+	:param dir_given: Directory to retrieve files
+	:type dir_given: string
+	
+	:returns: List of absolute path files.
+	"""
 	return_path = []
 	for root, dirs, files in os.walk(dir_given):
 		for f in files:
