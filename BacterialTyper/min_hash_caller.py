@@ -378,7 +378,9 @@ def get_Newick_tree(cluster_hierachy, DataMatrix, labeltext, output):
 	leaves_tree = []
 	for leaf in treePhylo.get_terminals(): 
 		leaves_tree.append(leaf.name)
+		#print(leaf.name)
 	
+	## BUG: the list is printed alphabetically ordered
 	Newick_tree_leaves =  output + '.leaves.txt'
 	functions.printList2file(Newick_tree_leaves, leaves_tree)
 
@@ -405,7 +407,7 @@ def main():
 	
 	## to do: implement main function
 	folder = "."
-	Debug = True
+	Debug = False
 	output = "test"
 	pdf = True
 	
