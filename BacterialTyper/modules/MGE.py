@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-'''
+##############################################################
+## Jose F. Sanchez											##
+## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain		##
+##############################################################
+"""
 This code calls several programs to generate a Mobile Genetic Element analysis
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
-'''
+"""
+
 ## useful imports
 import time
 import io
@@ -93,7 +96,7 @@ def run_MGE(options):
 		Project=True
 
 		## get user data	
-		pd_samples_retrieve = database_user.get_userData_files(options, input_dir)
+		pd_samples_retrieved = database_user.get_userData_files(options, input_dir)
 		## returns merge dafarame 
 
 	elif (options.detached):
@@ -178,13 +181,13 @@ def run_MGE(options):
 
 		## merge into pd_samples_retrieved
 		frames = [pd_samples_reads, pd_samples_assembly, pd_samples_annot]
-		pd_samples_retrieved = pd.concat(frames, ignore_index=True, sort=True)
+		pd_samples_retrieved = pd.concat(frames, sort=True, join='outer')
 		
 	########
 
 	## debug message
 	if (Debug):
-		print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
+		print (colored("**DEBUG: pd_samples_retrieved **", 'yellow'))
 		print (pd_samples_retrieved)
 		
 	## generate output folder, if necessary
@@ -237,12 +240,20 @@ def run_MGE(options):
 	print ("")
 	print ("")
 
+	## re-index dataframe
+	pd_samples_retrieved = pd_samples_retrieved.reset_index()
+	
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: pd_samples_retrieved **", 'yellow'))
+		print (pd_samples_retrieved)
+			
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())
 	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
 	max_workers_int = int(options.threads/threads_job)
 
-	# Group dataframe by sample name
+	# Group dataframe by sample name	
 	sample_frame = pd_samples_retrieved.groupby(["name"])
 
 	## debug message
@@ -267,6 +278,22 @@ def run_MGE(options):
 
 ###########################
 def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
+	"""Identify Mobile Genetic Elements
+	
+	This function is called for each sample to assess the putative plasmids, inserted phages and genomic islands.
+	
+	.. seealso: This functions depend on third party software called using several BacterialTyper functions such as:
+	
+		- :func:`BacterialTyper.bacteriophage.call_ident_bacteriophage`
+		
+		- :func:`BacterialTyper.bacteriophage.results_PhiSpy`
+		
+		- :func:`BacterialTyper.`
+		
+		- :func:`BacterialTyper.`
+	
+	"""
+	
 	print ("+ MGE analysis for sample: ", name)
 	print ("")
 	
@@ -282,6 +309,9 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: Dir" + str(outdir_dict_plasmid), 'yellow'))
+			
+			## ToDo implement plasmid analysis
+			
 			
 		print ("")
 		
@@ -302,7 +332,7 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 		gbk_file = dataFrame_sample.loc[dataFrame_sample['ext'] == 'gbf']['sample'].tolist() ## [TODO: Fix SettingWithCopyWarning]
 		
 		## Call phispy
-		bacteriophage.call_ident_bacteriophage(gbk_file[0], name, output_dict_phage[name], options.training_set, Debug, 
+		bacteriophage.ident_bacteriophage(gbk_file[0], name, outdir_dict_phage[name], options.training_set, Debug, 
 											window_size=options.window_size, number_phage_genes=options.phage_genes)
 		
 		## Parse results
@@ -320,6 +350,9 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: Dir"+ str(outdir_dict_GI), 'yellow'))
+		
+		
+			## ToDo implement genomic_island analysis
 		
 		print ("")
 
