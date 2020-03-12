@@ -60,9 +60,6 @@
 [TODO] BacterialTyper/database_generator.py :: NCBI descendant
 [TODO] BacterialTyper/database_generator.py :: provide preference to db2update (update_db_data_file)
 
-[TODO] BacterialTyper/spades_assembler.py :: Generate perl code in python
-
-
 #####################
 ### Visualization ###
 #####################
@@ -94,6 +91,9 @@ Generate docstrings using http://rst.ninjs.org/
 
 ## example report
 https://github.com/tseemann/nullarbor
+
+## CITATION of the software
+https://zenodo.org/
 
 
 
