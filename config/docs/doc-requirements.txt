@@ -8,3 +8,4 @@
 sphinx
 sphinxmark
 rinohtype
+sphinxcontrib-bibtex

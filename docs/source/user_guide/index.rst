@@ -16,4 +16,5 @@ User's Guide
     ../tutorial/index.rst
     modules/index.rst
     ../info/index.rst
+    faqs.rst
     
