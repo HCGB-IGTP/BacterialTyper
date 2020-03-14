@@ -36,5 +36,5 @@ Glossary
   ReST
       reStructuredText format (http://docutils.sourceforge.net/rst.html).
 
-  Sphinx: 
+  Sphinx
       Python module for documentation. See details in http://www.sphinx-doc.org/en/master/

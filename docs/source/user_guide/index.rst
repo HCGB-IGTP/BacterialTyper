@@ -9,12 +9,13 @@ User's Guide
     :Release: |version|
     :Date: |today|
 
+This User Guide provides... 
+
 .. toctree::
     :maxdepth: 2
 
     installing.rst
     ../tutorial/index.rst
     modules/index.rst
-    ../info/index.rst
     faqs.rst
     

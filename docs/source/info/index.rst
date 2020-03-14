@@ -7,13 +7,21 @@ Additional information
     :Release: |version|
     :Date: |today|
 
-.. toctree::
-    :maxdepth: 2
-    
-    history.rst
-    license.rst
-    credits.rst
-    citation.rst
-    github_stats.rst
-    whats_new.rst
+.. contents::
+
+.. include:: ./history.rst
+
+.. include:: ./license.rst
+
+.. include:: ./credits.rst
+
+.. include:: ./citation.rst
+
+.. include:: ./github_stats.rst
+
+.. include:: ./whats_new.rst
+   
+  
+ 
+ 
     

@@ -2,8 +2,8 @@
 Contents
 ********
 
-Overview
-========
+Documentation
+=============
 
 .. only:: html
 
@@ -14,11 +14,14 @@ Overview
    :maxdepth: 2
 
    user_guide/index.rst
-   api/index.rst
-   devel/index.rst
-   glossary/index.rst
    tutorial/index.rst
+   devel/index.rst
+   api/index.rst
    data/index.rst
+   
+   info/index.rst
+   glossary/index.rst
+   bib/bib.rst
    
 
 Indices and tables
