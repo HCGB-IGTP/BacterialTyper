@@ -377,7 +377,7 @@ def get_files(options, input_dir, mode, extension):
 		else:
 			## input folder does not exist...
 			if (options.debug):
-				print (colored("\n**DEBUG: sample_prepare.get_files input folder does not exists **", 'yellow'))
+				print (colored("\n**DEBUG: sampleParser.get_files input folder does not exists **", 'yellow'))
 				print (input_dir)
 				print ("\n")
 			
@@ -396,7 +396,7 @@ def get_files(options, input_dir, mode, extension):
 					else:
 						## input folder does not exist...
 						if (options.debug):
-							print (colored("\n**DEBUG: sample_prepare.get_files batch option; input folder does not exists **", 'yellow'))
+							print (colored("\n**DEBUG: sampleParser.get_files batch option; input folder does not exists **", 'yellow'))
 							print (d)
 							print ("\n")
 						
@@ -408,7 +408,7 @@ def get_files(options, input_dir, mode, extension):
 			else:
 				## input folder does not exist...
 				if (options.debug):
-					print (colored("\n**DEBUG: sample_prepare.get_files input folder does not exists **", 'yellow'))
+					print (colored("\n**DEBUG: sampleParser.get_files input folder does not exists **", 'yellow'))
 					print (input_dir)
 					print ("\n")
 	
@@ -427,7 +427,7 @@ def get_files(options, input_dir, mode, extension):
 
 		## in sample list...
 		if (options.debug):
-			print (colored("\n**DEBUG: sample_prepare.get_files include sample list **", 'yellow'))
+			print (colored("\n**DEBUG: sampleParser.get_files include sample list **", 'yellow'))
 			print (samples_names, '\n')
 
 
@@ -439,7 +439,7 @@ def get_files(options, input_dir, mode, extension):
 
 		## in sample list...
 		if (options.debug):
-			print (colored("\n**DEBUG: sample_prepare.get_files exclude sample list **", 'yellow'))
+			print (colored("\n**DEBUG: sampleParser.get_files exclude sample list **", 'yellow'))
 			print (samples_names, '\n')
 
 	else:
@@ -456,7 +456,7 @@ def get_files(options, input_dir, mode, extension):
 		
 	## files list...
 	if (options.debug):
-		print (colored("\n**DEBUG: sample_prepare.get_files files list to check **", 'yellow'))
+		print (colored("\n**DEBUG: sampleParser.get_files files list to check **", 'yellow'))
 		##print ('DO NOT PRINT THIS LIST: It could be very large...')
 		print (files, '\n')
 

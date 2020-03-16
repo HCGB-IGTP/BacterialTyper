@@ -1,17 +1,17 @@
-sample_prepare
-==============
+prep
+====
 
 Include brief comment about this module
 
 Workflow
 --------
 
-Below we show the workflow of the sample_prepare process.
+Below we show the workflow of the prep process.
 
 Functions
 ---------
 
-The `sample_prepare` module contains several main functions:
+The `prep` module contains several main functions:
 
 .. automodule:: BacterialTyper.modules.prep
    :members:

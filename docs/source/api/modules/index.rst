@@ -1,4 +1,4 @@
-.. modules:
+.. _modules:
 
 Modules
 =======
@@ -24,7 +24,7 @@ Developer guidelines for BacterialTyper modules.
    profile.rst
    MGE.rst
    run.rst
-   sample_prepare.rst
+   prep.rst
    test.rst
    trimm.rst
    version.rst

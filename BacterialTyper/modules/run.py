@@ -21,7 +21,7 @@ import pandas as pd
 from BacterialTyper import functions
 from BacterialTyper import config
 
-from BacterialTyper.modules import sample_prepare
+from BacterialTyper.modules import prep
 from BacterialTyper.modules import qc
 from BacterialTyper.modules import ident
 from BacterialTyper.modules import profile
@@ -32,7 +32,7 @@ from BacterialTyper.modules import assemble
 from BacterialTyper.modules import annot
 from BacterialTyper.modules import database
 from BacterialTyper.modules import trimm
-from BacterialTyper.modules import report_generation
+#from BacterialTyper.modules import report_generation
 from BacterialTyper.modules import help_info
 
 from BacterialTyper import sampleParser

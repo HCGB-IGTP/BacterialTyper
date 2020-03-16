@@ -14,7 +14,7 @@ __all__ = [
 	'qc',
 	'MGE',
 	'run',
-	'sample_prepare',
+	'prep',
 	'set_configuration',
 	'test',
 	'trimm',
