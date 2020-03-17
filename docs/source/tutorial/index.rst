@@ -4,7 +4,7 @@ Tutorial
 
 .. only:: html
 
-    :Release: |version|
+    :Version: |version|
     :Date: |today|
 
 .. toctree::

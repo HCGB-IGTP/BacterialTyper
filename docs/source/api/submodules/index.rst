@@ -5,7 +5,7 @@ Scripts
 
 .. only:: html
 
-    :Release: |version|
+    :Version: |version|
     :Date: |today|
 
 Developer guidelines for BacterialTyper scripts.

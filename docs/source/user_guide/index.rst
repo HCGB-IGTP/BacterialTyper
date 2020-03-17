@@ -6,7 +6,7 @@ User's Guide
 
 .. only:: html
 
-    :Release: |version|
+    :Version: |version|
     :Date: |today|
 
 This User Guide provides... 

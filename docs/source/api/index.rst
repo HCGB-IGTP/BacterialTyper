@@ -8,7 +8,7 @@ API Overview
    
 .. only:: html
 
-    :Release: |version|
+    :Version: |version|
     :Date: |today|
 
 .. contents:: :local:

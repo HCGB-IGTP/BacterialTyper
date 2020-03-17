@@ -5,7 +5,7 @@ Data
 
 .. only:: html
 
-    :Release: |version|
+    :Version: |version|
     :Date: |today|
 
 Data information and details provided along BacterialTyper project.

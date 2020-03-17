@@ -4,8 +4,9 @@ Additional information
 
 .. only:: html
 
-    :Release: |version|
+    :Version: |version|
     :Date: |today|
+    
 
 .. contents::
 
@@ -32,7 +33,7 @@ License
 This is brief description of the license terms for BacterialTyper. 
 
 
-.. credits:
+.. _credits:
 
 Credits
 =======

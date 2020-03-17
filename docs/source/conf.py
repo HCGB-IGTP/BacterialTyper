@@ -23,8 +23,11 @@ project = 'BacterialTyper'
 copyright = '2019, Jose F. Sanchez-Herrero'
 author = 'Jose F. Sanchez-Herrero'
 
-# The full version, including alpha/beta/rc tags
-release = '0.0.2'
+# The version & release will remain so far the same
+## Release corresponds to official releases we will generate periodically
+## Version reflects minor updates or bugs fixed
+release = '0.3'
+version = '0.3'
 
 
 # -- General configuration ---------------------------------------------------
