@@ -41,3 +41,49 @@ Command-line shared arguments
 *****************************
 
 Here we
+
+
+--project 
+
+   Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
+
+--detached
+
+   Isolated mode. --input is a folder containining fastq reads. Provide a unique path o several using --batch option")
+
+Input/Output
+
+--input
+
+   Folder containing a project or reads, according to the mode selected. 
+   Files could be .fastq/.fq/ or fastq.gz/.fq.gz. See --help_format for additional details.
+   
+--output_folder", help="Output folder.", required = '--detached' in sys.argv)
+
+--single_end
+   
+     Single end files [Default OFF]. Default mode is paired-end.")
+
+--batch
+   
+   Provide this option if input is a file containing multiple paths instead a path.")
+
+--in_sample
+   
+   File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+
+--ex_sample 
+
+   File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+
+Options
+
+--threads
+
+   Number of CPUs to use [Default: 2].", default=2)
+
+Additional information
+
+--debug 
+
+   Show additional message for debugging purposes.

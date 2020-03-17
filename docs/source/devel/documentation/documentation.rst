@@ -221,30 +221,18 @@ Example docstring
 
 An example docstring looks like:
 
-.. code-block:: python
+.. literalinclude:: ./example.py
+   :language: python
+     
 
-   """
-   def rename_fasta_seqs(fasta_file, name, new_fasta):
-   
-      Rename fasta sequences provided in file :file:`fasta_file` using id :file:`name`. Save results in file :file:`new_fasta` provided.
-      
-      Check for id character lenght do not exceed 37 characters as it might be a limitiation in further annotation and subsequent analysis. Read Prokka_ issue for further details: https://github.com/tseemann/prokka/issues/337.
-      
-      :param fasta_file: Absolute path to fasta file.
-      :type fasta_file: string
-      :param name: String to add every fasta sequence header.
-      :type name: string
-      :param new_fasta: Name for the new fasta file (Absolute path).
-      :type new_fasta: string
-      :return: Path to tabular delimited file containing conversion from all to new id for each sequence.
-      :warnings: Returns FAIL if name is >37 characters.
-      
-      .. include:: ../../../links.inc
-      """     
-   
-See some other example in https://matplotlib.org/devel/documenting_mpl.html#example-docstring
+And it displays like:
 
-Check and example for python documentation here: https://thomas-cokelaer.info/tutorials/sphinx/index.html
+   To do...
+.. ###include:: ./example.rst
+
+For other docstrings example visit https://matplotlib.org/devel/documenting_mpl.html#example-docstring
+
+Check an example for python documentation here: https://thomas-cokelaer.info/tutorials/sphinx/index.html
 
 
 .. #################
@@ -256,41 +244,19 @@ API Docstrings
 These docstrings populate files in :file:`docs/api` directory and form the 
 reference documentation for the modules and scripts within BacterialTyper.
 
-Using a shell loop we create the '.rst' file for each module and script:
+Using a shell loop we create an ``.rst`` file for each module and script:
 
 - modules:
 
-.. code-block:: sh
-   
-   cd BacterialTyper/docs/source/api/modules
-   for i in `dir ../../../../BacterialTyper/modules`; do 
-      name=(${i//.py/}); 
-      file=$name".rst"; 
-      echo ".. _"$name":" >> $file; 
-      echo "" >> $file; 
-      echo $name >> $file; 
-      echo "========" >> $file; 
-      echo ".. automodule:: BacterialTyper.modules."$i >> $file; 
-      echo "    :members:" >> $file; 
-   done;
+.. literalinclude:: ./modules_api-docstrings.sh
+   :language: sh
+  
 
 - scripts:
 
-.. code-block:: sh
-
-   cd BacterialTyper/docs/source/api/scripts
-   for i in `dir ../../../../BacterialTyper/`; do 
-      name=(${i//.py/}); 
-      file=$name".rst"; 
-      echo ".. _"$name":" >> $file; 
-      echo "" >> $file; 
-      echo $name >> $file; 
-      echo "========" >> $file; 
-      echo ".. automodule:: BacterialTyper.scripts."$i >> $file; 
-      echo "    :members:" >> $file; 
-   done;
-
-
+.. literalinclude:: ./scripts_api-docstrings.sh
+   :language: sh
+  
 
 .. ## Include linksReferences
 .. include:: ../../links.inc
