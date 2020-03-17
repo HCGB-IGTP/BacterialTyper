@@ -9,13 +9,14 @@ User's Guide
     :Version: |version|
     :Date: |today|
 
-This User Guide provides... 
+This User Guide provides information on BacterialTyper usage and documentation. 
 
 .. toctree::
     :maxdepth: 2
 
     installing.rst
-    ../tutorial/index.rst
+    quickStart.rst
     modules/index.rst
+    ../tutorial/index.rst
     faqs.rst
     

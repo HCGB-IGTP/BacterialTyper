@@ -23,7 +23,7 @@ setup(
     author='Jose F Sanchez Herrero',
     author_email='xxxx',
     url='xxxx',
-    scripts=glob.glob('scripts/*'),
+    scripts=glob.glob('main/*'),
     install_requires=[
 		## add additional modules
         'BeautifulSoup4 >= 4.1.0', 

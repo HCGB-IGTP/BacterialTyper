@@ -1,8 +1,8 @@
 .. ############################
-.. _ident-description::
+.. _cluster-description::
 
-ident
-=====
+cluster
+=======
 
 Include brief comment about this module
 

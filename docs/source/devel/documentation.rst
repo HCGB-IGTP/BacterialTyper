@@ -166,13 +166,13 @@ Documents can be linked with the ``:doc:`` directive:
 
 .. code-block:: rst
 
-   See the :doc:`../info/index/history`
+   See the :doc:`../info/index/background`
 
    See the installation user guide :doc:`../user_guide/installing`
 
 will render as:
 
-  See the :doc:`info/index/history`
+  See the :doc:`info/index/background`
   See the installation user guide :doc:`user_guide/installing`
   
 Sections can also be given reference names.  For instance from the

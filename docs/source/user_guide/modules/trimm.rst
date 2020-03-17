@@ -1,7 +1,7 @@
 .. ############################
-.. _ident-description::
+.. _trimm-description::
 
-ident
+trimm
 =====
 
 Include brief comment about this module

@@ -1,8 +1,8 @@
 .. ############################
-.. _ident-description::
+.. _help-info-description::
 
-ident
-=====
+help_info
+=========
 
 Include brief comment about this module
 

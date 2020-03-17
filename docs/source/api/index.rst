@@ -13,10 +13,10 @@ API Overview
 
 .. contents:: :local:
 
-This pipeline is composed of multiple modules.   
+This pipeline is composed of multiple modules and scripts.   
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    modules/index.rst
-   submodules/index.rst
+   scripts/index.rst

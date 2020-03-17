@@ -9,11 +9,17 @@ BacterialTyper Documentation
 
     :Version: |version|
     :Date: |today|
+    
+Introduction
+============
 
 BacterialTyper is a pipeline that integrates multiple bioinformatic tools for the analysis of bacterial 
-WGS data facilitating the interpretation of results.
+whole genome sequence (WGS) data from isolated microbial cultured colonies. It generates genotyping information 
+and facilitates the interpretation of results. 
 
-The pipeline is written in Python_ with a modular architecture and based on open-source software and databases engines. 
+The pipeline is written in Python_ with a modular architecture and based on open-source software and databases engines. The 
+design of this bioinformatic tool allows comparing samples with an internal database (previously identified samples) 
+and external databases.  
 
 Multiple tasks are performed by several modules including: 
  - preparation of raw data
@@ -38,22 +44,20 @@ The BacterialTyper documentation includes:
 - A list of :doc:`Glossary <glossary/index>` terms
 - A list of :doc:`Bibliography <bib/bib>`
 
+.. _pipeline-scheme:
 
 Pipeline Scheme
 ===============
 
 Here we show the scheme of the BacterialTyper bioinformatic tool. It is divided in four main actions:
    
-   1. **Set the database**: Several databases are downloaded from different websites/sources. 
-   They are automatically downloaded, indexed and/or updated after several days/months.
-
-   2. **Identification analysis**: for each sample of interest several bioinformatic steps are performed.
-
-   3. **Populate the database**: using the information generated in the identification analysis, 
-   user database is populated for later analysis.
-
-   4. **Outbreak progression analysis**: Using information in the database and samples of interest, user guides the 
-   analysis of the emergence or progression of an outbreak.
+   #. **Set the database**: Several databases are downloaded from different websites/sources. They are automatically downloaded, indexed and/or updated after several days/months.
+   
+   #. **Identification analysis**: for each sample of interest several bioinformatic steps are performed.
+   
+   #. **Populate the database**: using the information generated in the identification analysis, user database is populated for later analysis.
+   
+   #. **Outbreak progression analysis**: Using information in the database and samples of interest, user guides the analysis of the emergence or progression of an outbreak.
 
 
 .. image:: images/workflow/all.jpg

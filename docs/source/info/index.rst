@@ -10,10 +10,10 @@ Additional information
 
 .. contents::
 
-.. _history:
+.. _background:
 
-History of BacterialTyper project
-=================================
+Background
+==========
 
 *Staphylococcus aureus* is a major bacterial pathogen causing a variety of diseases ranging from wound infections to 
 severe bacteremia or intoxications. Besides host factors, the course and severity of disease is also widely dependent 
@@ -21,7 +21,7 @@ on the genotype of the  bacterium :cite:`Straus2016`. Whole-genome sequencing (W
 sequence analysis, is the most extensive genotyping method available but neither open, easy, direct and straighforward 
 analysis are available that provide researchers with integrative genotyping information.
 
-The BacterialTyper pipeline started as a collaboration with Dra. Cristina Prat () and Dra. Alicia Lacoma () to asses the
+The BacterialTyper pipeline started as a collaboration with Dra. Cristina Prat and Dra. Alicia Lacoma to asses the
 genotyping characteristics of a set of *S. aureus* samples.  
 
 

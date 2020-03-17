@@ -1,7 +1,8 @@
-.. _database-module:
+.. ############################3
+.. _database-description::
 
-Database module
-===============
+database
+========
 
 BacterialTyper relies in multiples databases that are initiated and downloaded in a folder provided using the option `--database string`.
 
@@ -18,5 +19,7 @@ Below we show the main databases included in our database.
 .. image:: ../../images/workflow/database.jpg
    :width: 1500pt
 
+
+.. include:: ../../links.inc
    
    

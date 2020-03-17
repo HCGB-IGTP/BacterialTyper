@@ -1,8 +1,8 @@
 .. ############################
-.. _ident-description::
+.. _test-description::
 
-ident
-=====
+test
+====
 
 Include brief comment about this module
 

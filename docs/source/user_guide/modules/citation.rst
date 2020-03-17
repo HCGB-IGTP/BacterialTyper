@@ -1,8 +1,8 @@
 .. ############################
-.. _ident-description::
+.. _citation-description::
 
-ident
-=====
+citation
+========
 
 Include brief comment about this module
 

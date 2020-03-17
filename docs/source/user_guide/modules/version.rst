@@ -1,8 +1,8 @@
 .. ############################
-.. _ident-description::
+.. _version-description::
 
-ident
-=====
+version
+=======
 
 Include brief comment about this module
 

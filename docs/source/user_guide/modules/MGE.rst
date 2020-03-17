@@ -1,8 +1,8 @@
 .. ############################
-.. _ident-description::
+.. _MGE-description::
 
-ident
-=====
+MGE
+===
 
 Include brief comment about this module
 
