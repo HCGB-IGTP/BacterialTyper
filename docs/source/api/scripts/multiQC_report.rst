@@ -2,5 +2,5 @@
 
 multiQC_report
 ==============
-.. automodule:: BacterialTyper.multiQC_report
+.. automodule:: BacterialTyper.scripts.multiQC_report
     :members:

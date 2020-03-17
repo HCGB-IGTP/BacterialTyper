@@ -3,9 +3,10 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
-Allows access to additional data stored within the repository.
-'''
+"""
+Allows access to additional information stored in different files 
+under folder ``data``.
+"""
 ## useful imports
 import os
 ## import my modules

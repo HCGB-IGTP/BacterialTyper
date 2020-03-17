@@ -2,5 +2,5 @@
 
 sampleParser
 ============
-.. automodule:: BacterialTyper.sampleParser
+.. automodule:: BacterialTyper.scripts.sampleParser
     :members:

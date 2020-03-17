@@ -2,5 +2,5 @@
 
 database_user
 =============
-.. automodule:: BacterialTyper.database_user
+.. automodule:: BacterialTyper.scripts.database_user
     :members:

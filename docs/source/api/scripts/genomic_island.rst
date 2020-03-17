@@ -2,5 +2,5 @@
 
 genomic_island
 ==============
-.. automodule:: BacterialTyper.genomic_island
+.. automodule:: BacterialTyper.scripts.genomic_island
     :members:

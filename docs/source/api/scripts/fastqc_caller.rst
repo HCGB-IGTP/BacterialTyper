@@ -2,5 +2,5 @@
 
 fastqc_caller
 =============
-.. automodule:: BacterialTyper.fastqc_caller
+.. automodule:: BacterialTyper.scripts.fastqc_caller
    :members:

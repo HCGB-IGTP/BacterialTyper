@@ -4,7 +4,7 @@ Documentation corresponding to python functions is included as docstrings within
 
 I would use shell to generate a loop to create the '.rst' file for each module and script:
 
-Module:
+modules:
 
 	cd BacterialTyper/docs/source/api/modules
 	for i in `dir ../../../../BacterialTyper/modules`; do 
@@ -18,9 +18,9 @@ Module:
 		echo "    :members:" >> $file; 
 	done;
 
-Submodule:
+scripts:
 
-	cd BacterialTyper/docs/source/api/submodules
+	cd BacterialTyper/docs/source/api/scripts
 	for i in `dir ../../../../BacterialTyper/`; do 
 		name=(${i//.py/}); 
 		file=$name".rst"; 
@@ -28,6 +28,6 @@ Submodule:
 		echo "" >> $file; 
 		echo $name >> $file; 
 		echo "========" >> $file; 
-		echo ".. automodule:: BacterialTyper.submodules."$i >> $file; 
+		echo ".. automodule:: BacterialTyper.scripts."$i >> $file; 
 		echo "    :members:" >> $file; 
 	done;

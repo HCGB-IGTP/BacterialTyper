@@ -2,5 +2,5 @@
 
 variant_calling
 ===============
-.. automodule:: BacterialTyper.variant_calling
+.. automodule:: BacterialTyper.scripts.variant_calling
     :members:

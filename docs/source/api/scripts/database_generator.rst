@@ -3,7 +3,7 @@
 database_generator
 ==================
 
-.. automodule:: BacterialTyper.database_generator
+.. automodule:: BacterialTyper.scripts.database_generator
     :members:
 
     

@@ -2,5 +2,5 @@
 
 BUSCO_caller
 ============
-.. automodule:: BacterialTyper.BUSCO_caller
+.. automodule:: BacterialTyper.scripts.BUSCO_caller
     :members:

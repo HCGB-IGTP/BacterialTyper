@@ -2,5 +2,5 @@
 
 config
 ======
-.. automodule:: BacterialTyper.config
+.. automodule:: BacterialTyper.scripts.config
     :members:

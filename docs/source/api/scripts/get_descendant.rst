@@ -2,5 +2,5 @@
 
 get_descendant
 ==============
-.. automodule:: BacterialTyper.get_descendant
+.. automodule:: BacterialTyper.scripts.get_descendant
     :members:

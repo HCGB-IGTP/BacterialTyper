@@ -2,5 +2,5 @@
 
 card_trick_caller
 =================
-.. automodule:: BacterialTyper.card_trick_caller
+.. automodule:: BacterialTyper.scripts.card_trick_caller
     :members:

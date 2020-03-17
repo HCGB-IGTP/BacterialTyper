@@ -2,5 +2,5 @@
 
 trimmomatic_call
 ================
-.. automodule:: BacterialTyper.trimmomatic_call
+.. automodule:: BacterialTyper.scripts.trimmomatic_call
     :members:

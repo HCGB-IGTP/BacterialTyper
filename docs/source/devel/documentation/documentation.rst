@@ -83,7 +83,7 @@ Sphinx_ documentation generation tool.
 There are several extra requirements that are needed to build the documentation. 
 They are listed in :file:`config/docs/doc-requirements.txt`, which is shown below:
 
-.. include:: ../../../config/docs/doc-requirements.txt
+.. include:: ../../../../config/docs/doc-requirements.txt
    :literal:
 
 .. note::
@@ -166,17 +166,19 @@ Documents can be linked with the ``:doc:`` directive:
 
 .. code-block:: rst
 
-   See the :doc:`../info/index/background`
+   See the :doc:`../../info/index`
 
-   See the installation user guide :doc:`../user_guide/installing`
+   See the installation user guide :doc:`../../../user_guide/installing`
 
 will render as:
 
-  See the :doc:`info/index/background`
-  See the installation user guide :doc:`user_guide/installing`
+  See the :doc:`../../info/index`
   
-Sections can also be given reference names.  For instance from the
-:doc:`/user_guide/modules/assemble` link:
+  See the installation user guide :doc:`../../../user_guide/installing`
+  
+Sections can also be given reference names and be referenced using the ``:ref:`` directive.  
+
+For instance, see here an example from the :doc:`/user_guide/modules/assemble` link:
 
 .. code-block:: rst
 
@@ -208,14 +210,11 @@ Writing docstrings
 ------------------
 
 Most of the API documentation is written in docstrings. These are comment
-blocks in source code that explain how the code works.
+blocks in source code that explain how the code works. Docstrings should 
+conform to the `numpydoc docstring guide`_. 
 
-All new or edited docstrings should conform to the `numpydoc docstring guide`_.
-Much of the ReST syntax discussed above (:ref:`writing-rest-pages`) can be
-used for links and references.  These docstrings eventually populate files in 
-:file:`docs/api` directory and form the reference documentation for the
-library.
-
+.. #################
+.. _example-docstrings:
 
 Example docstring
 ^^^^^^^^^^^^^^^^^
@@ -240,12 +239,58 @@ An example docstring looks like:
       :return: Path to tabular delimited file containing conversion from all to new id for each sequence.
       :warnings: Returns FAIL if name is >37 characters.
       
-      .. include:: ../../links.inc
+      .. include:: ../../../links.inc
       """     
    
 See some other example in https://matplotlib.org/devel/documenting_mpl.html#example-docstring
 
 Check and example for python documentation here: https://thomas-cokelaer.info/tutorials/sphinx/index.html
 
+
+.. #################
+.. _api-docstrings:
+
+API Docstrings
+^^^^^^^^^^^^^^
+
+These docstrings populate files in :file:`docs/api` directory and form the 
+reference documentation for the modules and scripts within BacterialTyper.
+
+Using a shell loop we create the '.rst' file for each module and script:
+
+- modules:
+
+.. code-block:: sh
+   
+   cd BacterialTyper/docs/source/api/modules
+   for i in `dir ../../../../BacterialTyper/modules`; do 
+      name=(${i//.py/}); 
+      file=$name".rst"; 
+      echo ".. _"$name":" >> $file; 
+      echo "" >> $file; 
+      echo $name >> $file; 
+      echo "========" >> $file; 
+      echo ".. automodule:: BacterialTyper.modules."$i >> $file; 
+      echo "    :members:" >> $file; 
+   done;
+
+- scripts:
+
+.. code-block:: sh
+
+   cd BacterialTyper/docs/source/api/scripts
+   for i in `dir ../../../../BacterialTyper/`; do 
+      name=(${i//.py/}); 
+      file=$name".rst"; 
+      echo ".. _"$name":" >> $file; 
+      echo "" >> $file; 
+      echo $name >> $file; 
+      echo "========" >> $file; 
+      echo ".. automodule:: BacterialTyper.scripts."$i >> $file; 
+      echo "    :members:" >> $file; 
+   done;
+
+
+
 .. ## Include linksReferences
-.. include:: ../links.inc
+.. include:: ../../links.inc

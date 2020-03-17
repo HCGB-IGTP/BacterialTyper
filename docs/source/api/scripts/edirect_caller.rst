@@ -2,5 +2,5 @@
 
 edirect_caller
 ==============
-.. automodule:: BacterialTyper.edirect_caller
+.. automodule:: BacterialTyper.scripts.edirect_caller
     :members:

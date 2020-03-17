@@ -8,13 +8,13 @@ Developer Guidelines
     :Version: |version|
     :Date: |today|
 
-Developer guidelines for BacterialTyper project: software pipeline development for analysis of bacterial whole genome sequences.
+Guidelines for developing the BacterialTyper project.
 
 .. toctree::
-    :maxdepth: 1
+   :maxdepth: 1
     
-    documentation.rst
-    developer_guidelines.rst
-    ../api/index.rst
-    ../data/index.rst
-   
+   ../api/index.rst
+   developer_guidelines.rst
+   ../data/index.rst
+   documentation/documentation.rst
+    

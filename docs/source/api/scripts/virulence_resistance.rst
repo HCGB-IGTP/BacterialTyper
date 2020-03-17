@@ -2,5 +2,5 @@
 
 virulence_resistance
 ====================
-.. automodule:: BacterialTyper.virulence_resistance
+.. automodule:: BacterialTyper.scripts.virulence_resistance
     :members:

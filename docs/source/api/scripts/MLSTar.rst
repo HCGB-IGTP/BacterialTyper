@@ -2,5 +2,5 @@
 
 MLSTar
 ======
-.. automodule:: BacterialTyper.MLSTar
+.. automodule:: BacterialTyper.scripts.MLSTar
     :members:

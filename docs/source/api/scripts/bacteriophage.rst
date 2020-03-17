@@ -2,5 +2,5 @@
 
 bacteriophage
 =============
-.. automodule:: BacterialTyper.bacteriophage
+.. automodule:: BacterialTyper.scripts.bacteriophage
     :members:

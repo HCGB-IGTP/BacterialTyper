@@ -32,7 +32,6 @@ Developer guidelines for BacterialTyper scripts.
    min_hash_caller.rst    
    MLSTar.rst     
    multiQC_report.rst  
-   other_tools.rst       
    sampleParser.rst       
    spades_assembler.rst
    species_identification_KMA.rst

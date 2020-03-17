@@ -2,5 +2,5 @@
 
 annotation
 ==========
-.. automodule:: BacterialTyper.annotation
+.. automodule:: BacterialTyper.scripts.annotation
     :members:

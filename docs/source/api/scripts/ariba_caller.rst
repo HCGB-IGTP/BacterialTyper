@@ -2,5 +2,5 @@
 
 ariba_caller
 ============
-.. automodule:: BacterialTyper.ariba_caller
+.. automodule:: BacterialTyper.scripts.ariba_caller
     :members:

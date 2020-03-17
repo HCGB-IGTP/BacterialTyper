@@ -20,3 +20,5 @@ This pipeline is composed of multiple modules and scripts.
 
    modules/index.rst
    scripts/index.rst
+   other_tools.rst
+   data.rst

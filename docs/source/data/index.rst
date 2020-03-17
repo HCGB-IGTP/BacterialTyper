@@ -1,7 +1,7 @@
 .. _data:
 
-Data
-====
+Data provided with BacterialTyper
+=================================
 
 .. only:: html
 

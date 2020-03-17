@@ -2,5 +2,5 @@
 
 extern_progs
 ============
-.. automodule:: BacterialTyper.extern_progs
+.. automodule:: BacterialTyper.scripts.extern_progs
     :members:

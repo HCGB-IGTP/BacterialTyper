@@ -1,9 +1,11 @@
 #usr/bin/en python3
-'''
-This code lists files within other_tools/* directory and returns path to given script specified"
-Jose F. Sanchez
-Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
-'''
+##########################################################
+## Jose F. Sanchez										##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+##########################################################
+"""
+Retrieves files within ``other_tools`` directory and returns path to given script specified
+"""
 ## useful imports
 import os
 ## import my modules
@@ -11,7 +13,7 @@ from BacterialTyper.scripts import functions
 
 ####################################################################
 def perl_scripts(script):
-	"""Lists files within other_tools/perl directory and returns path to given script.
+	"""Lists files within ``other_tools/perl`` directory and returns path to given script.
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
@@ -28,7 +30,7 @@ def perl_scripts(script):
 
 ####################################################################
 def R_scripts(script):
-	"""Lists files within other_tools/R directory and returns path to given script
+	"""Lists files within ``other_tools/R`` directory and returns path to given script
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	

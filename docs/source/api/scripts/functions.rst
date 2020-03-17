@@ -2,5 +2,5 @@
 
 functions
 =========
-.. automodule:: BacterialTyper.functions
+.. automodule:: BacterialTyper.scripts.functions
     :members:

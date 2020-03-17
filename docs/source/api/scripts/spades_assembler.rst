@@ -2,5 +2,5 @@
 
 spades_assembler
 ================
-.. automodule:: BacterialTyper.spades_assembler
+.. automodule:: BacterialTyper.scripts.spades_assembler
     :members:
