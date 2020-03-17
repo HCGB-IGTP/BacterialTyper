@@ -28,8 +28,8 @@ from termcolor import colored
 #from matplotlib.backends.backend_pdf import PdfPages
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 from BacterialTyper.other_tools import tools
 from BacterialTyper.data import data_files
 

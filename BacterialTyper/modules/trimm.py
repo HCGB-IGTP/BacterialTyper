@@ -17,13 +17,13 @@ import concurrent.futures
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper import trimmomatic_call
-from BacterialTyper import multiQC_report
-from BacterialTyper import sampleParser
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import trimmomatic_call
+from BacterialTyper.scripts import multiQC_report
+from BacterialTyper.scripts import sampleParser
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 from BacterialTyper.modules import help_info
-from BacterialTyper.data.data_files import data_list
+from BacterialTyper.data import data_files
 
 ##############################################
 def run(options):
@@ -118,7 +118,7 @@ def run(options):
 	else:
 		# Get default adpaters file
 		print("\t- Default Trimmomatic adapters (v0.39) will be used...")
-		options.adapters = data_list("available_Trimmomatic_adapters")
+		options.adapters = data_files.data_list("available_Trimmomatic_adapters")
 		
 	## send for each sample
 	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:

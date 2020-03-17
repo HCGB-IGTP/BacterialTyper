@@ -19,15 +19,15 @@ import pandas as pd
 import shutil
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper import sampleParser
-from BacterialTyper import virulence_resistance
-from BacterialTyper import database_generator
-from BacterialTyper import ariba_caller
-from BacterialTyper import card_trick_caller
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts import sampleParser
+from BacterialTyper.scripts import virulence_resistance
+from BacterialTyper.scripts import database_generator
+from BacterialTyper.scripts import ariba_caller
+from BacterialTyper.scripts import card_trick_caller
 from BacterialTyper.modules import help_info
-from BacterialTyper import database_user
+from BacterialTyper.scripts import database_user
 
 ####################################
 def run_profile(options):

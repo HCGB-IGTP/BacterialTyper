@@ -9,7 +9,7 @@ Allows access to additional data stored within the repository.
 ## useful imports
 import os
 ## import my modules
-from BacterialTyper import functions
+from BacterialTyper.scripts import functions
 
 ####################################################################
 def data_list(wanted_data):

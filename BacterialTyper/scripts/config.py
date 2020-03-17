@@ -17,9 +17,9 @@ from termcolor import colored
 from distutils.version import LooseVersion
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import extern_progs
-from BacterialTyper import install_dependencies
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import extern_progs
+from BacterialTyper.scripts import install_dependencies
 
 ##################
 def prog_to_default():

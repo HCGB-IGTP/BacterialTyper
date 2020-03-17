@@ -7,7 +7,7 @@ Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain
 ## useful imports
 import os
 ## import my modules
-from BacterialTyper import functions
+from BacterialTyper.scripts import functions
 
 ####################################################################
 def perl_scripts(script):

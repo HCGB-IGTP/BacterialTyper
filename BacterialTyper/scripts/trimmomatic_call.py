@@ -18,8 +18,8 @@ from sys import argv
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 
 ################################################
 def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_adapters):

@@ -14,14 +14,14 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper import database_generator
-from BacterialTyper import database_user
-from BacterialTyper import ariba_caller
-from BacterialTyper import multiQC_report
-from BacterialTyper import species_identification_KMA
-from BacterialTyper import config 
-from BacterialTyper import functions
-from BacterialTyper import BUSCO_caller
+from BacterialTyper.scripts import database_generator
+from BacterialTyper.scripts import database_user
+from BacterialTyper.scripts import ariba_caller
+from BacterialTyper.scripts import multiQC_report
+from BacterialTyper.scripts import species_identification_KMA
+from BacterialTyper.scripts import config 
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import BUSCO_caller
 
 ###############################################################
 def run_database(options):

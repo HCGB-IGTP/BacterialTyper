@@ -27,11 +27,11 @@ from Bio import SeqIO
 import concurrent.futures
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper import ariba_caller
-from BacterialTyper import species_identification_KMA
-from BacterialTyper import min_hash_caller
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts import ariba_caller
+from BacterialTyper.scripts import species_identification_KMA
+from BacterialTyper.scripts import min_hash_caller
 
 ##########################################################################################
 def NCBI_DB(strains2get, data_folder, Debug):

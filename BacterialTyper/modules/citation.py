@@ -8,7 +8,7 @@ Prints an index of citation for the different packages and other softwares emplo
 '''
 
 ## import my modules
-from BacterialTyper import config, functions
+from BacterialTyper.scripts import config, functions
 from termcolor import colored
 import os, sys
 import pandas as pd

@@ -19,14 +19,14 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper import functions, bacteriophage
-from BacterialTyper import config
-from BacterialTyper import annotation
-from BacterialTyper import bacteriophage
-from BacterialTyper import sampleParser
+from BacterialTyper.scripts import functions, bacteriophage
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts import annotation
+from BacterialTyper.scripts import bacteriophage
+from BacterialTyper.scripts import sampleParser
 from BacterialTyper.modules import help_info
-from BacterialTyper import database_generator
-from BacterialTyper import database_user
+from BacterialTyper.scripts import database_generator
+from BacterialTyper.scripts import database_user
 
 ####################################
 def run_MGE(options):

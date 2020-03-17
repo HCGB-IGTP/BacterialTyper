@@ -18,9 +18,9 @@ import subprocess
 import concurrent.futures
 
 ## import modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper.blast_parser import parse
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts.blast_parser import parse
 
 ## perl scripts
 perlDir = os.path.dirname(os.path.realpath(__file__)) + '/../tools/perl'

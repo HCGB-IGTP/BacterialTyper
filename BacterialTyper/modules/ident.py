@@ -18,13 +18,13 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper import sampleParser
-from BacterialTyper import species_identification_KMA
-from BacterialTyper import database_generator
-from BacterialTyper import MLSTar
-from BacterialTyper import edirect_caller
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts import sampleParser
+from BacterialTyper.scripts import species_identification_KMA
+from BacterialTyper.scripts import database_generator
+from BacterialTyper.scripts import MLSTar
+from BacterialTyper.scripts import edirect_caller
 from BacterialTyper.modules import help_info
 
 ####################################

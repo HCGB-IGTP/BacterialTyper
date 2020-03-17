@@ -16,17 +16,17 @@ from io import open
 from termcolor import colored
 	
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper import annotation
-from BacterialTyper import BUSCO_caller
-from BacterialTyper import ariba_caller
-from BacterialTyper import sampleParser
-from BacterialTyper import bacteriophage
-from BacterialTyper import trimmomatic_call
-from BacterialTyper import multiQC_report
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts import annotation
+from BacterialTyper.scripts import BUSCO_caller
+from BacterialTyper.scripts import ariba_caller
+from BacterialTyper.scripts import sampleParser
+from BacterialTyper.scripts import bacteriophage
+from BacterialTyper.scripts import trimmomatic_call
+from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.modules import MGE
-from BacterialTyper import min_hash_caller
+from BacterialTyper.scripts import min_hash_caller
 
 ##########################
 def run_info(options):

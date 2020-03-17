@@ -17,14 +17,14 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper import annotation
-from BacterialTyper import BUSCO_caller
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts import annotation
+from BacterialTyper.scripts import BUSCO_caller
 from BacterialTyper.modules import qc
-from BacterialTyper import multiQC_report
+from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.modules import help_info
-from BacterialTyper import sampleParser
+from BacterialTyper.scripts import sampleParser
 
 ####################################
 def run_annotation(options):

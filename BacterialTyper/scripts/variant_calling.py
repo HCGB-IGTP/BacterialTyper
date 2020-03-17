@@ -16,8 +16,8 @@ from sys import argv
 from io import open
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 
 ## https://samtools.github.io/hts-specs/VCFv4.2.pdf
 ## bcftools 

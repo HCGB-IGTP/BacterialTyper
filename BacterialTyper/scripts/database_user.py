@@ -24,12 +24,12 @@ from Bio import SeqIO
 import concurrent.futures
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper import species_identification_KMA
-from BacterialTyper import min_hash_caller
-from BacterialTyper import database_generator
-from BacterialTyper import sampleParser
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts import species_identification_KMA
+from BacterialTyper.scripts import min_hash_caller
+from BacterialTyper.scripts import database_generator
+from BacterialTyper.scripts import sampleParser
 
 ##########################################################################################
 def update_database_user_data(database_folder, project_folder, Debug, options):

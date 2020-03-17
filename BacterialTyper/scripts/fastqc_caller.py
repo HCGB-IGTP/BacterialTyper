@@ -17,16 +17,16 @@ from sys import argv
 from io import open
 import pandas as pd
 
-import matplotlib
-matplotlib.use('agg')
-import matplotlib.pyplot as plt
+#import matplotlib
+#matplotlib.use('agg')
+#import matplotlib.pyplot as plt
 from pandas.plotting import table
-from matplotlib.backends.backend_pdf import PdfPages
+#from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 
 ##################
 class fastqcObject: 

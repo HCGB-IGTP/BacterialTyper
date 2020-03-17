@@ -19,8 +19,8 @@ import pandas
 import shutil
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 
 ## import phispy modules
 import PhiSpyModules

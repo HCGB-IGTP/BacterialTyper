@@ -24,9 +24,9 @@ import pandas as pd
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper import extern_progs
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts import extern_progs
 
 ##################
 ## [TODO]

@@ -18,10 +18,10 @@ from io import open
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper import ariba_caller
-from BacterialTyper import card_trick_caller
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts import ariba_caller
+from BacterialTyper.scripts import card_trick_caller
 
 #############################################################
 def parse_vfdb(folder, sampleName, fileResults, fileFlags, summary, assembly_cutoff):

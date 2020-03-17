@@ -19,8 +19,8 @@ import pandas as pd
 from ete3 import Tree
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 from BacterialTyper.modules import citation
 
 ############################################################### 

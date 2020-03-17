@@ -21,9 +21,9 @@ from termcolor import colored
 import shutil
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper import ariba_caller
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts import ariba_caller
 
 ########################
 #### INFORMATION	####

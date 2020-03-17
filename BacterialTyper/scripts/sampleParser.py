@@ -18,8 +18,8 @@ import shutil
 import concurrent.futures
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 
 ###############
 def help_format():

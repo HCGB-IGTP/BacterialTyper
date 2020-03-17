@@ -29,7 +29,7 @@ import patoolib ## to extract
 import shutil
 
 ## import my modules
-from BacterialTyper import config
+from BacterialTyper.scripts import config
 from BacterialTyper.other_tools import tools
 
 ########################################################################

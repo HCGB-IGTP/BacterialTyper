@@ -21,9 +21,9 @@ import shutil
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper.blast_parser import parse
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts.blast_parser import parse
 from BacterialTyper.other_tools import tools
 
 ################################################

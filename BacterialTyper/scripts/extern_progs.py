@@ -25,9 +25,9 @@ from distutils.version import LooseVersion
 import pkg_resources
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper import install_dependencies
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts import install_dependencies
 
 prog_to_version_cmd = {
 	'augustus':('--version', re.compile('AUGUSTUS.*\(([0-9\.]+)\).*')),

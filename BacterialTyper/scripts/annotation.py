@@ -25,8 +25,8 @@ import pandas as pd
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 
 ### print info prokka
 def print_list_prokka():

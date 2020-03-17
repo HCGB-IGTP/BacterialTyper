@@ -18,12 +18,12 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper import sampleParser
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import sampleParser
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 from BacterialTyper.modules import help_info
-from BacterialTyper import database_generator
-from BacterialTyper import min_hash_caller
+from BacterialTyper.scripts import database_generator
+from BacterialTyper.scripts import min_hash_caller
 
 ##############################################
 def run_cluster(options):

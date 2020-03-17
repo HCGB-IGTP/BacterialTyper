@@ -18,8 +18,8 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 
 from BacterialTyper.modules import prep
 from BacterialTyper.modules import qc
@@ -35,16 +35,16 @@ from BacterialTyper.modules import trimm
 #from BacterialTyper.modules import report_generation
 from BacterialTyper.modules import help_info
 
-from BacterialTyper import sampleParser
-from BacterialTyper import BUSCO_caller
-from BacterialTyper import multiQC_report
-from BacterialTyper import annotation
-from BacterialTyper import ariba_caller
-from BacterialTyper import min_hash_caller
-from BacterialTyper import trimmomatic_call
-from BacterialTyper import species_identification_KMA
-from BacterialTyper import MLSTar
-from BacterialTyper import bacteriophage
+from BacterialTyper.scripts import sampleParser
+from BacterialTyper.scripts import BUSCO_caller
+from BacterialTyper.scripts import multiQC_report
+from BacterialTyper.scripts import annotation
+from BacterialTyper.scripts import ariba_caller
+from BacterialTyper.scripts import min_hash_caller
+from BacterialTyper.scripts import trimmomatic_call
+from BacterialTyper.scripts import species_identification_KMA
+from BacterialTyper.scripts import MLSTar
+from BacterialTyper.scripts import bacteriophage
 
 
 ####################################

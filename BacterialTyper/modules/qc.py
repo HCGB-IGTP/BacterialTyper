@@ -19,12 +19,12 @@ import shutil
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper import fastqc_caller
-from BacterialTyper import sampleParser
-from BacterialTyper import multiQC_report
-from BacterialTyper import BUSCO_caller
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import fastqc_caller
+from BacterialTyper.scripts import sampleParser
+from BacterialTyper.scripts import multiQC_report
+from BacterialTyper.scripts import BUSCO_caller
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 from BacterialTyper.modules import help_info
 
 ################################################

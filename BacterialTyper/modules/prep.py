@@ -17,9 +17,9 @@ import pandas as pd
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper import sampleParser
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import sampleParser
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 
 ################################
 def run_prep(options):

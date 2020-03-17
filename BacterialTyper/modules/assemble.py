@@ -16,12 +16,12 @@ import pandas as pd
 import shutil
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper import spades_assembler
-from BacterialTyper import annotation
-from BacterialTyper import sampleParser
-from BacterialTyper import BUSCO_caller
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
+from BacterialTyper.scripts import spades_assembler
+from BacterialTyper.scripts import annotation
+from BacterialTyper.scripts import sampleParser
+from BacterialTyper.scripts import BUSCO_caller
 from BacterialTyper.modules import qc
 from BacterialTyper.modules import help_info
 

@@ -16,11 +16,11 @@ import pandas as pd
 from sys import argv
 from io import open
 from termcolor import colored
-import card_trick
+#import card_trick
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import config
 
 ##########
 def get_info_CARD(IDs, term, dataF):
