@@ -6,9 +6,9 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
+"""
 Provides external programs details
-'''
+"""
 
 ## useful imports
 import os
@@ -65,11 +65,11 @@ def return_default(soft):
 def return_min_version(soft):
 	"""Retrieve version for a given software
 	
-	Retrieves minimun version for the software of interest stored in :file:`config.main.software_requirements.csv' using the function :func:`BacterialTyper.config.min_version_programs`.
+	Retrieves minimun version for the software of interest stored in :file:`config/main/software_requirements.csv' using the function :func:`BacterialTyper.config.min_version_programs`.
 	
 	.. seealso:: Additional information on BacterialTyper configuration and requirements
 	
-		- :doc:`Configuration <../../../user_guide/installing>` 
+		- :doc:`Configuration <../../../user_guide/installation/installing>` 
 
 	"""
 	version_programs = config.min_version_programs()
@@ -127,13 +127,13 @@ def get_version(prog, path, Debug=False):
 	
 	Given a program name and expected path, tries to determine its version.
 	
-	:param prog:
-	:param path:
-	:param Debug:
+	:param prog: Program name
+	:param path: Absolute path
+	:param Debug: True/False
 	
-	:type prog:
-	:type path:
-	:type Debug:
+	:type prog: string
+	:type path: string 
+	:type Debug: bool
 	
 	:returns: tuple (bool, string). First element True if found version ok.
 	Second element is version. Returns NA message if no found and raises attention error message.

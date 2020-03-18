@@ -19,7 +19,6 @@ Developer guidelines for BacterialTyper scripts.
    blast_parser.rst   
    BUSCO_caller.rst   
    card_trick_caller.rst   
-   config.rst        
    database_generator.rst  
    database_user.rst      
    edirect_caller.rst  
@@ -33,6 +32,7 @@ Developer guidelines for BacterialTyper scripts.
    MLSTar.rst     
    multiQC_report.rst  
    sampleParser.rst       
+   set_config.rst        
    spades_assembler.rst
    species_identification_KMA.rst
    trimmomatic_call.rst

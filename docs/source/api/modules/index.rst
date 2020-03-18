@@ -16,6 +16,7 @@ Developer guidelines for BacterialTyper modules.
    annot.rst
    assemble.rst
    citation.rst
+   config.rst
    cluster.rst
    database.rst
    ident.rst

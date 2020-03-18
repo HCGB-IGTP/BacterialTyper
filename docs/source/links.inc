@@ -12,6 +12,7 @@
 .. _`numpydoc docstring guide`: https://numpydoc.readthedocs.io/en/latest/format.html
 .. _Python: http://www.python.org/
 .. _`PyPI files page`: https://pypi.org/
+.. _`Python pip`: https://pip.pypa.io/en/stable/
 .. _`pip installing instructions`: https://packaging.python.org/tutorials/installing-packages
 
 .. #### BacterialTyper additional software links
