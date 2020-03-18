@@ -1,7 +1,6 @@
 appdirs==1.4.3
 ariba==2.14.4
 beautifulsoup4==4.8.2
-bio==0.1.0
 biopython==1.76
 bz2file==0.98
 card-trick==0.2.0

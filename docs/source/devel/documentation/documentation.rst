@@ -209,9 +209,7 @@ will give the following link: :ref:`assembly-workflow`
 Writing docstrings
 ------------------
 
-Most of the API documentation is written in docstrings. These are comment
-blocks in source code that explain how the code works. Docstrings should 
-conform to the `numpydoc docstring guide`_. 
+Docstrings should conform to the `numpydoc docstring guide`_. 
 
 .. #################
 .. _example-docstrings:
@@ -241,8 +239,11 @@ Check an example for python documentation here: https://thomas-cokelaer.info/tut
 API Docstrings
 ^^^^^^^^^^^^^^
 
-These docstrings populate files in :file:`docs/api` directory and form the 
-reference documentation for the modules and scripts within BacterialTyper.
+Most of the API documentation is written in docstrings. These are comment
+blocks in source code that explain how the code works. For each module and 
+script available we have to create an ``.rst`` file in :file:`docs/api` 
+directory. Then, using the ``:automodule:`` directive and ``:members:`` role
+we automatically include every docstring within the source code available.
 
 Using a shell loop we create an ``.rst`` file for each module and script:
 
