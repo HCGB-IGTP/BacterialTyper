@@ -20,7 +20,7 @@ import pandas as pd
 
 ## import my modules
 from BacterialTyper.scripts import functions, bacteriophage
-from BacterialTyper.scripts import config
+from BacterialTyper.scripts import set_config
 from BacterialTyper.scripts import annotation
 from BacterialTyper.scripts import bacteriophage
 from BacterialTyper.scripts import sampleParser

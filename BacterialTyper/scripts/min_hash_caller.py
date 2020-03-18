@@ -43,7 +43,7 @@ import scipy.cluster.hierarchy as sch
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import config
+from BacterialTyper.scripts import set_config
 from BacterialTyper.scripts import database_generator
 
 ##################################################

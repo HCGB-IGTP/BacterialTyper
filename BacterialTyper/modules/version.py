@@ -13,7 +13,7 @@ import os
 import sys
 
 ## import my modules
-from BacterialTyper.scripts import config, functions
+from BacterialTyper.scripts import set_config, functions
 from BacterialTyper.scripts import extern_progs
 
 #from BacterialTyper.scripts import __version__ as ariba_version ## to include when distributed

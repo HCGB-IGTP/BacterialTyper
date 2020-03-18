@@ -20,7 +20,7 @@ import shutil
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import config
+from BacterialTyper.scripts import set_config
 
 ## import phispy modules
 import PhiSpyModules

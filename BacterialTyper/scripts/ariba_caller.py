@@ -20,7 +20,7 @@ from ete3 import Tree
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import config
+from BacterialTyper.scripts import set_config
 from BacterialTyper.modules import citation
 
 ############################################################### 

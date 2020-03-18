@@ -15,7 +15,7 @@ __all__ = [
 	'MGE',
 	'run',
 	'prep',
-	'set_configuration',
+	'config',
 	'test',
 	'trimm',
 	'version'

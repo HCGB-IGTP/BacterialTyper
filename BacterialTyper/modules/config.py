@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-##########################################################
+#########################################################
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
@@ -15,7 +15,7 @@ from termcolor import colored
 from distutils.version import LooseVersion
 
 ## import my modules
-from BacterialTyper.scripts import config
+from BacterialTyper.scripts import set_config
 from BacterialTyper.scripts import extern_progs
 from BacterialTyper.scripts import functions
 from BacterialTyper.scripts import install_dependencies

@@ -21,7 +21,7 @@ from BacterialTyper.scripts import trimmomatic_call
 from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import config
+from BacterialTyper.scripts import set_config
 from BacterialTyper.modules import help_info
 from BacterialTyper.data import data_files
 

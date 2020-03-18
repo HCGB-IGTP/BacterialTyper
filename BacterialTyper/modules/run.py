@@ -19,7 +19,7 @@ import pandas as pd
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import config
+from BacterialTyper.scripts import set_config
 
 from BacterialTyper.modules import prep
 from BacterialTyper.modules import qc

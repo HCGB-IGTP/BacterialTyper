@@ -13,7 +13,7 @@ __all__ = [
     'bacteriophage',
     'blast_parser',
     'BUSCO_caller',
-    'config',
+    'set_config',
     'card_trick_caller',
     'database_generator',
     'database_user',

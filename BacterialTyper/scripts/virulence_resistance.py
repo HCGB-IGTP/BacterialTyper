@@ -19,7 +19,7 @@ from termcolor import colored
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import config
+from BacterialTyper.scripts import set_config
 from BacterialTyper.scripts import ariba_caller
 from BacterialTyper.scripts import card_trick_caller
 

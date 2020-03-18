@@ -19,7 +19,7 @@ from termcolor import colored
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import config
+from BacterialTyper.scripts import set_config
 
 ################################################
 def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_adapters):

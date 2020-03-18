@@ -17,7 +17,7 @@ from termcolor import colored
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import config
+from BacterialTyper.scripts import set_config
 
 ## additional information:
 ## https://ncbi-hackathons.github.io/EDirectCookbook/
