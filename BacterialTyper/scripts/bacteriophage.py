@@ -42,13 +42,13 @@ def results_PhiSpy(folder, name):
 
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.get_fullpath_list`
+		- :func:`BacterialTyper.scripts.functions.get_fullpath_list`
 
-		- :func:`BacterialTyper.functions.create_subfolder`
+		- :func:`BacterialTyper.scripts.functions.create_subfolder`
 
-		- :func:`BacterialTyper.functions.read_time_stamp`
+		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
 		
-		- :func:`BacterialTyper.functions.print_time_stamp`
+		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
 				
 	"""
 	
@@ -174,7 +174,7 @@ def ident_bacteriophage(gbk_file, name, output_dir, training_set, Debug=False, m
 	:type keep: Boolean
 
 	The parameter `training_set` is the id for the training set of interest among the different available provided by PhiSpy within the file 
-	:file:`data/trainingGenome_list.txt` and summarized here by :func:`BacterialTyper.bacteriophage.get_list_PhiSpy_trainingSets`.
+	:file:`data/trainingGenome_list.txt` and summarized here by :func:`BacterialTyper.scripts.bacteriophage.get_list_PhiSpy_trainingSets`.
 	
 	.. note:: See available training sets in :ref:`PhiSpy-training-sets`
 
@@ -281,7 +281,7 @@ def print_list_modified():
 	"""Print PhiSpy training set information
 	
 	This function prints on screen the data information retrieved from PhiSpy package using 
-	:func:`BacterialTyper.bacteriophage.get_list_PhiSpy_trainingSets`, 
+	:func:`BacterialTyper.scripts.bacteriophage.get_list_PhiSpy_trainingSets`, 
 			
 	.. note:: See available training sets in :ref:`PhiSpy-training-sets`
 

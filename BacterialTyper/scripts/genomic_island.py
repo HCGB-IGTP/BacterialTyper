@@ -55,7 +55,7 @@ def GI_module(genbank_file, name, outdir, cutoff_dinuc_bias=8, min_length=1000):
     
     .. seealso:: This function depends on other BacterialTyper functions called:
     
-        - :func:`BacterialTyper.genomic_island.call_Dimob`
+        - :func:`BacterialTyper.scripts.genomic_island.call_Dimob`
     
     
      .. include:: ../../links.inc

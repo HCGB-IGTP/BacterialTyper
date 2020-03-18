@@ -362,7 +362,7 @@ def get_Newick_tree(cluster_hierachy, DataMatrix, labeltext, output):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.printList2file`
+		- :func:`BacterialTyper.scripts.functions.printList2file`
 		
 	"""
 	

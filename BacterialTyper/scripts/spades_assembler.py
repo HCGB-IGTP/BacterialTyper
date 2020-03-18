@@ -30,9 +30,9 @@ from BacterialTyper.other_tools import tools
 def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads):
 	"""Generate plasmid assembly using SPADES
 	
-	- Calls SPADES to assemble plasmids using --plasmid option (using :func:`BacterialTyper.spades_assembler.SPADES_systemCall`) 
+	- Calls SPADES to assemble plasmids using --plasmid option (using :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`) 
 	
-	- SPADES generates a file named as *scaffolds.fasta* within the directory provided. This function retrieves path to contigs/scaffolds assembled (using :func:`BacterialTyper.functions.retrieve_matching_files`).
+	- SPADES generates a file named as *scaffolds.fasta* within the directory provided. This function retrieves path to contigs/scaffolds assembled (using :func:`BacterialTyper.scripts.functions.retrieve_matching_files`).
 	
 	:param path: Absolute path to folder.
 	:param file1: Absolute path to fastq reads (R1).
@@ -51,9 +51,9 @@ def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads)
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.spades_assembler.SPADES_systemCall`
+		- :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`
 	
-		- :func:`BacterialTyper.functions.retrieve_matching_files`
+		- :func:`BacterialTyper.scripts.functions.retrieve_matching_files`
 	"""
 	print ('+ Running plasmid assembly...')
 	name = sample + '_plasmid'
@@ -74,11 +74,11 @@ def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads)
 def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 	"""Generate main assembly using SPADES
 	
-	- Calls SPADES to assemble reads (using :func:`BacterialTyper.spades_assembler.SPADES_systemCall`) 
+	- Calls SPADES to assemble reads (using :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`) 
 	
-	- SPADES generates a file named as *scaffolds.fasta* within the directory provided. This function retrieves path to contigs/scaffolds assembled (using :func:`BacterialTyper.functions.retrieve_matching_files`).
+	- SPADES generates a file named as *scaffolds.fasta* within the directory provided. This function retrieves path to contigs/scaffolds assembled (using :func:`BacterialTyper.scripts.functions.retrieve_matching_files`).
 	
-	- Renames contigs retrieved using sample name (using :func:`BacterialTyper.spades_assembler.rename_contigs`).
+	- Renames contigs retrieved using sample name (using :func:`BacterialTyper.scripts.spades_assembler.rename_contigs`).
 		
 	:param path: Absolute path to folder.
 	:param file1: Absolute path to fastq reads (R1).
@@ -97,11 +97,11 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.spades_assembler.SPADES_systemCall`
+		- :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`
 	
-		- :func:`BacterialTyper.functions.retrieve_matching_files`
+		- :func:`BacterialTyper.scripts.functions.retrieve_matching_files`
 	
-		- :func:`BacterialTyper.functions.rename_fasta_seqs`
+		- :func:`BacterialTyper.scripts.functions.rename_fasta_seqs`
 	"""
 	##print ('+ Running main assembly...')
 	options = ''
@@ -137,9 +137,9 @@ def SPADES_systemCall(sample_folder, file1, file2, name, SPADES_bin, options, th
 	
 	Steps:
 	
-	- It generates system call for SPADES assembly (using :func:`BacterialTyper.functions.system_call`). 
+	- It generates system call for SPADES assembly (using :func:`BacterialTyper.scripts.functions.system_call`). 
 	
-	- It generates timestamp file (See :func:`BacterialTyper.functions.print_time_stamp`).
+	- It generates timestamp file (See :func:`BacterialTyper.scripts.functions.print_time_stamp`).
 	
 	:param sample_folder: Absolute path to store results. It must exists.
 	:param file1: Absolute path to fastq reads (R1).
@@ -163,9 +163,9 @@ def SPADES_systemCall(sample_folder, file1, file2, name, SPADES_bin, options, th
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.system_call`
+		- :func:`BacterialTyper.scripts.functions.system_call`
 	
-		- :func:`BacterialTyper.functions.print_time_stamp`
+		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
 	"""
 	
 	## check if previously assembled and succeeded
@@ -196,11 +196,11 @@ def run_module_assembly(name, folder, file1, file2, threads):
 	
 	It calls assembly function to process data provided and returns genome statistics. Steps: 
 	
-	- Retrieves SPADES_ executable (See details :func:`BacterialTyper.config.get_exe`) using the minimun version required (See :func:`BacterialTyper.config.min_version_programs` for details)
+	- Retrieves SPADES_ executable (See details :func:`BacterialTyper.scripts.set_config.get_exe`) using the minimun version required (See :func:`BacterialTyper.scripts.set_config.min_version_programs` for details)
 	
-	- It generates a call to SPADES_ assembler (See :func:`BacterialTyper.spades_assembler.run_SPADES_assembly`). 
+	- It generates a call to SPADES_ assembler (See :func:`BacterialTyper.scripts.spades_assembler.run_SPADES_assembly`). 
 		
-	- If assembly succeeds and fasta file is generated under the directory provided, contig statistics are generated (:func:`BacterialTyper.spades_assembler.contig_stats`).
+	- If assembly succeeds and fasta file is generated under the directory provided, contig statistics are generated (:func:`BacterialTyper.scripts.spades_assembler.contig_stats`).
 	
 	- It retrieves spades executable using 
 	
@@ -220,13 +220,13 @@ def run_module_assembly(name, folder, file1, file2, threads):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.config.get_exe`
+		- :func:`BacterialTyper.scripts.set_config.get_exe`
 	
-		- :func:`BacterialTyper.spades_assembler.run_SPADES_assembly`
+		- :func:`BacterialTyper.scripts.spades_assembler.run_SPADES_assembly`
 	
-		- :func:`BacterialTyper.config.min_version_programs`
+		- :func:`BacterialTyper.scripts.set_config.min_version_programs`
 	
-		- :func:`BacterialTyper.spades_assembler.contig_stats`
+		- :func:`BacterialTyper.scripts.spades_assembler.contig_stats`
 	
 	.. include:: ../../links.inc	 	
 	"""
@@ -353,7 +353,7 @@ def contig_stats(assembly_file, csv_arg):
 	
 	- Retrieve information of additional perl script location (using :func:`BacterialTyper.other_tools.tools.perl_scripts`)
 	
-	- Create system call (using :func:`BacterialTyper.functions.system_call`) and return output statistic file created.
+	- Create system call (using :func:`BacterialTyper.scripts.functions.system_call`) and return output statistic file created.
 	
 	:param assembly_file: Absolute path to assembly fasta file.
 	:type assembly_file: string
@@ -371,7 +371,7 @@ def contig_stats(assembly_file, csv_arg):
 
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.system_call`
+		- :func:`BacterialTyper.scripts.functions.system_call`
 		
 		- :func:`BacterialTyper.other_tools.tools.perl_scripts`
 	"""

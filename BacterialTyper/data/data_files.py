@@ -5,7 +5,7 @@
 ##########################################################
 """
 Allows access to additional information stored in different files 
-under folder ``data``.
+under folder ``BacterialTyper/data``.
 """
 ## useful imports
 import os
@@ -14,6 +14,10 @@ from BacterialTyper.scripts import functions
 
 ####################################################################
 def data_list(wanted_data):
+	"""
+	Retrieves information of additional files under folder ``BacterialTyper/data``.
+	"""
+
 	data = os.path.dirname(os.path.realpath(__file__))
 	list_data = functions.get_fullpath_list(data)
 	dict_data = {}

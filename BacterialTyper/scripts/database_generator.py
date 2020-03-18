@@ -63,17 +63,17 @@ def NCBI_DB(strains2get, data_folder, Debug):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.create_folder`
+		- :func:`BacterialTyper.scripts.functions.create_folder`
 	
-		- :func:`BacterialTyper.functions.get_data`
+		- :func:`BacterialTyper.scripts.functions.get_data`
 	
-		- :func:`BacterialTyper.database_generator.get_dbs`
+		- :func:`BacterialTyper.scripts.database_generator.get_dbs`
 	
-		- :func:`BacterialTyper.database_generator.get_database`
+		- :func:`BacterialTyper.scripts.database_generator.get_database`
 		
-		- :func:`BacterialTyper.database_generator.NCBIdownload`
+		- :func:`BacterialTyper.scripts.database_generator.NCBIdownload`
 		
-		- :func:`BacterialTyper.database_generator.update_db_data_file`
+		- :func:`BacterialTyper.scripts.database_generator.update_db_data_file`
 		
 	.. include:: ../../links.inc	 	
 	

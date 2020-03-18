@@ -54,7 +54,7 @@ def busco_datasets():
 	
 		- :func:`BacterialTyper.data.data_files.data_list`
 		
-		- :func:`BacterialTyper.functions.file2dataframe`
+		- :func:`BacterialTyper.scripts.functions.file2dataframe`
 
 	
 	"""
@@ -105,13 +105,13 @@ def BUSCO_download(name, ftp, folder):
 	
 	This code checks if dataset is already available in folder provided. If not available proceeds to download it.
 	
-	It creates a subfolder (using :func:`BacterialTyper.functions.create_folder`) and downloads the dataset from ftp site provided (using :func:`BacterialTyper.functions.wget_download`).
+	It creates a subfolder (using :func:`BacterialTyper.scripts.functions.create_folder`) and downloads the dataset from ftp site provided (using :func:`BacterialTyper.scripts.functions.wget_download`).
 
-	The file donwloaded would gunzipped so it is decompressed (using  :func:`BacterialTyper.functions.extract`). 
+	The file donwloaded would gunzipped so it is decompressed (using  :func:`BacterialTyper.scripts.functions.extract`). 
 	
-	A timestamp is printed to reflect download data (using :func:`BacterialTyper.functions.print_time_stamp`).
+	A timestamp is printed to reflect download data (using :func:`BacterialTyper.scripts.functions.print_time_stamp`).
 	
-	The data download is checked for integrity using the function :func:`BacterialTyper.BUSCO_caller.BUSCO_check_dataset`.
+	The data download is checked for integrity using the function :func:`BacterialTyper.scripts.BUSCO_caller.BUSCO_check_dataset`.
 
 	If the process failed, the whole process is retried (CAUTION: it might generate infinite loop).	
 	
@@ -129,17 +129,17 @@ def BUSCO_download(name, ftp, folder):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.create_folder`
+		- :func:`BacterialTyper.scripts.functions.create_folder`
 		
-		- :func:`BacterialTyper.functions.wget_download`
+		- :func:`BacterialTyper.scripts.functions.wget_download`
 		
-		- :func:`BacterialTyper.functions.extract`
+		- :func:`BacterialTyper.scripts.functions.extract`
 		
-		- :func:`BacterialTyper.functions.print_time_stamp`
+		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
 		
-		- :func:`BacterialTyper.functions.print_sepLine`
+		- :func:`BacterialTyper.scripts.functions.print_sepLine`
 
-		- :func:`BacterialTyper.BUSCO_caller.BUSCO_check_dataset`
+		- :func:`BacterialTyper.scripts.BUSCO_caller.BUSCO_check_dataset`
 
 	"""
 	
@@ -214,7 +214,7 @@ def BUSCO_retrieve_sets(list_datasets, folder):
 	"""Retrieves datasets information available
 	
 	This functions checks in 'folder' if datasets in 'list_datasets' are available or downloads them if necessary. 
-	Retrieves information using function :func:`BacterialTyper.busco_caller.busco_datasets` and checks if it is available or downloads it using :func:`BacterialTyper.BUSCO_caller.BUSCO_download`. 
+	Retrieves information using function :func:`BacterialTyper.scripts.busco_caller.busco_datasets` and checks if it is available or downloads it using :func:`BacterialTyper.scripts.BUSCO_caller.BUSCO_download`. 
 
 	:param list_datasets: list of datasets of interest to check.
 	:param folder: absolute path to folder that will contain all datasets of interest.

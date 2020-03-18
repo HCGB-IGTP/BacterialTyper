@@ -326,19 +326,19 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.config.get_exe`
+		- :func:`BacterialTyper.scripts.set_config.get_exe`
 	
-		- :func:`BacterialTyper.functions.boxymcboxface`
+		- :func:`BacterialTyper.scripts.functions.boxymcboxface`
 		
-		- :func:`BacterialTyper.functions.outdir_subproject`
+		- :func:`BacterialTyper.scripts.functions.outdir_subproject`
 		
 		- :func:`BacterialTyper.modules.ident.send_kma_job`
 		
 		- :func:`BacterialTyper.modules.ident.get_outfile`
 	
-		- :func:`BacterialTyper.species_identification_KMA.check_db_indexed`
+		- :func:`BacterialTyper.scripts.species_identification_KMA.check_db_indexed`
 	
-		- :func:`BacterialTyper.species_identification_KMA.parse_kma_results`
+		- :func:`BacterialTyper.scripts.species_identification_KMA.parse_kma_results`
 	
 		
 	.. include:: ../../links.inc	
@@ -553,23 +553,23 @@ def edirect_ident(dataFrame, outdir_dict):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.get_info_file`
+		- :func:`BacterialTyper.scripts.functions.get_info_file`
 		
-		- :func:`BacterialTyper.functions.read_time_stamp`
+		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
 	
-		- :func:`BacterialTyper.functions.print_time_stamp`
+		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
 
-		- :func:`BacterialTyper.functions.optimize_threads`
+		- :func:`BacterialTyper.scripts.functions.optimize_threads`
 	
-		- :func:`BacterialTyper.functions.create_subfolder`
+		- :func:`BacterialTyper.scripts.functions.create_subfolder`
 	
-		- :func:`BacterialTyper.functions.boxymcboxface`
+		- :func:`BacterialTyper.scripts.functions.boxymcboxface`
 		
-		- :func:`BacterialTyper.functions.is_non_zero_file`
+		- :func:`BacterialTyper.scripts.functions.is_non_zero_file`
 	
-		- :func:`BacterialTyper.edirect_caller.generate_docsum_call`
+		- :func:`BacterialTyper.scripts.edirect_caller.generate_docsum_call`
 		
-		- :func:`BacterialTyper.edirect_caller.generate_xtract_call`
+		- :func:`BacterialTyper.scripts.edirect_caller.generate_xtract_call`
 		
 	.. include:: ../../links.inc	
 	"""
@@ -676,7 +676,7 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 	:type dataFrame_edirect: pandas.DataFrame()
 	:type retrieve_databases: pandas.DataFrame()
 	
-	:return: Information of the MLST identification. Dictionary keys are samples and values are the absolute path to file generate by :func:`BacterialTyper.MLSTar.run_doMLST` containing MLST information.
+	:return: Information of the MLST identification. Dictionary keys are samples and values are the absolute path to file generate by :func:`BacterialTyper.scripts.MLSTar.run_doMLST` containing MLST information.
 	:rtype: Dictionary
 
 	
@@ -692,17 +692,17 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.read_time_stamp`
+		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
 	
-		- :func:`BacterialTyper.functions.create_subfolder`
+		- :func:`BacterialTyper.scripts.functions.create_subfolder`
 		
-		- :func:`BacterialTyper.functions.boxymcboxface`
+		- :func:`BacterialTyper.scripts.functions.boxymcboxface`
 		
-		- :func:`BacterialTyper.MLSTar.run_MLSTar`
+		- :func:`BacterialTyper.scripts.MLSTar.run_MLSTar`
 		
-		- :func:`BacterialTyper.sampleParser.get_files`
+		- :func:`BacterialTyper.scripts.sampleParser.get_files`
 		
-		- :func:`BacterialTyper.MLSTar.get_MLSTar_species`
+		- :func:`BacterialTyper.scripts.MLSTar.get_MLSTar_species`
 		
 	.. include:: ../../links.inc	
 	"""

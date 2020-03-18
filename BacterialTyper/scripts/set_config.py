@@ -178,13 +178,13 @@ def get_exe(prog, Debug=False):
 		
 		- :func:`BacterialTyper.config`
 
-		- :func:`BacterialTyper.extern_progs.return_default`
+		- :func:`BacterialTyper.scripts.extern_progs.return_default`
 		
-		- :func:`BacterialTyper.extern_progs.retrun_min_version`
+		- :func:`BacterialTyper.scripts.extern_progs.retrun_min_version`
 		
-		- :func:`BacterialTyper.extern_progs.get_version`
+		- :func:`BacterialTyper.scripts.extern_progs.get_version`
 		
-		- :func:`BacterialTyper.extern_progs.my_which`
+		- :func:`BacterialTyper.scripts.extern_progs.my_which`
 		
 	.. attention:: Be aware of Copyright
 	

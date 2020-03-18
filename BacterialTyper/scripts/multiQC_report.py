@@ -37,9 +37,9 @@ def multiQC_module_call(givenList, name, path, option):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.printList2file`
+		- :func:`BacterialTyper.scripts.functions.printList2file`
 		
-		- :func:`BacterialTyper.multiQC_report.multiQC_call`
+		- :func:`BacterialTyper.scripts.multiQC_report.multiQC_call`
 	
 	"""
 	pathFile = path + '/' + 'samples.txt'
@@ -61,11 +61,11 @@ def multiQC_call(pathFile, name, folder, option):
 	:type folder: string 
 	:type option: string
 	
-	:returns: :func:`BacterialTyper.functions.system_call` output (OK/FALSE)
+	:returns: :func:`BacterialTyper.scripts.functions.system_call` output (OK/FALSE)
 		
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.system_call`
+		- :func:`BacterialTyper.scripts.functions.system_call`
 	
 	"""
 	multiqc_bin = "multiqc" ## if we activate the environment it should be in $PATH

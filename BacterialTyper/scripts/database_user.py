@@ -48,7 +48,7 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 	:type Debug:
 	:type options:
 	
-	:returns: Updated database result from :func:`BacterialTyper.database_generator.update_db_data_file`.
+	:returns: Updated database result from :func:`BacterialTyper.scripts.database_generator.update_db_data_file`.
 	:rtype: Dataframe
 	
 	:warnings: Returns **FAIL** if check process failed.
@@ -56,21 +56,21 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.create_subfolder`
+		- :func:`BacterialTyper.scripts.functions.create_subfolder`
 		
-		- :func:`BacterialTyper.functions.get_data`
+		- :func:`BacterialTyper.scripts.functions.get_data`
 		
-		- :func:`BacterialTyper.functions.optimize_threads`
+		- :func:`BacterialTyper.scripts.functions.optimize_threads`
 		
-		- :func:`BacterialTyper.database_user.get_userData_files`
+		- :func:`BacterialTyper.scripts.database_user.get_userData_files`
 		
-		- :func:`BacterialTyper.database_user.update_sample`
+		- :func:`BacterialTyper.scripts.database_user.update_sample`
 		
-		- :func:`BacterialTyper.database_generator.getdbs`
+		- :func:`BacterialTyper.scripts.database_generator.getdbs`
 		
-		- :func:`BacterialTyper.database_generator.get_database`
+		- :func:`BacterialTyper.scripts.database_generator.get_database`
 		
-		- :func:`BacterialTyper.database_generator.update_db_data_file`
+		- :func:`BacterialTyper.scripts.database_generator.update_db_data_file`
 
 	"""
 	

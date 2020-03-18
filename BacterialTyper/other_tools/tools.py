@@ -17,7 +17,7 @@ def perl_scripts(script):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.get_fullpath_list`
+		- :func:`BacterialTyper.scripts.functions.get_fullpath_list`
 	"""
 	perlDir = os.path.dirname(os.path.realpath(__file__)) + '/perl/'
 	list_perl = functions.get_fullpath_list(perlDir)
@@ -34,7 +34,7 @@ def R_scripts(script):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.get_fullpath_list`
+		- :func:`BacterialTyper.scripts.functions.get_fullpath_list`
 	"""
 	RDir = os.path.dirname(os.path.realpath(__file__)) + '/R/'
 	list_R = functions.get_fullpath_list(RDir)

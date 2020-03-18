@@ -8,7 +8,7 @@ It generates a protein annotation using Prokka_ for the genomes assembled genera
 
 Prokka_ contains several databases with known parameters for several kingdom and genus. Prokka option `--usegenus` is set as default.
 Several options are available for kingdom and genus. See details below and see output from :code:`prokka --listdb`
-shown in :func:`BacterialTyper.annotation.print_list_prokka`. If no genus matches user desired option, use option "Other".
+shown in :func:`BacterialTyper.scripts.annotation.print_list_prokka`. If no genus matches user desired option, use option "Other".
 
 .. include:: ../../links.inc	 	
 """
@@ -42,9 +42,9 @@ def print_list_prokka():
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.config_exe`
+		- :func:`BacterialTyper.scripts.set_config.get_exe`
 		
-		- :func:`BacterialTyper.functions.system_call`
+		- :func:`BacterialTyper.scripts.functions.system_call`
 	
 	.. include:: ../../links.inc	 	
 	"""
@@ -57,11 +57,11 @@ def module_call(sequence_fasta, kingdom, genus, path, name, threads):
 	"""
 	Function that checks and generates annotation.
 	
-	- It uses Prokka_ via :func:`BacterialTyper.annotation.prokka_call`.
+	- It uses Prokka_ via :func:`BacterialTyper.scripts.annotation.prokka_call`.
 	
-	- It checks if previously generated using :func:`BacterialTyper.functions.read_time_stamp`. 
+	- It checks if previously generated using :func:`BacterialTyper.scripts.functions.read_time_stamp`. 
 	
-	- Once finished, it prints timestamp (:func:`BacterialTyper.functions.print_time_stamp`). 
+	- Once finished, it prints timestamp (:func:`BacterialTyper.scripts.functions.print_time_stamp`). 
 	
 	:param sequence_fasta: Assembled sequences in fasta file format. 
 	:param kingdom: Available kingdoms mode for Prokka software: Archaea|Bacteria|Mitochondria|Viruses
@@ -79,13 +79,13 @@ def module_call(sequence_fasta, kingdom, genus, path, name, threads):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.config_exe`
+		- :func:`BacterialTyper.scripts.set_config.get_exe`
 		
-		- :func:`BacterialTyper.functions.read_time_stamp`
+		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
 		
-		- :func:`BacterialTyper.functions.print_time_stamp`
+		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
 				
-		- :func:`BacterialTyper.annotation.prokka_call`	
+		- :func:`BacterialTyper.scripts.annotation.prokka_call`	
 
 	.. include:: ../../links.inc	 	
 	"""
@@ -138,13 +138,13 @@ def prokka_call(prokka_bin, sequence_fasta, kingdom, genus, outdir_name, name, t
 
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.config_exe`
+		- :func:`BacterialTyper.scripts.set_config.get_exe`
 		
-		- :func:`BacterialTyper.functions.read_time_stamp`
+		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
 		
-		- :func:`BacterialTyper.functions.print_time_stamp`
+		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
 				
-		- :func:`BacterialTyper.annotation.prokka_call`	
+		- :func:`BacterialTyper.scripts.annotation.prokka_call`	
 	
 	.. include:: ../../links.inc
 	"""

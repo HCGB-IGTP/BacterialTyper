@@ -225,6 +225,11 @@ An example docstring looks like:
 
 And it displays like:
 
+.. toctree:: 
+   :hidden:
+   
+   example.rst
+
 .. include:: ./example.rst
 
 For other docstrings example visit https://matplotlib.org/devel/documenting_mpl.html#example-docstring

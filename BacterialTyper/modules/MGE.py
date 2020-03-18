@@ -284,13 +284,13 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 	
 	.. seealso: This functions depend on third party software called using several BacterialTyper functions such as:
 	
-		- :func:`BacterialTyper.bacteriophage.call_ident_bacteriophage`
+		- :func:`BacterialTyper.scripts.bacteriophage.call_ident_bacteriophage`
 		
-		- :func:`BacterialTyper.bacteriophage.results_PhiSpy`
+		- :func:`BacterialTyper.scripts.bacteriophage.results_PhiSpy`
 		
-		- :func:`BacterialTyper.`
+		- :func:`BacterialTyper.scripts.`
 		
-		- :func:`BacterialTyper.`
+		- :func:`BacterialTyper.scripts.`
 	
 	"""
 	

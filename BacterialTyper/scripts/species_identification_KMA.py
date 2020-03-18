@@ -221,13 +221,13 @@ def index_database(fileToIndex, kma_bin, index_name, option, folder, type_option
 	:type folder: string 
 	:type type_option: string 	 
 	
-	:returns: It returns message from :func:`BacterialTyper.species_identification_KMA.check_db_indexed`.
+	:returns: It returns message from :func:`BacterialTyper.scripts.species_identification_KMA.check_db_indexed`.
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.system_call`
+		- :func:`BacterialTyper.scripts.functions.system_call`
 		
-		- :func:`BacterialTyper.species_identification_KMA.check_db_indexed`
+		- :func:`BacterialTyper.scripts.species_identification_KMA.check_db_indexed`
 	
 	"""	
 	
@@ -315,13 +315,13 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.functions.readList_fromFile`
+		- :func:`BacterialTyper.scripts.functions.readList_fromFile`
 		
-		- :func:`BacterialTyper.functions.printList2file`
+		- :func:`BacterialTyper.scripts.functions.printList2file`
 		
-		- :func:`BacterialTyper.species_identification_KMA.check_db_indexed`
+		- :func:`BacterialTyper.scripts.species_identification_KMA.check_db_indexed`
 
-		- :func:`BacterialTyper.species_identification_KMA.index_database`
+		- :func:`BacterialTyper.scripts.species_identification_KMA.index_database`
 
 		
 	"""

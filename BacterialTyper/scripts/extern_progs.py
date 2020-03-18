@@ -65,7 +65,7 @@ def return_default(soft):
 def return_min_version(soft):
 	"""Retrieve version for a given software
 	
-	Retrieves minimun version for the software of interest stored in :file:`config/main/software_requirements.csv' using the function :func:`BacterialTyper.config.min_version_programs`.
+	Retrieves minimun version for the software of interest stored in :file:`config/main/software_requirements.csv' using the function :func:`BacterialTyper.scripts.set_config.min_version_programs`.
 	
 	.. seealso:: Additional information on BacterialTyper configuration and requirements
 	
@@ -135,8 +135,7 @@ def get_version(prog, path, Debug=False):
 	:type path: string 
 	:type Debug: bool
 	
-	:returns: tuple (bool, string). First element True if found version ok.
-	Second element is version. Returns NA message if no found and raises attention error message.
+	:returns: tuple (bool, string). First element True if found version ok. Second element is version. Returns NA message if no found and raises attention error message.
 	
 	.. attention:: Be aware of Copyright
 	
