@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
+#########################################################
+## Jose F. Sanchez                                      ##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain      ##
 ##########################################################
-## Jose F. Sanchez										##
-## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
-##########################################################
-import argparse ## https://docs.python.org/3/library/argparse.html#module-argparse
+"""
+Main script for the BacterialTyper project.
+"""
+import argparse 
 import os
 import sys
-import BacterialTyper
+import BacterialTyper.modules
+ 
 
 ## initiate parser
 parser = argparse.ArgumentParser(
     prog='BacterialTyper',
-    description='BacterialTyper: Bacterial Genotyping using NGS...'
+    description='BacterialTyper: Bacterial Genotyping using NGS'
     #,epilog="(c) 2019. Jose F. Sanchez, Cristina Prat and Lauro Sumoy."
     
 )
@@ -52,7 +56,9 @@ subparser_config = subparsers.add_parser(
 )
 subparser_config.add_argument("option", help="Only check if missing any dependencies or modules or try to install them.", choices=['only_check','install'])
 subparser_config.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
-subparser_config.set_defaults(func=BacterialTyper.modules.set_configuration.run)
+subparser_config.set_defaults(func=BacterialTyper.modules.config.run)
+
+## add fake module blank to add space
 subparser_space = subparsers.add_parser(' ', help='')
 ##-------------------------------------------------------------##
 
