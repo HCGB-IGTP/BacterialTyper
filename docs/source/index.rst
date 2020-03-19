@@ -37,14 +37,16 @@ obtained results with those previously generated (internal database).
 
 The BacterialTyper documentation includes:
 
-- A :doc:`User's Guide <user_guide/index>` to get started.
-- An example :doc:`Tutorial <tutorial/index>`.
-- :doc:`Developer Guidelines <devel/index>`.
-- Additional :doc:`information <info/index>` of the BacterialTyper project
-- A list of :doc:`Glossary <glossary/index>` terms
-- A list of :doc:`Bibliography <bib/bib>`
+- A :doc:`User's Guide <user_guide/user_guide_index>` to get started.
+- An example :doc:`Tutorial <tutorial/tutorial_index>`.
+- :doc:`Developer Guidelines <devel/devel_index>`.
+- Additional :doc:`information <info/info_index>` of the BacterialTyper project
+- A list of :doc:`Glossary <glossary/glossary_index>` terms
+- A list of :doc:`Bibliography <bib/bib_index>`
 
+.. ##################
 .. _pipeline-scheme:
+.. ##################
 
 Pipeline Scheme
 ===============

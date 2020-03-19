@@ -11,7 +11,7 @@ Modules
 Developer guidelines for BacterialTyper modules.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    annot.rst
    assemble.rst

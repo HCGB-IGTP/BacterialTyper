@@ -13,8 +13,8 @@ Guidelines for developing the BacterialTyper project.
 .. toctree::
    :maxdepth: 1
     
-   ../api/index.rst
+   ../api/api_index.rst
    developer_guidelines.rst
-   ../data/index.rst
+   ../data/data_index.rst
    documentation/documentation.rst
     

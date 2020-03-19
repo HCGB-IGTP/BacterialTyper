@@ -15,11 +15,11 @@ Documentation
 .. toctree::
    :maxdepth: 2
 
-   user_guide/index.rst
-   devel/index.rst
-   info/index.rst
-   glossary/index.rst
-   bib/bib.rst
+   user_guide/user_guide_index.rst
+   devel/devel_index.rst
+   info/info_index.rst
+   glossary/glossary_index.rst
+   bib/bib_index.rst
    
 
 Indices and tables

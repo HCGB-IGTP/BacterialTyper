@@ -18,9 +18,10 @@ markup and working with Sphinx in general.
 Organization
 ------------
 
-The documentation folder :file:`BacterialTyper/docs` organization is distributed in multifple files, folders and subfolders:
+The documentation folder :file:`BacterialTyper/docs/source` organization is distributed 
+in multifple files, folders and subfolders:
 
-* :file:`api` - Placeholders to automatically generate the application programming interface (api_) documentation.
+* :file:`api` - Placeholders to automatically generate the application programming interface (API_) documentation.
 
 * :file:`devel` - Developers guidelines to contribute to the project.
 
@@ -47,17 +48,16 @@ The documentation folder :file:`BacterialTyper/docs` organization is distributed
 The ``.rst`` files are kept in :file:`user_guide`, :file:`devel`, 
 :file:`api`, :file:`glossary` and :file:`tutorial`. 
 
-The main entry point is :file:`index.rst`, which pulls in 
-the :file:`index.rst` file for the users guide, developers guide, 
-api reference, and FAQs. The documentation suite is built as a single 
+The main entry point is :file:`index.rst`, which contains links
+for users guide, developers guide, api reference, and FAQs. 
+The documentation suite is built as a single 
 document in order to make the most effective use of cross referencing.
 
-.. note::
-
-   There are also ``.rst`` files that are contained in :file:`api/modules` 
-   and :file:`api/submodules` that are automatically generated from the docstrings 
-   of the functions in BacterialTyper scripts and main modules. These sources consist 
-   of python scripts that have ReST documentation built into their comments. 
+There are also ``.rst`` files that are contained in :file:`api/modules` 
+and :file:`api/scripts` that are automatically generated from the docstrings 
+of the functions in BacterialTyper scripts and main modules. These sources consist 
+of python scripts that have ReST documentation built into their comments. See section
+:ref:`api-docstrings` for details. 
 
 .. _buld-the-docs:
 
@@ -80,15 +80,23 @@ To build the docs, you will need to install several python modules as
 documentation is generated from reStructuredText_ (ReST) using the 
 Sphinx_ documentation generation tool. 
 
+.. attention::
+
+  * You will need a minimal working LaTeX distribution.
+
 There are several extra requirements that are needed to build the documentation. 
 They are listed in :file:`config/docs/doc-requirements.txt`, which is shown below:
 
 .. include:: ../../../../config/docs/doc-requirements.txt
    :literal:
 
-.. note::
-  * You'll need a minimal working LaTeX distribution for many examples to run.
+You will need a BacterialTyper (and dependencies) working distribution included in your
+```$PYTHONPATH`` (activate your virtual environment as mentioned :ref:`here<activate-env>`) and then 
+additionally install documentation requirements using pip.
 
+.. code-block:: sh
+
+   pip install config/docs/doc-requirements.txt
 
 .. ###############################################
 .. _building-docs-guide:
@@ -99,9 +107,6 @@ The documentation sources are found in the :file:`docs/` directory in the trunk.
 The configuration file for Sphinx is :file:`docs/conf.py`. It controls which
 directories Sphinx parses, how the docs are built, and how the extensions are
 used. 
-
-install modules
-virtual environment
 
 To build the documentation in html format, cd into :file:`docs/` and run:
 
@@ -169,13 +174,13 @@ Documents can be linked with the ``:doc:`` directive:
 
 .. code-block:: rst
 
-   See the :doc:`../../../info/index`
+   See the :doc:`../../../info/info_index`
 
    See the installation user guide :doc:`../../../user_guide/installation/installing`
 
 will render as:
 
-  See the :doc:`../../../info/index`
+  See the :doc:`../../../info/info_index`
   
   See the installation user guide :doc:`../../../user_guide/installation/installing`
   

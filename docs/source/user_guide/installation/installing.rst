@@ -83,38 +83,65 @@ section :ref:`virtual-env-BacterialTyper` for further details.
 Installing from source
 ----------------------
 
-To get the code, you can either grab the latest tar.gz release file from the `PyPI files page`_ and follow the instructions 
-in :ref:`get-Pypi-targz` and install it. On the other hand, if you want to develop BacterialTyper or just 
-need the latest bugfixed version, grab the latest git version from the `BacterialTyper github`_ website, and 
-follow the :ref:`get-git-code` instructions.
+Under some circumstancies (develop, bugs fixed, etc) you might be interested in obtaining the latest code
+ version. Take into account, that you will to install dependencies and fulfill requirements to have a working
+ distribution. 
 
+.. ##############
+.. _get-git-code:
+.. ##############
 
 Get source code
 ^^^^^^^^^^^^^^^
 
+The BacterialTyper project uses git_ as a version control system. To get the code, you can grab the latest version 
+from the `BacterialTyper github`_ website, and follow the :ref:`install-BacterialTyper-source` instructions.
 
-.. _get-Pypi-targz: 
+Using the command-line, check you have a working distribution of git by typing ``git --help`` or install it by typing:
 
-Get latest Pypi files
-"""""""""""""""""""""
-   
-The Python Package Index (PyPI) is a repository of software for the Python programming language. PyPI helps 
-you find and install software developed and shared by the Python community. 
+.. code-block:: sh
 
-TODO: Fill it.
+   sudo apt update
+   sudo apt upgrade
+   sudo apt install git
 
-.. _get-git-code: 
+Once you have ``git`` installed and working change directory to a folder of interest where the BacterialTyper 
+project would be download. Type:
 
-Get latest git version
-""""""""""""""""""""""
+.. code-block:: sh
 
-Type:
    git clone https://github.com/JFsanchezherrero/BacterialTyper.git 
 
-Add git clone submodules command
+Additionally, BacterialTyper contains a third-party project, IslandPath-DIMOB (IslandPath_ :cite:`Bertelli2017`) that BacterialTyper developers
+forked, updated and adapted. See additional details in section: :ref:`islandPath-DIMOB-forked`.
+
+Then, if you are downloading BacterialTyper code from source, you need to retrieve the submodule latest version
+and install it accordingly. To do so, type:
+
+.. code-block:: sh
+   
+   git clone --recurse-submodules https://github.com/JFsanchezherrero/BacterialTyper.git
+
+On the other hand, you can also do it manually. In the directory containing git BacterialTyper project you would 
+find a ``third_party`` folder. Change directory to there and type:
+
+.. code-block:: sh
+
+   cd BacterialTyper/third_party
+   git submodule init
+   git submodule update
+   
+For additional details about git submodules see information :ref:`here<https://git-scm.com/book/en/v2/Git-Tools-Submodules>`.
+   
+
+.. ################################################
+.. _install-BacterialTyper-source:
+
+Install BacterialTyper from source
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Install Dependencies
-^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""
 
 .. ################################################
 .. _install-perl_packages:
@@ -132,8 +159,6 @@ Execute the file from the directory :file:`BacterialTyper/` as:
 .. code-block:: sh
 
    sh config/main/perl_lib_installer.sh
-
-
 
 .. ############################
 .. _virtual-env-BacterialTyper:
@@ -185,4 +210,3 @@ Execute the file from the directory :file:`BacterialTyper/` as:
 
 
 .. include:: ../../links.inc
-

@@ -11,7 +11,7 @@ Scripts
 Developer guidelines for BacterialTyper scripts.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
     
    annotation.rst    
    ariba_caller.rst   
