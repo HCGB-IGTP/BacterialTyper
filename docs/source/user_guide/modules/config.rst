@@ -1,8 +1,8 @@
 .. ############################
 .. _config-description::
 
-cluster
-=======
+config
+======
 
 Include brief comment about this module
 

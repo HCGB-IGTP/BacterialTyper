@@ -4,6 +4,14 @@ API Overview
 ------------
 .. toctree::
    :hidden:
+   
+   BacterialTyper.rst
+   modules/modules_index.rst
+   scripts/scripts_index.rst
+   other_tools.rst
+   data.rst
+   third_party.rst
+   
 
 .. only:: html
 
@@ -13,7 +21,7 @@ API Overview
 .. contents:: :local:
 
 Here we include and API_ documentation for BacterialTyper in order to provide third parties to use the 
-functionality of that software application
+functionality of BacterialTyper application
 
 This pipeline is composed of multiple modules and scripts that are separated in a main script:
 

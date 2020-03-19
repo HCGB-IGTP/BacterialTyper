@@ -1,5 +1,5 @@
 .. ################
-.. third-party-soft:
+.. _third-party-soft:
 .. ################
 
 Third Party Software
@@ -9,7 +9,7 @@ Within BacterialTyper, there is a third-party project, named IslandPath-DIMOB, t
 its original :ref:`source<IslandPath_>`. 
 
 .. ################
-.. islandPath-DIMOB-forked:
+.. _islandPath-DIMOB-forked:
 .. ################
 
 IslandPath-DIMOB forked version
