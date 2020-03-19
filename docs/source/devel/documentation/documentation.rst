@@ -100,6 +100,9 @@ The configuration file for Sphinx is :file:`docs/conf.py`. It controls which
 directories Sphinx parses, how the docs are built, and how the extensions are
 used. 
 
+install modules
+virtual environment
+
 To build the documentation in html format, cd into :file:`docs/` and run:
 
 .. code-block:: sh
@@ -166,15 +169,15 @@ Documents can be linked with the ``:doc:`` directive:
 
 .. code-block:: rst
 
-   See the :doc:`../../info/index`
+   See the :doc:`../../../info/index`
 
-   See the installation user guide :doc:`../../../user_guide/installing`
+   See the installation user guide :doc:`../../../user_guide/installation/installing`
 
 will render as:
 
-  See the :doc:`../../info/index`
+  See the :doc:`../../../info/index`
   
-  See the installation user guide :doc:`../../../user_guide/installing`
+  See the installation user guide :doc:`../../../user_guide/installation/installing`
   
 Sections can also be given reference names and be referenced using the ``:ref:`` directive.  
 

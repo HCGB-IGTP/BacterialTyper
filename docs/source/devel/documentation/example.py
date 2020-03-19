@@ -19,6 +19,8 @@ def hello_world(fasta_file, name, new_fasta):
     
     :return: Path to tabular delimited file containing conversion from all to new id for each sequence.
     :warnings: Returns FAIL if name is >37 characters.
+    
+    .. include:: ../../links.inc
 
     """
     print("Hello world!")
