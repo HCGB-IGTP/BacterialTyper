@@ -52,7 +52,7 @@ def run(options):
 	
 	## python version
 	this_python_version = str(sys.version)
-	python_min_version = extern_progs.return_min_version('python')
+	python_min_version = extern_progs.return_min_version_soft('python')
 	if LooseVersion(this_python_version) >= LooseVersion(python_min_version):
 		print ("Minimun version (%s) satistied: %s" %( python_min_version, this_python_version))
 

@@ -1,4 +1,4 @@
-.. scripts:
+.. _scripts:
 
 Scripts
 =======
@@ -22,17 +22,14 @@ Developer guidelines for BacterialTyper scripts.
    database_generator.rst  
    database_user.rst      
    edirect_caller.rst  
-   extern_progs.rst    
    fastqc_caller.rst   
    functions.rst
    genomic_island.rst
    get_descendant.rst  
-   install_dependencies.rst  
    min_hash_caller.rst    
    MLSTar.rst     
    multiQC_report.rst  
    sampleParser.rst       
-   set_config.rst        
    spades_assembler.rst
    species_identification_KMA.rst
    trimmomatic_call.rst

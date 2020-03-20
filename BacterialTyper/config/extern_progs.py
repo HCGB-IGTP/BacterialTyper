@@ -7,7 +7,7 @@
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
 """
-Provides external programs details
+Provides external programs details and configuration.
 """
 
 ## useful imports
@@ -56,32 +56,169 @@ prog_to_version_cmd = {
 	
 }
 
+####################################################################
+def file_list(wanted_data):
+	"""
+	Retrieves information of additional files under folder ``BacterialTyper/config``.
+	
+	Using :func:`BacterialTyper.scripts.functions.get_fullpath_list` retrieves absolute
+	path for file of interest.
+	
+	:param wanted_data: name for file
+	:type wanted_data: string
+	
+	:returns: Absolute path for file wanted
+	
+	"""
+
+	config_folder = os.path.dirname(os.path.realpath(__file__))
+	listOffiles = functions.get_fullpath_list(config_folder)
+	for f in listOffiles:
+		name = os.path.splitext(os.path.basename(f))[0]
+		if (name == wanted_data):
+			return (f)
+
 ##################
-def return_default(soft):
-	dict_programs = config.prog_to_default()
-	return (dict_programs[soft])
+## Software
+##################
+def read_dependencies():
+	"""Returns a dictionary containing the executable name for each software.
+	
+	It uses :func:`BacterialTyper.config.extern_progs.file_list` to retrieve absolute path
+	for file :file:`BacterialTyper/config/dependencies.csv`. It then reads csv into pandas
+	dataframe using :func:`BacterialTyper.scripts.functions.get_data` and returns it.
+	
+	.. seealso:: This function depends on other BacterialTyper functions:
+	
+		- :func:`BacterialTyper.config.extern_progs.file_list`
+		
+		- :func:`BacterialTyper.scripts.functions.get_data`	
+	"""
+	
+	## read from file: prog2default.csv
+	dependencies_file = file_list("dependencies")
+	return(functions.get_data(dependencies_file, ',', index_col=0))
+
+	
+def return_defatult_soft(soft):
+	"""Returns default name for a given software name
+	
+	For some software we provide a shorter name for the software. Here, we read file
+	:file:`BacterialTyper/config/dependencies.csv` using :func:`BacterialTyper.config.extern_progs.read_dependencies`
+	and retrieve original software name.
+	
+	:param soft: Software name
+	:type soft: string
+	
+	:returns: String with original software name
+	
+	.. seealso:: This function depends on other BacterialTyper functions:
+	
+		- :func:`BacterialTyper.config.extern_progs.read_dependencies`	
+	
+	"""
+	dependencies_df = read_dependencies()
+	return(dependencies_df[soft]["soft_name"])	
 	
 ##################
-def return_min_version(soft):
+def return_min_version_soft(soft):
 	"""Retrieve version for a given software
 	
-	Retrieves minimun version for the software of interest stored in :file:`config/main/software_requirements.csv' using the function :func:`BacterialTyper.scripts.set_config.min_version_programs`.
+	Retrieves minimum version for the software of interest stored in :file:`BacterialTyper/config/dependencies.csv'.
+	It reads file using :func:`BacterialTyper.config.extern_progs.read_dependencies`
+	and retrieve minimum version required.
 	
-	.. seealso:: Additional information on BacterialTyper configuration and requirements
+	:param soft: Software name
+	:type soft: string
 	
-		- :doc:`Configuration <../../../user_guide/installation/installing>` 
-
+	:returns: String with minimum version
+	
+	.. seealso:: This function depends on other BacterialTyper functions:
+	
+		- :func:`BacterialTyper.config.extern_progs.read_dependencies`	
 	"""
-	version_programs = config.min_version_programs()
-	return (version_programs[soft])
+	dependencies_df = read_dependencies()
+	return(dependencies_df[soft]["min_version"])	
 
 ##################
+
+##################
+### Python packages
+##################
+def min_package_version():
+	"""Returns a dictionary containing minimum version for each python package.
+
+	Reads information from :file:`config/main/python_requirements.csv`.
+	
+	:returns: dictionary
+	"""
+	
+	## ToDO: read requirements file:: python_requirements.txt
+	package_min_versions = {
+		'appdirs':'1.4.3',
+		'ariba':'2.13.5',
+		'Bio':'1.73', ## biopython
+		'bs4':'4.7.1', #beautifulsoup4
+		'certifi':'2019.3.9',
+		'chardet':'3.0.4',
+		'click':'7.0',
+		'colormath':'3.0.0',
+		'configparser':'3.7.4',
+		'cycler':'0.10.0',
+		'cython':'0.29.6',
+		'decorator':'4.4.0',
+		'dendropy':'4.4.0',
+		'et_xmlfile':'1.0.1',
+		'ete3':'3.1.1',
+		'fastqcparser':'1.1',
+		'filehash':'0.1.dev3',
+		'future':'0.17.1',
+		'idna':'2.8',
+		'jdcal':'1.4.1',
+		'jinja2':'2.10.1',
+		'kiwisolver':'1.0.1',
+		'lzstring':'1.0.4',
+		'markdown':'3.1',
+		'markupsafe':'1.1.1',
+		'matplotlib':'2.2.4',
+		'multiqc':'1.7',
+		'ncbi_genome_download':'0.2.9',
+		'networkx':'2.2',
+		'numpy':'1.16.2',
+		'openpyxl':'2.6.2',
+		'pandas':'0.24.2',
+		'patoolib':'1.12',
+		'pyfastaq':'3.17.0',
+		'pymummer':'0.10.3',
+		'pyparsing':'2.4.0',
+		'pysam':'0.15.2',
+		'dateutil':'2.8.0',
+		'python-magic':'0.4.15',
+		'pytz':'2018.9',
+		'yaml':'5.1', #pyyaml
+		'requests':'2.21.0',
+		'scipy':'1.2.1',
+		'simplejson':'3.16.0',
+		'six':'1.12.0',
+		'soupsieve':'1.9',
+		'spectra':'0.0.11',
+		'termcolor':'1.1.0',
+		'urllib3':'1.24.1',
+		'wget':'3.2',
+		'xlrd':'1.2.0',
+		'xlsxwriter':'1.1.7',
+		'xlwt':'1.3.0'
+	}
+	return package_min_versions
+
+##################
+
 def python_packages_dependencies():
 	## ToDo set automatic from pip list
 	python_packages_BacterialTyper = ('ariba', 'bs4', 'dendropy', 'pyfastaq', 'pymummer', 'pysam')
 
 ##################
-def return_min_version_package(package):
+def return_min_version_soft_package(package):
 	version_package = config.min_package_version()
 	return (version_package[package])
 
@@ -90,6 +227,11 @@ def print_package_version():
 	my_packages = config.min_package_version()
 	for each in my_packages:
 		print ("{:.<15}{:.>15}".format("Module: %s" %each, my_packages[each]))
+
+
+
+
+
 
 ##################
 def print_dependencies():
@@ -107,127 +249,4 @@ def print_dependencies():
 	pd.set_option('display.max_colwidth', -1)
 	pd.set_option('display.max_columns', None)
 	print (df_programs)
-
-##################
-def decode(x):
-	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
-	## give credit to them appropiately
-	try:
-		s = x.decode()
-	except:
-		return x
-	
-	return s
-
-##################
-def get_version(prog, path, Debug=False):
-	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
-	## give credit to them appropiately
-	"""Get version of software
-	
-	Given a program name and expected path, tries to determine its version.
-	
-	:param prog: Program name
-	:param path: Absolute path
-	:param Debug: True/False
-	
-	:type prog: string
-	:type path: string 
-	:type Debug: bool
-	
-	:returns: tuple (bool, string). First element True if found version ok. Second element is version. Returns NA message if no found and raises attention error message.
-	
-	.. attention:: Be aware of Copyright
-	
-		The code implemented here was retrieved and modified from ARIBA (https://github.com/sanger-pathogens/ariba)
-		
-		Give them credit accordingly.
-	"""
-
-	assert prog in prog_to_version_cmd
-	args, regex = prog_to_version_cmd[prog]
-	cmd = path + ' ' + args
-	if prog == 'spades':
-		cmd_output = subprocess.Popen(['python3', path, args], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
-	elif prog == 'trimmomatic':
-		java_bin = config.get_exe('java')
-		java_jar = java_bin + ' -jar ' + path + ' ' + args
-		cmd_output = subprocess.Popen(java_jar, shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
-	else:
-		cmd_output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-
-	## decode command
-	cmd_output = decode(cmd_output[0]).split('\n')[:-1] + decode(cmd_output[1]).split('\n')[:-1]
-	
-	## retrieve version information
-	for line in cmd_output:
-		hits = regex.search(line)
-		if hits:
-			return hits.group(1)
-	
-	if Debug:
-		print (colored('Attention: I tried to get the version of ' + prog + ' with: "' + cmd + '" and the output didn\'t match this regular expression: "' + regex.pattern + '"', 'red'))
-
-	return("n.a.")
-
-
-#########
-def check_python_packages(Debug, install):
-	## get all packages and min versions
-	my_packages = config.min_package_version()
-	for each in my_packages:
-		##	
-		min_version = my_packages[each]
-		installed = check_package_version(each) ## check version installed in system
-
-		## Not installed
-		if (installed == 'n.a.'):
-			print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ NOT FOUND ]"), 'red'))
-			if (Debug):
-				print ("\n**", each, min_version, installed, " **")			
-			if (install): # try to install
-				installed = install_dependencies.python_package_install(each, min_version)
-				if (Debug):
-					print ("\n**", each, min_version, installed, " **")			
-			else:
-				continue
-
-		# check version
-		if LooseVersion(installed) >= LooseVersion(min_version):
-			print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ OK ]"), 'green'))
-
-		else:
-			print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ FAILED ]"), 'red'))
-			#print (colored("Package %s\t[ FAILED ]" % each,'red'))
-			if (install):  # try to install
-				installed = install_dependencies.python_package_install(each, min_version)
-				if (Debug):
-					print ("\n**", each, min_version, installed, " **")	
-				if LooseVersion(installed) >= LooseVersion(min_version):
-					print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ OK ]"), 'green'))
-				else:
-					print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ FAILED (II) ]"), 'red'))
-					#print (colored("Package %s\t[ FAILED (II) ]" % each,'red'))
-					print ("+ Please install manually package: ", each, "\n\n")
-			else:
-				continue
-
-#########
-def check_package_version(package):
-	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
-	## give credit to them appropiately
-
-	try:
-		version = pkg_resources.get_distribution(package).version
-		return (version)
-	except:
-		
-		try:
-			exec('import ' + package)
-			version = eval(package + '.__version__')
-			return (version)
-
-		except:
-			return ('n.a.')
-		
 

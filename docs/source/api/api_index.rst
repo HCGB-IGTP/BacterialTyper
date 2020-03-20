@@ -34,6 +34,8 @@ several directories:
 - ``BacterialTyper/scripts``
 - ``BacterialTyper/data``
 - ``BacterialTyper/other_tools``
+- ``BacterialTyper/config``
+
 
 Additionally, we include a third-party software named IslandPath-DIMOB. See additional 
 details in section: :ref:`islandPath-DIMOB-forked`.
@@ -49,6 +51,7 @@ Contents
    BacterialTyper.rst
    modules/modules_index.rst
    scripts/scripts_index.rst
+   config/config_index.rst
    other_tools.rst
    data.rst
    third_party.rst

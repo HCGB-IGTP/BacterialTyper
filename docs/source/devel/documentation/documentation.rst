@@ -76,7 +76,7 @@ We will follow the rules for the documentation generated for the `Matplotlib doc
 Installing dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-To build the docs, you will need to install several python modules as 
+To build the docs, you will need to install several python modules because 
 documentation is generated from reStructuredText_ (ReST) using the 
 Sphinx_ documentation generation tool. 
 
@@ -85,9 +85,9 @@ Sphinx_ documentation generation tool.
   * You will need a minimal working LaTeX distribution.
 
 There are several extra requirements that are needed to build the documentation. 
-They are listed in :file:`config/docs/doc-requirements.txt`, which is shown below:
+They are listed in :file:`docs/config/doc-requirements.txt`, which is shown below:
 
-.. include:: ../../../../config/docs/doc-requirements.txt
+.. include:: ../../../config/doc-requirements.txt
    :literal:
 
 You will need a BacterialTyper (and dependencies) working distribution included in your
@@ -96,7 +96,7 @@ additionally install documentation requirements using pip.
 
 .. code-block:: sh
 
-   pip install config/docs/doc-requirements.txt
+   pip install docs/config/doc-requirements.txt
 
 .. ###############################################
 .. _building-docs-guide:

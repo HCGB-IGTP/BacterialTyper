@@ -54,11 +54,11 @@ Software dependencies
 ---------------------
 
 Also, several software packages are also required. They are listed in
-:file:`config/main/DEPENDENCIES`, which is shown below:
+:file:`BacterialTyper/config/dependencies.csv`, which is shown below:
 
 .. csv-table::
-   :header: "Third Party software"
-   :file: ../../../../config/main/DEPENDENCIES
+   :header-rows: 1 
+   :file: ../../../../BacterialTyper/config/dependencies.csv
 
 For additional details on how to install these dependencies see the 
 appropiate section within :ref:`install from source<install-bacterialtyper-source>`, 

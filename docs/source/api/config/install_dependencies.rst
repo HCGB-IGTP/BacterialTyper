@@ -2,5 +2,5 @@
 
 install_dependencies
 ====================
-.. automodule:: BacterialTyper.scripts.install_dependencies
+.. automodule:: BacterialTyper.config.install_dependencies
     :members:

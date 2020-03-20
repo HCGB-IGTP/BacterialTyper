@@ -210,7 +210,7 @@ BacterialTyper relies on several software dependencies that are listed in file
 
 Most of the software are common software that any person doing bioinformatics should have.
 
-To test them all, you can execute the script: :file:``config/main/check-dependencies.sh`
+To test them all, you can execute the script: :file:`config/main/check-dependencies.sh`
 
 .. code-block::
    sh config/main/check-dependencies.sh
@@ -233,16 +233,16 @@ under a python environment.
 
 Create environment
 ------------------
-To do so, run :file:`config/main/python_environment-commands.sh`, which is shown below:
+To do so, run :file:`config/main/create_python_environment.sh`, which is shown below:
 
-.. include:: ../../../../config/main/python_environment-commands.sh
+.. include:: ../../../../config/main/create_python_environment.sh
    :literal:
    
 Execute the file from the directory :file:`BacterialTyper/` as:
 
 .. code-block:: sh
 
-   sh config/main/python_environment-commands.sh
+   sh config/main/create_python_environment.sh
    
 .. ###########
 .. _activate-env:
@@ -265,7 +265,25 @@ Execute the file from the directory :file:`BacterialTyper/` as:
   
    sh config/main/activate_environment.sh
 
+Install modules
+---------------
 
+Once the BacterialTyper environment is created, install using ``pip`` BacterialTyper or any 
+additional modules. 
 
+*e.g.*: Install BacterialTyper
+
+.. code-block:: sh
+   python -m pip install BacterialTyper
+
+*e.g.*: install a list of requirements   
+
+.. code-block:: sh
+   
+   pip install -r ./BacterialTyper/config/python_requirements.txt
+   
+.. attention:: Installing BacterialTyper using ``pip`` installs 
+   all the python requirements, third-party software and additional
+   software required for BacterialTyper to work.
 
 .. include:: ../../links.inc
