@@ -18,7 +18,7 @@ from termcolor import colored
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import set_config
+from BacterialTyper.config import set_config
 
 ## to fix: 
 dimob_perl_script = "/imppc/labs/lslab/jsanchez/git_repo/BacterialTyper/third_party/IslandPath-DIMOB/Dimob.pl"

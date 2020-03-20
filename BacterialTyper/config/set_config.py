@@ -18,8 +18,8 @@ from distutils.version import LooseVersion
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import extern_progs
-from BacterialTyper.scripts import install_dependencies
+from BacterialTyper.config import extern_progs
+from BacterialTyper.config import install_dependencies
 
 ##################
 def prog_to_default():

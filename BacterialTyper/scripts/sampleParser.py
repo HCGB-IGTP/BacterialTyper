@@ -19,7 +19,7 @@ import concurrent.futures
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import set_config
+from BacterialTyper.config import set_config
 
 ###############
 def help_format():

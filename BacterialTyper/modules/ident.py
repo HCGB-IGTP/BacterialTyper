@@ -19,7 +19,7 @@ import pandas as pd
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import set_config
+from BacterialTyper.config import set_config
 from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import species_identification_KMA
 from BacterialTyper.scripts import database_generator

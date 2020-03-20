@@ -17,7 +17,7 @@ import shutil
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import set_config
+from BacterialTyper.config import set_config
 from BacterialTyper.scripts import spades_assembler
 from BacterialTyper.scripts import annotation
 from BacterialTyper.scripts import sampleParser

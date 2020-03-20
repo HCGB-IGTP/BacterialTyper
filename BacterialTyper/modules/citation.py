@@ -3,12 +3,13 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
+"""
 Prints an index of citation for the different packages and other softwares employed here.
-'''
+"""
 
 ## import my modules
-from BacterialTyper.scripts import set_config, functions
+from BacterialTyper.config import set_config
+from BacterialTyper.scripts import functions
 from termcolor import colored
 import os, sys
 import pandas as pd

@@ -26,8 +26,8 @@ import pkg_resources
 
 ## import my modules
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import set_config
-from BacterialTyper.scripts import install_dependencies
+from BacterialTyper.config import set_config
+from BacterialTyper.config import install_dependencies
 
 prog_to_version_cmd = {
 	'augustus':('--version', re.compile('AUGUSTUS.*\(([0-9\.]+)\).*')),

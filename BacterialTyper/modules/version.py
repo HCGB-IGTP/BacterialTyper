@@ -13,8 +13,10 @@ import os
 import sys
 
 ## import my modules
-from BacterialTyper.scripts import set_config, functions
-from BacterialTyper.scripts import extern_progs
+from BacterialTyper.config import set_config
+from BacterialTyper.config import extern_progs
+from BacterialTyper.scripts import functions
+
 
 #from BacterialTyper.scripts import __version__ as ariba_version ## to include when distributed
 pipeline_version = "0.0.2"

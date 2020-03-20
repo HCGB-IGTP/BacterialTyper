@@ -24,7 +24,7 @@ from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.scripts import BUSCO_caller
 from BacterialTyper.scripts import functions
-from BacterialTyper.scripts import set_config
+from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
 
 ################################################
