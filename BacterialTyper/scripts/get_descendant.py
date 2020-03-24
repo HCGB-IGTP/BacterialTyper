@@ -3,9 +3,9 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
+"""
 Generates a search among NCBI taxonomy and retrieves available genomes of interest
-'''
+"""
 
 ## Original code extracted from: ncbi-genome-download contribution script
 ## https://raw.githubusercontent.com/kblin/ncbi-genome-download/master/contrib/gimme_taxa.py
@@ -24,9 +24,9 @@ from termcolor import colored
 from ete3 import NCBITaxa
 
 ## import my modules
-from BacterialTyper import functions
-from BacterialTyper import config
-from BacterialTyper import edirect_caller
+from BacterialTyper.scripts import functions
+from BacterialTyper.config import set_config
+from BacterialTyper.scripts import edirect_caller
 
 ##########################################################################################
 def NCBItaxa_db(dbfile_path):
