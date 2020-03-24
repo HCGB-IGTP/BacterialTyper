@@ -8,7 +8,7 @@ Developer Guidelines
     :Version: |version|
     :Date: |today|
 
-Guidelines for developing the BacterialTyper project.
+Guidelines for developing the ``BacterialTyper`` project.
 
 .. toctree::
    :maxdepth: 1

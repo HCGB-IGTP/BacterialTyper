@@ -8,7 +8,7 @@ Modules
     :Version: |version|
     :Date: |today|
 
-Developer guidelines for BacterialTyper modules.
+Developer guidelines for ``BacterialTyper`` modules.
 
 .. toctree::
    :maxdepth: 1

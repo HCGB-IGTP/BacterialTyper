@@ -9,7 +9,7 @@ Main modules
 
 There are multiple modules available that perform several :ref:`steps<pipeline-scheme>` and generate multiple results. 
 
-BacterialTyper modules require several command-line arguments and options to run. There are a number of shared 
+``BacterialTyper`` modules require several command-line arguments and options to run. There are a number of shared 
 :ref:`arguments<shared-arguments>` among all modules and some others specific of each module and specified 
 within each one.
 
@@ -39,11 +39,11 @@ within each one.
 Command-line shared arguments
 *****************************
 
-Here we include a brief description of the shared command-line arguments for some of BacterialTyper modules.
+Here we include a brief description of the shared command-line arguments for some of ``BacterialTyper`` modules.
    
    **Mode:**
    
-   --project         Project mode. Requires as ``--input`` a folder containing an initialized BacterialTyper project [Default].
+   --project         Project mode. Requires as ``--input`` a folder containing an initialized ``BacterialTyper`` project [Default].
    
    --detached        Isolated mode. ``--input`` is a folder containining fastq reads. Provide a unique path o several using ``--batch`` option
    

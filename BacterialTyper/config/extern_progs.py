@@ -148,7 +148,7 @@ def return_min_version_soft(soft):
 def min_package_version():
 	"""Returns a dictionary containing minimum version for each python package.
 
-	Reads information from :file:`config/main/python_requirements.csv`.
+	Reads information from :file:`BacterialTyper/config/python_requirements.csv`.
 	
 	:returns: dictionary
 	"""

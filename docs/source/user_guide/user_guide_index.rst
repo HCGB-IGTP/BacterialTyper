@@ -9,7 +9,7 @@ User's Guide
     :Version: |version|
     :Date: |today|
 
-This User Guide provides information on BacterialTyper usage and documentation. It is divided in five main chapters:
+This User Guide provides information on ``BacterialTyper`` usage and documentation. It is divided in five main chapters:
 
 .. toctree::
     :maxdepth: 1

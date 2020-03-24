@@ -8,7 +8,7 @@ Config
     :Version: |version|
     :Date: |today|
 
-Developer guidelines for BacterialTyper config scripts.
+Developer guidelines for ``BacterialTyper`` config scripts.
 
 .. toctree::
    :maxdepth: 1

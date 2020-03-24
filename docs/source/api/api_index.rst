@@ -20,8 +20,8 @@ API Overview
 
 .. contents:: :local:
 
-Here we include and API_ documentation for BacterialTyper in order to provide third parties to use the 
-functionality of BacterialTyper application
+Here we include and API_ documentation for ``BacterialTyper`` in order to provide third parties to use the 
+functionality of ``BacterialTyper`` application
 
 This pipeline is composed of multiple modules and scripts that are separated in a main script:
 

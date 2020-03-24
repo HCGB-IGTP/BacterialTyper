@@ -13,7 +13,7 @@ BacterialTyper Documentation
 Introduction
 ============
 
-BacterialTyper is a pipeline that integrates multiple bioinformatic tools for the analysis of bacterial 
+``BacterialTyper`` is a pipeline that integrates multiple bioinformatic tools for the analysis of bacterial 
 whole genome sequence (WGS) data from isolated microbial cultured colonies. It generates genotyping information 
 and facilitates the interpretation of results. 
 
@@ -35,12 +35,12 @@ Multiple tasks are performed by several modules including:
 The tool uses and updates periodically external databases from different sources. It also allows the comparison of 
 obtained results with those previously generated (internal database).
 
-The BacterialTyper documentation includes:
+The ``BacterialTyper`` documentation includes:
 
 - A :doc:`User's Guide <user_guide/user_guide_index>` to get started.
 - An example :doc:`Tutorial <tutorial/tutorial_index>`.
 - :doc:`Developer Guidelines <devel/devel_index>`.
-- Additional :doc:`information <info/info_index>` of the BacterialTyper project
+- Additional :doc:`information <info/info_index>` of the ``BacterialTyper`` project
 - A list of :doc:`Glossary <glossary/glossary_index>` terms
 - A list of :doc:`Bibliography <bib/bib_index>`
 
@@ -51,7 +51,7 @@ The BacterialTyper documentation includes:
 Pipeline Scheme
 ===============
 
-Here we show the scheme of the BacterialTyper bioinformatic tool. It is divided in four main actions:
+Here we show the scheme of the ``BacterialTyper`` bioinformatic tool. It is divided in four main actions:
    
    #. **Set the database**: Several databases are downloaded from different websites/sources. They are automatically downloaded, indexed and/or updated after several days/months.
    

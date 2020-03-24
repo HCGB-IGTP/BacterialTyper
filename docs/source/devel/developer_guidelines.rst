@@ -5,7 +5,7 @@ Interpretation for developers
 
 .. contents:: Contents
 
-Here we include some guidelines and interpretation of intermediate results for developing the BacterialTyper project.
+Here we include some guidelines and interpretation of intermediate results for developing the ``BacterialTyper`` project.
 
 .. _ARIBA-explained:
 
@@ -98,7 +98,7 @@ There are several files generated:
 
 * prophage_coordinates.tsv: This file has the prophage ID, contig, start, stop, and potential att sites identified for the phages.
 
-* prophage.gff3: Gene Feature Format file (v3) containing the annotation of the phages identified. This is a contribution that BacterialTyper developer (Jose F. Sanchez-Herrero) pulled to original PhiSpy code: 
+* prophage.gff3: Gene Feature Format file (v3) containing the annotation of the phages identified. This is a contribution that ``BacterialTyper`` developer (Jose F. Sanchez-Herrero) pulled to original PhiSpy code: 
    
    * https://github.com/linsalrob/PhiSpy/PhiSpyModules/writers.py
    * https://github.com/linsalrob/PhiSpy/pull/10
@@ -114,7 +114,7 @@ Modified results
 All original files generated are named independently of the sample name as `prophage` or `classify`. Also, some samples are not necessary 
 for a regular user to interpret results and obtain the number of prophage regions and details. 
 
-Within BacterialTyper, we rename original PhiSpy result files according to sample names provided and as some tab files do not contain headers, 
+Within ``BacterialTyper``, we rename original PhiSpy result files according to sample names provided and as some tab files do not contain headers, 
 we generate either tab files with headers and a summary excel files for a better interpretation and integration of results.
 
 File conversion:

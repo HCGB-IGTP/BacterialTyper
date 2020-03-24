@@ -1,13 +1,17 @@
-.. ############################3
-.. _database-description::
+.. ######################
+.. _database-description:
+.. ######################
 
 database
 ========
 
-BacterialTyper relies in multiples databases that are initiated and downloaded in a folder provided using the option `--database string`.
+The ``BacterialTyper`` pipeline relies in multiples databases that are initiated and 
+downloaded in a folder provided using the option ``--database string``.
 
-The database module contains several functions (See :doc:`database module <../../api/modules/database>` for additional details) that would configure
-the retrieval, update and configuration of the different databases.
+The database module contains several functions (See 
+:doc:`database module <../../api/modules/database>` for additional details) 
+that would configure the retrieval, update and configuration of the 
+different databases.
 
 .. _databases-included:
 

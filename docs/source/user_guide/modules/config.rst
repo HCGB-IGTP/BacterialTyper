@@ -1,5 +1,5 @@
 .. ############################
-.. _config-description::
+.. _config-description:
 
 config
 ======

@@ -5,12 +5,12 @@
 Frequently Asked Questions (FAQs)
 *********************************
 
-This is a collection of FAQs for BacterialTyper tutorial and interpretation of results. 
+This is a collection of FAQs for ``BacterialTyper`` tutorial and interpretation of results. 
 
 .. seealso::
 
     Please read further information on each section following the links provided or
-    the main :ref:`User Guide for BacterialTyper<users-guide-index>`.
+    the main :ref:`User Guide for ``BacterialTyper``<users-guide-index>`.
 
 
 Quality control

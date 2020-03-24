@@ -31,7 +31,7 @@ in multifple files, folders and subfolders:
 
 * :file:`images` - Images to include in the documentation.
 
-* :file:`tutorial` - Tutorial examples for the BacterialTyper modules.
+* :file:`tutorial` - Tutorial examples for the ``BacterialTyper`` modules.
 
 * :file:`user_guide` - The user guide and documentation to interpret results and analysis.
 
@@ -55,7 +55,7 @@ document in order to make the most effective use of cross referencing.
 
 There are also ``.rst`` files that are contained in :file:`api/modules` 
 and :file:`api/scripts` that are automatically generated from the docstrings 
-of the functions in BacterialTyper scripts and main modules. These sources consist 
+of the functions in ``BacterialTyper`` scripts and main modules. These sources consist 
 of python scripts that have ReST documentation built into their comments. See section
 :ref:`api-docstrings` for details. 
 
@@ -90,7 +90,7 @@ They are listed in :file:`docs/config/doc-requirements.txt`, which is shown belo
 .. include:: ../../../config/doc-requirements.txt
    :literal:
 
-You will need a BacterialTyper (and dependencies) working distribution included in your
+You will need a ``BacterialTyper`` (and dependencies) working distribution included in your
 ```$PYTHONPATH`` (activate your virtual environment as mentioned :ref:`here<activate-env>`) and then 
 additionally install documentation requirements using pip.
 

@@ -21,7 +21,7 @@ on the genotype of the  bacterium :cite:`Straus2016`. Whole-genome sequencing (W
 sequence analysis, is the most extensive genotyping method available but neither open, easy, direct and straighforward 
 analysis are available that provide researchers with integrative genotyping information.
 
-The BacterialTyper pipeline started as a collaboration with Dra. Cristina Prat and Dra. Alicia Lacoma to asses the
+The ``BacterialTyper`` pipeline started as a collaboration with Dra. Cristina Prat and Dra. Alicia Lacoma to asses the
 genotyping characteristics of a set of *S. aureus* samples.  
 
 
@@ -30,7 +30,7 @@ genotyping characteristics of a set of *S. aureus* samples.
 License
 =======
 
-This is brief description of the license terms for BacterialTyper. 
+This is brief description of the license terms for ``BacterialTyper``. 
 
 
 .. _credits:
@@ -46,7 +46,7 @@ Give credit to who deserves
 Citation
 ========
 
-Please cite the BacterialTyper project, code or documentation using the following links:
+Please cite the ``BacterialTyper`` project, code or documentation using the following links:
 
 .. github_stats:
 
