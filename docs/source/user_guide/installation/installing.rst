@@ -38,7 +38,28 @@ you have all the dependencies fulfilled from section
 Requirements and dependencies
 =============================
 
-We include details on the different modules required here:
+.. ########################
+.. _system-requirements:
+.. ########################
+
+System requirements
+-------------------
+
+Take into account that you may need some system requirements to install ``BacterialTyper`` already available
+in your system such as ``python3``, ``python3-dev`` and ``python3-venv`` or ``build-essential`` libraries among others. 
+
+Check and install them by typing:
+
+.. code-block:: sh
+   
+   sudo apt install python3 python3-dev python-dev python3-venv python-pip
+   sudo apt install build-essential libssl-dev libffi-dev libxml2-dev libxslt1-dev zlib1g-dev
+
+
+BacterialTyper requirements
+---------------------------
+
+We include details on the different modules required by ``BacterialTyper`` to successfully run here:
 
 .. toctree:: 
    requirements.rst

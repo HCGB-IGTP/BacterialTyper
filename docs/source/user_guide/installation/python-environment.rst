@@ -8,6 +8,9 @@ Python environment
 It is always recommended to install ``BacterialTyper`` and all its dependencies and modules 
 under a `python environment`_. 
 
+Take into account that you might need to have installed several developer libraries in your system. See 
+section :ref:`System requirements<system-requirements>` for details.
+
 By executing the ``env/create_python_environment.sh`` script, it creates an environment, installs
 all python requirements and activates it for later usage.
 
@@ -28,15 +31,6 @@ To do so, run :file:`env/create_python_environment.sh`, which is shown below:
 
 .. include:: ../../../../env/create_python_environment.sh
    :literal:
-
-You will need as a requisite to have installed in your system ``python3-dev`` and ``python3-venv``libraries. 
-
-Install them by typing:
-
-.. code-block:: sh
-
-   sudo apt install python3-dev
-   sudo apt install python3-venv
 
 Execute the file from the main directory as:
 
