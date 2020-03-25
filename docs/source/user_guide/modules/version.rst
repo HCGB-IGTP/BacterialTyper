@@ -1,5 +1,5 @@
 .. ############################
-.. _version-description::
+.. _version-description:
 
 version
 =======

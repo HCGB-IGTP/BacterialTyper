@@ -1,5 +1,5 @@
 .. ############################
-.. _assemble-description::
+.. _assemble-description:
 
 assemble
 ========

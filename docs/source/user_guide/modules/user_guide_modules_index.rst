@@ -25,9 +25,11 @@ within each one.
    help_info.rst
    ident.rst
    MGE.rst
+   metadata.rst
    prep.rst
    profile.rst
    qc.rst
+   report_generation.rst
    run.rst
    test.rst
    trimm.rst

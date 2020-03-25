@@ -1,5 +1,5 @@
 .. ############################
-.. _cluster-description::
+.. _cluster-description:
 
 cluster
 =======

@@ -1,8 +1,8 @@
 .. ############################
-.. _ident-description:
+.. _report-generation-description:
 
-ident
-=====
+report_generation
+=================
 
 Include brief comment about this module
 

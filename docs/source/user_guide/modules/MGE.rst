@@ -1,5 +1,5 @@
 .. ############################
-.. _MGE-description::
+.. _MGE-description:
 
 MGE
 ===

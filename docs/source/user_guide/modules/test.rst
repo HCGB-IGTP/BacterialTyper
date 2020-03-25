@@ -1,5 +1,5 @@
 .. ############################
-.. _test-description::
+.. _test-description:
 
 test
 ====

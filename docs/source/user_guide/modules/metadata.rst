@@ -1,8 +1,8 @@
 .. ############################
-.. _ident-description:
+.. _metadata-description:
 
-ident
-=====
+metadata
+========
 
 Include brief comment about this module
 

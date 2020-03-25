@@ -1,5 +1,5 @@
 .. ############################
-.. _trimm-description::
+.. _trimm-description:
 
 trimm
 =====

@@ -1,5 +1,5 @@
 .. ############################
-.. _prep-description::
+.. _prep-description:
 
 prep
 ====

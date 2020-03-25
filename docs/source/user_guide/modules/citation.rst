@@ -1,5 +1,5 @@
 .. ############################
-.. _citation-description::
+.. _citation-description:
 
 citation
 ========

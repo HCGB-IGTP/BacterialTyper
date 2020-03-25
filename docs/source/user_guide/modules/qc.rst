@@ -1,5 +1,5 @@
 .. ############################
-.. _qc-description::
+.. _qc-description:
 
 qc
 ==

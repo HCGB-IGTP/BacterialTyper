@@ -1,5 +1,5 @@
 .. ############################
-.. _profile-description::
+.. _profile-description:
 
 profile
 =======

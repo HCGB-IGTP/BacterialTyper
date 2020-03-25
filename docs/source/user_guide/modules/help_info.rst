@@ -1,5 +1,5 @@
 .. ############################
-.. _help-info-description::
+.. _help-info-description:
 
 help_info
 =========

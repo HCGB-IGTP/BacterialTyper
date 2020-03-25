@@ -1,5 +1,5 @@
 .. ############################
-.. _run-description::
+.. _run-description:
 
 run
 ===

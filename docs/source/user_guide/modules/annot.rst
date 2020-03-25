@@ -1,5 +1,5 @@
 .. ############################
-.. _annot-description::
+.. _annot-description:
 
 annot
 =====
