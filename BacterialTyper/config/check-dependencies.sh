@@ -1,9 +1,23 @@
-#!/usr/bin/env bash
+echo "#### Check BacterialTyper software dependencies ####"
+echo "## Read dependencies from file: BacterialTyper/config/dependencies.csv"
+echo "+ Get software name"
+echo "+ Get minimun version required"
+echo "+ Get regular expression to get version for each software"
 
-## check dependencies fulfilled
+##cat "BacterialTyper/config/dependencies.csv"
 
-## read dependencies.csv to obtain given software name
-## and minimun version required, regular expression to get version, etc.
+IFS=','
+while read soft version_cmd get_version min_version soft_name
+do
+	echo "#################################"
+	echo "## Check software: " $soft
+	echo "#################################"
+	echo "soft_name:" $soft_name
+	echo "min_version:" $min_version
+	echo ""
+	
 
-## For each software, find the executable path within your system 
-## and check the version.
+done < BacterialTyper/config/dependencies.csv
+
+
+
