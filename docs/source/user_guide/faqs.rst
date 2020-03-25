@@ -18,13 +18,8 @@ Installation
 - What is required for the installation?
 
 In order to correctly install ``BacterialTyper``, it is necessary to have python3 and 
-python development and virtual environment libraries installed.
-
-.. code-block:: sh
-
-   sudo apt install python3
-   sudo apt install python3-dev
-   sudo apt install python3-venv
+python development and virtual environment libraries installed. See additional details 
+in section :ref:`System requirements<system-requirements>`.
 
 - Why does the script ``env/create_python_environment.sh`` or the script ``env/activate_python_environment.sh`` report ``source`` and ``pip`` not found?
 

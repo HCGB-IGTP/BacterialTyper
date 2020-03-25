@@ -219,19 +219,14 @@ def python_packages_dependencies():
 
 ##################
 def return_min_version_soft_package(package):
-	version_package = config.min_package_version()
+	version_package = min_package_version()
 	return (version_package[package])
 
 ##################
 def print_package_version():
-	my_packages = config.min_package_version()
+	my_packages = min_package_version()
 	for each in my_packages:
 		print ("{:.<15}{:.>15}".format("Module: %s" %each, my_packages[each]))
-
-
-
-
-
 
 ##################
 def print_dependencies():
@@ -250,3 +245,16 @@ def print_dependencies():
 	pd.set_option('display.max_columns', None)
 	print (df_programs)
 
+
+def main():
+	
+	data = read_dependencies()
+	print(data)
+	
+	print_package_version()
+
+######
+'''******************************************'''
+if __name__== "__main__":
+	main()
+		

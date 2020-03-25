@@ -4,8 +4,6 @@ echo "+ Get software name"
 echo "+ Get minimun version required"
 echo "+ Get regular expression to get version for each software"
 
-##cat "BacterialTyper/config/dependencies.csv"
-
 IFS=','
 while read soft version_cmd get_version min_version soft_name
 do
