@@ -234,6 +234,7 @@ def file2dictionary(file2read, split_char):
 	d = {}
 	with open(file2read) as f:
 		for line in f:
+			line = line.rstrip('\n')
 			(key, val) = line.split(split_char)
 			d[key] = val
 

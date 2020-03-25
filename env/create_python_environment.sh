@@ -27,8 +27,8 @@ echo ""
 # install BacterialTyper requirements
 
 echo "#### Install pip package requirements ####"
-echo "pip install -I --isolated --default-timeout=500 -r BacterialTyper/config/python_requirements.txt"
-pip install -I --isolated --default-timeout=500 -r BacterialTyper/config/python_requirements.txt
+echo "pip install -I --isolated --default-timeout=500 -r BacterialTyper/config/python/min_python_requirements.txt"
+pip install -I --isolated --default-timeout=500 -r BacterialTyper/config/python/min_python_requirements.txt
 echo "Done...."
 echo ""
 

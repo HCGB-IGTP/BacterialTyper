@@ -125,7 +125,7 @@ def min_package_version():
 	:returns: dictionary
 	"""
 	## read from file: prog2default.csv
-	python_modules = file_list("python_requirements")
+	python_modules = file_list("python/python_requirements")
 	package_min_versions = functions.file2dictionary(python_modules, "==")
 
 	return(package_min_versions)

@@ -1,0 +1,15 @@
+biopython==1.76
+card-trick==0.2.0
+ete3==3.1.1
+fastqcparser==1.1
+filehash==0.1.dev5
+six==1.14.0
+sourmash==3.2.2
+wget==3.2
+termcolor==1.1.0
+ncbi-genome-download==0.2.12
+pandas==1.0.1
+patool==1.12
+PhiSpy==3.7.8
+multiqc==1.8
+XlsxWriter==1.2.8
