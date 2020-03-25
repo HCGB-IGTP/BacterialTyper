@@ -24,6 +24,8 @@ Developer guidelines for ``BacterialTyper`` modules.
    qc.rst
    profile.rst
    MGE.rst
+   metadata.rst
+   report_generation.rst
    run.rst
    prep.rst
    test.rst
