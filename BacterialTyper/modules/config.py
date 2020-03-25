@@ -62,7 +62,7 @@ def run(options):
 	print ('\n')
 	functions.print_sepLine("+", 50, False)
 	print ('Python packages:')
-	extern_progs.check_python_packages(Debug, option_install)
+	set_config.check_python_packages(Debug, option_install)
 	functions.print_sepLine("+", 50, False)
 	print ('\n')
 	
