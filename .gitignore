@@ -3,3 +3,4 @@
 *.pydevproject
 *docs/build/
 *pyc
+env/BacterialTyper/
