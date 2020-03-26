@@ -12,5 +12,12 @@ use File::Path;
 use Cwd;
 use File::Temp;
 use FindBin;
-use Log::Log4perl;
-  
+#use Bio::Perl;
+#use Bio::Seq;
+#use Bio::SeqIO;
+use Carp;
+use Exporter;
+#use Moose;
+#use Log::Log4perl;
+use vars;
+use POSIX ();  
