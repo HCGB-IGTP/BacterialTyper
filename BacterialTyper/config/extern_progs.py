@@ -172,7 +172,7 @@ def main():
 	#print_package_version()
 	#print (return_min_version_soft_package('ariba'))
 	#print (return_min_version_soft('kma'))
-	set_config.check_python_packages(False, '')
+	set_config.check_python_packages(True, '')
 
 
 ######

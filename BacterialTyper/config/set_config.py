@@ -21,6 +21,7 @@ from sys import argv
 import subprocess
 from termcolor import colored
 from distutils.version import LooseVersion
+import pkg_resources
 
 ## import my modules
 from BacterialTyper.scripts import functions
@@ -277,7 +278,7 @@ def check_python_packages(Debug, option_install):
 		##	
 		min_version = my_packages[each]
 		module_name = module_dependecies.loc[each, 'module_name_import']
-		installed = check_package_version(module_name) ## check version installed in system
+		installed = check_package_version(module_name, Debug) ## check version installed in system
 
 		## Not installed
 		if (installed == 'n.a.'):
@@ -312,27 +313,38 @@ def check_python_packages(Debug, option_install):
 				continue
 
 #########
-def check_package_version(package):
+def check_package_version(package, Debug):
 	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
 	## give credit to them appropiately
 
 	try:
 		version = pkg_resources.get_distribution(package).version
-		#return (version)
-		print ("1st method")
+		if (Debug):
+			print ("1st method: pkg_resources.get_distribution(package).version")
 	except:
 
 		try:
 			exec('import ' + package)
 			version = eval(package + '.__version__')
-			#return (version)
-			print ("2nd method")
+			if (Debug):
+				print ("2nd method: exec('import ' + package); version = eval(package + '.__version__')")
 
 		except:
-			version = 'n.a.'
+			#version = pkg_resources.resource_filename(package, 'version.py')
+			#print(version)
 
-	print ('Package:', package)
-	print ('Version:', version)
+			try:
+				if (Debug):
+					print ("3rd method: pkg_resources.resource_filename(package, 'version.py')")
+
+				version = pkg_resources.resource_filename(package, 'version.py')
+			except:
+				version = 'n.a.'
+
+	if (Debug):
+		print ('Package:', package)
+		print ('Version:', version)
+
 	return(version)
 
 ##################
