@@ -264,15 +264,15 @@ def get_version(prog, path, Debug=False):
 
 #########
 def check_python_packages(Debug, option_install):
-	
+
 	## min versions for packages
 	my_packages = extern_progs.min_package_version()
-	
+
 	## get import nades for packages:
 	## some modules do not have the same name when install from pip and called from import
 	file_module_dependecies = extern_progs.file_list("module_dependencies")
 	module_dependecies = functions.get_data(file_module_dependecies, ',', 'index_col=0')
-		
+
 	for each in my_packages:
 		##	
 		min_version = my_packages[each]
