@@ -125,7 +125,7 @@ def min_package_version():
 	:returns: dictionary
 	"""
 	## read from file: prog2default.csv
-	python_modules = file_list("python/python_requirements")
+	python_modules = file_list("python_requirements")
 	package_min_versions = functions.file2dictionary(python_modules, "==")
 
 	return(package_min_versions)
@@ -169,10 +169,10 @@ def main():
 	data = read_dependencies()
 	print(data)
 
-	print_package_version()
-
-	print (return_min_version_soft_package('ariba'))
-	print (return_min_version_soft('kma'))
+	#print_package_version()
+	#print (return_min_version_soft_package('ariba'))
+	#print (return_min_version_soft('kma'))
+	set_config.check_python_packages(False, '')
 
 
 ######

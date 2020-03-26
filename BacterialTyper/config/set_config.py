@@ -6,7 +6,7 @@
 """Provides configuration for the pipeline.
 
 .. seealso:: Additional information on BacterialTyper configuration and requirements
-	
+
 	- :doc:`Configuration <../../user_guide/installation/installing>` 
 """
 
@@ -30,35 +30,32 @@ from BacterialTyper.config import install_dependencies
 ##################
 def get_exe(prog, Debug=False):
 	"""Return absolute path of the executable program requested.
-	
+
 	Given a program name it returns its exectuable to be called. It has to fulfilled a minimun version specified.
-	
+
 	:param prog: Software name
-	
 	:type prog: string
-	
 	:returns: Absolute path for the executable requested
-	
 	:warning: if no executable available in $PATH or not fulfilling the expected version.
-	
+
 	.. seealso:: This function depends on other BacterialTyper functions:
-		
+
 		- :func:`BacterialTyper.config`
 
 		- :func:`BacterialTyper.scripts.extern_progs.return_defatult_soft`
-		
+
 		- :func:`BacterialTyper.scripts.extern_progs.retrun_min_version`
-		
+
 		- :func:`BacterialTyper.scripts.extern_progs.get_version`
-		
+
 		- :func:`BacterialTyper.scripts.extern_progs.my_which`
-		
+
 	.. attention:: Be aware of Copyright
-	
+
 		The code implemented here was retrieved and modified from ARIBA (https://github.com/sanger-pathogens/ariba)
-		
+
 		Give them credit accordingly.
-		
+
 	"""
 	exe = ""
 	if prog in os.environ: 
@@ -73,60 +70,60 @@ def get_exe(prog, Debug=False):
 	## get min_version
 	min_version = extern_progs.return_min_version_soft(prog)
 	#print ("Min version: ", min_version)
-	
+
 	## debugging messages
 	debug=False
 	if Debug:
 		debug=True
-	
+
 	for p in exe_path_tmp:
 		prog_ver = extern_progs.get_version(prog, p, Debug=debug)
 		#print ("Path: ", p , "\nVersion: ", prog_ver)
 		if (prog_ver == 'n.a.'):
 			continue
-		
+
 		if LooseVersion(prog_ver) >= LooseVersion(min_version):
 			return (p)
-	
+
 	if (len(exe_path_tmp) == 0):
 		print(colored("\n**ERROR: Programme %s could not be found." % prog,'red'))
 		exit()
 	else:
 		print(colored("\n**ERROR: Programme %s version smaller than minimun version expected %s." %(prog,min_version),'red'))
 		exit()
-			
+
 	return('ERROR')
 
 #################
 def _access_check(fn, mode=os.F_OK | os.X_OK):
 	"""Check exec permission
-	
+
 	This function checks wether a given path is a folder or file and wether it is 
 	executable and accessible. It also works if a java jar file provided.
-	
+
 	:param fn: Absolute path file
 	:param mode: Value to pass as the mode parameter of access()
-	
+
 	:type fn: string
 	:type mode: string
-	
+
 	`mode` defaults to:
-	
+
 		- os.F_OK: Value to pass as the mode parameter of access() to test the existence of path.
-		
+
 		- os.X_OK: Value to include in the mode parameter of access() to determine if path can be executed.
-	
+
 	.. attention:: Be aware of Copyright
-	
+
 		The code implemented here was retrieved and modified from shutil (https://github.com/python/cpython/blob/master/Lib/shutil.py).
-		
+
 		Give them credit accordingly.
-		
+
 		We modified the code to work if java jar files provided.
 	"""
 	## the original code belongs to shutil, slightly modified here
 	# https://github.com/python/cpython/blob/master/Lib/shutil.py
-	
+
 	if os.path.isdir(fn):
 		return False
 
@@ -136,22 +133,22 @@ def _access_check(fn, mode=os.F_OK | os.X_OK):
 
 		if os.access(fn, mode):
 			return True
-	
+
 #################
 def my_which(cmd):
 	"""Return the absolute path to the executable
-	
+
 	Given a command return the absolute path(s), if any.
-	
+
 	:param cmd: Software command name 
 	:returns: List of absolute paths(s) of the given command.
-	
+
 	.. attention:: Be aware of Copyright
-	
+
 		The code implemented here was retrieved and modified from shutil (https://github.com/python/cpython/blob/master/Lib/shutil.py).
-		
+
 		Give them credit accordingly.
-		
+
 		We modified the code to return multiple paths in a list if available different installed binaries in $PATH.
 
 	"""
@@ -207,7 +204,7 @@ def my_which(cmd):
 				if _access_check(name):
 					## return (name) ## previously, it would only return the first item
 					return_paths.append(name) ## modification
-	
+
 	if (len(return_paths) >= 1):
 		return return_paths
 	else:
@@ -218,23 +215,23 @@ def get_version(prog, path, Debug=False):
 	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
 	## give credit to them appropiately
 	"""Get version of software
-	
+
 	Given a program name and expected path, tries to determine its version.
-	
+
 	:param prog: Program name
 	:param path: Absolute path
 	:param Debug: True/False
-	
+
 	:type prog: string
 	:type path: string 
 	:type Debug: bool
-	
+
 	:returns: tuple (bool, string). First element True if found version ok. Second element is version. Returns NA message if no found and raises attention error message.
-	
+
 	.. attention:: Be aware of Copyright
-	
+
 		The code implemented here was retrieved and modified from ARIBA (https://github.com/sanger-pathogens/ariba)
-		
+
 		Give them credit accordingly.
 	"""
 
@@ -252,13 +249,13 @@ def get_version(prog, path, Debug=False):
 
 	## decode command
 	cmd_output = decode(cmd_output[0]).split('\n')[:-1] + decode(cmd_output[1]).split('\n')[:-1]
-	
+
 	## retrieve version information
 	for line in cmd_output:
 		hits = regex.search(line)
 		if hits:
 			return hits.group(1)
-	
+
 	if Debug:
 		print (colored('Attention: I tried to get the version of ' + prog + ' with: "' + cmd + '" and the output didn\'t match this regular expression: "' + regex.pattern + '"', 'red'))
 
@@ -313,17 +310,23 @@ def check_package_version(package):
 
 	try:
 		version = pkg_resources.get_distribution(package).version
-		return (version)
+		#return (version)
+		print ("1st method")
 	except:
-		
+
 		try:
 			exec('import ' + package)
 			version = eval(package + '.__version__')
-			return (version)
+			#return (version)
+			print ("2nd method")
 
 		except:
-			return ('n.a.')
-		
+			version = 'n.a.'
+
+	print ('Package:', package)
+	print ('Version:', version)
+	return(version)
+
 ##################
 def decode(x):
 	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
@@ -332,7 +335,7 @@ def decode(x):
 		s = x.decode()
 	except:
 		return x
-	
+
 	return s
 
 
