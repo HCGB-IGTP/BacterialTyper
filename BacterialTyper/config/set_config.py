@@ -266,43 +266,51 @@ def get_version(prog, path, Debug=False):
 
 
 #########
-def check_python_packages(Debug, install):
-	## get all packages and min versions
+def check_python_packages(Debug, option_install):
+	
+	## min versions for packages
 	my_packages = extern_progs.min_package_version()
+	
+	## get import nades for packages:
+	## some modules do not have the same name when install from pip and called from import
+	file_module_dependecies = extern_progs.file_list("module_dependencies")
+	module_dependecies = functions.get_data(file_module_dependecies, ',', 'index_col=0')
+		
 	for each in my_packages:
 		##	
 		min_version = my_packages[each]
-		installed = check_package_version(each) ## check version installed in system
+		module_name = module_dependecies.loc[each, 'module_name_import']
+		installed = check_package_version(module_name) ## check version installed in system
 
 		## Not installed
 		if (installed == 'n.a.'):
-			print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ NOT FOUND ]"), 'red'))
+			print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ NOT FOUND ]"), 'red'))
 			if (Debug):
-				print ("\n**", each, min_version, installed, " **")			
-			if (install): # try to install
-				installed = install_dependencies.python_package_install(each, min_version)
+				print ("\n**", module_name, min_version, installed, " **")			
+			if (option_install == "install"): # try to install
+				installed = install_dependencies.python_package_install(module_name, min_version)
 				if (Debug):
-					print ("\n**", each, min_version, installed, " **")			
+					print ("\n**", module_name, min_version, installed, " **")			
 			else:
 				continue
 
 		# check version
 		if LooseVersion(installed) >= LooseVersion(min_version):
-			print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ OK ]"), 'green'))
+			print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ OK ]"), 'green'))
 
 		else:
-			print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ FAILED ]"), 'red'))
-			#print (colored("Package %s\t[ FAILED ]" % each,'red'))
-			if (install):  # try to install
-				installed = install_dependencies.python_package_install(each, min_version)
+			print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ FAILED ]"), 'red'))
+			#print (colored("Package %s\t[ FAILED ]" % module_name,'red'))
+			if (option_install == 'install'):  # try to install
+				installed = install_dependencies.python_package_install(module_name, min_version)
 				if (Debug):
-					print ("\n**", each, min_version, installed, " **")	
+					print ("\n**", module_name, min_version, installed, " **")	
 				if LooseVersion(installed) >= LooseVersion(min_version):
-					print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ OK ]"), 'green'))
+					print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ OK ]"), 'green'))
 				else:
-					print (colored("{:.<15}{:.>15}".format("Module: %s" %each, "[ FAILED (II) ]"), 'red'))
-					#print (colored("Package %s\t[ FAILED (II) ]" % each,'red'))
-					print ("+ Please install manually package: ", each, "\n\n")
+					print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ FAILED (II) ]"), 'red'))
+					#print (colored("Package %s\t[ FAILED (II) ]" % module_name,'red'))
+					print ("+ Please install manually package: ", module_name, "\n\n")
 			else:
 				continue
 
