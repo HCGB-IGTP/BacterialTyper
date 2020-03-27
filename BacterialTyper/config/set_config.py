@@ -75,13 +75,13 @@ def get_exe(prog, Debug=False):
 	if (Debug):
 		print(colored("** Debug: exe: %s" %exe,'red'))
 		print(colored("** Debug: exe_path_tmp: %s" %exe_path_tmp,'red'))
-		
+
 	## get min_version
 	min_version = extern_progs.return_min_version_soft(prog)
 	## debug message
 	if (Debug):
 		print(colored("** Debug: min_version: %s" %min_version,'red'))
-	
+
 	## debugging messages
 	debug=False
 	if Debug:
@@ -89,7 +89,10 @@ def get_exe(prog, Debug=False):
 
 	for p in exe_path_tmp:
 		prog_ver = get_version(prog, p, Debug=debug)
-		#print ("Path: ", p , "\nVersion: ", prog_ver)
+
+		if (Debug):
+			print (colored("** Debug: Sotf: %s\nPath: %s\nVersion: %s" %(prog, p, prog_ver), 'red'))
+
 		if (prog_ver == 'n.a.'):
 			continue
 
@@ -104,9 +107,8 @@ def get_exe(prog, Debug=False):
 		exit()
 
 	return('ERROR')
-	
-	
-#################
+
+################
 def _access_check(fn, mode=os.F_OK | os.X_OK):
 	"""Check exec permission
 
@@ -246,20 +248,20 @@ def get_version(prog, path, Debug=False):
 
 		Give them credit accordingly.
 	"""
-	
+
 	## read dependencies information
 	dependencies_pd = extern_progs.read_dependencies()
-	
+
 	## get information for prog
 	regex = re.compile(dependencies_pd.loc[prog, 'get_version'])
 	args = dependencies_pd.loc[prog, 'version_cmd']
 	cmd = path + ' ' + args
-	
+
 	## debug messages
 	if (Debug):
 		print(colored("** Debug: regex: %s" %regex,'red'))
 		print(colored("** Debug: args: %s" %args, 'red'))
-		
+
 	if prog == 'spades':
 		cmd_output = subprocess.Popen(['python3', path, args], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
 	elif prog == 'trimmomatic':
@@ -275,10 +277,12 @@ def get_version(prog, path, Debug=False):
 	## debug messages
 	if (Debug):
 		print(colored("** Debug: cmd_output:\n %s" %cmd_output,'red'))
-	
+
 	## retrieve version information
 	for line in cmd_output:
 		hits = regex.search(line)
+		if (Debug):
+			print (hits)
 		if hits:
 			return hits.group(1)
 
@@ -304,55 +308,54 @@ def decode(x):
 def print_module_comparison(module_name, message, color):
 	"""
 	Creates print message for a given module, version, message
-	
+
 	:param module_name: Name of the module
 	:param message: Message to include in the print message: OK | FAILED | NOT FOUND
 	:param color: Print message color: green | orange | red
-	
+
 	:type module_name: string
 	:type message: string 
 	:type color: string
-	
+
 	:returns: Print message
 	"""
-	print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ ", message, " ]"), color))
-			
+	print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ %s ]" %message), color))
+
 #########
 
-def get_python_packages():
+def get_python_packages(Debug):
 	"""
 	Retrieves the version of the python packages installed in the system.
-	
+
 	It retrieves the dependencies name conversion from file :file:`BacterialTyper/config/python/module_dependencies.csv`
 	using function :func:`BacterialTyper.config.extern_progs.file_list` and :func:`BacterialTyper.scripts.functions.get_data`.
 	For each module it retrieves the package version installed in the system using 
 	:func:`BacterialTyper.config.set_config.check_package_version`.	
-	
+
 	:returns: Dictionary containing for each python module (key) the installed version (value).
-	
+
 	.. seealso:: This function relies on other ``BacterialTyper`` functions:
-	
+
 		- :func:`BacterialTyper.config.set_config.check_package_version`
-		
+
 		- :func:`BacterialTyper.config.extern_progs.file_list` 
-		
+
 		- :func:`BacterialTyper.scripts.functions.get_data`
-	
+
 	"""
-	
+
 	## get import names for packages:
 	## some modules do not have the same name when install from pip and called from import
 	file_module_dependecies = extern_progs.file_list("module_dependencies")
-	module_dependecies = functions.get_data(file_module_dependecies, ',', 'index_col=0')
+	module_dependencies = functions.file2dictionary(file_module_dependecies, ',')
 
-	my_packages_installed = []
+	my_packages_installed = {}
 
-	for each in my_packages_requirements:
-		##	
-		module_name = module_dependecies.loc[each, 'module_name_import']
+	for each in module_dependencies:
+		module_name = module_dependencies[each]
 		installed = check_package_version(module_name, Debug) ## check version installed in system
 		my_packages_installed[each] = installed
-		
+
 	return (my_packages_installed)
 
 ##################
@@ -360,57 +363,63 @@ def check_python_packages(Debug, option_install):
 	"""
 	This functions checks wether the packages installed in the system fulfilled the 
 	minimum version specified in the configuration folder. 
-	
+
 	It uses function :func:`BacterialTyper.config.set_config.get_python packages` to
 	retrieve the version of the python packages installed in the system. Then it uses
 	:func:`BacterialTyper.config.extern_progs.min_package_version` to retrieve the minimum
 	version specified. It compares them using function :func:`BacterialTyper.config.set_config.check_install_module`.
-	
+
 	:param Debug:
 	:param option_install:
 	:type Debug: boolean
 	:type option_install: string
-	
+
 	:returns: Print messages if packages are installed.
-	
+
 	.. seealso:: This function relies on other ``BacterialTyper`` functions:
-	
+
 		- :func:`BacterialTyper.config.set_config.get_python packages`
-		
+
 		- :func:`BacterialTyper.config.set_config.check_install_module`
-		
+
 		- :func:`BacterialTyper.config.extern_progs.min_package_version`
-		
+
 		- :func:`BacterialTyper.config.install_dependencies.python_package_install`
-		
+
 	"""
-	
 	## get python packages installed
-	my_packages_installed = get_python_packages()
+	my_packages_installed = get_python_packages(Debug)
 
 	## min versions for packages
 	my_packages_requirements = extern_progs.min_package_version()
 
+	## my module name conversion
+	file_module_dependecies = extern_progs.file_list("module_dependencies")
+	module_dependencies = functions.file2dictionary(file_module_dependecies, ',')
+
 	## check each package
 	for each in my_packages_requirements:
-		## get min version	
+		## get min version
 		min_version = my_packages_requirements[each]
 
 		## get version installed in system
 		installed = my_packages_installed[each] 
+
+		## module name conversion
+		module_name = module_dependencies[each]
 
 		## check if installed
 		message = check_install_module(installed, module_name, min_version, Debug)
 
 		if (message == 'OK'):
 			continue
-		else:			
+		else:
 			if (option_install == 'install'):  # try to install
 				installed = install_dependencies.python_package_install(module_name, min_version)
 				message2 = check_install_module(installed, module_name, min_version, Debug)
 				if (message2 == 'OK'):
 					continue
-				else:			
+				else:
 					print ("+ Attent to install package: ", module_name, " failed. Install it manually to continue with BacterialTyper\n\n")
 			else:
 				print ("+ Please install manually package: ", module_name, " to continue with BacterialTyper\n\n")
