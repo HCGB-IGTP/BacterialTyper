@@ -44,7 +44,7 @@ def run_database(options):
 	print ("--------- Starting Process ---------")
 	functions.print_time()
 
-	kma_bin = config.get_exe("kma")
+	kma_bin = set_config.get_exe("kma")
 
 	######################################################
 	## print further information if requested

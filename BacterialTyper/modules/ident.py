@@ -349,7 +349,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	functions.boxymcboxface("KMA Identification")
 
 	## set defaults
-	kma_bin = config.get_exe("kma")	
+	kma_bin = set_config.get_exe("kma")	
 
 	## check status
 	databases2use = []
@@ -488,7 +488,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 	outdir_dict_kma = functions.outdir_subproject(outdir_file, dataFrame_sample, "kma")
 
 	## set defaults
-	kma_bin = config.get_exe("kma")
+	kma_bin = set_config.get_exe("kma")
 
 	## get outfile
 	outfile = get_outfile(outdir_dict_kma[name], name, database)
@@ -710,7 +710,7 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 	## TODO: Samples might not be assembled...to take into account and return 0
 	## TODO: Fix and install MLSTar during installation
 	########################################################################################
-	rscript = "/soft/general/R-3.5.1-bioc-3.8/bin/Rscript" ##config.get_exe("Rscript") 
+	rscript = "/soft/general/R-3.5.1-bioc-3.8/bin/Rscript" ##set_config.get_exe("Rscript") 
 	########################################################################################
 
 	## TODO: What to do if multi-isolate sample?
@@ -805,7 +805,7 @@ def get_external_kma(kma_external_files, Debug):
 		external_kma_dbs_list = []
 		
 		## set defaults
-		kma_bin = config.get_exe("kma")
+		kma_bin = set_config.get_exe("kma")
 		for f in kma_external_files:
 			file_name = os.path.basename(f)
 			fold_name = os.path.dirname(f)

@@ -257,7 +257,7 @@ def BUSCO_run(dataset, fasta, threads, output_name, dataset_name, mode):
 		print (colored("\tSuccessfully run on date: %s"  %timestamp, 'green'))
 	else:
 	
-		busco_bin = config.get_exe('busco')
+		busco_bin = set_config.get_exe('busco')
 		os.chdir(output_name)
 		logFile = dataset_name + '.log'
 		cmd = '%s -i %s -f -c %s --blast_single_core --mode %s -l %s -o %s > %s' %(busco_bin, fasta, threads, mode, dataset, dataset_name, logFile)
@@ -316,7 +316,7 @@ def BUSCO_stats(summary_file, sample, dataset):
 
 ###############
 def BUSCO_plot(outfolder):
-	busco_plot_bin = config.get_exe('busco_plot')
+	busco_plot_bin = set_config.get_exe('busco_plot')
 	#logFile = dataset_name + '.log'
 	cmd = '%s -wd %s' %(busco_plot_bin, outfolder)
 	functions.system_call(cmd)

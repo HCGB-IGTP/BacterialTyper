@@ -48,7 +48,7 @@ def print_list_prokka():
 	
 	.. include:: ../../links.inc	 	
 	"""
-	prokka_bin = config.get_exe('prokka')
+	prokka_bin = set_config.get_exe('prokka')
 	cmd = prokka_bin + " --listdb"
 	functions.system_call(cmd)
 
@@ -100,7 +100,7 @@ def module_call(sequence_fasta, kingdom, genus, path, name, threads):
 			return ()
 	
 	## call prokka
-	prokka_bin = config.get_exe('prokka')
+	prokka_bin = set_config.get_exe('prokka')
 	dirname = prokka_call(prokka_bin, sequence_fasta, kingdom, genus, path, name, threads)
 
 	## success stamps

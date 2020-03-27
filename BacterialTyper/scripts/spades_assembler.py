@@ -234,7 +234,7 @@ def run_module_assembly(name, folder, file1, file2, threads):
 	print ("+ Calling spades assembly for sample...", name)	
 	
 	## get configuration
-	SPADES_bin = config.get_exe('spades')
+	SPADES_bin = set_config.get_exe('spades')
 	
 	## assembly main 
 	path_to_contigs = run_SPADES_assembly(folder, file1, file2, name, SPADES_bin, threads)
@@ -484,7 +484,7 @@ def run_module_SPADES_old(name, folder, file1, file2, threads):
 	functions.create_folder(folder)
 	
 	## get configuration
-	SPADES_bin = config.get_exe('spades')
+	SPADES_bin = set_config.get_exe('spades')
 	
 	## assembly main 
 	path_to_contigs = run_SPADES_assembly(folder, file1, file2, name, SPADES_bin, threads)

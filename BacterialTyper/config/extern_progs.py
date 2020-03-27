@@ -123,7 +123,7 @@ def print_dependencies():
 	depencencies_pd = read_dependencies()
 	for prog in depencencies_pd:
 		#print (prog)
-		prog_exe = config.get_exe(prog)
+		prog_exe = set_config.get_exe(prog)
 		#print (prog + '\t' + prog_exe)
 		prog_ver = get_version(prog, prog_exe)
 		progs[prog] = [prog_exe, prog_ver]

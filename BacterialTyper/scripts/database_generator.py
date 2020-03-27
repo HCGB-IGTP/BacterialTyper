@@ -626,7 +626,7 @@ def getdbs(source, database_folder, option, debug):
 
 	#### external_data
 	### TODO: Fix this
-	mash_bin = config.get_exe('mash')
+	mash_bin = set_config.get_exe('mash')
 	if any(name in 'Mash_external' for name in db_Dataframe['source'].to_list()):
 		print (colored("\t- external_data: including information from external data provided by user", 'green')) ## include user data
 		db_Dataframe = db_Dataframe.set_index("db", drop = False)

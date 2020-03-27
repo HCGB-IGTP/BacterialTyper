@@ -120,7 +120,7 @@ def parse_fastqcFile(resultsfile, name):
 ############
 def run_module_fastqc(path, files, sample, threads):	
 	## Arguments provided via ARGVs
-	fastqc_bin = config.get_exe('fastqc')
+	fastqc_bin = set_config.get_exe('fastqc')
 
 	## check if paired end
 	if (len(files) < 2):

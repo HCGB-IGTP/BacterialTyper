@@ -31,8 +31,8 @@ def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_ada
 	##
 	
 	## get exe
-	trimmomatic_jar = config.get_exe('trimmomatic')
-	java_path = config.get_exe('java')
+	trimmomatic_jar = set_config.get_exe('trimmomatic')
+	java_path = set_config.get_exe('java')
 
 	## check if it exists
 	if os.path.isfile(trimmomatic_adapters):

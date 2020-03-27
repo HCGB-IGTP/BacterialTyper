@@ -36,8 +36,8 @@ def help_edirect():
 
 ###############
 def generate_docsum_call(db, query, outfile):
-	esearch_bin = config.get_exe("esearch") 
-	efetch_bin = config.get_exe("efetch")
+	esearch_bin = set_config.get_exe("esearch") 
+	efetch_bin = set_config.get_exe("efetch")
 	return(docsum_call(db, query, outfile, esearch_bin, efetch_bin))
 
 ###############
@@ -47,7 +47,7 @@ def docsum_call(db, query, outfile, esearch_bin, efetch_bin):
 	
 ###############
 def generate_xtract_call(docsum_file, pattern, element, outfile):
-	xtract_bin = config.get_exe("xtract") 
+	xtract_bin = set_config.get_exe("xtract") 
 	return(xtract_call(docsum_file, pattern, element, outfile, xtract_bin))
 	
 ###############

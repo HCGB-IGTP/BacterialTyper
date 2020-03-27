@@ -298,7 +298,7 @@ def extract(fileGiven, out):
 ###############
 def makeblastdb(DBname, fasta):
 	## generate blastdb for genome
-	makeblastDBexe = config.get_exe('makeblastdb')
+	makeblastDBexe = set_config.get_exe('makeblastdb')
 	
 	if (os.path.isfile(DBname + '.nhr')):
 		print ("+ BLAST database is already generated...")
@@ -315,7 +315,7 @@ def makeblastdb(DBname, fasta):
 ###############	
 def blastn(outFile, DBname, fasta, threads):
 	# blastn plasmids vs contigs
-	blastnexe = config.get_exe('blastn')
+	blastnexe = set_config.get_exe('blastn')
 	cmd_blastn = "%s -db %s -query %s -out %s -evalue 1e-20 -outfmt \'6 std qlen slen\' -num_threads %s" %(blastnexe, DBname, fasta, outFile, threads )
 	codeBlastn = system_call(cmd_blastn)
 	
