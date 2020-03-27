@@ -1,6 +1,27 @@
-Config-Simple-4.58, https://cpan.metacpan.org/authors/id/S/SH/SHERZODR/Config-Simple-4.58.tar.gz
-ExtUtils-Config-0.008, https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-Config-0.008.tar.gz
-ExtUtils-Helpers-0.026, https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-Helpers-0.026.tar.gz
-ExtUtils-InstallPaths-0.012, https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-InstallPaths-0.012.tar.gz
-Module-Build-Tiny-0.039, https://cpan.metacpan.org/authors/id/L/LE/LEONT/Module-Build-Tiny-0.039.tar.gz
-MooseX-Singleton-0.30, https://cpan.metacpan.org/authors/id/E/ET/ETHER/MooseX-Singleton-0.30.tar.gz
+module_name,module,type_module,version,tar_gz
+strit,strict,core,,
+warnings,warnings,core,,
+Carp,Carp,core,,
+Cwd,Cwd,core,,
+Data_dumper,Data::Dumper,core,,
+Exporter,Exporter,core,,
+File-Copy,File::Copy,core,,
+File-Basename,File::Basename,core,,
+File-Spec,File::Spec,core,,
+File-Path,File::Path,core,,
+File-Temp,File::Temp,core,,
+FindBin,FindBin,core,,
+List-Util,List::Util,core,,
+Getopt-long,Getopt::Long,core,,
+POSIX,POSIX,core,,
+Config-Simple,Config::Simple;,install,4.58,https://cpan.metacpan.org/authors/id/S/SH/SHERZODR/Config-Simple-4.58.tar.gz
+ExtUtils-Config,ExtUtils::Config,install,0.008,https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-Config-0.008.tar.gz
+ExtUtils-Helpers,ExtUtils::Helpers,install,0.026,https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-Helpers-0.026.tar.gz
+ExtUtils-InstallPaths,ExtUtils::InstallPaths;,install,0.012,https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-InstallPaths-0.012.tar.gz
+Log-Log4perl,Log::Log4perl,install,1.49,https://cpan.metacpan.org/authors/id/M/MS/MSCHILLI/Log-Log4perl-1.49.tar.gz
+Module-Build-Tiny,Module::Build::Tiny,install,0.039,https://cpan.metacpan.org/authors/id/L/LE/LEONT/Module-Build-Tiny-0.039.tar.gz
+MooseX-Singleton,MooseX::Singleton,install,0.30,https://cpan.metacpan.org/authors/id/E/ET/ETHER/MooseX-Singleton-0.30.tar.gz
+Moose,Moose,install,2.2012,https://cpan.metacpan.org/authors/id/E/ET/ETHER/Moose-2.2012.tar.gz
+#Bio::Perl,
+#Bio::Seq,
+#Bio::SeqIO,
