@@ -3,7 +3,6 @@
 ## Jose F. Sanchez			      							##
 ## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain		##
 ##############################################################
-from Tools.scripts.var_access_benchmark import read_deque
 """Provides configuration for the pipeline.
 
 .. seealso:: Additional information on BacterialTyper configuration and requirements
