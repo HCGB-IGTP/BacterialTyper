@@ -8,7 +8,7 @@ Config
     :Version: |version|
     :Date: |today|
 
-Developer guidelines for ``BacterialTyper`` config scripts.
+Developer guidelines for ``BacterialTyper`` configuration scripts.
 
 .. toctree::
    :maxdepth: 1
@@ -16,3 +16,4 @@ Developer guidelines for ``BacterialTyper`` config scripts.
    extern_progs.rst
    install_dependencies.rst
    set_config.rst
+   additional_info.rst

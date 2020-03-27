@@ -18,8 +18,6 @@ API Overview
     :Version: |version|
     :Date: |today|
 
-.. contents:: :local:
-
 Here we include and API_ documentation for ``BacterialTyper`` in order to provide third parties to use the 
 functionality of ``BacterialTyper`` application
 
@@ -38,7 +36,7 @@ several directories:
 
 
 Additionally, we include a third-party software named IslandPath-DIMOB. See additional 
-details in section: :ref:`islandPath-DIMOB-forked`.
+details in section: :ref:`IslandPath-DIMOB forked version<islandPath-DIMOB-forked>`.
 
 - ``third_party/IslandPath-DIMOB``
 
@@ -46,7 +44,7 @@ Contents
 ^^^^^^^^
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    BacterialTyper.rst
    modules/modules_index.rst

@@ -26,20 +26,20 @@ in section :ref:`System requirements<system-requirements>`.
 Sometimes, the script to create or activate a `python environment`_ do not execute and update the 
 content of the virtual environment created. 
 
-They usually create these error messages:
+The commom error messages are:
 
-``env/create_python_environment.sh``:
+For the ``env/create_python_environment.sh`` script:
    
 .. code-block:: sh
    
-      ``env/create_python_environment.sh: 16 env/create_python_environment.sh: source: not found``  
-      ``env/create_python_environment.sh: 23 env/create_python_environment.sh: pip: not found``
+      env/create_python_environment.sh: 16 env/create_python_environment.sh: source: not found  
+      env/create_python_environment.sh: 23 env/create_python_environment.sh: pip: not found
    
-``env/activate_python_environment.sh``:
+For the ``env/activate_python_environment.sh`` script:
    
 .. code-block:: sh
 
-      ``env/activate_python_environment.sh: 16 env/create_python_environment.sh: source: not found``
+      env/activate_python_environment.sh: 16 env/create_python_environment.sh: source: not found
    
 These error messages are because they are not correctly executed or they might have lost execution permissions.
 

@@ -13,7 +13,7 @@ are needed and are summarized in the following table.
    :file: ../../data/python_requirements_summary.csv
 
 These modules might have extra dependencies. Details of the list of 
-all modules required are listed in :file:`BacterialTyper/config/python_requirements.txt`. 
+all modules required are listed in :file:`BacterialTyper/config/python/python_requirements.txt`. 
 And accessible here:
 
 .. toctree:: 
@@ -26,7 +26,7 @@ Using ``pip`` we can install them all at a glance.
 
 .. code-block:: sh
 
-   pip install -r ./BacterialTyper/config/python_requirements.txt
+   pip install -r ./BacterialTyper/config/python/python_requirements.txt
 
 But again, following installation recommendations, we encourage you to create and install them 
 within a virtual environment (See section: :ref:`Python environment<virtual-env-BacterialTyper>` 
@@ -44,7 +44,7 @@ language for ``BacterialTyper`` some third-party software rely on perl
 and so some perl dependencies are required. 
 
 They are listed in file 
-:file:`BacterialTyper/config/perl_lib_dependencies.csv`, which is shown below:
+:file:`BacterialTyper/config/perl/perl_lib_dependencies.csv`, which is shown below:
 
 .. csv-table::
    :header: "Package", "Version"
@@ -53,14 +53,14 @@ They are listed in file
 To install these dependencies there is shell script available for the 
 perl package modules installation (file :file:`BacterialTyper/config/perl_lib_installer.sh`). 
 
-.. include:: ../../../../BacterialTyper/config/perl_lib_installer.sh
+.. include:: ../../../../BacterialTyper/config/perl/perl_lib_installer.sh
    :literal:
  
 Execute the file from the main directory as:
 
 .. code-block:: sh
 
-   sh BacterialTyper/config/perl_lib_installer.sh
+   sh BacterialTyper/config/perl/perl_lib_installer.sh
 
 .. ######################
 .. _soft-dependencies:
