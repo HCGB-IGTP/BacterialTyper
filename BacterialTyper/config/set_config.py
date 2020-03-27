@@ -390,8 +390,18 @@ def check_python_packages(Debug, option_install):
 	## get python packages installed
 	my_packages_installed = get_python_packages(Debug)
 
+	## debug messages
+	if (Debug):
+		print ("my_packages_installed :: ")
+		print (my_packages_installed)
+
 	## min versions for packages
 	my_packages_requirements = extern_progs.min_package_version()
+
+	## debug messages
+	if (Debug):
+		print ("my_packages_requirements")
+		print (my_packages_requirements)
 
 	## my module name conversion
 	file_module_dependecies = extern_progs.file_list("module_dependencies")
@@ -408,6 +418,13 @@ def check_python_packages(Debug, option_install):
 		## module name conversion
 		module_name = module_dependencies[each]
 
+		## debug messages
+		if (Debug):
+			print ("Module:", each)
+			print ("Module name:", module_name)
+			print ("Min_Version:", min_version)
+			print ("Version installed:", installed)
+
 		## check if installed
 		message = check_install_module(installed, module_name, min_version, Debug)
 
@@ -415,6 +432,9 @@ def check_python_packages(Debug, option_install):
 			continue
 		else:
 			if (option_install == 'install'):  # try to install
+				if (Debug):
+					print ("Install module: ", each)
+
 				installed = install_dependencies.python_package_install(module_name, min_version)
 				message2 = check_install_module(installed, module_name, min_version, Debug)
 				if (message2 == 'OK'):
