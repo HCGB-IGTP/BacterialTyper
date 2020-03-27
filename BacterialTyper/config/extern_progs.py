@@ -96,7 +96,7 @@ def return_defatult_soft(soft):
 def return_min_version_soft(soft):
 	"""Retrieve version for a given software
 
-	Retrieves minimum version for the software of interest stored in :file:`BacterialTyper/config/dependencies.csv'.
+	Retrieves minimum version for the software of interest stored in :file:`BacterialTyper/config/dependencies.csv`.
 	It reads file using :func:`BacterialTyper.config.extern_progs.read_dependencies`
 	and retrieve minimum version required.
 
@@ -111,8 +111,30 @@ def return_min_version_soft(soft):
 	"""
 	dependencies_df = read_dependencies()
 	return(dependencies_df.loc[soft,"min_version"])
+##################
 
 ##################
+def print_dependencies():
+	"""
+	
+	"""
+	
+	progs = {}
+	depencencies_pd = read_dependencies()
+	for prog in depencencies_pd:
+		#print (prog)
+		prog_exe = config.get_exe(prog)
+		#print (prog + '\t' + prog_exe)
+		prog_ver = get_version(prog, prog_exe)
+		progs[prog] = [prog_exe, prog_ver]
+
+	df_programs = pd.DataFrame.from_dict(progs, orient='index', columns=('Executable path', 'Version'))
+	df_programs = df_programs.stack().str.lstrip().unstack()
+	pd.set_option('display.max_colwidth', -1)
+	pd.set_option('display.max_columns', None)
+	print (df_programs)
+
+
 
 ##################
 ### Python packages
@@ -131,38 +153,35 @@ def min_package_version():
 	return(package_min_versions)
 ##################
 
-def python_packages_dependencies():
-	## ToDo set automatic from pip list
-	python_packages_BacterialTyper = ('ariba', 'bs4', 'dendropy', 'pyfastaq', 'pymummer', 'pysam')
-
 ##################
-def return_min_version_soft_package(package):
+def return_min_version_python_package(package):
+	"""
+	Retrieves minimum version requirement for the given package.
+	
+	It retrieves the requirements using :func:`BacterialTyper.config.extern_progs.min_package_version`
+	and returns the given package requested minimun version.
+	
+	:param package:  
+	:type package: string	
+	:returns: Minimum version package (string)
+	
+	"""
 	version_package = min_package_version()
 	return (version_package[package])
 
 ##################
 def print_package_version():
+	"""
+	Prints the package version required by ``BacterialTyper``
+	
+	It retrieves the requirements using :func:`BacterialTyper.config.extern_progs.min_package_version`
+	and prints them using function :func:`BacterialTyper.config.set_config.print_module_comparison`.
+	
+	:returns: Print messages
+	"""
 	my_packages = min_package_version()
 	for each in my_packages:
-		print ("{:.<15}{:.>15}".format("Module: %s" %each, my_packages[each]))
-
-##################
-def print_dependencies():
-	progs = {}
-	prog_to_default = config.prog_to_default()
-	for prog in prog_to_default:
-		#print (prog)
-		prog_exe = config.get_exe(prog)
-		#print (prog + '\t' + prog_exe)
-		prog_ver = get_version(prog, prog_exe)
-		progs[prog] = [prog_exe, prog_ver]
-
-	df_programs = pd.DataFrame.from_dict(progs, orient='index', columns=('Executable path', 'Version'))
-	df_programs = df_programs.stack().str.lstrip().unstack()
-	pd.set_option('display.max_colwidth', -1)
-	pd.set_option('display.max_columns', None)
-	print (df_programs)
-
+		set_config.print_module_comparison(each, my_packages[each], 'green')
 
 def main():
 
@@ -170,7 +189,7 @@ def main():
 	print(data)
 
 	#print_package_version()
-	#print (return_min_version_soft_package('ariba'))
+	#print (return_min_version_python_package('ariba'))
 	#print (return_min_version_soft('kma'))
 	set_config.check_python_packages(True, '')
 

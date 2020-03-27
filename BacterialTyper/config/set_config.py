@@ -28,6 +28,10 @@ from BacterialTyper.scripts import functions
 from BacterialTyper.config import extern_progs
 from BacterialTyper.config import install_dependencies
 
+################
+## Software
+################
+
 ##################
 def get_exe(prog, Debug=False):
 	"""Return absolute path of the executable program requested.
@@ -78,7 +82,7 @@ def get_exe(prog, Debug=False):
 		debug=True
 
 	for p in exe_path_tmp:
-		prog_ver = extern_progs.get_version(prog, p, Debug=debug)
+		prog_ver = get_version(prog, p, Debug=debug)
 		#print ("Path: ", p , "\nVersion: ", prog_ver)
 		if (prog_ver == 'n.a.'):
 			continue
@@ -94,7 +98,8 @@ def get_exe(prog, Debug=False):
 		exit()
 
 	return('ERROR')
-
+	
+	
 #################
 def _access_check(fn, mode=os.F_OK | os.X_OK):
 	"""Check exec permission
@@ -262,56 +267,159 @@ def get_version(prog, path, Debug=False):
 
 	return("n.a.")
 
+##################
+def decode(x):
+	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
+	## give credit to them appropiately
+	try:
+		s = x.decode()
+	except:
+		return x
 
+	return s
+
+################
+## Python
+################
+def print_module_comparison(module_name, message, color):
+	"""
+	Creates print message for a given module, version, message
+	
+	:param module_name: Name of the module
+	:param message: Message to include in the print message: OK | FAILED | NOT FOUND
+	:param color: Print message color: green | orange | red
+	
+	:type module_name: string
+	:type message: string 
+	:type color: string
+	
+	:returns: Print message
+	"""
+	print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ ", message, " ]"), color))
+			
 #########
-def check_python_packages(Debug, option_install):
 
-	## min versions for packages
-	my_packages = extern_progs.min_package_version()
-
-	## get import nades for packages:
+def get_python_packages():
+	"""
+	Retrieves the version of the python packages installed in the system.
+	
+	It retrieves the dependencies name conversion from file :file:`BacterialTyper/config/python/module_dependencies.csv`
+	using function :func:`BacterialTyper.config.extern_progs.file_list` and :func:`BacterialTyper.scripts.functions.get_data`.
+	For each module it retrieves the package version installed in the system using 
+	:func:`BacterialTyper.config.set_config.check_package_version`.	
+	
+	:returns: Dictionary containing for each python module (key) the installed version (value).
+	
+	.. seealso:: This function relies on other ``BacterialTyper`` functions:
+	
+		- :func:`BacterialTyper.config.set_config.check_package_version`
+		
+		- :func:`BacterialTyper.config.extern_progs.file_list` 
+		
+		- :func:`BacterialTyper.scripts.functions.get_data`
+	
+	"""
+	
+	## get import names for packages:
 	## some modules do not have the same name when install from pip and called from import
 	file_module_dependecies = extern_progs.file_list("module_dependencies")
 	module_dependecies = functions.get_data(file_module_dependecies, ',', 'index_col=0')
 
-	for each in my_packages:
+	my_packages_installed = []
+
+	for each in my_packages_requirements:
 		##	
-		min_version = my_packages[each]
 		module_name = module_dependecies.loc[each, 'module_name_import']
 		installed = check_package_version(module_name, Debug) ## check version installed in system
+		my_packages_installed[each] = installed
+		
+	return (my_packages_installed)
 
-		## Not installed
-		if (installed == 'n.a.'):
-			print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ NOT FOUND ]"), 'red'))
-			if (Debug):
-				print ("\n**", module_name, min_version, installed, " **")			
-			if (option_install == "install"): # try to install
-				installed = install_dependencies.python_package_install(module_name, min_version)
-				if (Debug):
-					print ("\n**", module_name, min_version, installed, " **")			
-			else:
-				continue
+##################
+def check_python_packages(Debug, option_install):
+	"""
+	This functions checks wether the packages installed in the system fulfilled the 
+	minimum version specified in the configuration folder. 
+	
+	It uses function :func:`BacterialTyper.config.set_config.get_python packages` to
+	retrieve the version of the python packages installed in the system. Then it uses
+	:func:`BacterialTyper.config.extern_progs.min_package_version` to retrieve the minimum
+	version specified. It compares them using function :func:`BacterialTyper.config.set_config.check_install_module`.
+	
+	:param Debug:
+	:param option_install:
+	:type Debug: boolean
+	:type option_install: string
+	
+	:returns: Print messages if packages are installed.
+	
+	.. seealso:: This function relies on other ``BacterialTyper`` functions:
+	
+		- :func:`BacterialTyper.config.set_config.get_python packages`
+		
+		- :func:`BacterialTyper.config.set_config.check_install_module`
+		
+		- :func:`BacterialTyper.config.extern_progs.min_package_version`
+		
+		- :func:`BacterialTyper.config.install_dependencies.python_package_install`
+		
+	"""
+	
+	## get python packages installed
+	my_packages_installed = get_python_packages()
 
-		# check version
-		if LooseVersion(installed) >= LooseVersion(min_version):
-			print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ OK ]"), 'green'))
+	## min versions for packages
+	my_packages_requirements = extern_progs.min_package_version()
 
-		else:
-			print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ FAILED ]"), 'red'))
-			#print (colored("Package %s\t[ FAILED ]" % module_name,'red'))
+	## check each package
+	for each in my_packages_requirements:
+		## get min version	
+		min_version = my_packages_requirements[each]
+
+		## get version installed in system
+		installed = my_packages_installed[each] 
+
+		## check if installed
+		message = check_install_module(installed, module_name, min_version, Debug)
+
+		if (message == 'OK'):
+			continue
+		else:			
 			if (option_install == 'install'):  # try to install
 				installed = install_dependencies.python_package_install(module_name, min_version)
-				if (Debug):
-					print ("\n**", module_name, min_version, installed, " **")	
-				if LooseVersion(installed) >= LooseVersion(min_version):
-					print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ OK ]"), 'green'))
-				else:
-					print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ FAILED (II) ]"), 'red'))
-					#print (colored("Package %s\t[ FAILED (II) ]" % module_name,'red'))
-					print ("+ Please install manually package: ", module_name, "\n\n")
+				message2 = check_install_module(installed, module_name, min_version, Debug)
+				if (message2 == 'OK'):
+					continue
+				else:			
+					print ("+ Attent to install package: ", module_name, " failed. Install it manually to continue with BacterialTyper\n\n")
 			else:
-				continue
+				print ("+ Please install manually package: ", module_name, " to continue with BacterialTyper\n\n")
 
+##################
+def check_install_module(installed, module_name, min_version, Debug):
+	"""
+	
+	"""
+	 ## Not installed
+	if (installed == 'n.a.'):
+		message = 'NOT FOUND'
+		color = 'red'
+		print_module_comparison(module_name, message, color)
+		
+	# check version
+	elif LooseVersion(installed) >= LooseVersion(min_version):
+		message = 'OK'
+		color = 'green'
+		print_module_comparison(module_name, message, color)
+	
+	else:
+		message = 'FAILED'
+		color = 'orange'
+		print_module_comparison(module_name, message, color)
+
+	## return message
+	return (message)
+	
 #########
 def check_package_version(package, Debug):
 	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
@@ -347,16 +455,9 @@ def check_package_version(package, Debug):
 
 	return(version)
 
-##################
-def decode(x):
-	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
-	## give credit to them appropiately
-	try:
-		s = x.decode()
-	except:
-		return x
-
-	return s
-
-
+################
+## Perl
+################
+def check_perl_packages(Debug, option_install):
+	return()
 
