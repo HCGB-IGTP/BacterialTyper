@@ -3,6 +3,7 @@
 ## Jose F. Sanchez			      							##
 ## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain		##
 ##############################################################
+from Tools.scripts.var_access_benchmark import read_deque
 """Provides configuration for the pipeline.
 
 .. seealso:: Additional information on BacterialTyper configuration and requirements
@@ -70,12 +71,18 @@ def get_exe(prog, Debug=False):
 
 	## get paths
 	exe_path_tmp = my_which(exe)
-	#print (exe_path_tmp)
+
+	## debug message
+	if (Debug):
+		print(colored("** Debug: exe: %s" %exe,'red'))
+		print(colored("** Debug: exe_path_tmp: %s" %exe_path_tmp,'red'))
 
 	## get min_version
 	min_version = extern_progs.return_min_version_soft(prog)
-	#print ("Min version: ", min_version)
-
+	## debug message
+	if (Debug):
+		print(colored("** Debug: min_version: %s" %min_version,'red'))
+	
 	## debugging messages
 	debug=False
 	if Debug:
@@ -240,10 +247,20 @@ def get_version(prog, path, Debug=False):
 
 		Give them credit accordingly.
 	"""
-
-	assert prog in prog_to_version_cmd
-	args, regex = prog_to_version_cmd[prog]
+	
+	## read dependencies information
+	dependencies_pd = extern_progs.read_dependencies()
+	
+	## get information for prog
+	regex = dependencies_pd.loc[prog, 'get_version']
+	args = dependencies_pd.loc[prog, 'version_cmd']
 	cmd = path + ' ' + args
+	
+	if (Debug):
+		print(colored("** Debug: regex: %s" %regex,'red'))
+		print(colored("** Debug: args: %s" %args, 'red'))
+		
+	
 	if prog == 'spades':
 		cmd_output = subprocess.Popen(['python3', path, args], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
 	elif prog == 'trimmomatic':
