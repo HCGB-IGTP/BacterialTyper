@@ -70,12 +70,18 @@ def get_exe(prog, Debug=False):
 
 	## get paths
 	exe_path_tmp = my_which(exe)
-	#print (exe_path_tmp)
+
+	## debug message
+	if (Debug):
+		print(colored("** Debug: exe: %s" %exe,'orange'))
+		print(colored("** Debug: exe_path_tmp: %s" %exe_path_tmp,'orange'))
 
 	## get min_version
 	min_version = extern_progs.return_min_version_soft(prog)
-	#print ("Min version: ", min_version)
-
+	## debug message
+	if (Debug):
+		print(colored("** Debug: min_version: %s" %min_version,'orange'))
+	
 	## debugging messages
 	debug=False
 	if Debug:
