@@ -251,15 +251,15 @@ def get_version(prog, path, Debug=False):
 	dependencies_pd = extern_progs.read_dependencies()
 	
 	## get information for prog
-	regex = dependencies_pd.loc[prog, 'get_version']
+	regex = re.compile(dependencies_pd.loc[prog, 'get_version'])
 	args = dependencies_pd.loc[prog, 'version_cmd']
 	cmd = path + ' ' + args
 	
+	## debug messages
 	if (Debug):
 		print(colored("** Debug: regex: %s" %regex,'red'))
 		print(colored("** Debug: args: %s" %args, 'red'))
 		
-	
 	if prog == 'spades':
 		cmd_output = subprocess.Popen(['python3', path, args], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
 	elif prog == 'trimmomatic':
@@ -272,6 +272,10 @@ def get_version(prog, path, Debug=False):
 	## decode command
 	cmd_output = decode(cmd_output[0]).split('\n')[:-1] + decode(cmd_output[1]).split('\n')[:-1]
 
+	## debug messages
+	if (Debug):
+		print(colored("** Debug: cmd_output:\n %s" %cmd_output,'red'))
+	
 	## retrieve version information
 	for line in cmd_output:
 		hits = regex.search(line)
