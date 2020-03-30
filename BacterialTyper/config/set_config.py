@@ -3,7 +3,8 @@
 ## Jose F. Sanchez			      							##
 ## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain		##
 ##############################################################
-"""Provides configuration for the pipeline.
+"""
+Provides configuration for the pipeline.
 
 .. seealso:: Additional information on BacterialTyper configuration and requirements
 
@@ -333,7 +334,7 @@ def get_python_packages(Debug):
 
 		- :func:`BacterialTyper.config.extern_progs.file_list` 
 
-		- :func:`BacterialTyper.scripts.functions.get_data`
+		- :func:`BacterialTyper.scripts.functions.file2dictionary`
 
 	"""
 
@@ -362,8 +363,8 @@ def check_python_packages(Debug, option_install):
 	:func:`BacterialTyper.config.extern_progs.min_package_version` to retrieve the minimum
 	version specified. It compares them using function :func:`BacterialTyper.config.set_config.check_install_module`.
 
-	:param Debug:
-	:param option_install:
+	:param Debug: True/False for debugging messages
+	:param option_install: True/False for installing missing dependencies
 	:type Debug: boolean
 	:type option_install: string
 
@@ -378,6 +379,8 @@ def check_python_packages(Debug, option_install):
 		- :func:`BacterialTyper.config.extern_progs.min_package_version`
 
 		- :func:`BacterialTyper.config.install_dependencies.python_package_install`
+		
+		- :func:`BacterialTyper.scripts.functions.file2dictionary`
 
 	"""
 	## get python packages installed
@@ -424,7 +427,7 @@ def check_python_packages(Debug, option_install):
 		if (message == 'OK'):
 			continue
 		else:
-			if (option_install == 'install'):  # try to install
+			if (option_install):  # try to install
 				if (Debug):
 					print ("Install module: ", each)
 
@@ -437,6 +440,7 @@ def check_python_packages(Debug, option_install):
 			else:
 				print ("+ Please install manually package: ", module_name, " to continue with BacterialTyper\n\n")
 
+################
 def check_package_version(package, Debug):
 	"""
 	Retrieve python package version installed
@@ -485,8 +489,149 @@ def check_package_version(package, Debug):
 ################
 ## Perl
 ################
+def get_perl_packages(Debug):
+	"""
+	Retrieves the version of the perl packages installed in the system.
+
+	It retrieves the dependencies name conversion from file :file:`BacterialTyper/config/perl/perl_lib_dependencies.csv`
+	using function :func:`BacterialTyper.config.extern_progs.file_list` and :func:`BacterialTyper.scripts.functions.get_data`.
+	For each module it retrieves the package version installed in the system using 
+	:func:`BacterialTyper.config.set_config.check_perl_package_version`.	
+
+	:returns: Dictionary containing for each perl module (key) the installed version (value).
+
+	.. seealso:: This function relies on other ``BacterialTyper`` functions:
+
+		- :func:`BacterialTyper.config.set_config.check_perl_package_version`
+
+		- :func:`BacterialTyper.config.extern_progs.file_list` 
+
+		- :func:`BacterialTyper.scripts.functions.get_data`
+
+	"""
+
+	## get info for perl modules
+	perl_lib_dependecies_file = extern_progs.file_list("perl_lib_dependencies")
+	perl_lib_dependecies = functions.get_data(perl_lib_dependecies_file, ',', 'index_col=0')
+
+	my_packages_installed = {}
+
+	for index_name, row in perl_lib_dependecies.iterrows():
+		module_name = row['module']
+		installed = check_perl_package_version(module_name, Debug) ## check version installed in system
+		my_packages_installed[index_name] = installed
+
+	return (my_packages_installed)
+
+##################
 def check_perl_packages(Debug, option_install):
-	return()
+	"""
+	This functions checks wether the packages installed in the system fulfilled the 
+	minimum version specified in the configuration file. 
+
+	It uses function :func:`BacterialTyper.config.set_config.get_perl_packages` to
+	retrieve the version of the perl packages installed in the system. Then it uses
+	:func:`BacterialTyper.config.extern_progs.min_perl_package_version` to retrieve the minimum
+	version specified. It compares them using function :func:`BacterialTyper.config.set_config.check_install_module`.
+
+	:param Debug: True/False for debugging messages
+	:param option_install: True/False for installing missing dependencies
+	:type Debug: boolean
+	:type option_install: boolean
+
+	:returns: Print messages if packages are installed.
+
+	.. seealso:: This function relies on other ``BacterialTyper`` functions:
+
+		- :func:`BacterialTyper.config.set_config.get_perl_packages`
+
+		- :func:`BacterialTyper.config.set_config.check_install_module`
+
+		- :func:`BacterialTyper.config.extern_progs.min_perl_package_version`
+
+		- :func:`BacterialTyper.config.install_dependencies.perl_package_install`
+
+	"""
+	## get perl packages installed
+	my_packages_installed = get_perl_packages(Debug)
+
+	## debug messages
+	if (Debug):
+		print ("my_packages_installed :: ")
+		print (my_packages_installed)
+
+	## min versions for packages
+	my_packages_requirements = extern_progs.min_perl_package_version()
+
+	## debug messages
+	if (Debug):
+		print ("my_packages_requirements")
+		print (my_packages_requirements)
+
+	## get info for perl modules
+	perl_lib_dependecies_file = extern_progs.file_list("perl_lib_dependencies")
+	perl_lib_dependecies = functions.get_data(perl_lib_dependecies_file, ',', 'index_col=0')
+
+	## check each package
+	for each in my_packages_requirements:
+		## get min version
+		min_version = my_packages_requirements[each]
+
+		## get version installed in system
+		installed = my_packages_installed[each] 
+
+		## module name conversion
+		module_name = perl_lib_dependecies.loc[each, 'module']
+
+		## debug messages
+		if (Debug):
+			print ("Module:", each)
+			print ("Module name:", module_name)
+			print ("Min_Version:", min_version)
+			print ("Version installed:", installed)
+
+		## check if installed
+		message = check_install_module(installed, module_name, min_version)
+
+		if (message == 'OK'):
+			continue
+		else:
+			if (option_install):  # try to install
+				if (Debug):
+					print ("Install module: ", each)
+
+				installed = install_dependencies.perl_package_install(module_name, min_version)
+				message2 = check_install_module(installed, module_name, min_version)
+				if (message2 == 'OK'):
+					continue
+				else:
+					print ("+ Attent to install package: ", module_name, " failed. Install it manually to continue with BacterialTyper\n\n")
+			else:
+				print ("+ Please install manually package: ", module_name, " to continue with BacterialTyper\n\n")
+
+################
+def check_perl_package_version(package, Debug):
+	"""
+	Retrieve  package version installed
+	
+	It basically uses a one line perl command to load the package and print the version.
+	
+	:param package: package name 
+	:param Debug: True/False for debugging messages
+	
+	:type package: string
+	:type Debug: boolean
+	
+	:returns: Version retrieved
+	"""
+	
+	perl_exe = get_exe('perl')
+	perl_one_line_command = perl_exe + '-M' + package + ' -e \'print $' + package + '::VERSION\'."\n";'
+	
+	if (Debug):
+		print ("** DEBUG: perl command:\n")
+		print (perl_one_line_command) 
+
 
 ################
 ## Miscellaneous

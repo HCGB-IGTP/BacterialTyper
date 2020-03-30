@@ -142,7 +142,7 @@ def print_dependencies():
 def min_package_version():
 	"""Returns a dictionary containing minimum version for each python package.
 
-	Reads information from :file:`BacterialTyper/config/python_requirements.csv`.
+	Reads information from :file:`BacterialTyper/config/python/python_requirements.csv`.
 
 	:returns: dictionary
 	"""
@@ -182,6 +182,34 @@ def print_package_version():
 	my_packages = min_package_version()
 	for each in my_packages:
 		set_config.print_module_comparison(each, my_packages[each], 'green')
+
+
+def min_perl_package_version():
+	"""Returns a dictionary containing minimum version for each perl package.
+
+	Reads information from :file:`BacterialTyper/config/perl/perl_lib_dependencies.csv`, and creates a 
+	dictionary. For each perl module (key) the value is the version required.
+	
+	.. seealso:: This function depends on other ``BacterialTyper`` functions:
+	
+		- :func:`BacterialTyper.scripts.functions.get_data`
+	
+		- :func:`BacterialTyper.config.extern_progs.file_list`
+
+	:returns: dictionary
+	"""
+	## get info for perl modules
+	perl_lib_dependecies_file = extern_progs.file_list("perl_lib_dependencies")
+	perl_lib_dependecies = functions.get_data(perl_lib_dependecies_file, ',', 'index_col=0')
+
+	## return only package name and version
+	package_min_versions = {}
+
+
+	return(package_min_versions)
+##################
+
+
 
 def main():
 
