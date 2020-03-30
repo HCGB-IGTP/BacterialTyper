@@ -293,8 +293,19 @@ def get_version(prog, path, Debug=False):
 
 ##################
 def decode(x):
-	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
-	## give credit to them appropiately
+	"""
+	Python decode string method
+	
+	:param x: String of text to decode
+	:type x: string
+	:returns: Text decoded
+	
+	.. attention:: Be aware of Copyright
+
+		The code implemented here was retrieved and modified from ARIBA (https://github.com/sanger-pathogens/ariba)
+
+		Give them credit accordingly.
+	"""
 	try:
 		s = x.decode()
 	except:
@@ -305,24 +316,6 @@ def decode(x):
 ################
 ## Python
 ################
-def print_module_comparison(module_name, message, color):
-	"""
-	Creates print message for a given module, version, message
-
-	:param module_name: Name of the module
-	:param message: Message to include in the print message: OK | FAILED | NOT FOUND
-	:param color: Print message color: green | orange | red
-
-	:type module_name: string
-	:type message: string 
-	:type color: string
-
-	:returns: Print message
-	"""
-	print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ %s ]" %message), color))
-
-#########
-
 def get_python_packages(Debug):
 	"""
 	Retrieves the version of the python packages installed in the system.
@@ -426,7 +419,7 @@ def check_python_packages(Debug, option_install):
 			print ("Version installed:", installed)
 
 		## check if installed
-		message = check_install_module(installed, module_name, min_version, Debug)
+		message = check_install_module(installed, module_name, min_version)
 
 		if (message == 'OK'):
 			continue
@@ -436,7 +429,7 @@ def check_python_packages(Debug, option_install):
 					print ("Install module: ", each)
 
 				installed = install_dependencies.python_package_install(module_name, min_version)
-				message2 = check_install_module(installed, module_name, min_version, Debug)
+				message2 = check_install_module(installed, module_name, min_version)
 				if (message2 == 'OK'):
 					continue
 				else:
@@ -444,10 +437,93 @@ def check_python_packages(Debug, option_install):
 			else:
 				print ("+ Please install manually package: ", module_name, " to continue with BacterialTyper\n\n")
 
-##################
-def check_install_module(installed, module_name, min_version, Debug):
+def check_package_version(package, Debug):
+	"""
+	Retrieve python package version installed
+	
+	This is a modification of the original code from ARIBA (https://github.com/sanger-pathogens/ariba). 
+	It basically uses pkg_resources.get_distribution(), pkg_resources.resource_filename() or imports module
+	and retrieves version from __version__ variable.
+	
+	:param package: Python package name 
+	:param Debug: True/False for debugging messages
+	
+	:type package: string
+	:type Debug: boolean
+	
+	:returns: Version retrieved
+	
+	.. attention:: Be aware of Copyright
+
+		The code implemented here was retrieved and modified from ARIBA (https://github.com/sanger-pathogens/ariba)
+
+		Give them credit accordingly.
 	"""
 	
+	try:
+		version = pkg_resources.get_distribution(package).version
+		if (Debug):
+			print ("Method: pkg_resources.get_distribution(package).version")
+	except:
+		try:
+			exec('import ' + package)
+			version = eval(package + '.__version__')
+			if (Debug):
+				print ("Method: exec('import ' + package); version = eval(package + '.__version__')")
+		except:
+			try:
+				if (Debug):
+					print ("Method: pkg_resources.resource_filename(package, 'version.py')")
+				version = pkg_resources.resource_filename(package, 'version.py')
+			except:
+				version = 'n.a.'
+	if (Debug):
+		print ('Package:', package)
+		print ('Version:', version)
+	return(version)
+
+################
+## Perl
+################
+def check_perl_packages(Debug, option_install):
+	return()
+
+################
+## Miscellaneous
+################
+def print_module_comparison(module_name, message, color):
+	"""
+	Creates print message for a given module, version, message
+
+	:param module_name: Name of the module
+	:param message: Message to include in the print message: OK | FAILED | NOT FOUND
+	:param color: Print message color: green | orange | red
+
+	:type module_name: string
+	:type message: string 
+	:type color: string
+
+	:returns: Print message
+	"""
+	print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ %s ]" %message), color))
+
+#########
+
+##################
+def check_install_module(installed, module_name, min_version):
+	"""
+	Checks modules installation 
+	
+	Checks wether a module is installed and fulifilling requirements. 	
+	It prints messages using :func:`BacterialTyper.config.set_config.print_module_comparison`.
+	
+	:param installed: Version string of the module installed.
+	:param module_name: Module name
+	:param min_version: Version string for the minimum version required
+	
+	:type installed: string
+	:type module_name: string 
+	:type min_version: string
 	"""
 	 ## Not installed
 	if (installed == 'n.a.'):
@@ -468,45 +544,5 @@ def check_install_module(installed, module_name, min_version, Debug):
 
 	## return message
 	return (message)
-	
+
 #########
-def check_package_version(package, Debug):
-	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
-	## give credit to them appropiately
-
-	try:
-		version = pkg_resources.get_distribution(package).version
-		if (Debug):
-			print ("1st method: pkg_resources.get_distribution(package).version")
-	except:
-
-		try:
-			exec('import ' + package)
-			version = eval(package + '.__version__')
-			if (Debug):
-				print ("2nd method: exec('import ' + package); version = eval(package + '.__version__')")
-
-		except:
-			#version = pkg_resources.resource_filename(package, 'version.py')
-			#print(version)
-
-			try:
-				if (Debug):
-					print ("3rd method: pkg_resources.resource_filename(package, 'version.py')")
-
-				version = pkg_resources.resource_filename(package, 'version.py')
-			except:
-				version = 'n.a.'
-
-	if (Debug):
-		print ('Package:', package)
-		print ('Version:', version)
-
-	return(version)
-
-################
-## Perl
-################
-def check_perl_packages(Debug, option_install):
-	return()
-
