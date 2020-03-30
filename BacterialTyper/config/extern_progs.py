@@ -116,9 +116,9 @@ def return_min_version_soft(soft):
 ##################
 def print_dependencies():
 	"""
-	
+
 	"""
-	
+
 	progs = {}
 	depencencies_pd = read_dependencies()
 	for prog in depencencies_pd:
@@ -157,14 +157,14 @@ def min_package_version():
 def return_min_version_python_package(package):
 	"""
 	Retrieves minimum version requirement for the given package.
-	
+
 	It retrieves the requirements using :func:`BacterialTyper.config.extern_progs.min_package_version`
 	and returns the given package requested minimun version.
-	
+
 	:param package:  
 	:type package: string	
 	:returns: Minimum version package (string)
-	
+
 	"""
 	version_package = min_package_version()
 	return (version_package[package])
@@ -173,10 +173,10 @@ def return_min_version_python_package(package):
 def print_package_version():
 	"""
 	Prints the package version required by ``BacterialTyper``
-	
+
 	It retrieves the requirements using :func:`BacterialTyper.config.extern_progs.min_package_version`
 	and prints them using function :func:`BacterialTyper.config.set_config.print_module_comparison`.
-	
+
 	:returns: Print messages
 	"""
 	my_packages = min_package_version()
@@ -189,22 +189,23 @@ def min_perl_package_version():
 
 	Reads information from :file:`BacterialTyper/config/perl/perl_lib_dependencies.csv`, and creates a 
 	dictionary. For each perl module (key) the value is the version required.
-	
+
 	.. seealso:: This function depends on other ``BacterialTyper`` functions:
-	
+
 		- :func:`BacterialTyper.scripts.functions.get_data`
-	
+
 		- :func:`BacterialTyper.config.extern_progs.file_list`
 
 	:returns: dictionary
 	"""
 	## get info for perl modules
-	perl_lib_dependecies_file = extern_progs.file_list("perl_lib_dependencies")
-	perl_lib_dependecies = functions.get_data(perl_lib_dependecies_file, ',', 'index_col=0')
+	perl_lib_dependencies_file = file_list("perl_lib_dependencies")
+	perl_lib_dependencies = functions.get_data(perl_lib_dependencies_file, ',', 'index_col=0')
 
 	## return only package name and version
 	package_min_versions = {}
-
+	for index, row in perl_lib_dependencies.iterrows():
+		package_min_versions[index] = row['version']
 
 	return(package_min_versions)
 ##################
@@ -213,13 +214,13 @@ def min_perl_package_version():
 
 def main():
 
-	data = read_dependencies()
-	print(data)
+	#data = read_dependencies()
+	#print(data)
 
 	#print_package_version()
 	#print (return_min_version_python_package('ariba'))
 	#print (return_min_version_soft('kma'))
-	set_config.check_python_packages(True, '')
+	set_config.check_perl_packages(True, '')
 
 
 ######

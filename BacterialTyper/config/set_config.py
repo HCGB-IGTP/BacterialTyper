@@ -296,11 +296,11 @@ def get_version(prog, path, Debug=False):
 def decode(x):
 	"""
 	Python decode string method
-	
+
 	:param x: String of text to decode
 	:type x: string
 	:returns: Text decoded
-	
+
 	.. attention:: Be aware of Copyright
 
 		The code implemented here was retrieved and modified from ARIBA (https://github.com/sanger-pathogens/ariba)
@@ -379,7 +379,7 @@ def check_python_packages(Debug, option_install):
 		- :func:`BacterialTyper.config.extern_progs.min_package_version`
 
 		- :func:`BacterialTyper.config.install_dependencies.python_package_install`
-		
+
 		- :func:`BacterialTyper.scripts.functions.file2dictionary`
 
 	"""
@@ -444,26 +444,26 @@ def check_python_packages(Debug, option_install):
 def check_package_version(package, Debug):
 	"""
 	Retrieve python package version installed
-	
+
 	This is a modification of the original code from ARIBA (https://github.com/sanger-pathogens/ariba). 
 	It basically uses pkg_resources.get_distribution(), pkg_resources.resource_filename() or imports module
 	and retrieves version from __version__ variable.
-	
+
 	:param package: Python package name 
 	:param Debug: True/False for debugging messages
-	
+
 	:type package: string
 	:type Debug: boolean
-	
+
 	:returns: Version retrieved
-	
+
 	.. attention:: Be aware of Copyright
 
 		The code implemented here was retrieved and modified from ARIBA (https://github.com/sanger-pathogens/ariba)
 
 		Give them credit accordingly.
 	"""
-	
+
 	try:
 		version = pkg_resources.get_distribution(package).version
 		if (Debug):
@@ -515,10 +515,11 @@ def get_perl_packages(Debug):
 	perl_lib_dependecies = functions.get_data(perl_lib_dependecies_file, ',', 'index_col=0')
 
 	my_packages_installed = {}
-
 	for index_name, row in perl_lib_dependecies.iterrows():
 		module_name = row['module']
 		installed = check_perl_package_version(module_name, Debug) ## check version installed in system
+		if not (installed):
+			installed = 'n.a.'
 		my_packages_installed[index_name] = installed
 
 	return (my_packages_installed)
@@ -613,24 +614,28 @@ def check_perl_packages(Debug, option_install):
 def check_perl_package_version(package, Debug):
 	"""
 	Retrieve  package version installed
-	
+
 	It basically uses a one line perl command to load the package and print the version.
-	
+
 	:param package: package name 
 	:param Debug: True/False for debugging messages
-	
+
 	:type package: string
 	:type Debug: boolean
-	
+
 	:returns: Version retrieved
 	"""
-	
+
 	perl_exe = get_exe('perl')
-	perl_one_line_command = perl_exe + '-M' + package + ' -e \'print $' + package + '::VERSION\'."\n";'
-	
+	perl_one_line_command = perl_exe + ' -M' + package + ' -e \'print $' + package + '::VERSION\';'
+
 	if (Debug):
 		print ("** DEBUG: perl command:\n")
-		print (perl_one_line_command) 
+		print (perl_one_line_command)
+
+	## execute one line perl command
+	output_one_line = functions.system_call(perl_one_line_command, True)
+	return(decode (output_one_line))
 
 
 ################
@@ -658,14 +663,14 @@ def print_module_comparison(module_name, message, color):
 def check_install_module(installed, module_name, min_version):
 	"""
 	Checks modules installation 
-	
+
 	Checks wether a module is installed and fulifilling requirements. 	
 	It prints messages using :func:`BacterialTyper.config.set_config.print_module_comparison`.
-	
+
 	:param installed: Version string of the module installed.
 	:param module_name: Module name
 	:param min_version: Version string for the minimum version required
-	
+
 	:type installed: string
 	:type module_name: string 
 	:type min_version: string
@@ -675,16 +680,16 @@ def check_install_module(installed, module_name, min_version):
 		message = 'NOT FOUND'
 		color = 'red'
 		print_module_comparison(module_name, message, color)
-		
+
 	# check version
 	elif LooseVersion(installed) >= LooseVersion(min_version):
 		message = 'OK'
 		color = 'green'
 		print_module_comparison(module_name, message, color)
-	
+
 	else:
 		message = 'FAILED'
-		color = 'orange'
+		color = 'yellow'
 		print_module_comparison(module_name, message, color)
 
 	## return message

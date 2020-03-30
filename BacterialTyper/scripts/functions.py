@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
 ##########################################################
-## Jose F. Sanchez										##
-## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+## Jose F. Sanchez					##
+## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain	##
 ##########################################################
-'''
-Common functions.
-- time
-- system call
-- files/folders
-- aesthetics
-- fasta files
-- miscellaneous
-'''
+"""
+Shared functions used along ``BacterialTyper`` pipeline.
+With different purposes:
+
+	- Print time stamps
+
+	- Create system calls
+
+	- Manage/list/arrange files/folders
+
+	- Aesthetics
+
+	- Manage fasta files
+
+	- Other miscellaneous functions
+"""
 ## useful imports
 import time
 import io
@@ -61,7 +68,7 @@ def timestamp (start_time_partial):
 	print ('(Time spent: %i h %i min %i s)' %(int(h), int(m), int(s)))
 	print_sepLine("-", 25, False)
 	return time.time()
-	
+
 ###############	
 def print_time_stamp (out):
 	"""Prints out timestamp in a file provided. Format: time.time()"""
@@ -84,7 +91,7 @@ def get_diff_time(stamp):
 	"""Obtains the time spent for a process in days given a stamp in time.time() format.
 	Returns days passed since.
 	"""
-	
+
 	time_today = time.time()
 	elapsed = time_today - float(time_today)
 	days_passed = int((elapsed/3600)/24)
@@ -113,16 +120,16 @@ def outdir_project(outdir, project_mode, pd_samples, mode):
 
 	# Group dataframe by sample name
 	sample_frame = pd_samples.groupby(["name"])
-	
+
 	dict_outdir = {}	
 	for name, cluster in sample_frame:
 		if (project_mode):
 			#print ("Create subdir for every sample: ", mode)
 			sample_dir = create_subfolder('data', outdir)		
-			
+
 			## create sample
 			sample_name_dir = create_subfolder(name, sample_dir)		
-			
+
 			## create subdir sub sample
 			mode_name_dir = create_subfolder(mode, sample_name_dir)		
 			dict_outdir[name] = mode_name_dir
@@ -152,7 +159,7 @@ def create_subfolder (name, path):
 	## create subfolder  ##	
 	subfolder_path = path + "/" + name
 	access_rights = 0o755
-	
+
 	# define the access rights
 	try:
 		os.mkdir(subfolder_path, access_rights)
@@ -161,16 +168,16 @@ def create_subfolder (name, path):
 		return subfolder_path
 	else:  
 		print (colored("Successfully created the directory %s " % subfolder_path, 'yellow'))
-	
+
 	return subfolder_path
 
 ###############  
 def create_folder (path):
 	"""Create a folder directory 'path'. Returns path created."""
-	
+
 	## create subfolder  ##	
 	access_rights = 0o755
-	
+
 	# define the access rights
 	try:
 		os.mkdir(path, access_rights)
@@ -179,7 +186,7 @@ def create_folder (path):
 		return path
 	else:  
 		print (colored("Successfully created the directory %s " %path, 'yellow'))
-	
+
 	return path
 
 ############### 
@@ -195,10 +202,10 @@ def get_symbolic_link (sample_list, directory):
 #################
 def get_fullpath_list(dir_given):
 	"""Retrieve full absolute path for the files within a directory specified.
-	
+
 	:param dir_given: Directory to retrieve files
 	:type dir_given: string
-	
+
 	:returns: List of absolute path files.
 	"""
 	return_path = []
@@ -227,7 +234,7 @@ def retrieve_matching_files(folder, string):
 	my_all_list = get_fullpath_list(folder)
 	matching = [s for s in my_all_list if s.endswith(string)]
 	return (matching)
-	
+
 #####
 def file2dictionary(file2read, split_char):
 	"""Read file and generate a dictionary"""
@@ -239,28 +246,35 @@ def file2dictionary(file2read, split_char):
 			d[key] = val
 
 	return(d)
-	
+
 def file2dataframe(file2read, names):
+	## TODO: check if duplicated with get_data function
 	"""Read csv file into pandas dataframe"""
 	d = pd.read_csv(file2read, comment="#", names=names)
 	return(d)
 
 
-	
+
 ########################################################################
 ######## 					system call							######## 					
 ########################################################################
 
 ###############
-def system_call(cmd):
+def system_call(cmd, returned):
 	"""Generates system call using subprocess.check_output"""
 	## call system
 	## send command
-	print (colored("[** System: %s **]" % cmd, 'green'))
+	if not (returned):
+		print (colored("[** System: %s **]" % cmd, 'green'))
+
 	try:
-		subprocess.check_output(cmd, shell = True)
+		out = subprocess.check_output(cmd, shell = True)
+		if (returned):
+			return (out)
 		return ('OK')
 	except subprocess.CalledProcessError as err:
+		if (returned):
+			return ('')
 		print (colored("** ERROR **", 'red'))
 		print (colored(err.output, 'red'))
 		print (colored("** ERROR **", 'red'))
