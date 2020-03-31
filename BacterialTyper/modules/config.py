@@ -94,7 +94,7 @@ def run(options):
 		install_path_tmp = get_python_lib()
 		
 		##os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'templates'))
-		options.install_path = os.path.abspath(os.path.join(install_path_tmp, '../../'))
+		options.install_path = os.path.abspath(os.path.join(install_path_tmp, '../../..'))
 			
 		if (Debug):
 			print ("Retrieve environment path as installation path:")
@@ -111,9 +111,11 @@ def run(options):
 		if (set_config.access_check(options.install_path)):
 			print ("Installation path is accessible and has permission for installation if necessary")
 		else:
-			print ("No access/permission for this path: " + options.install_path)
-			print ("Please provide a valid path with access/permission to install any missing dependencies.")
-	
+			print (colored("\n*** ERROR ****", 'red'))
+			print (colored("No access/permission for this path: %s" %options.install_path, 'red'))
+			print (colored("Please provide a valid path with access/permission to install any missing dependencies.", 'red'))
+			exit()
+			
 	elif (options.option == 'only_check'):
 		print ("\nCheck dependencies, modules or third party software and print report...")
 
