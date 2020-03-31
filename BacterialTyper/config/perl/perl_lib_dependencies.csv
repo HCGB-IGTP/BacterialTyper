@@ -22,4 +22,4 @@ Log-Log4perl,Log::Log4perl,install,1.49,https://cpan.metacpan.org/authors/id/M/M
 Module-Build-Tiny,Module::Build::Tiny,install,0.039,https://cpan.metacpan.org/authors/id/L/LE/LEONT/Module-Build-Tiny-0.039.tar.gz
 MooseX-Singleton,MooseX::Singleton,install,0.30,https://cpan.metacpan.org/authors/id/E/ET/ETHER/MooseX-Singleton-0.30.tar.gz
 Moose,Moose,install,2.2012,https://cpan.metacpan.org/authors/id/E/ET/ETHER/Moose-2.2012.tar.gz
-Bio-Perl,Bio::Perl,1.7.7,https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/BioPerl-1.7.7.tar.gz
+Bio-Perl,Bio::Perl,install,1.7.7,https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/BioPerl-1.7.7.tar.gz
