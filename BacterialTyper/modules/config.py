@@ -84,18 +84,23 @@ def run(options):
 	functions.print_time()
 
 	if (options.install_path):
-		if (Debug):
-			print ("Installation path provided for missing modules, packages, dependencies...")
-			print ("Path: " + options.install_path)
-			
+		if os.path.isdir(options.install_path):
+			if (Debug):
+				print ("Installation path provided for missing modules, packages, dependencies...")
+				print ("Path: " + options.install_path)
+		else:
+			print (colored("\n*** ERROR ****", 'red'))
+			print (colored("Path provided is not a folder", 'red')) 
+			print (options.install_path)
+			exit()
 	else:
 		## get python environment path
 		from distutils.sysconfig import get_python_lib; 
 		install_path_tmp = get_python_lib()
-		
+
 		##os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'templates'))
 		options.install_path = os.path.abspath(os.path.join(install_path_tmp, '../../..'))
-			
+
 		if (Debug):
 			print ("Retrieve environment path as installation path:")
 			print ("Path: " + options.install_path)
@@ -106,16 +111,22 @@ def run(options):
 		print ("\n+ Check dependencies")
 		print ("+ Try to install all missing dependencies, modules or third party software...")
 		option_install = True
-	
+
 		## check if access and permission
-		if (set_config.access_check(options.install_path)):
-			print ("+ Installation path is accessible and has permission for installation if necessary")
+		if os.path.isdir(options.install_path):
+			if (set_config.access_check(options.install_path, mode=os.F_OK)):
+				print ("Installation path is accessible and has permission for installation if necessary")
+			else:
+				print (colored("\n*** ERROR ****", 'red'))
+				print (colored("No access/permission for this path: %s" %options.install_path, 'red'))
+				print (colored("Please provide a valid path with access/permission to install any missing dependencies.", 'red'))
+				exit()
 		else:
 			print (colored("\n*** ERROR ****", 'red'))
-			print (colored("No access/permission for this path: %s" %options.install_path, 'red'))
-			print (colored("Please provide a valid path with access/permission to install any missing dependencies.", 'red'))
+			print (colored("Path provided is not a folder", 'red'))
+			print (options.install_path)
 			exit()
-			
+
 	elif (options.option == 'only_check'):
 		print ("\nCheck dependencies, modules or third party software and print report...")
 

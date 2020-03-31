@@ -139,8 +139,8 @@ def access_check(fn, mode=os.F_OK | os.X_OK):
 	## the original code belongs to shutil, slightly modified here
 	# https://github.com/python/cpython/blob/master/Lib/shutil.py
 
-	if os.path.isdir(fn):
-		return False
+	#if os.path.isdir(fn):
+	#	return False
 
 	if os.path.exists(fn):
 		if fn.endswith('.jar'):
