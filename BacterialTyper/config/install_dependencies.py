@@ -59,6 +59,9 @@ def install_pakage(package_path, install_path, Debug, name):
 	## change dir to package path
 	os.chdir(package_path)
 	
+	
+	print ("+ Installing module: " + name)
+	
 	## perl Makefile.PL
 	makefile_perl = functions.retrieve_matching_files(package_path, "Makefile.PL")
 	perl_exe = set_config.get_exe("perl", Debug)
@@ -69,27 +72,35 @@ def install_pakage(package_path, install_path, Debug, name):
 		print ("** Debug: perl_exe" + perl_exe)
 		print ("** Debug: makefile_perl" + makefile_perl)
 	
+	
+	print ("\t- Create make file")
 	perl_MakeFile_cmd = perl_exe + ' ' + makefile_perl
 	code_perl_make = functions.system_call(perl_MakeFile_cmd)
 	
+	code_make = ""	
 	##
 	if (code_perl_make == 'OK'):
 		## debug messages
 		if (Debug):
-			print ("** Debug: perl Makefile.PL successfull")
-			make_bin = set_config.get_exe("make", Debug)
-			code_make = functions.system_call(make_bin)
+			print ("** Debug: perl Makefile.PL successful")
+		
+		make_bin = set_config.get_exe("make", Debug)
+		print ("\t- Execute make file")
+		code_make = functions.system_call(make_bin)
+		
+		if (code_make == 'OK'):
+			if (Debug):
+				print ("** Debug: make successful")
+		else:
+			print_error_message(name, package_path)
+			return()
 	else:
 		print_error_message(name, package_path)
+		return()
 			
-	##
-	if (code_make == 'OK'):
-		## debug messages
-		if (Debug):
-			print ("** Debug: make successfull")
-			
-	else:
-		print_error_message(name, package_path)
+	## copy files an finish installation
+	print ("\t- Copy files into the install path")
+	
 	
 #######################
 def print_error_message(module_name, path):
