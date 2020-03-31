@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-##############################################################
-## Jose F. Sanchez											##
-## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain		##
-##############################################################
+##########################################################
+## Jose F. Sanchez					##
+## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain	##
+##########################################################
 """
 Installs external dependencies if not satistified
 """
@@ -65,49 +65,87 @@ def install_package(package_path, install_path, Debug, name):
 	makefile_perl = functions.retrieve_matching_files(package_path, "Makefile.PL")
 	perl_exe = set_config.get_exe("perl", Debug)
 
-	print ("+ Create make file")
-	perl_MakeFile_cmd = perl_exe + ' ' + makefile_perl[0]
+	## two installation possibilities: Makefile.PL or Build.PL
+	if (makefile_perl):
 
-	## debug messages
-	if (Debug):
-		print ("** Debug: chdir " + package_path)
-		print ("** Debug: perl_exe" + perl_exe)
-		print ("** Debug: makefile_perl: " + makefile_perl[0])
+		print ("+ Create make file")
+		perl_MakeFile_cmd = perl_exe + ' ' + makefile_perl[0]
 
-	code_perl_make = functions.system_call(perl_MakeFile_cmd)
-	code_make = ""	
-
-	##
-	if (code_perl_make == 'OK'):
 		## debug messages
 		if (Debug):
-			print ("** Debug: perl Makefile.PL successful")
+			print ("** Debug: chdir " + package_path)
+			print ("** Debug: perl_exe" + perl_exe)
+			print ("** Debug: makefile_perl: " + makefile_perl[0])
 
-		make_bin = set_config.get_exe("make", Debug)
-		print ("+ Execute make file")
-		code_make = functions.system_call(make_bin)
+		code_perl_make = functions.system_call(perl_MakeFile_cmd)
+		code_make = ""
 
-		if (code_make == 'OK'):
+		##
+		if (code_perl_make == 'OK'):
+			## debug messages
 			if (Debug):
-				print ("** Debug: make successful")
+				print ("** Debug: perl Makefile.PL successful")
+
+			make_bin = set_config.get_exe("make", Debug)
+			print ("+ Execute make file")
+			code_make = functions.system_call(make_bin)
+
+			if (code_make == 'OK'):
+				if (Debug):
+					print ("** Debug: make successful")
+			else:
+				print_error_message(name, package_path)
+				return('n.a.')
 		else:
 			print_error_message(name, package_path)
-			return()
+			return('n.a.')
 	else:
-		print_error_message(name, package_path)
-		return()
+		## perl Makefile.PL
+		Build_perl = functions.retrieve_matching_files(package_path, "Build.PL")
+		if (Build_perl):
+			print ("+ Create Build file")
+			perl_build_cmd = perl_exe + ' ' + Build_perl[0]
+
+			## debug messages
+			if (Debug):
+				print ("** Debug: chdir " + package_path)
+				print ("** Debug: perl_exe" + perl_exe)
+				print ("** Debug: Build_perl: " + Build_perl[0])
+
+			code_perl_build = functions.system_call(perl_build_cmd)
+			code_build = ""
+
+			if (code_perl_build == 'OK'):
+				## debug messages
+				if (Debug):
+					print ("** Debug: perl Build.PL successful")
+
+				print ("+ Execute Build file")
+				code_build = functions.system_call("./Build")
+
+				if (code_build == 'OK'):
+					if (Debug):
+						print ("** Debug: build successful")
+				else:
+					print_error_message(name, package_path)
+					return('n.a.')
+			else:
+				print_error_message(name, package_path)
+				return('n.a.')
+		else:
+			print_error_message(name, package_path)
+			return('n.a')
+
 
 	## copy files an finish installation
 	print ("+ Include files into the PERL path")
-	
 	blib_lib = os.path.join(package_path, 'blib', 'lib')
-	
 	if os.path.isdir(blib_lib):
 		return(blib_lib)
 	else:
 		print_error_message(name, package_path)
 		return ('n.a.')
-	
+
 #######################
 def print_error_message(module_name, path):
 	"""
@@ -184,12 +222,15 @@ def perl_package_install(name, version2install, http_tar_gz, install_dir, Debug)
 	blib_lib = install_package(path2download_extract_folder, install_dir, Debug, name)
 
 	## include in $PERL5LIB system variable
+	my_perl5lib = 'PERL5LIB=${PERL5LIB}:' + blib_lib
+	command_export = my_perl5lib + "; export PERL5LIB"
+	functions.system_call(command_export)
+
 	## debugging messages
 	if (Debug):
 		print ("** DEBUG: **")
 		print ("blib_lib: " + blib_lib)
-	
-	print ("blib_lib: " + blib_lib)
+
 	return(version2install)
 
 ##################
