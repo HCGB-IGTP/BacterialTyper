@@ -38,46 +38,45 @@ from BacterialTyper.config import extern_progs
 def install(software):
 	print ("Install missing software: ", software)
 	print ("To do....")
-	
+
 	## try to install: 
 	print(colored("**Check paths or install it in the system and add it to $PATH environment variable.",'red'))
 
 
 #######################
-def install_pakage(package_path, install_path, Debug, name):
+def install_package(package_path, install_path, Debug, name):
 	"""
 	Install perl package provided
-	
+
 	:param package_path: Path where the perl package is extracted
 	:param install_path: Path to install package
-	
+
 	:type package_path: string
 	:type install_path: string
-		
+
 	:returns: Path where the module is installed to include in $PERL5LIB
 	"""
 	## change dir to package path
 	os.chdir(package_path)
-	
-	
+
 	print ("+ Installing module: " + name)
-	
+
 	## perl Makefile.PL
 	makefile_perl = functions.retrieve_matching_files(package_path, "Makefile.PL")
 	perl_exe = set_config.get_exe("perl", Debug)
-	
+
+	print ("\t- Create make file")
+	perl_MakeFile_cmd = perl_exe + ' ' + makefile_perl[0]
+
 	## debug messages
 	if (Debug):
 		print ("** Debug: chdir " + package_path)
 		print ("** Debug: perl_exe" + perl_exe)
-		print ("** Debug: makefile_perl" + makefile_perl)
-	
-	
-	print ("\t- Create make file")
-	perl_MakeFile_cmd = perl_exe + ' ' + makefile_perl
+		print ("** Debug: makefile_perl: " + makefile_perl[0])
+
 	code_perl_make = functions.system_call(perl_MakeFile_cmd)
-	
 	code_make = ""	
+
 	##
 	if (code_perl_make == 'OK'):
 		## debug messages
@@ -100,55 +99,56 @@ def install_pakage(package_path, install_path, Debug, name):
 			
 	## copy files an finish installation
 	print ("\t- Copy files into the install path")
+
 	
-	
+
 #######################
 def print_error_message(module_name, path):
 	"""
 	Print error messages generated during installation
-	
+
 	:param module_name: 
 	:param path:
-	
+
 	:type module_name: string 
 	:type path: string
-	
+
 	:returns: Print messages.
 	"""
 	print ("\nSome error ocurred while installing module [ %s ]." %module_name)
 	print ("Path: " + path)
 	print ("Please retry or install it mannually to continue with BacterialTyper")
-	
+
 
 ##################
 def perl_package_install(package, version2install, http_tar_gz, install_dir):
 	"""
 	Retrieves information for perl package installation
-	
+
 	.. seealso: This function depends on other ``BacterialTyper`` functions such as:
-	
+
 		- :func:`BacterialTyper.scripts.functions.wget_download`
-		
+
 		- :func:`BacterialTyper.scripts.functions.extract`
-		
+
 		- :func:`BacterialTyper.config.install_dependencies.install_package`
-		
+
 	"""	
 
 	print (colored("Install missing perl package: " + package, 'yellow'))
-	
+
 	path2download = install_dir
-	
+
 	## download
 	functions.wget_download(http_tar_gz, path2download)
-	
+
 	## extract tar gz file
 	path2download_out = ""
 	functions.extract(path2download, path2download_out)
-	
+
 	## install
-	install_perl(path2download_out)
-	
+	install_package(path2download_out)
+
 	return (versioninstalled)
 
 
@@ -161,11 +161,11 @@ def python_package_install(package, version2install):
 ##################
 def install_BUSCO():
 	## git clone https://gitlab.com/ezlab/busco.git
-	
+
 	## install within our environment
 	## run python setup.py install --user 
 	## export PYTHONPATH=$PYTHONPATH:/path/to/busco/build/lib
-	
+
 	## add BUSCO_CONFIG_FILE to path
 	folder = ""
 	fileConfig = BUSCO_config(folder)	
@@ -174,7 +174,7 @@ def install_BUSCO():
 	# AUGUSTUS_CONFIG_PATH
 	#cp -r /path/to/AUGUSTUS/augustus-3.2.3/config /folder/augustus/config
 	#export AUGUSTUS_CONFIG_PATH="/folder/augustus/config"
-	
+
 ##################
 def BUSCO_config():
 
@@ -182,7 +182,7 @@ def BUSCO_config():
 	folder = ""
 	config_file = folder + '/config_BUSCO.ini'
 	file_hd = open(config_file, 'w')
-	
+
 	## write BUSCO configuration into file	
 	file_hd.write("# BUSCO specific configuration")
 	file_hd.write("# It overrides default values in code and dataset cfg, and is overridden by arguments in command line")
@@ -276,3 +276,17 @@ def BUSCO_config():
 	file_hd.write("# You can find example config files in the directory /soft/bio/augustus/config.\n")
 	#
 	file_hd.close()
+
+
+def main():
+
+
+	install_path = os.path.abspath(sys.argv[1])
+	module_path = os.path.abspath(sys.argv[2])
+	name = sys.argv[3]
+
+	install_package(module_path, install_path, False, name)
+
+
+if __name__ == "__main__":
+	main()
