@@ -91,7 +91,10 @@ def run(options):
 	else:
 		## get python environment path
 		from distutils.sysconfig import get_python_lib; 
-		options.install_path = get_python_lib()
+		install_path_tmp = get_python_lib()
+		
+		##os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'templates'))
+		options.install_path = os.path.abspath(os.path.join(install_path_tmp, '../../'))
 			
 		if (Debug):
 			print ("Retrieve environment path as installation path:")
@@ -129,12 +132,12 @@ def run(options):
 	functions.print_sepLine("+", 50, False)
 	print ('Perl:')
 	functions.print_sepLine("+", 50, False)
+	
 	perl_min_version = extern_progs.return_min_version_soft('perl')
 	this_perl_path = set_config.get_exe("perl", Debug)
 	this_perl_version = set_config.get_version("perl", this_perl_path, Debug)
 	if LooseVersion(this_perl_version) >= LooseVersion(perl_min_version):
 		print ("Minimun version (%s) satistied: %s" %(perl_min_version, this_perl_version))
-
 
 	## third-party software
 	print ('\n')
@@ -142,7 +145,7 @@ def run(options):
 	print ('External dependencies:')
 	functions.print_sepLine("+", 20, False)
 	
-	set_config.check_dependencies()
+	set_config.check_dependencies(options.option, options.install_path)
 	print ('\n')	
 
 	## python packages
@@ -151,7 +154,7 @@ def run(options):
 	print ('Python packages:')
 	functions.print_sepLine("+", 20, False)
 
-	set_config.check_python_packages(Debug, option_install)
+	set_config.check_python_packages(Debug, option_install, options.install_path)
 	functions.print_sepLine("+", 20, False)
 	print ('\n')
 
@@ -161,7 +164,7 @@ def run(options):
 	print ('Perl packages:')
 	functions.print_sepLine("+", 20, False)
 
-	set_config.check_perl_packages(Debug, option_install)
+	set_config.check_perl_packages(Debug, option_install, options.install_path)
 	functions.print_sepLine("+", 20, False)
 	print ('\n')
 

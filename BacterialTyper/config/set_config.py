@@ -292,7 +292,7 @@ def get_version(prog, path, Debug=False):
 
 	return("n.a.")
 
-def check_dependencies():
+def check_dependencies(install_option, install_path):
 	"""
 	"""
 	
@@ -340,7 +340,7 @@ def get_python_packages(Debug):
 	return (my_packages_installed)
 
 ##################
-def check_python_packages(Debug, option_install):
+def check_python_packages(Debug, option_install, install_path):
 	"""
 	This functions checks wether the packages installed in the system fulfilled the 
 	minimum version specified in the configuration folder. 
@@ -591,7 +591,7 @@ def check_perl_packages(Debug, option_install, install_path):
 					print ("Install module: ", each)
 				
 				http_tar_gz = perl_lib_dependecies.loc[each, 'tar_gz']
-				installed = install_dependencies.perl_package_install(module_name, min_version, http_tar_gz)
+				installed = install_dependencies.perl_package_install(each, min_version, http_tar_gz, install_path, Debug)
 				message2 = check_install_module(installed, module_name, min_version)
 				if (message2 == 'OK'):
 					continue

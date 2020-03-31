@@ -59,13 +59,13 @@ def install_package(package_path, install_path, Debug, name):
 	## change dir to package path
 	os.chdir(package_path)
 
-	print ("+ Installing module: " + name)
+	print ("## Installing module: " + name + " ##")
 
 	## perl Makefile.PL
 	makefile_perl = functions.retrieve_matching_files(package_path, "Makefile.PL")
 	perl_exe = set_config.get_exe("perl", Debug)
 
-	print ("\t- Create make file")
+	print ("+ Create make file")
 	perl_MakeFile_cmd = perl_exe + ' ' + makefile_perl[0]
 
 	## debug messages
@@ -84,7 +84,7 @@ def install_package(package_path, install_path, Debug, name):
 			print ("** Debug: perl Makefile.PL successful")
 		
 		make_bin = set_config.get_exe("make", Debug)
-		print ("\t- Execute make file")
+		print ("+ Execute make file")
 		code_make = functions.system_call(make_bin)
 		
 		if (code_make == 'OK'):
@@ -98,7 +98,7 @@ def install_package(package_path, install_path, Debug, name):
 		return()
 			
 	## copy files an finish installation
-	print ("\t- Copy files into the install path")
+	print ("+ Copy files into the install path")
 
 	
 
@@ -121,9 +121,21 @@ def print_error_message(module_name, path):
 
 
 ##################
-def perl_package_install(package, version2install, http_tar_gz, install_dir):
+def perl_package_install(name, version2install, http_tar_gz, install_dir, Debug):
 	"""
 	Retrieves information for perl package installation
+	
+	:param name: Perl package name
+	:param version2install: Version to install
+	:param http_tar_gz: FTP/https site of the tar gz perl package (cpan)
+	:param install_dir: Installation directory
+	:param Debug: True/False for debugging messages
+	
+	:type name: string
+	:type version2install: string 
+	:type http_tar_gz: string 
+	:type install_dir: string 
+	:type Debug: boolean
 
 	.. seealso: This function depends on other ``BacterialTyper`` functions such as:
 
@@ -137,17 +149,27 @@ def perl_package_install(package, version2install, http_tar_gz, install_dir):
 
 	print (colored("Install missing perl package: " + package, 'yellow'))
 
-	path2download = install_dir
-
+	## create folders
+	perlPackages = functions.create_subfolder("perl_packages", install_dir)
+	path2download = functions.create_subfolder("downloads", perlPackages)
+	
+	## debuggine messages
+	if (Debug):
+		print ("perlPackages: " + perlPackages)
+		print ("path2download: " + path2download)
+	
 	## download
 	functions.wget_download(http_tar_gz, path2download)
 
 	## extract tar gz file
-	path2download_out = ""
+	path2download_out = os.path.join(path2download, name)
 	functions.extract(path2download, path2download_out)
 
 	## install
 	install_package(path2download_out)
+		
+	## include in $PERL5LIB system variable
+	return()
 
 	return (versioninstalled)
 
