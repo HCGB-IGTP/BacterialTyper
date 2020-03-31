@@ -48,7 +48,7 @@ def run(options):
 	manually install them.
 
 	:param option: State wether to check or install missing modules, packages and third party software. Provide: check/install
-	:param install_path: Absolute path to install modules or packages missing. Defaul: ``BacterialTyper`` config folder.
+	:param install_path: Absolute path to install modules or packages missing. Default: ``BacterialTyper`` environment path.
 	:param debug: True/false for debugging messages.
 	
 	:type option: string 
@@ -83,12 +83,34 @@ def run(options):
 	print ("--------- Starting Process ---------")
 	functions.print_time()
 
+	if (options.install_path):
+		if (Debug):
+			print ("Installation path provided for missing modules, packages, dependencies...")
+			print ("Path: " + options.install_path)
+			
+	else:
+		## get python environment path
+		from distutils.sysconfig import get_python_lib; 
+		options.install_path = get_python_lib()
+			
+		if (Debug):
+			print ("Retrieve environment path as installation path:")
+			print ("Path: " + options.install_path)
+
 	## install or only check
 	option_install = False
 	if (options.option == 'install'):
 		print ("\nCheck dependencies, modules or third party software...")
 		print ("\nTry to install all missing dependencies, modules or third party software...")
 		option_install = True
+	
+		## check if access and permission
+		if (set_config.access_check(options.install_path)):
+			print ("Installation path is accessible and has permission for installation if necessary")
+		else:
+			print ("No access/permission for this path: " + options.install_path)
+			print ("Please provide a valid path with access/permission to install any missing dependencies.")
+	
 	elif (options.option == 'only_check'):
 		print ("\nCheck dependencies, modules or third party software and print report...")
 

@@ -260,7 +260,7 @@ def file2dataframe(file2read, names):
 ########################################################################
 
 ###############
-def system_call(cmd, returned):
+def system_call(cmd, returned=False):
 	"""Generates system call using subprocess.check_output"""
 	## call system
 	## send command
@@ -522,3 +522,28 @@ def parse_sublist(lst, ind):
 	## extract elemnts of the list
 	## Original Code: https://www.geeksforgeeks.org/python-get-first-element-of-each-sublist/
 	return [item[ind] for item in lst]
+
+##################
+def decode(x):
+	"""
+	Python decode string method
+
+	It converts bytes to string.
+
+	:param x: String of text to decode
+	:type x: string
+	:returns: Text decoded
+
+	.. attention:: Be aware of Copyright
+
+		The code implemented here was retrieved and modified from ARIBA (https://github.com/sanger-pathogens/ariba)
+
+		Give them credit accordingly.
+	"""
+	try:
+		s = x.decode()
+	except:
+		return x
+
+	return s
+

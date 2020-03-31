@@ -54,7 +54,8 @@ subparser_config = subparsers.add_parser(
     help='Configure the pipeline',
     description='Configure dependencies, executables and additional python or perl modules.',
 )
-subparser_config.add_argument("option", help="Only check if missing any dependencies or modules or try to install them.", choices=['only_check','install'])
+subparser_config.add_argument("option", help="Checks if missing any dependencies or modules or tries to install them.", choices=['check','install'])
+subparser_config.add_argument("--install_path", help="Path to install missing modules or dependencies. [Default: BacterialTyper config folder]")
 subparser_config.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 subparser_config.set_defaults(func=BacterialTyper.modules.config.run)
 

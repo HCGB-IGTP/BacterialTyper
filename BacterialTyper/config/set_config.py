@@ -110,7 +110,7 @@ def get_exe(prog, Debug=False):
 	return('ERROR')
 
 ################
-def _access_check(fn, mode=os.F_OK | os.X_OK):
+def access_check(fn, mode=os.F_OK | os.X_OK):
 	"""Check exec permission
 
 	This function checks wether a given path is a folder or file and wether it is 
@@ -171,7 +171,7 @@ def my_which(cmd):
 	# than referring to PATH directories. This includes checking relative to the
 	# current directory, e.g. ./script
 	if os.path.dirname(cmd):
-		if _access_check(cmd):
+		if access_check(cmd):
 			return cmd
 		return None
 
@@ -216,7 +216,7 @@ def my_which(cmd):
 			for thefile in files:
 				name = os.path.join(dir, thefile)
 				#print ("Name: ", name)
-				if _access_check(name):
+				if access_check(name):
 					## return (name) ## previously, it would only return the first item
 					return_paths.append(name) ## modification
 
@@ -273,7 +273,7 @@ def get_version(prog, path, Debug=False):
 		cmd_output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
 	## decode command
-	cmd_output = decode(cmd_output[0]).split('\n')[:-1] + decode(cmd_output[1]).split('\n')[:-1]
+	cmd_output = functions.decode(cmd_output[0]).split('\n')[:-1] + functions.decode(cmd_output[1]).split('\n')[:-1]
 
 	## debug messages
 	if (Debug):
@@ -292,27 +292,14 @@ def get_version(prog, path, Debug=False):
 
 	return("n.a.")
 
-##################
-def decode(x):
+def check_dependencies():
 	"""
-	Python decode string method
-
-	:param x: String of text to decode
-	:type x: string
-	:returns: Text decoded
-
-	.. attention:: Be aware of Copyright
-
-		The code implemented here was retrieved and modified from ARIBA (https://github.com/sanger-pathogens/ariba)
-
-		Give them credit accordingly.
 	"""
-	try:
-		s = x.decode()
-	except:
-		return x
+	
+	print ()
+	
 
-	return s
+
 
 ################
 ## Python
@@ -509,7 +496,6 @@ def get_perl_packages(Debug):
 		- :func:`BacterialTyper.scripts.functions.get_data`
 
 	"""
-
 	## get info for perl modules
 	perl_lib_dependecies_file = extern_progs.file_list("perl_lib_dependencies")
 	perl_lib_dependecies = functions.get_data(perl_lib_dependecies_file, ',', 'index_col=0')
@@ -525,7 +511,7 @@ def get_perl_packages(Debug):
 	return (my_packages_installed)
 
 ##################
-def check_perl_packages(Debug, option_install):
+def check_perl_packages(Debug, option_install, install_path):
 	"""
 	This functions checks wether the packages installed in the system fulfilled the 
 	minimum version specified in the configuration file. 
@@ -537,8 +523,11 @@ def check_perl_packages(Debug, option_install):
 
 	:param Debug: True/False for debugging messages
 	:param option_install: True/False for installing missing dependencies
+	:param install_path: Install path for installing modules.
+	
 	:type Debug: boolean
 	:type option_install: boolean
+	:type install_path: string
 
 	:returns: Print messages if packages are installed.
 
@@ -600,8 +589,9 @@ def check_perl_packages(Debug, option_install):
 			if (option_install):  # try to install
 				if (Debug):
 					print ("Install module: ", each)
-
-				installed = install_dependencies.perl_package_install(module_name, min_version)
+				
+				http_tar_gz = perl_lib_dependecies.loc[each, 'tar_gz']
+				installed = install_dependencies.perl_package_install(module_name, min_version, http_tar_gz)
 				message2 = check_install_module(installed, module_name, min_version)
 				if (message2 == 'OK'):
 					continue
@@ -613,7 +603,7 @@ def check_perl_packages(Debug, option_install):
 ################
 def check_perl_package_version(package, Debug):
 	"""
-	Retrieve  package version installed
+	Retrieve perl package version installed
 
 	It basically uses a one line perl command to load the package and print the version.
 
@@ -635,7 +625,7 @@ def check_perl_package_version(package, Debug):
 
 	## execute one line perl command
 	output_one_line = functions.system_call(perl_one_line_command, True)
-	return(decode (output_one_line))
+	return(functions.decode (output_one_line))
 
 
 ################

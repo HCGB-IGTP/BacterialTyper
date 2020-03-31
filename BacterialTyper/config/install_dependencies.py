@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-##########################################################
-## Jose F. Sanchez										##
-## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
-##########################################################
+##############################################################
+## Jose F. Sanchez											##
+## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain		##
+##############################################################
 """
 Installs external dependencies if not satistified
 """
@@ -42,10 +42,102 @@ def install(software):
 	## try to install: 
 	print(colored("**Check paths or install it in the system and add it to $PATH environment variable.",'red'))
 
+
+#######################
+def install_pakage(package_path, install_path, Debug, name):
+	"""
+	Install perl package provided
+	
+	:param package_path: Path where the perl package is extracted
+	:param install_path: Path to install package
+	
+	:type package_path: string
+	:type install_path: string
+		
+	:returns: Path where the module is installed to include in $PERL5LIB
+	"""
+	## change dir to package path
+	os.chdir(package_path)
+	
+	## perl Makefile.PL
+	makefile_perl = functions.retrieve_matching_files(package_path, "Makefile.PL")
+	perl_exe = set_config.get_exe("perl", Debug)
+	
+	## debug messages
+	if (Debug):
+		print ("** Debug: chdir " + package_path)
+		print ("** Debug: perl_exe" + perl_exe)
+		print ("** Debug: makefile_perl" + makefile_perl)
+	
+	perl_MakeFile_cmd = perl_exe + ' ' + makefile_perl
+	code_perl_make = functions.system_call(perl_MakeFile_cmd)
+	
+	##
+	if (code_perl_make == 'OK'):
+		## debug messages
+		if (Debug):
+			print ("** Debug: perl Makefile.PL successfull")
+			make_bin = set_config.get_exe("make", Debug)
+			code_make = functions.system_call(make_bin)
+	else:
+		print_error_message(name, package_path)
+			
+	##
+	if (code_make == 'OK'):
+		## debug messages
+		if (Debug):
+			print ("** Debug: make successfull")
+			
+	else:
+		print_error_message(name, package_path)
+	
+#######################
+def print_error_message(module_name, path):
+	"""
+	Print error messages generated during installation
+	
+	:param module_name: 
+	:param path:
+	
+	:type module_name: string 
+	:type path: string
+	
+	:returns: Print messages.
+	"""
+	print ("\nSome error ocurred while installing module [ %s ]." %module_name)
+	print ("Path: " + path)
+	print ("Please retry or install it mannually to continue with BacterialTyper")
+	
+
 ##################
-def perl_package_install(package, version2install):
-	print (colored("Install missing python package: " + package, 'yellow'))
-	versioninstalled='0.1'
+def perl_package_install(package, version2install, http_tar_gz, install_dir):
+	"""
+	Retrieves information for perl package installation
+	
+	.. seealso: This function depends on other ``BacterialTyper`` functions such as:
+	
+		- :func:`BacterialTyper.scripts.functions.wget_download`
+		
+		- :func:`BacterialTyper.scripts.functions.extract`
+		
+		- :func:`BacterialTyper.config.install_dependencies.install_package`
+		
+	"""	
+
+	print (colored("Install missing perl package: " + package, 'yellow'))
+	
+	path2download = install_dir
+	
+	## download
+	functions.wget_download(http_tar_gz, path2download)
+	
+	## extract tar gz file
+	path2download_out = ""
+	functions.extract(path2download, path2download_out)
+	
+	## install
+	install_perl(path2download_out)
+	
 	return (versioninstalled)
 
 
