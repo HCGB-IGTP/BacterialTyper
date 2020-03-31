@@ -219,7 +219,18 @@ def main():
 	#print_package_version()
 	#print (return_min_version_python_package('ariba'))
 	#print (return_min_version_soft('kma'))
-	set_config.check_perl_packages(True, '')
+	#set_config.check_perl_packages(True, '')
+
+	if (set_config.access_check('/usr/bin/make')):
+		print ('make accessible')
+	else:
+		print ('make not accessible')
+
+	if (set_config.access_check('/home/jsanchez/git_repos/BacterialTyper'), 'os.F_OK'):
+		print ('Folder accessible')
+	else:
+		print ('Not access')
+
 
 
 ######

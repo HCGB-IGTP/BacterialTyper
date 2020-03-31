@@ -82,11 +82,11 @@ def install_package(package_path, install_path, Debug, name):
 		## debug messages
 		if (Debug):
 			print ("** Debug: perl Makefile.PL successful")
-		
+
 		make_bin = set_config.get_exe("make", Debug)
 		print ("+ Execute make file")
 		code_make = functions.system_call(make_bin)
-		
+
 		if (code_make == 'OK'):
 			if (Debug):
 				print ("** Debug: make successful")
@@ -96,11 +96,9 @@ def install_package(package_path, install_path, Debug, name):
 	else:
 		print_error_message(name, package_path)
 		return()
-			
+
 	## copy files an finish installation
 	print ("+ Copy files into the install path")
-
-	
 
 #######################
 def print_error_message(module_name, path):
@@ -124,13 +122,13 @@ def print_error_message(module_name, path):
 def perl_package_install(name, version2install, http_tar_gz, install_dir, Debug):
 	"""
 	Retrieves information for perl package installation
-	
+
 	:param name: Perl package name
 	:param version2install: Version to install
 	:param http_tar_gz: FTP/https site of the tar gz perl package (cpan)
 	:param install_dir: Installation directory
 	:param Debug: True/False for debugging messages
-	
+
 	:type name: string
 	:type version2install: string 
 	:type http_tar_gz: string 
@@ -147,27 +145,38 @@ def perl_package_install(name, version2install, http_tar_gz, install_dir, Debug)
 
 	"""	
 
-	print (colored("Install missing perl package: " + package, 'yellow'))
+	print (colored("Install missing perl package: " + name, 'yellow'))
 
 	## create folders
 	perlPackages = functions.create_subfolder("perl_packages", install_dir)
 	path2download = functions.create_subfolder("downloads", perlPackages)
-	
-	## debuggine messages
+	path2download_name = functions.create_subfolder(name, path2download)
+
+	## debugging messages
 	if (Debug):
 		print ("perlPackages: " + perlPackages)
 		print ("path2download: " + path2download)
-	
-	## download
-	functions.wget_download(http_tar_gz, path2download)
+		print ("path2download_name: " + path2download_name)
 
-	## extract tar gz file
-	path2download_out = os.path.join(path2download, name)
-	functions.extract(path2download, path2download_out)
+        ## download
+	functions.wget_download(http_tar_gz, path2download_name)
+
+	## get targz file
+	tar_gz = functions.retrieve_matching_files(path2download_name, 'tar.gz')
+	functions.extract(tar_gz[0], path2download_name)
+
+	## debugging messages
+	if (Debug):
+		print ("** DEBUG: **")
+		print ("http: " + http_tar_gz)
+		print ('tar_gz: ')
+		print (tar_gz)
+		print ("*******************")
 
 	## install
-	install_package(path2download_out)
-		
+	path2download_extract_folder = os.path.join(path2download_name, name)
+	install_package(path2download_extract_folder, install_dir, Debug, name)
+
 	## include in $PERL5LIB system variable
 	return()
 
