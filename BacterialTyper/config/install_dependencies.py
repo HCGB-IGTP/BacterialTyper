@@ -98,8 +98,16 @@ def install_package(package_path, install_path, Debug, name):
 		return()
 
 	## copy files an finish installation
-	print ("+ Copy files into the install path")
-
+	print ("+ Include files into the PERL path")
+	
+	blib_lib = os.path.join(package_path, 'blib', 'lib')
+	
+	if os.path.isdir(blib_lib):
+		return(blib_lib)
+	else:
+		print_error_message(name, package_path)
+		return ('n.a.')
+	
 #######################
 def print_error_message(module_name, path):
 	"""
@@ -149,13 +157,11 @@ def perl_package_install(name, version2install, http_tar_gz, install_dir, Debug)
 
 	## create folders
 	perlPackages = functions.create_subfolder("perl_packages", install_dir)
-	path2download = functions.create_subfolder("downloads", perlPackages)
-	path2download_name = functions.create_subfolder(name, path2download)
+	path2download_name = functions.create_subfolder(name, perlPackages)
 
 	## debugging messages
 	if (Debug):
 		print ("perlPackages: " + perlPackages)
-		print ("path2download: " + path2download)
 		print ("path2download_name: " + path2download_name)
 
         ## download
@@ -175,13 +181,16 @@ def perl_package_install(name, version2install, http_tar_gz, install_dir, Debug)
 
 	## install
 	path2download_extract_folder = os.path.join(path2download_name, name)
-	install_package(path2download_extract_folder, install_dir, Debug, name)
+	blib_lib = install_package(path2download_extract_folder, install_dir, Debug, name)
 
 	## include in $PERL5LIB system variable
-	return()
-
-	return (versioninstalled)
-
+	## debugging messages
+	if (Debug):
+		print ("** DEBUG: **")
+		print ("blib_lib: " + blib_lib)
+	
+	print ("blib_lib: " + blib_lib)
+	return(version2install)
 
 ##################
 def python_package_install(package, version2install):
