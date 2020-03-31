@@ -103,13 +103,13 @@ def run(options):
 	## install or only check
 	option_install = False
 	if (options.option == 'install'):
-		print ("\nCheck dependencies, modules or third party software...")
-		print ("\nTry to install all missing dependencies, modules or third party software...")
+		print ("\n+ Check dependencies")
+		print ("+ Try to install all missing dependencies, modules or third party software...")
 		option_install = True
 	
 		## check if access and permission
 		if (set_config.access_check(options.install_path)):
-			print ("Installation path is accessible and has permission for installation if necessary")
+			print ("+ Installation path is accessible and has permission for installation if necessary")
 		else:
 			print (colored("\n*** ERROR ****", 'red'))
 			print (colored("No access/permission for this path: %s" %options.install_path, 'red'))
