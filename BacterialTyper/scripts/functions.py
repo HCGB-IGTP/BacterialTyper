@@ -282,6 +282,19 @@ def system_call(cmd, returned):
 
 ###############
 def wget_download(url, path):
+	"""
+	Downloads file in the given path.
+	
+	It uses python module wget to download given ``url`` in the ``path`` provided.
+	
+	:param url: File to download from http/ftp site.
+	:param path: Absolute path to the folder where to save the downloaded file.
+	:type url: string
+	:type path: string  
+	
+	:returns: Print messages and generates download
+	"""
+	
 	print ('\t+ Downloading: ', url)
 	wget.download(url, path)
 	print ('\n')
@@ -299,6 +312,23 @@ def check_md5sum(string, File):
 
 ###############
 def extract(fileGiven, out):
+	"""
+	Extracts archived file
+	
+	This function extracts the file given in the ``out`` path provided.
+	It uses the ``patoolib`` that is able to identify the type of file 
+	and compression algorithm to use in each case.
+	
+	It also removes the compressed file using ``os`` module.
+	
+	:param fileGiven: Archived file to extract.
+	:param out: Output name and absolute path for the extracted archived.
+	
+	:type fileGiven: string
+	:type out: string
+	
+	
+	"""
 	cmd = patoolib.extract_archive(fileGiven, outdir=out, verbosity=0)
 	## remove compress file
 	print ("Remove compress file...")

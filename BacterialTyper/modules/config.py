@@ -40,12 +40,21 @@ from BacterialTyper.config import install_dependencies
 
 def run(options):
 	"""
-	This is the main function of the module ``config`` that basically checks 
+	This is the main function of the module ``config``. It basically checks 
 	if the different requirements (python, perl and third-party software) are
 	fulfilled. 
 
 	If any requirement is not available this modules tries to install them or reports to the user to
 	manually install them.
+
+	:param option: State wether to check or install missing modules, packages and third party software. Provide: check/install
+	:param install_path: Absolute path to install modules or packages missing. Defaul: ``BacterialTyper`` config folder.
+	:param debug: True/false for debugging messages.
+	
+	:type option: string 
+	:param install_path: string 
+	:param debug: boolean
+	
 
 	.. seealso:: This function depends on several ``BacterialTyper`` functions:
 
@@ -110,7 +119,8 @@ def run(options):
 	functions.print_sepLine("+", 20, False)
 	print ('External dependencies:')
 	functions.print_sepLine("+", 20, False)
-	#extern_progs.print_dependencies()
+	
+	set_config.check_dependencies()
 	print ('\n')	
 
 	## python packages

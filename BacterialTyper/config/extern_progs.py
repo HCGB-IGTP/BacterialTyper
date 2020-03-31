@@ -43,7 +43,6 @@ def file_list(wanted_data):
 	:returns: Absolute path for file wanted
 
 	"""
-
 	config_folder = os.path.dirname(os.path.realpath(__file__))
 	listOffiles = functions.get_fullpath_list(config_folder)
 	for f in listOffiles:
