@@ -83,13 +83,16 @@ def get_exe(prog, Debug=False, Return_Version=False):
 	if (Debug):
 		print(colored("** Debug: min_version: %s" %min_version,'red'))
 
-	## debugging messages
-	debug=False
-	if Debug:
-		debug=True
+	## return if not available
+	if not exe_path_tmp:
+		if (Return_Version):
+			return ('ERROR', 'n.a.')
+		else:
+			return('ERROR')
 
+	## Loop for all possibilities
 	for p in exe_path_tmp:
-		prog_ver = get_version(prog, p, Debug=debug)
+		prog_ver = get_version(prog, p, Debug=Debug)
 
 		if (Debug):
 			print (colored("** Debug: Sotf: %s\nPath: %s\nVersion: %s" %(prog, p, prog_ver), 'red'))
