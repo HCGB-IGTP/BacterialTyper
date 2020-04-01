@@ -330,7 +330,7 @@ def check_dependencies(install_option, install_path, Debug):
 		else:
 			if (install_option):
 				if (Debug):
-						print ("Install module: ", each)
+						print ("Install software: ", soft)
 	
 				installed = install_dependencies.install(soft, min_version)
 				message2 = check_install_module(installed, soft_name, min_version, 'Software')
@@ -446,10 +446,8 @@ def check_python_packages(Debug, option_install, install_path):
 			print ("Module:", each)
 			print ("Module name:", module_name)
 			print ("Min_Version:", min_version)
-			print (type(min_version))
 			print ("Version installed:", installed)
-			print (type(installed))
-
+			
 		## check if installed
 		message = check_install_module(installed, module_name, min_version, 'Module')
 
@@ -693,7 +691,7 @@ def print_module_comparison(module_name, message, color, tag):
 
 	:returns: Print message
 	"""
-	print (colored("{:.<15}{:.>15}".format("%s: %s" %(module_name, tag), "[ %s ]" %message), color))
+	print (colored("{:.<15}{:.>15}".format("%s: %s" %(tag, module_name), "[ %s ]" %message), color))
 
 #########
 
