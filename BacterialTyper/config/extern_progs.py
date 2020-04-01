@@ -58,7 +58,7 @@ def read_dependencies():
 	"""Returns a dictionary containing the executable name for each software.
 
 	It uses :func:`BacterialTyper.config.extern_progs.file_list` to retrieve absolute path
-	for file :file:`BacterialTyper/config/dependencies.csv`. It then reads csv into pandas
+	for file :file:`BacterialTyper/config/software/dependencies.csv`. It then reads csv into pandas
 	dataframe using :func:`BacterialTyper.scripts.functions.get_data` and returns it.
 
 	.. seealso:: This function depends on other BacterialTyper functions:
@@ -77,7 +77,7 @@ def return_defatult_soft(soft):
 	"""Returns default name for a given software name
 
 	For some software we provide a shorter name for the software. Here, we read file
-	:file:`BacterialTyper/config/dependencies.csv` using :func:`BacterialTyper.config.extern_progs.read_dependencies`
+	:file:`BacterialTyper/config/software/dependencies.csv` using :func:`BacterialTyper.config.extern_progs.read_dependencies`
 	and retrieve original software name.
 
 	:param soft: Software name
@@ -97,7 +97,7 @@ def return_defatult_soft(soft):
 def return_min_version_soft(soft):
 	"""Retrieve version for a given software
 
-	Retrieves minimum version for the software of interest stored in :file:`BacterialTyper/config/dependencies.csv`.
+	Retrieves minimum version for the software of interest stored in :file:`BacterialTyper/config/software/dependencies.csv`.
 	It reads file using :func:`BacterialTyper.config.extern_progs.read_dependencies`
 	and retrieve minimum version required.
 

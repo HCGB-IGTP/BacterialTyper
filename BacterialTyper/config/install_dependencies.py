@@ -35,12 +35,12 @@ from BacterialTyper.config import extern_progs
 
 ## [TODO]
 ##################
-def install(software):
+def install(software, min_version):
 	print ("Install missing software: ", software)
 	print ("To do....")
 
 	## try to install: 
-	print(colored("**Check paths or install it in the system and add it to $PATH environment variable.",'red'))
+	print(colored("**Check paths or install it in the system and add it to $PATH environment variable.",'green'))
 
 
 #######################

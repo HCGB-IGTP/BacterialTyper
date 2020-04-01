@@ -93,11 +93,11 @@ Software dependencies
 ---------------------
 
 Also, several software packages are also required. They are listed in
-:file:`BacterialTyper/config/dependencies.csv`, which is shown below:
+:file:`BacterialTyper/config/software/dependencies.csv`, which is shown below:
 
 .. csv-table::
    :header-rows: 1 
-   :file: ../../../../BacterialTyper/config/dependencies.csv
+   :file: ../../../../BacterialTyper/config/software/dependencies.csv
 
 Most of the software are common software that any person doing bioinformatics should have, so
 you might have already available within your system.

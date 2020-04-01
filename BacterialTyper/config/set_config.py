@@ -34,7 +34,7 @@ from BacterialTyper.config import install_dependencies
 ################
 
 ##################
-def get_exe(prog, Debug=False):
+def get_exe(prog, Debug=False, Return_Version=False):
 	"""Return absolute path of the executable program requested.
 
 	Given a program name it returns its exectuable to be called. It has to fulfilled a minimun version specified.
@@ -98,7 +98,10 @@ def get_exe(prog, Debug=False):
 			continue
 
 		if LooseVersion(prog_ver) >= LooseVersion(min_version):
-			return (p)
+			if (Return_Version):
+				return (p, prog_ver)
+			else:
+				return (p)
 
 	if (len(exe_path_tmp) == 0):
 		print(colored("\n**ERROR: Programme %s could not be found." % prog,'red'))
@@ -107,7 +110,10 @@ def get_exe(prog, Debug=False):
 		print(colored("\n**ERROR: Programme %s version smaller than minimun version expected %s." %(prog,min_version),'red'))
 		exit()
 
-	return('ERROR')
+	if (Return_Version):
+		return ('ERROR', 'n.a.')
+	else:
+		return('ERROR')
 
 ################
 def access_check(fn, mode=os.F_OK | os.X_OK):
@@ -292,15 +298,46 @@ def get_version(prog, path, Debug=False):
 
 	return("n.a.")
 
-def check_dependencies(install_option, install_path):
+def check_dependencies(install_option, install_path, Debug):
 	"""
 	"""
 	
-	print ()
+	## read dependencies information
+	dependencies_pd = extern_progs.read_dependencies()
+
+	for soft, row in dependencies_pd.iterrows():
+		(soft_path, installed) = get_exe(soft, Debug=Debug, Return_Version=True)
+		soft_name = row['soft_name']
+		min_version = row['min_version']
+		
+		## debug messages
+		if (Debug):
+			print ("Software:", soft)
+			print ("Soft name:", soft_name)
+			print ("Min_Version:", min_version)
+			
+			print ("Soft Path: ", soft_path)
+			print ("Version installed:", installed)
+			
+		## check if installed
+		message = check_install_module(installed, soft_name, min_version, 'Software')
+
+		if (message == 'OK'):
+			continue
+		else:
+			if (install_option):
+				if (Debug):
+						print ("Install module: ", each)
 	
-
-
-
+				installed = install_dependencies.install(soft, min_version)
+				message2 = check_install_module(installed, soft_name, min_version, 'Software')
+				if (message2 == 'OK'):
+					continue
+				else:
+					print ("+ Attent to install software: ", soft_name, " failed. Install it manually to continue with BacterialTyper\n\n")
+			else:
+				print ("+ Please install manually software: ", soft_name, " to continue with BacterialTyper\n\n")
+	
 ################
 ## Python
 ################
@@ -411,7 +448,7 @@ def check_python_packages(Debug, option_install, install_path):
 			print (type(installed))
 
 		## check if installed
-		message = check_install_module(installed, module_name, min_version)
+		message = check_install_module(installed, module_name, min_version, 'Module')
 
 		if (message == 'OK'):
 			continue
@@ -421,7 +458,7 @@ def check_python_packages(Debug, option_install, install_path):
 					print ("Install module: ", each)
 
 				installed = install_dependencies.python_package_install(module_name, min_version)
-				message2 = check_install_module(installed, module_name, min_version)
+				message2 = check_install_module(installed, module_name, min_version, 'Module')
 				if (message2 == 'OK'):
 					continue
 				else:
@@ -585,12 +622,10 @@ def check_perl_packages(file_name, Debug, option_install, install_path):
 			print ("Module:", each)
 			print ("Module name:", module_name)
 			print ("Min_Version:", min_version)
-			print (type(min_version))
 			print ("Version installed:", installed)
-			print (type(installed))
-
+			
 		## check if installed
-		message = check_install_module(installed, module_name, min_version)
+		message = check_install_module(installed, module_name, min_version, 'Package')
 
 		if (message == 'OK'):
 			continue
@@ -625,11 +660,9 @@ def check_perl_package_version(package, Debug):
 	output_one_line = functions.system_call(perl_one_line_command, True)
 	return(functions.decode(output_one_line))
 
-
 ################
 ## IslandPath
 ################
-
 def check_IslandPath(Debug, option_install, install_path):
 
 	## get perl packages installed
@@ -641,26 +674,28 @@ def check_IslandPath(Debug, option_install, install_path):
 ################
 ## Miscellaneous
 ################
-def print_module_comparison(module_name, message, color):
+def print_module_comparison(module_name, message, color, tag):
 	"""
 	Creates print message for a given module, version, message
 
 	:param module_name: Name of the module
 	:param message: Message to include in the print message: OK | FAILED | NOT FOUND
 	:param color: Print message color: green | orange | red
+	:param tag: Tag to include: Module, package, software
 
 	:type module_name: string
 	:type message: string 
 	:type color: string
+	:type tag: string
 
 	:returns: Print message
 	"""
-	print (colored("{:.<15}{:.>15}".format("Module: %s" %module_name, "[ %s ]" %message), color))
+	print (colored("{:.<15}{:.>15}".format("%s: %s" %(module_name, tag), "[ %s ]" %message), color))
 
 #########
 
 ##################
-def check_install_module(installed, module_name, min_version):
+def check_install_module(installed, module_name, min_version, tag):
 	"""
 	Checks modules installation 
 
@@ -679,18 +714,18 @@ def check_install_module(installed, module_name, min_version):
 	if (installed == 'n.a.'):
 		message = 'NOT FOUND'
 		color = 'red'
-		print_module_comparison(module_name, message, color)
+		print_module_comparison(module_name, message, color, tag)
 
 	# check version
 	elif LooseVersion(installed) >= LooseVersion(min_version):
 		message = 'OK'
 		color = 'green'
-		print_module_comparison(module_name, message, color)
+		print_module_comparison(module_name, message, color, tag)
 
 	else:
 		message = 'FAILED'
 		color = 'yellow'
-		print_module_comparison(module_name, message, color)
+		print_module_comparison(module_name, message, color, tag)
 
 	## return message
 	return (message)
