@@ -1,18 +1,5 @@
 module_name,module,type_module,version,tar_gz
-strict,strict,core,1.11,
-warnings,warnings,core,1.42,
 Carp,Carp,core,1.50,
-Cwd,Cwd,core,3.74,
-Data_dumper,Data::Dumper,core,2.170,
-Exporter,Exporter,core,5.73,
-File-Copy,File::Copy,core,2.33,
-File-Basename,File::Basename,core,2.85,
-File-Spec,File::Spec,core,3.74,
-File-Path,File::Path,core,2.15,
-File-Temp,File::Temp,core,0.2304,
-FindBin,FindBin,core,1.51,
-List-Util,List::Util,core,1.5,
-Getopt-long,Getopt::Long,core,2.5,
 POSIX,POSIX,core,1.84,
 Config-Simple-4.58,Config::Simple,install,4.58,https://cpan.metacpan.org/authors/id/S/SH/SHERZODR/Config-Simple-4.58.tar.gz
 ExtUtils-Config-0.008,ExtUtils::Config,install,0.008,https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-Config-0.008.tar.gz
@@ -23,4 +10,3 @@ Module-Build-Tiny-0.039,Module::Build::Tiny,install,0.039,https://cpan.metacpan.
 MooseX-Singleton-0.30,MooseX::Singleton,install,0.30,https://cpan.metacpan.org/authors/id/E/ET/ETHER/MooseX-Singleton-0.30.tar.gz
 Moose-2.2012,Moose,install,2.2012,https://cpan.metacpan.org/authors/id/E/ET/ETHER/Moose-2.2012.tar.gz
 BioPerl-1.7.7,Bio::Perl,install,1.7.7,https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/BioPerl-1.7.7.tar.gz
-Module-Runtime-0.016,Module::Runtime,install,0.016,https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/Module-Runtime-0.016.tar.gz

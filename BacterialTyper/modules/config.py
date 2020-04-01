@@ -41,7 +41,7 @@ from BacterialTyper.config import install_dependencies
 def run(options):
 	"""
 	This is the main function of the module ``config``. It basically checks 
-	if the different requirements (python, perl and third-party software) are
+	if the different requirements (python` and third-party software) are
 	fulfilled. 
 
 	If any requirement is not available this modules tries to install them or reports to the user to
@@ -49,12 +49,13 @@ def run(options):
 
 	:param option: State wether to check or install missing modules, packages and third party software. Provide: check/install
 	:param install_path: Absolute path to install modules or packages missing. Default: ``BacterialTyper`` environment path.
+	:param IslandPath: True/False for checking additional perl and software required by this option analysis.
 	:param debug: True/false for debugging messages.
 	
 	:type option: string 
-	:param install_path: string 
-	:param debug: boolean
-	
+	:type IslandPath: boolean
+	:type install_path: string 
+	:type debug: boolean	
 
 	.. seealso:: This function depends on several ``BacterialTyper`` functions:
 
@@ -180,4 +181,18 @@ def run(options):
 	set_config.check_perl_packages(Debug, option_install, options.install_path)
 	functions.print_sepLine("+", 20, False)
 	print ('\n')
+
+	## IslandPath dependencies
+	if (options.IslandPath):
+		print ('\n')
+		functions.print_sepLine("+", 20, False)
+		print ('IslandPath packages and software required:')
+		functions.print_sepLine("+", 20, False)
+	
+		set_config.check_IslandPath(Debug, option_install, options.install_path)
+		functions.print_sepLine("+", 20, False)
+		print ('\n')
+
+
+
 

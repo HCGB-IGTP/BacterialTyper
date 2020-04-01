@@ -17,7 +17,7 @@ This is an installation guide for the ``BacterialTyper`` pipeline.
 
 ``BacterialTyper`` is a pipeline composed of multiple lines of code 
 that calls and automatizes the analysis from multiple bioinformatic 
-tools. Several dependencies (python, perl, software dependencies 
+tools. Several dependencies (python, perl, additional software and their dependencies 
 and third-party software) are required for the ``BacterialTyper`` analysis. 
 
 You first need to get ``BacterialTyper`` (from different sources available): 
@@ -27,8 +27,8 @@ recommended you :ref:`install the latest development version<install-from-source
 
 Once you get the code, before running ``BacterialTyper`` you must make sure 
 you have all the dependencies fulfilled from section 
-:ref:`Requirements and dependencies<Requirements-dependencies>` either using the 
-``config`` module or different scripts available for each type of requirement.
+:ref:`Requirements and dependencies<Requirements-dependencies>` using the 
+``BacterialTyper config`` module.
 
 
 .. ########################

@@ -56,6 +56,7 @@ subparser_config = subparsers.add_parser(
 )
 subparser_config.add_argument("option", help="Checks if missing any dependencies or modules or tries to install them.", choices=['check','install'])
 subparser_config.add_argument("--install_path", help="Path to install missing modules or dependencies. [Default: BacterialTyper config folder]")
+subparser_config.add_argument("--IslandPath", action="store_true", help="Check for additional perl and software packages required for IslandPath.")
 subparser_config.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 subparser_config.set_defaults(func=BacterialTyper.modules.config.run)
 

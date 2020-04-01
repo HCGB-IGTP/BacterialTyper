@@ -44,10 +44,125 @@ def install(software):
 
 
 #######################
-def install_package(package_path, install_path, Debug, name):
+def print_error_message(module_name, path):
 	"""
-	Install perl package provided
+	Print error messages generated during installation
 
+	:param module_name: 
+	:param path:
+
+	:type module_name: string 
+	:type path: string
+
+	:returns: Print messages.
+	"""
+	print ("\nSome error ocurred while installing module [ %s ]." %module_name)
+	print ("Path: " + path)
+	print ("Please retry or install it mannually to continue with BacterialTyper")
+
+
+##################
+def perl_package_install(name, version2install, Debug):
+	"""
+	Installs perl package using CPAN
+	
+	This function installs packages archived in CPAN using cpan perl module.
+	
+	:param name: Perl package name
+	:param version2install: Version to install
+	:param Debug: True/False for debugging messages
+
+	:type name: string
+	:type version2install: string 
+	:type Debug: boolean
+
+	.. seealso: This function depends on other ``BacterialTyper`` functions such as:
+
+		- :func:`BacterialTyper.config.install_dependencies.install_cpan_package`
+	"""	
+	print ()
+	
+##################	
+def perl_package_install_targz(name, version2install, http_tar_gz, install_dir, Debug):
+	"""
+	Retrieves information for perl package installation
+	
+	This function installs packages archived in tar.gz files. It downloads and extracts
+	``tar.gz`` files and install them locally. This option might not be the best option
+	as long as it would not install all sub-dependencies for each package. We would use
+	preferentially :func:`BacterialTyper.config.install_dependencies.perl_package_install_cpan`.  
+
+	:param name: Perl package name
+	:param version2install: Version to install
+	:param http_tar_gz: FTP/https site of the tar gz perl package (cpan)
+	:param install_dir: Installation directory
+	:param Debug: True/False for debugging messages
+
+	:type name: string
+	:type version2install: string 
+	:type http_tar_gz: string 
+	:type install_dir: string 
+	:type Debug: boolean
+
+	.. seealso: This function depends on other ``BacterialTyper`` functions such as:
+
+		- :func:`BacterialTyper.scripts.functions.wget_download`
+
+		- :func:`BacterialTyper.scripts.functions.extract`
+
+		- :func:`BacterialTyper.config.install_dependencies.install_package`
+
+	"""	
+
+	print (colored("Install missing perl package: " + name, 'yellow'))
+
+	## create folders
+	perlPackages = functions.create_subfolder("perl_packages", install_dir)
+	path2download_name = functions.create_subfolder(name, perlPackages)
+
+	## debugging messages
+	if (Debug):
+		print ("perlPackages: " + perlPackages)
+		print ("path2download_name: " + path2download_name)
+
+        ## download
+	functions.wget_download(http_tar_gz, path2download_name)
+
+	## get targz file
+	tar_gz = functions.retrieve_matching_files(path2download_name, 'tar.gz')
+	functions.extract(tar_gz[0], path2download_name)
+
+	## debugging messages
+	if (Debug):
+		print ("** DEBUG: **")
+		print ("http: " + http_tar_gz)
+		print ('tar_gz: ')
+		print (tar_gz)
+		print ("*******************")
+
+	## install
+	path2download_extract_folder = os.path.join(path2download_name, name)
+	blib_lib = install_package_targz(path2download_extract_folder, install_dir, Debug, name)
+
+	## include in $PERL5LIB system variable
+	print (colored("** ATTENTION:", 'yellow'))
+	print ("Include the following path within your PERL5LIB variable:")
+	print (blib_lib)
+	
+	## debugging messages
+	if (Debug):
+		print ("** DEBUG: **")
+		print ("blib_lib: " + blib_lib)
+
+	return(version2install)
+
+##################
+
+#######################
+def install_package_targz(package_path, install_path, Debug, name):
+	"""
+	Install perl package downloaded
+	
 	:param package_path: Path where the perl package is extracted
 	:param install_path: Path to install package
 
@@ -146,94 +261,7 @@ def install_package(package_path, install_path, Debug, name):
 		print_error_message(name, package_path)
 		return ('n.a.')
 
-#######################
-def print_error_message(module_name, path):
-	"""
-	Print error messages generated during installation
 
-	:param module_name: 
-	:param path:
-
-	:type module_name: string 
-	:type path: string
-
-	:returns: Print messages.
-	"""
-	print ("\nSome error ocurred while installing module [ %s ]." %module_name)
-	print ("Path: " + path)
-	print ("Please retry or install it mannually to continue with BacterialTyper")
-
-
-##################
-def perl_package_install(name, version2install, http_tar_gz, install_dir, Debug):
-	"""
-	Retrieves information for perl package installation
-
-	:param name: Perl package name
-	:param version2install: Version to install
-	:param http_tar_gz: FTP/https site of the tar gz perl package (cpan)
-	:param install_dir: Installation directory
-	:param Debug: True/False for debugging messages
-
-	:type name: string
-	:type version2install: string 
-	:type http_tar_gz: string 
-	:type install_dir: string 
-	:type Debug: boolean
-
-	.. seealso: This function depends on other ``BacterialTyper`` functions such as:
-
-		- :func:`BacterialTyper.scripts.functions.wget_download`
-
-		- :func:`BacterialTyper.scripts.functions.extract`
-
-		- :func:`BacterialTyper.config.install_dependencies.install_package`
-
-	"""	
-
-	print (colored("Install missing perl package: " + name, 'yellow'))
-
-	## create folders
-	perlPackages = functions.create_subfolder("perl_packages", install_dir)
-	path2download_name = functions.create_subfolder(name, perlPackages)
-
-	## debugging messages
-	if (Debug):
-		print ("perlPackages: " + perlPackages)
-		print ("path2download_name: " + path2download_name)
-
-        ## download
-	functions.wget_download(http_tar_gz, path2download_name)
-
-	## get targz file
-	tar_gz = functions.retrieve_matching_files(path2download_name, 'tar.gz')
-	functions.extract(tar_gz[0], path2download_name)
-
-	## debugging messages
-	if (Debug):
-		print ("** DEBUG: **")
-		print ("http: " + http_tar_gz)
-		print ('tar_gz: ')
-		print (tar_gz)
-		print ("*******************")
-
-	## install
-	path2download_extract_folder = os.path.join(path2download_name, name)
-	blib_lib = install_package(path2download_extract_folder, install_dir, Debug, name)
-
-	## include in $PERL5LIB system variable
-	my_perl5lib = 'PERL5LIB=${PERL5LIB}:' + blib_lib
-	command_export = my_perl5lib + "; export PERL5LIB"
-	functions.system_call(command_export)
-
-	## debugging messages
-	if (Debug):
-		print ("** DEBUG: **")
-		print ("blib_lib: " + blib_lib)
-
-	return(version2install)
-
-##################
 def python_package_install(package, version2install):
 	print (colored("Install missing python package: " + package, 'yellow'))
 	versioninstalled='0.1'

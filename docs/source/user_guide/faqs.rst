@@ -61,7 +61,7 @@ Or for the ``activate_python_environment.sh`` script:
    source env/activate_python_environment.sh
 
 
-- How do I know the python environment is activate?
+- How do I know the python environment is activated?
 
 Once you execute the activation of the environment, either using the script ``activate_python_environment.sh`` or 
 by executing ``source env/BacterialTyper/bin/activate``, you should see a tag in the command-line header as shown in 
@@ -73,6 +73,16 @@ figure X.
 Once you deactivate the environment this tag should disappear. 
 
 Read additional details in `python environment`_ official documentation website.
+
+
+- What is CPAN?
+
+CPAN is the Comprehensive Perl Archive Network, a large collection of Perl software and documentation. 
+You can begin exploring from either http://www.cpan.org/ or any of the mirrors 
+listed at http://www.cpan.org/SITES.html.
+
+CPAN is also the name of a Perl module, ``CPAN.pm``, which is used to download and install Perl software 
+from the CPAN archive. Read further information at https://metacpan.org/pod/CPAN.
 
 Quality control
 ===============

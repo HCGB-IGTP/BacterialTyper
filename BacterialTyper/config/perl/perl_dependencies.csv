@@ -1,0 +1,13 @@
+module_name,module,type_module,version
+strict,strict,core,1.11
+warnings,warnings,core,1.42
+Cwd,Cwd,core,3.74
+Data_dumper,Data::Dumper,core,2.170
+File-Copy,File::Copy,core,2.33
+File-Basename,File::Basename,core,2.85
+File-Spec,File::Spec,core,3.74
+File-Path,File::Path,core,2.15
+File-Temp,File::Temp,core,0.2304
+FindBin,FindBin,core,1.51
+List-Util,List::Util,core,1.5
+Getopt-long,Getopt::Long,core,2.5

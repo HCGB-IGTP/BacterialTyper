@@ -1,6 +1,9 @@
+Carp,1.50,
+POSIX,1.84,
 Config-Simple,4.58
 ExtUtils-Config,0.008
 ExtUtils-Helpers,0.026
 ExtUtils-InstallPaths,0.012
 Module-Build-Tiny,0.039
 MooseX-Singleton,0.30
+BioPerl,1.7.7
