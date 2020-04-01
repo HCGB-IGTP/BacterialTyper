@@ -511,20 +511,25 @@ def get_perl_packages(Debug, file_name):
 	return (my_packages_installed)
 
 ##################
-def check_perl_packages(Debug, option_install, install_path):
+def check_perl_packages(file_name, Debug, option_install, install_path):
 	"""
+	Check the perl packages required
+	
 	This functions checks wether the packages installed in the system fulfilled the 
-	minimum version specified in the configuration file. 
+	minimum version specified in the configuration file. Details of the perl packages 
+	required are available in :file:`BacterialTyper/config/perl/`. 
 
 	It uses function :func:`BacterialTyper.config.set_config.get_perl_packages` to
 	retrieve the version of the perl packages installed in the system. Then it uses
 	:func:`BacterialTyper.config.extern_progs.min_perl_package_version` to retrieve the minimum
 	version specified. It compares them using function :func:`BacterialTyper.config.set_config.check_install_module`.
-
+	
+	:param file_name: Name of the file to search within :file:`BacterialTyper/config/perl/`.
 	:param Debug: True/False for debugging messages
 	:param option_install: True/False for installing missing dependencies
 	:param install_path: Install path for installing modules.
 	
+	:type file_name: string
 	:type Debug: boolean
 	:type option_install: boolean
 	:type install_path: string
@@ -543,7 +548,7 @@ def check_perl_packages(Debug, option_install, install_path):
 
 	"""
 	## get perl packages installed
-	my_packages_installed = get_perl_packages(Debug, "perl_dependencies")
+	my_packages_installed = get_perl_packages(Debug, file_name)
 
 	## debug messages
 	if (Debug):
@@ -551,7 +556,7 @@ def check_perl_packages(Debug, option_install, install_path):
 		print (my_packages_installed)
 
 	## min versions for packages
-	my_packages_requirements = extern_progs.min_perl_package_version("perl_dependencies")
+	my_packages_requirements = extern_progs.min_perl_package_version(file_name)
 
 	## debug messages
 	if (Debug):
@@ -559,7 +564,7 @@ def check_perl_packages(Debug, option_install, install_path):
 		print (my_packages_requirements)
 
 	## get info for perl modules
-	perl_lib_dependecies_file = extern_progs.file_list("perl_dependencies")
+	perl_lib_dependecies_file = extern_progs.file_list(file_name)
 	perl_lib_dependecies = functions.get_data(perl_lib_dependecies_file, ',', 'index_col=0')
 
 	## check each package
@@ -586,21 +591,9 @@ def check_perl_packages(Debug, option_install, install_path):
 		if (message == 'OK'):
 			continue
 		else:
-			if (option_install):  # try to install
-				if (Debug):
-					print ("Install module: ", each)
-				print (colored("** ATTENTION: Installation of perl modules is not supported",'red'))
+			print (colored("** ATTENTION: Installation of perl modules is not supported",'red'))
+			print ("+ Please install manually package: ", module_name, " to continue with BacterialTyper\n\n")
 				
-				## The following code is not available anymore
-				#http_tar_gz = perl_lib_dependecies.loc[each, 'tar_gz']
-				#installed = install_dependencies.perl_package_install(each, min_version, http_tar_gz, install_path, Debug)
-				#message2 = check_install_module(installed, module_name, min_version)
-				#if (message2 == 'OK'):
-				#	continue
-				#else:
-				#	print ("+ Attent to install package: ", module_name, " failed. Install it manually to continue with BacterialTyper\n\n")
-			else:
-				print ("+ Please install manually package: ", module_name, " to continue with BacterialTyper\n\n")
 
 ################
 def check_perl_package_version(package, Debug):
@@ -637,25 +630,10 @@ def check_perl_package_version(package, Debug):
 def check_IslandPath(Debug, option_install, install_path):
 
 	## get perl packages installed
-	my_packages_installed = get_perl_packages(Debug, "IslandPath_dependencies")
-
-	## debug messages
-	if (Debug):
-		print ("my_packages_installed :: ")
-		print (my_packages_installed)
-
-	## min versions for packages
-	my_packages_requirements = extern_progs.min_perl_package_version("IslandPath_dependencies")
-
-	## debug messages
-	if (Debug):
-		print ("my_packages_requirements")
-		print (my_packages_requirements)
-
-	## get info for perl modules
-	perl_lib_dependecies_file = extern_progs.file_list("perl_dependencies")
-	perl_lib_dependecies = functions.get_data(perl_lib_dependecies_file, ',', 'index_col=0')
-
+	check_perl_packages("IslandPath_dependencies", Debug, option_install, options.install_path)
+	
+	## check additional software required
+	print ("+ Check additional software for IslandPath optional analysis...")
 
 ################
 ## Miscellaneous

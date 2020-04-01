@@ -178,7 +178,7 @@ def run(options):
 	print ('Perl packages:')
 	functions.print_sepLine("+", 20, False)
 
-	set_config.check_perl_packages(Debug, option_install, options.install_path)
+	set_config.check_perl_packages("perl_dependencies", Debug, option_install, options.install_path)
 	functions.print_sepLine("+", 20, False)
 	print ('\n')
 
