@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 ##########################################################
-## this modules is an idea from ARIBA (https://github.com/sanger-pathogens/ariba)
-## give credit to them appropiately
-##
-## Jose F. Sanchez										##
-## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+## this modules is an idea from ARIBA			##
+## (https://github.com/sanger-pathogens/ariba)		##
+## give credit to them appropiately			##
+##							##
+## Jose F. Sanchez					##
+## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain	##
 ##########################################################
 """
 Provides external programs details and configuration.
@@ -71,6 +72,7 @@ def read_dependencies():
 	dependencies_file = file_list("dependencies")
 	return(functions.get_data(dependencies_file, ',', 'index_col=0'))
 
+#######################
 def return_defatult_soft(soft):
 	"""Returns default name for a given software name
 
@@ -182,7 +184,7 @@ def print_package_version():
 	for each in my_packages:
 		set_config.print_module_comparison(each, my_packages[each], 'green')
 
-
+######################
 def min_perl_package_version(file_name):
 	"""Returns a dictionary containing minimum version for each perl package.
 
@@ -207,7 +209,7 @@ def min_perl_package_version(file_name):
 	## return only package name and version
 	package_min_versions = {}
 	for index, row in perl_dependencies.iterrows():
-		package_min_versions[index] = row['version']
+		package_min_versions[index] = str(row['version'])
 
 	return(package_min_versions)
 ##################
@@ -227,13 +229,7 @@ def main():
 	if (set_config.access_check('/usr/bin/make')):
 		print ('make accessible')
 	else:
-		print ('make not accessible')
-
-	if (set_config.access_check('/home/jsanchez/git_repos/BacterialTyper'), 'os.F_OK'):
-		print ('Folder accessible')
-	else:
-		print ('Not access')
-
+		print ('not accessible')
 
 
 ######

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-##############################################################
-## Jose F. Sanchez			      							##
-## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain		##
-##############################################################
+##########################################################
+## Jose F. Sanchez					##
+## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain	##
+##########################################################
 """
 Provides configuration for the pipeline.
 
@@ -406,7 +406,9 @@ def check_python_packages(Debug, option_install, install_path):
 			print ("Module:", each)
 			print ("Module name:", module_name)
 			print ("Min_Version:", min_version)
+			print (type(min_version))
 			print ("Version installed:", installed)
+			print (type(installed))
 
 		## check if installed
 		message = check_install_module(installed, module_name, min_version)
@@ -514,7 +516,7 @@ def get_perl_packages(Debug, file_name):
 def check_perl_packages(file_name, Debug, option_install, install_path):
 	"""
 	Check the perl packages required
-	
+
 	This functions checks wether the packages installed in the system fulfilled the 
 	minimum version specified in the configuration file. Details of the perl packages 
 	required are available in :file:`BacterialTyper/config/perl/`. 
@@ -523,12 +525,12 @@ def check_perl_packages(file_name, Debug, option_install, install_path):
 	retrieve the version of the perl packages installed in the system. Then it uses
 	:func:`BacterialTyper.config.extern_progs.min_perl_package_version` to retrieve the minimum
 	version specified. It compares them using function :func:`BacterialTyper.config.set_config.check_install_module`.
-	
+
 	:param file_name: Name of the file to search within :file:`BacterialTyper/config/perl/`.
 	:param Debug: True/False for debugging messages
 	:param option_install: True/False for installing missing dependencies
 	:param install_path: Install path for installing modules.
-	
+
 	:type file_name: string
 	:type Debug: boolean
 	:type option_install: boolean
@@ -583,7 +585,9 @@ def check_perl_packages(file_name, Debug, option_install, install_path):
 			print ("Module:", each)
 			print ("Module name:", module_name)
 			print ("Min_Version:", min_version)
+			print (type(min_version))
 			print ("Version installed:", installed)
+			print (type(installed))
 
 		## check if installed
 		message = check_install_module(installed, module_name, min_version)
@@ -593,7 +597,6 @@ def check_perl_packages(file_name, Debug, option_install, install_path):
 		else:
 			print (colored("** ATTENTION: Installation of perl modules is not supported",'red'))
 			print ("+ Please install manually package: ", module_name, " to continue with BacterialTyper\n\n")
-				
 
 ################
 def check_perl_package_version(package, Debug):
@@ -620,7 +623,7 @@ def check_perl_package_version(package, Debug):
 
 	## execute one line perl command
 	output_one_line = functions.system_call(perl_one_line_command, True)
-	return(functions.decode (output_one_line))
+	return(functions.decode(output_one_line))
 
 
 ################
@@ -630,8 +633,8 @@ def check_perl_package_version(package, Debug):
 def check_IslandPath(Debug, option_install, install_path):
 
 	## get perl packages installed
-	check_perl_packages("IslandPath_dependencies", Debug, option_install, options.install_path)
-	
+	check_perl_packages("IslandPath_dependencies", Debug, option_install, install_path)
+
 	## check additional software required
 	print ("+ Check additional software for IslandPath optional analysis...")
 
