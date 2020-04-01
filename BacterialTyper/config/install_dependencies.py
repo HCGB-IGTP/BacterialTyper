@@ -42,6 +42,8 @@ def install(software, min_version):
 	## try to install: 
 	print(colored("**Check paths or install it in the system and add it to $PATH environment variable.",'green'))
 
+	versionInstalled = 'n.a.'
+	return (versionInstalled)
 
 #######################
 def print_error_message(module_name, path):
