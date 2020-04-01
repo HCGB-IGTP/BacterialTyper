@@ -159,7 +159,7 @@ def run(options):
 	print ('External dependencies:')
 	functions.print_sepLine("+", 20, False)
 	
-	set_config.check_dependencies(options.option, options.install_path)
+	set_config.check_dependencies(options.option, options.install_path, Debug)
 	print ('\n')	
 
 	## python packages
@@ -168,7 +168,7 @@ def run(options):
 	print ('Python packages:')
 	functions.print_sepLine("+", 20, False)
 
-	set_config.check_python_packages(Debug, option_install, options.install_path)
+	set_config.check_python_packages(option_install, options.install_path, Debug)
 	functions.print_sepLine("+", 20, False)
 	print ('\n')
 
