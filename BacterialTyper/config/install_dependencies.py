@@ -35,10 +35,15 @@ from BacterialTyper.config import extern_progs
 
 ## [TODO]
 ##################
-def install(software, min_version):
+def install(software, min_version, install_path):
+	
+	## install busco
+	if (software == 'busco' or software == 'busco_plot'):
+		install_BUSCO()
+		
 	print ("Install missing software: ", software)
 	print ("To do....")
-
+	
 	## try to install: 
 	print(colored("**Check paths or install it in the system and add it to $PATH environment variable.",'green'))
 

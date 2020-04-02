@@ -77,7 +77,7 @@ analysis as supplementary, so far, we would not take care of fulfilling the mult
 requirements of this tool. This packages are listed in here:
 
 .. csv-table::
-   :header: "Package", "Version"
+   :header: "Package", "Version", "Type_module"
    :file: ../../data/installation/perl_dependencies_IslandPath_summary.csv
 
 We encorage to install these modules using CPAN (https://www.cpan.org/) or any other ``perl`` package

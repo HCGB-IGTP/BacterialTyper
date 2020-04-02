@@ -303,6 +303,36 @@ def get_version(prog, path, Debug=False):
 
 def check_dependencies(install_option, install_path, Debug):
 	"""
+	Check if available the different software required for ``BacterialTyper`` execution.
+	
+	Using the function :func:`BacterialTyper.config.extern_progs.read_dependencies` the 
+	information for all the dependencies is retrieved from file :file:`BacterialTyper/config/software/dependencies.csv`.
+	
+	For each software, the function :func:`BacterialTyper.config.set_config.get_exe` retrieves
+	wether it is installed in the system or not and its version anc it is check using 
+	:func:`BacterialTyper.config.set_config.check_install`. If not installed, the  
+	:func:`BacterialTyper.config.install_dependencies.install` parses the software name and
+	proceeds for the installation of the software.
+	
+	:param install_option: True/False for proceeding with installation or only check.
+	:param install_path: Installation absolute path.
+	:param Debug: True/False for debugging messages 
+	
+	:type install_option: boolean
+	:type install_path: string
+	:type Debug: boolean
+	
+	:returns: Print messages and information	
+	
+	.. seealso: This function also depende on additional functions:
+	
+		- :func:`BacterialTyper.config.extern_progs.read_dependencies` 
+		
+		- :func:`BacterialTyper.config.set_config.get_exe`
+		
+		- :func:`BacterialTyper.config.set_config.check_install`
+		
+		- :func:`BacterialTyper.config.install_dependencies.install`
 	"""
 	
 	## read dependencies information
@@ -332,7 +362,7 @@ def check_dependencies(install_option, install_path, Debug):
 				if (Debug):
 						print ("Install software: ", soft)
 	
-				installed = install_dependencies.install(soft, min_version)
+				installed = install_dependencies.install(soft, min_version, install_path)
 				message2 = check_install_module(installed, soft_name, min_version, 'Software')
 				if (message2 == 'OK'):
 					continue
