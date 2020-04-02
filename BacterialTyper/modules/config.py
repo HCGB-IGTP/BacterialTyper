@@ -19,6 +19,8 @@ This module relies in several scripts and files which are arranged in the
 
 .. seealso:: Additional information on BacterialTyper configuration and requirements
 
+	- :doc:`Installation <../../user_guide/installation/installing>`
+	
 	- :doc:`Requirements <../../user_guide/installation/requirements>` 
 
 	- :doc:`Configuration <../../user_guide/modules/config>`
