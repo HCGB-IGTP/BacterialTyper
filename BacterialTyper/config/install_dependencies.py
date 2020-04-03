@@ -39,8 +39,12 @@ def install(software, min_version, install_path):
 	
 	## install busco
 	if (software == 'busco' or software == 'busco_plot'):
-		install_BUSCO()
-		
+		install_BUSCO(install_path)
+	
+	## install edirect
+	elif (software == 'efetch' or software == 'esearch' or software == 'xtract' ):
+		install_edirect(install_path)
+			
 	print ("Install missing software: ", software)
 	print ("To do....")
 	
@@ -73,8 +77,18 @@ def python_package_install(package, version2install):
 	versioninstalled='0.1'
 	return (versioninstalled)
 
+
+def install_edirect(install_path):
+	"""
+	Installs and configurates Edirect 
+	
+	Read further information of the Edirect utilities in https://www.ncbi.nlm.nih.gov/books/NBK179288/
+	"""
+	
+	print ()
+	
 ##################
-def install_BUSCO():
+def install_BUSCO(install_path):
 	## git clone https://gitlab.com/ezlab/busco.git
 
 	## install within our environment
