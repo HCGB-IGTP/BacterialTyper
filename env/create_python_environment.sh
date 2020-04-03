@@ -7,7 +7,7 @@ echo ""
 
 export PYTHONPATH=""
 echo "python3 -m venv env/BacterialTyper"
-#python3 -m venv env/BacterialTyper
+python3 -m venv env/BacterialTyper
 echo "Done..."
 echo ""
 
