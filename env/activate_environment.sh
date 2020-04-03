@@ -10,5 +10,8 @@ source env/BacterialTyper/bin/activate
 echo "Done..."
 echo ""
 
+## export BacterialTyper
+export PYTHONPATH="$PYTHONPATH:$PWD/BacterialTyper"
+
 echo "Exit...."
 echo ""
