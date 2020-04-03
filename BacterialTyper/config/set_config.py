@@ -42,19 +42,17 @@ def get_exe(prog, Debug=False, Return_Version=False):
 	:param prog: Software name
 	:type prog: string
 	:returns: Absolute path for the executable requested
-	:warning: if no executable available in $PATH or not fulfilling the expected version.
+	:warning: if no executable available in system ``$PATH`` or not fulfilling the expected version.
 
-	.. seealso:: This function depends on other BacterialTyper functions:
+	.. seealso:: This function depends on other ``BacterialTyper`` functions:
 
-		- :func:`BacterialTyper.config`
+		- :func:`BacterialTyper.config.set_config.my_which`
 
-		- :func:`BacterialTyper.scripts.extern_progs.return_defatult_soft`
+		- :func:`BacterialTyper.config.extern_progs.return_defatult_soft`
 
-		- :func:`BacterialTyper.scripts.extern_progs.retrun_min_version`
+		- :func:`BacterialTyper.config.extern_progs.return_min_version_soft`
 
-		- :func:`BacterialTyper.scripts.extern_progs.get_version`
-
-		- :func:`BacterialTyper.scripts.extern_progs.my_which`
+		- :func:`BacterialTyper.config.set_config.get_version`
 
 	.. attention:: Be aware of Copyright
 
@@ -324,7 +322,7 @@ def check_dependencies(install_option, install_path, Debug):
 	
 	:returns: Print messages and information	
 	
-	.. seealso: This function also depende on additional functions:
+	.. seealso:: This function also depende on additional functions:
 	
 		- :func:`BacterialTyper.config.extern_progs.read_dependencies` 
 		

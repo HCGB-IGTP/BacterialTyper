@@ -62,29 +62,6 @@ be available within your installation. These modules are listed in file
 
 You can test the presence of these ``perl`` modules using the ``BacterialTyper config`` module. 
 
-Third party software
-""""""""""""""""""""
-
-Additionally, within the ``BacterialTyper MGE`` module there is an optional analysis
-that determines the pathogenic islands within the genome. The tool that we
-employ for this purpose is named IslandPath-DIMOB (IslandPath_ :cite:`Bertelli2017`) 
-and we distribute it along ``BacterialTyper``. See additional details in the API section for 
-:ref:`Third-party Software<third-party-soft>`.
-
-This third party software requires multiple ``perl`` modules and in turn, depend on many others,
-making the installation and distribution quite difficult. As we established this
-analysis as supplementary, so far, we would not take care of fulfilling the multiple
-requirements of this tool. This packages are listed in here:
-
-.. csv-table::
-   :header: "Package", "Version", "Type_module"
-   :file: ../../data/installation/perl_dependencies_IslandPath_summary.csv
-
-We encorage to install these modules using CPAN (https://www.cpan.org/) or any other ``perl`` package
-installer of your interest.
-
-To test the presence of these additional ``perl`` modules, you can also use the ``BacterialTyper config`` module.
-
 .. ######################
 .. _soft-dependencies:
 .. ######################
@@ -106,6 +83,36 @@ You can test for any missing software dependencies using the ``BacterialTyper co
 identified the missing dependencies and minimum versions required you can either install them and 
 set them available within your ``$PATH`` or you can execute the ``BacterialTyper config`` 
 with ``install`` option.
+
+
+.. ##########################
+.. _third-party-requirement:
+.. ##########################
+
+Third party software
+--------------------
+
+Additionally, within the ``BacterialTyper MGE`` module there is an optional analysis
+that determines the pathogenic islands within the genome. The tool that we
+employ for this purpose is named IslandPath-DIMOB (IslandPath_ :cite:`Bertelli2017`) 
+and we distribute it along ``BacterialTyper``. See additional details in the API section for 
+:ref:`Third-party Software<third-party-soft>`.
+
+This third party software requires multiple ``perl`` modules and in turn, depend on many others,
+making the installation and distribution quite difficult. As we established this
+analysis as supplementary, so far, we would not take care of fulfilling the multiple
+requirements of this tool. This packages are listed in here:
+
+.. csv-table::
+   :header: "Package", "Version", "Type_module"
+   :file: ../../data/installation/perl_dependencies_IslandPath_summary.csv
+
+We encorage to install these modules using CPAN (https://www.cpan.org/) or any other ``perl`` package
+installer of your interest.
+
+To test the presence of these additional ``perl`` modules, you can also use the ``BacterialTyper config`` module.
+
+
 
 .. #### Include links
 .. include:: ../../links.inc

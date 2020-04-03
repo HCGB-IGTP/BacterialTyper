@@ -82,33 +82,42 @@ Sphinx_ documentation generation tool.
 
 .. attention::
 
-  * You will need a minimal working LaTeX distribution.
+  * You will need a minimal working ``LaTeX`` distribution.
 
-There are several extra requirements that are needed to build the documentation. 
+There are several extra ``python`` requirements that are needed to build the documentation. 
 They are listed in :file:`docs/config/doc-requirements.txt`, which is shown below:
 
 .. include:: ../../../config/doc-requirements.txt
    :literal:
 
 You will need a ``BacterialTyper`` (and dependencies) working distribution included in your
-```$PYTHONPATH`` (activate your virtual environment as mentioned :ref:`here<activate-env>`) and then 
-additionally install documentation requirements using pip.
+``$PYTHONPATH`` (activate your virtual environment as mentioned :ref:`here<activate-env>`) and then 
+additionally install documentation requirements using ``pip``.
 
 .. code-block:: sh
 
    pip install docs/config/doc-requirements.txt
+
+Also, there is a ``perl`` module required for the documentation generation:
+
+.. include:: ../../../config/perl_packages.txt
+   :literal:
+
+We encorage to install this module using CPAN (https://www.cpan.org/) or any other ``perl`` package
+installer of your interest.
+
 
 .. ###############################################
 .. _building-docs-guide:
 
 Building documentation
 ^^^^^^^^^^^^^^^^^^^^^^
-The documentation sources are found in the :file:`docs/` directory in the trunk.
-The configuration file for Sphinx is :file:`docs/conf.py`. It controls which
+The documentation sources are found in the :file:`docs/source` directory in the trunk.
+The configuration file for Sphinx is :file:`docs/source/conf.py`. It controls which
 directories Sphinx parses, how the docs are built, and how the extensions are
 used. 
 
-To build the documentation in html format, cd into :file:`docs/` and run:
+To build the documentation in html format, cd into :file:`docs/source/` and run:
 
 .. code-block:: sh
 
@@ -235,7 +244,7 @@ And it displays like:
 
 .. toctree:: 
    :hidden:
-   
+     
    example.rst
 
 .. include:: ./example.rst
