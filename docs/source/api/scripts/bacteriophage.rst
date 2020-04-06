@@ -1,6 +1,11 @@
 .. _bacteriophage:
 
 bacteriophage
-=============
-.. automodule:: BacterialTyper.scripts.bacteriophage
+========
+This script contains several functions. Here we show a graph representation of the different functions and relationships among them:
+
+.. image:: ../../images/python_graph/bacteriophage.png
+    :align: center
+
+.. automodule:: BacterialTyper.scripts.bacteriophage.py
     :members:

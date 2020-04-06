@@ -1,6 +1,11 @@
 .. _fastqc_caller:
 
 fastqc_caller
-=============
-.. automodule:: BacterialTyper.scripts.fastqc_caller
-   :members:
+========
+This script contains several functions. Here we show a graph representation of the different functions and relationships among them:
+
+.. image:: ../../images/python_graph/fastqc_caller.png
+    :align: center
+
+.. automodule:: BacterialTyper.scripts.fastqc_caller.py
+    :members:
