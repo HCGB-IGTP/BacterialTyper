@@ -17,4 +17,4 @@ Guidelines for developing the ``BacterialTyper`` project.
    developer_guidelines.rst
    ../data/data_index.rst
    documentation/documentation.rst
-    
+   working_with_git.rst

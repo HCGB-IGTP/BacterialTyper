@@ -1,6 +1,7 @@
 .. _example-doc:
 
 .. function:: hello_world
+   :noindex:
 
    Rename fasta sequences provided in file :file:`fasta_file` using id :file:`name`. 
    Save results in file :file:`new_fasta` provided.
