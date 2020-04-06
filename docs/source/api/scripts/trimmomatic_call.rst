@@ -7,5 +7,5 @@ This script contains several functions. Here we show a graph representation of t
 .. image:: ../../images/python_graph/trimmomatic_call.png
     :align: center
 
-.. automodule:: BacterialTyper.scripts.trimmomatic_call.py
-    :members:
+.. automodule:: BacterialTyper.scripts.trimmomatic_call
+    :members: echo     :undoc-members:

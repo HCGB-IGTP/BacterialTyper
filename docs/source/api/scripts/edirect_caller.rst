@@ -7,5 +7,5 @@ This script contains several functions. Here we show a graph representation of t
 .. image:: ../../images/python_graph/edirect_caller.png
     :align: center
 
-.. automodule:: BacterialTyper.scripts.edirect_caller.py
-    :members:
+.. automodule:: BacterialTyper.scripts.edirect_caller
+    :members: echo     :undoc-members:

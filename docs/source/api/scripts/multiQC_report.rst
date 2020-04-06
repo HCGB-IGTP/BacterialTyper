@@ -7,5 +7,5 @@ This script contains several functions. Here we show a graph representation of t
 .. image:: ../../images/python_graph/multiQC_report.png
     :align: center
 
-.. automodule:: BacterialTyper.scripts.multiQC_report.py
-    :members:
+.. automodule:: BacterialTyper.scripts.multiQC_report
+    :members: echo     :undoc-members:

@@ -7,5 +7,5 @@ This script contains several functions. Here we show a graph representation of t
 .. image:: ../../images/python_graph/database_generator.png
     :align: center
 
-.. automodule:: BacterialTyper.scripts.database_generator.py
-    :members:
+.. automodule:: BacterialTyper.scripts.database_generator
+    :members: echo     :undoc-members:

@@ -7,5 +7,5 @@ This script contains several functions. Here we show a graph representation of t
 .. image:: ../../images/python_graph/genomic_island.png
     :align: center
 
-.. automodule:: BacterialTyper.scripts.genomic_island.py
-    :members:
+.. automodule:: BacterialTyper.scripts.genomic_island
+    :members: echo     :undoc-members:

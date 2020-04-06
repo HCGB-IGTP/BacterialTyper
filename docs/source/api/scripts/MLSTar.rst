@@ -7,5 +7,5 @@ This script contains several functions. Here we show a graph representation of t
 .. image:: ../../images/python_graph/MLSTar.png
     :align: center
 
-.. automodule:: BacterialTyper.scripts.MLSTar.py
-    :members:
+.. automodule:: BacterialTyper.scripts.MLSTar
+    :members: echo     :undoc-members:

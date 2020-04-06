@@ -7,5 +7,5 @@ This script contains several functions. Here we show a graph representation of t
 .. image:: ../../images/python_graph/min_hash_caller.png
     :align: center
 
-.. automodule:: BacterialTyper.scripts.min_hash_caller.py
-    :members:
+.. automodule:: BacterialTyper.scripts.min_hash_caller
+    :members: echo     :undoc-members:

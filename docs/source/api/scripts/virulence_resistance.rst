@@ -7,5 +7,5 @@ This script contains several functions. Here we show a graph representation of t
 .. image:: ../../images/python_graph/virulence_resistance.png
     :align: center
 
-.. automodule:: BacterialTyper.scripts.virulence_resistance.py
-    :members:
+.. automodule:: BacterialTyper.scripts.virulence_resistance
+    :members: echo     :undoc-members:

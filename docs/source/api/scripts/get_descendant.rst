@@ -7,5 +7,5 @@ This script contains several functions. Here we show a graph representation of t
 .. image:: ../../images/python_graph/get_descendant.png
     :align: center
 
-.. automodule:: BacterialTyper.scripts.get_descendant.py
-    :members:
+.. automodule:: BacterialTyper.scripts.get_descendant
+    :members: echo     :undoc-members:

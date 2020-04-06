@@ -7,5 +7,5 @@ This script contains several functions. Here we show a graph representation of t
 .. image:: ../../images/python_graph/ariba_caller.png
     :align: center
 
-.. automodule:: BacterialTyper.scripts.ariba_caller.py
-    :members:
+.. automodule:: BacterialTyper.scripts.ariba_caller
+    :members: echo     :undoc-members:
