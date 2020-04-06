@@ -1,0 +1,61 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__sampleParser [label="BacterialTyper.scripts.sampleParser", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__sampleParser {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.sampleParser"];
+            BacterialTyper__scripts__sampleParser__get_fields [label="get_fields", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__sampleParser {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.sampleParser"];
+            BacterialTyper__scripts__sampleParser__get_files [label="get_files", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__sampleParser {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.sampleParser"];
+            BacterialTyper__scripts__sampleParser__gunzip_merge [label="gunzip_merge", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__sampleParser {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.sampleParser"];
+            BacterialTyper__scripts__sampleParser__help_format [label="help_format", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__sampleParser {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.sampleParser"];
+            BacterialTyper__scripts__sampleParser__help_options [label="help_options", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__sampleParser {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.sampleParser"];
+            BacterialTyper__scripts__sampleParser__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__sampleParser {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.sampleParser"];
+            BacterialTyper__scripts__sampleParser__one_file_per_sample [label="one_file_per_sample", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__sampleParser {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.sampleParser"];
+            BacterialTyper__scripts__sampleParser__select_other_samples [label="select_other_samples", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__sampleParser {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.sampleParser"];
+            BacterialTyper__scripts__sampleParser__select_samples [label="select_samples", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+        BacterialTyper__scripts__sampleParser -> BacterialTyper__scripts__sampleParser__main [style="solid", color="#000000"];
+        BacterialTyper__scripts__sampleParser__select_samples -> BacterialTyper__scripts__sampleParser__get_fields [style="solid", color="#000000"];
+        BacterialTyper__scripts__sampleParser__one_file_per_sample -> BacterialTyper__scripts__sampleParser__gunzip_merge [style="solid", color="#000000"];
+        BacterialTyper__scripts__sampleParser__get_files -> BacterialTyper__scripts__sampleParser__select_samples [style="solid", color="#000000"];
+        BacterialTyper__scripts__sampleParser__get_files -> BacterialTyper__scripts__sampleParser__select_other_samples [style="solid", color="#000000"];
+        BacterialTyper__scripts__sampleParser__main -> BacterialTyper__scripts__sampleParser__one_file_per_sample [style="solid", color="#000000"];
+        BacterialTyper__scripts__sampleParser__main -> BacterialTyper__scripts__sampleParser__select_samples [style="solid", color="#000000"];
+        BacterialTyper__scripts__sampleParser__main -> BacterialTyper__scripts__sampleParser__help_options [style="solid", color="#000000"];
+    }

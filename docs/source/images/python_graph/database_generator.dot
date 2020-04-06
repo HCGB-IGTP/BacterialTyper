@@ -1,0 +1,48 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__database_generator [label="BacterialTyper.scripts.database_generator", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__database_generator {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.database_generator"];
+            BacterialTyper__scripts__database_generator__NCBI_DB [label="NCBI_DB", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__database_generator {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.database_generator"];
+            BacterialTyper__scripts__database_generator__NCBI_descendant [label="NCBI_descendant", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__database_generator {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.database_generator"];
+            BacterialTyper__scripts__database_generator__NCBIdownload [label="NCBIdownload", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__database_generator {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.database_generator"];
+            BacterialTyper__scripts__database_generator__get_database [label="get_database", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__database_generator {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.database_generator"];
+            BacterialTyper__scripts__database_generator__get_files_download [label="get_files_download", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__database_generator {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.database_generator"];
+            BacterialTyper__scripts__database_generator__getdbs [label="getdbs", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__database_generator {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.database_generator"];
+            BacterialTyper__scripts__database_generator__update_db_data_file [label="update_db_data_file", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+        BacterialTyper__scripts__database_generator__NCBI_DB -> BacterialTyper__scripts__database_generator__NCBIdownload [style="solid", color="#000000"];
+        BacterialTyper__scripts__database_generator__NCBI_DB -> BacterialTyper__scripts__database_generator__get_database [style="solid", color="#000000"];
+        BacterialTyper__scripts__database_generator__NCBI_DB -> BacterialTyper__scripts__database_generator__update_db_data_file [style="solid", color="#000000"];
+        BacterialTyper__scripts__database_generator__NCBI_DB -> BacterialTyper__scripts__database_generator__getdbs [style="solid", color="#000000"];
+        BacterialTyper__scripts__database_generator__NCBIdownload -> BacterialTyper__scripts__database_generator__get_files_download [style="solid", color="#000000"];
+    }

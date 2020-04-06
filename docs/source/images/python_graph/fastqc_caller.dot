@@ -1,0 +1,109 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__fastqc_caller [label="BacterialTyper.scripts.fastqc_caller", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__fastqc_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller"];
+            BacterialTyper__scripts__fastqc_caller__call_fastqc [label="call_fastqc", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__fastqc_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller"];
+            BacterialTyper__scripts__fastqc_caller__fastqcObject [label="fastqcObject", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__fastqc_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller"];
+            BacterialTyper__scripts__fastqc_caller__generateStatisticsTable [label="generateStatisticsTable", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__fastqc_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller"];
+            BacterialTyper__scripts__fastqc_caller__generateTable [label="generateTable", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__fastqc_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller"];
+            BacterialTyper__scripts__fastqc_caller__get_files [label="get_files", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__fastqc_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller"];
+            BacterialTyper__scripts__fastqc_caller__help_options [label="help_options", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__fastqc_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller"];
+            BacterialTyper__scripts__fastqc_caller__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__fastqc_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller"];
+            BacterialTyper__scripts__fastqc_caller__parse_fastqcFile [label="parse_fastqcFile", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__fastqc_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller"];
+            BacterialTyper__scripts__fastqc_caller__run_module_fastqc [label="run_module_fastqc", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            subgraph cluster_BacterialTyper__scripts__fastqc_caller__fastqcObject {
+
+                graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller.fastqcObject"];
+                BacterialTyper__scripts__fastqc_caller__fastqcObject____init__ [label="__init__", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+            }
+            subgraph cluster_BacterialTyper__scripts__fastqc_caller__fastqcObject {
+
+                graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller.fastqcObject"];
+                BacterialTyper__scripts__fastqc_caller__fastqcObject____repr__ [label="__repr__", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+            }
+            subgraph cluster_BacterialTyper__scripts__fastqc_caller__fastqcObject {
+
+                graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller.fastqcObject"];
+                BacterialTyper__scripts__fastqc_caller__fastqcObject____str__ [label="__str__", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+            }
+            subgraph cluster_BacterialTyper__scripts__fastqc_caller__fastqcObject {
+
+                graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller.fastqcObject"];
+                BacterialTyper__scripts__fastqc_caller__fastqcObject__get_StatisticsFrame [label="get_StatisticsFrame", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+            }
+            subgraph cluster_BacterialTyper__scripts__fastqc_caller__fastqcObject {
+
+                graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller.fastqcObject"];
+                BacterialTyper__scripts__fastqc_caller__fastqcObject__get_StatusFrame [label="get_StatusFrame", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+            }
+            subgraph cluster_BacterialTyper__scripts__fastqc_caller__fastqcObject {
+
+                graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller.fastqcObject"];
+                BacterialTyper__scripts__fastqc_caller__fastqcObject__get_sample [label="get_sample", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+            }
+            subgraph cluster_BacterialTyper__scripts__fastqc_caller__fastqcObject {
+
+                graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller.fastqcObject"];
+                BacterialTyper__scripts__fastqc_caller__fastqcObject__print_header [label="print_header", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+            }
+            subgraph cluster_BacterialTyper__scripts__fastqc_caller__fastqcObject {
+
+                graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller.fastqcObject"];
+                BacterialTyper__scripts__fastqc_caller__fastqcObject__set_StatisticsFrame [label="set_StatisticsFrame", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+            }
+            subgraph cluster_BacterialTyper__scripts__fastqc_caller__fastqcObject {
+
+                graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller.fastqcObject"];
+                BacterialTyper__scripts__fastqc_caller__fastqcObject__set_StatusFrame [label="set_StatusFrame", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+            }
+            subgraph cluster_BacterialTyper__scripts__fastqc_caller__fastqcObject {
+
+                graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.fastqc_caller.fastqcObject"];
+                BacterialTyper__scripts__fastqc_caller__fastqcObject__set_sample [label="set_sample", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+            }
+        }
+    }
+        BacterialTyper__scripts__fastqc_caller -> BacterialTyper__scripts__fastqc_caller__main [style="solid", color="#000000"];
+        BacterialTyper__scripts__fastqc_caller__run_module_fastqc -> BacterialTyper__scripts__fastqc_caller__call_fastqc [style="solid", color="#000000"];
+        BacterialTyper__scripts__fastqc_caller__main -> BacterialTyper__scripts__fastqc_caller__parse_fastqcFile [style="solid", color="#000000"];
+        BacterialTyper__scripts__fastqc_caller__main -> BacterialTyper__scripts__fastqc_caller__help_options [style="solid", color="#000000"];
+        BacterialTyper__scripts__fastqc_caller__main -> BacterialTyper__scripts__fastqc_caller__get_files [style="solid", color="#000000"];
+        BacterialTyper__scripts__fastqc_caller__main -> BacterialTyper__scripts__fastqc_caller__call_fastqc [style="solid", color="#000000"];
+    }

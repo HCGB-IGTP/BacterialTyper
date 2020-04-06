@@ -1,0 +1,51 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__bacteriophage [label="BacterialTyper.scripts.bacteriophage", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__bacteriophage {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
+            BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets [label="get_list_PhiSpy_trainingSets", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__bacteriophage {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
+            BacterialTyper__scripts__bacteriophage__help_PhiSpy [label="help_PhiSpy", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__bacteriophage {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
+            BacterialTyper__scripts__bacteriophage__help_options [label="help_options", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__bacteriophage {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
+            BacterialTyper__scripts__bacteriophage__ident_bacteriophage [label="ident_bacteriophage", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__bacteriophage {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
+            BacterialTyper__scripts__bacteriophage__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__bacteriophage {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
+            BacterialTyper__scripts__bacteriophage__print_list_modified [label="print_list_modified", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__bacteriophage {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
+            BacterialTyper__scripts__bacteriophage__results_PhiSpy [label="results_PhiSpy", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+        BacterialTyper__scripts__bacteriophage -> BacterialTyper__scripts__bacteriophage__main [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__ident_bacteriophage -> BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__print_list_modified -> BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__help_PhiSpy -> BacterialTyper__scripts__bacteriophage__print_list_modified [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__help_options -> BacterialTyper__scripts__bacteriophage__print_list_modified [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__main -> BacterialTyper__scripts__bacteriophage__results_PhiSpy [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__main -> BacterialTyper__scripts__bacteriophage__help_options [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__main -> BacterialTyper__scripts__bacteriophage__ident_bacteriophage [style="solid", color="#000000"];
+    }

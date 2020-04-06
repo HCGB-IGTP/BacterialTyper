@@ -1,0 +1,68 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__BUSCO_caller [label="BacterialTyper.scripts.BUSCO_caller", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__BUSCO_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.BUSCO_caller"];
+            BacterialTyper__scripts__BUSCO_caller__BUSCO_check_dataset [label="BUSCO_check_dataset", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__BUSCO_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.BUSCO_caller"];
+            BacterialTyper__scripts__BUSCO_caller__BUSCO_download [label="BUSCO_download", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__BUSCO_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.BUSCO_caller"];
+            BacterialTyper__scripts__BUSCO_caller__BUSCO_plot [label="BUSCO_plot", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__BUSCO_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.BUSCO_caller"];
+            BacterialTyper__scripts__BUSCO_caller__BUSCO_retrieve_sets [label="BUSCO_retrieve_sets", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__BUSCO_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.BUSCO_caller"];
+            BacterialTyper__scripts__BUSCO_caller__BUSCO_run [label="BUSCO_run", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__BUSCO_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.BUSCO_caller"];
+            BacterialTyper__scripts__BUSCO_caller__BUSCO_stats [label="BUSCO_stats", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__BUSCO_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.BUSCO_caller"];
+            BacterialTyper__scripts__BUSCO_caller__busco_datasets [label="busco_datasets", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__BUSCO_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.BUSCO_caller"];
+            BacterialTyper__scripts__BUSCO_caller__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__BUSCO_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.BUSCO_caller"];
+            BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO [label="print_available_BUSCO", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__BUSCO_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.BUSCO_caller"];
+            BacterialTyper__scripts__BUSCO_caller__print_help_BUSCO [label="print_help_BUSCO", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+        BacterialTyper__scripts__BUSCO_caller -> BacterialTyper__scripts__BUSCO_caller__main [style="solid", color="#000000"];
+        BacterialTyper__scripts__BUSCO_caller__print_help_BUSCO -> BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO [style="solid", color="#000000"];
+        BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO -> BacterialTyper__scripts__BUSCO_caller__busco_datasets [style="solid", color="#000000"];
+        BacterialTyper__scripts__BUSCO_caller__BUSCO_download -> BacterialTyper__scripts__BUSCO_caller__BUSCO_download [style="solid", color="#000000"];
+        BacterialTyper__scripts__BUSCO_caller__BUSCO_download -> BacterialTyper__scripts__BUSCO_caller__BUSCO_check_dataset [style="solid", color="#000000"];
+        BacterialTyper__scripts__BUSCO_caller__BUSCO_retrieve_sets -> BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO [style="solid", color="#000000"];
+        BacterialTyper__scripts__BUSCO_caller__BUSCO_retrieve_sets -> BacterialTyper__scripts__BUSCO_caller__BUSCO_download [style="solid", color="#000000"];
+        BacterialTyper__scripts__BUSCO_caller__BUSCO_retrieve_sets -> BacterialTyper__scripts__BUSCO_caller__busco_datasets [style="solid", color="#000000"];
+        BacterialTyper__scripts__BUSCO_caller__main -> BacterialTyper__scripts__BUSCO_caller__print_help_BUSCO [style="solid", color="#000000"];
+        BacterialTyper__scripts__BUSCO_caller__main -> BacterialTyper__scripts__BUSCO_caller__BUSCO_stats [style="solid", color="#000000"];
+    }

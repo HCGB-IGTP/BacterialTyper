@@ -1,0 +1,37 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__trimmomatic_call [label="BacterialTyper.scripts.trimmomatic_call", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__trimmomatic_call {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.trimmomatic_call"];
+            BacterialTyper__scripts__trimmomatic_call__help_options [label="help_options", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__trimmomatic_call {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.trimmomatic_call"];
+            BacterialTyper__scripts__trimmomatic_call__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__trimmomatic_call {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.trimmomatic_call"];
+            BacterialTyper__scripts__trimmomatic_call__print_help_adapters [label="print_help_adapters", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__trimmomatic_call {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.trimmomatic_call"];
+            BacterialTyper__scripts__trimmomatic_call__trimmo_call [label="trimmo_call", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__trimmomatic_call {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.trimmomatic_call"];
+            BacterialTyper__scripts__trimmomatic_call__trimmo_module [label="trimmo_module", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+        BacterialTyper__scripts__trimmomatic_call -> BacterialTyper__scripts__trimmomatic_call__main [style="solid", color="#000000"];
+        BacterialTyper__scripts__trimmomatic_call__trimmo_module -> BacterialTyper__scripts__trimmomatic_call__trimmo_call [style="solid", color="#000000"];
+        BacterialTyper__scripts__trimmomatic_call__main -> BacterialTyper__scripts__trimmomatic_call__trimmo_call [style="solid", color="#000000"];
+        BacterialTyper__scripts__trimmomatic_call__main -> BacterialTyper__scripts__trimmomatic_call__help_options [style="solid", color="#000000"];
+    }

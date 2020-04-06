@@ -1,0 +1,92 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__ariba_caller [label="BacterialTyper.scripts.ariba_caller", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__ariba_expandflag [label="ariba_expandflag", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__ariba_getref [label="ariba_getref", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__ariba_prepareref [label="ariba_prepareref", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__ariba_pubmlstget [label="ariba_pubmlstget", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__ariba_run [label="ariba_run", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__ariba_summary [label="ariba_summary", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__ariba_summary_all [label="ariba_summary_all", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__check_db_indexed [label="check_db_indexed", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__download_ariba_databases [label="download_ariba_databases", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__fix_ariba_summary [label="fix_ariba_summary", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__fix_phangando_tree [label="fix_phangando_tree", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__get_ARIBA_dbs [label="get_ARIBA_dbs", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__help_ARIBA [label="help_ARIBA", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__help_options [label="help_options", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__ariba_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.ariba_caller"];
+            BacterialTyper__scripts__ariba_caller__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+        BacterialTyper__scripts__ariba_caller -> BacterialTyper__scripts__ariba_caller__main [style="solid", color="#000000"];
+        BacterialTyper__scripts__ariba_caller__download_ariba_databases -> BacterialTyper__scripts__ariba_caller__get_ARIBA_dbs [style="solid", color="#000000"];
+        BacterialTyper__scripts__ariba_caller__download_ariba_databases -> BacterialTyper__scripts__ariba_caller__ariba_getref [style="solid", color="#000000"];
+        BacterialTyper__scripts__ariba_caller__ariba_getref -> BacterialTyper__scripts__ariba_caller__ariba_prepareref [style="solid", color="#000000"];
+        BacterialTyper__scripts__ariba_caller__ariba_summary_all -> BacterialTyper__scripts__ariba_caller__ariba_summary [style="solid", color="#000000"];
+        BacterialTyper__scripts__ariba_caller__ariba_summary_all -> BacterialTyper__scripts__ariba_caller__fix_phangando_tree [style="solid", color="#000000"];
+        BacterialTyper__scripts__ariba_caller__ariba_summary_all -> BacterialTyper__scripts__ariba_caller__fix_ariba_summary [style="solid", color="#000000"];
+        BacterialTyper__scripts__ariba_caller__main -> BacterialTyper__scripts__ariba_caller__help_options [style="solid", color="#000000"];
+        BacterialTyper__scripts__ariba_caller__main -> BacterialTyper__scripts__ariba_caller__help_ARIBA [style="solid", color="#000000"];
+    }

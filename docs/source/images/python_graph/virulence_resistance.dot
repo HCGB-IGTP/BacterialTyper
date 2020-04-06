@@ -1,0 +1,86 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__virulence_resistance [label="BacterialTyper.scripts.virulence_resistance", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__check_VFDB [label="check_VFDB", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__check_results [label="check_results", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__download_VFDB_files [label="download_VFDB_files", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__found_results [label="found_results", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__get_id [label="get_id", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__help_options [label="help_options", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__identified_results [label="identified_results", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__parse_card [label="parse_card", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__parse_results [label="parse_results", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__parse_vfdb [label="parse_vfdb", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__results_parser [label="results_parser", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__virulence_resistance {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.virulence_resistance"];
+            BacterialTyper__scripts__virulence_resistance__subsetting_species [label="subsetting_species", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+        BacterialTyper__scripts__virulence_resistance -> BacterialTyper__scripts__virulence_resistance__main [style="solid", color="#000000"];
+        BacterialTyper__scripts__virulence_resistance__parse_vfdb -> BacterialTyper__scripts__virulence_resistance__identified_results [style="solid", color="#000000"];
+        BacterialTyper__scripts__virulence_resistance__parse_vfdb -> BacterialTyper__scripts__virulence_resistance__found_results [style="solid", color="#000000"];
+        BacterialTyper__scripts__virulence_resistance__parse_card -> BacterialTyper__scripts__virulence_resistance__identified_results [style="solid", color="#000000"];
+        BacterialTyper__scripts__virulence_resistance__parse_card -> BacterialTyper__scripts__virulence_resistance__found_results [style="solid", color="#000000"];
+        BacterialTyper__scripts__virulence_resistance__found_results -> BacterialTyper__scripts__virulence_resistance__get_id [style="solid", color="#000000"];
+        BacterialTyper__scripts__virulence_resistance__identified_results -> BacterialTyper__scripts__virulence_resistance__get_id [style="solid", color="#000000"];
+        BacterialTyper__scripts__virulence_resistance__check_results -> BacterialTyper__scripts__virulence_resistance__results_parser [style="solid", color="#000000"];
+        BacterialTyper__scripts__virulence_resistance__results_parser -> BacterialTyper__scripts__virulence_resistance__parse_vfdb [style="solid", color="#000000"];
+        BacterialTyper__scripts__virulence_resistance__results_parser -> BacterialTyper__scripts__virulence_resistance__parse_card [style="solid", color="#000000"];
+        BacterialTyper__scripts__virulence_resistance__results_parser -> BacterialTyper__scripts__virulence_resistance__parse_results [style="solid", color="#000000"];
+        BacterialTyper__scripts__virulence_resistance__check_VFDB -> BacterialTyper__scripts__virulence_resistance__download_VFDB_files [style="solid", color="#000000"];
+        BacterialTyper__scripts__virulence_resistance__main -> BacterialTyper__scripts__virulence_resistance__help_options [style="solid", color="#000000"];
+    }

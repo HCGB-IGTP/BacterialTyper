@@ -1,0 +1,37 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__annotation [label="BacterialTyper.scripts.annotation", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__annotation {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.annotation"];
+            BacterialTyper__scripts__annotation__help_options [label="help_options", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__annotation {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.annotation"];
+            BacterialTyper__scripts__annotation__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__annotation {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.annotation"];
+            BacterialTyper__scripts__annotation__module_call [label="module_call", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__annotation {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.annotation"];
+            BacterialTyper__scripts__annotation__print_list_prokka [label="print_list_prokka", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__annotation {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.annotation"];
+            BacterialTyper__scripts__annotation__prokka_call [label="prokka_call", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+        BacterialTyper__scripts__annotation -> BacterialTyper__scripts__annotation__main [style="solid", color="#000000"];
+        BacterialTyper__scripts__annotation__module_call -> BacterialTyper__scripts__annotation__prokka_call [style="solid", color="#000000"];
+        BacterialTyper__scripts__annotation__main -> BacterialTyper__scripts__annotation__prokka_call [style="solid", color="#000000"];
+        BacterialTyper__scripts__annotation__main -> BacterialTyper__scripts__annotation__help_options [style="solid", color="#000000"];
+    }

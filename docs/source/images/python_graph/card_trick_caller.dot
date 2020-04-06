@@ -1,0 +1,23 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__card_trick_caller [label="BacterialTyper.scripts.card_trick_caller", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__card_trick_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.card_trick_caller"];
+            BacterialTyper__scripts__card_trick_caller__dead_code [label="dead_code", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__card_trick_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.card_trick_caller"];
+            BacterialTyper__scripts__card_trick_caller__get_info_CARD [label="get_info_CARD", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__card_trick_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.card_trick_caller"];
+            BacterialTyper__scripts__card_trick_caller__prepare_card_data [label="prepare_card_data", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+    }

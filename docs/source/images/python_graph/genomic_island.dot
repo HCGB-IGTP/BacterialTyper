@@ -1,0 +1,18 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__genomic_island [label="BacterialTyper.scripts.genomic_island", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__genomic_island {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.genomic_island"];
+            BacterialTyper__scripts__genomic_island__GI_module [label="GI_module", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__genomic_island {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.genomic_island"];
+            BacterialTyper__scripts__genomic_island__call_Dimob [label="call_Dimob", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+    }

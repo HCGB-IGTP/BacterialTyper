@@ -1,0 +1,35 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__edirect_caller [label="BacterialTyper.scripts.edirect_caller", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__edirect_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.edirect_caller"];
+            BacterialTyper__scripts__edirect_caller__docsum_call [label="docsum_call", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__edirect_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.edirect_caller"];
+            BacterialTyper__scripts__edirect_caller__generate_docsum_call [label="generate_docsum_call", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__edirect_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.edirect_caller"];
+            BacterialTyper__scripts__edirect_caller__generate_xtract_call [label="generate_xtract_call", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__edirect_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.edirect_caller"];
+            BacterialTyper__scripts__edirect_caller__help_edirect [label="help_edirect", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__edirect_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.edirect_caller"];
+            BacterialTyper__scripts__edirect_caller__xtract_call [label="xtract_call", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+        BacterialTyper__scripts__edirect_caller__generate_docsum_call -> BacterialTyper__scripts__edirect_caller__docsum_call [style="solid", color="#000000"];
+        BacterialTyper__scripts__edirect_caller__generate_xtract_call -> BacterialTyper__scripts__edirect_caller__xtract_call [style="solid", color="#000000"];
+    }

@@ -1,0 +1,18 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__get_descendant [label="BacterialTyper.scripts.get_descendant", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__get_descendant {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.get_descendant"];
+            BacterialTyper__scripts__get_descendant__NCBItaxa_db [label="NCBItaxa_db", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__get_descendant {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.get_descendant"];
+            BacterialTyper__scripts__get_descendant__get_descendant_taxid [label="get_descendant_taxid", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+    }

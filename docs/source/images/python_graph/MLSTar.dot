@@ -1,0 +1,66 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__MLSTar [label="BacterialTyper.scripts.MLSTar", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__MLSTar {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
+            BacterialTyper__scripts__MLSTar__download_PubMLST [label="download_PubMLST", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__MLSTar {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
+            BacterialTyper__scripts__MLSTar__getPUBMLST [label="getPUBMLST", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__MLSTar {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
+            BacterialTyper__scripts__MLSTar__get_MLSTar_species [label="get_MLSTar_species", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__MLSTar {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
+            BacterialTyper__scripts__MLSTar__help_MLSTar [label="help_MLSTar", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__MLSTar {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
+            BacterialTyper__scripts__MLSTar__help_options [label="help_options", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__MLSTar {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
+            BacterialTyper__scripts__MLSTar__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__MLSTar {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
+            BacterialTyper__scripts__MLSTar__plot_MLST [label="plot_MLST", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__MLSTar {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
+            BacterialTyper__scripts__MLSTar__run_MLSTar [label="run_MLSTar", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__MLSTar {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
+            BacterialTyper__scripts__MLSTar__run_doMLST [label="run_doMLST", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__MLSTar {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
+            BacterialTyper__scripts__MLSTar__update_MLSTar_profile_alleles [label="update_MLSTar_profile_alleles", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+        BacterialTyper__scripts__MLSTar -> BacterialTyper__scripts__MLSTar__main [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__help_MLSTar -> BacterialTyper__scripts__MLSTar__get_MLSTar_species [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__run_MLSTar -> BacterialTyper__scripts__MLSTar__run_doMLST [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__run_MLSTar -> BacterialTyper__scripts__MLSTar__download_PubMLST [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__plot_MLST [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__help_options [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__getPUBMLST [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__run_MLSTar [style="solid", color="#000000"];
+    }

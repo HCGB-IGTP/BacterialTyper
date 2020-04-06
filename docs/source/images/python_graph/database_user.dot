@@ -1,0 +1,31 @@
+digraph G {
+    graph [rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        BacterialTyper__scripts__database_user [label="BacterialTyper.scripts.database_user", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        subgraph cluster_BacterialTyper__scripts__database_user {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.database_user"];
+            BacterialTyper__scripts__database_user__get_userData_files [label="get_userData_files", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__database_user {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.database_user"];
+            BacterialTyper__scripts__database_user__get_userData_info [label="get_userData_info", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__database_user {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.database_user"];
+            BacterialTyper__scripts__database_user__update_database_user_data [label="update_database_user_data", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__database_user {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.database_user"];
+            BacterialTyper__scripts__database_user__update_sample [label="update_sample", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+    }
+        BacterialTyper__scripts__database_user__update_database_user_data -> BacterialTyper__scripts__database_user__get_userData_files [style="solid", color="#000000"];
+        BacterialTyper__scripts__database_user__update_database_user_data -> BacterialTyper__scripts__database_user__update_sample [style="solid", color="#000000"];
+        BacterialTyper__scripts__database_user__update_database_user_data -> BacterialTyper__scripts__database_user__get_userData_info [style="solid", color="#000000"];
+    }
