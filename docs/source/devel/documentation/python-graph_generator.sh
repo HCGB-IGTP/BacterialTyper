@@ -9,6 +9,6 @@ do
 	echo "##########";
 
 	pyan --grouped -e --no-define --colored --dot ../../../../../BacterialTyper/scripts/$i > $name.dot; 
-	dot -Tpng -Gnewrank=true $name.dot > $name.png;
+	dot -Tsvg -Gnewrank=true $name.dot > $name.svg;
 done
 
