@@ -49,3 +49,4 @@
 .. _HCGB: http://www.germanstrias.org/technology-services/genomica-bioinformatica/
 .. _`BacterialTyper github`: https://github.com/JFsanchezherrero/BacterialTyper
 
+
