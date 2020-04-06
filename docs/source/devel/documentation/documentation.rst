@@ -106,6 +106,20 @@ Also, there is a ``perl`` module required for the documentation generation:
 We encorage to install this module using CPAN (https://www.cpan.org/) or any other ``perl`` package
 installer of your interest.
 
+Finally, in order to generate the ``python`` graph dependency images, the tool ``graphviz`` and 
+an specific ``python`` module is required.
+
+To install ``graphviz`` type:
+
+.. code-block:: sh
+
+   sudo apt install graphviz
+   
+The ``python`` module needs to be installed using ``pip`` but from ``github``. Type:
+
+.. code-block:: sh
+
+   pip install git+https://github.com/ttylec/pyan
 
 .. ###############################################
 .. _building-docs-guide:
@@ -273,12 +287,23 @@ Using a shell loop we create an ``.rst`` file for each module and script:
 .. literalinclude:: ./modules_api-docstrings.sh
    :language: sh
   
-
 - scripts:
 
 .. literalinclude:: ./scripts_api-docstrings.sh
    :language: sh
-  
+
+Python Graph images
+^^^^^^^^^^^^^^^^^^^
+
+Additionally, for each script or module of interest, we generate a graph representation 
+of the different functions and relationships with other modules. Images are stored in 
+:file:`docs/source/images/python_graph`. We also include automatically these images generated 
+for the corresponding ``.rst`` file using the previous shell script.
+
+To generate the ``python`` graph image, we would employ the ``python`` module ``pyan`` 
+and the ``graphviz`` tool. 
+
+
 
 .. ## Include linksReferences
 .. include:: ../../links.inc
