@@ -8,4 +8,5 @@ This script contains several functions. Here we show a graph representation of t
     :align: center
 
 .. automodule:: BacterialTyper.scripts.sampleParser
-    :members: echo     :undoc-members:
+    :members:
+    :undoc-members:
