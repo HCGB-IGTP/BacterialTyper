@@ -4,7 +4,7 @@ sampleParser
 ==========================================
 This script contains several functions. Here we show a graph representation of the different functions and relationships among them:
 
-.. image:: ../../images/python_graph/sampleParser.png
+.. image:: ../../images/python_graph/sampleParser.svg
     :align: center
 
 .. automodule:: BacterialTyper.scripts.sampleParser
