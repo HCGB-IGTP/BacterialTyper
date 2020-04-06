@@ -1,7 +1,7 @@
 .. _multiQC_report:
 
 multiQC_report
-========
+==========================================
 This script contains several functions. Here we show a graph representation of the different functions and relationships among them:
 
 .. image:: ../../images/python_graph/multiQC_report.png
@@ -10,3 +10,5 @@ This script contains several functions. Here we show a graph representation of t
 .. automodule:: BacterialTyper.scripts.multiQC_report
     :members:
     :undoc-members:
+
+.. include:: ../../links.inc

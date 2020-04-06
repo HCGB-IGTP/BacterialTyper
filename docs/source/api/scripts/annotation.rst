@@ -1,7 +1,7 @@
 .. _annotation:
 
 annotation
-========
+==========================================
 This script contains several functions. Here we show a graph representation of the different functions and relationships among them:
 
 .. image:: ../../images/python_graph/annotation.png
@@ -10,3 +10,5 @@ This script contains several functions. Here we show a graph representation of t
 .. automodule:: BacterialTyper.scripts.annotation
     :members:
     :undoc-members:
+
+.. include:: ../../links.inc
