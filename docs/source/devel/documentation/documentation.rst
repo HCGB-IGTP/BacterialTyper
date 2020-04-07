@@ -115,7 +115,8 @@ To install ``graphviz`` type:
 
    sudo apt install graphviz
    
-The ``python`` module needs to be installed using ``pip`` but from ``github``. Type:
+The ``python`` module ``pyan`` needs to be installed using ``pip`` from ``github``. 
+See https://github.com/ttylec/pyan for additional details. Type:
 
 .. code-block:: sh
 
@@ -296,13 +297,13 @@ Python Graph images
 ^^^^^^^^^^^^^^^^^^^
 
 Additionally, for each script or module of interest, we generate a graph representation 
-of the different functions and relationships with other modules. Images are stored in 
-:file:`docs/source/images/python_graph`. We also include automatically these images generated 
-for the corresponding ``.rst`` file using the previous shell script.
+of the different functions and relationships with other modules. 
+
+Images are stored in  :file:`docs/source/images/python_graph`. We also include automatically 
+these images generated for the corresponding ``.rst`` file using the previous shell script.
 
 To generate the ``python`` graph image, we would employ the ``python`` module ``pyan`` 
-and the ``graphviz`` tool. 
-
+and the ``graphviz`` tool. See https://github.com/ttylec/pyan for additional details.
 
 
 .. ## Include linksReferences
