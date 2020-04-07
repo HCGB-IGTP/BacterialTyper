@@ -1,66 +1,254 @@
 digraph G {
-    graph [rankdir=TB, clusterrank="local"];
+    graph [spilines=ortho, rankdir=TB, clusterrank="local"];
     subgraph cluster_G {
 
         graph [style="filled,rounded",fillcolor="#80808018", label=""];
-        BacterialTyper__scripts__MLSTar [label="BacterialTyper.scripts.MLSTar", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
-        subgraph cluster_BacterialTyper__scripts__MLSTar {
+        subgraph cluster_BacterialTyper__data__data_files {
 
-            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
-            BacterialTyper__scripts__MLSTar__download_PubMLST [label="download_PubMLST", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.data.data_files"];
+            BacterialTyper__data__data_files__data_list [label="data_list", style="filled", fillcolor="#ffa365b2", fontcolor="#000000", group="3"];
+        }
+        subgraph cluster_BacterialTyper__other_tools__tools {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.other_tools.tools"];
+            BacterialTyper__other_tools__tools__R_scripts [label="R_scripts", style="filled", fillcolor="#65ffe0b2", fontcolor="#000000", group="21"];
+        }
+        subgraph cluster_BacterialTyper__other_tools__tools {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.other_tools.tools"];
         }
         subgraph cluster_BacterialTyper__scripts__MLSTar {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
-            BacterialTyper__scripts__MLSTar__getPUBMLST [label="getPUBMLST", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__MLSTar__download_PubMLST [label="download_PubMLST", style="filled", fillcolor="#65f4ffb2", fontcolor="#000000", group="23"];
         }
         subgraph cluster_BacterialTyper__scripts__MLSTar {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
-            BacterialTyper__scripts__MLSTar__get_MLSTar_species [label="get_MLSTar_species", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__MLSTar__getPUBMLST [label="getPUBMLST", style="filled", fillcolor="#65f4ffb2", fontcolor="#000000", group="23"];
         }
         subgraph cluster_BacterialTyper__scripts__MLSTar {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
-            BacterialTyper__scripts__MLSTar__help_MLSTar [label="help_MLSTar", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__MLSTar__get_MLSTar_species [label="get_MLSTar_species", style="filled", fillcolor="#65f4ffb2", fontcolor="#000000", group="23"];
         }
         subgraph cluster_BacterialTyper__scripts__MLSTar {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
-            BacterialTyper__scripts__MLSTar__help_options [label="help_options", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__MLSTar__help_MLSTar [label="help_MLSTar", style="filled", fillcolor="#65f4ffb2", fontcolor="#000000", group="23"];
         }
         subgraph cluster_BacterialTyper__scripts__MLSTar {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
-            BacterialTyper__scripts__MLSTar__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__MLSTar__help_options [label="help_options", style="filled", fillcolor="#65f4ffb2", fontcolor="#000000", group="23"];
         }
         subgraph cluster_BacterialTyper__scripts__MLSTar {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
-            BacterialTyper__scripts__MLSTar__plot_MLST [label="plot_MLST", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__MLSTar__main [label="main", style="filled", fillcolor="#65f4ffb2", fontcolor="#000000", group="23"];
         }
         subgraph cluster_BacterialTyper__scripts__MLSTar {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
-            BacterialTyper__scripts__MLSTar__run_MLSTar [label="run_MLSTar", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__MLSTar__plot_MLST [label="plot_MLST", style="filled", fillcolor="#65f4ffb2", fontcolor="#000000", group="23"];
         }
         subgraph cluster_BacterialTyper__scripts__MLSTar {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
-            BacterialTyper__scripts__MLSTar__run_doMLST [label="run_doMLST", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__MLSTar__run_MLSTar [label="run_MLSTar", style="filled", fillcolor="#65f4ffb2", fontcolor="#000000", group="23"];
         }
         subgraph cluster_BacterialTyper__scripts__MLSTar {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
-            BacterialTyper__scripts__MLSTar__update_MLSTar_profile_alleles [label="update_MLSTar_profile_alleles", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__MLSTar__run_doMLST [label="run_doMLST", style="filled", fillcolor="#65f4ffb2", fontcolor="#000000", group="23"];
+        }
+        subgraph cluster_BacterialTyper__scripts__MLSTar {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.MLSTar"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__create_folder [label="create_folder", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__create_subfolder [label="create_subfolder", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__print_time_stamp [label="print_time_stamp", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__read_time_stamp [label="read_time_stamp", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__system_call [label="system_call", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
         }
     }
-        BacterialTyper__scripts__MLSTar -> BacterialTyper__scripts__MLSTar__main [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__help_MLSTar -> BacterialTyper__scripts__MLSTar__get_MLSTar_species [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__run_MLSTar -> BacterialTyper__scripts__MLSTar__run_doMLST [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__run_MLSTar -> BacterialTyper__scripts__functions__create_subfolder [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__run_MLSTar -> BacterialTyper__scripts__MLSTar__download_PubMLST [style="solid", color="#000000"];
-        BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__plot_MLST [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__run_doMLST -> BacterialTyper__other_tools__tools__R_scripts [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__run_doMLST -> BacterialTyper__scripts__functions__read_time_stamp [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__run_doMLST -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__run_doMLST -> BacterialTyper__scripts__functions__print_time_stamp [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__get_MLSTar_species -> BacterialTyper__data__data_files__data_list [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__getPUBMLST -> BacterialTyper__other_tools__tools__R_scripts [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__getPUBMLST -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__plot_MLST -> BacterialTyper__other_tools__tools__R_scripts [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__plot_MLST -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__download_PubMLST -> BacterialTyper__other_tools__tools__R_scripts [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__download_PubMLST -> BacterialTyper__scripts__functions__read_time_stamp [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__download_PubMLST -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__download_PubMLST -> BacterialTyper__scripts__functions__print_time_stamp [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__help_options [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__getPUBMLST [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__run_MLSTar [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__functions__create_subfolder [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__functions__create_folder [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__plot_MLST [style="solid", color="#000000"];
     }

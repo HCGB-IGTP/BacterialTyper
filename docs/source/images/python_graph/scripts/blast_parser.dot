@@ -1,93 +1,104 @@
 digraph G {
-    graph [rankdir=TB, clusterrank="local"];
+    graph [spilines=ortho, rankdir=TB, clusterrank="local"];
     subgraph cluster_G {
 
         graph [style="filled,rounded",fillcolor="#80808018", label=""];
-        BacterialTyper__scripts__blast_parser [label="BacterialTyper.scripts.blast_parser", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
         subgraph cluster_BacterialTyper__scripts__blast_parser {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser"];
-            BacterialTyper__scripts__blast_parser__BlastRecord [label="BlastRecord", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__blast_parser__BlastRecord [label="BlastRecord", style="filled", fillcolor="#65a3ffb2", fontcolor="#000000", group="27"];
         }
         subgraph cluster_BacterialTyper__scripts__blast_parser {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser"];
-            BacterialTyper__scripts__blast_parser__Hsp [label="Hsp", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__blast_parser__Hsp [label="Hsp", style="filled", fillcolor="#65a3ffb2", fontcolor="#000000", group="27"];
         }
         subgraph cluster_BacterialTyper__scripts__blast_parser {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser"];
-            BacterialTyper__scripts__blast_parser__parse [label="parse", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__blast_parser__parse [label="parse", style="filled", fillcolor="#65a3ffb2", fontcolor="#000000", group="27"];
             subgraph cluster_BacterialTyper__scripts__blast_parser__BlastRecord {
 
                 graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser.BlastRecord"];
-                BacterialTyper__scripts__blast_parser__BlastRecord____init__ [label="__init__", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+                BacterialTyper__scripts__blast_parser__BlastRecord____init__ [label="__init__", style="filled", fillcolor="#3284ffb2", fontcolor="#000000", group="27"];
             }
             subgraph cluster_BacterialTyper__scripts__blast_parser__BlastRecord {
 
                 graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser.BlastRecord"];
-                BacterialTyper__scripts__blast_parser__BlastRecord____str__ [label="__str__", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+                BacterialTyper__scripts__blast_parser__BlastRecord____str__ [label="__str__", style="filled", fillcolor="#3284ffb2", fontcolor="#000000", group="27"];
             }
             subgraph cluster_BacterialTyper__scripts__blast_parser__BlastRecord {
 
                 graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser.BlastRecord"];
-                BacterialTyper__scripts__blast_parser__BlastRecord___format [label="_format", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+                BacterialTyper__scripts__blast_parser__BlastRecord___format [label="_format", style="filled", fillcolor="#3284ffb2", fontcolor="#000000", group="27"];
             }
             subgraph cluster_BacterialTyper__scripts__blast_parser__BlastRecord {
 
                 graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser.BlastRecord"];
-                BacterialTyper__scripts__blast_parser__BlastRecord__best_hits [label="best_hits", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+                BacterialTyper__scripts__blast_parser__BlastRecord__best_hits [label="best_hits", style="filled", fillcolor="#3284ffb2", fontcolor="#000000", group="27"];
             }
             subgraph cluster_BacterialTyper__scripts__blast_parser__BlastRecord {
 
                 graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser.BlastRecord"];
-                BacterialTyper__scripts__blast_parser__BlastRecord__best_hsps [label="best_hsps", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+                BacterialTyper__scripts__blast_parser__BlastRecord__best_hsps [label="best_hsps", style="filled", fillcolor="#3284ffb2", fontcolor="#000000", group="27"];
             }
             subgraph cluster_BacterialTyper__scripts__blast_parser__BlastRecord {
 
                 graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser.BlastRecord"];
-                BacterialTyper__scripts__blast_parser__BlastRecord__best_hsps_except_query [label="best_hsps_except_query", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+                BacterialTyper__scripts__blast_parser__BlastRecord__best_hsps_except_query [label="best_hsps_except_query", style="filled", fillcolor="#3284ffb2", fontcolor="#000000", group="27"];
             }
             subgraph cluster_BacterialTyper__scripts__blast_parser__BlastRecord {
 
                 graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser.BlastRecord"];
-                BacterialTyper__scripts__blast_parser__BlastRecord__evalue_cutoff [label="evalue_cutoff", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+                BacterialTyper__scripts__blast_parser__BlastRecord__evalue_cutoff [label="evalue_cutoff", style="filled", fillcolor="#3284ffb2", fontcolor="#000000", group="27"];
             }
             subgraph cluster_BacterialTyper__scripts__blast_parser__BlastRecord {
 
                 graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser.BlastRecord"];
-                BacterialTyper__scripts__blast_parser__BlastRecord__format [label="format", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+                BacterialTyper__scripts__blast_parser__BlastRecord__format [label="format", style="filled", fillcolor="#3284ffb2", fontcolor="#000000", group="27"];
             }
             subgraph cluster_BacterialTyper__scripts__blast_parser__Hsp {
 
                 graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser.Hsp"];
-                BacterialTyper__scripts__blast_parser__Hsp____init__ [label="__init__", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+                BacterialTyper__scripts__blast_parser__Hsp____init__ [label="__init__", style="filled", fillcolor="#3284ffb2", fontcolor="#000000", group="27"];
             }
             subgraph cluster_BacterialTyper__scripts__blast_parser__Hsp {
 
                 graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser.Hsp"];
-                BacterialTyper__scripts__blast_parser__Hsp____str__ [label="__str__", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+                BacterialTyper__scripts__blast_parser__Hsp____str__ [label="__str__", style="filled", fillcolor="#3284ffb2", fontcolor="#000000", group="27"];
             }
             subgraph cluster_BacterialTyper__scripts__blast_parser__Hsp {
 
                 graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser.Hsp"];
-                BacterialTyper__scripts__blast_parser__Hsp___format [label="_format", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+                BacterialTyper__scripts__blast_parser__Hsp___format [label="_format", style="filled", fillcolor="#3284ffb2", fontcolor="#000000", group="27"];
             }
             subgraph cluster_BacterialTyper__scripts__blast_parser__Hsp {
 
                 graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.blast_parser.Hsp"];
-                BacterialTyper__scripts__blast_parser__Hsp__format [label="format", style="filled", fillcolor="#ff3232b2", fontcolor="#000000", group="0"];
+                BacterialTyper__scripts__blast_parser__Hsp__format [label="format", style="filled", fillcolor="#3284ffb2", fontcolor="#000000", group="27"];
             }
         }
     }
+        BacterialTyper__scripts__blast_parser__Hsp -> BacterialTyper__scripts__blast_parser__Hsp__format [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__blast_parser__Hsp -> BacterialTyper__scripts__blast_parser__Hsp___format [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__blast_parser__Hsp -> BacterialTyper__scripts__blast_parser__Hsp____init__ [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__blast_parser__Hsp -> BacterialTyper__scripts__blast_parser__Hsp____str__ [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__blast_parser__BlastRecord -> BacterialTyper__scripts__blast_parser__BlastRecord__evalue_cutoff [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__blast_parser__BlastRecord -> BacterialTyper__scripts__blast_parser__BlastRecord__best_hits [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__blast_parser__BlastRecord -> BacterialTyper__scripts__blast_parser__BlastRecord___format [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__blast_parser__BlastRecord -> BacterialTyper__scripts__blast_parser__BlastRecord__best_hsps [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__blast_parser__BlastRecord -> BacterialTyper__scripts__blast_parser__BlastRecord__format [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__blast_parser__BlastRecord -> BacterialTyper__scripts__blast_parser__BlastRecord____init__ [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__blast_parser__BlastRecord -> BacterialTyper__scripts__blast_parser__BlastRecord____str__ [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__blast_parser__BlastRecord -> BacterialTyper__scripts__blast_parser__BlastRecord__best_hsps_except_query [style="dashed", color="#ffffff00"];
         BacterialTyper__scripts__blast_parser__Hsp__format -> BacterialTyper__scripts__blast_parser__Hsp___format [style="solid", color="#000000"];
         BacterialTyper__scripts__blast_parser__BlastRecord___format -> BacterialTyper__scripts__blast_parser__BlastRecord___format [style="solid", color="#000000"];
         BacterialTyper__scripts__blast_parser__BlastRecord___format -> BacterialTyper__scripts__blast_parser__Hsp___format [style="solid", color="#000000"];
         BacterialTyper__scripts__blast_parser__BlastRecord__format -> BacterialTyper__scripts__blast_parser__Hsp__format [style="solid", color="#000000"];
         BacterialTyper__scripts__blast_parser__BlastRecord__format -> BacterialTyper__scripts__blast_parser__BlastRecord__format [style="solid", color="#000000"];
         BacterialTyper__scripts__blast_parser__BlastRecord____str__ -> BacterialTyper__scripts__blast_parser__BlastRecord__format [style="solid", color="#000000"];
+        BacterialTyper__scripts__blast_parser__parse -> BacterialTyper__scripts__blast_parser__Hsp [style="solid", color="#000000"];
         BacterialTyper__scripts__blast_parser__parse -> BacterialTyper__scripts__blast_parser__BlastRecord [style="solid", color="#000000"];
         BacterialTyper__scripts__blast_parser__parse -> BacterialTyper__scripts__blast_parser__Hsp____init__ [style="solid", color="#000000"];
         BacterialTyper__scripts__blast_parser__parse -> BacterialTyper__scripts__blast_parser__BlastRecord____init__ [style="solid", color="#000000"];
-        BacterialTyper__scripts__blast_parser__parse -> BacterialTyper__scripts__blast_parser__Hsp [style="solid", color="#000000"];
     }

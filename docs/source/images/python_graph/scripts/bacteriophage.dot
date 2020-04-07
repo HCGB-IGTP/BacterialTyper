@@ -1,51 +1,219 @@
 digraph G {
-    graph [rankdir=TB, clusterrank="local"];
+    graph [spilines=ortho, rankdir=TB, clusterrank="local"];
     subgraph cluster_G {
 
         graph [style="filled,rounded",fillcolor="#80808018", label=""];
-        BacterialTyper__scripts__bacteriophage [label="BacterialTyper.scripts.bacteriophage", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
         subgraph cluster_BacterialTyper__scripts__bacteriophage {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
-            BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets [label="get_list_PhiSpy_trainingSets", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets [label="get_list_PhiSpy_trainingSets", style="filled", fillcolor="#65b7ffb2", fontcolor="#000000", group="26"];
         }
         subgraph cluster_BacterialTyper__scripts__bacteriophage {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
-            BacterialTyper__scripts__bacteriophage__help_PhiSpy [label="help_PhiSpy", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__bacteriophage__help_PhiSpy [label="help_PhiSpy", style="filled", fillcolor="#65b7ffb2", fontcolor="#000000", group="26"];
         }
         subgraph cluster_BacterialTyper__scripts__bacteriophage {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
-            BacterialTyper__scripts__bacteriophage__help_options [label="help_options", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__bacteriophage__help_options [label="help_options", style="filled", fillcolor="#65b7ffb2", fontcolor="#000000", group="26"];
         }
         subgraph cluster_BacterialTyper__scripts__bacteriophage {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
-            BacterialTyper__scripts__bacteriophage__ident_bacteriophage [label="ident_bacteriophage", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__bacteriophage__ident_bacteriophage [label="ident_bacteriophage", style="filled", fillcolor="#65b7ffb2", fontcolor="#000000", group="26"];
         }
         subgraph cluster_BacterialTyper__scripts__bacteriophage {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
-            BacterialTyper__scripts__bacteriophage__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__bacteriophage__main [label="main", style="filled", fillcolor="#65b7ffb2", fontcolor="#000000", group="26"];
         }
         subgraph cluster_BacterialTyper__scripts__bacteriophage {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
-            BacterialTyper__scripts__bacteriophage__print_list_modified [label="print_list_modified", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__bacteriophage__print_list_modified [label="print_list_modified", style="filled", fillcolor="#65b7ffb2", fontcolor="#000000", group="26"];
         }
         subgraph cluster_BacterialTyper__scripts__bacteriophage {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.bacteriophage"];
-            BacterialTyper__scripts__bacteriophage__results_PhiSpy [label="results_PhiSpy", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__bacteriophage__results_PhiSpy [label="results_PhiSpy", style="filled", fillcolor="#65b7ffb2", fontcolor="#000000", group="26"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__create_folder [label="create_folder", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__create_subfolder [label="create_subfolder", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__get_fullpath_list [label="get_fullpath_list", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__parse_sublist [label="parse_sublist", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__print_time_stamp [label="print_time_stamp", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__read_time_stamp [label="read_time_stamp", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
         }
     }
-        BacterialTyper__scripts__bacteriophage -> BacterialTyper__scripts__bacteriophage__main [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__results_PhiSpy -> BacterialTyper__scripts__functions__create_subfolder [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__results_PhiSpy -> BacterialTyper__scripts__functions__read_time_stamp [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__results_PhiSpy -> BacterialTyper__scripts__functions__print_time_stamp [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__results_PhiSpy -> BacterialTyper__scripts__functions__get_fullpath_list [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__ident_bacteriophage -> BacterialTyper__scripts__functions__read_time_stamp [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__ident_bacteriophage -> BacterialTyper__scripts__functions__create_folder [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__ident_bacteriophage -> BacterialTyper__scripts__functions__print_time_stamp [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__ident_bacteriophage -> BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__print_list_modified -> BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets -> BacterialTyper__scripts__functions__parse_sublist [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__help_PhiSpy -> BacterialTyper__scripts__bacteriophage__print_list_modified [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__help_options -> BacterialTyper__scripts__bacteriophage__print_list_modified [style="solid", color="#000000"];
-        BacterialTyper__scripts__bacteriophage__main -> BacterialTyper__scripts__bacteriophage__results_PhiSpy [style="solid", color="#000000"];
-        BacterialTyper__scripts__bacteriophage__main -> BacterialTyper__scripts__bacteriophage__help_options [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__main -> BacterialTyper__scripts__bacteriophage__ident_bacteriophage [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__main -> BacterialTyper__scripts__bacteriophage__help_options [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__main -> BacterialTyper__scripts__bacteriophage__results_PhiSpy [style="solid", color="#000000"];
     }

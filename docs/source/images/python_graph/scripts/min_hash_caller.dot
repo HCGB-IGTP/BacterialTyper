@@ -1,61 +1,217 @@
 digraph G {
-    graph [rankdir=TB, clusterrank="local"];
+    graph [spilines=ortho, rankdir=TB, clusterrank="local"];
     subgraph cluster_G {
 
         graph [style="filled,rounded",fillcolor="#80808018", label=""];
-        BacterialTyper__scripts__min_hash_caller [label="BacterialTyper.scripts.min_hash_caller", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
-        subgraph cluster_BacterialTyper__scripts__min_hash_caller {
+        subgraph cluster_BacterialTyper__scripts__functions {
 
-            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.min_hash_caller"];
-            BacterialTyper__scripts__min_hash_caller__compare [label="compare", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__create_folder [label="create_folder", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__printList2file [label="printList2file", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
         }
         subgraph cluster_BacterialTyper__scripts__min_hash_caller {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.min_hash_caller"];
-            BacterialTyper__scripts__min_hash_caller__generateNewick [label="generateNewick", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__min_hash_caller__compare [label="compare", style="filled", fillcolor="#e065ffb2", fontcolor="#000000", group="36"];
         }
         subgraph cluster_BacterialTyper__scripts__min_hash_caller {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.min_hash_caller"];
-            BacterialTyper__scripts__min_hash_caller__get_Newick_tree [label="get_Newick_tree", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__min_hash_caller__generateNewick [label="generateNewick", style="filled", fillcolor="#e065ffb2", fontcolor="#000000", group="36"];
         }
         subgraph cluster_BacterialTyper__scripts__min_hash_caller {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.min_hash_caller"];
-            BacterialTyper__scripts__min_hash_caller__helpMash [label="helpMash", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__min_hash_caller__get_Newick_tree [label="get_Newick_tree", style="filled", fillcolor="#e065ffb2", fontcolor="#000000", group="36"];
         }
         subgraph cluster_BacterialTyper__scripts__min_hash_caller {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.min_hash_caller"];
-            BacterialTyper__scripts__min_hash_caller__help_options [label="help_options", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
         }
         subgraph cluster_BacterialTyper__scripts__min_hash_caller {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.min_hash_caller"];
-            BacterialTyper__scripts__min_hash_caller__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__min_hash_caller__help_options [label="help_options", style="filled", fillcolor="#e065ffb2", fontcolor="#000000", group="36"];
         }
         subgraph cluster_BacterialTyper__scripts__min_hash_caller {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.min_hash_caller"];
-            BacterialTyper__scripts__min_hash_caller__plot [label="plot", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__min_hash_caller__main [label="main", style="filled", fillcolor="#e065ffb2", fontcolor="#000000", group="36"];
         }
         subgraph cluster_BacterialTyper__scripts__min_hash_caller {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.min_hash_caller"];
-            BacterialTyper__scripts__min_hash_caller__read_signature [label="read_signature", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+            BacterialTyper__scripts__min_hash_caller__plot [label="plot", style="filled", fillcolor="#e065ffb2", fontcolor="#000000", group="36"];
         }
         subgraph cluster_BacterialTyper__scripts__min_hash_caller {
 
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.min_hash_caller"];
-            BacterialTyper__scripts__min_hash_caller__sketch_database [label="sketch_database", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__scripts__min_hash_caller {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.min_hash_caller"];
+            BacterialTyper__scripts__min_hash_caller__sketch_database [label="sketch_database", style="filled", fillcolor="#e065ffb2", fontcolor="#000000", group="36"];
         }
     }
-        BacterialTyper__scripts__min_hash_caller -> BacterialTyper__scripts__min_hash_caller__main [style="solid", color="#000000"];
+        BacterialTyper__scripts__min_hash_caller__sketch_database -> BacterialTyper__scripts__functions__create_folder [style="solid", color="#000000"];
         BacterialTyper__scripts__min_hash_caller__generateNewick -> BacterialTyper__scripts__min_hash_caller__generateNewick [style="solid", color="#000000"];
+        BacterialTyper__scripts__min_hash_caller__get_Newick_tree -> BacterialTyper__scripts__functions__printList2file [style="solid", color="#000000"];
         BacterialTyper__scripts__min_hash_caller__get_Newick_tree -> BacterialTyper__scripts__min_hash_caller__generateNewick [style="solid", color="#000000"];
-        BacterialTyper__scripts__min_hash_caller__main -> BacterialTyper__scripts__min_hash_caller__plot [style="solid", color="#000000"];
-        BacterialTyper__scripts__min_hash_caller__main -> BacterialTyper__scripts__min_hash_caller__compare [style="solid", color="#000000"];
         BacterialTyper__scripts__min_hash_caller__main -> BacterialTyper__scripts__min_hash_caller__sketch_database [style="solid", color="#000000"];
-        BacterialTyper__scripts__min_hash_caller__main -> BacterialTyper__scripts__min_hash_caller__get_Newick_tree [style="solid", color="#000000"];
         BacterialTyper__scripts__min_hash_caller__main -> BacterialTyper__scripts__min_hash_caller__help_options [style="solid", color="#000000"];
+        BacterialTyper__scripts__min_hash_caller__main -> BacterialTyper__scripts__min_hash_caller__compare [style="solid", color="#000000"];
+        BacterialTyper__scripts__min_hash_caller__main -> BacterialTyper__scripts__min_hash_caller__get_Newick_tree [style="solid", color="#000000"];
+        BacterialTyper__scripts__min_hash_caller__main -> BacterialTyper__scripts__min_hash_caller__plot [style="solid", color="#000000"];
     }

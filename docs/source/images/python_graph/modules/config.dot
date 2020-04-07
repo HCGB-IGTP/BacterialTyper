@@ -1,0 +1,416 @@
+digraph G {
+    graph [spilines=ortho, rankdir=TB, clusterrank="local"];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        subgraph cluster_BacterialTyper__config__extern_progs {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.extern_progs"];
+            BacterialTyper__config__extern_progs__file_list [label="file_list", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__config__extern_progs {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.extern_progs"];
+            BacterialTyper__config__extern_progs__main [label="main", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__config__extern_progs {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.extern_progs"];
+            BacterialTyper__config__extern_progs__min_perl_package_version [label="min_perl_package_version", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__config__extern_progs {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.extern_progs"];
+            BacterialTyper__config__extern_progs__min_python_module_version [label="min_python_module_version", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__config__extern_progs {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.extern_progs"];
+            BacterialTyper__config__extern_progs__print_dependencies [label="print_dependencies", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__config__extern_progs {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.extern_progs"];
+            BacterialTyper__config__extern_progs__print_package_version [label="print_package_version", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__config__extern_progs {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.extern_progs"];
+            BacterialTyper__config__extern_progs__read_dependencies [label="read_dependencies", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__config__extern_progs {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.extern_progs"];
+            BacterialTyper__config__extern_progs__return_defatult_soft [label="return_defatult_soft", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__config__extern_progs {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.extern_progs"];
+            BacterialTyper__config__extern_progs__return_min_version_python_package [label="return_min_version_python_package", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__config__extern_progs {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.extern_progs"];
+            BacterialTyper__config__extern_progs__return_min_version_soft [label="return_min_version_soft", style="filled", fillcolor="#ff6565b2", fontcolor="#000000", group="0"];
+        }
+        subgraph cluster_BacterialTyper__config__install_dependencies {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.install_dependencies"];
+            BacterialTyper__config__install_dependencies__BUSCO_config [label="BUSCO_config", style="filled", fillcolor="#ff7a65b2", fontcolor="#000000", group="1"];
+        }
+        subgraph cluster_BacterialTyper__config__install_dependencies {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.install_dependencies"];
+            BacterialTyper__config__install_dependencies__install [label="install", style="filled", fillcolor="#ff7a65b2", fontcolor="#000000", group="1"];
+        }
+        subgraph cluster_BacterialTyper__config__install_dependencies {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.install_dependencies"];
+            BacterialTyper__config__install_dependencies__install_BUSCO [label="install_BUSCO", style="filled", fillcolor="#ff7a65b2", fontcolor="#000000", group="1"];
+        }
+        subgraph cluster_BacterialTyper__config__install_dependencies {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.install_dependencies"];
+            BacterialTyper__config__install_dependencies__install_edirect [label="install_edirect", style="filled", fillcolor="#ff7a65b2", fontcolor="#000000", group="1"];
+        }
+        subgraph cluster_BacterialTyper__config__install_dependencies {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.install_dependencies"];
+            BacterialTyper__config__install_dependencies__install_package_targz [label="install_package_targz", style="filled", fillcolor="#ff7a65b2", fontcolor="#000000", group="1"];
+        }
+        subgraph cluster_BacterialTyper__config__install_dependencies {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.install_dependencies"];
+            BacterialTyper__config__install_dependencies__main [label="main", style="filled", fillcolor="#ff7a65b2", fontcolor="#000000", group="1"];
+        }
+        subgraph cluster_BacterialTyper__config__install_dependencies {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.install_dependencies"];
+            BacterialTyper__config__install_dependencies__perl_package_install_targz [label="perl_package_install_targz", style="filled", fillcolor="#ff7a65b2", fontcolor="#000000", group="1"];
+        }
+        subgraph cluster_BacterialTyper__config__install_dependencies {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.install_dependencies"];
+            BacterialTyper__config__install_dependencies__print_error_message [label="print_error_message", style="filled", fillcolor="#ff7a65b2", fontcolor="#000000", group="1"];
+        }
+        subgraph cluster_BacterialTyper__config__install_dependencies {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.install_dependencies"];
+            BacterialTyper__config__install_dependencies__python_package_install [label="python_package_install", style="filled", fillcolor="#ff7a65b2", fontcolor="#000000", group="1"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__access_check [label="access_check", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__check_IslandPath [label="check_IslandPath", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__check_dependencies [label="check_dependencies", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__check_install_module [label="check_install_module", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__check_package_version [label="check_package_version", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__check_perl_package_version [label="check_perl_package_version", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__check_perl_packages [label="check_perl_packages", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__check_python_packages [label="check_python_packages", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__get_exe [label="get_exe", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__get_perl_packages [label="get_perl_packages", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__get_python_packages [label="get_python_packages", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__get_version [label="get_version", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__my_which [label="my_which", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__config__set_config {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.config.set_config"];
+            BacterialTyper__config__set_config__print_module_comparison [label="print_module_comparison", style="filled", fillcolor="#ff8e65b2", fontcolor="#000000", group="2"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__boxymcboxface [label="boxymcboxface", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__create_subfolder [label="create_subfolder", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__decode [label="decode", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__extract [label="extract", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__file2dictionary [label="file2dictionary", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__get_data [label="get_data", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__get_fullpath_list [label="get_fullpath_list", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__pipeline_header [label="pipeline_header", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__print_sepLine [label="print_sepLine", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__print_time [label="print_time", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__retrieve_matching_files [label="retrieve_matching_files", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__system_call [label="system_call", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+        }
+        subgraph cluster_BacterialTyper__scripts__functions {
+
+            graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
+            BacterialTyper__scripts__functions__wget_download [label="wget_download", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
+        }
+    }
+        BacterialTyper__config__extern_progs__file_list -> BacterialTyper__scripts__functions__get_fullpath_list [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__read_dependencies -> BacterialTyper__scripts__functions__get_data [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__read_dependencies -> BacterialTyper__config__extern_progs__file_list [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__return_defatult_soft -> BacterialTyper__config__extern_progs__read_dependencies [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__return_min_version_soft -> BacterialTyper__config__extern_progs__read_dependencies [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__print_dependencies -> BacterialTyper__config__set_config__get_version [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__print_dependencies -> BacterialTyper__config__extern_progs__read_dependencies [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__print_dependencies -> BacterialTyper__config__set_config__get_exe [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__min_python_module_version -> BacterialTyper__scripts__functions__file2dictionary [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__min_python_module_version -> BacterialTyper__config__extern_progs__file_list [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__return_min_version_python_package -> BacterialTyper__config__extern_progs__min_python_module_version [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__print_package_version -> BacterialTyper__config__extern_progs__min_python_module_version [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__print_package_version -> BacterialTyper__config__set_config__print_module_comparison [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__min_perl_package_version -> BacterialTyper__config__extern_progs__file_list [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__min_perl_package_version -> BacterialTyper__scripts__functions__get_data [style="solid", color="#000000"];
+        BacterialTyper__config__extern_progs__main -> BacterialTyper__config__set_config__access_check [style="solid", color="#000000"];
+        BacterialTyper__config__install_dependencies__install -> BacterialTyper__config__install_dependencies__install_BUSCO [style="solid", color="#000000"];
+        BacterialTyper__config__install_dependencies__install -> BacterialTyper__config__install_dependencies__install_edirect [style="solid", color="#000000"];
+        BacterialTyper__config__install_dependencies__install_BUSCO -> BacterialTyper__config__install_dependencies__BUSCO_config [style="solid", color="#000000"];
+        BacterialTyper__config__install_dependencies__perl_package_install_targz -> BacterialTyper__scripts__functions__wget_download [style="solid", color="#000000"];
+        BacterialTyper__config__install_dependencies__perl_package_install_targz -> BacterialTyper__scripts__functions__create_subfolder [style="solid", color="#000000"];
+        BacterialTyper__config__install_dependencies__perl_package_install_targz -> BacterialTyper__scripts__functions__extract [style="solid", color="#000000"];
+        BacterialTyper__config__install_dependencies__perl_package_install_targz -> BacterialTyper__scripts__functions__retrieve_matching_files [style="solid", color="#000000"];
+        BacterialTyper__config__install_dependencies__perl_package_install_targz -> BacterialTyper__config__install_dependencies__install_package_targz [style="solid", color="#000000"];
+        BacterialTyper__config__install_dependencies__install_package_targz -> BacterialTyper__scripts__functions__retrieve_matching_files [style="solid", color="#000000"];
+        BacterialTyper__config__install_dependencies__install_package_targz -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
+        BacterialTyper__config__install_dependencies__install_package_targz -> BacterialTyper__config__set_config__get_exe [style="solid", color="#000000"];
+        BacterialTyper__config__install_dependencies__install_package_targz -> BacterialTyper__config__install_dependencies__print_error_message [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__get_exe -> BacterialTyper__config__set_config__get_version [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__get_exe -> BacterialTyper__config__set_config__my_which [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__get_exe -> BacterialTyper__config__extern_progs__return_min_version_soft [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__get_exe -> BacterialTyper__config__extern_progs__return_defatult_soft [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__my_which -> BacterialTyper__config__set_config__access_check [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__get_version -> BacterialTyper__config__set_config__get_exe [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__get_version -> BacterialTyper__config__extern_progs__read_dependencies [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_dependencies -> BacterialTyper__config__set_config__check_install_module [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_dependencies -> BacterialTyper__config__extern_progs__read_dependencies [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_dependencies -> BacterialTyper__config__install_dependencies__install [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_dependencies -> BacterialTyper__config__set_config__get_exe [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__get_python_packages -> BacterialTyper__config__extern_progs__file_list [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__get_python_packages -> BacterialTyper__config__set_config__check_package_version [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__get_python_packages -> BacterialTyper__scripts__functions__file2dictionary [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_python_packages -> BacterialTyper__config__set_config__get_python_packages [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_python_packages -> BacterialTyper__config__extern_progs__file_list [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_python_packages -> BacterialTyper__config__install_dependencies__python_package_install [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_python_packages -> BacterialTyper__config__set_config__check_install_module [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_python_packages -> BacterialTyper__scripts__functions__file2dictionary [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_python_packages -> BacterialTyper__config__extern_progs__min_python_module_version [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__get_perl_packages -> BacterialTyper__config__extern_progs__file_list [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__get_perl_packages -> BacterialTyper__config__set_config__check_perl_package_version [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__get_perl_packages -> BacterialTyper__scripts__functions__get_data [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_perl_packages -> BacterialTyper__config__extern_progs__file_list [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_perl_packages -> BacterialTyper__scripts__functions__get_data [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_perl_packages -> BacterialTyper__config__set_config__check_install_module [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_perl_packages -> BacterialTyper__config__set_config__get_perl_packages [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_perl_packages -> BacterialTyper__config__extern_progs__min_perl_package_version [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_perl_package_version -> BacterialTyper__scripts__functions__decode [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_perl_package_version -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_perl_package_version -> BacterialTyper__config__set_config__get_exe [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_IslandPath -> BacterialTyper__config__set_config__check_perl_packages [style="solid", color="#000000"];
+        BacterialTyper__config__set_config__check_install_module -> BacterialTyper__config__set_config__print_module_comparison [style="solid", color="#000000"];
+        BacterialTyper__modules__config__run -> BacterialTyper__config__set_config__check_IslandPath [style="solid", color="#000000"];
+        BacterialTyper__modules__config__run -> BacterialTyper__config__set_config__get_exe [style="solid", color="#000000"];
+        BacterialTyper__modules__config__run -> BacterialTyper__config__set_config__access_check [style="solid", color="#000000"];
+        BacterialTyper__modules__config__run -> BacterialTyper__config__set_config__check_python_packages [style="solid", color="#000000"];
+        BacterialTyper__modules__config__run -> BacterialTyper__scripts__functions__print_sepLine [style="solid", color="#000000"];
+        BacterialTyper__modules__config__run -> BacterialTyper__config__set_config__get_version [style="solid", color="#000000"];
+        BacterialTyper__modules__config__run -> BacterialTyper__scripts__functions__pipeline_header [style="solid", color="#000000"];
+        BacterialTyper__modules__config__run -> BacterialTyper__scripts__functions__boxymcboxface [style="solid", color="#000000"];
+        BacterialTyper__modules__config__run -> BacterialTyper__config__extern_progs__return_min_version_soft [style="solid", color="#000000"];
+        BacterialTyper__modules__config__run -> BacterialTyper__config__set_config__check_dependencies [style="solid", color="#000000"];
+        BacterialTyper__modules__config__run -> BacterialTyper__scripts__functions__print_time [style="solid", color="#000000"];
+        BacterialTyper__modules__config__run -> BacterialTyper__config__set_config__check_perl_packages [style="solid", color="#000000"];
+        BacterialTyper__scripts__functions__retrieve_matching_files -> BacterialTyper__scripts__functions__get_fullpath_list [style="solid", color="#000000"];
+        BacterialTyper__scripts__functions__pipeline_header -> BacterialTyper__scripts__functions__print_sepLine [style="solid", color="#000000"];
+    }
