@@ -5,8 +5,8 @@
 Third Party Software
 ####################
 
-Within BacterialTyper, there is a third-party project, named IslandPath-DIMOB, that we forked, adapted and updated from
-its original :ref:`source<IslandPath_>`. 
+Within ``BacterialTyper``, there is a third-party project, named IslandPath-Dimob (https://github.com/brinkmanlab/islandpath), that we forked, adapted and updated from
+its original source. 
 
 .. ################
 .. _islandPath-DIMOB-forked:
@@ -15,4 +15,4 @@ its original :ref:`source<IslandPath_>`.
 IslandPath-DIMOB forked version
 ===============================
 
-During the development of the BacterialTyper :ref:`module MGE<MGE-description_>`
+During the development of the BacterialTyper :ref:`module MGE<MGE-description>`

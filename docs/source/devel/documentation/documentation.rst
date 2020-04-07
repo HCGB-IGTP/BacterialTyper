@@ -115,7 +115,8 @@ To install ``graphviz`` type:
 
    sudo apt install graphviz
    
-The ``python`` module needs to be installed using ``pip`` but from ``github``. Type:
+The ``python`` module ``pyan`` needs to be installed using ``pip`` from ``github``. 
+See https://github.com/ttylec/pyan for additional details. Type:
 
 .. code-block:: sh
 
@@ -149,29 +150,6 @@ To generate a pdf file of the documentation.
 
    make latexpdf
 
-
-.. note::
-
-   The ``SPHINXOPTS`` variable is set to ``-W --keep-going`` by default to build
-   the complete docs but exit with exit status 1 if there are warnings.  To unset
-   it, use
-
-   .. code-block:: sh
-   
-      make SPHINXOPTS= html
-   
-   You can use the ``O`` variable to set additional options:
-   
-   * ``make O=-j4 html`` runs a parallel build with 4 processes.
-   * ``make O=-Dplot_formats=png:100 html`` saves figures in low resolution.
-   * ``make O=-Dplot_gallery=0 html`` skips the gallery build.
-   
-   Multiple options can be combined using e.g. ``make O='-j4 -Dplot_gallery=0'
-   html``.
-   
-   On Windows, options needs to be set as environment variables, e.g. ``set O=-W
-   --keep-going -j4 & make html``.
-
 .. _writing-rest-pages:
 
 Writing ReST pages
@@ -181,9 +159,8 @@ Most documentation is either in the docstring of individual classes and methods,
 in explicit ``.rst`` files, or in examples and tutorials.
 
 All of these use the reStructuredText_ (ReST) syntax. Users should look at the ReST documentation
-for a full description. But some specific hints and conventions Matplotlib
-uses are useful for creating documentation.
-
+for a full description. But some hints and conventions uses are describing as a quickstart
+for creating documentation.
 
 .. ###############################################
 .. _internal-section-refs:
@@ -235,12 +212,51 @@ will give the following link: :ref:`assembly-workflow`
    use hyphen separated, descriptive labels for section references. Since 
    underscores are widely used by Sphinx itself, use hyphens to separate words.
 
+.. ###############
+.. _hyperlink-ref:
+
+Include hyperlinks
+^^^^^^^^^^^^^^^^^^
+
+To include an hyperlink in a word just type:
+
+.. code-block:: rst
+   
+   Example: `Google<https://www.google.com>`_.
+
+and this will create the following: 
+
+Example: `Google <https://www.google.com/>`_
+
+.. ###############
+.. _citations-ref:
+
+Include citations
+^^^^^^^^^^^^^^^^^
+
+The bibliography is included ``BibTex`` format in file :file:`docs/source/bib/references.bib`. 
+The initiation and style of the bibliography is determined by file :file:`docs/source/bib/bib_index.rst`
+and the directive ``.. bibliography::``.
+
+To include a citation you will use the role ``:cite:`` and the tag associated to each entry.
+
+And example of citation might be:
+
+.. code-block:: rst
+   
+   Whatever text you want to reference :cite:`Deplano2018`.
+
+That will render as:
+
+Whatever text you want to reference :cite:`Deplano2018`
+
+.. ##########################
 .. _writing-docstrings:
 
 Writing docstrings
 ------------------
 
-Docstrings should conform to the `numpydoc docstring guide`_. 
+Docstrings should conform to the reStructuredText_ (ReST) syntax guide. 
 
 .. #################
 .. _example-docstrings:
@@ -282,12 +298,12 @@ we automatically include every docstring within the source code available.
 
 Using a shell loop we create an ``.rst`` file for each module and script:
 
-- modules:
+- modules (file :file:`docs/source/devel/documentation/modules_api-docstrings.sh`):
 
 .. literalinclude:: ./modules_api-docstrings.sh
    :language: sh
   
-- scripts:
+- scripts (file :file:`docs/source/devel/documentation/scripts_api-docstrings.sh`):
 
 .. literalinclude:: ./scripts_api-docstrings.sh
    :language: sh
@@ -296,13 +312,13 @@ Python Graph images
 ^^^^^^^^^^^^^^^^^^^
 
 Additionally, for each script or module of interest, we generate a graph representation 
-of the different functions and relationships with other modules. Images are stored in 
-:file:`docs/source/images/python_graph`. We also include automatically these images generated 
-for the corresponding ``.rst`` file using the previous shell script.
+of the different functions and relationships with other modules. 
+
+Images are stored in  :file:`docs/source/images/python_graph`. We also include automatically 
+these images generated for the corresponding ``.rst`` file using the previous shell script.
 
 To generate the ``python`` graph image, we would employ the ``python`` module ``pyan`` 
-and the ``graphviz`` tool. 
-
+and the ``graphviz`` tool. See https://github.com/ttylec/pyan for additional details.
 
 
 .. ## Include linksReferences

@@ -1,9 +1,10 @@
 .. ################################################
 .. _faqs:
 
-
 Frequently Asked Questions (FAQs)
 *********************************
+
+.. contents::
 
 This is a collection of FAQs for ``BacterialTyper`` tutorial and interpretation of results. 
 
@@ -60,7 +61,6 @@ Or for the ``activate_python_environment.sh`` script:
    chmod +x env/activate_python_environment.sh
    source env/activate_python_environment.sh
 
-
 - How do I know the python environment is activated?
 
 Once you execute the activation of the environment, either using the script ``activate_python_environment.sh`` or 
@@ -101,8 +101,6 @@ beyond the match will be changed to N in the resultant FASTQ file or trimmed, ge
 As an example of a Multiqc_ image of quality control of our samples, there is a progressive drop in quality with read length, 
 less pronounced in R1 than in R2, causing R2 reads with lower mean base quality :cite:`Tan2019`, which is expected from 300 
 nt long paired end reads
-
-
 
 .. ######################
 .. include:: ../links.inc

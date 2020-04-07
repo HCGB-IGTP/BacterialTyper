@@ -4,7 +4,7 @@ BUSCO_caller
 ==========================================
 This script contains several functions. Here we show a graph representation of the different functions and relationships among them:
 
-.. image:: ../../images/python_graph/BUSCO_caller.png
+.. image:: ../../images/python_graph/scripts/BUSCO_caller.svg
     :align: center
 
 .. automodule:: BacterialTyper.scripts.BUSCO_caller

@@ -39,10 +39,12 @@ The ``BacterialTyper`` documentation includes:
 
 - A :doc:`User's Guide <user_guide/user_guide_index>` to get started.
 - An example :doc:`Tutorial <tutorial/tutorial_index>`.
-- :doc:`Developer Guidelines <devel/devel_index>`.
-- Additional :doc:`information <info/info_index>` of the ``BacterialTyper`` project
-- A list of :doc:`Glossary <glossary/glossary_index>` terms
-- A list of :doc:`Bibliography <bib/bib_index>`
+- A :doc:`Quick Start Guide <user_guide/quickStart>`.
+- A list of :doc:`user_guide/faqs`
+- Some :doc:`developer Guidelines <devel/devel_index>` to contribute to the project.
+- Additional :doc:`information <info/info_index>` of the ``BacterialTyper`` project.
+- A list of :doc:`Glossary <glossary/glossary_index>` terms.
+- A list of :doc:`Bibliography <bib/zbib_index>`
 
 .. ##################
 .. _pipeline-scheme:
