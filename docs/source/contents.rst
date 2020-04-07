@@ -19,7 +19,7 @@ Documentation
    devel/devel_index.rst
    info/info_index.rst
    glossary/glossary_index.rst
-   bib/bib_index.rst
+   bib/zbib_index.rst
    
 
 Indices and tables

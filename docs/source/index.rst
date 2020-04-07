@@ -42,7 +42,7 @@ The ``BacterialTyper`` documentation includes:
 - :doc:`Developer Guidelines <devel/devel_index>`.
 - Additional :doc:`information <info/info_index>` of the ``BacterialTyper`` project
 - A list of :doc:`Glossary <glossary/glossary_index>` terms
-- A list of :doc:`Bibliography <bib/bib_index>`
+- A list of :doc:`Bibliography <bib/zbib_index>`
 
 .. ##################
 .. _pipeline-scheme:

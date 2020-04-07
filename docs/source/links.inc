@@ -9,14 +9,12 @@
 .. _`Matplotlib documentation configuration`: https://matplotlib.org/devel/documenting_mpl.html
 .. _API: https://en.wikipedia.org/wiki/Application_programming_interface
 .. _`internal references`: https://www.sphinx-doc.org/en/stable/usage/restructuredtext/roles.html
-.. _`numpydoc docstring guide`: https://numpydoc.readthedocs.io/en/latest/format.html
 .. _Python: http://www.python.org/
 .. _`PyPI files page`: https://pypi.org/
 .. _`Python pip`: https://pip.pypa.io/en/stable/
 .. _`pip installing instructions`: https://packaging.python.org/tutorials/installing-packages
 .. _git: https://git-scm.com/
 .. _`python environment`: https://docs.python.org/3/tutorial/venv.html
-
 
 .. #### BacterialTyper additional software links
 .. _CARD: https://card.mcmaster.ca/
