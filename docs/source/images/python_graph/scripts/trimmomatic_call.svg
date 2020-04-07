@@ -59,10 +59,10 @@
 <text text-anchor="middle" x="208" y="-196.3" font-family="Times,serif" font-size="14.00" fill="#000000">main</text>
 </g>
 <!-- BacterialTyper__scripts__trimmomatic_call__main&#45;&gt;BacterialTyper__scripts__trimmomatic_call__help_options -->
-<g id="edge5" class="edge">
+<g id="edge6" class="edge">
 <title>BacterialTyper__scripts__trimmomatic_call__main&#45;&gt;BacterialTyper__scripts__trimmomatic_call__help_options</title>
-<path fill="none" stroke="#000000" d="M208,-181.8446C208,-173.3401 208,-163.0076 208,-153.4964"/>
-<polygon fill="#000000" stroke="#000000" points="211.5001,-153.2481 208,-143.2482 204.5001,-153.2482 211.5001,-153.2481"/>
+<path fill="none" stroke="#000000" d="M217.5325,-182.9813C217.5325,-182.9813 217.5325,-152.9972 217.5325,-152.9972"/>
+<polygon fill="#000000" stroke="#000000" points="221.0326,-152.9971 217.5325,-142.9972 214.0326,-152.9972 221.0326,-152.9971"/>
 </g>
 <!-- BacterialTyper__scripts__trimmomatic_call__trimmo_call -->
 <g id="node6" class="node">
@@ -71,22 +71,22 @@
 <text text-anchor="middle" x="80" y="-121.3" font-family="Times,serif" font-size="14.00" fill="#000000">trimmo_call</text>
 </g>
 <!-- BacterialTyper__scripts__trimmomatic_call__main&#45;&gt;BacterialTyper__scripts__trimmomatic_call__trimmo_call -->
-<g id="edge6" class="edge">
+<g id="edge5" class="edge">
 <title>BacterialTyper__scripts__trimmomatic_call__main&#45;&gt;BacterialTyper__scripts__trimmomatic_call__trimmo_call</title>
-<path fill="none" stroke="#000000" d="M185.9733,-188.5077C181.1112,-186.1907 175.9369,-183.8895 171,-182 158.9127,-177.3737 154.541,-179.8577 143,-174 129.8062,-167.3035 116.6581,-157.6681 105.813,-148.7107"/>
-<polygon fill="#000000" stroke="#000000" points="107.886,-145.8787 98.006,-142.053 103.3438,-151.205 107.886,-145.8787"/>
+<path fill="none" stroke="#000000" d="M198.4675,-182.8625C198.4675,-170.508 198.4675,-156 198.4675,-156 198.4675,-156 98.1984,-156 98.1984,-156 98.1984,-156 98.1984,-152.3127 98.1984,-152.3127"/>
+<polygon fill="#000000" stroke="#000000" points="101.6985,-152.3127 98.1984,-142.3127 94.6985,-152.3127 101.6985,-152.3127"/>
 </g>
 <!-- BacterialTyper__scripts__trimmomatic_call__trimmo_call&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
-<g id="edge3" class="edge">
+<g id="edge4" class="edge">
 <title>BacterialTyper__scripts__trimmomatic_call__trimmo_call&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M107.8572,-109.3906C118.0048,-103.6581 129.5487,-97.0828 140,-91 154.9324,-82.3092 171.2913,-72.577 185.4426,-64.0903"/>
-<polygon fill="#000000" stroke="#000000" points="187.617,-66.867 194.3862,-58.7166 184.0118,-60.8668 187.617,-66.867"/>
+<path fill="none" stroke="#000000" d="M134.9861,-125C139.0352,-125 141.5758,-125 141.5758,-125 141.5758,-125 141.5758,-42 141.5758,-42 141.5758,-42 142.2615,-42 142.2615,-42"/>
+<polygon fill="#000000" stroke="#000000" points="138.4328,-45.5002 148.4328,-42 138.4327,-38.5002 138.4328,-45.5002"/>
 </g>
 <!-- BacterialTyper__scripts__trimmomatic_call__trimmo_call&#45;&gt;BacterialTyper__scripts__functions__system_call -->
-<g id="edge4" class="edge">
+<g id="edge3" class="edge">
 <title>BacterialTyper__scripts__trimmomatic_call__trimmo_call&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M79.566,-106.9902C79.3083,-96.2963 78.9759,-82.4994 78.6836,-70.3706"/>
-<polygon fill="#000000" stroke="#000000" points="82.18,-70.174 78.44,-60.2612 75.182,-70.3427 82.18,-70.174"/>
+<path fill="none" stroke="#000000" d="M78.0251,-106.9902C78.0251,-106.9902 78.0251,-70.2612 78.0251,-70.2612"/>
+<polygon fill="#000000" stroke="#000000" points="81.5252,-70.2612 78.0251,-60.2612 74.5252,-70.2613 81.5252,-70.2612"/>
 </g>
 <!-- BacterialTyper__scripts__trimmomatic_call__trimmo_module -->
 <g id="node7" class="node">
@@ -95,16 +95,16 @@
 <text text-anchor="middle" x="93" y="-196.3" font-family="Times,serif" font-size="14.00" fill="#000000">trimmo_module</text>
 </g>
 <!-- BacterialTyper__scripts__trimmomatic_call__trimmo_module&#45;&gt;BacterialTyper__config__set_config__get_exe -->
-<g id="edge1" class="edge">
+<g id="edge2" class="edge">
 <title>BacterialTyper__scripts__trimmomatic_call__trimmo_module&#45;&gt;BacterialTyper__config__set_config__get_exe</title>
-<path fill="none" stroke="#000000" d="M142.072,-187.338C151.3018,-185.2959 160.9087,-183.3971 170,-182 193.3484,-178.4118 254.482,-183.7468 276,-174 287.9361,-168.5934 298.6867,-159.05 307.1333,-149.8131"/>
-<polygon fill="#000000" stroke="#000000" points="309.7938,-152.0872 313.6619,-142.2237 304.4871,-147.5222 309.7938,-152.0872"/>
+<path fill="none" stroke="#000000" d="M156.9994,-193.1201C156.9994,-183.9872 156.9994,-169 156.9994,-169 156.9994,-169 326,-169 326,-169 326,-169 326,-153.1505 326,-153.1505"/>
+<polygon fill="#000000" stroke="#000000" points="329.5001,-153.1505 326,-143.1505 322.5001,-153.1506 329.5001,-153.1505"/>
 </g>
 <!-- BacterialTyper__scripts__trimmomatic_call__trimmo_module&#45;&gt;BacterialTyper__scripts__trimmomatic_call__trimmo_call -->
-<g id="edge2" class="edge">
+<g id="edge1" class="edge">
 <title>BacterialTyper__scripts__trimmomatic_call__trimmo_module&#45;&gt;BacterialTyper__scripts__trimmomatic_call__trimmo_call</title>
-<path fill="none" stroke="#000000" d="M89.8531,-181.8446C88.3521,-173.1849 86.5225,-162.6301 84.8493,-152.9768"/>
-<polygon fill="#000000" stroke="#000000" points="88.2745,-152.2435 83.118,-142.9882 81.3773,-153.4391 88.2745,-152.2435"/>
+<path fill="none" stroke="#000000" d="M61.8016,-183.7261C61.8016,-183.7261 61.8016,-152.0231 61.8016,-152.0231"/>
+<polygon fill="#000000" stroke="#000000" points="65.3017,-152.023 61.8016,-142.0231 58.3017,-152.0231 65.3017,-152.023"/>
 </g>
 </g>
 </svg>

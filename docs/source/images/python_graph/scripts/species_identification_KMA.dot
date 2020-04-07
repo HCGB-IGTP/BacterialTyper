@@ -1,5 +1,5 @@
 digraph G {
-    graph [spilines=ortho, rankdir=TB, clusterrank="local"];
+    graph [splines=ortho, rankdir=TB, clusterrank="local"];
     subgraph cluster_G {
 
         graph [style="filled,rounded",fillcolor="#80808018", label=""];
@@ -218,17 +218,17 @@ digraph G {
         BacterialTyper__scripts__species_identification_KMA__download_kma_database -> BacterialTyper__scripts__functions__print_time_stamp [style="solid", color="#000000"];
         BacterialTyper__scripts__species_identification_KMA__download_kma_database -> BacterialTyper__scripts__functions__check_md5sum [style="solid", color="#000000"];
         BacterialTyper__scripts__species_identification_KMA__download_kma_database -> BacterialTyper__scripts__species_identification_KMA__check_db_indexed [style="solid", color="#000000"];
-        BacterialTyper__scripts__species_identification_KMA__check_db_indexed -> BacterialTyper__scripts__functions__readList_fromFile [style="solid", color="#000000"];
         BacterialTyper__scripts__species_identification_KMA__check_db_indexed -> BacterialTyper__scripts__functions__get_number_lines [style="solid", color="#000000"];
         BacterialTyper__scripts__species_identification_KMA__check_db_indexed -> BacterialTyper__scripts__functions__read_time_stamp [style="solid", color="#000000"];
+        BacterialTyper__scripts__species_identification_KMA__check_db_indexed -> BacterialTyper__scripts__functions__readList_fromFile [style="solid", color="#000000"];
         BacterialTyper__scripts__species_identification_KMA__index_database -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
         BacterialTyper__scripts__species_identification_KMA__index_database -> BacterialTyper__scripts__species_identification_KMA__check_db_indexed [style="solid", color="#000000"];
+        BacterialTyper__scripts__species_identification_KMA__generate_db -> BacterialTyper__scripts__functions__printList2file [style="solid", color="#000000"];
         BacterialTyper__scripts__species_identification_KMA__generate_db -> BacterialTyper__scripts__species_identification_KMA__index_database [style="solid", color="#000000"];
         BacterialTyper__scripts__species_identification_KMA__generate_db -> BacterialTyper__scripts__functions__readList_fromFile [style="solid", color="#000000"];
-        BacterialTyper__scripts__species_identification_KMA__generate_db -> BacterialTyper__scripts__functions__printList2file [style="solid", color="#000000"];
         BacterialTyper__scripts__species_identification_KMA__generate_db -> BacterialTyper__scripts__species_identification_KMA__check_db_indexed [style="solid", color="#000000"];
-        BacterialTyper__scripts__species_identification_KMA__kma_ident_call -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
         BacterialTyper__scripts__species_identification_KMA__kma_ident_call -> BacterialTyper__scripts__functions__print_time_stamp [style="solid", color="#000000"];
+        BacterialTyper__scripts__species_identification_KMA__kma_ident_call -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
         BacterialTyper__scripts__species_identification_KMA__main -> BacterialTyper__scripts__species_identification_KMA__help_options [style="solid", color="#000000"];
         BacterialTyper__scripts__species_identification_KMA__main -> BacterialTyper__scripts__species_identification_KMA__parse_kma_results [style="solid", color="#000000"];
     }

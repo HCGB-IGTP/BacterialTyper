@@ -84,22 +84,22 @@
 <text text-anchor="middle" x="516" y="-121.3" font-family="Times,serif" font-size="14.00" fill="#000000">check_db_indexed</text>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__check_db_indexed&#45;&gt;BacterialTyper__scripts__functions__get_number_lines -->
-<g id="edge7" class="edge">
+<g id="edge6" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__check_db_indexed&#45;&gt;BacterialTyper__scripts__functions__get_number_lines</title>
-<path fill="none" stroke="#000000" d="M447.1452,-116.9485C414.8162,-111.7954 376.1844,-103.6303 343,-91 325.5161,-84.3454 307.4737,-74.1582 292.6951,-64.7928"/>
-<polygon fill="#000000" stroke="#000000" points="294.2408,-61.6231 283.9492,-59.1066 290.4253,-67.4918 294.2408,-61.6231"/>
+<path fill="none" stroke="#000000" d="M443.5306,-119C386.8547,-119 317.5992,-119 317.5992,-119 317.5992,-119 317.5992,-63.3616 317.5992,-63.3616"/>
+<polygon fill="#000000" stroke="#000000" points="321.0993,-63.3616 317.5992,-53.3616 314.0993,-63.3617 321.0993,-63.3616"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__check_db_indexed&#45;&gt;BacterialTyper__scripts__functions__readList_fromFile -->
-<g id="edge6" class="edge">
+<g id="edge8" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__check_db_indexed&#45;&gt;BacterialTyper__scripts__functions__readList_fromFile</title>
-<path fill="none" stroke="#000000" d="M590.0091,-120.2685C632.7621,-115.858 687.0121,-107.358 733,-91 751.0841,-84.5674 769.6725,-74.1845 784.7507,-64.6285"/>
-<polygon fill="#000000" stroke="#000000" points="786.7209,-67.5223 793.1926,-59.1337 782.9023,-61.6555 786.7209,-67.5223"/>
+<path fill="none" stroke="#000000" d="M593.0033,-125C667.8648,-125 770.3489,-125 770.3489,-125 770.3489,-125 770.3489,-66.4575 770.3489,-66.4575"/>
+<polygon fill="#000000" stroke="#000000" points="773.849,-66.4575 770.3489,-56.4575 766.849,-66.4575 773.849,-66.4575"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__check_db_indexed&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
-<g id="edge8" class="edge">
+<g id="edge7" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__check_db_indexed&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M440.8294,-121.3263C356.1804,-116.5105 224.2722,-106.7706 177,-91 159.3119,-85.099 141.3929,-74.8045 126.9216,-65.1697"/>
-<polygon fill="#000000" stroke="#000000" points="128.6123,-62.0846 118.3897,-59.3011 124.6453,-67.852 128.6123,-62.0846"/>
+<path fill="none" stroke="#000000" d="M443.4383,-131C336.4032,-131 148.7252,-131 148.7252,-131 148.7252,-131 148.7252,-64.3751 148.7252,-64.3751"/>
+<polygon fill="#000000" stroke="#000000" points="152.2251,-64.3751 148.7252,-54.3751 145.2251,-64.375 152.2251,-64.3751"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__download_kma_database -->
 <g id="node11" class="node">
@@ -110,32 +110,32 @@
 <!-- BacterialTyper__scripts__species_identification_KMA__download_kma_database&#45;&gt;BacterialTyper__scripts__functions__check_md5sum -->
 <g id="edge4" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__download_kma_database&#45;&gt;BacterialTyper__scripts__functions__check_md5sum</title>
-<path fill="none" stroke="#000000" d="M694.0999,-178.9162C686.8288,-152.0826 673.1224,-101.4994 664.5591,-69.8967"/>
-<polygon fill="#000000" stroke="#000000" points="667.8625,-68.7052 661.8689,-59.9686 661.1062,-70.536 667.8625,-68.7052"/>
+<path fill="none" stroke="#000000" d="M692.6853,-178.9162C692.6853,-178.9162 692.6853,-67.6434 692.6853,-67.6434"/>
+<polygon fill="#000000" stroke="#000000" points="696.1854,-67.6433 692.6853,-57.6434 689.1854,-67.6434 696.1854,-67.6433"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__download_kma_database&#45;&gt;BacterialTyper__scripts__functions__extract -->
 <g id="edge2" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__download_kma_database&#45;&gt;BacterialTyper__scripts__functions__extract</title>
-<path fill="none" stroke="#000000" d="M689.6527,-178.9798C677.0118,-156.5126 652.2839,-118.6749 620,-99 604.8906,-89.7918 596.2986,-99.8904 581,-91 570.9146,-85.1392 561.9804,-76.0556 554.9051,-67.294"/>
-<polygon fill="#000000" stroke="#000000" points="557.5379,-64.9728 548.7143,-59.1081 551.9548,-69.1952 557.5379,-64.9728"/>
+<path fill="none" stroke="#000000" d="M661.4265,-180.2922C661.4265,-146.8795 661.4265,-75 661.4265,-75 661.4265,-75 538,-75 538,-75 538,-75 538,-70.0449 538,-70.0449"/>
+<polygon fill="#000000" stroke="#000000" points="541.5001,-70.0448 538,-60.0449 534.5001,-70.0449 541.5001,-70.0448"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__download_kma_database&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="edge3" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__download_kma_database&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M779.2422,-186.2275C872.7003,-171.9328 1030.5456,-142.3199 1158,-91 1175.0713,-84.1262 1192.7504,-74.0046 1207.3027,-64.7424"/>
-<polygon fill="#000000" stroke="#000000" points="1209.4587,-67.5151 1215.9261,-59.1232 1205.637,-61.6503 1209.4587,-67.5151"/>
+<path fill="none" stroke="#000000" d="M799.2025,-197C949.409,-197 1215.5188,-197 1215.5188,-197 1215.5188,-197 1215.5188,-69.1799 1215.5188,-69.1799"/>
+<polygon fill="#000000" stroke="#000000" points="1219.0189,-69.1799 1215.5188,-59.1799 1212.0189,-69.18 1219.0189,-69.1799"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__download_kma_database&#45;&gt;BacterialTyper__scripts__functions__wget_download -->
 <g id="edge1" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__download_kma_database&#45;&gt;BacterialTyper__scripts__functions__wget_download</title>
-<path fill="none" stroke="#000000" d="M665.2273,-179.8983C649.7699,-170.6955 632.2185,-158.117 620,-143 606.7184,-126.5677 619.0905,-111.4231 602,-99 582.713,-84.9802 517.6062,-98.5831 495,-91 478.1508,-85.3481 461.342,-75.1132 447.8325,-65.4538"/>
-<polygon fill="#000000" stroke="#000000" points="449.58,-62.3922 439.464,-59.2432 445.4083,-68.0133 449.58,-62.3922"/>
+<path fill="none" stroke="#000000" d="M630.1677,-183.575C630.1677,-155.0519 630.1677,-91 630.1677,-91 630.1677,-91 462.6254,-91 462.6254,-91 462.6254,-91 462.6254,-65.9104 462.6254,-65.9104"/>
+<polygon fill="#000000" stroke="#000000" points="466.1255,-65.9103 462.6254,-55.9104 459.1255,-65.9104 466.1255,-65.9103"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__download_kma_database&#45;&gt;BacterialTyper__scripts__species_identification_KMA__check_db_indexed -->
 <g id="edge5" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__download_kma_database&#45;&gt;BacterialTyper__scripts__species_identification_KMA__check_db_indexed</title>
-<path fill="none" stroke="#000000" d="M657.0161,-180.4817C629.6172,-169.7018 593.7416,-155.5869 565.0332,-144.2918"/>
-<polygon fill="#000000" stroke="#000000" points="566.1818,-140.9826 555.5947,-140.5782 563.6189,-147.4965 566.1818,-140.9826"/>
+<path fill="none" stroke="#000000" d="M598.5736,-197C592.5082,-197 588.7935,-197 588.7935,-197 588.7935,-197 588.7935,-141.1387 588.7935,-141.1387"/>
+<polygon fill="#000000" stroke="#000000" points="592.2936,-141.1386 588.7935,-131.1387 585.2936,-141.1387 592.2936,-141.1386"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__generate_db -->
 <g id="node12" class="node">
@@ -144,22 +144,22 @@
 <text text-anchor="middle" x="516" y="-265.3" font-family="Times,serif" font-size="14.00" fill="#000000">generate_db</text>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__generate_db&#45;&gt;BacterialTyper__scripts__functions__printList2file -->
-<g id="edge13" class="edge">
+<g id="edge11" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__generate_db&#45;&gt;BacterialTyper__scripts__functions__printList2file</title>
-<path fill="none" stroke="#000000" d="M565.9429,-262.0877C646.9404,-250.5952 800.1422,-227.5805 822,-215 883.6489,-179.5174 931.1037,-107.7345 953.62,-68.715"/>
-<polygon fill="#000000" stroke="#000000" points="956.6736,-70.4255 958.549,-59.9979 950.5802,-66.98 956.6736,-70.4255"/>
+<path fill="none" stroke="#000000" d="M542.9726,-253.2971C542.9726,-246.0386 542.9726,-239 542.9726,-239 542.9726,-239 968,-239 968,-239 968,-239 968,-70.1802 968,-70.1802"/>
+<polygon fill="#000000" stroke="#000000" points="971.5001,-70.1801 968,-60.1802 964.5001,-70.1802 971.5001,-70.1801"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__generate_db&#45;&gt;BacterialTyper__scripts__functions__readList_fromFile -->
-<g id="edge12" class="edge">
+<g id="edge13" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__generate_db&#45;&gt;BacterialTyper__scripts__functions__readList_fromFile</title>
-<path fill="none" stroke="#000000" d="M566.9732,-263.0195C646.3943,-253.1988 792.2574,-232.9508 808,-215 843.0738,-175.0064 833.9786,-107.6952 825.0049,-69.9048"/>
-<polygon fill="#000000" stroke="#000000" points="828.3635,-68.9097 822.5139,-60.0761 821.578,-70.6295 828.3635,-68.9097"/>
+<path fill="none" stroke="#000000" d="M516,-250.9445C516,-239.561 516,-227 516,-227 516,-227 845.7422,-227 845.7422,-227 845.7422,-227 845.7422,-68.7438 845.7422,-68.7438"/>
+<polygon fill="#000000" stroke="#000000" points="849.2423,-68.7438 845.7422,-58.7438 842.2423,-68.7438 849.2423,-68.7438"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__generate_db&#45;&gt;BacterialTyper__scripts__species_identification_KMA__check_db_indexed -->
 <g id="edge14" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__generate_db&#45;&gt;BacterialTyper__scripts__species_identification_KMA__check_db_indexed</title>
-<path fill="none" stroke="#000000" d="M483.626,-254.3207C468.0091,-245.3723 450.7908,-232.2974 442,-215 434.751,-200.7363 434.751,-193.2637 442,-179 448.668,-165.8796 460.1847,-155.1887 472.1734,-146.8852"/>
-<polygon fill="#000000" stroke="#000000" points="474.4045,-149.6118 480.924,-141.2603 470.6194,-143.7234 474.4045,-149.6118"/>
+<path fill="none" stroke="#000000" d="M570.2833,-269C578.8219,-269 584.8939,-269 584.8939,-269 584.8939,-269 584.8939,-143.1547 584.8939,-143.1547"/>
+<polygon fill="#000000" stroke="#000000" points="588.394,-143.1546 584.8939,-133.1547 581.394,-143.1547 588.394,-143.1546"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__index_database -->
 <g id="node14" class="node">
@@ -168,10 +168,10 @@
 <text text-anchor="middle" x="516" y="-193.3" font-family="Times,serif" font-size="14.00" fill="#000000">index_database</text>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__generate_db&#45;&gt;BacterialTyper__scripts__species_identification_KMA__index_database -->
-<g id="edge11" class="edge">
+<g id="edge12" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__generate_db&#45;&gt;BacterialTyper__scripts__species_identification_KMA__index_database</title>
-<path fill="none" stroke="#000000" d="M516,-250.8314C516,-243.131 516,-233.9743 516,-225.4166"/>
-<polygon fill="#000000" stroke="#000000" points="519.5001,-225.4132 516,-215.4133 512.5001,-225.4133 519.5001,-225.4132"/>
+<path fill="none" stroke="#000000" d="M489.0274,-253.3771C489.0274,-253.3771 489.0274,-223.5945 489.0274,-223.5945"/>
+<polygon fill="#000000" stroke="#000000" points="492.5275,-223.5945 489.0274,-213.5945 485.5275,-223.5946 492.5275,-223.5945"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__help_options -->
 <g id="node13" class="node">
@@ -182,14 +182,14 @@
 <!-- BacterialTyper__scripts__species_identification_KMA__index_database&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge9" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__index_database&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M564.4932,-184.8888C572.9801,-182.8595 581.7367,-180.823 590,-179 590.7674,-178.8307 1033.2864,-91.3292 1034,-91 1047.5012,-84.7715 1060.6827,-75.0349 1071.3954,-65.8767"/>
-<polygon fill="#000000" stroke="#000000" points="1073.9222,-68.3136 1079.0708,-59.0538 1069.2715,-63.0818 1073.9222,-68.3136"/>
+<path fill="none" stroke="#000000" d="M537.6647,-179.8435C537.6647,-170.5713 537.6647,-161 537.6647,-161 537.6647,-161 1078.4516,-161 1078.4516,-161 1078.4516,-161 1078.4516,-69.0498 1078.4516,-69.0498"/>
+<polygon fill="#000000" stroke="#000000" points="1081.9517,-69.0498 1078.4516,-59.0498 1074.9517,-69.0498 1081.9517,-69.0498"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__index_database&#45;&gt;BacterialTyper__scripts__species_identification_KMA__check_db_indexed -->
 <g id="edge10" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__index_database&#45;&gt;BacterialTyper__scripts__species_identification_KMA__check_db_indexed</title>
-<path fill="none" stroke="#000000" d="M516,-178.8314C516,-171.131 516,-161.9743 516,-153.4166"/>
-<polygon fill="#000000" stroke="#000000" points="519.5001,-153.4132 516,-143.4133 512.5001,-153.4133 519.5001,-153.4132"/>
+<path fill="none" stroke="#000000" d="M494.3353,-179.937C494.3353,-179.937 494.3353,-152.4407 494.3353,-152.4407"/>
+<polygon fill="#000000" stroke="#000000" points="497.8354,-152.4406 494.3353,-142.4407 490.8354,-152.4407 497.8354,-152.4406"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__kma_ident_call -->
 <g id="node15" class="node">
@@ -198,16 +198,16 @@
 <text text-anchor="middle" x="733" y="-265.3" font-family="Times,serif" font-size="14.00" fill="#000000">kma_ident_call</text>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__kma_ident_call&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
-<g id="edge16" class="edge">
+<g id="edge15" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__kma_ident_call&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M787.031,-258.6009C828.859,-249.627 887.7667,-234.9529 937,-215 1041.3807,-172.6974 1060.5394,-147.4471 1158,-91 1172.9508,-82.3408 1189.3131,-72.6145 1203.462,-64.1236"/>
-<polygon fill="#000000" stroke="#000000" points="1205.6377,-66.8994 1212.4032,-58.746 1202.0298,-60.9008 1205.6377,-66.8994"/>
+<path fill="none" stroke="#000000" d="M795.0078,-275C935.2067,-275 1264.4812,-275 1264.4812,-275 1264.4812,-275 1264.4812,-69.133 1264.4812,-69.133"/>
+<polygon fill="#000000" stroke="#000000" points="1267.9813,-69.133 1264.4812,-59.133 1260.9813,-69.1331 1267.9813,-69.133"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__kma_ident_call&#45;&gt;BacterialTyper__scripts__functions__system_call -->
-<g id="edge15" class="edge">
+<g id="edge16" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__kma_ident_call&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M787.1984,-258.8215C823.1156,-250.5412 870.3702,-236.6247 908,-215 977.7188,-174.9347 1042.9738,-104.8567 1075.1237,-67.3661"/>
-<polygon fill="#000000" stroke="#000000" points="1078.0411,-69.3373 1081.8378,-59.4461 1072.7015,-64.8107 1078.0411,-69.3373"/>
+<path fill="none" stroke="#000000" d="M794.9886,-263C902.8215,-263 1113.5484,-263 1113.5484,-263 1113.5484,-263 1113.5484,-68.9745 1113.5484,-68.9745"/>
+<polygon fill="#000000" stroke="#000000" points="1117.0485,-68.9745 1113.5484,-58.9745 1110.0485,-68.9746 1117.0485,-68.9745"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__main -->
 <g id="node16" class="node">
@@ -218,8 +218,8 @@
 <!-- BacterialTyper__scripts__species_identification_KMA__main&#45;&gt;BacterialTyper__scripts__species_identification_KMA__help_options -->
 <g id="edge17" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__main&#45;&gt;BacterialTyper__scripts__species_identification_KMA__help_options</title>
-<path fill="none" stroke="#000000" d="M297.1176,-253.7307C307.0304,-244.3396 319.9568,-232.0936 331.2616,-221.3838"/>
-<polygon fill="#000000" stroke="#000000" points="333.9195,-223.687 338.7719,-214.2687 329.1053,-218.6053 333.9195,-223.687"/>
+<path fill="none" stroke="#000000" d="M305.3512,-259.2898C305.3512,-259.2898 305.3512,-213.9691 305.3512,-213.9691"/>
+<polygon fill="#000000" stroke="#000000" points="308.8513,-213.969 305.3512,-203.9691 301.8513,-213.9691 308.8513,-213.969"/>
 </g>
 <!-- BacterialTyper__scripts__species_identification_KMA__parse_kma_results -->
 <g id="node17" class="node">
@@ -230,8 +230,8 @@
 <!-- BacterialTyper__scripts__species_identification_KMA__main&#45;&gt;BacterialTyper__scripts__species_identification_KMA__parse_kma_results -->
 <g id="edge18" class="edge">
 <title>BacterialTyper__scripts__species_identification_KMA__main&#45;&gt;BacterialTyper__scripts__species_identification_KMA__parse_kma_results</title>
-<path fill="none" stroke="#000000" d="M265.0944,-253.7307C255.382,-244.4067 242.7379,-232.2684 231.6391,-221.6135"/>
-<polygon fill="#000000" stroke="#000000" points="233.8949,-218.9273 224.2571,-214.5269 229.0472,-223.9771 233.8949,-218.9273"/>
+<path fill="none" stroke="#000000" d="M267.5479,-253.0209C267.5479,-253.0209 267.5479,-217.8035 267.5479,-217.8035"/>
+<polygon fill="#000000" stroke="#000000" points="271.048,-217.8034 267.5479,-207.8035 264.048,-217.8035 271.048,-217.8034"/>
 </g>
 </g>
 </svg>

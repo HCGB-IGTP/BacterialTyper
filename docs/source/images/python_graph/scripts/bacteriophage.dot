@@ -1,5 +1,5 @@
 digraph G {
-    graph [spilines=ortho, rankdir=TB, clusterrank="local"];
+    graph [splines=ortho, rankdir=TB, clusterrank="local"];
     subgraph cluster_G {
 
         graph [style="filled,rounded",fillcolor="#80808018", label=""];
@@ -201,8 +201,8 @@ digraph G {
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
         }
     }
-        BacterialTyper__scripts__bacteriophage__results_PhiSpy -> BacterialTyper__scripts__functions__create_subfolder [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__results_PhiSpy -> BacterialTyper__scripts__functions__read_time_stamp [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__results_PhiSpy -> BacterialTyper__scripts__functions__create_subfolder [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__results_PhiSpy -> BacterialTyper__scripts__functions__print_time_stamp [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__results_PhiSpy -> BacterialTyper__scripts__functions__get_fullpath_list [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__ident_bacteriophage -> BacterialTyper__scripts__functions__read_time_stamp [style="solid", color="#000000"];
@@ -213,7 +213,7 @@ digraph G {
         BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets -> BacterialTyper__scripts__functions__parse_sublist [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__help_PhiSpy -> BacterialTyper__scripts__bacteriophage__print_list_modified [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__help_options -> BacterialTyper__scripts__bacteriophage__print_list_modified [style="solid", color="#000000"];
+        BacterialTyper__scripts__bacteriophage__main -> BacterialTyper__scripts__bacteriophage__results_PhiSpy [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__main -> BacterialTyper__scripts__bacteriophage__ident_bacteriophage [style="solid", color="#000000"];
         BacterialTyper__scripts__bacteriophage__main -> BacterialTyper__scripts__bacteriophage__help_options [style="solid", color="#000000"];
-        BacterialTyper__scripts__bacteriophage__main -> BacterialTyper__scripts__bacteriophage__results_PhiSpy [style="solid", color="#000000"];
     }

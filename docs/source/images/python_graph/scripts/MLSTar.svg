@@ -52,10 +52,10 @@
 <text text-anchor="middle" x="674" y="-121.3" font-family="Times,serif" font-size="14.00" fill="#000000">download_PubMLST</text>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__download_PubMLST&#45;&gt;BacterialTyper__other_tools__tools__R_scripts -->
-<g id="edge14" class="edge">
+<g id="edge17" class="edge">
 <title>BacterialTyper__scripts__MLSTar__download_PubMLST&#45;&gt;BacterialTyper__other_tools__tools__R_scripts</title>
-<path fill="none" stroke="#000000" d="M719.8134,-109.6663C732.5991,-104.542 746.2095,-98.2567 758,-91 769.3456,-84.0171 780.6378,-74.7087 790.0785,-66.0814"/>
-<polygon fill="#000000" stroke="#000000" points="792.6531,-68.4645 797.5337,-59.0608 787.8541,-63.3685 792.6531,-68.4645"/>
+<path fill="none" stroke="#000000" d="M753.6179,-117.6343C753.6179,-97.3211 753.6179,-42 753.6179,-42 753.6179,-42 759.7992,-42 759.7992,-42"/>
+<polygon fill="#000000" stroke="#000000" points="759.7993,-45.5001 769.7992,-42 759.7992,-38.5001 759.7993,-45.5001"/>
 </g>
 <!-- BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="node14" class="node">
@@ -64,10 +64,10 @@
 <text text-anchor="middle" x="510" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">print_time_stamp</text>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__download_PubMLST&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
-<g id="edge17" class="edge">
+<g id="edge16" class="edge">
 <title>BacterialTyper__scripts__MLSTar__download_PubMLST&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M632.7187,-108.9422C619.831,-103.5923 605.6753,-97.3648 593,-91 576.9011,-82.916 559.6641,-72.9657 545.0932,-64.1483"/>
-<polygon fill="#000000" stroke="#000000" points="546.7565,-61.063 536.3993,-58.8315 543.1044,-67.0347 546.7565,-61.063"/>
+<path fill="none" stroke="#000000" d="M596.8735,-116.4302C596.8735,-95.2238 596.8735,-42 596.8735,-42 596.8735,-42 593.6793,-42 593.6793,-42"/>
+<polygon fill="#000000" stroke="#000000" points="593.6793,-38.5001 583.6793,-42 593.6793,-45.5001 593.6793,-38.5001"/>
 </g>
 <!-- BacterialTyper__scripts__functions__read_time_stamp -->
 <g id="node15" class="node">
@@ -76,10 +76,10 @@
 <text text-anchor="middle" x="674" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">read_time_stamp</text>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__download_PubMLST&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
-<g id="edge15" class="edge">
+<g id="edge14" class="edge">
 <title>BacterialTyper__scripts__MLSTar__download_PubMLST&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M674,-106.9902C674,-96.2963 674,-82.4994 674,-70.3706"/>
-<polygon fill="#000000" stroke="#000000" points="677.5001,-70.2612 674,-60.2612 670.5001,-70.2613 677.5001,-70.2612"/>
+<path fill="none" stroke="#000000" d="M698.0479,-107.3978C698.0479,-107.3978 698.0479,-69.0091 698.0479,-69.0091"/>
+<polygon fill="#000000" stroke="#000000" points="701.548,-69.0091 698.0479,-59.0091 694.548,-69.0092 701.548,-69.0091"/>
 </g>
 <!-- BacterialTyper__scripts__functions__system_call -->
 <g id="node16" class="node">
@@ -88,10 +88,10 @@
 <text text-anchor="middle" x="366" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">system_call</text>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__download_PubMLST&#45;&gt;BacterialTyper__scripts__functions__system_call -->
-<g id="edge16" class="edge">
+<g id="edge15" class="edge">
 <title>BacterialTyper__scripts__MLSTar__download_PubMLST&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M626.0879,-109.891C610.8612,-105.6668 593.8561,-101.5407 578,-99 545.0397,-93.7186 459.2286,-102.7919 428,-91 413.8854,-85.6703 400.4564,-75.8777 389.7286,-66.4399"/>
-<polygon fill="#000000" stroke="#000000" points="391.8032,-63.5913 382.0848,-59.3717 387.0507,-68.7308 391.8032,-63.5913"/>
+<path fill="none" stroke="#000000" d="M591.8906,-118.9291C591.8906,-110.163 591.8906,-95 591.8906,-95 591.8906,-95 397.5872,-95 397.5872,-95 397.5872,-95 397.5872,-66.4825 397.5872,-66.4825"/>
+<polygon fill="#000000" stroke="#000000" points="401.0873,-66.4824 397.5872,-56.4825 394.0873,-66.4825 401.0873,-66.4824"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__getPUBMLST -->
 <g id="node4" class="node">
@@ -102,14 +102,14 @@
 <!-- BacterialTyper__scripts__MLSTar__getPUBMLST&#45;&gt;BacterialTyper__other_tools__tools__R_scripts -->
 <g id="edge10" class="edge">
 <title>BacterialTyper__scripts__MLSTar__getPUBMLST&#45;&gt;BacterialTyper__other_tools__tools__R_scripts</title>
-<path fill="none" stroke="#000000" d="M891.1891,-182.1825C875.9813,-154.5637 846.6187,-101.2385 828.8174,-68.9098"/>
-<polygon fill="#000000" stroke="#000000" points="831.798,-67.0664 823.9085,-59.9948 825.6661,-70.4428 831.798,-67.0664"/>
+<path fill="none" stroke="#000000" d="M851.6659,-188.8897C851.6659,-188.8897 851.6659,-61.6661 851.6659,-61.6661"/>
+<polygon fill="#000000" stroke="#000000" points="855.166,-61.6661 851.6659,-51.6661 848.166,-61.6661 855.166,-61.6661"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__getPUBMLST&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge11" class="edge">
 <title>BacterialTyper__scripts__MLSTar__getPUBMLST&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M856.9924,-187.1904C848.1268,-185.079 838.8212,-183.1928 830,-182 808.5242,-179.0961 458.5856,-185.1453 440,-174 402.1454,-151.2997 382.1052,-101.542 372.801,-70.0185"/>
-<polygon fill="#000000" stroke="#000000" points="376.0932,-68.7926 370.047,-60.0924 369.348,-70.6641 376.0932,-68.7926"/>
+<path fill="none" stroke="#000000" d="M845.1357,-191.639C845.1357,-177.8867 845.1357,-152 845.1357,-152 845.1357,-152 355.4709,-152 355.4709,-152 355.4709,-152 355.4709,-69.6734 355.4709,-69.6734"/>
+<polygon fill="#000000" stroke="#000000" points="358.971,-69.6734 355.4709,-59.6734 351.971,-69.6734 358.971,-69.6734"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__get_MLSTar_species -->
 <g id="node5" class="node">
@@ -120,8 +120,8 @@
 <!-- BacterialTyper__scripts__MLSTar__get_MLSTar_species&#45;&gt;BacterialTyper__data__data_files__data_list -->
 <g id="edge9" class="edge">
 <title>BacterialTyper__scripts__MLSTar__get_MLSTar_species&#45;&gt;BacterialTyper__data__data_files__data_list</title>
-<path fill="none" stroke="#000000" d="M283.7368,-187.8622C272.1054,-184.3116 260.384,-179.7746 250,-174 238.7645,-167.7519 228.1034,-158.5317 219.3932,-149.77"/>
-<polygon fill="#000000" stroke="#000000" points="221.6996,-147.1159 212.2756,-142.2745 216.6236,-151.9361 221.6996,-147.1159"/>
+<path fill="none" stroke="#000000" d="M272.8864,-190.9795C272.8864,-172.2762 272.8864,-131 272.8864,-131 272.8864,-131 246.3207,-131 246.3207,-131"/>
+<polygon fill="#000000" stroke="#000000" points="246.3207,-127.5001 236.3207,-131 246.3207,-134.5001 246.3207,-127.5001"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__help_MLSTar -->
 <g id="node6" class="node">
@@ -132,7 +132,7 @@
 <!-- BacterialTyper__scripts__MLSTar__help_MLSTar&#45;&gt;BacterialTyper__scripts__MLSTar__get_MLSTar_species -->
 <g id="edge1" class="edge">
 <title>BacterialTyper__scripts__MLSTar__help_MLSTar&#45;&gt;BacterialTyper__scripts__MLSTar__get_MLSTar_species</title>
-<path fill="none" stroke="#000000" d="M348,-253.8314C348,-246.131 348,-236.9743 348,-228.4166"/>
+<path fill="none" stroke="#000000" d="M348,-253.8314C348,-253.8314 348,-228.4133 348,-228.4133"/>
 <polygon fill="#000000" stroke="#000000" points="351.5001,-228.4132 348,-218.4133 344.5001,-228.4133 351.5001,-228.4132"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__help_options -->
@@ -148,16 +148,16 @@
 <text text-anchor="middle" x="640" y="-268.3" font-family="Times,serif" font-size="14.00" fill="#000000">main</text>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__main&#45;&gt;BacterialTyper__scripts__MLSTar__getPUBMLST -->
-<g id="edge19" class="edge">
+<g id="edge23" class="edge">
 <title>BacterialTyper__scripts__MLSTar__main&#45;&gt;BacterialTyper__scripts__MLSTar__getPUBMLST</title>
-<path fill="none" stroke="#000000" d="M666.4624,-264.7C708.3096,-253.156 790.6591,-230.4389 845.7793,-215.2333"/>
-<polygon fill="#000000" stroke="#000000" points="847.0296,-218.5192 855.7387,-212.4859 845.168,-211.7713 847.0296,-218.5192"/>
+<path fill="none" stroke="#000000" d="M667.4383,-278C734.449,-278 901,-278 901,-278 901,-278 901,-228.0908 901,-228.0908"/>
+<polygon fill="#000000" stroke="#000000" points="904.5001,-228.0908 901,-218.0908 897.5001,-228.0909 904.5001,-228.0908"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__main&#45;&gt;BacterialTyper__scripts__MLSTar__help_options -->
 <g id="edge18" class="edge">
 <title>BacterialTyper__scripts__MLSTar__main&#45;&gt;BacterialTyper__scripts__MLSTar__help_options</title>
-<path fill="none" stroke="#000000" d="M618.2029,-260.1107C598.5509,-249.3914 569.2221,-233.3939 545.7607,-220.5967"/>
-<polygon fill="#000000" stroke="#000000" points="547.2191,-217.4055 536.7641,-215.6895 543.8671,-223.5507 547.2191,-217.4055"/>
+<path fill="none" stroke="#000000" d="M611.358,-272C572.5357,-272 508,-272 508,-272 508,-272 508,-228.1686 508,-228.1686"/>
+<polygon fill="#000000" stroke="#000000" points="511.5001,-228.1686 508,-218.1686 504.5001,-228.1687 511.5001,-228.1686"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__plot_MLST -->
 <g id="node9" class="node">
@@ -166,10 +166,10 @@
 <text text-anchor="middle" x="768" y="-196.3" font-family="Times,serif" font-size="14.00" fill="#000000">plot_MLST</text>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__main&#45;&gt;BacterialTyper__scripts__MLSTar__plot_MLST -->
-<g id="edge23" class="edge">
+<g id="edge22" class="edge">
 <title>BacterialTyper__scripts__MLSTar__main&#45;&gt;BacterialTyper__scripts__MLSTar__plot_MLST</title>
-<path fill="none" stroke="#000000" d="M661.4243,-259.9488C680.4398,-249.2526 708.6323,-233.3943 731.2454,-220.6745"/>
-<polygon fill="#000000" stroke="#000000" points="733.2359,-223.5706 740.2358,-215.6174 729.8041,-217.4695 733.2359,-223.5706"/>
+<path fill="none" stroke="#000000" d="M667.1455,-266C704.7188,-266 768,-266 768,-266 768,-266 768,-228.0348 768,-228.0348"/>
+<polygon fill="#000000" stroke="#000000" points="771.5001,-228.0348 768,-218.0348 764.5001,-228.0348 771.5001,-228.0348"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__run_MLSTar -->
 <g id="node10" class="node">
@@ -178,10 +178,10 @@
 <text text-anchor="middle" x="640" y="-196.3" font-family="Times,serif" font-size="14.00" fill="#000000">run_MLSTar</text>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__main&#45;&gt;BacterialTyper__scripts__MLSTar__run_MLSTar -->
-<g id="edge20" class="edge">
+<g id="edge19" class="edge">
 <title>BacterialTyper__scripts__MLSTar__main&#45;&gt;BacterialTyper__scripts__MLSTar__run_MLSTar</title>
-<path fill="none" stroke="#000000" d="M640,-253.8314C640,-246.131 640,-236.9743 640,-228.4166"/>
-<polygon fill="#000000" stroke="#000000" points="643.5001,-228.4132 640,-218.4133 636.5001,-228.4133 643.5001,-228.4132"/>
+<path fill="none" stroke="#000000" d="M654.2987,-256.3771C654.2987,-256.3771 654.2987,-227.6161 654.2987,-227.6161"/>
+<polygon fill="#000000" stroke="#000000" points="657.7988,-227.616 654.2987,-217.6161 650.7988,-227.6161 657.7988,-227.616"/>
 </g>
 <!-- BacterialTyper__scripts__functions__create_folder -->
 <g id="node12" class="node">
@@ -190,10 +190,10 @@
 <text text-anchor="middle" x="81" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">create_folder</text>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__main&#45;&gt;BacterialTyper__scripts__functions__create_folder -->
-<g id="edge22" class="edge">
+<g id="edge21" class="edge">
 <title>BacterialTyper__scripts__MLSTar__main&#45;&gt;BacterialTyper__scripts__functions__create_folder</title>
-<path fill="none" stroke="#000000" d="M611.4042,-269.7261C494.9687,-260.4245 62.1568,-225.4145 50,-218 3.6135,-189.7088 .7757,-149.0163 22,-99 27.5862,-85.8359 37.8664,-74.2297 48.2992,-64.9844"/>
-<polygon fill="#000000" stroke="#000000" points="50.7807,-67.4729 56.2318,-58.388 46.305,-62.0907 50.7807,-67.4729"/>
+<path fill="none" stroke="#000000" d="M625.7013,-256.2971C625.7013,-249.0386 625.7013,-242 625.7013,-242 625.7013,-242 81,-242 81,-242 81,-242 81,-70.1014 81,-70.1014"/>
+<polygon fill="#000000" stroke="#000000" points="84.5001,-70.1014 81,-60.1014 77.5001,-70.1014 84.5001,-70.1014"/>
 </g>
 <!-- BacterialTyper__scripts__functions__create_subfolder -->
 <g id="node13" class="node">
@@ -202,28 +202,28 @@
 <text text-anchor="middle" x="226" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">create_subfolder</text>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__main&#45;&gt;BacterialTyper__scripts__functions__create_subfolder -->
-<g id="edge21" class="edge">
+<g id="edge20" class="edge">
 <title>BacterialTyper__scripts__MLSTar__main&#45;&gt;BacterialTyper__scripts__functions__create_subfolder</title>
-<path fill="none" stroke="#000000" d="M611.5791,-269.5345C497.6882,-259.3673 78.6665,-219.1013 42,-174 20.9728,-148.1356 19.3428,-123.4492 42,-99 49.953,-90.418 135.8774,-94.6318 147,-91 164.5332,-85.275 182.1557,-74.8965 196.2937,-65.1602"/>
-<polygon fill="#000000" stroke="#000000" points="198.5035,-67.8832 204.6144,-59.2283 194.44,-62.1834 198.5035,-67.8832"/>
+<path fill="none" stroke="#000000" d="M640,-253.9445C640,-242.561 640,-230 640,-230 640,-230 249.927,-230 249.927,-230 249.927,-230 249.927,-69.0153 249.927,-69.0153"/>
+<polygon fill="#000000" stroke="#000000" points="253.4271,-69.0153 249.927,-59.0153 246.4271,-69.0154 253.4271,-69.0153"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__plot_MLST&#45;&gt;BacterialTyper__other_tools__tools__R_scripts -->
 <g id="edge12" class="edge">
 <title>BacterialTyper__scripts__MLSTar__plot_MLST&#45;&gt;BacterialTyper__other_tools__tools__R_scripts</title>
-<path fill="none" stroke="#000000" d="M773.2768,-181.8754C781.2835,-154.3741 796.561,-101.8991 805.9573,-69.6248"/>
-<polygon fill="#000000" stroke="#000000" points="809.3498,-70.493 808.7848,-59.9132 802.6289,-68.5362 809.3498,-70.493"/>
+<path fill="none" stroke="#000000" d="M803.6982,-186.529C803.6982,-186.529 803.6982,-69.7076 803.6982,-69.7076"/>
+<polygon fill="#000000" stroke="#000000" points="807.1983,-69.7076 803.6982,-59.7076 800.1983,-69.7077 807.1983,-69.7076"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__plot_MLST&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge13" class="edge">
 <title>BacterialTyper__scripts__MLSTar__plot_MLST&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M730.6186,-187.2171C722.8961,-185.0741 714.752,-183.169 707,-182 689.2823,-179.3282 74.5912,-186.7483 62,-174 38.5764,-150.2841 38.8208,-122.9549 62,-99 71.3927,-89.293 292.3341,-95.6928 305,-91 319.0075,-85.8102 332.2369,-76.0373 342.7718,-66.5764"/>
-<polygon fill="#000000" stroke="#000000" points="345.4109,-68.8979 350.271,-59.4836 340.6008,-63.8123 345.4109,-68.8979"/>
+<path fill="none" stroke="#000000" d="M738.2235,-184.9814C738.2235,-174.3597 738.2235,-162 738.2235,-162 738.2235,-162 334.4128,-162 334.4128,-162 334.4128,-162 334.4128,-66.7144 334.4128,-66.7144"/>
+<polygon fill="#000000" stroke="#000000" points="337.9129,-66.7143 334.4128,-56.7144 330.9129,-66.7144 337.9129,-66.7143"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__run_MLSTar&#45;&gt;BacterialTyper__scripts__MLSTar__download_PubMLST -->
 <g id="edge4" class="edge">
 <title>BacterialTyper__scripts__MLSTar__run_MLSTar&#45;&gt;BacterialTyper__scripts__MLSTar__download_PubMLST</title>
-<path fill="none" stroke="#000000" d="M648.2305,-181.8446C652.2397,-173.0007 657.145,-162.1801 661.5959,-152.3619"/>
-<polygon fill="#000000" stroke="#000000" points="664.9041,-153.5412 665.8453,-142.9882 658.5287,-150.6509 664.9041,-153.5412"/>
+<path fill="none" stroke="#000000" d="M660.8658,-182.9813C660.8658,-182.9813 660.8658,-152.9972 660.8658,-152.9972"/>
+<polygon fill="#000000" stroke="#000000" points="664.3659,-152.9971 660.8658,-142.9972 657.3659,-152.9972 664.3659,-152.9971"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__run_doMLST -->
 <g id="node11" class="node">
@@ -232,40 +232,40 @@
 <text text-anchor="middle" x="509" y="-121.3" font-family="Times,serif" font-size="14.00" fill="#000000">run_doMLST</text>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__run_MLSTar&#45;&gt;BacterialTyper__scripts__MLSTar__run_doMLST -->
-<g id="edge2" class="edge">
+<g id="edge3" class="edge">
 <title>BacterialTyper__scripts__MLSTar__run_MLSTar&#45;&gt;BacterialTyper__scripts__MLSTar__run_doMLST</title>
-<path fill="none" stroke="#000000" d="M602.9751,-186.0456C594.5947,-182.4581 585.8556,-178.3662 578,-174 564.4626,-166.4758 550.3744,-156.8398 538.4844,-148.107"/>
-<polygon fill="#000000" stroke="#000000" points="540.3585,-145.138 530.2544,-141.9509 536.1656,-150.7434 540.3585,-145.138"/>
+<path fill="none" stroke="#000000" d="M581.8977,-200C577.9364,-200 575.4749,-200 575.4749,-200 575.4749,-200 575.4749,-125 575.4749,-125 575.4749,-125 574.8132,-125 574.8132,-125"/>
+<polygon fill="#000000" stroke="#000000" points="578.8581,-121.5002 568.858,-125 578.858,-128.5002 578.8581,-121.5002"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__run_MLSTar&#45;&gt;BacterialTyper__scripts__functions__create_subfolder -->
-<g id="edge3" class="edge">
+<g id="edge2" class="edge">
 <title>BacterialTyper__scripts__MLSTar__run_MLSTar&#45;&gt;BacterialTyper__scripts__functions__create_subfolder</title>
-<path fill="none" stroke="#000000" d="M598.4841,-187.3422C590.1169,-185.2183 581.332,-183.2886 573,-182 533.4309,-175.8805 430.52,-187.979 393,-174 332.9805,-151.6382 277.6862,-99.0546 248.2281,-67.4187"/>
-<polygon fill="#000000" stroke="#000000" points="250.6417,-64.8719 241.3082,-59.8582 245.478,-69.598 250.6417,-64.8719"/>
+<path fill="none" stroke="#000000" d="M623.8868,-182.4262C623.8868,-176.8005 623.8868,-172 623.8868,-172 623.8868,-172 284.2151,-172 284.2151,-172 284.2151,-172 284.2151,-62.2009 284.2151,-62.2009"/>
+<polygon fill="#000000" stroke="#000000" points="287.7152,-62.2008 284.2151,-52.2009 280.7152,-62.2009 287.7152,-62.2008"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__run_doMLST&#45;&gt;BacterialTyper__other_tools__tools__R_scripts -->
-<g id="edge5" class="edge">
+<g id="edge8" class="edge">
 <title>BacterialTyper__scripts__MLSTar__run_doMLST&#45;&gt;BacterialTyper__other_tools__tools__R_scripts</title>
-<path fill="none" stroke="#000000" d="M542.4105,-109.9846C553.5135,-105.6552 566.0869,-101.4445 578,-99 617.2223,-90.9518 720.8409,-105.9118 758,-91 771.0552,-85.761 783.136,-76.1135 792.7095,-66.7557"/>
-<polygon fill="#000000" stroke="#000000" points="795.3845,-69.0244 799.8203,-59.4028 790.3526,-64.1581 795.3845,-69.0244"/>
+<path fill="none" stroke="#000000" d="M538.8973,-109.3608C538.8973,-97.4196 538.8973,-83 538.8973,-83 538.8973,-83 786.7511,-83 786.7511,-83 786.7511,-83 786.7511,-66.3398 786.7511,-66.3398"/>
+<polygon fill="#000000" stroke="#000000" points="790.2512,-66.3398 786.7511,-56.3398 783.2512,-66.3398 790.2512,-66.3398"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__run_doMLST&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
-<g id="edge8" class="edge">
+<g id="edge7" class="edge">
 <title>BacterialTyper__scripts__MLSTar__run_doMLST&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M509.217,-106.9902C509.3458,-96.2963 509.5121,-82.4994 509.6582,-70.3706"/>
-<polygon fill="#000000" stroke="#000000" points="513.1592,-70.3027 509.78,-60.2612 506.1597,-70.2183 513.1592,-70.3027"/>
+<path fill="none" stroke="#000000" d="M479.1027,-109.3883C479.1027,-109.3883 479.1027,-68.3935 479.1027,-68.3935"/>
+<polygon fill="#000000" stroke="#000000" points="482.6028,-68.3934 479.1027,-58.3935 475.6028,-68.3935 482.6028,-68.3934"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__run_doMLST&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
-<g id="edge6" class="edge">
+<g id="edge5" class="edge">
 <title>BacterialTyper__scripts__MLSTar__run_doMLST&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M546.7159,-110.9355C561.1013,-105.2128 577.5154,-98.2434 592,-91 607.9686,-83.0146 625.008,-73.0799 639.3937,-64.2476"/>
-<polygon fill="#000000" stroke="#000000" points="641.3264,-67.1674 647.9745,-58.918 637.633,-61.221 641.3264,-67.1674"/>
+<path fill="none" stroke="#000000" d="M509,-106.7181C509,-91.0522 509,-71 509,-71 509,-71 649.9521,-71 649.9521,-71 649.9521,-71 649.9521,-69.2046 649.9521,-69.2046"/>
+<polygon fill="#000000" stroke="#000000" points="653.4522,-69.2046 649.9521,-59.2046 646.4522,-69.2046 653.4522,-69.2046"/>
 </g>
 <!-- BacterialTyper__scripts__MLSTar__run_doMLST&#45;&gt;BacterialTyper__scripts__functions__system_call -->
-<g id="edge7" class="edge">
+<g id="edge6" class="edge">
 <title>BacterialTyper__scripts__MLSTar__run_doMLST&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M470.0551,-111.1455C456.3675,-105.6344 441.1347,-98.7509 428,-91 415.5713,-83.6657 402.8888,-74.0859 392.2594,-65.3442"/>
-<polygon fill="#000000" stroke="#000000" points="394.4746,-62.6339 384.5694,-58.8738 389.9678,-67.9902 394.4746,-62.6339"/>
+<path fill="none" stroke="#000000" d="M452.4362,-119C416.4309,-119 376.5291,-119 376.5291,-119 376.5291,-119 376.5291,-69.8589 376.5291,-69.8589"/>
+<polygon fill="#000000" stroke="#000000" points="380.0292,-69.8589 376.5291,-59.8589 373.0292,-69.8589 380.0292,-69.8589"/>
 </g>
 </g>
 </svg>

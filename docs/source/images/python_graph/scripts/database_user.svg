@@ -48,8 +48,8 @@
 <!-- BacterialTyper__scripts__database_generator__get_database&#45;&gt;BacterialTyper__scripts__functions__get_data -->
 <g id="edge2" class="edge">
 <title>BacterialTyper__scripts__database_generator__get_database&#45;&gt;BacterialTyper__scripts__functions__get_data</title>
-<path fill="none" stroke="#000000" d="M449.8157,-109.9792C459.8127,-104.5507 470.7127,-98.0156 480,-91 489.5546,-83.7825 499.0865,-74.7704 507.1692,-66.4501"/>
-<polygon fill="#000000" stroke="#000000" points="509.8157,-68.7454 514.1436,-59.0749 504.7297,-63.9358 509.8157,-68.7454"/>
+<path fill="none" stroke="#000000" d="M475.0517,-125C479.9984,-125 483.1802,-125 483.1802,-125 483.1802,-125 483.1802,-36 483.1802,-36 483.1802,-36 483.9368,-36 483.9368,-36"/>
+<polygon fill="#000000" stroke="#000000" points="480.7464,-39.5001 490.7464,-36 480.7463,-32.5001 480.7464,-39.5001"/>
 </g>
 <!-- BacterialTyper__scripts__functions__print_sepLine -->
 <g id="node11" class="node">
@@ -60,8 +60,8 @@
 <!-- BacterialTyper__scripts__database_generator__get_database&#45;&gt;BacterialTyper__scripts__functions__print_sepLine -->
 <g id="edge1" class="edge">
 <title>BacterialTyper__scripts__database_generator__get_database&#45;&gt;BacterialTyper__scripts__functions__print_sepLine</title>
-<path fill="none" stroke="#000000" d="M417.2641,-106.9902C416.2334,-96.2963 414.9036,-82.4994 413.7345,-70.3706"/>
-<polygon fill="#000000" stroke="#000000" points="417.2035,-69.8793 412.7601,-60.2612 410.2358,-70.5509 417.2035,-69.8793"/>
+<path fill="none" stroke="#000000" d="M416.9498,-106.9902C416.9498,-106.9902 416.9498,-69.9746 416.9498,-69.9746"/>
+<polygon fill="#000000" stroke="#000000" points="420.4499,-69.9746 416.9498,-59.9746 413.4499,-69.9747 420.4499,-69.9746"/>
 </g>
 <!-- BacterialTyper__scripts__database_generator__getdbs -->
 <g id="node2" class="node">
@@ -78,14 +78,14 @@
 <!-- BacterialTyper__scripts__database_generator__getdbs&#45;&gt;BacterialTyper__scripts__functions__create_subfolder -->
 <g id="edge4" class="edge">
 <title>BacterialTyper__scripts__database_generator__getdbs&#45;&gt;BacterialTyper__scripts__functions__create_subfolder</title>
-<path fill="none" stroke="#000000" d="M301.0325,-107.3978C294.6576,-96.1401 286.2674,-81.3232 279.0852,-68.6399"/>
-<polygon fill="#000000" stroke="#000000" points="282.0883,-66.84 274.1152,-59.8629 275.9971,-70.2893 282.0883,-66.84"/>
+<path fill="none" stroke="#000000" d="M295.9833,-108.6019C295.9833,-108.6019 295.9833,-68.0816 295.9833,-68.0816"/>
+<polygon fill="#000000" stroke="#000000" points="299.4834,-68.0816 295.9833,-58.0816 292.4834,-68.0817 299.4834,-68.0816"/>
 </g>
 <!-- BacterialTyper__scripts__database_generator__getdbs&#45;&gt;BacterialTyper__scripts__functions__print_sepLine -->
 <g id="edge5" class="edge">
 <title>BacterialTyper__scripts__database_generator__getdbs&#45;&gt;BacterialTyper__scripts__functions__print_sepLine</title>
-<path fill="none" stroke="#000000" d="M329.3415,-109.7765C344.1691,-97.4697 365.3066,-79.9255 382.3609,-65.7704"/>
-<polygon fill="#000000" stroke="#000000" points="384.9001,-68.2115 390.3595,-59.1316 380.4293,-62.8251 384.9001,-68.2115"/>
+<path fill="none" stroke="#000000" d="M339.1704,-114.8226C339.1704,-92.6592 339.1704,-42 339.1704,-42 339.1704,-42 341.0316,-42 341.0316,-42"/>
+<polygon fill="#000000" stroke="#000000" points="341.0316,-45.5001 351.0316,-42 341.0316,-38.5001 341.0316,-45.5001"/>
 </g>
 <!-- BacterialTyper__scripts__database_generator__update_db_data_file -->
 <g id="node3" class="node">
@@ -96,8 +96,8 @@
 <!-- BacterialTyper__scripts__database_generator__update_db_data_file&#45;&gt;BacterialTyper__scripts__functions__get_data -->
 <g id="edge3" class="edge">
 <title>BacterialTyper__scripts__database_generator__update_db_data_file&#45;&gt;BacterialTyper__scripts__functions__get_data</title>
-<path fill="none" stroke="#000000" d="M565.0187,-106.9902C558.8281,-95.8203 550.7613,-81.2649 543.8315,-68.7612"/>
-<polygon fill="#000000" stroke="#000000" points="546.7126,-66.7394 538.8038,-59.6895 540.59,-70.1327 546.7126,-66.7394"/>
+<path fill="none" stroke="#000000" d="M530.8769,-109.7765C530.8769,-109.7765 530.8769,-70.0162 530.8769,-70.0162"/>
+<polygon fill="#000000" stroke="#000000" points="534.377,-70.0161 530.8769,-60.0162 527.377,-70.0162 534.377,-70.0161"/>
 </g>
 <!-- BacterialTyper__scripts__database_user__get_userData_files -->
 <g id="node4" class="node">
@@ -114,8 +114,8 @@
 <!-- BacterialTyper__scripts__database_user__get_userData_files&#45;&gt;BacterialTyper__scripts__sampleParser__get_files -->
 <g id="edge16" class="edge">
 <title>BacterialTyper__scripts__database_user__get_userData_files&#45;&gt;BacterialTyper__scripts__sampleParser__get_files</title>
-<path fill="none" stroke="#000000" d="M261.5344,-191.6287C252.0721,-186.4031 241.8927,-180.3235 233,-174 222.415,-166.4732 211.5722,-157.2063 202.342,-148.7646"/>
-<polygon fill="#000000" stroke="#000000" points="204.7088,-146.1861 195.009,-141.9241 199.9339,-151.3047 204.7088,-146.1861"/>
+<path fill="none" stroke="#000000" d="M217.2807,-208C213.5607,-208 211.3356,-208 211.3356,-208 211.3356,-208 211.3356,-145.512 211.3356,-145.512"/>
+<polygon fill="#000000" stroke="#000000" points="214.8357,-145.512 211.3356,-135.512 207.8357,-145.512 214.8357,-145.512"/>
 </g>
 <!-- BacterialTyper__scripts__database_user__get_userData_info -->
 <g id="node5" class="node">
@@ -126,8 +126,8 @@
 <!-- BacterialTyper__scripts__database_user__get_userData_info&#45;&gt;BacterialTyper__scripts__sampleParser__get_files -->
 <g id="edge17" class="edge">
 <title>BacterialTyper__scripts__database_user__get_userData_info&#45;&gt;BacterialTyper__scripts__sampleParser__get_files</title>
-<path fill="none" stroke="#000000" d="M135.7172,-189.9902C143.1056,-178.634 152.7705,-163.7786 160.9949,-151.1375"/>
-<polygon fill="#000000" stroke="#000000" points="164.156,-152.6967 166.6757,-142.4058 158.2885,-148.8793 164.156,-152.6967"/>
+<path fill="none" stroke="#000000" d="M168.2235,-193.1613C168.2235,-193.1613 168.2235,-152.5895 168.2235,-152.5895"/>
+<polygon fill="#000000" stroke="#000000" points="171.7236,-152.5894 168.2235,-142.5895 164.7236,-152.5895 171.7236,-152.5894"/>
 </g>
 <!-- BacterialTyper__scripts__database_user__update_database_user_data -->
 <g id="node6" class="node">
@@ -138,32 +138,32 @@
 <!-- BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__database_generator__get_database -->
 <g id="edge7" class="edge">
 <title>BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__database_generator__get_database</title>
-<path fill="none" stroke="#000000" d="M386.63,-271.0385C446.0465,-263.1562 515.4243,-249.2197 534,-226 546.2163,-210.7297 546.7114,-196.8607 534,-182 519.0862,-164.5644 504.0922,-183.03 483,-174 468.9215,-167.9727 455.184,-158.144 444.0688,-148.8655"/>
-<polygon fill="#000000" stroke="#000000" points="446.3168,-146.1822 436.4712,-142.2687 441.7274,-151.4678 446.3168,-146.1822"/>
+<path fill="none" stroke="#000000" d="M381.2607,-269.3462C381.2607,-269.3462 381.2607,-148.3179 381.2607,-148.3179"/>
+<polygon fill="#000000" stroke="#000000" points="384.7608,-148.3178 381.2607,-138.3179 377.7608,-148.3179 384.7608,-148.3178"/>
 </g>
 <!-- BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__database_generator__getdbs -->
 <g id="edge14" class="edge">
 <title>BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__database_generator__getdbs</title>
-<path fill="none" stroke="#000000" d="M384.4272,-270.3929C441.3554,-262.2673 507.308,-248.3047 525,-226 537.1526,-210.6789 538.5009,-196.1473 525,-182 511.8683,-168.2396 371.1385,-182.25 354,-174 343.2252,-168.8133 334.0198,-159.5613 326.9237,-150.4833"/>
-<polygon fill="#000000" stroke="#000000" points="329.7128,-148.3672 321.0154,-142.3167 324.0414,-152.4703 329.7128,-148.3672"/>
+<path fill="none" stroke="#000000" d="M374.2157,-267.7131C374.2157,-237.3088 374.2157,-161 374.2157,-161 374.2157,-161 311,-161 311,-161 311,-161 311,-153 311,-153"/>
+<polygon fill="#000000" stroke="#000000" points="314.5001,-153 311,-143 307.5001,-153 314.5001,-153"/>
 </g>
 <!-- BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__database_generator__update_db_data_file -->
 <g id="edge8" class="edge">
 <title>BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__database_generator__update_db_data_file</title>
-<path fill="none" stroke="#000000" d="M383.3714,-270.1282C444.9252,-261.6006 519.6588,-247.2599 543,-226 563.3091,-207.5019 570.8129,-176.2124 573.5404,-153.3518"/>
-<polygon fill="#000000" stroke="#000000" points="577.0424,-153.4964 574.5087,-143.209 570.0741,-152.8311 577.0424,-153.4964"/>
+<path fill="none" stroke="#000000" d="M394.7027,-274C479.3468,-274 586.6185,-274 586.6185,-274 586.6185,-274 586.6185,-152.9729 586.6185,-152.9729"/>
+<polygon fill="#000000" stroke="#000000" points="590.1186,-152.9728 586.6185,-142.9729 583.1186,-152.9729 590.1186,-152.9728"/>
 </g>
 <!-- BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__database_user__get_userData_files -->
 <g id="edge15" class="edge">
 <title>BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__database_user__get_userData_files</title>
-<path fill="none" stroke="#000000" d="M294,-261.8314C294,-254.131 294,-244.9743 294,-236.4166"/>
+<path fill="none" stroke="#000000" d="M294,-261.8314C294,-261.8314 294,-236.4133 294,-236.4133"/>
 <polygon fill="#000000" stroke="#000000" points="297.5001,-236.4132 294,-226.4133 290.5001,-236.4133 297.5001,-236.4132"/>
 </g>
 <!-- BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__database_user__get_userData_info -->
 <g id="edge9" class="edge">
 <title>BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__database_user__get_userData_info</title>
-<path fill="none" stroke="#000000" d="M254.1426,-263.1192C229.1449,-252.5319 196.809,-238.8367 170.6234,-227.7464"/>
-<polygon fill="#000000" stroke="#000000" points="171.8525,-224.466 161.2793,-223.7889 169.1225,-230.9117 171.8525,-224.466"/>
+<path fill="none" stroke="#000000" d="M193.4014,-273.8613C193.4014,-273.8613 193.4014,-225.3963 193.4014,-225.3963"/>
+<polygon fill="#000000" stroke="#000000" points="196.9015,-225.3962 193.4014,-215.3963 189.9015,-225.3963 196.9015,-225.3962"/>
 </g>
 <!-- BacterialTyper__scripts__database_user__update_sample -->
 <g id="node7" class="node">
@@ -174,20 +174,20 @@
 <!-- BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__database_user__update_sample -->
 <g id="edge11" class="edge">
 <title>BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__database_user__update_sample</title>
-<path fill="none" stroke="#000000" d="M331.044,-263.1192C354.3954,-252.478 384.6367,-238.6972 409.039,-227.5772"/>
-<polygon fill="#000000" stroke="#000000" points="410.7699,-230.6347 418.4183,-223.3031 407.8672,-224.2649 410.7699,-230.6347"/>
+<path fill="none" stroke="#000000" d="M394.4481,-273.8613C394.4481,-273.8613 394.4481,-225.8423 394.4481,-225.8423"/>
+<polygon fill="#000000" stroke="#000000" points="397.9482,-225.8423 394.4481,-215.8423 390.9482,-225.8424 397.9482,-225.8423"/>
 </g>
 <!-- BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__functions__create_subfolder -->
 <g id="edge6" class="edge">
 <title>BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__functions__create_subfolder</title>
-<path fill="none" stroke="#000000" d="M379.3544,-269.1462C517.428,-248.4676 765.1906,-196.5407 670,-99 657.2692,-85.9549 359.4527,-96.2584 342,-91 324.3743,-85.6895 306.8291,-75.2478 292.8556,-65.363"/>
-<polygon fill="#000000" stroke="#000000" points="294.7786,-62.4327 284.6479,-59.3312 290.6333,-68.0734 294.7786,-62.4327"/>
+<path fill="none" stroke="#000000" d="M205.3645,-269.9409C205.3645,-242.957 205.3645,-171 205.3645,-171 205.3645,-171 248.0747,-171 248.0747,-171 248.0747,-171 248.0747,-69.6664 248.0747,-69.6664"/>
+<polygon fill="#000000" stroke="#000000" points="251.5748,-69.6664 248.0747,-59.6664 244.5748,-69.6665 251.5748,-69.6664"/>
 </g>
 <!-- BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__functions__get_data -->
 <g id="edge13" class="edge">
 <title>BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__functions__get_data</title>
-<path fill="none" stroke="#000000" d="M393.7825,-273.5317C485.5028,-266.0977 613.6066,-251.506 657,-226 682.137,-211.2249 687.611,-201.6047 697,-174 707.7335,-142.4421 719.7591,-123.3543 697,-99 688.0275,-89.3986 590.9911,-96.3764 579,-91 567.0433,-85.639 556.2895,-76.1028 547.8461,-66.8589"/>
-<polygon fill="#000000" stroke="#000000" points="550.4915,-64.5673 541.3213,-59.2609 545.1809,-69.1277 550.4915,-64.5673"/>
+<path fill="none" stroke="#000000" d="M384.7832,-270.4116C384.7832,-245.3824 384.7832,-180 384.7832,-180 384.7832,-180 485.9419,-180 485.9419,-180 485.9419,-180 485.9419,-48 485.9419,-48 485.9419,-48 486.4358,-48 486.4358,-48"/>
+<polygon fill="#000000" stroke="#000000" points="480.8813,-51.5002 490.8812,-48 480.8811,-44.5002 480.8813,-51.5002"/>
 </g>
 <!-- BacterialTyper__scripts__functions__optimize_threads -->
 <g id="node10" class="node">
@@ -198,20 +198,20 @@
 <!-- BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__functions__optimize_threads -->
 <g id="edge10" class="edge">
 <title>BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__functions__optimize_threads</title>
-<path fill="none" stroke="#000000" d="M397.8491,-275.9314C496.3292,-270.2412 635.635,-256.8707 680,-226 727.4443,-192.9867 728.0926,-153.1953 708,-99 703.5345,-86.9553 695.2582,-75.7457 686.762,-66.5098"/>
-<polygon fill="#000000" stroke="#000000" points="689.1468,-63.9425 679.6523,-59.2408 684.1425,-68.8371 689.1468,-63.9425"/>
+<path fill="none" stroke="#000000" d="M394.6832,-286C513.181,-286 694.0182,-286 694.0182,-286 694.0182,-286 694.0182,-68.0095 694.0182,-68.0095"/>
+<polygon fill="#000000" stroke="#000000" points="697.5183,-68.0095 694.0182,-58.0095 690.5183,-68.0096 697.5183,-68.0095"/>
 </g>
 <!-- BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__functions__print_sepLine -->
 <g id="edge12" class="edge">
 <title>BacterialTyper__scripts__database_user__update_database_user_data&#45;&gt;BacterialTyper__scripts__functions__print_sepLine</title>
-<path fill="none" stroke="#000000" d="M385.3352,-270.6175C467.9038,-261.1336 582.654,-245.1657 624,-226 656.3213,-211.0177 670.0701,-206.3455 685,-174 698.9695,-143.7351 708.1061,-123.0254 685,-99 669.1988,-82.5702 501.578,-98.3489 480,-91 464.2927,-85.6505 449.0152,-75.4844 436.8454,-65.7927"/>
-<polygon fill="#000000" stroke="#000000" points="438.8755,-62.9287 428.9496,-59.2238 434.3986,-68.31 438.8755,-62.9287"/>
+<path fill="none" stroke="#000000" d="M377.7382,-268.6409C377.7382,-237.3145 377.7382,-152 377.7382,-152 377.7382,-152 359.1384,-152 359.1384,-152 359.1384,-152 359.1384,-61.0018 359.1384,-61.0018"/>
+<polygon fill="#000000" stroke="#000000" points="362.6385,-61.0017 359.1384,-51.0018 355.6385,-61.0018 362.6385,-61.0017"/>
 </g>
 <!-- BacterialTyper__scripts__database_user__update_sample&#45;&gt;BacterialTyper__scripts__functions__create_subfolder -->
 <g id="edge18" class="edge">
 <title>BacterialTyper__scripts__database_user__update_sample&#45;&gt;BacterialTyper__scripts__functions__create_subfolder</title>
-<path fill="none" stroke="#000000" d="M416.3107,-192.905C404.9022,-188.6815 392.0933,-184.5523 380,-182 367.4674,-179.355 273.7726,-183.3329 265,-174 239.1654,-146.5153 246.1379,-99.807 254.4106,-69.9561"/>
-<polygon fill="#000000" stroke="#000000" points="257.8283,-70.7432 257.3393,-60.1597 251.1216,-68.7381 257.8283,-70.7432"/>
+<path fill="none" stroke="#000000" d="M480.4185,-191.6584C480.4185,-157.7757 480.4185,-83 480.4185,-83 480.4185,-83 314.7636,-83 314.7636,-83 314.7636,-83 314.7636,-64.5241 314.7636,-64.5241"/>
+<polygon fill="#000000" stroke="#000000" points="318.2637,-64.5241 314.7636,-54.5241 311.2637,-64.5242 318.2637,-64.5241"/>
 </g>
 <!-- BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="node12" class="node">
@@ -222,14 +222,14 @@
 <!-- BacterialTyper__scripts__database_user__update_sample&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="edge19" class="edge">
 <title>BacterialTyper__scripts__database_user__update_sample&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M416.6952,-192.9596C405.1957,-188.6844 392.2375,-184.5117 380,-182 365.0632,-178.9343 254.1747,-184.3746 243,-174 218.3553,-151.1198 256.3881,-123.1632 233,-99 217.9583,-83.4598 205.3024,-98.4544 185,-91 167.4666,-84.5623 149.4895,-74.3051 134.8528,-64.8352"/>
-<polygon fill="#000000" stroke="#000000" points="136.4693,-61.7069 126.2048,-59.0818 132.5919,-67.5349 136.4693,-61.7069"/>
+<path fill="none" stroke="#000000" d="M477.6567,-191.3265C477.6567,-159.8936 477.6567,-95 477.6567,-95 477.6567,-95 156.7486,-95 156.7486,-95 156.7486,-95 156.7486,-64.2925 156.7486,-64.2925"/>
+<polygon fill="#000000" stroke="#000000" points="160.2487,-64.2924 156.7486,-54.2925 153.2487,-64.2925 160.2487,-64.2924"/>
 </g>
 <!-- BacterialTyper__scripts__sampleParser__get_files&#45;&gt;BacterialTyper__scripts__functions__print_sepLine -->
 <g id="edge20" class="edge">
 <title>BacterialTyper__scripts__sampleParser__get_files&#45;&gt;BacterialTyper__scripts__functions__print_sepLine</title>
-<path fill="none" stroke="#000000" d="M210.2722,-113.7749C226.5082,-108.5343 246.6009,-102.659 265,-99 299.1792,-92.2029 310.4262,-103.3841 343,-91 358.1401,-85.244 372.9703,-75.2294 384.8976,-65.748"/>
-<polygon fill="#000000" stroke="#000000" points="387.1844,-68.3986 392.6593,-59.3279 382.7229,-63.0046 387.1844,-68.3986"/>
+<path fill="none" stroke="#000000" d="M206.7013,-111.9281C206.7013,-95.9467 206.7013,-71 206.7013,-71 206.7013,-71 355.1719,-71 355.1719,-71 355.1719,-71 355.1719,-58.7261 355.1719,-58.7261"/>
+<polygon fill="#000000" stroke="#000000" points="358.672,-58.726 355.1719,-48.7261 351.672,-58.7261 358.672,-58.726"/>
 </g>
 </g>
 </svg>

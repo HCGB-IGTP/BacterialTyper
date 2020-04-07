@@ -1,5 +1,5 @@
 digraph G {
-    graph [spilines=ortho, rankdir=TB, clusterrank="local"];
+    graph [splines=ortho, rankdir=TB, clusterrank="local"];
     subgraph cluster_G {
 
         graph [style="filled,rounded",fillcolor="#80808018", label=""];
@@ -282,8 +282,8 @@ digraph G {
             BacterialTyper__scripts__functions__wget_download [label="wget_download", style="filled", fillcolor="#a365ffb2", fontcolor="#000000", group="33"];
         }
     }
-        BacterialTyper__scripts__BUSCO_caller__busco_datasets -> BacterialTyper__data__data_files__data_list [style="solid", color="#000000"];
         BacterialTyper__scripts__BUSCO_caller__busco_datasets -> BacterialTyper__scripts__functions__file2dataframe [style="solid", color="#000000"];
+        BacterialTyper__scripts__BUSCO_caller__busco_datasets -> BacterialTyper__data__data_files__data_list [style="solid", color="#000000"];
         BacterialTyper__scripts__BUSCO_caller__print_help_BUSCO -> BacterialTyper__scripts__functions__print_sepLine [style="solid", color="#000000"];
         BacterialTyper__scripts__BUSCO_caller__print_help_BUSCO -> BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO [style="solid", color="#000000"];
         BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO -> BacterialTyper__scripts__BUSCO_caller__busco_datasets [style="solid", color="#000000"];

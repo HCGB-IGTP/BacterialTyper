@@ -54,8 +54,8 @@
 <!-- BacterialTyper__scripts__fastqc_caller__call_fastqc&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge11" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__call_fastqc&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M73.8095,-114.5848C74.3661,-101.9209 75.1162,-84.8558 75.7493,-70.4541"/>
-<polygon fill="#000000" stroke="#000000" points="79.2628,-70.2213 76.2054,-60.0773 72.2695,-69.9139 79.2628,-70.2213"/>
+<path fill="none" stroke="#000000" d="M73.0502,-114.5848C73.0502,-114.5848 73.0502,-70.0773 73.0502,-70.0773"/>
+<polygon fill="#000000" stroke="#000000" points="76.5503,-70.0772 73.0502,-60.0773 69.5503,-70.0773 76.5503,-70.0772"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject -->
 <g id="node3" class="node">
@@ -70,10 +70,10 @@
 <text text-anchor="middle" x="1800" y="-129.3" font-family="Times,serif" font-size="14.00" fill="#000000">__init__</text>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject____init__ -->
-<g id="edge10" class="edge">
+<g id="edge2" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject____init__</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1282.3138,-207.4628C1408.1162,-205.925 1708.0448,-200.3591 1750,-182 1762.0045,-176.747 1772.7659,-167.2278 1781.202,-157.9675"/>
-<polygon fill="transparent" stroke="transparent" points="1783.8779,-160.2236 1787.7177,-150.349 1778.5582,-155.6738 1783.8779,-160.2236"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1273.4056,-218C1409.8172,-218 1800,-218 1800,-218 1800,-218 1800,-161.0263 1800,-161.0263"/>
+<polygon fill="transparent" stroke="transparent" points="1803.5001,-161.0263 1800,-151.0263 1796.5001,-161.0263 1803.5001,-161.0263"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject____repr__ -->
 <g id="node10" class="node">
@@ -82,10 +82,10 @@
 <text text-anchor="middle" x="1699" y="-129.3" font-family="Times,serif" font-size="14.00" fill="#000000">__repr__</text>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject____repr__ -->
-<g id="edge7" class="edge">
+<g id="edge10" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject____repr__</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1282.1606,-206.7077C1388.7326,-203.9029 1615.3518,-196.3275 1648,-182 1660.122,-176.6803 1671.0792,-167.1506 1679.7028,-157.9005"/>
-<polygon fill="transparent" stroke="transparent" points="1682.4106,-160.121 1686.372,-150.2946 1677.1474,-155.5059 1682.4106,-160.121"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1281.6055,-211C1405.8505,-211 1699,-211 1699,-211 1699,-211 1699,-161.0908 1699,-161.0908"/>
+<polygon fill="transparent" stroke="transparent" points="1702.5001,-161.0908 1699,-151.0908 1695.5001,-161.0909 1702.5001,-161.0908"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject____str__ -->
 <g id="node11" class="node">
@@ -94,10 +94,10 @@
 <text text-anchor="middle" x="1602" y="-129.3" font-family="Times,serif" font-size="14.00" fill="#000000">__str__</text>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject____str__ -->
-<g id="edge9" class="edge">
+<g id="edge4" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject____str__</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1281.9571,-205.8194C1369.1903,-202.0354 1531.9855,-193.5386 1556,-182 1567.112,-176.6608 1576.8872,-167.3823 1584.5364,-158.3255"/>
-<polygon fill="transparent" stroke="transparent" points="1587.5054,-160.2123 1590.9407,-150.1898 1582.0051,-155.8825 1587.5054,-160.2123"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1281.1277,-204C1384.9767,-204 1602,-204 1602,-204 1602,-204 1602,-161.2843 1602,-161.2843"/>
+<polygon fill="transparent" stroke="transparent" points="1605.5001,-161.2842 1602,-151.2843 1598.5001,-161.2843 1605.5001,-161.2842"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject__get_StatisticsFrame -->
 <g id="node12" class="node">
@@ -106,10 +106,10 @@
 <text text-anchor="middle" x="1466" y="-129.3" font-family="Times,serif" font-size="14.00" fill="#000000">get_StatisticsFrame</text>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__get_StatisticsFrame -->
-<g id="edge5" class="edge">
+<g id="edge8" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__get_StatisticsFrame</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1280.1206,-202.9912C1309.0473,-199.2125 1345.1321,-192.7687 1376,-182 1395.1338,-175.3249 1415.0585,-164.889 1431.2823,-155.3606"/>
-<polygon fill="transparent" stroke="transparent" points="1433.1177,-158.341 1439.8862,-150.19 1429.512,-152.3411 1433.1177,-158.341"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1270.8363,-197C1339.8336,-197 1466,-197 1466,-197 1466,-197 1466,-161.1686 1466,-161.1686"/>
+<polygon fill="transparent" stroke="transparent" points="1469.5001,-161.1686 1466,-151.1686 1462.5001,-161.1687 1469.5001,-161.1686"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject__get_StatusFrame -->
 <g id="node13" class="node">
@@ -118,10 +118,10 @@
 <text text-anchor="middle" x="1297" y="-129.3" font-family="Times,serif" font-size="14.00" fill="#000000">get_StatusFrame</text>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__get_StatusFrame -->
-<g id="edge1" class="edge">
+<g id="edge3" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__get_StatusFrame</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1243.2354,-190.605C1252.2703,-180.9247 1263.6738,-168.7067 1273.6513,-158.0165"/>
-<polygon fill="transparent" stroke="transparent" points="1276.3457,-160.2592 1280.6102,-150.5605 1271.2283,-155.4829 1276.3457,-160.2592"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1254.5257,-192.0944C1254.5257,-192.0944 1254.5257,-157.3609 1254.5257,-157.3609"/>
+<polygon fill="transparent" stroke="transparent" points="1258.0258,-157.3609 1254.5257,-147.3609 1251.0258,-157.361 1258.0258,-157.3609"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject__get_sample -->
 <g id="node14" class="node">
@@ -130,10 +130,10 @@
 <text text-anchor="middle" x="1157" y="-129.3" font-family="Times,serif" font-size="14.00" fill="#000000">get_sample</text>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__get_sample -->
-<g id="edge6" class="edge">
+<g id="edge9" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__get_sample</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1210.7646,-190.605C1201.6647,-180.855 1190.162,-168.5307 1180.1336,-157.786"/>
-<polygon fill="transparent" stroke="transparent" points="1182.5292,-155.2231 1173.1473,-150.3007 1177.4118,-159.9994 1182.5292,-155.2231"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1190.0502,-194.5915C1190.0502,-194.5915 1190.0502,-156.7998 1190.0502,-156.7998"/>
+<polygon fill="transparent" stroke="transparent" points="1193.5503,-156.7998 1190.0502,-146.7998 1186.5503,-156.7999 1193.5503,-156.7998"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject__print_header -->
 <g id="node15" class="node">
@@ -142,10 +142,10 @@
 <text text-anchor="middle" x="1032" y="-129.3" font-family="Times,serif" font-size="14.00" fill="#000000">print_header</text>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__print_header -->
-<g id="edge2" class="edge">
+<g id="edge5" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__print_header</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1173.7935,-202.8372C1149.5874,-199.1252 1121.0453,-192.7864 1097,-182 1082.9928,-175.7166 1069.1689,-165.9424 1057.8949,-156.7715"/>
-<polygon fill="transparent" stroke="transparent" points="1060.0717,-154.0288 1050.1703,-150.2589 1055.5596,-159.3806 1060.0717,-154.0288"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1174.7436,-202C1116.9822,-202 1032,-202 1032,-202 1032,-202 1032,-161.1289 1032,-161.1289"/>
+<polygon fill="transparent" stroke="transparent" points="1035.5001,-161.1289 1032,-151.1289 1028.5001,-161.129 1035.5001,-161.1289"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject__set_StatisticsFrame -->
 <g id="node16" class="node">
@@ -154,10 +154,10 @@
 <text text-anchor="middle" x="879" y="-129.3" font-family="Times,serif" font-size="14.00" fill="#000000">set_StatisticsFrame</text>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__set_StatisticsFrame -->
-<g id="edge3" class="edge">
+<g id="edge6" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__set_StatisticsFrame</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1172.2202,-205.0841C1107.7595,-201.2014 1004.8398,-193.463 968,-182 948.5318,-175.9423 928.4989,-165.3647 912.3807,-155.5841"/>
-<polygon fill="transparent" stroke="transparent" points="914.1941,-152.5902 903.8573,-150.2662 910.4887,-158.5291 914.1941,-152.5902"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1171.4736,-208C1073.2237,-208 879,-208 879,-208 879,-208 879,-161.1554 879,-161.1554"/>
+<polygon fill="transparent" stroke="transparent" points="882.5001,-161.1554 879,-151.1554 875.5001,-161.1554 882.5001,-161.1554"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject__set_StatusFrame -->
 <g id="node17" class="node">
@@ -166,10 +166,10 @@
 <text text-anchor="middle" x="712" y="-129.3" font-family="Times,serif" font-size="14.00" fill="#000000">set_StatusFrame</text>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__set_StatusFrame -->
-<g id="edge8" class="edge">
+<g id="edge1" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__set_StatusFrame</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1171.7944,-206.2231C1062.5722,-202.4866 826.3696,-193.2274 791,-182 773.4202,-176.4196 755.7927,-166.0567 741.6635,-156.2932"/>
-<polygon fill="transparent" stroke="transparent" points="743.5179,-153.3163 733.3497,-150.3397 739.4423,-159.0075 743.5179,-153.3163"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1174.7849,-214C1043.857,-214 712,-214 712,-214 712,-214 712,-161.3802 712,-161.3802"/>
+<polygon fill="transparent" stroke="transparent" points="715.5001,-161.3801 712,-151.3802 708.5001,-161.3802 715.5001,-161.3801"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject__set_sample -->
 <g id="node18" class="node">
@@ -178,10 +178,10 @@
 <text text-anchor="middle" x="574" y="-129.3" font-family="Times,serif" font-size="14.00" fill="#000000">set_sample</text>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__set_sample -->
-<g id="edge4" class="edge">
+<g id="edge7" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__fastqcObject&#45;&gt;BacterialTyper__scripts__fastqc_caller__fastqcObject__set_sample</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1171.545,-207.5838C1033.5668,-206.2634 682.3526,-201.0516 633,-182 619.3402,-176.7269 606.5288,-166.9423 596.3577,-157.4952"/>
-<polygon fill="transparent" stroke="transparent" points="598.7194,-154.9092 589.124,-150.417 593.8237,-159.9125 598.7194,-154.9092"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M1185.6565,-220C1042.1138,-220 574,-220 574,-220 574,-220 574,-161.0265 574,-161.0265"/>
+<polygon fill="transparent" stroke="transparent" points="577.5001,-161.0264 574,-151.0265 570.5001,-161.0265 577.5001,-161.0264"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__get_files -->
 <g id="node4" class="node">
@@ -202,22 +202,22 @@
 <text text-anchor="middle" x="284" y="-204.3" font-family="Times,serif" font-size="14.00" fill="#000000">main</text>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__main&#45;&gt;BacterialTyper__scripts__fastqc_caller__call_fastqc -->
-<g id="edge14" class="edge">
+<g id="edge17" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__main&#45;&gt;BacterialTyper__scripts__fastqc_caller__call_fastqc</title>
-<path fill="none" stroke="#000000" d="M256.8103,-202.3014C238.3068,-198.5308 213.2358,-193.631 191,-190 164.449,-185.6643 155.5971,-192.8965 131,-182 118.0665,-176.2705 105.7844,-166.7342 95.8803,-157.5894"/>
-<polygon fill="#000000" stroke="#000000" points="98.0976,-154.8644 88.4802,-150.4197 93.2267,-159.8918 98.0976,-154.8644"/>
+<path fill="none" stroke="#000000" d="M260.187,-197.7949C260.187,-184.7969 260.187,-164 260.187,-164 260.187,-164 89.2486,-164 89.2486,-164 89.2486,-164 89.2486,-160.3127 89.2486,-160.3127"/>
+<polygon fill="#000000" stroke="#000000" points="92.7487,-160.3127 89.2486,-150.3127 85.7487,-160.3127 92.7487,-160.3127"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__main&#45;&gt;BacterialTyper__scripts__fastqc_caller__get_files -->
-<g id="edge17" class="edge">
+<g id="edge15" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__main&#45;&gt;BacterialTyper__scripts__fastqc_caller__get_files</title>
-<path fill="none" stroke="#000000" d="M312.2268,-204.3241C345.2144,-199.6957 397.5186,-191.2261 415,-182 426.3065,-176.0328 436.763,-166.6967 445.1592,-157.7676"/>
-<polygon fill="#000000" stroke="#000000" points="447.9347,-159.9139 451.9769,-150.1205 442.7097,-155.2556 447.9347,-159.9139"/>
+<path fill="none" stroke="#000000" d="M305.4739,-196C353.4189,-196 465,-196 465,-196 465,-196 465,-161.2222 465,-161.2222"/>
+<polygon fill="#000000" stroke="#000000" points="468.5001,-161.2222 465,-151.2222 461.5001,-161.2222 468.5001,-161.2222"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__main&#45;&gt;BacterialTyper__scripts__fastqc_caller__help_options -->
-<g id="edge16" class="edge">
+<g id="edge14" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__main&#45;&gt;BacterialTyper__scripts__fastqc_caller__help_options</title>
-<path fill="none" stroke="#000000" d="M266.614,-193.1824C254.3875,-182.762 237.7692,-168.5988 223.7256,-156.6298"/>
-<polygon fill="#000000" stroke="#000000" points="225.6884,-153.7039 215.8072,-149.8811 221.1478,-159.0315 225.6884,-153.7039"/>
+<path fill="none" stroke="#000000" d="M264.9715,-194.2438C264.9715,-172.592 264.9715,-133 264.9715,-133 264.9715,-133 261.9985,-133 261.9985,-133"/>
+<polygon fill="#000000" stroke="#000000" points="261.9986,-129.5001 251.9985,-133 261.9985,-136.5001 261.9986,-129.5001"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__parse_fastqcFile -->
 <g id="node7" class="node">
@@ -226,10 +226,10 @@
 <text text-anchor="middle" x="338" y="-129.3" font-family="Times,serif" font-size="14.00" fill="#000000">parse_fastqcFile</text>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__main&#45;&gt;BacterialTyper__scripts__fastqc_caller__parse_fastqcFile -->
-<g id="edge15" class="edge">
+<g id="edge16" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__main&#45;&gt;BacterialTyper__scripts__fastqc_caller__parse_fastqcFile</title>
-<path fill="none" stroke="#000000" d="M295.9844,-191.3551C302.8003,-181.8885 311.4881,-169.8221 319.1928,-159.1212"/>
-<polygon fill="#000000" stroke="#000000" points="322.1037,-161.0682 325.1064,-150.9078 316.4229,-156.9781 322.1037,-161.0682"/>
+<path fill="none" stroke="#000000" d="M291.1768,-190.226C291.1768,-190.226 291.1768,-156.1874 291.1768,-156.1874"/>
+<polygon fill="#000000" stroke="#000000" points="294.6769,-156.1874 291.1768,-146.1874 287.6769,-156.1875 294.6769,-156.1874"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__run_module_fastqc -->
 <g id="node8" class="node">
@@ -240,14 +240,14 @@
 <!-- BacterialTyper__scripts__fastqc_caller__run_module_fastqc&#45;&gt;BacterialTyper__config__set_config__get_exe -->
 <g id="edge13" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__run_module_fastqc&#45;&gt;BacterialTyper__config__set_config__get_exe</title>
-<path fill="none" stroke="#000000" d="M169.0522,-198.0027C193.2027,-194.7926 220.781,-191.644 246,-190 268.2586,-188.549 1831.0713,-189.7163 1852,-182 1865.7981,-176.9127 1878.585,-166.9536 1888.6216,-157.3351"/>
-<polygon fill="#000000" stroke="#000000" points="1891.1974,-159.7079 1895.7318,-150.1324 1886.2157,-154.7902 1891.1974,-159.7079"/>
+<path fill="none" stroke="#000000" d="M161.199,-195.748C161.199,-187.0829 161.199,-177 161.199,-177 161.199,-177 1910,-177 1910,-177 1910,-177 1910,-161.1505 1910,-161.1505"/>
+<polygon fill="#000000" stroke="#000000" points="1913.5001,-161.1505 1910,-151.1505 1906.5001,-161.1506 1913.5001,-161.1505"/>
 </g>
 <!-- BacterialTyper__scripts__fastqc_caller__run_module_fastqc&#45;&gt;BacterialTyper__scripts__fastqc_caller__call_fastqc -->
 <g id="edge12" class="edge">
 <title>BacterialTyper__scripts__fastqc_caller__run_module_fastqc&#45;&gt;BacterialTyper__scripts__fastqc_caller__call_fastqc</title>
-<path fill="none" stroke="#000000" d="M95.7378,-189.8446C92.2003,-181.0007 87.872,-170.1801 83.9448,-160.3619"/>
-<polygon fill="#000000" stroke="#000000" points="87.1589,-158.9731 80.1953,-150.9882 80.6596,-161.5729 87.1589,-158.9731"/>
+<path fill="none" stroke="#000000" d="M56.7514,-193.1824C56.7514,-193.1824 56.7514,-160.1492 56.7514,-160.1492"/>
+<polygon fill="#000000" stroke="#000000" points="60.2515,-160.1492 56.7514,-150.1492 53.2515,-160.1492 60.2515,-160.1492"/>
 </g>
 </g>
 </svg>

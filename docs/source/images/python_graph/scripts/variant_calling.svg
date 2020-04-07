@@ -33,7 +33,7 @@
 <!-- BacterialTyper__scripts__variant_calling__main&#45;&gt;BacterialTyper__scripts__variant_calling__help_options -->
 <g id="edge1" class="edge">
 <title>BacterialTyper__scripts__variant_calling__main&#45;&gt;BacterialTyper__scripts__variant_calling__help_options</title>
-<path fill="none" stroke="#000000" d="M126,-95.8314C126,-88.131 126,-78.9743 126,-70.4166"/>
+<path fill="none" stroke="#000000" d="M126,-95.8314C126,-95.8314 126,-70.4133 126,-70.4133"/>
 <polygon fill="#000000" stroke="#000000" points="129.5001,-70.4132 126,-60.4133 122.5001,-70.4133 129.5001,-70.4132"/>
 </g>
 </g>

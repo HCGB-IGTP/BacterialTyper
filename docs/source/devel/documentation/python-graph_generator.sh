@@ -1,14 +1,1 @@
-
-cd ./BacterialTyper/docs/source/images/python_graph
-
-for i in `dir ../../../../../BacterialTyper/scripts/`;
-do
-	echo "#########";
-	echo "## Script: "$i;
-	name=(${i//.py/});
-	echo "##########";
-
-	pyan --grouped -e --no-define --colored --dot ../../../../../BacterialTyper/scripts/$i > $name.dot; 
-	dot -Tsvg -Gnewrank=true $name.dot > $name.svg;
-done
-
+for i in `dir ../../../../../BacterialTyper/scripts/`; do if [[ $i =~ .*__.* ]]; then continue; else if [[ $i =~ .*pyc.* ]]; then continue; else echo "##############"; echo "##### Create pyan graph for file: "$i; echo "####################"; name=(${i//.py/}); python ../../../../../third_party/pyan/scripts/pyan --dot-rankdir TB --make-svg -f $name".dot" -n -u -c -G -e --focus=$name --only-child ../../../../../BacterialTyper/*/*py; fi; fi; done"

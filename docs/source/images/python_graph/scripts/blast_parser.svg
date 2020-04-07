@@ -43,8 +43,8 @@
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord____init__ -->
 <g id="edge10" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord____init__</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M520.614,-349.2454C421.3712,-343.9874 217.1923,-332.4691 203,-326 191.3158,-320.6741 180.8568,-311.2715 172.6325,-302.1175"/>
-<polygon fill="transparent" stroke="transparent" points="175.1235,-299.6417 166.0058,-294.2457 169.7684,-304.1499 175.1235,-299.6417"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M520.0109,-352C409.4165,-352 167.4321,-352 167.4321,-352 167.4321,-352 167.4321,-304.0187 167.4321,-304.0187"/>
+<polygon fill="transparent" stroke="transparent" points="170.9322,-304.0186 167.4321,-294.0187 163.9322,-304.0187 170.9322,-304.0186"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord____str__ -->
 <g id="node5" class="node">
@@ -55,8 +55,8 @@
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord____str__ -->
 <g id="edge11" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord____str__</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M626.3711,-347.4656C667.1411,-343.2535 719.9035,-336.1033 739,-326 749.7391,-320.3183 759.3522,-311.1522 766.9788,-302.2761"/>
-<polygon fill="transparent" stroke="transparent" points="769.8464,-304.2957 773.3995,-294.3144 764.3975,-299.9014 769.8464,-304.2957"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M625.0772,-346C687.5233,-346 785,-346 785,-346 785,-346 785,-305.1289 785,-305.1289"/>
+<polygon fill="transparent" stroke="transparent" points="788.5001,-305.1289 785,-295.1289 781.5001,-305.129 788.5001,-305.1289"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord___format -->
 <g id="node6" class="node">
@@ -67,8 +67,8 @@
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord___format -->
 <g id="edge7" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord___format</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M606.4979,-337.4354C612.858,-334.0378 619.3133,-330.1776 625,-326 634.5522,-318.9828 643.9325,-310.0152 651.8305,-301.6745"/>
-<polygon fill="transparent" stroke="transparent" points="654.4474,-303.9994 658.6296,-294.2649 649.2897,-299.2667 654.4474,-303.9994"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M622.0957,-343.6871C622.0957,-324.16 622.0957,-277 622.0957,-277 622.0957,-277 623.9021,-277 623.9021,-277"/>
+<polygon fill="transparent" stroke="transparent" points="623.9022,-280.5001 633.9021,-277 623.9021,-273.5001 623.9022,-280.5001"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord__best_hits -->
 <g id="node7" class="node">
@@ -79,7 +79,7 @@
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__best_hits -->
 <g id="edge6" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__best_hits</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M574,-333.8446C574,-325.3401 574,-315.0076 574,-305.4964"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M574,-333.8446C574,-333.8446 574,-305.2482 574,-305.2482"/>
 <polygon fill="transparent" stroke="transparent" points="577.5001,-305.2481 574,-295.2482 570.5001,-305.2482 577.5001,-305.2481"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord__best_hsps -->
@@ -91,8 +91,8 @@
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__best_hsps -->
 <g id="edge8" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__best_hsps</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M541.9599,-337.313C535.4994,-333.9001 528.8889,-330.065 523,-326 512.5248,-318.7691 501.948,-309.6594 492.9653,-301.2622"/>
-<polygon fill="transparent" stroke="transparent" points="495.166,-298.5235 485.5244,-294.1315 490.3227,-303.5775 495.166,-298.5235"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M525.9043,-343.6871C525.9043,-324.16 525.9043,-277 525.9043,-277 525.9043,-277 524.1137,-277 524.1137,-277"/>
+<polygon fill="transparent" stroke="transparent" points="524.1137,-273.5001 514.1137,-277 524.1136,-280.5001 524.1137,-273.5001"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord__best_hsps_except_query -->
 <g id="node9" class="node">
@@ -103,8 +103,8 @@
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__best_hsps_except_query -->
 <g id="edge12" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__best_hsps_except_query</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M521.9898,-347.0964C490.5342,-343.2488 449.8979,-336.7015 415,-326 392.5127,-319.1043 368.6372,-308.3951 349.2502,-298.7452"/>
-<polygon fill="transparent" stroke="transparent" points="350.6209,-295.516 340.1192,-294.1144 347.4547,-301.759 350.6209,-295.516"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M527.2333,-343C451.1571,-343 309,-343 309,-343 309,-343 309,-305.0348 309,-305.0348"/>
+<polygon fill="transparent" stroke="transparent" points="312.5001,-305.0348 309,-295.0348 305.5001,-305.0348 312.5001,-305.0348"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord__evalue_cutoff -->
 <g id="node10" class="node">
@@ -115,8 +115,8 @@
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__evalue_cutoff -->
 <g id="edge5" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__evalue_cutoff</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M627.765,-349.8304C691.924,-346.6738 795.0454,-339.641 831,-326 846.1441,-320.2544 860.9748,-310.2413 872.9014,-300.758"/>
-<polygon fill="transparent" stroke="transparent" points="875.1891,-303.4078 880.6625,-294.3363 870.7267,-298.0146 875.1891,-303.4078"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M625.1388,-358C716.6633,-358 899,-358 899,-358 899,-358 899,-305.3802 899,-305.3802"/>
+<polygon fill="transparent" stroke="transparent" points="902.5001,-305.3801 899,-295.3802 895.5001,-305.3802 902.5001,-305.3801"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord__format -->
 <g id="node11" class="node">
@@ -127,8 +127,8 @@
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__format -->
 <g id="edge9" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__format</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M627.9633,-350.3608C732.9776,-346.9069 955.5955,-338.1839 967,-326 987.3492,-304.26 985.3256,-282.471 967,-259 926.4014,-207.0023 885.1119,-245.2285 823,-223 821.8015,-222.5711 820.59,-222.1171 819.3728,-221.6434"/>
-<polygon fill="transparent" stroke="transparent" points="820.6259,-218.3735 810.0515,-217.7167 817.9083,-224.8244 820.6259,-218.3735"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M619.171,-342.1473C619.171,-310.7344 619.171,-215 619.171,-215 619.171,-215 746.1148,-215 746.1148,-215"/>
+<polygon fill="transparent" stroke="transparent" points="746.1148,-218.5001 756.1148,-215 746.1148,-211.5001 746.1148,-218.5001"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__Hsp -->
 <g id="node2" class="node">
@@ -145,8 +145,8 @@
 <!-- BacterialTyper__scripts__blast_parser__Hsp&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp____init__ -->
 <g id="edge3" class="edge">
 <title>BacterialTyper__scripts__blast_parser__Hsp&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp____init__</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M85.4762,-189.6074C90.3054,-185.4248 95.9973,-181.3937 102,-179 129.0908,-168.1969 206.3474,-182.8431 233,-171 244.9746,-165.6791 255.7312,-156.1492 264.1719,-146.8992"/>
-<polygon fill="transparent" stroke="transparent" points="266.8411,-149.1633 270.6933,-139.2936 261.527,-144.6068 266.8411,-149.1633"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M97.4213,-201C154.2516,-201 283,-201 283,-201 283,-201 283,-150.3228 283,-150.3228"/>
+<polygon fill="transparent" stroke="transparent" points="286.5001,-150.3227 283,-140.3228 279.5001,-150.3228 286.5001,-150.3227"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__Hsp____str__ -->
 <g id="node13" class="node">
@@ -157,8 +157,8 @@
 <!-- BacterialTyper__scripts__blast_parser__Hsp&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp____str__ -->
 <g id="edge4" class="edge">
 <title>BacterialTyper__scripts__blast_parser__Hsp&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp____str__</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M77.3622,-187.3978C81.3523,-176.3587 86.5793,-161.8973 91.1032,-149.3811"/>
-<polygon fill="transparent" stroke="transparent" points="94.4358,-150.4572 94.5435,-139.8629 87.8526,-148.0777 94.4358,-150.4572"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M80.9766,-188.2037C80.9766,-188.2037 80.9766,-147.3717 80.9766,-147.3717"/>
+<polygon fill="transparent" stroke="transparent" points="84.4767,-147.3716 80.9766,-137.3717 77.4767,-147.3717 84.4767,-147.3716"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__Hsp___format -->
 <g id="node14" class="node">
@@ -169,8 +169,8 @@
 <!-- BacterialTyper__scripts__blast_parser__Hsp&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp___format -->
 <g id="edge2" class="edge">
 <title>BacterialTyper__scripts__blast_parser__Hsp&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp___format</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M61.1578,-187.8799C58.6386,-182.6333 56.2808,-176.7299 55,-171 48.5039,-141.9394 44.4176,-131.8339 55,-104 59.4131,-92.3927 67.5914,-81.6872 75.9628,-72.9218"/>
-<polygon fill="transparent" stroke="transparent" points="78.5917,-75.2458 83.2793,-65.7445 73.6897,-70.2488 78.5917,-75.2458"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M53.9766,-190.9714C53.9766,-152.8168 53.9766,-50 53.9766,-50 53.9766,-50 54.9687,-50 54.9687,-50"/>
+<polygon fill="transparent" stroke="transparent" points="53.8973,-53.5001 63.8973,-50 53.8972,-46.5001 53.8973,-53.5001"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__Hsp__format -->
 <g id="node15" class="node">
@@ -181,8 +181,8 @@
 <!-- BacterialTyper__scripts__blast_parser__Hsp&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp__format -->
 <g id="edge1" class="edge">
 <title>BacterialTyper__scripts__blast_parser__Hsp&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp__format</title>
-<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M85.9742,-189.7554C90.7401,-185.6828 96.272,-181.6751 102,-179 120.4053,-170.4043 129.3036,-180.9739 147,-171 157.1618,-165.2727 166.1109,-156.2151 173.1767,-147.437"/>
-<polygon fill="transparent" stroke="transparent" points="176.1396,-149.3203 179.3522,-139.2243 170.5448,-145.1133 176.1396,-149.3203"/>
+<path fill="none" stroke="transparent" stroke-dasharray="5,2" d="M92.5333,-194C122.9735,-194 174.9247,-194 174.9247,-194 174.9247,-194 174.9247,-148.3379 174.9247,-148.3379"/>
+<polygon fill="transparent" stroke="transparent" points="178.4248,-148.3379 174.9247,-138.3379 171.4248,-148.3379 178.4248,-148.3379"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__parse -->
 <g id="node3" class="node">
@@ -193,62 +193,62 @@
 <!-- BacterialTyper__scripts__blast_parser__parse&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord -->
 <g id="edge20" class="edge">
 <title>BacterialTyper__scripts__blast_parser__parse&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord</title>
-<path fill="none" stroke="#000000" d="M488.7497,-410.4574C503.6226,-400.2588 524.334,-386.0567 541.6179,-374.2049"/>
-<polygon fill="#000000" stroke="#000000" points="544.0268,-376.7969 550.2948,-368.255 540.0681,-371.0238 544.0268,-376.7969"/>
+<path fill="none" stroke="#000000" d="M469,-405.7778C469,-387.1715 469,-361 469,-361 469,-361 517.028,-361 517.028,-361"/>
+<polygon fill="#000000" stroke="#000000" points="517.028,-364.5001 527.028,-361 517.0279,-357.5001 517.028,-364.5001"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__parse&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp -->
 <g id="edge19" class="edge">
 <title>BacterialTyper__scripts__blast_parser__parse&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp</title>
-<path fill="none" stroke="#000000" d="M440.2353,-420.3864C361.9339,-409.9477 147.7685,-377.1913 102,-326 79.2608,-300.5666 72.7625,-260.6953 71.1314,-233.7371"/>
-<polygon fill="#000000" stroke="#000000" points="74.6143,-233.2484 70.7046,-223.4013 67.6203,-233.5372 74.6143,-233.2484"/>
+<path fill="none" stroke="#000000" d="M443.4979,-433C355.6551,-433 71,-433 71,-433 71,-433 71,-233.2728 71,-233.2728"/>
+<polygon fill="#000000" stroke="#000000" points="74.5001,-233.2728 71,-223.2728 67.5001,-233.2728 74.5001,-233.2728"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__parse&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord____init__ -->
 <g id="edge22" class="edge">
 <title>BacterialTyper__scripts__blast_parser__parse&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord____init__</title>
-<path fill="none" stroke="#000000" d="M441.1801,-417.9601C390.7081,-406.1239 281.9728,-376.5294 203,-326 192.7585,-319.4472 182.9666,-310.4316 174.8655,-301.919"/>
-<polygon fill="#000000" stroke="#000000" points="177.2633,-299.3542 167.9367,-294.3277 172.0931,-304.0733 177.2633,-299.3542"/>
+<path fill="none" stroke="#000000" d="M439.5648,-424C358.9508,-424 140.5679,-424 140.5679,-424 140.5679,-424 140.5679,-304.1505 140.5679,-304.1505"/>
+<polygon fill="#000000" stroke="#000000" points="144.0678,-304.1505 140.5679,-294.1505 137.0678,-304.1504 144.0678,-304.1505"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__parse&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp____init__ -->
 <g id="edge21" class="edge">
 <title>BacterialTyper__scripts__blast_parser__parse&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp____init__</title>
-<path fill="none" stroke="#000000" d="M498.2635,-423.0548C597.2845,-419.1849 917.0535,-400.9832 979,-326 1020.689,-275.5374 1016.9561,-224.6023 970,-179 924.6198,-134.9281 485.6073,-124.774 334.1031,-122.574"/>
-<polygon fill="#000000" stroke="#000000" points="333.7489,-119.0689 323.7011,-122.429 333.6513,-126.0682 333.7489,-119.0689"/>
+<path fill="none" stroke="#000000" d="M443.5801,-415C429.5736,-415 414.9977,-415 414.9977,-415 414.9977,-415 414.9977,-122 414.9977,-122 414.9977,-122 333.3209,-122 333.3209,-122"/>
+<polygon fill="#000000" stroke="#000000" points="333.3209,-118.5001 323.3209,-122 333.3209,-125.5001 333.3209,-118.5001"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord____str__&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__format -->
 <g id="edge18" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord____str__&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__format</title>
-<path fill="none" stroke="#000000" d="M785,-258.8314C785,-251.131 785,-241.9743 785,-233.4166"/>
-<polygon fill="#000000" stroke="#000000" points="788.5001,-233.4132 785,-223.4133 781.5001,-233.4133 788.5001,-233.4132"/>
+<path fill="none" stroke="#000000" d="M773.5177,-259.5708C773.5177,-259.5708 773.5177,-232.2687 773.5177,-232.2687"/>
+<polygon fill="#000000" stroke="#000000" points="777.0178,-232.2687 773.5177,-222.2687 770.0178,-232.2687 777.0178,-232.2687"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord___format&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord___format -->
 <g id="edge14" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord___format&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord___format</title>
-<path fill="none" stroke="#000000" d="M700.564,-289.854C715.8866,-292.2534 729.9965,-287.9688 729.9965,-277 729.9965,-268.5164 721.5559,-264.0312 710.6418,-263.5444"/>
-<polygon fill="#000000" stroke="#000000" points="710.3376,-260.0563 700.564,-264.146 710.7548,-267.0438 710.3376,-260.0563"/>
+<path fill="none" stroke="#000000" d="M673,-295.0664C673,-304.4587 673,-314 673,-314 673,-314 625.0205,-314 625.0205,-314 625.0205,-314 625.0205,-235 625.0205,-235 625.0205,-235 685.9988,-235 685.9988,-235 685.9988,-235 685.9988,-249.917 685.9988,-249.917"/>
+<polygon fill="#000000" stroke="#000000" points="682.4989,-249.917 685.9988,-259.917 689.4989,-249.917 682.4989,-249.917"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord___format&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp___format -->
 <g id="edge15" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord___format&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp___format</title>
-<path fill="none" stroke="#000000" d="M644.4813,-264.7204C638.1703,-262.4525 631.4419,-260.3703 625,-259 560.2175,-245.2192 75.3969,-271.2266 30,-223 -6.2512,-184.4892 6.1912,-151.2269 30,-104 34.5626,-94.9497 52.9591,-81.3673 70.1413,-70.0889"/>
-<polygon fill="#000000" stroke="#000000" points="72.4155,-72.7879 78.936,-64.4373 68.6312,-66.899 72.4155,-72.7879"/>
+<path fill="none" stroke="#000000" d="M660.0012,-259.867C660.0012,-206.0585 660.0012,-44 660.0012,-44 660.0012,-44 149.9778,-44 149.9778,-44"/>
+<polygon fill="#000000" stroke="#000000" points="149.9778,-40.5001 139.9778,-44 149.9777,-47.5001 149.9778,-40.5001"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord__format&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__format -->
 <g id="edge17" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord__format&#45;&gt;BacterialTyper__scripts__blast_parser__BlastRecord__format</title>
-<path fill="none" stroke="#000000" d="M809.5492,-217.7082C823.9591,-220.4157 837.4469,-216.1797 837.4469,-205 837.4469,-196.5279 829.7011,-192.0434 819.6781,-191.5464"/>
-<polygon fill="#000000" stroke="#000000" points="819.2653,-188.0673 809.5492,-192.2918 819.7791,-195.0484 819.2653,-188.0673"/>
+<path fill="none" stroke="#000000" d="M796.4823,-222.083C796.4823,-233.7109 796.4823,-247 796.4823,-247 796.4823,-247 830.951,-247 830.951,-247 830.951,-247 830.951,-163 830.951,-163 830.951,-163 785,-163 785,-163 785,-163 785,-176.9445 785,-176.9445"/>
+<polygon fill="#000000" stroke="#000000" points="781.5001,-176.9444 785,-186.9445 788.5001,-176.9445 781.5001,-176.9444"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__BlastRecord__format&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp__format -->
 <g id="edge16" class="edge">
 <title>BacterialTyper__scripts__blast_parser__BlastRecord__format&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp__format</title>
-<path fill="none" stroke="#000000" d="M766.8246,-189.4036C760.8873,-185.2128 754.0085,-181.2282 747,-179 719.8363,-170.3639 259.9401,-182.8136 234,-171 223.0064,-165.9933 213.5925,-156.7728 206.327,-147.6695"/>
-<polygon fill="#000000" stroke="#000000" points="209.0283,-145.4355 200.2748,-139.4666 203.3955,-149.5915 209.0283,-145.4355"/>
+<path fill="none" stroke="#000000" d="M750.8268,-208C628.3062,-208 218.3028,-208 218.3028,-208 218.3028,-208 218.3028,-142.5453 218.3028,-142.5453"/>
+<polygon fill="#000000" stroke="#000000" points="221.8027,-142.5453 218.3028,-132.5453 214.8027,-142.5453 221.8027,-142.5453"/>
 </g>
 <!-- BacterialTyper__scripts__blast_parser__Hsp__format&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp___format -->
 <g id="edge13" class="edge">
 <title>BacterialTyper__scripts__blast_parser__Hsp__format&#45;&gt;BacterialTyper__scripts__blast_parser__Hsp___format</title>
-<path fill="none" stroke="#000000" d="M171.5495,-106.7307C159.4882,-96.7488 143.5292,-83.5414 130.0446,-72.3818"/>
-<polygon fill="#000000" stroke="#000000" points="131.9608,-69.4244 122.0253,-65.7451 127.4978,-74.8172 131.9608,-69.4244"/>
+<path fill="none" stroke="#000000" d="M190,-103.9652C190,-84.4238 190,-56 190,-56 190,-56 149.8958,-56 149.8958,-56"/>
+<polygon fill="#000000" stroke="#000000" points="149.8959,-52.5001 139.8958,-56 149.8958,-59.5001 149.8959,-52.5001"/>
 </g>
 </g>
 </svg>

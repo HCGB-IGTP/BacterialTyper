@@ -1,5 +1,5 @@
 digraph G {
-    graph [spilines=ortho, rankdir=TB, clusterrank="local"];
+    graph [splines=ortho, rankdir=TB, clusterrank="local"];
     subgraph cluster_G {
 
         graph [style="filled,rounded",fillcolor="#80808018", label=""];
@@ -229,26 +229,26 @@ digraph G {
         }
     }
         BacterialTyper__scripts__MLSTar__help_MLSTar -> BacterialTyper__scripts__MLSTar__get_MLSTar_species [style="solid", color="#000000"];
-        BacterialTyper__scripts__MLSTar__run_MLSTar -> BacterialTyper__scripts__MLSTar__run_doMLST [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__run_MLSTar -> BacterialTyper__scripts__functions__create_subfolder [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__run_MLSTar -> BacterialTyper__scripts__MLSTar__run_doMLST [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__run_MLSTar -> BacterialTyper__scripts__MLSTar__download_PubMLST [style="solid", color="#000000"];
-        BacterialTyper__scripts__MLSTar__run_doMLST -> BacterialTyper__other_tools__tools__R_scripts [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__run_doMLST -> BacterialTyper__scripts__functions__read_time_stamp [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__run_doMLST -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__run_doMLST -> BacterialTyper__scripts__functions__print_time_stamp [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__run_doMLST -> BacterialTyper__other_tools__tools__R_scripts [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__get_MLSTar_species -> BacterialTyper__data__data_files__data_list [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__getPUBMLST -> BacterialTyper__other_tools__tools__R_scripts [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__getPUBMLST -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__plot_MLST -> BacterialTyper__other_tools__tools__R_scripts [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__plot_MLST -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
-        BacterialTyper__scripts__MLSTar__download_PubMLST -> BacterialTyper__other_tools__tools__R_scripts [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__download_PubMLST -> BacterialTyper__scripts__functions__read_time_stamp [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__download_PubMLST -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__download_PubMLST -> BacterialTyper__scripts__functions__print_time_stamp [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__download_PubMLST -> BacterialTyper__other_tools__tools__R_scripts [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__help_options [style="solid", color="#000000"];
-        BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__getPUBMLST [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__run_MLSTar [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__functions__create_subfolder [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__functions__create_folder [style="solid", color="#000000"];
         BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__plot_MLST [style="solid", color="#000000"];
+        BacterialTyper__scripts__MLSTar__main -> BacterialTyper__scripts__MLSTar__getPUBMLST [style="solid", color="#000000"];
     }

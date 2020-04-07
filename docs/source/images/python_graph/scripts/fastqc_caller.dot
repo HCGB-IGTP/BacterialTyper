@@ -1,5 +1,5 @@
 digraph G {
-    graph [spilines=ortho, rankdir=TB, clusterrank="local"];
+    graph [splines=ortho, rankdir=TB, clusterrank="local"];
     subgraph cluster_G {
 
         graph [style="filled,rounded",fillcolor="#80808018", label=""];
@@ -311,21 +311,21 @@ digraph G {
             graph [style="filled,rounded",fillcolor="#80808018", label="BacterialTyper.scripts.functions"];
         }
     }
+        BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject__set_StatusFrame [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject____init__ [style="dashed", color="#ffffff00"];
         BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject__get_StatusFrame [style="dashed", color="#ffffff00"];
+        BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject____str__ [style="dashed", color="#ffffff00"];
         BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject__print_header [style="dashed", color="#ffffff00"];
         BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject__set_StatisticsFrame [style="dashed", color="#ffffff00"];
         BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject__set_sample [style="dashed", color="#ffffff00"];
         BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject__get_StatisticsFrame [style="dashed", color="#ffffff00"];
         BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject__get_sample [style="dashed", color="#ffffff00"];
         BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject____repr__ [style="dashed", color="#ffffff00"];
-        BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject__set_StatusFrame [style="dashed", color="#ffffff00"];
-        BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject____str__ [style="dashed", color="#ffffff00"];
-        BacterialTyper__scripts__fastqc_caller__fastqcObject -> BacterialTyper__scripts__fastqc_caller__fastqcObject____init__ [style="dashed", color="#ffffff00"];
         BacterialTyper__scripts__fastqc_caller__call_fastqc -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
         BacterialTyper__scripts__fastqc_caller__run_module_fastqc -> BacterialTyper__scripts__fastqc_caller__call_fastqc [style="solid", color="#000000"];
         BacterialTyper__scripts__fastqc_caller__run_module_fastqc -> BacterialTyper__config__set_config__get_exe [style="solid", color="#000000"];
-        BacterialTyper__scripts__fastqc_caller__main -> BacterialTyper__scripts__fastqc_caller__call_fastqc [style="solid", color="#000000"];
-        BacterialTyper__scripts__fastqc_caller__main -> BacterialTyper__scripts__fastqc_caller__parse_fastqcFile [style="solid", color="#000000"];
         BacterialTyper__scripts__fastqc_caller__main -> BacterialTyper__scripts__fastqc_caller__help_options [style="solid", color="#000000"];
         BacterialTyper__scripts__fastqc_caller__main -> BacterialTyper__scripts__fastqc_caller__get_files [style="solid", color="#000000"];
+        BacterialTyper__scripts__fastqc_caller__main -> BacterialTyper__scripts__fastqc_caller__parse_fastqcFile [style="solid", color="#000000"];
+        BacterialTyper__scripts__fastqc_caller__main -> BacterialTyper__scripts__fastqc_caller__call_fastqc [style="solid", color="#000000"];
     }

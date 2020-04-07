@@ -114,7 +114,7 @@
 <!-- BacterialTyper__scripts__virulence_resistance__check_VFDB&#45;&gt;BacterialTyper__scripts__virulence_resistance__download_VFDB_files -->
 <g id="edge19" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__check_VFDB&#45;&gt;BacterialTyper__scripts__virulence_resistance__download_VFDB_files</title>
-<path fill="none" stroke="#000000" d="M385,-325.8314C385,-318.131 385,-308.9743 385,-300.4166"/>
+<path fill="none" stroke="#000000" d="M385,-325.8314C385,-325.8314 385,-300.4133 385,-300.4133"/>
 <polygon fill="#000000" stroke="#000000" points="388.5001,-300.4132 385,-290.4133 381.5001,-300.4133 388.5001,-300.4132"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__check_results -->
@@ -126,8 +126,8 @@
 <!-- BacterialTyper__scripts__virulence_resistance__check_results&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
 <g id="edge9" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__check_results&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M263.9228,-334.5674C280.7457,-331.5779 299.6509,-328.4238 317,-326 654.2527,-278.884 743.5376,-304.5175 1079,-246 1231.3841,-219.4184 1274.073,-222.1556 1417,-163 1433.8518,-156.0253 1451.3138,-145.8902 1465.6905,-136.6453"/>
-<polygon fill="#000000" stroke="#000000" points="1467.7797,-139.4603 1474.2103,-131.0402 1463.9324,-133.6124 1467.7797,-139.4603"/>
+<path fill="none" stroke="#000000" d="M233.4983,-326.8435C233.4983,-317.5713 233.4983,-308 233.4983,-308 233.4983,-308 1522.0479,-308 1522.0479,-308 1522.0479,-308 1522.0479,-141.2162 1522.0479,-141.2162"/>
+<polygon fill="#000000" stroke="#000000" points="1525.548,-141.2162 1522.0479,-131.2162 1518.548,-141.2162 1525.548,-141.2162"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__results_parser -->
 <g id="node23" class="node">
@@ -138,44 +138,44 @@
 <!-- BacterialTyper__scripts__virulence_resistance__check_results&#45;&gt;BacterialTyper__scripts__virulence_resistance__results_parser -->
 <g id="edge10" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__check_results&#45;&gt;BacterialTyper__scripts__virulence_resistance__results_parser</title>
-<path fill="none" stroke="#000000" d="M214,-325.8314C214,-318.131 214,-308.9743 214,-300.4166"/>
-<polygon fill="#000000" stroke="#000000" points="217.5001,-300.4132 214,-290.4133 210.5001,-300.4133 217.5001,-300.4132"/>
+<path fill="none" stroke="#000000" d="M194.5017,-326.937C194.5017,-326.937 194.5017,-299.4407 194.5017,-299.4407"/>
+<polygon fill="#000000" stroke="#000000" points="198.0018,-299.4406 194.5017,-289.4407 191.0018,-299.4407 198.0018,-299.4406"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__download_VFDB_files&#45;&gt;BacterialTyper__scripts__functions__create_folder -->
 <g id="edge25" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__download_VFDB_files&#45;&gt;BacterialTyper__scripts__functions__create_folder</title>
-<path fill="none" stroke="#000000" d="M408.7007,-254.489C411.3898,-251.8468 413.9099,-248.9955 416,-246 436.2728,-216.9462 414.1668,-191.5854 443,-171 467.4186,-153.5664 954.5839,-172.6293 983,-163 998.1179,-157.877 1012.6245,-147.8766 1024.168,-138.2389"/>
-<polygon fill="#000000" stroke="#000000" points="1026.8029,-140.5836 1032.0162,-131.3602 1022.1889,-135.3194 1026.8029,-140.5836"/>
+<path fill="none" stroke="#000000" d="M468.2949,-264C647.4564,-264 1053.3443,-264 1053.3443,-264 1053.3443,-264 1053.3443,-142.0935 1053.3443,-142.0935"/>
+<polygon fill="#000000" stroke="#000000" points="1056.8444,-142.0935 1053.3443,-132.0935 1049.8444,-142.0935 1056.8444,-142.0935"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__download_VFDB_files&#45;&gt;BacterialTyper__scripts__functions__extract -->
 <g id="edge23" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__download_VFDB_files&#45;&gt;BacterialTyper__scripts__functions__extract</title>
-<path fill="none" stroke="#000000" d="M457.1009,-260.5706C473.5253,-256.6925 487.9359,-251.833 494,-246 518.9476,-222.0033 487.499,-192.0218 515,-171 538.4818,-153.0505 1552.0525,-175.1413 1579,-163 1590.0137,-158.0377 1599.4312,-148.825 1606.6939,-139.7155"/>
-<polygon fill="#000000" stroke="#000000" points="1609.6298,-141.6311 1612.7419,-131.5036 1603.9935,-137.4799 1609.6298,-141.6311"/>
+<path fill="none" stroke="#000000" d="M454.4055,-284C716.9435,-284 1634.4823,-284 1634.4823,-284 1634.4823,-284 1634.4823,-141.236 1634.4823,-141.236"/>
+<polygon fill="#000000" stroke="#000000" points="1637.9824,-141.236 1634.4823,-131.236 1630.9824,-141.2361 1637.9824,-141.236"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__download_VFDB_files&#45;&gt;BacterialTyper__scripts__functions__get_diff_time -->
 <g id="edge20" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__download_VFDB_files&#45;&gt;BacterialTyper__scripts__functions__get_diff_time</title>
-<path fill="none" stroke="#000000" d="M438.6466,-257.1555C444.2683,-254.0946 449.5455,-250.4163 454,-246 479.3793,-220.838 453.6241,-191.3542 483,-171 501.1984,-158.3905 1258.9409,-169.8334 1280,-163 1295.7832,-157.8785 1311.0695,-147.7393 1323.2256,-138.0063"/>
-<polygon fill="#000000" stroke="#000000" points="1325.6926,-140.5054 1331.1089,-131.3997 1321.1964,-135.1404 1325.6926,-140.5054"/>
+<path fill="none" stroke="#000000" d="M477.4324,-274C718.7138,-274 1349,-274 1349,-274 1349,-274 1349,-142.043 1349,-142.043"/>
+<polygon fill="#000000" stroke="#000000" points="1352.5001,-142.043 1349,-132.043 1345.5001,-142.0431 1352.5001,-142.043"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__download_VFDB_files&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="edge24" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__download_VFDB_files&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M424.2229,-255.3655C428.1855,-252.6298 431.8882,-249.5174 435,-246 458.5759,-219.3513 433.8953,-191.4668 463,-171 477.8159,-160.5813 1097.5573,-167.8798 1115,-163 1133.7245,-157.7616 1152.5506,-147.1838 1167.5285,-137.1928"/>
-<polygon fill="#000000" stroke="#000000" points="1169.6383,-139.9892 1175.8727,-131.4228 1165.6569,-134.2316 1169.6383,-139.9892"/>
+<path fill="none" stroke="#000000" d="M477.0208,-269C694.5756,-269 1222.4812,-269 1222.4812,-269 1222.4812,-269 1222.4812,-141.1799 1222.4812,-141.1799"/>
+<polygon fill="#000000" stroke="#000000" points="1225.9813,-141.1799 1222.4812,-131.1799 1218.9813,-141.18 1225.9813,-141.1799"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__download_VFDB_files&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
 <g id="edge22" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__download_VFDB_files&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M446.1777,-258.3447C458.5261,-254.6329 469.199,-250.4105 474,-246 500.3185,-221.8221 473.6111,-191.3353 503,-171 523.879,-156.5531 1392.5738,-169.9287 1417,-163 1435.2006,-157.8373 1453.4103,-147.4104 1467.941,-137.4973"/>
-<polygon fill="#000000" stroke="#000000" points="1470.3468,-140.0821 1476.48,-131.443 1466.298,-134.3717 1470.3468,-140.0821"/>
+<path fill="none" stroke="#000000" d="M470.9028,-279C728.0389,-279 1473.9521,-279 1473.9521,-279 1473.9521,-279 1473.9521,-141.0364 1473.9521,-141.0364"/>
+<polygon fill="#000000" stroke="#000000" points="1477.4522,-141.0364 1473.9521,-131.0364 1470.4522,-141.0365 1477.4522,-141.0364"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__download_VFDB_files&#45;&gt;BacterialTyper__scripts__functions__wget_download -->
 <g id="edge21" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__download_VFDB_files&#45;&gt;BacterialTyper__scripts__functions__wget_download</title>
-<path fill="none" stroke="#000000" d="M394.4256,-253.969C395.6881,-251.3239 396.9185,-248.611 398,-246 411.4461,-213.5382 394.6986,-191.8231 423,-171 441.2609,-157.5644 809.3158,-169.616 831,-163 848.2845,-157.7264 865.391,-147.2884 878.9849,-137.3965"/>
-<polygon fill="#000000" stroke="#000000" points="881.1021,-140.1836 886.9654,-131.3591 876.8788,-134.6012 881.1021,-140.1836"/>
+<path fill="none" stroke="#000000" d="M449.4868,-259C576.9212,-259 848.7811,-259 848.7811,-259 848.7811,-259 848.7811,-133.0704 848.7811,-133.0704"/>
+<polygon fill="#000000" stroke="#000000" points="852.2812,-133.0704 848.7811,-123.0704 845.2812,-133.0704 852.2812,-133.0704"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__found_results -->
 <g id="node15" class="node">
@@ -192,8 +192,8 @@
 <!-- BacterialTyper__scripts__virulence_resistance__found_results&#45;&gt;BacterialTyper__scripts__virulence_resistance__get_id -->
 <g id="edge7" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__found_results&#45;&gt;BacterialTyper__scripts__virulence_resistance__get_id</title>
-<path fill="none" stroke="#000000" d="M158.9133,-96.5708C168.6886,-87.0597 180.9116,-75.1671 191.4496,-64.9139"/>
-<polygon fill="#000000" stroke="#000000" points="194.0396,-67.2773 198.7661,-57.7951 189.1581,-62.2602 194.0396,-67.2773"/>
+<path fill="none" stroke="#000000" d="M190.9988,-104.5873C190.9988,-104.5873 190.9988,-64.562 190.9988,-64.562"/>
+<polygon fill="#000000" stroke="#000000" points="194.4989,-64.562 190.9988,-54.562 187.4989,-64.5621 194.4989,-64.562"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__help_options -->
 <g id="node17" class="node">
@@ -210,8 +210,8 @@
 <!-- BacterialTyper__scripts__virulence_resistance__identified_results&#45;&gt;BacterialTyper__scripts__virulence_resistance__get_id -->
 <g id="edge8" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__identified_results&#45;&gt;BacterialTyper__scripts__virulence_resistance__get_id</title>
-<path fill="none" stroke="#000000" d="M271.0867,-96.5708C261.3114,-87.0597 249.0884,-75.1671 238.5504,-64.9139"/>
-<polygon fill="#000000" stroke="#000000" points="240.8419,-62.2602 231.2339,-57.7951 235.9604,-67.2773 240.8419,-62.2602"/>
+<path fill="none" stroke="#000000" d="M232.5017,-102.75C232.5017,-102.75 232.5017,-67.1814 232.5017,-67.1814"/>
+<polygon fill="#000000" stroke="#000000" points="236.0018,-67.1813 232.5017,-57.1814 229.0018,-67.1814 236.0018,-67.1813"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__main -->
 <g id="node19" class="node">
@@ -222,7 +222,7 @@
 <!-- BacterialTyper__scripts__virulence_resistance__main&#45;&gt;BacterialTyper__scripts__virulence_resistance__help_options -->
 <g id="edge26" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__main&#45;&gt;BacterialTyper__scripts__virulence_resistance__help_options</title>
-<path fill="none" stroke="#000000" d="M80,-325.8314C80,-318.131 80,-308.9743 80,-300.4166"/>
+<path fill="none" stroke="#000000" d="M80,-325.8314C80,-325.8314 80,-300.4133 80,-300.4133"/>
 <polygon fill="#000000" stroke="#000000" points="83.5001,-300.4132 80,-290.4133 76.5001,-300.4133 83.5001,-300.4132"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__parse_card -->
@@ -234,26 +234,26 @@
 <!-- BacterialTyper__scripts__virulence_resistance__parse_card&#45;&gt;BacterialTyper__scripts__card_trick_caller__get_info_CARD -->
 <g id="edge6" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__parse_card&#45;&gt;BacterialTyper__scripts__card_trick_caller__get_info_CARD</title>
-<path fill="none" stroke="#000000" d="M118.0388,-181.9645C127.2633,-177.5767 137.8231,-173.3364 148,-171 222.0933,-153.9898 417.0184,-184.2801 490,-163 508.1623,-157.7042 526.3681,-147.264 540.9062,-137.3764"/>
-<polygon fill="#000000" stroke="#000000" points="543.3014,-139.9697 549.4511,-131.3423 539.2635,-134.2517 543.3014,-139.9697"/>
+<path fill="none" stroke="#000000" d="M116.8495,-181.5231C116.8495,-171.3841 116.8495,-160 116.8495,-160 116.8495,-160 514.7566,-160 514.7566,-160 514.7566,-160 514.7566,-134.6689 514.7566,-134.6689"/>
+<polygon fill="#000000" stroke="#000000" points="518.2567,-134.6689 514.7566,-124.6689 511.2567,-134.669 518.2567,-134.6689"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__parse_card&#45;&gt;BacterialTyper__scripts__functions__get_data -->
 <g id="edge3" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__parse_card&#45;&gt;BacterialTyper__scripts__functions__get_data</title>
-<path fill="none" stroke="#000000" d="M118.0257,-181.907C127.2493,-177.5154 137.812,-173.2873 148,-171 179.551,-163.9165 700.0273,-175.136 730,-163 742.3959,-157.9809 753.5737,-148.4986 762.3608,-139.2026"/>
-<polygon fill="#000000" stroke="#000000" points="765.1393,-141.3446 769.154,-131.5399 759.9012,-136.701 765.1393,-141.3446"/>
+<path fill="none" stroke="#000000" d="M128.2976,-185.2877C128.2976,-177.615 128.2976,-169 128.2976,-169 128.2976,-169 782,-169 782,-169 782,-169 782,-142.0091 782,-142.0091"/>
+<polygon fill="#000000" stroke="#000000" points="785.5001,-142.009 782,-132.0091 778.5001,-142.0091 785.5001,-142.009"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__parse_card&#45;&gt;BacterialTyper__scripts__virulence_resistance__found_results -->
 <g id="edge4" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__parse_card&#45;&gt;BacterialTyper__scripts__virulence_resistance__found_results</title>
-<path fill="none" stroke="#000000" d="M101.6037,-179.3978C108.3855,-168.1401 117.3113,-153.3232 124.9519,-140.6399"/>
-<polygon fill="#000000" stroke="#000000" points="128.0771,-142.2348 130.2392,-131.8629 122.081,-138.6227 128.0771,-142.2348"/>
+<path fill="none" stroke="#000000" d="M93.9533,-178.9902C93.9533,-178.9902 93.9533,-135.1023 93.9533,-135.1023"/>
+<polygon fill="#000000" stroke="#000000" points="97.4534,-135.1022 93.9533,-125.1023 90.4534,-135.1023 97.4534,-135.1022"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__parse_card&#45;&gt;BacterialTyper__scripts__virulence_resistance__identified_results -->
 <g id="edge5" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__parse_card&#45;&gt;BacterialTyper__scripts__virulence_resistance__identified_results</title>
-<path fill="none" stroke="#000000" d="M119.0755,-182.2037C128.0988,-177.9942 138.2793,-173.7979 148,-171 173.8531,-163.5588 182.6222,-171.9285 208,-163 225.4612,-156.8568 243.236,-146.635 257.6689,-137.1123"/>
-<polygon fill="#000000" stroke="#000000" points="259.8905,-139.8342 266.1909,-131.3162 255.9538,-134.046 259.8905,-139.8342"/>
+<path fill="none" stroke="#000000" d="M105.4014,-179.5882C105.4014,-163.1493 105.4014,-141 105.4014,-141 105.4014,-141 244.0257,-141 244.0257,-141 244.0257,-141 244.0257,-138.1326 244.0257,-138.1326"/>
+<polygon fill="#000000" stroke="#000000" points="247.5258,-138.1326 244.0257,-128.1326 240.5258,-138.1326 247.5258,-138.1326"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__parse_results -->
 <g id="node21" class="node">
@@ -270,62 +270,62 @@
 <!-- BacterialTyper__scripts__virulence_resistance__parse_vfdb&#45;&gt;BacterialTyper__scripts__virulence_resistance__found_results -->
 <g id="edge1" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__parse_vfdb&#45;&gt;BacterialTyper__scripts__virulence_resistance__found_results</title>
-<path fill="none" stroke="#000000" d="M310.2263,-182.2362C300.8115,-177.9758 290.1584,-173.742 280,-171 249.342,-162.7247 238.6257,-174.433 209,-163 193.8888,-157.1684 179.0625,-147.144 167.1302,-137.6755"/>
-<polygon fill="#000000" stroke="#000000" points="169.3047,-134.9321 159.3638,-131.2676 164.8498,-140.3316 169.3047,-134.9321"/>
+<path fill="none" stroke="#000000" d="M312.8008,-181.6104C312.8008,-167.9033 312.8008,-150 312.8008,-150 312.8008,-150 178.4749,-150 178.4749,-150 178.4749,-150 178.4749,-138.2282 178.4749,-138.2282"/>
+<polygon fill="#000000" stroke="#000000" points="181.975,-138.2281 178.4749,-128.2282 174.975,-138.2282 181.975,-138.2281"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__parse_vfdb&#45;&gt;BacterialTyper__scripts__virulence_resistance__identified_results -->
 <g id="edge2" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__parse_vfdb&#45;&gt;BacterialTyper__scripts__virulence_resistance__identified_results</title>
-<path fill="none" stroke="#000000" d="M328.3963,-179.3978C321.6145,-168.1401 312.6887,-153.3232 305.0481,-140.6399"/>
-<polygon fill="#000000" stroke="#000000" points="307.919,-138.6227 299.7608,-131.8629 301.9229,-142.2348 307.919,-138.6227"/>
+<path fill="none" stroke="#000000" d="M336.6473,-178.9902C336.6473,-178.9902 336.6473,-137.6041 336.6473,-137.6041"/>
+<polygon fill="#000000" stroke="#000000" points="340.1474,-137.6041 336.6473,-127.6041 333.1474,-137.6042 340.1474,-137.6041"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__ariba_caller__ariba_expandflag -->
 <g id="edge11" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__ariba_caller__ariba_expandflag</title>
-<path fill="none" stroke="#000000" d="M256.3753,-259.2346C265.1035,-257.0902 274.2897,-255.1802 283,-254 345.2156,-245.5704 787.6454,-263.2965 848,-246 866.1866,-240.7881 884.3948,-230.3563 898.9283,-220.4526"/>
-<polygon fill="#000000" stroke="#000000" points="901.3301,-223.0406 907.4694,-214.4058 897.2854,-217.3274 901.3301,-223.0406"/>
+<path fill="none" stroke="#000000" d="M222.0779,-253.8903C222.0779,-244.103 222.0779,-234 222.0779,-234 222.0779,-234 929,-234 929,-234 929,-234 929,-225.0664 929,-225.0664"/>
+<polygon fill="#000000" stroke="#000000" points="932.5001,-225.0664 929,-215.0664 925.5001,-225.0665 932.5001,-225.0664"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__ariba_caller__ariba_summary -->
 <g id="edge18" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__ariba_caller__ariba_summary</title>
-<path fill="none" stroke="#000000" d="M256.3801,-259.2695C265.1079,-257.1224 274.2928,-255.2024 283,-254 328.6861,-247.6909 653.9265,-259.585 698,-246 714.9478,-240.7761 731.6772,-230.4848 745.0206,-220.6766"/>
-<polygon fill="#000000" stroke="#000000" points="747.4579,-223.2185 753.2684,-214.3591 743.2013,-217.6613 747.4579,-223.2185"/>
+<path fill="none" stroke="#000000" d="M205.9221,-254.1035C205.9221,-241.9219 205.9221,-228 205.9221,-228 205.9221,-228 773,-228 773,-228 773,-228 773,-225.0328 773,-225.0328"/>
+<polygon fill="#000000" stroke="#000000" points="776.5001,-225.0328 773,-215.0328 769.5001,-225.0329 776.5001,-225.0328"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__ariba_caller__fix_ariba_summary -->
 <g id="edge15" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__ariba_caller__fix_ariba_summary</title>
-<path fill="none" stroke="#000000" d="M256.7679,-259.3104C265.3838,-257.1891 274.4273,-255.2685 283,-254 374.077,-240.5232 400.0729,-265.7422 490,-246 516.7307,-240.1317 545.1032,-228.5389 567.3266,-218.1022"/>
-<polygon fill="#000000" stroke="#000000" points="568.9524,-221.2042 576.4517,-213.7202 565.9221,-214.8941 568.9524,-221.2042"/>
+<path fill="none" stroke="#000000" d="M189.7664,-255.3007C189.7664,-240.4269 189.7664,-221 189.7664,-221 189.7664,-221 608,-221 608,-221 608,-221 608,-220.419 608,-220.419"/>
+<polygon fill="#000000" stroke="#000000" points="611.5002,-225.1902 608,-215.1903 604.5002,-225.1903 611.5002,-225.1902"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__functions__extract -->
 <g id="edge13" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__functions__extract</title>
-<path fill="none" stroke="#000000" d="M256.3715,-259.2066C265.1,-257.0644 274.2873,-255.1623 283,-254 370.6723,-242.3046 990.8877,-253.7096 1079,-246 1303.4058,-226.3651 1381.5082,-271.3536 1579,-163 1589.4372,-157.2736 1598.6632,-148.0991 1605.9366,-139.2289"/>
-<polygon fill="#000000" stroke="#000000" points="1608.7296,-141.3383 1612.046,-131.2759 1603.1784,-137.074 1608.7296,-141.3383"/>
+<path fill="none" stroke="#000000" d="M254.3893,-258.6217C254.3893,-252.6778 254.3893,-247 254.3893,-247 254.3893,-247 1611.5177,-247 1611.5177,-247 1611.5177,-247 1611.5177,-141.1151 1611.5177,-141.1151"/>
+<polygon fill="#000000" stroke="#000000" points="1615.0178,-141.1151 1611.5177,-131.1151 1608.0178,-141.1152 1615.0178,-141.1151"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="edge14" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M256.3724,-259.2129C265.1008,-257.0702 274.2879,-255.1663 283,-254 323.1443,-248.6259 973.4789,-258.513 1012,-246 1077.8946,-224.5951 1140.6037,-170.7858 1173.6989,-138.8674"/>
-<polygon fill="#000000" stroke="#000000" points="1176.3808,-141.1396 1181.0739,-131.6409 1171.4817,-136.1398 1176.3808,-141.1396"/>
+<path fill="none" stroke="#000000" d="M238.2336,-255.411C238.2336,-248.0405 238.2336,-241 238.2336,-241 238.2336,-241 1173.5188,-241 1173.5188,-241 1173.5188,-241 1173.5188,-141.1278 1173.5188,-141.1278"/>
+<polygon fill="#000000" stroke="#000000" points="1177.0189,-141.1278 1173.5188,-131.1278 1170.0189,-141.1278 1177.0189,-141.1278"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__virulence_resistance__parse_card -->
 <g id="edge17" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__virulence_resistance__parse_card</title>
-<path fill="none" stroke="#000000" d="M173.537,-258.5406C164.8494,-254.9766 155.9095,-250.77 148,-246 136.4759,-239.0502 124.9867,-229.7482 115.3744,-221.1168"/>
-<polygon fill="#000000" stroke="#000000" points="117.4987,-218.3139 107.782,-214.0906 112.7442,-223.4515 117.4987,-218.3139"/>
+<path fill="none" stroke="#000000" d="M154.1483,-272C149.7409,-272 146.9755,-272 146.9755,-272 146.9755,-272 146.9755,-197 146.9755,-197 146.9755,-197 146.2891,-197 146.2891,-197"/>
+<polygon fill="#000000" stroke="#000000" points="150.1119,-193.5002 140.1118,-197 150.1117,-200.5002 150.1119,-193.5002"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__virulence_resistance__parse_results -->
 <g id="edge12" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__virulence_resistance__parse_results</title>
-<path fill="none" stroke="#000000" d="M214,-253.8446C214,-245.3401 214,-235.0076 214,-225.4964"/>
-<polygon fill="#000000" stroke="#000000" points="217.5001,-225.2481 214,-215.2482 210.5001,-225.2482 217.5001,-225.2481"/>
+<path fill="none" stroke="#000000" d="M173.6107,-258.5915C173.6107,-258.5915 173.6107,-219.7918 173.6107,-219.7918"/>
+<polygon fill="#000000" stroke="#000000" points="177.1108,-219.7918 173.6107,-209.7918 170.1108,-219.7918 177.1108,-219.7918"/>
 </g>
 <!-- BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__virulence_resistance__parse_vfdb -->
 <g id="edge16" class="edge">
 <title>BacterialTyper__scripts__virulence_resistance__results_parser&#45;&gt;BacterialTyper__scripts__virulence_resistance__parse_vfdb</title>
-<path fill="none" stroke="#000000" d="M254.0551,-258.5816C262.8546,-254.9927 271.9442,-250.7653 280,-246 291.9364,-238.9392 303.9265,-229.5127 313.9507,-220.8143"/>
-<polygon fill="#000000" stroke="#000000" points="316.3972,-223.3222 321.5298,-214.0536 311.7375,-218.0984 316.3972,-223.3222"/>
+<path fill="none" stroke="#000000" d="M273.9069,-272C278.4868,-272 281.3746,-272 281.3746,-272 281.3746,-272 281.3746,-197 281.3746,-197 281.3746,-197 282.1279,-197 282.1279,-197"/>
+<polygon fill="#000000" stroke="#000000" points="278.9081,-200.5001 288.9081,-197 278.908,-193.5001 278.9081,-200.5001"/>
 </g>
 </g>
 </svg>

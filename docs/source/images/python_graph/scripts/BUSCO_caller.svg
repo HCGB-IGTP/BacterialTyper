@@ -60,8 +60,8 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_check_dataset&#45;&gt;BacterialTyper__scripts__functions__print_sepLine -->
 <g id="edge16" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_check_dataset&#45;&gt;BacterialTyper__scripts__functions__print_sepLine</title>
-<path fill="none" stroke="#000000" d="M705.2454,-106.9902C710.2748,-96.005 716.8033,-81.7455 722.4631,-69.3833"/>
-<polygon fill="#000000" stroke="#000000" points="725.7902,-70.524 726.7707,-59.9746 719.4255,-67.61 725.7902,-70.524"/>
+<path fill="none" stroke="#000000" d="M752.1296,-110.1613C752.1296,-110.1613 752.1296,-69.2938 752.1296,-69.2938"/>
+<polygon fill="#000000" stroke="#000000" points="755.6297,-69.2937 752.1296,-59.2938 748.6297,-69.2938 755.6297,-69.2937"/>
 </g>
 <!-- BacterialTyper__scripts__functions__readList_fromFile -->
 <g id="node19" class="node">
@@ -72,8 +72,8 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_check_dataset&#45;&gt;BacterialTyper__scripts__functions__readList_fromFile -->
 <g id="edge15" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_check_dataset&#45;&gt;BacterialTyper__scripts__functions__readList_fromFile</title>
-<path fill="none" stroke="#000000" d="M629.3298,-112.5636C577.7954,-103.0715 515.4175,-91.5269 514,-91 496.141,-84.3616 477.7038,-74.0538 462.6688,-64.6019"/>
-<polygon fill="#000000" stroke="#000000" points="464.5414,-61.6449 454.2397,-59.1699 460.7495,-67.5289 464.5414,-61.6449"/>
+<path fill="none" stroke="#000000" d="M630.1762,-112.3829C630.1762,-97.5708 630.1762,-75 630.1762,-75 630.1762,-75 462.3495,-75 462.3495,-75 462.3495,-75 462.3495,-68.5 462.3495,-68.5"/>
+<polygon fill="#000000" stroke="#000000" points="465.8496,-68.5 462.3495,-58.5 458.8496,-68.5 465.8496,-68.5"/>
 </g>
 <!-- BacterialTyper__scripts__functions__read_time_stamp -->
 <g id="node20" class="node">
@@ -84,8 +84,8 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_check_dataset&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
 <g id="edge14" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_check_dataset&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M772.9551,-114.4569C812.3033,-109.2613 861.1684,-103.2219 905,-99 931.1613,-96.4801 997.9161,-98.8463 1023,-91 1041.0883,-85.342 1059.3682,-74.9707 1074.0639,-65.2218"/>
-<polygon fill="#000000" stroke="#000000" points="1076.4547,-67.8258 1082.7171,-59.2799 1072.4923,-62.0553 1076.4547,-67.8258"/>
+<path fill="none" stroke="#000000" d="M790.9253,-125C904.5937,-125 1080.9521,-125 1080.9521,-125 1080.9521,-125 1080.9521,-69.1977 1080.9521,-69.1977"/>
+<polygon fill="#000000" stroke="#000000" points="1084.4522,-69.1976 1080.9521,-59.1977 1077.4522,-69.1977 1084.4522,-69.1976"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_download -->
 <g id="node4" class="node">
@@ -96,14 +96,14 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__BUSCO_caller__BUSCO_check_dataset -->
 <g id="edge12" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__BUSCO_caller__BUSCO_check_dataset</title>
-<path fill="none" stroke="#000000" d="M697,-178.8314C697,-171.131 697,-161.9743 697,-153.4166"/>
-<polygon fill="#000000" stroke="#000000" points="700.5001,-153.4132 697,-143.4133 693.5001,-153.4133 700.5001,-153.4132"/>
+<path fill="none" stroke="#000000" d="M670.569,-179.937C670.569,-179.937 670.569,-152.4407 670.569,-152.4407"/>
+<polygon fill="#000000" stroke="#000000" points="674.0691,-152.4406 670.569,-142.4407 667.0691,-152.4407 674.0691,-152.4406"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__BUSCO_caller__BUSCO_download -->
 <g id="edge11" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__BUSCO_caller__BUSCO_download</title>
-<path fill="none" stroke="#000000" d="M750.5347,-210.3146C774.0543,-211.4929 794.293,-207.0547 794.293,-197 794.293,-188.4378 779.6167,-183.9485 760.7359,-183.5319"/>
-<polygon fill="#000000" stroke="#000000" points="760.4809,-180.0353 750.5347,-183.6854 760.5863,-187.0345 760.4809,-180.0353"/>
+<path fill="none" stroke="#000000" d="M769.2491,-204.6367C769.2491,-211.9887 769.2491,-222 769.2491,-222 769.2491,-222 783.4423,-222 783.4423,-222 783.4423,-222 783.4423,-161 783.4423,-161 783.4423,-161 723.431,-161 723.431,-161 723.431,-161 723.431,-169.8435 723.431,-169.8435"/>
+<polygon fill="#000000" stroke="#000000" points="719.9311,-169.8434 723.431,-179.8435 726.9311,-169.8435 719.9311,-169.8434"/>
 </g>
 <!-- BacterialTyper__scripts__functions__create_folder -->
 <g id="node13" class="node">
@@ -114,8 +114,8 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__functions__create_folder -->
 <g id="edge10" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__functions__create_folder</title>
-<path fill="none" stroke="#000000" d="M762.9437,-186.904C791.5066,-179.3236 823.1161,-166.0863 844,-143 861.9543,-123.1523 867.8432,-92.5529 869.614,-70.2345"/>
-<polygon fill="#000000" stroke="#000000" points="873.1209,-70.2073 870.1873,-60.0268 866.1319,-69.8147 873.1209,-70.2073"/>
+<path fill="none" stroke="#000000" d="M774.5818,-193C816.1063,-193 858.7982,-193 858.7982,-193 858.7982,-193 858.7982,-69.9146 858.7982,-69.9146"/>
+<polygon fill="#000000" stroke="#000000" points="862.2983,-69.9146 858.7982,-59.9146 855.2983,-69.9147 862.2983,-69.9146"/>
 </g>
 <!-- BacterialTyper__scripts__functions__extract -->
 <g id="node14" class="node">
@@ -126,14 +126,14 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__functions__extract -->
 <g id="edge8" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__functions__extract</title>
-<path fill="none" stroke="#000000" d="M754.3856,-184.4902C786.6328,-175.879 826.7543,-162.4372 859,-143 883.2297,-128.3947 880.2796,-112.7584 905,-99 917.4332,-92.0802 923.8384,-98.3868 936,-91 945.9232,-84.9728 954.8971,-76.0173 962.1135,-67.4049"/>
-<polygon fill="#000000" stroke="#000000" points="965.0163,-69.3767 968.4675,-59.3597 959.5229,-65.0381 965.0163,-69.3767"/>
+<path fill="none" stroke="#000000" d="M775.29,-200C854.0592,-200 963.9498,-200 963.9498,-200 963.9498,-200 963.9498,-68.0194 963.9498,-68.0194"/>
+<polygon fill="#000000" stroke="#000000" points="967.4499,-68.0193 963.9498,-58.0194 960.4499,-68.0194 967.4499,-68.0193"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__functions__print_sepLine -->
 <g id="edge13" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__functions__print_sepLine</title>
-<path fill="none" stroke="#000000" d="M748.9663,-183.2782C783.6599,-172.9462 824.7388,-158.034 835,-143 846.0242,-126.848 846.9763,-114.4593 835,-99 826.2857,-87.7514 816.9038,-96.9967 804,-91 789.4935,-84.2585 774.8457,-74.3884 762.8007,-65.2702"/>
-<polygon fill="#000000" stroke="#000000" points="764.9514,-62.509 754.9113,-59.1254 760.65,-68.0315 764.9514,-62.509"/>
+<path fill="none" stroke="#000000" d="M759.7744,-186C781.6338,-186 800.7982,-186 800.7982,-186 800.7982,-186 800.7982,-48 800.7982,-48 800.7982,-48 799.8833,-48 799.8833,-48"/>
+<polygon fill="#000000" stroke="#000000" points="801.6492,-44.5001 791.6492,-48 801.6492,-51.5001 801.6492,-44.5001"/>
 </g>
 <!-- BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="node18" class="node">
@@ -144,8 +144,8 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="edge9" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M747.9558,-183.175C839.8594,-158.4705 1030.1218,-108.44 1098,-99 1146.0149,-92.3225 1269.5147,-104.753 1316,-91 1334.4783,-85.5331 1353.0756,-74.9342 1367.8771,-64.9883"/>
-<polygon fill="#000000" stroke="#000000" points="1369.9134,-67.8353 1376.1238,-59.2515 1365.916,-62.089 1369.9134,-67.8353"/>
+<path fill="none" stroke="#000000" d="M763.0992,-207C933.3289,-207 1373.5188,-207 1373.5188,-207 1373.5188,-207 1373.5188,-69.0364 1373.5188,-69.0364"/>
+<polygon fill="#000000" stroke="#000000" points="1377.0189,-69.0364 1373.5188,-59.0364 1370.0189,-69.0365 1377.0189,-69.0364"/>
 </g>
 <!-- BacterialTyper__scripts__functions__wget_download -->
 <g id="node22" class="node">
@@ -156,8 +156,8 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__functions__wget_download -->
 <g id="edge7" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_download&#45;&gt;BacterialTyper__scripts__functions__wget_download</title>
-<path fill="none" stroke="#000000" d="M747.5364,-183.1093C767.4967,-174.8758 788.4015,-162.1767 800,-143 810.1206,-126.267 813.4095,-113.2339 800,-99 789.7723,-88.1435 680.1762,-95.6373 666,-91 649.1089,-85.4746 632.2952,-75.2544 618.7933,-65.5718"/>
-<polygon fill="#000000" stroke="#000000" points="620.5415,-62.5097 610.4314,-59.3414 616.3591,-68.1229 620.5415,-62.5097"/>
+<path fill="none" stroke="#000000" d="M617.5652,-197C604.7305,-197 595.5527,-197 595.5527,-197 595.5527,-197 595.5527,-70.0838 595.5527,-70.0838"/>
+<polygon fill="#000000" stroke="#000000" points="599.0528,-70.0838 595.5527,-60.0838 592.0528,-70.0839 599.0528,-70.0838"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_plot -->
 <g id="node5" class="node">
@@ -168,8 +168,8 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_plot&#45;&gt;BacterialTyper__config__set_config__get_exe -->
 <g id="edge25" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_plot&#45;&gt;BacterialTyper__config__set_config__get_exe</title>
-<path fill="none" stroke="#000000" d="M735.5323,-331.4454C743.8981,-329.313 752.6783,-327.3538 761,-326 790.2248,-321.2457 866.9365,-330.0108 894,-318 905.977,-312.6846 916.734,-303.1556 925.1744,-293.9047"/>
-<polygon fill="#000000" stroke="#000000" points="927.844,-296.1682 931.6953,-286.2981 922.5296,-291.6123 927.844,-296.1682"/>
+<path fill="none" stroke="#000000" d="M749.2439,-338.6002C749.2439,-329.7185 749.2439,-313 749.2439,-313 749.2439,-313 931.2178,-313 931.2178,-313 931.2178,-313 931.2178,-296.1375 931.2178,-296.1375"/>
+<polygon fill="#000000" stroke="#000000" points="934.7179,-296.1375 931.2178,-286.1375 927.7179,-296.1376 934.7179,-296.1375"/>
 </g>
 <!-- BacterialTyper__scripts__functions__system_call -->
 <g id="node21" class="node">
@@ -180,8 +180,8 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_plot&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge26" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_plot&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M735.1371,-331.2963C743.6131,-329.1471 752.5359,-327.2195 761,-326 779.5361,-323.3293 1084.0571,-330.5026 1098,-318 1123.0368,-295.5495 1087.8793,-269.9448 1108,-243 1201.7995,-117.3877 1279.7579,-143.7673 1430,-99 1451.5678,-92.5735 1459.394,-100.0477 1480,-91 1493.6142,-85.0223 1506.8129,-75.3242 1517.5081,-66.127"/>
-<polygon fill="#000000" stroke="#000000" points="1520.0559,-68.5434 1525.1642,-59.2613 1515.3825,-63.3319 1520.0559,-68.5434"/>
+<path fill="none" stroke="#000000" d="M746.643,-336.4086C746.643,-312.9199 746.643,-243 746.643,-243 746.643,-243 1524.4516,-243 1524.4516,-243 1524.4516,-243 1524.4516,-69.1371 1524.4516,-69.1371"/>
+<polygon fill="#000000" stroke="#000000" points="1527.9517,-69.1371 1524.4516,-59.1371 1520.9517,-69.1372 1527.9517,-69.1371"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_retrieve_sets -->
 <g id="node6" class="node">
@@ -192,8 +192,8 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_retrieve_sets&#45;&gt;BacterialTyper__scripts__BUSCO_caller__BUSCO_download -->
 <g id="edge18" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_retrieve_sets&#45;&gt;BacterialTyper__scripts__BUSCO_caller__BUSCO_download</title>
-<path fill="none" stroke="#000000" d="M665.5984,-250.8314C670.41,-242.5829 676.1963,-232.6635 681.4838,-223.5992"/>
-<polygon fill="#000000" stroke="#000000" points="684.535,-225.3148 686.5505,-214.9134 678.4885,-221.7876 684.535,-225.3148"/>
+<path fill="none" stroke="#000000" d="M680.8746,-251.5708C680.8746,-251.5708 680.8746,-224.7689 680.8746,-224.7689"/>
+<polygon fill="#000000" stroke="#000000" points="684.3747,-224.7688 680.8746,-214.7689 677.3747,-224.7689 684.3747,-224.7688"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__busco_datasets -->
 <g id="node9" class="node">
@@ -204,8 +204,8 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_retrieve_sets&#45;&gt;BacterialTyper__scripts__BUSCO_caller__busco_datasets -->
 <g id="edge17" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_retrieve_sets&#45;&gt;BacterialTyper__scripts__BUSCO_caller__busco_datasets</title>
-<path fill="none" stroke="#000000" d="M638.3019,-251.2319C629.1243,-241.032 617.8427,-227.7513 609,-215 598.5697,-199.9594 602.1728,-191.7078 589,-179 573.0967,-163.6581 551.9713,-151.7078 532.7667,-142.994"/>
-<polygon fill="#000000" stroke="#000000" points="534.0909,-139.7533 523.5246,-138.9756 531.2997,-146.1727 534.0909,-139.7533"/>
+<path fill="none" stroke="#000000" d="M587.697,-256.7226C587.697,-221.8994 587.697,-125 587.697,-125 587.697,-125 556.9186,-125 556.9186,-125"/>
+<polygon fill="#000000" stroke="#000000" points="556.9187,-121.5001 546.9186,-125 556.9186,-128.5001 556.9187,-121.5001"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO -->
 <g id="node11" class="node">
@@ -216,8 +216,8 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_retrieve_sets&#45;&gt;BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO -->
 <g id="edge19" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_retrieve_sets&#45;&gt;BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO</title>
-<path fill="none" stroke="#000000" d="M615.9705,-252.6621C591.077,-242.2415 558.6094,-228.6505 531.9887,-217.5069"/>
-<polygon fill="#000000" stroke="#000000" points="533.0463,-214.1554 522.4704,-213.5225 530.3433,-220.6125 533.0463,-214.1554"/>
+<path fill="none" stroke="#000000" d="M572.8997,-261.8331C572.8997,-261.8331 572.8997,-213.717 572.8997,-213.717"/>
+<polygon fill="#000000" stroke="#000000" points="576.3998,-213.717 572.8997,-203.717 569.3998,-213.717 576.3998,-213.717"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_run -->
 <g id="node7" class="node">
@@ -228,26 +228,26 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_run&#45;&gt;BacterialTyper__config__set_config__get_exe -->
 <g id="edge23" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_run&#45;&gt;BacterialTyper__config__set_config__get_exe</title>
-<path fill="none" stroke="#000000" d="M866.8726,-331.4892C876.1471,-327.8146 885.7015,-323.322 894,-318 904.6033,-311.1999 914.8162,-301.8746 923.217,-293.1834"/>
-<polygon fill="#000000" stroke="#000000" points="925.8481,-295.4937 930.0972,-285.7883 920.7231,-290.7256 925.8481,-295.4937"/>
+<path fill="none" stroke="#000000" d="M870.2769,-333C908.2178,-333 956.7822,-333 956.7822,-333 956.7822,-333 956.7822,-296.1508 956.7822,-296.1508"/>
+<polygon fill="#000000" stroke="#000000" points="960.2823,-296.1508 956.7822,-286.1508 953.2823,-296.1509 960.2823,-296.1508"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_run&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="edge22" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_run&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M881.6568,-342.2472C958.9131,-339.3079 1091.1168,-332.2513 1108,-318 1134.3619,-295.7475 1108.6426,-271.5555 1128,-243 1159.5522,-196.4552 1296.2506,-106.2996 1362.1766,-64.4059"/>
-<polygon fill="#000000" stroke="#000000" points="1364.4148,-67.1313 1370.991,-58.8244 1360.6699,-61.2173 1364.4148,-67.1313"/>
+<path fill="none" stroke="#000000" d="M881.3128,-347C1029.1835,-347 1422.4812,-347 1422.4812,-347 1422.4812,-347 1422.4812,-69.272 1422.4812,-69.272"/>
+<polygon fill="#000000" stroke="#000000" points="1425.9813,-69.272 1422.4812,-59.272 1418.9813,-69.272 1425.9813,-69.272"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_run&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
 <g id="edge20" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_run&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M882.034,-343.1832C964.7965,-341.3874 1111.7446,-335.715 1128,-318 1191.635,-248.6511 1144.5072,-123.9868 1118.7979,-69.1457"/>
-<polygon fill="#000000" stroke="#000000" points="1121.913,-67.5474 1114.4272,-60.0497 1115.6036,-70.5791 1121.913,-67.5474"/>
+<path fill="none" stroke="#000000" d="M880.5289,-340C967.7783,-340 1129.0479,-340 1129.0479,-340 1129.0479,-340 1129.0479,-69.3098 1129.0479,-69.3098"/>
+<polygon fill="#000000" stroke="#000000" points="1132.548,-69.3098 1129.0479,-59.3098 1125.548,-69.3098 1132.548,-69.3098"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_run&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge21" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_run&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M882.0353,-342.93C960.9433,-340.8362 1100.4819,-334.8168 1148,-318 1306.9845,-261.7348 1460.305,-122.5039 1517.9752,-66.2033"/>
-<polygon fill="#000000" stroke="#000000" points="1520.4837,-68.6452 1525.1564,-59.1364 1515.5738,-63.6558 1520.4837,-68.6452"/>
+<path fill="none" stroke="#000000" d="M872.7226,-354C1034.2985,-354 1559.5484,-354 1559.5484,-354 1559.5484,-354 1559.5484,-69.2189 1559.5484,-69.2189"/>
+<polygon fill="#000000" stroke="#000000" points="1563.0485,-69.2189 1559.5484,-59.2189 1556.0485,-69.2189 1563.0485,-69.2189"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_stats -->
 <g id="node8" class="node">
@@ -264,14 +264,14 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__BUSCO_stats&#45;&gt;BacterialTyper__scripts__functions__get_info_file -->
 <g id="edge24" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__BUSCO_stats&#45;&gt;BacterialTyper__scripts__functions__get_info_file</title>
-<path fill="none" stroke="#000000" d="M842.13,-251.925C885.5311,-216.2267 992.5433,-134.1064 1098,-99 1135.2619,-86.5955 1149.3613,-105.1396 1186,-91 1200.6407,-85.3499 1214.8104,-75.3816 1226.1628,-65.9045"/>
-<polygon fill="#000000" stroke="#000000" points="1228.6613,-68.3697 1233.8977,-59.1593 1224.0605,-63.0939 1228.6613,-68.3697"/>
+<path fill="none" stroke="#000000" d="M835.8016,-251.3407C835.8016,-243.4947 835.8016,-236 835.8016,-236 835.8016,-236 1251,-236 1251,-236 1251,-236 1251,-70.251 1251,-70.251"/>
+<polygon fill="#000000" stroke="#000000" points="1254.5001,-70.251 1251,-60.251 1247.5001,-70.2511 1254.5001,-70.251"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__busco_datasets&#45;&gt;BacterialTyper__data__data_files__data_list -->
-<g id="edge1" class="edge">
+<g id="edge2" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__busco_datasets&#45;&gt;BacterialTyper__data__data_files__data_list</title>
-<path fill="none" stroke="#000000" d="M419.9676,-122.0102C348.747,-117.8352 237.8182,-108.695 200,-91 188.0624,-85.4145 177.0766,-76.0247 168.3088,-66.9508"/>
-<polygon fill="#000000" stroke="#000000" points="170.8232,-64.5138 161.4934,-59.4933 165.656,-69.2362 170.8232,-64.5138"/>
+<path fill="none" stroke="#000000" d="M422.7218,-131C326.2732,-131 148,-131 148,-131 148,-131 148,-70.0105 148,-70.0105"/>
+<polygon fill="#000000" stroke="#000000" points="151.5001,-70.0104 148,-60.0105 144.5001,-70.0105 151.5001,-70.0104"/>
 </g>
 <!-- BacterialTyper__scripts__functions__file2dataframe -->
 <g id="node15" class="node">
@@ -280,10 +280,10 @@
 <text text-anchor="middle" x="274" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">file2dataframe</text>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__busco_datasets&#45;&gt;BacterialTyper__scripts__functions__file2dataframe -->
-<g id="edge2" class="edge">
+<g id="edge1" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__busco_datasets&#45;&gt;BacterialTyper__scripts__functions__file2dataframe</title>
-<path fill="none" stroke="#000000" d="M427.8477,-115.9566C402.2506,-110.6011 371.84,-102.5521 346,-91 330.9714,-84.2813 315.703,-74.4146 303.1171,-65.2928"/>
-<polygon fill="#000000" stroke="#000000" points="304.9777,-62.3144 294.8682,-59.1445 300.7944,-67.9269 304.9777,-62.3144"/>
+<path fill="none" stroke="#000000" d="M422.8289,-119C361.0862,-119 274,-119 274,-119 274,-119 274,-70.2479 274,-70.2479"/>
+<polygon fill="#000000" stroke="#000000" points="277.5001,-70.2479 274,-60.2479 270.5001,-70.248 277.5001,-70.2479"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__main -->
 <g id="node10" class="node">
@@ -294,8 +294,8 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__main&#45;&gt;BacterialTyper__scripts__BUSCO_caller__BUSCO_stats -->
 <g id="edge27" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__main&#45;&gt;BacterialTyper__scripts__BUSCO_caller__BUSCO_stats</title>
-<path fill="none" stroke="#000000" d="M555.1832,-338.1756C575.0008,-334.1455 602.5503,-328.9886 627,-326 654.8491,-322.5959 726.554,-327.3685 753,-318 768.5284,-312.4991 783.6908,-302.417 795.8289,-292.822"/>
-<polygon fill="#000000" stroke="#000000" points="798.2269,-295.3812 803.7164,-286.3194 793.7741,-289.98 798.2269,-295.3812"/>
+<path fill="none" stroke="#000000" d="M552.0952,-334.235C552.0952,-321.2722 552.0952,-300 552.0952,-300 552.0952,-300 766.1551,-300 766.1551,-300 766.1551,-300 766.1551,-285.5743 766.1551,-285.5743"/>
+<polygon fill="#000000" stroke="#000000" points="769.6552,-285.5743 766.1551,-275.5743 762.6552,-285.5743 769.6552,-285.5743"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__print_help_BUSCO -->
 <g id="node12" class="node">
@@ -306,32 +306,32 @@
 <!-- BacterialTyper__scripts__BUSCO_caller__main&#45;&gt;BacterialTyper__scripts__BUSCO_caller__print_help_BUSCO -->
 <g id="edge28" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__main&#45;&gt;BacterialTyper__scripts__BUSCO_caller__print_help_BUSCO</title>
-<path fill="none" stroke="#000000" d="M514.7639,-327.7261C506.9456,-318.1134 496.8705,-305.726 487.9905,-294.808"/>
-<polygon fill="#000000" stroke="#000000" points="490.5151,-292.3651 481.49,-286.8156 485.0845,-296.782 490.5151,-292.3651"/>
+<path fill="none" stroke="#000000" d="M523.4977,-325.8446C523.4977,-325.8446 523.4977,-292.0533 523.4977,-292.0533"/>
+<polygon fill="#000000" stroke="#000000" points="526.9978,-292.0533 523.4977,-282.0533 519.9978,-292.0533 526.9978,-292.0533"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO&#45;&gt;BacterialTyper__scripts__BUSCO_caller__busco_datasets -->
 <g id="edge5" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO&#45;&gt;BacterialTyper__scripts__BUSCO_caller__busco_datasets</title>
-<path fill="none" stroke="#000000" d="M483,-178.8314C483,-171.131 483,-161.9743 483,-153.4166"/>
+<path fill="none" stroke="#000000" d="M483,-178.8314C483,-178.8314 483,-153.4133 483,-153.4133"/>
 <polygon fill="#000000" stroke="#000000" points="486.5001,-153.4132 483,-143.4133 479.5001,-153.4133 486.5001,-153.4132"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO&#45;&gt;BacterialTyper__scripts__functions__print_sepLine -->
 <g id="edge6" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO&#45;&gt;BacterialTyper__scripts__functions__print_sepLine</title>
-<path fill="none" stroke="#000000" d="M557.7353,-185.4804C650.2105,-171.0528 796.0727,-147.6528 800,-143 812.6135,-128.0561 808.071,-116.8123 800,-99 793.7691,-85.2488 782.3999,-73.5039 770.892,-64.3117"/>
-<polygon fill="#000000" stroke="#000000" points="772.6633,-61.2657 762.5596,-58.0773 768.4697,-66.8705 772.6633,-61.2657"/>
+<path fill="none" stroke="#000000" d="M563.2679,-186.8363C563.2679,-160.3053 563.2679,-91 563.2679,-91 563.2679,-91 713.6674,-91 713.6674,-91 713.6674,-91 713.6674,-68.863 713.6674,-68.863"/>
+<polygon fill="#000000" stroke="#000000" points="717.1675,-68.863 713.6674,-58.863 710.1675,-68.8631 717.1675,-68.863"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__print_help_BUSCO&#45;&gt;BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO -->
 <g id="edge4" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__print_help_BUSCO&#45;&gt;BacterialTyper__scripts__BUSCO_caller__print_available_BUSCO</title>
-<path fill="none" stroke="#000000" d="M471.0375,-250.8314C472.7487,-243.131 474.7835,-233.9743 476.6852,-225.4166"/>
-<polygon fill="#000000" stroke="#000000" points="480.1554,-225.9344 478.9082,-215.4133 473.3221,-224.4159 480.1554,-225.9344"/>
+<path fill="none" stroke="#000000" d="M440.1357,-251.937C440.1357,-251.937 440.1357,-223.4449 440.1357,-223.4449"/>
+<polygon fill="#000000" stroke="#000000" points="443.6358,-223.4449 440.1357,-213.4449 436.6358,-223.445 443.6358,-223.4449"/>
 </g>
 <!-- BacterialTyper__scripts__BUSCO_caller__print_help_BUSCO&#45;&gt;BacterialTyper__scripts__functions__print_sepLine -->
 <g id="edge3" class="edge">
 <title>BacterialTyper__scripts__BUSCO_caller__print_help_BUSCO&#45;&gt;BacterialTyper__scripts__functions__print_sepLine</title>
-<path fill="none" stroke="#000000" d="M512.8811,-254.1356C526.9195,-250.0248 542.4869,-245.9009 557,-243 610.9524,-232.2158 757.0761,-245.301 803,-215 848.6414,-184.8854 878.6672,-141.2872 844,-99 832.5059,-84.9794 820.6456,-98.1843 804,-91 789.2035,-84.6138 774.4194,-74.7046 762.3534,-65.4637"/>
-<polygon fill="#000000" stroke="#000000" points="764.4814,-62.6844 754.4675,-59.2244 760.1381,-68.174 764.4814,-62.6844"/>
+<path fill="none" stroke="#000000" d="M493.8643,-251.8043C493.8643,-240.9629 493.8643,-229 493.8643,-229 493.8643,-229 806.8016,-229 806.8016,-229 806.8016,-229 806.8016,-36 806.8016,-36 806.8016,-36 801.5743,-36 801.5743,-36"/>
+<polygon fill="#000000" stroke="#000000" points="801.5744,-32.5001 791.5743,-36 801.5743,-39.5001 801.5744,-32.5001"/>
 </g>
 </g>
 </svg>

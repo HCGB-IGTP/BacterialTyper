@@ -49,7 +49,7 @@
 <!-- BacterialTyper__scripts__edirect_caller__docsum_call&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge4" class="edge">
 <title>BacterialTyper__scripts__edirect_caller__docsum_call&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M296,-106.9902C296,-96.2963 296,-82.4994 296,-70.3706"/>
+<path fill="none" stroke="#000000" d="M296,-106.9902C296,-106.9902 296,-70.2612 296,-70.2612"/>
 <polygon fill="#000000" stroke="#000000" points="299.5001,-70.2612 296,-60.2612 292.5001,-70.2613 299.5001,-70.2612"/>
 </g>
 <!-- BacterialTyper__scripts__edirect_caller__generate_docsum_call -->
@@ -61,13 +61,13 @@
 <!-- BacterialTyper__scripts__edirect_caller__generate_docsum_call&#45;&gt;BacterialTyper__config__set_config__get_exe -->
 <g id="edge2" class="edge">
 <title>BacterialTyper__scripts__edirect_caller__generate_docsum_call&#45;&gt;BacterialTyper__config__set_config__get_exe</title>
-<path fill="none" stroke="#000000" d="M359.738,-187.2702C371.4302,-185.2604 383.5544,-183.3905 395,-182 423.5121,-178.5361 497.7583,-185.6753 524,-174 535.9721,-168.6734 546.7283,-159.1427 555.1694,-149.8936"/>
-<polygon fill="#000000" stroke="#000000" points="557.838,-152.1583 561.6913,-142.289 552.5244,-147.6013 557.838,-152.1583"/>
+<path fill="none" stroke="#000000" d="M376.049,-191.6871C376.049,-172.16 376.049,-125 376.049,-125 376.049,-125 525.3631,-125 525.3631,-125"/>
+<polygon fill="#000000" stroke="#000000" points="525.3632,-128.5001 535.3631,-125 525.3631,-121.5001 525.3632,-128.5001"/>
 </g>
 <!-- BacterialTyper__scripts__edirect_caller__generate_docsum_call&#45;&gt;BacterialTyper__scripts__edirect_caller__docsum_call -->
 <g id="edge3" class="edge">
 <title>BacterialTyper__scripts__edirect_caller__generate_docsum_call&#45;&gt;BacterialTyper__scripts__edirect_caller__docsum_call</title>
-<path fill="none" stroke="#000000" d="M296,-181.8446C296,-173.3401 296,-163.0076 296,-153.4964"/>
+<path fill="none" stroke="#000000" d="M296,-181.8446C296,-181.8446 296,-153.2482 296,-153.2482"/>
 <polygon fill="#000000" stroke="#000000" points="299.5001,-153.2481 296,-143.2482 292.5001,-153.2482 299.5001,-153.2481"/>
 </g>
 <!-- BacterialTyper__scripts__edirect_caller__generate_xtract_call -->
@@ -79,8 +79,8 @@
 <!-- BacterialTyper__scripts__edirect_caller__generate_xtract_call&#45;&gt;BacterialTyper__config__set_config__get_exe -->
 <g id="edge5" class="edge">
 <title>BacterialTyper__scripts__edirect_caller__generate_xtract_call&#45;&gt;BacterialTyper__config__set_config__get_exe</title>
-<path fill="none" stroke="#000000" d="M163.5377,-187.0782C174.5918,-185.0337 186.1148,-183.2008 197,-182 233.1251,-178.0149 490.5231,-188.149 524,-174 536.0698,-168.8987 546.8414,-159.4035 555.2676,-150.12"/>
-<polygon fill="#000000" stroke="#000000" points="557.9588,-152.3581 561.771,-142.4728 552.6263,-147.8232 557.9588,-152.3581"/>
+<path fill="none" stroke="#000000" d="M170.9942,-188.8043C170.9942,-177.5952 170.9942,-162 170.9942,-162 170.9942,-162 574,-162 574,-162 574,-162 574,-153.0664 574,-153.0664"/>
+<polygon fill="#000000" stroke="#000000" points="577.5001,-153.0664 574,-143.0664 570.5001,-153.0665 577.5001,-153.0664"/>
 </g>
 <!-- BacterialTyper__scripts__edirect_caller__xtract_call -->
 <g id="node6" class="node">
@@ -91,7 +91,7 @@
 <!-- BacterialTyper__scripts__edirect_caller__generate_xtract_call&#45;&gt;BacterialTyper__scripts__edirect_caller__xtract_call -->
 <g id="edge6" class="edge">
 <title>BacterialTyper__scripts__edirect_caller__generate_xtract_call&#45;&gt;BacterialTyper__scripts__edirect_caller__xtract_call</title>
-<path fill="none" stroke="#000000" d="M106,-181.8446C106,-173.3401 106,-163.0076 106,-153.4964"/>
+<path fill="none" stroke="#000000" d="M106,-181.8446C106,-181.8446 106,-153.2482 106,-153.2482"/>
 <polygon fill="#000000" stroke="#000000" points="109.5001,-153.2481 106,-143.2482 102.5001,-153.2482 109.5001,-153.2481"/>
 </g>
 <!-- BacterialTyper__scripts__edirect_caller__help_edirect -->
@@ -109,14 +109,14 @@
 <!-- BacterialTyper__scripts__edirect_caller__help_edirect&#45;&gt;BacterialTyper__scripts__functions__boxymcboxface -->
 <g id="edge1" class="edge">
 <title>BacterialTyper__scripts__edirect_caller__help_edirect&#45;&gt;BacterialTyper__scripts__functions__boxymcboxface</title>
-<path fill="none" stroke="#000000" d="M511.8037,-198.6233C586.4107,-196.1497 713.7715,-189.6645 728,-174 750.4121,-149.326 749.2088,-124.7157 728,-99 700.9709,-66.2272 588.6532,-52.0686 510.9454,-46.114"/>
-<polygon fill="#000000" stroke="#000000" points="510.9285,-42.6034 500.6988,-45.3606 510.4152,-49.5845 510.9285,-42.6034"/>
+<path fill="none" stroke="#000000" d="M452.8244,-181.8754C452.8244,-181.8754 452.8244,-69.4318 452.8244,-69.4318"/>
+<polygon fill="#000000" stroke="#000000" points="456.3245,-69.4317 452.8244,-59.4318 449.3245,-69.4318 456.3245,-69.4317"/>
 </g>
 <!-- BacterialTyper__scripts__edirect_caller__xtract_call&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge7" class="edge">
 <title>BacterialTyper__scripts__edirect_caller__xtract_call&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M137.3746,-111.2942C169.1679,-97.4056 218.5566,-75.8305 253.7733,-60.4464"/>
-<polygon fill="#000000" stroke="#000000" points="255.5414,-63.4935 263.3041,-56.283 252.7391,-57.0788 255.5414,-63.4935"/>
+<path fill="none" stroke="#000000" d="M106,-106.9902C106,-82.5793 106,-42 106,-42 106,-42 233.3267,-42 233.3267,-42"/>
+<polygon fill="#000000" stroke="#000000" points="233.3268,-45.5001 243.3267,-42 233.3267,-38.5001 233.3268,-45.5001"/>
 </g>
 </g>
 </svg>

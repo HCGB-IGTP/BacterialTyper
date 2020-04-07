@@ -60,8 +60,8 @@
 <!-- BacterialTyper__scripts__ariba_caller__ariba_expandflag&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge15" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_expandflag&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M985.5957,-187.6587C995.0263,-185.6326 1004.7841,-183.6567 1014,-182 1026.8056,-179.698 1061.7973,-182.074 1072,-174 1100.0247,-151.8223 1071.6388,-119.3753 1101,-99 1116.9073,-87.961 1779.7727,-97.532 1798,-91 1812.0623,-85.9606 1825.2994,-76.2089 1835.8253,-66.7233"/>
-<polygon fill="#000000" stroke="#000000" points="1838.4783,-69.0304 1843.3149,-59.6039 1833.6555,-63.9568 1838.4783,-69.0304"/>
+<path fill="none" stroke="#000000" d="M977.4812,-185.4422C977.4812,-172.9675 977.4812,-157 977.4812,-157 977.4812,-157 1866.5208,-157 1866.5208,-157 1866.5208,-157 1866.5208,-69.9688 1866.5208,-69.9688"/>
+<polygon fill="#000000" stroke="#000000" points="1870.0209,-69.9687 1866.5208,-59.9688 1863.0209,-69.9688 1870.0209,-69.9687"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_getref -->
 <g id="node4" class="node">
@@ -76,10 +76,10 @@
 <text text-anchor="middle" x="852" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">ariba_prepareref</text>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_getref&#45;&gt;BacterialTyper__scripts__ariba_caller__ariba_prepareref -->
-<g id="edge11" class="edge">
+<g id="edge10" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_getref&#45;&gt;BacterialTyper__scripts__ariba_caller__ariba_prepareref</title>
-<path fill="none" stroke="#000000" d="M852,-106.9902C852,-96.2963 852,-82.4994 852,-70.3706"/>
-<polygon fill="#000000" stroke="#000000" points="855.5001,-70.2612 852,-60.2612 848.5001,-70.2613 855.5001,-70.2612"/>
+<path fill="none" stroke="#000000" d="M820.0228,-110.5425C820.0228,-110.5425 820.0228,-67.9909 820.0228,-67.9909"/>
+<polygon fill="#000000" stroke="#000000" points="823.5229,-67.9909 820.0228,-57.9909 816.5229,-67.991 823.5229,-67.9909"/>
 </g>
 <!-- BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="node21" class="node">
@@ -90,8 +90,8 @@
 <!-- BacterialTyper__scripts__ariba_caller__ariba_getref&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="edge13" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_getref&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M881.5201,-109.8676C891.561,-105.4734 903.0238,-101.2537 914,-99 968.8029,-87.7475 1867.13,-106.0996 1921,-91 1939.5549,-85.7991 1958.1593,-75.2248 1972.9457,-65.2263"/>
-<polygon fill="#000000" stroke="#000000" points="1975.0034,-68.0582 1981.1812,-59.4509 1970.9842,-62.327 1975.0034,-68.0582"/>
+<path fill="none" stroke="#000000" d="M862.6591,-107.2021C862.6591,-100.7422 862.6591,-95 862.6591,-95 862.6591,-95 1978.5188,-95 1978.5188,-95 1978.5188,-95 1978.5188,-69.0613 1978.5188,-69.0613"/>
+<polygon fill="#000000" stroke="#000000" points="1982.0189,-69.0612 1978.5188,-59.0613 1975.0189,-69.0613 1982.0189,-69.0612"/>
 </g>
 <!-- BacterialTyper__scripts__functions__read_time_stamp -->
 <g id="node22" class="node">
@@ -100,22 +100,22 @@
 <text text-anchor="middle" x="2457" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">read_time_stamp</text>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_getref&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
-<g id="edge10" class="edge">
+<g id="edge11" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_getref&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M881.5169,-109.8517C891.5576,-105.4564 903.021,-101.2401 914,-99 953.7919,-90.8809 2336.9116,-102.0185 2376,-91 2394.5131,-85.7814 2413.0276,-75.0937 2427.6733,-65.028"/>
-<polygon fill="#000000" stroke="#000000" points="2429.7097,-67.8747 2435.8201,-59.2194 2425.6459,-62.1751 2429.7097,-67.8747"/>
+<path fill="none" stroke="#000000" d="M883.9772,-110.4854C883.9772,-105.4312 883.9772,-101 883.9772,-101 883.9772,-101 2420.9282,-101 2420.9282,-101 2420.9282,-101 2420.9282,-67.8109 2420.9282,-67.8109"/>
+<polygon fill="#000000" stroke="#000000" points="2424.4283,-67.8109 2420.9282,-57.8109 2417.4283,-67.811 2424.4283,-67.8109"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_getref&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge12" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_getref&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M881.5216,-109.8747C891.5626,-105.481 903.0251,-101.2598 914,-99 962.104,-89.0953 1751.746,-107.5125 1798,-91 1812.0684,-85.9776 1825.3064,-76.2283 1835.8313,-66.7399"/>
-<polygon fill="#000000" stroke="#000000" points="1838.4859,-69.0454 1843.3198,-59.6175 1833.6616,-63.9732 1838.4859,-69.0454"/>
+<path fill="none" stroke="#000000" d="M841.3409,-107C841.3409,-98 841.3409,-89 841.3409,-89 841.3409,-89 1851.4792,-89 1851.4792,-89 1851.4792,-89 1851.4792,-70.037 1851.4792,-70.037"/>
+<polygon fill="#000000" stroke="#000000" points="1854.9793,-70.037 1851.4792,-60.037 1847.9793,-70.037 1854.9793,-70.037"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_prepareref&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge14" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_prepareref&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M915.0824,-49.2514C1026.2139,-61.6216 1264.2367,-86.3081 1466,-95 1501.8556,-96.5446 1753.8929,-102.4502 1789,-95 1807.399,-91.0955 1824.3238,-78.642 1836.9212,-66.7877"/>
-<polygon fill="#000000" stroke="#000000" points="1839.5594,-69.1001 1844.1801,-59.566 1834.6224,-64.1377 1839.5594,-69.1001"/>
+<path fill="none" stroke="#000000" d="M913.0946,-50.5644C913.0946,-57.1036 913.0946,-65 913.0946,-65 913.0946,-65 1821.3962,-65 1821.3962,-65 1821.3962,-65 1821.3962,-63.9845 1821.3962,-63.9845"/>
+<polygon fill="#000000" stroke="#000000" points="1824.8963,-64.8449 1821.3962,-54.8449 1817.8963,-64.845 1824.8963,-64.8449"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_pubmlstget -->
 <g id="node6" class="node">
@@ -130,16 +130,16 @@
 <text text-anchor="middle" x="2152" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">create_folder</text>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_pubmlstget&#45;&gt;BacterialTyper__scripts__functions__create_folder -->
-<g id="edge17" class="edge">
+<g id="edge16" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_pubmlstget&#45;&gt;BacterialTyper__scripts__functions__create_folder</title>
-<path fill="none" stroke="#000000" d="M1255.0465,-187.9685C1284.9176,-181.3051 1316.196,-174.2991 1317,-174 1383.1586,-149.388 1388.6459,-116.6193 1457,-99 1490.7873,-90.2908 2051.9026,-102.0452 2085,-91 2100.4382,-85.848 2115.2947,-75.7052 2127.0781,-65.9777"/>
-<polygon fill="#000000" stroke="#000000" points="2129.4383,-68.5639 2134.7143,-59.3762 2124.8603,-63.2685 2129.4383,-68.5639"/>
+<path fill="none" stroke="#000000" d="M1225.0479,-182.7954C1225.0479,-176.5508 1225.0479,-171 1225.0479,-171 1225.0479,-171 2152,-171 2152,-171 2152,-171 2152,-70.2089 2152,-70.2089"/>
+<polygon fill="#000000" stroke="#000000" points="2155.5001,-70.2089 2152,-60.2089 2148.5001,-70.209 2155.5001,-70.2089"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_pubmlstget&#45;&gt;BacterialTyper__scripts__functions__system_call -->
-<g id="edge16" class="edge">
+<g id="edge17" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_pubmlstget&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M1236.9945,-184.3212C1301.5461,-156.232 1430.7995,-100.1303 1436,-99 1475.3143,-90.4556 1760.1991,-104.7734 1798,-91 1812.0354,-85.886 1825.2686,-76.1238 1835.799,-66.6504"/>
-<polygon fill="#000000" stroke="#000000" points="1838.4451,-68.9647 1843.2933,-59.5442 1833.6286,-63.8852 1838.4451,-68.9647"/>
+<path fill="none" stroke="#000000" d="M1176.9521,-182.8435C1176.9521,-173.5713 1176.9521,-164 1176.9521,-164 1176.9521,-164 1896.6038,-164 1896.6038,-164 1896.6038,-164 1896.6038,-65.0561 1896.6038,-65.0561"/>
+<polygon fill="#000000" stroke="#000000" points="1900.1039,-65.0561 1896.6038,-55.0561 1893.1039,-65.0562 1900.1039,-65.0561"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_run -->
 <g id="node7" class="node">
@@ -150,14 +150,14 @@
 <!-- BacterialTyper__scripts__ariba_caller__ariba_run&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="edge19" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_run&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M1099.4876,-187.7684C1106.1966,-185.5826 1113.2702,-183.5208 1120,-182 1149.6822,-175.2922 1158.209,-180.2064 1188,-174 1300.7319,-150.5146 1322.2297,-116.7868 1436,-99 1489.2494,-90.675 1869.1665,-105.768 1921,-91 1939.5325,-85.7198 1958.1348,-75.1382 1972.9256,-65.1554"/>
-<polygon fill="#000000" stroke="#000000" points="1974.9769,-67.9918 1981.1644,-59.3915 1970.9642,-62.2561 1974.9769,-67.9918"/>
+<path fill="none" stroke="#000000" d="M1094.9787,-185.8135C1094.9787,-176.8694 1094.9787,-167 1094.9787,-167 1094.9787,-167 2027.4812,-167 2027.4812,-167 2027.4812,-167 2027.4812,-69.1186 2027.4812,-69.1186"/>
+<polygon fill="#000000" stroke="#000000" points="2030.9813,-69.1186 2027.4812,-59.1186 2023.9813,-69.1187 2030.9813,-69.1186"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_run&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge18" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_run&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M1088.7668,-184.1978C1123.1198,-160.3186 1192.9193,-116.0212 1260,-99 1317.948,-84.2962 1741.7546,-111.264 1798,-91 1812.0538,-85.9367 1825.2896,-76.1817 1835.817,-66.7"/>
-<polygon fill="#000000" stroke="#000000" points="1838.4677,-69.0094 1843.308,-59.5848 1833.647,-63.9339 1838.4677,-69.0094"/>
+<path fill="none" stroke="#000000" d="M1078.7612,-182.339C1078.7612,-171.6235 1078.7612,-160 1078.7612,-160 1078.7612,-160 1881.5623,-160 1881.5623,-160 1881.5623,-160 1881.5623,-68.4074 1881.5623,-68.4074"/>
+<polygon fill="#000000" stroke="#000000" points="1885.0624,-68.4074 1881.5623,-58.4074 1878.0624,-68.4074 1885.0624,-68.4074"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_summary -->
 <g id="node8" class="node">
@@ -168,8 +168,8 @@
 <!-- BacterialTyper__scripts__ariba_caller__ariba_summary&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge9" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_summary&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M570.9899,-109.8528C583.1549,-105.4576 596.9614,-101.2411 610,-99 642.5238,-93.4098 1766.9075,-102.0593 1798,-91 1812.0742,-85.9939 1825.313,-76.2469 1835.8369,-66.7558"/>
-<polygon fill="#000000" stroke="#000000" points="1838.4931,-69.0597 1843.3244,-59.6306 1833.6675,-63.9888 1838.4931,-69.0597"/>
+<path fill="none" stroke="#000000" d="M535,-106.9445C535,-95.561 535,-83 535,-83 535,-83 1836.4377,-83 1836.4377,-83 1836.4377,-83 1836.4377,-68.6763 1836.4377,-68.6763"/>
+<polygon fill="#000000" stroke="#000000" points="1839.9378,-68.6762 1836.4377,-58.6763 1832.9378,-68.6763 1839.9378,-68.6762"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_summary_all -->
 <g id="node9" class="node">
@@ -180,13 +180,13 @@
 <!-- BacterialTyper__scripts__ariba_caller__ariba_summary_all&#45;&gt;BacterialTyper__config__extern_progs__file_list -->
 <g id="edge21" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_summary_all&#45;&gt;BacterialTyper__config__extern_progs__file_list</title>
-<path fill="none" stroke="#000000" d="M590.7718,-187.0357C601.7301,-184.9665 613.1821,-183.1355 624,-182 647.0135,-179.5844 1435.6193,-182.85 1457,-174 1469.1073,-168.9885 1479.8849,-159.5074 1488.3054,-150.2103"/>
-<polygon fill="#000000" stroke="#000000" points="1491.0056,-152.4375 1494.8016,-142.5461 1485.6658,-147.9114 1491.0056,-152.4375"/>
+<path fill="none" stroke="#000000" d="M605.6271,-191.7435C605.6271,-177.5421 605.6271,-150 605.6271,-150 605.6271,-150 1507,-150 1507,-150 1507,-150 1507,-149.3169 1507,-149.3169"/>
+<polygon fill="#000000" stroke="#000000" points="1510.5002,-153.1686 1507,-143.1686 1503.5002,-153.1687 1510.5002,-153.1686"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__ariba_summary_all&#45;&gt;BacterialTyper__scripts__ariba_caller__ariba_summary -->
 <g id="edge23" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_summary_all&#45;&gt;BacterialTyper__scripts__ariba_caller__ariba_summary</title>
-<path fill="none" stroke="#000000" d="M535,-181.8446C535,-173.3401 535,-163.0076 535,-153.4964"/>
+<path fill="none" stroke="#000000" d="M535,-181.8446C535,-181.8446 535,-153.2482 535,-153.2482"/>
 <polygon fill="#000000" stroke="#000000" points="538.5001,-153.2481 535,-143.2482 531.5001,-153.2482 538.5001,-153.2481"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__fix_ariba_summary -->
@@ -198,8 +198,8 @@
 <!-- BacterialTyper__scripts__ariba_caller__ariba_summary_all&#45;&gt;BacterialTyper__scripts__ariba_caller__fix_ariba_summary -->
 <g id="edge20" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_summary_all&#45;&gt;BacterialTyper__scripts__ariba_caller__fix_ariba_summary</title>
-<path fill="none" stroke="#000000" d="M581.4739,-185.2292C591.0213,-181.8223 600.9244,-178.0109 610,-174 627.8195,-166.1247 646.8624,-156.0208 662.8213,-147.036"/>
-<polygon fill="#000000" stroke="#000000" points="664.875,-149.894 671.8287,-141.9005 661.4079,-143.813 664.875,-149.894"/>
+<path fill="none" stroke="#000000" d="M609.96,-194.1149C609.96,-176.4343 609.96,-125 609.96,-125 609.96,-125 610.8897,-125 610.8897,-125"/>
+<polygon fill="#000000" stroke="#000000" points="609.2568,-128.5001 619.2567,-125 609.2567,-121.5001 609.2568,-128.5001"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__fix_phangando_tree -->
 <g id="node13" class="node">
@@ -210,8 +210,8 @@
 <!-- BacterialTyper__scripts__ariba_caller__ariba_summary_all&#45;&gt;BacterialTyper__scripts__ariba_caller__fix_phangando_tree -->
 <g id="edge22" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__ariba_summary_all&#45;&gt;BacterialTyper__scripts__ariba_caller__fix_phangando_tree</title>
-<path fill="none" stroke="#000000" d="M488.9381,-185.3382C479.2674,-181.8977 469.211,-178.0453 460,-174 442.0092,-166.0988 422.7586,-155.9911 406.6181,-147.0105"/>
-<polygon fill="#000000" stroke="#000000" points="407.9377,-143.7368 397.5072,-141.8783 404.5021,-149.8357 407.9377,-143.7368"/>
+<path fill="none" stroke="#000000" d="M462.2065,-192.8087C462.2065,-174.0368 462.2065,-125 462.2065,-125 462.2065,-125 460.4018,-125 460.4018,-125"/>
+<polygon fill="#000000" stroke="#000000" points="460.4018,-121.5001 450.4018,-125 460.4018,-128.5001 460.4018,-121.5001"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__check_db_indexed -->
 <g id="node10" class="node">
@@ -222,8 +222,8 @@
 <!-- BacterialTyper__scripts__ariba_caller__check_db_indexed&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
 <g id="edge8" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__check_db_indexed&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M1444.8272,-199.6636C1640.4838,-198.5224 2147.328,-193.6813 2221,-174 2301.7888,-152.4175 2384.4085,-96.9629 2427.1983,-65.2216"/>
-<polygon fill="#000000" stroke="#000000" points="2429.3157,-68.0086 2435.2128,-59.2066 2425.1138,-62.41 2429.3157,-68.0086"/>
+<path fill="none" stroke="#000000" d="M1444.8879,-200C1698.5934,-200 2493.0718,-200 2493.0718,-200 2493.0718,-200 2493.0718,-67.7273 2493.0718,-67.7273"/>
+<polygon fill="#000000" stroke="#000000" points="2496.5719,-67.7272 2493.0718,-57.7273 2489.5719,-67.7273 2496.5719,-67.7272"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__download_ariba_databases -->
 <g id="node11" class="node">
@@ -232,10 +232,10 @@
 <text text-anchor="middle" x="738" y="-196.3" font-family="Times,serif" font-size="14.00" fill="#000000">download_ariba_databases</text>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__download_ariba_databases&#45;&gt;BacterialTyper__scripts__ariba_caller__ariba_getref -->
-<g id="edge6" class="edge">
+<g id="edge4" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__download_ariba_databases&#45;&gt;BacterialTyper__scripts__ariba_caller__ariba_getref</title>
-<path fill="none" stroke="#000000" d="M774.3356,-183.035C779.6885,-180.1925 785.0595,-177.1405 790,-174 801.8769,-166.4503 814.1903,-157.0835 824.6835,-148.5681"/>
-<polygon fill="#000000" stroke="#000000" points="827.1862,-151.0404 832.6655,-141.9723 822.7273,-145.6443 827.1862,-151.0404"/>
+<path fill="none" stroke="#000000" d="M806.1357,-186.2438C806.1357,-186.2438 806.1357,-144.3992 806.1357,-144.3992"/>
+<polygon fill="#000000" stroke="#000000" points="809.6358,-144.3991 806.1357,-134.3992 802.6358,-144.3992 809.6358,-144.3991"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__get_ARIBA_dbs -->
 <g id="node14" class="node">
@@ -244,10 +244,10 @@
 <text text-anchor="middle" x="993" y="-121.3" font-family="Times,serif" font-size="14.00" fill="#000000">get_ARIBA_dbs</text>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__download_ariba_databases&#45;&gt;BacterialTyper__scripts__ariba_caller__get_ARIBA_dbs -->
-<g id="edge5" class="edge">
+<g id="edge3" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__download_ariba_databases&#45;&gt;BacterialTyper__scripts__ariba_caller__get_ARIBA_dbs</title>
-<path fill="none" stroke="#000000" d="M814.975,-187.681C827.6704,-185.7271 840.6984,-183.7691 853,-182 880.0648,-178.1078 888.2476,-183.1905 914,-174 931.2452,-167.8455 948.7211,-157.5222 962.8362,-147.9339"/>
-<polygon fill="#000000" stroke="#000000" points="964.9771,-150.7075 971.1584,-142.1027 960.9602,-144.9747 964.9771,-150.7075"/>
+<path fill="none" stroke="#000000" d="M813.5667,-187.2028C813.5667,-171.2342 813.5667,-146 813.5667,-146 813.5667,-146 950.4687,-146 950.4687,-146 950.4687,-146 950.4687,-145.3355 950.4687,-145.3355"/>
+<polygon fill="#000000" stroke="#000000" points="953.9688,-149.3554 950.4687,-139.3555 946.9688,-149.3555 953.9688,-149.3554"/>
 </g>
 <!-- BacterialTyper__scripts__functions__create_subfolder -->
 <g id="node19" class="node">
@@ -256,10 +256,10 @@
 <text text-anchor="middle" x="2297" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">create_subfolder</text>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__download_ariba_databases&#45;&gt;BacterialTyper__scripts__functions__create_subfolder -->
-<g id="edge3" class="edge">
+<g id="edge6" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__download_ariba_databases&#45;&gt;BacterialTyper__scripts__functions__create_subfolder</title>
-<path fill="none" stroke="#000000" d="M810.8109,-186.964C824.7713,-184.9301 839.3049,-183.1302 853,-182 1041.0358,-166.4816 1513.9974,-189.9155 1702,-174 1933.4533,-154.4061 2000.3912,-172.2465 2218,-91 2235.0287,-84.6422 2252.3645,-74.3946 2266.4412,-64.9104"/>
-<polygon fill="#000000" stroke="#000000" points="2268.5308,-67.7206 2274.753,-59.1453 2264.5413,-61.9687 2268.5308,-67.7206"/>
+<path fill="none" stroke="#000000" d="M828.4287,-190.6134C828.4287,-183.166 828.4287,-174 828.4287,-174 828.4287,-174 2297,-174 2297,-174 2297,-174 2297,-70.0773 2297,-70.0773"/>
+<polygon fill="#000000" stroke="#000000" points="2300.5001,-70.0772 2297,-60.0773 2293.5001,-70.0773 2300.5001,-70.0772"/>
 </g>
 <!-- BacterialTyper__scripts__functions__print_sepLine -->
 <g id="node20" class="node">
@@ -268,16 +268,16 @@
 <text text-anchor="middle" x="1729" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">print_sepLine</text>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__download_ariba_databases&#45;&gt;BacterialTyper__scripts__functions__print_sepLine -->
-<g id="edge7" class="edge">
+<g id="edge5" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__download_ariba_databases&#45;&gt;BacterialTyper__scripts__functions__print_sepLine</title>
-<path fill="none" stroke="#000000" d="M810.8112,-186.9674C824.7715,-184.9332 839.305,-183.1324 853,-182 864.3784,-181.0592 1665.5519,-180.4099 1675,-174 1709.0914,-150.8713 1721.6788,-102.0483 1726.3139,-70.7"/>
-<polygon fill="#000000" stroke="#000000" points="1729.833,-70.7775 1727.644,-60.4113 1722.8907,-69.88 1729.833,-70.7775"/>
+<path fill="none" stroke="#000000" d="M820.9977,-188.6226C820.9977,-174.7128 820.9977,-153 820.9977,-153 820.9977,-153 1748.9316,-153 1748.9316,-153 1748.9316,-153 1748.9316,-69.3438 1748.9316,-69.3438"/>
+<polygon fill="#000000" stroke="#000000" points="1752.4317,-69.3437 1748.9316,-59.3438 1745.4317,-69.3438 1752.4317,-69.3437"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__download_ariba_databases&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
-<g id="edge4" class="edge">
+<g id="edge7" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__download_ariba_databases&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M810.809,-186.9403C824.7695,-184.9085 839.3037,-183.1156 853,-182 974.7113,-172.0866 1831.0735,-190.9909 1952,-174 2074.9081,-156.7307 2098.5044,-118.9866 2221,-99 2255.0402,-93.446 2343.0279,-101.1202 2376,-91 2393.9558,-85.4888 2412.0222,-75.1332 2426.5221,-65.3568"/>
-<polygon fill="#000000" stroke="#000000" points="2428.8645,-67.9899 2435.0566,-59.3929 2424.8549,-62.252 2428.8645,-67.9899"/>
+<path fill="none" stroke="#000000" d="M835.8597,-193.0391C835.8597,-186.5938 835.8597,-178 835.8597,-178 835.8597,-178 2457,-178 2457,-178 2457,-178 2457,-70.0597 2457,-70.0597"/>
+<polygon fill="#000000" stroke="#000000" points="2460.5001,-70.0597 2457,-60.0597 2453.5001,-70.0598 2460.5001,-70.0597"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__help_ARIBA -->
 <g id="node15" class="node">
@@ -288,14 +288,14 @@
 <!-- BacterialTyper__scripts__ariba_caller__help_ARIBA&#45;&gt;BacterialTyper__modules__citation__ariba_citation -->
 <g id="edge1" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__help_ARIBA&#45;&gt;BacterialTyper__modules__citation__ariba_citation</title>
-<path fill="none" stroke="#000000" d="M244.0127,-109.8566C254.8708,-105.4616 267.2341,-101.2443 279,-99 311.1435,-92.8688 1425.7916,-100.8401 1457,-91 1473.404,-85.8278 1489.3787,-75.435 1502.0081,-65.5464"/>
-<polygon fill="#000000" stroke="#000000" points="1504.2679,-68.2198 1509.7952,-59.181 1499.8376,-62.8001 1504.2679,-68.2198"/>
+<path fill="none" stroke="#000000" d="M192.7184,-107.9141C192.7184,-92.0938 192.7184,-71 192.7184,-71 192.7184,-71 1507,-71 1507,-71 1507,-71 1507,-68.8694 1507,-68.8694"/>
+<polygon fill="#000000" stroke="#000000" points="1510.5001,-68.8694 1507,-58.8694 1503.5001,-68.8695 1510.5001,-68.8694"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__help_ARIBA&#45;&gt;BacterialTyper__scripts__functions__print_sepLine -->
 <g id="edge2" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__help_ARIBA&#45;&gt;BacterialTyper__scripts__functions__print_sepLine</title>
-<path fill="none" stroke="#000000" d="M244.0114,-109.8498C254.8694,-105.4544 267.233,-101.2385 279,-99 316.604,-91.8464 1620.4503,-102.3735 1657,-91 1673.5803,-85.8406 1689.7744,-75.449 1702.5921,-65.5581"/>
-<polygon fill="#000000" stroke="#000000" points="1704.9052,-68.1892 1710.4977,-59.1906 1700.5142,-62.7376 1704.9052,-68.1892"/>
+<path fill="none" stroke="#000000" d="M231.2816,-107.9418C231.2816,-94.1453 231.2816,-77 231.2816,-77 231.2816,-77 1709.0684,-77 1709.0684,-77 1709.0684,-77 1709.0684,-69.0899 1709.0684,-69.0899"/>
+<polygon fill="#000000" stroke="#000000" points="1712.5685,-69.0898 1709.0684,-59.0899 1705.5685,-69.0899 1712.5685,-69.0898"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__help_options -->
 <g id="node16" class="node">
@@ -310,16 +310,16 @@
 <text text-anchor="middle" x="146" y="-196.3" font-family="Times,serif" font-size="14.00" fill="#000000">main</text>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__main&#45;&gt;BacterialTyper__scripts__ariba_caller__help_ARIBA -->
-<g id="edge24" class="edge">
+<g id="edge25" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__main&#45;&gt;BacterialTyper__scripts__ariba_caller__help_ARIBA</title>
-<path fill="none" stroke="#000000" d="M159.9969,-184.0944C168.6444,-174.2678 179.9327,-161.4401 189.7816,-150.2481"/>
-<polygon fill="#000000" stroke="#000000" points="192.6616,-152.2734 196.6404,-142.4541 187.4066,-147.649 192.6616,-152.2734"/>
+<path fill="none" stroke="#000000" d="M164.3763,-185.8931C164.3763,-185.8931 164.3763,-145.6511 164.3763,-145.6511"/>
+<polygon fill="#000000" stroke="#000000" points="167.8764,-145.6511 164.3763,-135.6511 160.8764,-145.6511 167.8764,-145.6511"/>
 </g>
 <!-- BacterialTyper__scripts__ariba_caller__main&#45;&gt;BacterialTyper__scripts__ariba_caller__help_options -->
-<g id="edge25" class="edge">
+<g id="edge24" class="edge">
 <title>BacterialTyper__scripts__ariba_caller__main&#45;&gt;BacterialTyper__scripts__ariba_caller__help_options</title>
-<path fill="none" stroke="#000000" d="M132.0031,-184.0944C123.3556,-174.2678 112.0673,-161.4401 102.2184,-150.2481"/>
-<polygon fill="#000000" stroke="#000000" points="104.5934,-147.649 95.3596,-142.4541 99.3384,-152.2734 104.5934,-147.649"/>
+<path fill="none" stroke="#000000" d="M126.6488,-186.5915C126.6488,-186.5915 126.6488,-144.9401 126.6488,-144.9401"/>
+<polygon fill="#000000" stroke="#000000" points="130.1489,-144.94 126.6488,-134.9401 123.1489,-144.9401 130.1489,-144.94"/>
 </g>
 </g>
 </svg>

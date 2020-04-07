@@ -38,8 +38,8 @@
 <!-- BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets&#45;&gt;BacterialTyper__scripts__functions__parse_sublist -->
 <g id="edge10" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets&#45;&gt;BacterialTyper__scripts__functions__parse_sublist</title>
-<path fill="none" stroke="#000000" d="M179.8453,-108.0737C168.9573,-103.0095 157.3296,-97.1534 147,-91 134.2012,-83.3757 120.866,-73.8216 109.5599,-65.1794"/>
-<polygon fill="#000000" stroke="#000000" points="111.3945,-62.1723 101.3522,-58.7954 107.0968,-67.6977 111.3945,-62.1723"/>
+<path fill="none" stroke="#000000" d="M122.5525,-115.8004C122.5525,-115.8004 122.5525,-64.4779 122.5525,-64.4779"/>
+<polygon fill="#000000" stroke="#000000" points="126.0526,-64.4778 122.5525,-54.4779 119.0526,-64.4779 126.0526,-64.4778"/>
 </g>
 <!-- BacterialTyper__scripts__bacteriophage__help_PhiSpy -->
 <g id="node2" class="node">
@@ -56,8 +56,8 @@
 <!-- BacterialTyper__scripts__bacteriophage__help_PhiSpy&#45;&gt;BacterialTyper__scripts__bacteriophage__print_list_modified -->
 <g id="edge11" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__help_PhiSpy&#45;&gt;BacterialTyper__scripts__bacteriophage__print_list_modified</title>
-<path fill="none" stroke="#000000" d="M270.4008,-252.6621C256.4445,-243 238.551,-230.6122 223.189,-219.977"/>
-<polygon fill="#000000" stroke="#000000" points="225.1703,-217.0917 214.9561,-214.2773 221.1858,-222.8471 225.1703,-217.0917"/>
+<path fill="none" stroke="#000000" d="M253.699,-256.4586C253.699,-256.4586 253.699,-217.9842 253.699,-217.9842"/>
+<polygon fill="#000000" stroke="#000000" points="257.1991,-217.9842 253.699,-207.9842 250.1991,-217.9842 257.1991,-217.9842"/>
 </g>
 <!-- BacterialTyper__scripts__bacteriophage__help_options -->
 <g id="node3" class="node">
@@ -68,8 +68,8 @@
 <!-- BacterialTyper__scripts__bacteriophage__help_options&#45;&gt;BacterialTyper__scripts__bacteriophage__print_list_modified -->
 <g id="edge12" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__help_options&#45;&gt;BacterialTyper__scripts__bacteriophage__print_list_modified</title>
-<path fill="none" stroke="#000000" d="M170.5609,-250.8314C173.4027,-242.9617 176.7937,-233.5712 179.9419,-224.8533"/>
-<polygon fill="#000000" stroke="#000000" points="183.2462,-226.0076 183.3508,-215.4133 176.6623,-223.63 183.2462,-226.0076"/>
+<path fill="none" stroke="#000000" d="M165.301,-250.8314C165.301,-250.8314 165.301,-224.4177 165.301,-224.4177"/>
+<polygon fill="#000000" stroke="#000000" points="168.8011,-224.4177 165.301,-214.4177 161.8011,-224.4177 168.8011,-224.4177"/>
 </g>
 <!-- BacterialTyper__scripts__bacteriophage__ident_bacteriophage -->
 <g id="node4" class="node">
@@ -80,8 +80,8 @@
 <!-- BacterialTyper__scripts__bacteriophage__ident_bacteriophage&#45;&gt;BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets -->
 <g id="edge8" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__ident_bacteriophage&#45;&gt;BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets</title>
-<path fill="none" stroke="#000000" d="M334.8164,-180.4817C313.9746,-170.4106 287.1088,-157.4284 264.6055,-146.5543"/>
-<polygon fill="#000000" stroke="#000000" points="266.1065,-143.3925 255.5797,-142.1929 263.0608,-149.6952 266.1065,-143.3925"/>
+<path fill="none" stroke="#000000" d="M309.7736,-184.4586C309.7736,-184.4586 309.7736,-145.9842 309.7736,-145.9842"/>
+<polygon fill="#000000" stroke="#000000" points="313.2737,-145.9842 309.7736,-135.9842 306.2737,-145.9842 313.2737,-145.9842"/>
 </g>
 <!-- BacterialTyper__scripts__functions__create_folder -->
 <g id="node8" class="node">
@@ -92,8 +92,8 @@
 <!-- BacterialTyper__scripts__bacteriophage__ident_bacteriophage&#45;&gt;BacterialTyper__scripts__functions__create_folder -->
 <g id="edge6" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__ident_bacteriophage&#45;&gt;BacterialTyper__scripts__functions__create_folder</title>
-<path fill="none" stroke="#000000" d="M366.254,-178.9627C362.011,-153.6161 353.0728,-109.3856 341,-99 319.9371,-80.8808 304.766,-101.3954 279,-91 264.41,-85.1136 250.1465,-75.2102 238.634,-65.841"/>
-<polygon fill="#000000" stroke="#000000" points="240.6637,-62.9734 230.7719,-59.1783 236.1381,-68.3137 240.6637,-62.9734"/>
+<path fill="none" stroke="#000000" d="M357.3659,-178.9364C357.3659,-146.7915 357.3659,-83 357.3659,-83 357.3659,-83 213,-83 213,-83 213,-83 213,-70.1025 213,-70.1025"/>
+<polygon fill="#000000" stroke="#000000" points="216.5001,-70.1025 213,-60.1025 209.5001,-70.1026 216.5001,-70.1025"/>
 </g>
 <!-- BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="node12" class="node">
@@ -104,8 +104,8 @@
 <!-- BacterialTyper__scripts__bacteriophage__ident_bacteriophage&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="edge7" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__ident_bacteriophage&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M386.7805,-179.2195C414.4604,-151.5396 467.9289,-98.0711 499.3259,-66.6741"/>
-<polygon fill="#000000" stroke="#000000" points="501.8307,-69.1191 506.4269,-59.5731 496.8809,-64.1693 501.8307,-69.1191"/>
+<path fill="none" stroke="#000000" d="M441.3501,-188.2224C441.3501,-155.4332 441.3501,-42 441.3501,-42 441.3501,-42 442.2661,-42 442.2661,-42"/>
+<polygon fill="#000000" stroke="#000000" points="440.5109,-45.5001 450.5108,-42 440.5108,-38.5001 440.5109,-45.5001"/>
 </g>
 <!-- BacterialTyper__scripts__functions__read_time_stamp -->
 <g id="node13" class="node">
@@ -116,8 +116,8 @@
 <!-- BacterialTyper__scripts__bacteriophage__ident_bacteriophage&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
 <g id="edge5" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__ident_bacteriophage&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M367.95,-178.9162C366.407,-152.3422 363.5115,-102.4757 361.6734,-70.819"/>
-<polygon fill="#000000" stroke="#000000" points="365.1451,-70.2294 361.0712,-60.4491 358.1569,-70.6352 365.1451,-70.2294"/>
+<path fill="none" stroke="#000000" d="M382.2918,-179.2195C382.2918,-179.2195 382.2918,-69.5731 382.2918,-69.5731"/>
+<polygon fill="#000000" stroke="#000000" points="385.7919,-69.5731 382.2918,-59.5731 378.7919,-69.5731 385.7919,-69.5731"/>
 </g>
 <!-- BacterialTyper__scripts__bacteriophage__main -->
 <g id="node5" class="node">
@@ -126,16 +126,16 @@
 <text text-anchor="middle" x="369" y="-337.3" font-family="Times,serif" font-size="14.00" fill="#000000">main</text>
 </g>
 <!-- BacterialTyper__scripts__bacteriophage__main&#45;&gt;BacterialTyper__scripts__bacteriophage__help_options -->
-<g id="edge14" class="edge">
+<g id="edge15" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__main&#45;&gt;BacterialTyper__scripts__bacteriophage__help_options</title>
-<path fill="none" stroke="#000000" d="M343.863,-332.1714C311.0014,-320.6298 252.7763,-300.18 211.4821,-285.6767"/>
-<polygon fill="#000000" stroke="#000000" points="212.4937,-282.3224 201.8989,-282.3108 210.174,-288.9269 212.4937,-282.3224"/>
+<path fill="none" stroke="#000000" d="M340.0633,-341C283.5549,-341 164,-341 164,-341 164,-341 164,-297.1686 164,-297.1686"/>
+<polygon fill="#000000" stroke="#000000" points="167.5001,-297.1686 164,-287.1686 160.5001,-297.1687 167.5001,-297.1686"/>
 </g>
 <!-- BacterialTyper__scripts__bacteriophage__main&#45;&gt;BacterialTyper__scripts__bacteriophage__ident_bacteriophage -->
-<g id="edge13" class="edge">
+<g id="edge14" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__main&#45;&gt;BacterialTyper__scripts__bacteriophage__ident_bacteriophage</title>
-<path fill="none" stroke="#000000" d="M369,-322.7623C369,-298.201 369,-254.2474 369,-225.3541"/>
-<polygon fill="#000000" stroke="#000000" points="372.5001,-225.0896 369,-215.0896 365.5001,-225.0897 372.5001,-225.0896"/>
+<path fill="none" stroke="#000000" d="M369.1003,-322.7623C369.1003,-322.7623 369.1003,-225.0896 369.1003,-225.0896"/>
+<polygon fill="#000000" stroke="#000000" points="372.6004,-225.0896 369.1003,-215.0896 365.6004,-225.0897 372.6004,-225.0896"/>
 </g>
 <!-- BacterialTyper__scripts__bacteriophage__results_PhiSpy -->
 <g id="node7" class="node">
@@ -144,16 +144,16 @@
 <text text-anchor="middle" x="452" y="-265.3" font-family="Times,serif" font-size="14.00" fill="#000000">results_PhiSpy</text>
 </g>
 <!-- BacterialTyper__scripts__bacteriophage__main&#45;&gt;BacterialTyper__scripts__bacteriophage__results_PhiSpy -->
-<g id="edge15" class="edge">
+<g id="edge13" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__main&#45;&gt;BacterialTyper__scripts__bacteriophage__results_PhiSpy</title>
-<path fill="none" stroke="#000000" d="M385.7963,-326.4297C396.8584,-316.8337 411.6024,-304.0437 424.3682,-292.9697"/>
-<polygon fill="#000000" stroke="#000000" points="426.7501,-295.537 432.0105,-286.3403 422.1631,-290.2492 426.7501,-295.537"/>
+<path fill="none" stroke="#000000" d="M392.9516,-330.9887C392.9516,-330.9887 392.9516,-285.9037 392.9516,-285.9037"/>
+<polygon fill="#000000" stroke="#000000" points="396.4517,-285.9036 392.9516,-275.9037 389.4517,-285.9037 396.4517,-285.9036"/>
 </g>
 <!-- BacterialTyper__scripts__bacteriophage__print_list_modified&#45;&gt;BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets -->
 <g id="edge9" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__print_list_modified&#45;&gt;BacterialTyper__scripts__bacteriophage__get_list_PhiSpy_trainingSets</title>
-<path fill="none" stroke="#000000" d="M197.5703,-178.8314C200.8493,-170.9617 204.762,-161.5712 208.3945,-152.8533"/>
-<polygon fill="#000000" stroke="#000000" points="211.7124,-153.9902 212.3278,-143.4133 205.2508,-151.2979 211.7124,-153.9902"/>
+<path fill="none" stroke="#000000" d="M190,-178.8314C190,-178.8314 190,-152.4177 190,-152.4177"/>
+<polygon fill="#000000" stroke="#000000" points="193.5001,-152.4177 190,-142.4177 186.5001,-152.4177 193.5001,-152.4177"/>
 </g>
 <!-- BacterialTyper__scripts__functions__create_subfolder -->
 <g id="node9" class="node">
@@ -162,10 +162,10 @@
 <text text-anchor="middle" x="685" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">create_subfolder</text>
 </g>
 <!-- BacterialTyper__scripts__bacteriophage__results_PhiSpy&#45;&gt;BacterialTyper__scripts__functions__create_subfolder -->
-<g id="edge1" class="edge">
+<g id="edge2" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__results_PhiSpy&#45;&gt;BacterialTyper__scripts__functions__create_subfolder</title>
-<path fill="none" stroke="#000000" d="M469.8962,-251.5646C510.9799,-211.5389 612.1579,-112.9664 659.6329,-66.7139"/>
-<polygon fill="#000000" stroke="#000000" points="662.3225,-68.98 667.0428,-59.4948 657.4377,-63.9661 662.3225,-68.98"/>
+<path fill="none" stroke="#000000" d="M512.3063,-263C581.3433,-263 685,-263 685,-263 685,-263 685,-70.0854 685,-70.0854"/>
+<polygon fill="#000000" stroke="#000000" points="688.5001,-70.0853 685,-60.0854 681.5001,-70.0854 688.5001,-70.0853"/>
 </g>
 <!-- BacterialTyper__scripts__functions__get_fullpath_list -->
 <g id="node10" class="node">
@@ -176,20 +176,20 @@
 <!-- BacterialTyper__scripts__bacteriophage__results_PhiSpy&#45;&gt;BacterialTyper__scripts__functions__get_fullpath_list -->
 <g id="edge4" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__results_PhiSpy&#45;&gt;BacterialTyper__scripts__functions__get_fullpath_list</title>
-<path fill="none" stroke="#000000" d="M481.5242,-252.7799C537.2311,-222.038 661.4623,-152.826 764,-91 778.002,-82.5574 793.2265,-72.9597 806.413,-64.5099"/>
-<polygon fill="#000000" stroke="#000000" points="808.6604,-67.2258 815.1765,-58.8717 804.8729,-61.3389 808.6604,-67.2258"/>
+<path fill="none" stroke="#000000" d="M512.3544,-275C621.6173,-275 841,-275 841,-275 841,-275 841,-70.2831 841,-70.2831"/>
+<polygon fill="#000000" stroke="#000000" points="844.5001,-70.2831 841,-60.2831 837.5001,-70.2832 844.5001,-70.2831"/>
 </g>
 <!-- BacterialTyper__scripts__bacteriophage__results_PhiSpy&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="edge3" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__results_PhiSpy&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M460.4633,-250.7336C465.0878,-240.3778 470.7263,-227.1072 475,-215 492.7029,-164.8481 508.5456,-104.8248 517.1632,-70.2831"/>
-<polygon fill="#000000" stroke="#000000" points="520.5991,-70.9681 519.5997,-60.4205 513.8034,-69.2892 520.5991,-70.9681"/>
+<path fill="none" stroke="#000000" d="M494.0938,-255.4799C494.0938,-255.4799 494.0938,-68.7494 494.0938,-68.7494"/>
+<polygon fill="#000000" stroke="#000000" points="497.5939,-68.7494 494.0938,-58.7494 490.5939,-68.7495 497.5939,-68.7494"/>
 </g>
 <!-- BacterialTyper__scripts__bacteriophage__results_PhiSpy&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
-<g id="edge2" class="edge">
+<g id="edge1" class="edge">
 <title>BacterialTyper__scripts__bacteriophage__results_PhiSpy&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M457.7226,-250.9364C462.6478,-232.4175 467.8309,-203.0107 460,-179 445.5195,-134.6007 410.6017,-92.6337 386.1261,-67.1253"/>
-<polygon fill="#000000" stroke="#000000" points="388.3992,-64.4443 378.8996,-59.7528 383.4001,-69.3443 388.3992,-64.4443"/>
+<path fill="none" stroke="#000000" d="M472.4933,-251.6479C472.4933,-221.1188 472.4933,-161 472.4933,-161 472.4933,-161 407.2177,-161 407.2177,-161 407.2177,-161 407.2177,-65.6508 407.2177,-65.6508"/>
+<polygon fill="#000000" stroke="#000000" points="410.7178,-65.6508 407.2177,-55.6508 403.7178,-65.6508 410.7178,-65.6508"/>
 </g>
 </g>
 </svg>

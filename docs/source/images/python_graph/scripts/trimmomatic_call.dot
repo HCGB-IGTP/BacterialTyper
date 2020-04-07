@@ -1,5 +1,5 @@
 digraph G {
-    graph [spilines=ortho, rankdir=TB, clusterrank="local"];
+    graph [splines=ortho, rankdir=TB, clusterrank="local"];
     subgraph cluster_G {
 
         graph [style="filled,rounded",fillcolor="#80808018", label=""];
@@ -243,10 +243,10 @@ digraph G {
             BacterialTyper__scripts__trimmomatic_call__trimmo_module [label="trimmo_module", style="filled", fillcolor="#ff65b7b2", fontcolor="#000000", group="41"];
         }
     }
-        BacterialTyper__scripts__trimmomatic_call__trimmo_module -> BacterialTyper__config__set_config__get_exe [style="solid", color="#000000"];
         BacterialTyper__scripts__trimmomatic_call__trimmo_module -> BacterialTyper__scripts__trimmomatic_call__trimmo_call [style="solid", color="#000000"];
-        BacterialTyper__scripts__trimmomatic_call__trimmo_call -> BacterialTyper__scripts__functions__print_time_stamp [style="solid", color="#000000"];
+        BacterialTyper__scripts__trimmomatic_call__trimmo_module -> BacterialTyper__config__set_config__get_exe [style="solid", color="#000000"];
         BacterialTyper__scripts__trimmomatic_call__trimmo_call -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
-        BacterialTyper__scripts__trimmomatic_call__main -> BacterialTyper__scripts__trimmomatic_call__help_options [style="solid", color="#000000"];
+        BacterialTyper__scripts__trimmomatic_call__trimmo_call -> BacterialTyper__scripts__functions__print_time_stamp [style="solid", color="#000000"];
         BacterialTyper__scripts__trimmomatic_call__main -> BacterialTyper__scripts__trimmomatic_call__trimmo_call [style="solid", color="#000000"];
+        BacterialTyper__scripts__trimmomatic_call__main -> BacterialTyper__scripts__trimmomatic_call__help_options [style="solid", color="#000000"];
     }

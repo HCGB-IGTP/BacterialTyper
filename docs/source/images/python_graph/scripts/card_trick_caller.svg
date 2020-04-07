@@ -57,26 +57,26 @@
 <!-- BacterialTyper__scripts__card_trick_caller__prepare_card_data&#45;&gt;BacterialTyper__scripts__functions__create_subfolder -->
 <g id="edge2" class="edge">
 <title>BacterialTyper__scripts__card_trick_caller__prepare_card_data&#45;&gt;BacterialTyper__scripts__functions__create_subfolder</title>
-<path fill="none" stroke="#000000" d="M418.2396,-111.5857C444.0087,-108.1035 466.3801,-103.918 479,-99 498.2325,-91.5051 517.0826,-78.2012 531.5437,-66.3306"/>
-<polygon fill="#000000" stroke="#000000" points="534.1603,-68.7006 539.5206,-59.5618 529.6312,-63.3631 534.1603,-68.7006"/>
+<path fill="none" stroke="#000000" d="M492.8426,-121.4336C492.8426,-121.4336 492.8426,-58.4438 492.8426,-58.4438"/>
+<polygon fill="#000000" stroke="#000000" points="496.3427,-58.4438 492.8426,-48.4438 489.3427,-58.4438 496.3427,-58.4438"/>
 </g>
 <!-- BacterialTyper__scripts__card_trick_caller__prepare_card_data&#45;&gt;BacterialTyper__scripts__functions__get_diff_time -->
 <g id="edge1" class="edge">
 <title>BacterialTyper__scripts__card_trick_caller__prepare_card_data&#45;&gt;BacterialTyper__scripts__functions__get_diff_time</title>
-<path fill="none" stroke="#000000" d="M323.693,-107.5069C330.0199,-104.974 336.2293,-102.1432 342,-99 358.0064,-90.2817 373.8316,-77.5851 386.2808,-66.3867"/>
-<polygon fill="#000000" stroke="#000000" points="388.9771,-68.6603 393.9422,-59.3009 384.2242,-63.5213 388.9771,-68.6603"/>
+<path fill="none" stroke="#000000" d="M411,-110.9202C411,-110.9202 411,-70.2227 411,-70.2227"/>
+<polygon fill="#000000" stroke="#000000" points="414.5001,-70.2227 411,-60.2227 407.5001,-70.2228 414.5001,-70.2227"/>
 </g>
 <!-- BacterialTyper__scripts__card_trick_caller__prepare_card_data&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp -->
 <g id="edge4" class="edge">
 <title>BacterialTyper__scripts__card_trick_caller__prepare_card_data&#45;&gt;BacterialTyper__scripts__functions__print_time_stamp</title>
-<path fill="none" stroke="#000000" d="M260,-106.9902C260,-96.2963 260,-82.4994 260,-70.3706"/>
+<path fill="none" stroke="#000000" d="M260,-106.9902C260,-106.9902 260,-70.2612 260,-70.2612"/>
 <polygon fill="#000000" stroke="#000000" points="263.5001,-70.2612 260,-60.2612 256.5001,-70.2613 263.5001,-70.2612"/>
 </g>
 <!-- BacterialTyper__scripts__card_trick_caller__prepare_card_data&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp -->
 <g id="edge3" class="edge">
 <title>BacterialTyper__scripts__card_trick_caller__prepare_card_data&#45;&gt;BacterialTyper__scripts__functions__read_time_stamp</title>
-<path fill="none" stroke="#000000" d="M197.8705,-107.5037C191.0477,-104.9362 184.2982,-102.0988 178,-99 159.5338,-89.9142 140.5624,-76.9992 125.5245,-65.7594"/>
-<polygon fill="#000000" stroke="#000000" points="127.2319,-62.6597 117.1585,-59.3768 122.986,-68.2251 127.2319,-62.6597"/>
+<path fill="none" stroke="#000000" d="M96,-111.6646C96,-111.6646 96,-70.2532 96,-70.2532"/>
+<polygon fill="#000000" stroke="#000000" points="99.5001,-70.2532 96,-60.2532 92.5001,-70.2532 99.5001,-70.2532"/>
 </g>
 <!-- BacterialTyper__scripts__card_trick_caller__dead_code -->
 <g id="node7" class="node">
@@ -87,8 +87,8 @@
 <!-- BacterialTyper__scripts__card_trick_caller__dead_code&#45;&gt;BacterialTyper__scripts__functions__readList_fromFile -->
 <g id="edge5" class="edge">
 <title>BacterialTyper__scripts__card_trick_caller__dead_code&#45;&gt;BacterialTyper__scripts__functions__readList_fromFile</title>
-<path fill="none" stroke="#000000" d="M724.1321,-106.9902C723.6167,-96.2963 722.9518,-82.4994 722.3673,-70.3706"/>
-<polygon fill="#000000" stroke="#000000" points="725.8575,-70.0811 721.8801,-60.2612 718.8656,-70.4182 725.8575,-70.0811"/>
+<path fill="none" stroke="#000000" d="M721,-106.9902C721,-106.9902 721,-70.2612 721,-70.2612"/>
+<polygon fill="#000000" stroke="#000000" points="724.5001,-70.2612 721,-60.2612 717.5001,-70.2613 724.5001,-70.2612"/>
 </g>
 </g>
 </svg>

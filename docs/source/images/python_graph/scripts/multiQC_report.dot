@@ -1,5 +1,5 @@
 digraph G {
-    graph [spilines=ortho, rankdir=TB, clusterrank="local"];
+    graph [splines=ortho, rankdir=TB, clusterrank="local"];
     subgraph cluster_G {
 
         graph [style="filled,rounded",fillcolor="#80808018", label=""];
@@ -189,6 +189,6 @@ digraph G {
         BacterialTyper__scripts__multiQC_report__multiQC_module_call -> BacterialTyper__scripts__functions__printList2file [style="solid", color="#000000"];
         BacterialTyper__scripts__multiQC_report__multiQC_module_call -> BacterialTyper__scripts__multiQC_report__multiQC_call [style="solid", color="#000000"];
         BacterialTyper__scripts__multiQC_report__multiQC_call -> BacterialTyper__scripts__functions__system_call [style="solid", color="#000000"];
-        BacterialTyper__scripts__multiQC_report__main -> BacterialTyper__scripts__multiQC_report__multiQC_call [style="solid", color="#000000"];
         BacterialTyper__scripts__multiQC_report__main -> BacterialTyper__scripts__multiQC_report__help_options [style="solid", color="#000000"];
+        BacterialTyper__scripts__multiQC_report__main -> BacterialTyper__scripts__multiQC_report__multiQC_call [style="solid", color="#000000"];
     }

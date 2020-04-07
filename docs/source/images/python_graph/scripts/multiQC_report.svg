@@ -48,10 +48,10 @@
 <text text-anchor="middle" x="251" y="-193.3" font-family="Times,serif" font-size="14.00" fill="#000000">main</text>
 </g>
 <!-- BacterialTyper__scripts__multiQC_report__main&#45;&gt;BacterialTyper__scripts__multiQC_report__help_options -->
-<g id="edge5" class="edge">
+<g id="edge4" class="edge">
 <title>BacterialTyper__scripts__multiQC_report__main&#45;&gt;BacterialTyper__scripts__multiQC_report__help_options</title>
-<path fill="none" stroke="#000000" d="M249.9906,-178.8314C249.5628,-171.131 249.0541,-161.9743 248.5787,-153.4166"/>
-<polygon fill="#000000" stroke="#000000" points="252.0724,-153.2037 248.023,-143.4133 245.0831,-153.592 252.0724,-153.2037"/>
+<path fill="none" stroke="#000000" d="M260.5325,-179.937C260.5325,-179.937 260.5325,-152.6924 260.5325,-152.6924"/>
+<polygon fill="#000000" stroke="#000000" points="264.0326,-152.6924 260.5325,-142.6924 257.0326,-152.6925 264.0326,-152.6924"/>
 </g>
 <!-- BacterialTyper__scripts__multiQC_report__multiQC_call -->
 <g id="node5" class="node">
@@ -60,16 +60,16 @@
 <text text-anchor="middle" x="114" y="-121.3" font-family="Times,serif" font-size="14.00" fill="#000000">multiQC_call</text>
 </g>
 <!-- BacterialTyper__scripts__multiQC_report__main&#45;&gt;BacterialTyper__scripts__multiQC_report__multiQC_call -->
-<g id="edge4" class="edge">
+<g id="edge5" class="edge">
 <title>BacterialTyper__scripts__multiQC_report__main&#45;&gt;BacterialTyper__scripts__multiQC_report__multiQC_call</title>
-<path fill="none" stroke="#000000" d="M228.9886,-185.432C208.5323,-174.6812 177.6031,-158.4264 152.9726,-145.482"/>
-<polygon fill="#000000" stroke="#000000" points="154.3564,-142.2553 143.8761,-140.7013 151.0999,-148.4517 154.3564,-142.2553"/>
+<path fill="none" stroke="#000000" d="M241.4675,-179.8435C241.4675,-170.5713 241.4675,-161 241.4675,-161 241.4675,-161 133.7149,-161 133.7149,-161 133.7149,-161 133.7149,-152.1565 133.7149,-152.1565"/>
+<polygon fill="#000000" stroke="#000000" points="137.215,-152.1565 133.7149,-142.1565 130.215,-152.1566 137.215,-152.1565"/>
 </g>
 <!-- BacterialTyper__scripts__multiQC_report__multiQC_call&#45;&gt;BacterialTyper__scripts__functions__system_call -->
 <g id="edge3" class="edge">
 <title>BacterialTyper__scripts__multiQC_report__multiQC_call&#45;&gt;BacterialTyper__scripts__functions__system_call</title>
-<path fill="none" stroke="#000000" d="M115.7359,-106.9902C116.7666,-96.2963 118.0964,-82.4994 119.2655,-70.3706"/>
-<polygon fill="#000000" stroke="#000000" points="122.7642,-70.5509 120.2399,-60.2612 115.7965,-69.8793 122.7642,-70.5509"/>
+<path fill="none" stroke="#000000" d="M121.2497,-106.9902C121.2497,-106.9902 121.2497,-70.2612 121.2497,-70.2612"/>
+<polygon fill="#000000" stroke="#000000" points="124.7498,-70.2612 121.2497,-60.2612 117.7498,-70.2613 124.7498,-70.2612"/>
 </g>
 <!-- BacterialTyper__scripts__multiQC_report__multiQC_module_call -->
 <g id="node6" class="node">
@@ -80,14 +80,14 @@
 <!-- BacterialTyper__scripts__multiQC_report__multiQC_module_call&#45;&gt;BacterialTyper__scripts__functions__printList2file -->
 <g id="edge1" class="edge">
 <title>BacterialTyper__scripts__multiQC_report__multiQC_module_call&#45;&gt;BacterialTyper__scripts__functions__printList2file</title>
-<path fill="none" stroke="#000000" d="M176.3847,-183.9473C231.1948,-171.8494 303.5247,-154.0962 312,-143 323.8701,-127.4591 319.8612,-116.9059 312,-99 306.0405,-85.4258 295.0762,-73.6628 284.0063,-64.4056"/>
-<polygon fill="#000000" stroke="#000000" points="286.024,-61.5399 275.9971,-58.1177 281.7014,-67.0459 286.024,-61.5399"/>
+<path fill="none" stroke="#000000" d="M182.8751,-185.3498C182.8751,-149.3028 182.8751,-42 182.8751,-42 182.8751,-42 183.8656,-42 183.8656,-42"/>
+<polygon fill="#000000" stroke="#000000" points="182.7797,-45.5001 192.7796,-42 182.7796,-38.5001 182.7797,-45.5001"/>
 </g>
 <!-- BacterialTyper__scripts__multiQC_report__multiQC_module_call&#45;&gt;BacterialTyper__scripts__multiQC_report__multiQC_call -->
 <g id="edge2" class="edge">
 <title>BacterialTyper__scripts__multiQC_report__multiQC_module_call&#45;&gt;BacterialTyper__scripts__multiQC_report__multiQC_call</title>
-<path fill="none" stroke="#000000" d="M114,-178.8314C114,-171.131 114,-161.9743 114,-153.4166"/>
-<polygon fill="#000000" stroke="#000000" points="117.5001,-153.4132 114,-143.4133 110.5001,-153.4133 117.5001,-153.4132"/>
+<path fill="none" stroke="#000000" d="M94.2851,-179.2022C94.2851,-179.2022 94.2851,-152.0972 94.2851,-152.0972"/>
+<polygon fill="#000000" stroke="#000000" points="97.7852,-152.0972 94.2851,-142.0972 90.7852,-152.0973 97.7852,-152.0972"/>
 </g>
 </g>
 </svg>
