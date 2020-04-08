@@ -55,5 +55,6 @@ Glossary
       The Comprehensive Antibiotic Resistance Database (CARD, https://card.mcmaster.ca/) provides data, 
       models, and algorithms relating to the molecular basis of antimicrobial resistance. The CARD provides 
       curated reference sequences and SNPs organized via the Antibiotic Resistance Ontology (ARO). 
+   
       
      
