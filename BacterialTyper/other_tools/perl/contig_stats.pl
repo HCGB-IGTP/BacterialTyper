@@ -167,7 +167,7 @@ foreach my $keys (sort {$a<=>$b} keys %parts_array) {
 	if (!$N_set_perc) {$N_set_perc=0;}
 	printf "%-25s %.3e\n", "Total length (no Ns):", $all_bases_noNs_set; print "\n";
 	
-	if ($set eq ">1000 bp") {
+	if ($set eq ">10000 bp") {
 		my ($totalContigs, $percentage_contigs_returned, $bases, $percentage_pb_bases_this_set_print, $minReadLen, $maxReadLen, $avgReadLen, $medianLen, $n50, $L50) = split(",", $string2print_set);
 		print CSV $totalContigs."\n";
 		print CSV $percentage_contigs_returned."\n";

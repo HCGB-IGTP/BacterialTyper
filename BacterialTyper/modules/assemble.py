@@ -170,6 +170,11 @@ def run_assembly(options):
 	## functions.timestamp
 	print ("\n+ Assembly of all samples finished: ")
 	start_time_partial = functions.timestamp(start_time_partial_assembly)
+
+	###################
+	if Debug:
+		print ("** DEBUG: assembly_stats dictionary")
+		print (assembly_stats)
 	
 	##
 	if (assembly_stats):
@@ -195,9 +200,19 @@ def run_assembly(options):
 			tmp_name = os.path.splitext(file_stats)
 			#csv
 			csv_file = tmp_name[0] + '.csv'
-		
+
+			######
+			if Debug:
+				print ("file_stats: ", file_stats)
+				print ("tmp_name: ", tmp_name)
+				print ("csv_file: ", csv_file)
+
 			## subset dataframe	& print result
 			results_summary_toPrint = pd.read_csv(csv_file, sep=',', header=None).transpose()
+			
+			## TODO: check if file read contains the correct amount of columns.
+			## It might produce stop failure if not matches.
+
 			results_summary_toPrint.columns = column_names
 			results_summary_toPrint['sample'] = stats
 		
