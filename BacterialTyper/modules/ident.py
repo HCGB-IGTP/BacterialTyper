@@ -710,7 +710,8 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 	## TODO: Samples might not be assembled...to take into account and return 0
 	## TODO: Fix and install MLSTar during installation
 	########################################################################################
-	rscript = "/soft/general/R-3.5.1-bioc-3.8/bin/Rscript" ##set_config.get_exe("Rscript") 
+	
+	set_config.get_exe("Rscript") 
 	########################################################################################
 
 	## TODO: What to do if multi-isolate sample?
@@ -740,7 +741,16 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 		
 	## get MLST_profile: default or provided
 	mlst_profile = retrieve_databases.loc[ retrieve_databases['db'] == 'PubMLST']['path'].item()
-	
+
+	if (Debug):
+		print ("** Debug **")
+		print ("mlst_profile")
+		print (mlst_profile)
+
+		print ("dataFrame_edirect")
+		print (dataFrame_edirect)
+
+
 	## Generate MLST call according to species identified for each sample
 	for index, row in dataFrame_edirect.iterrows():
 		MLSTar_taxa_name = MLSTar.get_MLSTar_species(row['genus'], row['species'] )
