@@ -185,10 +185,11 @@ def check_db_indexed(folder, option):
 	.. include:: ../../links.inc
 	"""
 	
+	path_basename = folder.split('/')
 	if os.path.isfile(folder + '00.info.txt'):
 		if os.path.isfile(folder + '.success'):
 			stamp =	functions.read_time_stamp(folder + '.success')
-			print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
+			print (colored("\tA previous command generated results on: %s [%s]" %(stamp, path_basename[-2]), 'yellow'))
 			return True
 	else:
 		if (option == 'YES'):
