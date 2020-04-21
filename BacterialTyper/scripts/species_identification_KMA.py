@@ -260,7 +260,7 @@ def index_database(fileToIndex, kma_bin, index_name, option, folder, type_option
 	#	-h			Shows this help message
 	#######################################################################################
 	
-	##
+	## check if file exists
 	if os.path.isfile(index_name):
 		index_file_name = index_name
 	else:
@@ -268,6 +268,9 @@ def index_database(fileToIndex, kma_bin, index_name, option, folder, type_option
 		
 	logFile = index_file_name + '.log'
 	
+	## check if folder exists
+	functions.create_folder(folder)
+
 	## single file
 	if (type_option == 'batch'):
 		type_option = '-batch'
@@ -398,32 +401,23 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, option, th
 	
 	Paired-end end or single end fastq files accepted. It generates a time stamp if succeeds.
 
-	Arguments:
-		out_file: str
-			Absolute path and basename for the output files generated with results.
-		
-		files: list
-			List of absolute paths for fastq files to search againts the database.
-		
-		fold_name: path
-			Directory path to store database generated.
-		
-		index_name: str
-			Database name
-		
-		kma_bin: path
-			Binary executable for KMA software.
-		
-		option: str
-			Additional options to pass to the system call.
-		
-		threads: int
-			Number of CPUs to use. 
-	
-	Returns:
-		OK if system call returned finish status.
-		
-		FAIL if system call failed.
+	:param out_file: Absolute path and basename for the output files generated with results.
+	:param files: List of absolute paths for fastq files to search againts the database.
+	:param sample_name: Directory path to store database generated.
+	:param index_name: Database name
+	:param kma_bin: Binary executable for KMA software.
+	:param option: Additional options to pass to the system call.
+	:param threads: Number of CPUs to use. 
+
+	:type out_file: string
+	:type files: list
+	:type sample_name: string
+	:type index_name: string
+	:type kma_bin: string
+	:type option: string
+	:type threads: integer	
+
+	:returns: System call returned finish status.
 	"""
 
 	###
@@ -440,7 +434,7 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, option, th
 		## success stamps
 		basename_tag = os.path.basename(out_file)
 		folder = os.path.dirname(out_file)
-		filename_stamp = folder + '/.success_' + basename_tag
+		filename_stamp = folder + '.success_' + basename_tag
 		stamp =	functions.print_time_stamp(filename_stamp)
 		return('OK')
 	else:
@@ -450,8 +444,13 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, option, th
 def parse_kma_results(out_file, cutoff):
 	"""Filters KMA results given a cutoff threshold.
 	
-	Returns:
-		Filtered dataframe.
+	:param out_file: Results file originated from kma system call (kma_ident_call)
+	:param cutoff: Template coverage cutoff.
+
+	:type out_file: string
+	:type cutoff: integer	
+
+	:returns: Filtered dataframe of results.
 	"""
 	results = pd.read_csv(out_file, sep="\t")
 	results_filter = results[results['Template_Coverage'] > cutoff] 
@@ -460,7 +459,7 @@ def parse_kma_results(out_file, cutoff):
 
 ##################################################
 def	help_options():
-	print ("\nUSAGE: python %s file1 file2 name xxc threads path\n"  %os.path.realpath(__file__))
+	print ("\nUSAGE: python %s name fasta folder_name sample_name threads files_csv_string\n"  %os.path.realpath(__file__))
 
 ##################################################
 def main():
@@ -473,11 +472,34 @@ def main():
 		help_options()
 		exit()    	
 	
-	## to do: implement main function
+	## arguments
 	name = argv[1]
-	cutoff = 80
-	file_out = os.path.abspath(argv[2])
-	parse_kma_results(file_out, cutoff)
+	fasta = os.path.abspath(argv[2])
+	folder = os.path.abspath(argv[3])
+	sample_name = argv[4]
+	threads = argv[5]
+
+	files = []
+	for i,e in enumerate(argv):
+		if i > 5:
+			files.append(os.path.abspath(argv[i]))
+
+	## other
+	cutoff=80
+	kma_bin = set_config.get_exe("kma")
+	out_file = sample_name + ".out_kma-search.txt"
+
+	## check if database is indexed
+	if not  check_db_indexed(name, folder):
+		index_database(fasta, kma_bin, name, 'new', folder, '')
+		print ("\n+ Database indexed")
+	
+
+	## search files
+	kma_ident_call(out_file, files, sample_name, folder + '/' + name, kma_bin, '', threads)
+
+	##
+	#parse_kma_results(file_out, cutoff)
 
 ##################################################
 if __name__== "__main__":
