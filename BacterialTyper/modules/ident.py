@@ -711,7 +711,7 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 	## TODO: Fix and install MLSTar during installation
 	########################################################################################
 	
-	set_config.get_exe("Rscript") 
+	rscript = set_config.get_exe("Rscript") 
 	########################################################################################
 
 	## TODO: What to do if multi-isolate sample?
