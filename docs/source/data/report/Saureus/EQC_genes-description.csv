@@ -1,0 +1,26 @@
+Gene,Synonym,Definition
+mecA,"PBP2A","A foreign PBP2a acquired by lateral gene transfer that able to perform peptidoglycan synthesis in the presence of beta-lactams."
+mecC,"mecALGA251","A foreign PBP2a acquired by lateral gene transfer that able to perform peptidoglycan synthesis in the presence of beta-lactams."
+mupA,"ileS2","An alternative isoleucyl-tRNA synthetase conferring resistance to mupirocin."
+cfr,"cfr cfr(A)","CfrA is a chloramphenicol-florfenicol resistance gene and methyltransferase enzyme. Methylation of 23S rRNA confers resistance to chloramphenicol antibiotics"
+tetK,"tetK","TetK is a tetracycline efflux protein found in both Gram-negative (Haemophilus and Gallibacterium) and Gram-positive (many species, including mycobacteria) bacteria."
+tetM,"","TetM is a ribosomal protection protein that confers tetracycline resistance. It is found on transposable DNA elements and its horizontal transfer between bacterial species has been documented."
+ermA,"ermTR","ErmA confers the MLSb phenotype. Similar to ErmC, Expression of ErmA is inducible by erythromycin. The leader peptide causes attenuation of the mRNA and stabilizes the structure preventing further translation. When erythromycin is present, it binds the leader peptide causing a change in conformation allowing for the expression of ErmA."
+ermC,"ErmC' ermIM ermM","ErmC is a methyltransferase that catalyzes the methylation of A2058 of the 23S ribosomal RNA in two steps. Expression of ErmC is inducible by erythromycin. The leader peptide causes attenuation of the mRNA and stabilizes the structure preventing further translation. When erythromycin is present, it binds the leader peptide causing a change in conformation allowing for the expression of ErmC."
+aph3,"-","APH(3')-IIIa is a plasmid-encoded aminoglycoside phosphotransferase in S. aureus and Enterococcus spp."
+aadC,"aadD aadD2","ANT(4')-Ia is a plasmid-encoded aminoglycoside nucleotidyltransferase in S. epidermidis, S. aureus, Enterococcus spp. and Bacillus spp."
+aac-aphD,"aac(6')-bifunctional, aacA-aphD, APH(2''), aph(2'')-bifunctional, AAC(6')-APH(2'')","AAC(6')-Ie-APH(2'')-Ia is an aminoglycoside acetyltransferase encoded by plasmids and transposons in S. aureus, E. faecalis, E. faecium and Staphylococcus warneri"
+lukF_PV,"","Panton-Valentine leukocidin chain F precursor"
+lukS_PV,"","Panton-Valentine leukocidin chain S precursor"
+tst,"tsst-1","Toxic shock syndrome toxin-1. Membrane acting superantigen"
+sea,"staphylococcal enterotoxin A",
+seb,"staphylococcal enterotoxin B",
+sec1,"staphylococcal enterotoxin C1",
+sec3,"staphylococcal enterotoxin C3",
+sed,"staphylococcal enterotoxin D",
+see,"staphylococcal enterotoxin E",
+seh,"staphylococcal enterotoxin H",
+eta,"Exfoliative toxin A","Primarily responsible for the skin manifestation of staphylococcal scalded skin syndrome and bullous impetigo"
+etb,"Exfoliative toxin B","Primarily responsible for the skin manifestation of staphylococcal scalded skin syndrome and bullous impetigo"
+etd,"Exfoliative toxin D",""
+arcA,,"arginine deiminase"

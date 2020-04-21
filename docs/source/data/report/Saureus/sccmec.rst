@@ -1,3 +1,4 @@
+.. _sccmec-description:
 
 SCCmec
 ======
