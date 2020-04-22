@@ -44,23 +44,43 @@ def help_kma_database():
 ##################################################
 def download_kma_database(folder, database, debug):
 	"""
+	Downloads databases from KMA website.
 	
-	:param folder:
-	:param database:
-	:param string:
+	Using the latest available ftp datasets, this function downloads available datasets using
+	function :func:`BacterialTyper.scripts.functions.wget_download`. 
 	
-	:type folder:
-	:type database:
-	:type string:
+	Ftp site: "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/latest/"
 	
+	It also downloads the md5sum for the dataset selected and compares with the 
 	
+	:param folder: Absolute path to folder that contains database.
+	:param database: Possible options: [bacteria, archaea, protozoa, fungi, plasmids, typestrains].
+	:param debug: True/false for printing debugging messages.
+	
+	:type folder: string
+	:type database: string
+	:type debug: boolean
+	
+	.. seealso:: This function depends on other ``BacterialTyper`` functions called:
+	
+		- :func:`BacterialTyper.scripts.functions.wget_download`
+
+		- :func:`BacterialTyper.scripts.functions.check_md5sum`
+
+		- :func:`BacterialTyper.scripts.functions.extract`
+		
+		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
+		
+		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
+
+		- :func:`BacterialTyper.scripts.species_identification_KMA.check_db_indexed`
+
 	"""
 
-	## types: bacteria, archaea, protozoa, fungi, plasmids, typestrains
-	## Default: downloads all "bacterial,plasmids" genomes from KMA website
-
-	## ToDo: update with latest version, not working so far.
+	## ToDo: update with latest version
 	#ftp_site = "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/latest/"
+	
+	## So far there is not a plasmid database within the latest database section
 	
 	## ToDo: Set automatic: download config file and look for prefix for each sample and generate a dictionary to code the prefix for each db.
 	
@@ -167,6 +187,30 @@ def download_kma_database(folder, database, debug):
 
 ##################################################
 def check_db_indexed(index_name, folder):
+	"""
+	Check the status of a database
+	
+	:param index_name: Index name for the database
+	:param folder: Absolute path of the folder containing the databse.
+	
+	:type index_name: string
+	:type folder: string
+	
+	:returns: True/False for the index status.
+	
+	.. seealso:: This function depends on other ``BacterialTyper`` functions called:
+		
+		- :func:`BacterialTyper.scripts.functions.readList_fromFile`
+		
+		- :func:`BacterialTyper.scripts.functions.get_number_lines`
+		
+		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
+
+		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
+	
+	"""
+	
+	# Each db consist of 5 files with the following extensions: b, comp.b, length.b, seq.b, name
 	my_index_list = [".comp.b", ".index.b", ".length.b", ".name", ".seq.b"]
 
 	print ("\t+ Checking if database has been previously indexed...")
@@ -199,7 +243,6 @@ def check_db_indexed(index_name, folder):
 		entries = functions.readList_fromFile(names)
 		print (*entries, sep='\n')
 
-
 	return(True)
 	
 ##################################################
@@ -223,12 +266,13 @@ def index_database(fileToIndex, kma_bin, index_name, option, folder, type_option
 	
 	:returns: It returns message from :func:`BacterialTyper.scripts.species_identification_KMA.check_db_indexed`.
 	
-	.. seealso:: This function depends on other BacterialTyper functions called:
+	.. seealso:: This function depends on other ``BacterialTyper`` functions called:
 	
+		- :func:`BacterialTyper.scripts.functions.create_folder`
+		
 		- :func:`BacterialTyper.scripts.functions.system_call`
 		
 		- :func:`BacterialTyper.scripts.species_identification_KMA.check_db_indexed`
-	
 	"""	
 	
 	########################################################################################
@@ -316,7 +360,7 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 		
 	:returns: Absolute path to database generated
 	
-	.. seealso:: This function depends on other BacterialTyper functions called:
+	.. seealso:: This function depends on other ``BacterialTyper`` functions called:
 	
 		- :func:`BacterialTyper.scripts.functions.readList_fromFile`
 		
@@ -325,7 +369,6 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 		- :func:`BacterialTyper.scripts.species_identification_KMA.check_db_indexed`
 
 		- :func:`BacterialTyper.scripts.species_identification_KMA.index_database`
-
 		
 	"""
 
@@ -391,6 +434,42 @@ def generate_db(file_abs_paths, name, fold_name, option, type_option, Debug, kma
 	else:
 		return False
 
+def load_db(kma_bin, db2use):
+	"""
+	This function loads the given database in memory.
+	
+	:param kma_bin: Absolute path to KMA binary.
+	:param db2use: Database to load in memory
+	
+	:type kma_bin: string
+	:type db2use: string 
+	
+	:returns: System call status. 
+	"""
+	cmd_load_db = "%s shm -t_db %s -shmLvl 1" %(kma_bin, db2use)
+	return_code_load = functions.system_call(cmd_load_db)
+	
+	return(return_code_load)
+
+def remove_db(kma_bin, db2use):
+	"""
+	This function removes the given database from memory.
+	
+	:param kma_bin: Absolute path to KMA binary.
+	:param db2use: Database to remove from memory
+	
+	:type kma_bin: string
+	:type db2use: string 
+	
+	:returns: System call status. 
+	"""
+
+	cmd_rm_db = "%s shm -t_db %s -shmLvl 1 -destroy" %(kma_bin, db2use)
+	return_code_rm = functions.system_call(cmd_rm_db)
+	
+	return(return_code_rm)
+			
+
 ########################
 #### IDENTIFICATION	####
 ########################
@@ -418,15 +497,22 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, option, th
 	:type threads: integer	
 
 	:returns: System call returned finish status.
+	
+	.. seealso:: This function depends on other ``BacterialTyper`` functions called:
+	
+		- :func:`BacterialTyper.scripts.functions.system_call`
+	
+		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
+
 	"""
 
 	###
 	out_file_log = out_file + '.log'
 	if len(files) == 2:
-		cmd_kma_search = "%s -ipe %s %s -o %s -t_db %s -shm 1 -t %s %s 2> %s" %(kma_bin, files[0], files[1], out_file, index_name, threads, option, out_file_log)
+		cmd_kma_search = "%s -ipe %s %s -o %s -t_db %s -t %s %s 2> %s" %(kma_bin, files[0], files[1], out_file, index_name, threads, option, out_file_log)
 	else:
 		## TODO: test Single End
-		cmd_kma_search = "%s -i %s -o %s -t_db %s -shm 1 -t %s %s 2> %s" %(kma_bin, files[0], out_file, index_name, threads, option, out_file_log)
+		cmd_kma_search = "%s -i %s -o %s -t_db %s -t %s %s 2> %s" %(kma_bin, files[0], out_file, index_name, threads, option, out_file_log)
 
 	code = functions.system_call(cmd_kma_search)
 

@@ -324,9 +324,9 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	.. include:: ../../devel/results/KMA_ident_example.csv
 		:literal:
 	
-	.. seealso:: This function depends on other BacterialTyper functions called:
+	.. seealso:: This function depends on other ``BacterialTyper`` functions called:
 	
-		- :func:`BacterialTyper.scripts.set_config.get_exe`
+		- :func:`BacterialTyper.config.set_config.get_exe`
 	
 		- :func:`BacterialTyper.scripts.functions.boxymcboxface`
 		
@@ -394,9 +394,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			
 			## load database on memory
 			print ("+ Loading database on memory for faster identification.")
-			cmd_load_db = "%s shm -t_db %s -shmLvl 1" %(kma_bin, db2use)
-			return_code_load = functions.system_call(cmd_load_db)
-			
+			return_code_load = species_identification_KMA.load_db(kma_bin, db2use)
 			## send for each sample
 			commandsSent = { executor.submit(send_kma_job, outdir_dict[name], sorted(cluster["sample"].tolist()), name, db2use, threads_job, cluster): name for name, cluster in sample_frame }
 
@@ -411,11 +409,10 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 
 			## remove database from memory
 			print ("+ Removing database from memory...")
-			cmd_rm_db = "%s shm -t_db %s -shmLvl 1 -destroy" %(kma_bin, db2use)
-			return_code_rm = functions.system_call(cmd_rm_db)
+			return_code_rm = species_identification_KMA.remove_db(kma_bin, db2use)
 			
 			if (return_code_rm == 'FAIL'):
-				print (colored("***ERROR: Removing database from memory failed. Please do it! Execute command: %s" %cmd_rm_db,'red'))
+				print (colored("***ERROR: Removing database from memory failed. Please do it manually! Execute command: %s" %cmd_rm_db,'red'))
 		
 			## functions.timestamp
 			time_partial = functions.timestamp(time_partial)
@@ -483,7 +480,42 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 
 ###################################
 def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sample):
-
+	"""
+	Executes KMA identification jobs
+	
+	This function automates the process of checking if any previous run succeeded or
+	runs the appropiate identification process for the sample and database provided.
+	
+	:param outdir_file:
+	:param list_files:
+	:param name:
+	:param database:
+	:param threads:
+	:param dataFrame_sample:
+	
+	:type outdir_file:
+	:type list_files:
+	:type name:
+	:type database:
+	:type threads:
+	:type dataFrame_sample:
+	
+	.. seealso:: This function depends on other ``BacterialTyper`` functions called:
+	
+		- :func:`BacterialTyper.scripts.functions.outdir_subproject`
+	
+		- :func:`BacterialTyper.config.set_config.get_exe`
+	
+		- :func:`BacterialTyper.scripts.species_identification_KMA.kma_ident_call`
+	
+		- :func:`BacterialTyper.module.ident.get_outfile`
+		
+		- :func:`BacterialTyper.scripts.functions.system_call`
+	
+		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
+		
+		
+	"""
 	## outdir_KMA
 	outdir_dict_kma = functions.outdir_subproject(outdir_file, dataFrame_sample, "kma")
 
@@ -514,13 +546,29 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 		if (basename_tag == 'userData_KMA'):
 			option = ''
 		else:
-			option = '-Sparse'
+			option = '-Sparse '
+	
+		## Add option to retrieve databse from memory
+		option = option + '-shm 1'
 	
 		# Call KMA
 		species_identification_KMA.kma_ident_call(outfile, list_files, name, database, kma_bin, option, threads)
 
 ####################################
 def get_outfile(output_dir, name, index_name):
+	"""
+	Generates the name for the output file created
+	
+	:param output_dir: Absolute path to results folder 
+	:param name: Name of the sample
+	:param index_name: Name of the database
+	
+	:type output_dir: string
+	:type name: string
+	:type index_name: string
+	
+	:retruns: Output file absolute path
+	"""
 	basename_tag = os.path.basename(index_name)
 	if Project:
 		output_path = output_dir
@@ -551,7 +599,7 @@ def edirect_ident(dataFrame, outdir_dict):
 	.. include:: ../../devel/results/edirect_download_results.csv
 		:literal:
 	
-	.. seealso:: This function depends on other BacterialTyper functions called:
+	.. seealso:: This function depends on other ``BacterialTyper`` functions called:
 	
 		- :func:`BacterialTyper.scripts.functions.get_info_file`
 		
@@ -690,7 +738,7 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 		- :doc:`PubMLST datasets<../../../data/PubMLST_datasets>`
 	
 	
-	.. seealso:: This function depends on other BacterialTyper functions called:
+	.. seealso:: This function depends on other ``BacterialTyper`` functions called:
 	
 		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
 	
@@ -843,8 +891,9 @@ def get_external_kma(kma_external_files, Debug):
 def get_options_db(options):
 	"""Select databases to use according to the input options.
 	
-	Returns:
-		Dataframe with database information among all databases available.
+	:param options:
+	
+	:returns: Dataframe with database information among all databases available.
 	"""
 	
 	print ("\n\n+ Select databases to use for identification:")
