@@ -6,6 +6,11 @@ Staphylococcus aureus report
     :Version: |version|
     :Date: |today|
     
+.. toctree::
+   :hidden:
+   
+   sccmec.rst
+   spatyping.rst
 
 .. contents::
 

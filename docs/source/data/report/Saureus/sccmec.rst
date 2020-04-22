@@ -31,7 +31,7 @@ SCCmec typing
 -------------
 
 The type of SCCmec is defined by the combination of the type of ccr-gene complex and the 
-class of mec-gene complex :cite:`Hiramatsu2013`. Subtype of the SCCmec is based on the difference in the  
+class of mec-gene complex :cite:`hiramatsu13`. Subtype of the SCCmec is based on the difference in the  
 J regions (standing for junkyard): J1, J2, and J3.
 
 .. csv-table::
