@@ -74,7 +74,6 @@ Once you deactivate the environment this tag should disappear.
 
 Read additional details in `python environment`_ official documentation website.
 
-
 - What is CPAN?
 
 CPAN is the Comprehensive Perl Archive Network, a large collection of Perl software and documentation. 
@@ -83,6 +82,18 @@ listed at http://www.cpan.org/SITES.html.
 
 CPAN is also the name of a Perl module, ``CPAN.pm``, which is used to download and install Perl software 
 from the CPAN archive. Read further information at https://metacpan.org/pod/CPAN.
+
+Database
+========
+
+- Why does the database module take so much time?
+
+Some files, specially KMA databases are very big files (Gbytes) and it might take a long time. Please be patient.
+
+Here we show an example of the size of the different KMA databases.
+
+.. image:: ../images/KMA_databases_ftp_dir.png
+   :align: center
 
 Quality control
 ===============
