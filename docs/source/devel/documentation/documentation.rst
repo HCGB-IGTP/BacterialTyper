@@ -222,7 +222,7 @@ To include an hyperlink in a word just type:
 
 .. code-block:: rst
    
-   Example: `Google<https://www.google.com>`_.
+   Example: `Google <https://www.google.com>`_.
 
 and this will create the following: 
 
