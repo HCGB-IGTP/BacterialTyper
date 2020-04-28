@@ -34,4 +34,6 @@ A list of important genes is provided in file:
 
 .. include:: spatyping.rst
 
+.. ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR211/006/ERR2112496/ERR2112496_1.fastq.gz
+.. ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR211/006/ERR2112496/ERR2112496_2.fastq.gz
 
