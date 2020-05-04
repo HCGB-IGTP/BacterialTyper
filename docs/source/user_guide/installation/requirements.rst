@@ -76,15 +76,18 @@ Also, several software packages are also required. They are listed in
    :header-rows: 1 
    :file: ../../../../BacterialTyper/config/software/dependencies.csv
 
-You might need to install the default ``java`` run time environment (jre):
+Most of the software are common software that any person doing bioinformatics should have, so
+you might have already available within your system.
+
+You might need to have installed some basic libraries: the default ``java`` run time environment (jre), C-compiler 
+and zlib development files:
 
 .. code-block:: sh
 	
 	sudo apt install default-jre
-
-Most of the software are common software that any person doing bioinformatics should have, so
-you might have already available within your system.
-
+	sudo apt-get install libz-dev
+	sudo apt-get install build-essential
+	
 You can test for any missing software dependencies using the ``BacterialTyper config`` module. Once you 
 identified the missing dependencies and minimum versions required you can either install them and 
 set them available within your ``$PATH`` or you can execute the ``BacterialTyper config`` 

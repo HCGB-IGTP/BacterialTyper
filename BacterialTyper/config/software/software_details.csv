@@ -1,2 +1,3 @@
-name,version,site,ext,folder,bin_name
-fastqc,v0.11.9,https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip,zip,FastQC,fastqc
+type,name,version,site,ext,folder,bin_name
+extract,fastqc,v0.11.9,https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip,zip,FastQC,fastqc
+git,kma,,https://bitbucket.org/genomicepidemiology/kma.git,,kma,kma

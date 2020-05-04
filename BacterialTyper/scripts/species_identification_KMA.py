@@ -590,10 +590,11 @@ def main():
 ##################################################
 if __name__== "__main__":
 	main()
-	
+
 ################################################################################################
 ## 										KMA v1.2.2
 ################################################################################################	
+## read additional information in: https://bitbucket.org/genomicepidemiology/kma/src/master/KMAspecification.pdf
 # KMA-1.2.2 mapps raw reads to a template database.
 # Options are:		
 ##				Desc:													Default:	Requirements:
