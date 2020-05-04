@@ -30,15 +30,15 @@ from io import StringIO
 ## import modules sourmash
 import csv
 import shutil
-#import sourmash
+import sourmash
 import screed
 import numpy
-#from sourmash import SourmashSignature, save_signatures, load_one_signature
-#import matplotlib
-#matplotlib.use('Agg')
-#import matplotlib.pyplot as plt
+from sourmash import SourmashSignature, save_signatures, load_one_signature
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
-#import pylab
+import pylab
 import scipy.cluster.hierarchy as sch
 
 ## import my modules

@@ -16,7 +16,7 @@ import pandas as pd
 from sys import argv
 from io import open
 from termcolor import colored
-#import card_trick
+import card_trick
 
 ## import my modules
 from BacterialTyper.scripts import functions

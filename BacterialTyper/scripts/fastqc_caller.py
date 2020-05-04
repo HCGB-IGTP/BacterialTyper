@@ -17,11 +17,11 @@ from sys import argv
 from io import open
 import pandas as pd
 
-#import matplotlib
-#matplotlib.use('agg')
-#import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
 from pandas.plotting import table
-#from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 
 ## import my modules

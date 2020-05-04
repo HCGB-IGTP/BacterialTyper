@@ -21,11 +21,11 @@ from io import open
 import pandas as pd
 from termcolor import colored
 
-#import matplotlib
-#matplotlib.use('agg')
-#import matplotlib.pyplot as plt
-#from pandas.plotting import table
-#from matplotlib.backends.backend_pdf import PdfPages
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
+from pandas.plotting import table
+from matplotlib.backends.backend_pdf import PdfPages
 
 ## import my modules
 from BacterialTyper.scripts import functions
