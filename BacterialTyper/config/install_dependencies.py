@@ -60,7 +60,7 @@ def install(software, min_version, install_path):
 	elif (software == 'efetch' or software == 'esearch' or software == 'xtract' ):
 		install_edirect(install_path)
 	else:
-		install_binary(software, min_version, install_path, Debug)
+		install_soft(software, min_version, install_path, Debug)
 			
 	print ("Install missing software: ", software)
 	print ("To do....")
@@ -95,6 +95,118 @@ def python_package_install(package, version2install):
 	return (versioninstalled)
 
 ##################
+
+#######################
+def install_soft(software, min_version, install_path, Debug):
+	
+	# check info from file: software_details.txt
+	info = get_info_software()
+
+	## print debugging messages
+	if Debug:
+		print(colored("** Debug: info data frame retrieved from file", 'yellow'))
+		print(info)	
+	
+	## get info for file: web site & ext
+	type= info.loc[software, 'type']
+
+	if (type=='extract'):
+		install_binary(software, min_version, install_path, Debug)
+	elif (type=='git'):
+		install_git_repo(software, min_version, install_path, Debug)
+	else:
+		print()
+
+#######################
+def install_git_repo(software, min_version, install_path, Debug):
+	""" """
+	# check info from file: software_details.txt
+	info = get_info_software()
+
+	## get info for file: web site & ext
+	git_repo= info.loc[software, 'site']
+	folder_name = info.loc[software, 'folder']
+	bin_name = info.loc[software, 'bin_name']
+	
+	print ("+ Installing:")
+	print ("\tSoftware: ", software)
+	print ("\tPath: ", install_path)
+	print ("\tGit repo: ", git_repo)
+	
+	## debug messages
+	if Debug:
+		print(colored("** Debug:", 'yellow'))
+		print(colored("\nGit repo: %s" %git_repo, 'yellow'))
+		print(colored("Folder clone: %s" %folder_name, 'yellow'))
+		print(colored("Binary name: %s\n" %bin_name, 'yellow'))
+	
+	## option
+	option = info.loc[software, 'ext']
+	folder_name = info.loc[software, 'folder']
+	binary_name = info.loc[software, 'bin_name']
+	folder_path = os.path.join(install_path, folder_name)
+
+	## current path
+	current_path = os.getcwd()
+	
+	## git clone repo
+	print ('+ Clone repository...')
+	git_exe = set_config.get_exe('git', Debug)
+	
+	if os.path.exists(folder_path):
+		## pull
+		os.chdir(folder_path)
+		cmd = git_exe + ' pull'
+	else:
+		## clone
+		cmd = git_exe + ' clone ' + git_repo 
+	
+	## call git
+	functions.system_call(cmd)
+
+	## Compile
+	print ('+ Compile software...')
+	if (option == 'make'):
+		## make
+		os.chdir(folder_path)
+		functions.system_call('make')
+		
+	else:
+		## no need to compile
+		print ()
+	
+	## get software path
+	file_software = os.path.join(folder_path, binary_name)
+	
+	## add some exceptions
+	if (software == 'prokka'):
+		## get software path
+		file_software = os.path.join(folder_path, 'bin', binary_name)
+		
+	## debug messages
+	if Debug:
+		print(colored("** Debug:", 'yellow'))
+		print(colored('folder_path: %s' %folder_path, 'yellow'))
+		print(colored('file_software: %s' %file_software, 'yellow'))
+	
+	## change permissions
+	functions.chmod_rights(file_software, stat.S_IRWXU) ## execute permissions for group
+	
+	## get version
+	VersionInstalled = set_config.get_version(software, file_software, Debug)
+	
+	## debug messages
+	if Debug:
+		print(colored("** Debug: VersionInstalled: %s" %VersionInstalled, 'yellow'))
+	
+	## chdir to previous path
+	os.chdir(current_path)
+	
+	##
+	return (VersionInstalled)
+	
+	
+#######################
 def install_binary(software, min_version, install_path, Debug):
 	"""Install binary software
 	
@@ -129,8 +241,6 @@ def install_binary(software, min_version, install_path, Debug):
 	
 	## debug messages
 	if Debug:
-		print(colored("** Debug: info data frame retrieved from file", 'yellow'))
-		print(info)	
 		print(colored("\nSite: %s" %site, 'yellow'))
 		print(colored("Extension: %s" %ext, 'yellow'))
 		print(colored("Folder downloaded: %s" %folder_name, 'yellow'))
@@ -304,7 +414,9 @@ def BUSCO_config():
 def main():
 
 
-	install_binary('fastqc', '', '/home/jfsanchez/software', True)
+	install_soft('spades', '', '/home/jfsanchez/software', True)
+	install_soft('prokka', '', '/home/jfsanchez/software', True)
+	install_soft('trimmomatic', '', '/home/jfsanchez/software', True)
 
 if __name__ == "__main__":
 	main()
