@@ -37,7 +37,7 @@ from BacterialTyper.config import install_dependencies
 def get_exe(prog, Debug=False, Return_Version=False):
 	"""Return absolute path of the executable program requested.
 
-	Given a program name it returns its exectuable to be called. It has to fulfilled a minimun version specified.
+	Given a program name it returns its executable to be called. It has to fulfilled a minimum version specified.
 
 	:param prog: Software name
 	:type prog: string
@@ -248,7 +248,7 @@ def get_version(prog, path, Debug=False):
 	:type path: string 
 	:type Debug: bool
 
-	:returns: tuple (bool, string). First element True if found version ok. Second element is version. Returns NA message if no found and raises attention error message.
+	:returns: String containing version. Returns NA message if no found and raises attention error message.
 
 	.. attention:: Be aware of Copyright
 

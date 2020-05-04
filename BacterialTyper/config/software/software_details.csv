@@ -1,0 +1,2 @@
+name,version,site,ext,folder,bin_name
+fastqc,v0.11.9,https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip,zip,FastQC,fastqc

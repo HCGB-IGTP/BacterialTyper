@@ -255,6 +255,15 @@ def file2dataframe(file2read, names):
 	return(d)
 
 
+def chmod_rights(file, access_rights):
+	"""Changes access permission of a file:
+	
+	Read additional information in:
+	https://docs.python.org/3/library/os.html#os.chmod
+	https://www.geeksforgeeks.org/python-os-chmod-method/
+	"""
+	access = os.chmod(file, access_rights, follow_symlinks=True)
+
 
 ########################################################################
 ######## 					system call							######## 					
@@ -312,7 +321,7 @@ def check_md5sum(string, File):
 		return (False)
 
 ###############
-def extract(fileGiven, out):
+def extract(fileGiven, out, remove=True):
 	"""
 	Extracts archived file
 	
@@ -324,17 +333,22 @@ def extract(fileGiven, out):
 	
 	:param fileGiven: Archived file to extract.
 	:param out: Output name and absolute path for the extracted archived.
+	:param remove: True/False for removing compressed file extracted
 	
 	:type fileGiven: string
 	:type out: string
-	
+	:type remove: boolean
 	
 	"""
-	cmd = patoolib.extract_archive(fileGiven, outdir=out, verbosity=0)
-	## remove compress file
-	print ("Remove compress file...")
-	os.remove(fileGiven)
-	print ("\n")
+	## extract using patoolib
+	patoolib.extract_archive(fileGiven, outdir=out, verbosity=0)
+	
+	if (remove):
+		## remove compress file
+		print ("Remove compress file...")
+		os.remove(fileGiven)
+		print ("\n")
+	
 
 ####################################################################
 ######## 					BLAST							######## 					
