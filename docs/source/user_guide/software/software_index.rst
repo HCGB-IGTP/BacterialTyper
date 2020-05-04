@@ -4,12 +4,13 @@
 
 Software Information
 ********************
-.. toctree::
-   :hidden:
-   
-   fastqc.rst
-   .rst
       
 This is a general guide for the software that we employed along the ``BacterialTyper`` pipeline.
 
-.. contents:: 
+.. toctree::
+   
+   fastqc.rst
+   kma.rst
+   prokka.rst
+   spades.rst
+   trimmomatic.rst

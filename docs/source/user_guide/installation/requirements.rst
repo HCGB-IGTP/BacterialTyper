@@ -79,15 +79,27 @@ Also, several software packages are also required. They are listed in
 Most of the software are common software that any person doing bioinformatics should have, so
 you might have already available within your system.
 
-You might need to have installed some basic libraries: the default ``java`` run time environment (jre), C-compiler 
-and zlib development files:
+You might need to have installed some basic libraries: 
+
+	- default ``java`` run time environment (jre), 
+
+	- C-compiler 
+
+	- zlib development files
+
+	- perl libraries
+
+	- Bio::Perl
+
 
 .. code-block:: sh
 	
 	sudo apt install default-jre
 	sudo apt-get install libz-dev
 	sudo apt-get install build-essential
-	
+	sudo apt-get install libdatetime-perl libxml-simple-perl libdigest-md5-perl bioperl
+	sudo cpan Bio::Perl
+
 You can test for any missing software dependencies using the ``BacterialTyper config`` module. Once you 
 identified the missing dependencies and minimum versions required you can either install them and 
 set them available within your ``$PATH`` or you can execute the ``BacterialTyper config`` 
