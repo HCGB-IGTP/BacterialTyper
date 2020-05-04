@@ -4,10 +4,10 @@
 ## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain	##
 ##########################################################
 """
-Installs external dependencies if not satistified
+Installs external dependencies if not satisfied
 """
 ## this modules is an idea from ARIBA (https://github.com/sanger-pathogens/ariba)
-## give credit to them appropiately
+## give credit to them appropriately
 
 ## [TODO]
 
@@ -67,9 +67,9 @@ def print_error_message(module_name, path):
 
 	:returns: Print messages.
 	"""
-	print ("\nSome error ocurred while installing module [ %s ]." %module_name)
+	print ("\nSome error happened while installing module [ %s ]." %module_name)
 	print ("Path: " + path)
-	print ("Please retry or install it mannually to continue with BacterialTyper")
+	print ("Please retry or install it manually to continue with BacterialTyper")
 
 #############################3
 def python_package_install(package, version2install):
@@ -80,7 +80,7 @@ def python_package_install(package, version2install):
 
 def install_edirect(install_path):
 	"""
-	Installs and configurates Edirect 
+	Installs and configures Edirect 
 	
 	Read further information of the Edirect utilities in https://www.ncbi.nlm.nih.gov/books/NBK179288/
 	"""

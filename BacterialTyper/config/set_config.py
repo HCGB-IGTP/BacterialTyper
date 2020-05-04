@@ -105,10 +105,10 @@ def get_exe(prog, Debug=False, Return_Version=False):
 				return (p)
 
 	if (len(exe_path_tmp) == 0):
-		print(colored("\n**ERROR: Programme %s could not be found." % prog,'red'))
+		print(colored("\n**ERROR: Software %s could not be found." % prog,'red'))
 		exit()
 	else:
-		print(colored("\n**ERROR: Programme %s version smaller than minimun version expected %s." %(prog,min_version),'red'))
+		print(colored("\n**ERROR: Software %s version smaller than minimum version expected %s." %(prog,min_version),'red'))
 		exit()
 
 	if (Return_Version):
@@ -118,9 +118,9 @@ def get_exe(prog, Debug=False, Return_Version=False):
 
 ################
 def access_check(fn, mode=os.F_OK | os.X_OK):
-	"""Check exec permission
+	"""Check executable permission
 
-	This function checks wether a given path is a folder or file and wether it is 
+	This function checks whether a given path is a folder or file and if it is 
 	executable and accessible. It also works if a java jar file provided.
 
 	:param fn: Absolute path file
