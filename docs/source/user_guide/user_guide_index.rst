@@ -9,7 +9,7 @@ User's Guide
     :Version: |version|
     :Date: |today|
 
-This User Guide provides information on ``BacterialTyper`` usage and documentation. It is divided in five main chapters:
+This User Guide provides information on ``BacterialTyper`` usage and documentation. It is divided in several main chapters:
 
 .. toctree::
     :maxdepth: 1
@@ -18,5 +18,6 @@ This User Guide provides information on ``BacterialTyper`` usage and documentati
     quickStart.rst
     modules/user_guide_modules_index.rst
     ../tutorial/tutorial_index.rst
+    software/software_index.rst
     faqs.rst
 
