@@ -30,7 +30,7 @@ Using ``pip`` we can install them all at a glance.
 
 But again, following installation recommendations, we encourage you to create and install them 
 within a virtual environment (See section: :ref:`Python environment<virtual-env-BacterialTyper>` 
-section for details).`
+section for details).
 
 You can test the presence of these ``python`` modules using the ``BacterialTyper config`` module. 
 Once you identified the missing dependencies and minimum versions required you can either install them and 
@@ -75,6 +75,12 @@ Also, several software packages are also required. They are listed in
 .. csv-table::
    :header-rows: 1 
    :file: ../../../../BacterialTyper/config/software/dependencies.csv
+
+You might need to install the default ``java`` run time environment (jre):
+
+.. code-block:: sh
+	
+	sudo apt install default-jre
 
 Most of the software are common software that any person doing bioinformatics should have, so
 you might have already available within your system.
