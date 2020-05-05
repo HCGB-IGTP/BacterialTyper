@@ -3,7 +3,7 @@
 # You will first need to install BacterialTyper
 #
 # Install the documentation requirements with:
-#     pip install -r config/docs/doc-requirements.txt
+#     pip install -r docs/config/doc-requirements.txt
 
 sphinx
 sphinxmark
