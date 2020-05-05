@@ -5,9 +5,9 @@
 FastQC
 ======
 
-FastQC is a quality control tool for high throughput sequence data. It aims to provide a simple 
+FastQC :cite:`fastqc` is a quality control tool for high throughput sequence data. It aims to provide a simple 
 way to do some quality control checks on raw sequence data coming from high throughput sequencing 
-pipelines. It provides a modular set of analyses which you can use to give a quick impression of 
+pipelines. It provides a modular set of analysis which you can use to give a quick impression of 
 whether your data has any problems of which you should be aware before doing any further analysis.
 
 The main functions of FastQC are

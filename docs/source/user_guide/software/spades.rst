@@ -5,7 +5,7 @@
 SPAdes
 ======
 
-SPAdes – St. Petersburg genome assembler – is an assembly toolkit containing various assembly pipelines. 
+SPAdes – St. Petersburg genome assembler – is an assembly toolkit containing various assembly pipelines :cite:`Bankevich2012`. 
 
 
 See additional details in: 
