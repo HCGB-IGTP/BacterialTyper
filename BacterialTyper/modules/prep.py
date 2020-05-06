@@ -3,9 +3,9 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
+"""
 Get fastq files and prepare them for other purposes. 
-'''
+"""
 
 ## import useful modules
 import time
@@ -70,7 +70,7 @@ def run_prep(options):
 	###
 	final_dir = ""
 	if (options.project):
-		print ("+ Generate a directory containinig information within the project folder provided")
+		print ("+ Generate a directory containing information within the project folder provided")
 		final_dir = functions.create_subfolder("info", outdir)
 	else:
 		final_dir = outdir
@@ -150,8 +150,4 @@ def run_prep(options):
 		else:
 			if not options.project:
 				functions.get_symbolic_link(list_reads, outdir)
-	
-
-			
-
 	

@@ -8,7 +8,7 @@ The ``BacterialTyper`` pipelines provides this module ``config`` to help the use
 to configurate the multiple dependencies and requirements.
 
 We encourage ``BacterialTyper`` users to run this module after the installation to
-check wether the multiple requirements and dependencies are fulfilled.
+check whether the multiple requirements and dependencies are fulfilled.
 
 .. seealso:: Additional information on ``BacterialTyper`` configuration and requirements
 
@@ -36,7 +36,7 @@ The different options and parameters for this module should appear in the comman
 
 .. function:: Module BacterialTyper config
    
-   :param option: State wether to check or install missing modules, packages and third party software. Provide: check/install 
+   :param option: State whether to check or install missing modules, packages and third party software. Provide: check/install 
    :param install_path: Absolute path to install modules or packages missing. Default: ``BacterialTyper`` environment path.
    :param IslandPath: True/False for checking additional perl and software required by this option analysis.
    :param debug: True/false for debugging messages.

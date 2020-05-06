@@ -49,7 +49,7 @@ def run(options):
 	If any requirement is not available this modules tries to install them or reports to the user to
 	manually install them.
 
-	:param option: State wether to check or install missing modules, packages and third party software. Provide: check/install
+	:param option: State whether to check or install missing modules, packages and third party software. Provide: check/install
 	:param install_path: Absolute path to install modules or packages missing. Default: ``BacterialTyper`` environment path.
 	:param IslandPath: True/False for checking additional perl and software required by this option analysis.
 	:param debug: True/false for debugging messages.
@@ -142,9 +142,9 @@ def run(options):
 	this_python_version = str(sys.version)
 	python_min_version = extern_progs.return_min_version_soft('python')
 	if LooseVersion(this_python_version) >= LooseVersion(python_min_version):
-		print (colored("Minimun version (%s) satistied: %s" %( python_min_version, this_python_version), 'green'))
+		print (colored("Minimum version (%s) satisfied: %s" %( python_min_version, this_python_version), 'green'))
 	else:
-		print (colored("Minimun version (%s) not satistied: %s" %(python_min_version, this_python_version), 'red'))
+		print (colored("Minimum version (%s) not satisfied: %s" %(python_min_version, this_python_version), 'red'))
 		exit()
 		
 	## perl_version
@@ -157,9 +157,9 @@ def run(options):
 	this_perl_path = set_config.get_exe("perl", Debug)
 	this_perl_version = set_config.get_version("perl", this_perl_path, Debug)
 	if LooseVersion(this_perl_version) >= LooseVersion(perl_min_version):
-		print (colored("Minimun version (%s) satistied: %s" %(perl_min_version, this_perl_version), 'green'))
+		print (colored("Minimum version (%s) satisfied: %s" %(perl_min_version, this_perl_version), 'green'))
 	else:
-		print (colored("Minimun version (%s) not satistied: %s" %(perl_min_version, this_perl_version), 'red'))
+		print (colored("Minimum version (%s) not satisfied: %s" %(perl_min_version, this_perl_version), 'red'))
 		exit()
 
 	## third-party software
@@ -201,7 +201,3 @@ def run(options):
 		set_config.check_IslandPath(Debug, option_install, options.install_path)
 		functions.print_sepLine("+", 20, False)
 		print ('\n')
-
-
-
-

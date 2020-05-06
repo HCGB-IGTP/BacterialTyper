@@ -3,9 +3,9 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
+"""
 Prepares samples for further analysis.
-'''
+"""
 ## useful imports
 import time
 import io

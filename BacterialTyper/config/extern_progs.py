@@ -213,27 +213,3 @@ def min_perl_package_version(file_name):
 
 	return(package_min_versions)
 ##################
-
-
-
-def main():
-
-	#data = read_dependencies()
-	#print(data)
-
-	#print_package_version()
-	#print (return_min_version_python_package('ariba'))
-	#print (return_min_version_soft('kma'))
-	#set_config.check_perl_packages(True, '')
-
-	if (set_config.access_check('/usr/bin/make')):
-		print ('make accessible')
-	else:
-		print ('not accessible')
-
-
-######
-'''******************************************'''
-if __name__== "__main__":
-	main()
-

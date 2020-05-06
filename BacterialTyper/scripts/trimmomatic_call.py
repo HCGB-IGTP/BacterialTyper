@@ -25,7 +25,7 @@ from BacterialTyper.config import set_config
 def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_adapters):
 	## 
 	## This functions generates a trimmomatic call using java and trimmomatic from 
-	## the system with a minimun version (specified in config.py)
+	## the system with a minimum version (specified in config.py)
 	## Checks if adapter file exists
 	## Returns code from trimmo_call: OK/FAIL
 	##
@@ -54,7 +54,7 @@ def print_help_adapters():
 	
 	BacterialTyper includes a file :file:`BacterialTyper.data.available_Trimmomatic_adapters.fasta` with default sequencing adapters provided by Trimmomatic_ (v0.39).
 	
-	User can provide using the option --adatpers different sequencing adapters.
+	User can provide using the option --adapters different sequencing adapters.
 	
 	.. seealso:: Additional information on Trimmomatic adapters available.
 	
@@ -68,7 +68,7 @@ def print_help_adapters():
 	print("BacterialTyper includes a file with default sequencing adapters provided by Trimmomatic (v0.39).")
 	print("See additional details in the documentation.\n")
 	
-	print("Users can provide any sequencing adapter of interest using the option --adatpers in fasta format file.")
+	print("Users can provide any sequencing adapter of interest using the option --adapters in fasta format file.")
 
 ################################################
 def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
@@ -76,7 +76,7 @@ def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, t
 	## Function to call trimmomatic using java. Can take single-end and pair-end files
 	## sample_folder must exists before calling this function. 
 	## It can be call from main or a module.
-	## Returns code OK/FAIL according if suceeded or failed the system call
+	## Returns code OK/FAIL according if succeeded or failed the system call
 	## 
 
 	#######################################

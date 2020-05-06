@@ -3,9 +3,9 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
+"""
 Trimms sequence adapters within fastq reads.
-'''
+"""
 ## import useful modules
 import os
 import sys

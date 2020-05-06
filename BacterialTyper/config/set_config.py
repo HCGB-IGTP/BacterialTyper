@@ -235,8 +235,6 @@ def my_which(cmd):
 
 ##################
 def get_version(prog, path, Debug=False):
-	## this function is from ARIBA (https://github.com/sanger-pathogens/ariba)
-	## give credit to them appropiately
 	"""Get version of software
 
 	Given a program name and expected path, tries to determine its version.
@@ -308,7 +306,7 @@ def check_dependencies(install_option, install_path, Debug):
 	information for all the dependencies is retrieved from file :file:`BacterialTyper/config/software/dependencies.csv`.
 	
 	For each software, the function :func:`BacterialTyper.config.set_config.get_exe` retrieves
-	wether it is installed in the system or not and its version anc it is check using 
+	whether it is installed in the system or not and its version and it is check using 
 	:func:`BacterialTyper.config.set_config.check_install`. If not installed, the  
 	:func:`BacterialTyper.config.install_dependencies.install` parses the software name and
 	proceeds for the installation of the software.
@@ -323,7 +321,7 @@ def check_dependencies(install_option, install_path, Debug):
 	
 	:returns: Print messages and information	
 	
-	.. seealso:: This function also depende on additional functions:
+	.. seealso:: This function also depends on additional functions:
 	
 		- :func:`BacterialTyper.config.extern_progs.read_dependencies` 
 		
@@ -366,7 +364,7 @@ def check_dependencies(install_option, install_path, Debug):
 				if (message2 == 'OK'):
 					continue
 				else:
-					print ("+ Attent to install software: ", soft_name, " failed. Install it manually to continue with BacterialTyper\n\n")
+					print ("+ attempt to install software: ", soft_name, " failed. Install it manually to continue with BacterialTyper\n\n")
 			else:
 				print ("+ Please install manually software: ", soft_name, " to continue with BacterialTyper\n\n")
 	
@@ -411,7 +409,7 @@ def get_python_packages(Debug):
 ##################
 def check_python_packages(Debug, option_install, install_path):
 	"""
-	This functions checks wether the packages installed in the system fulfilled the 
+	This functions checks whether the packages installed in the system fulfilled the 
 	minimum version specified in the configuration folder. 
 
 	It uses function :func:`BacterialTyper.config.set_config.get_python packages` to
@@ -492,7 +490,7 @@ def check_python_packages(Debug, option_install, install_path):
 				if (message2 == 'OK'):
 					continue
 				else:
-					print ("+ Attent to install package: ", module_name, " failed. Install it manually to continue with BacterialTyper\n\n")
+					print ("+ attempt to install package: ", module_name, " failed. Install it manually to continue with BacterialTyper\n\n")
 			else:
 				print ("+ Please install manually package: ", module_name, " to continue with BacterialTyper\n\n")
 
@@ -584,7 +582,7 @@ def check_perl_packages(file_name, Debug, option_install, install_path):
 	"""
 	Check the perl packages required
 
-	This functions checks wether the packages installed in the system fulfilled the 
+	This functions checks whether the packages installed in the system fulfilled the 
 	minimum version specified in the configuration file. Details of the perl packages 
 	required are available in :file:`BacterialTyper/config/perl/`. 
 
@@ -729,7 +727,7 @@ def check_install_module(installed, module_name, min_version, tag):
 	"""
 	Checks modules installation 
 
-	Checks wether a module is installed and fulifilling requirements. 	
+	Checks whether a module is installed and fulfilling requirements. 	
 	It prints messages using :func:`BacterialTyper.config.set_config.print_module_comparison`.
 
 	:param installed: Version string of the module installed.
