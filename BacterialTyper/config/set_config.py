@@ -72,14 +72,14 @@ def get_exe(prog, Debug=False, Return_Version=False):
 
 	## debug message
 	if (Debug):
-		print(colored("** Debug: exe: %s" %exe,'red'))
-		print(colored("** Debug: exe_path_tmp: %s" %exe_path_tmp,'red'))
+		print(colored("** Debug: exe: %s" %exe,'yellow'))
+		print(colored("** Debug: exe_path_tmp: %s" %exe_path_tmp,'yellow'))
 
 	## get min_version
 	min_version = extern_progs.return_min_version_soft(prog)
 	## debug message
 	if (Debug):
-		print(colored("** Debug: min_version: %s" %min_version,'red'))
+		print(colored("** Debug: min_version: %s" %min_version,'yellow'))
 
 	## return if not available
 	if not exe_path_tmp:
@@ -93,7 +93,7 @@ def get_exe(prog, Debug=False, Return_Version=False):
 		prog_ver = get_version(prog, p, Debug=Debug)
 
 		if (Debug):
-			print (colored("** Debug: Sotf: %s\nPath: %s\nVersion: %s" %(prog, p, prog_ver), 'red'))
+			print (colored("** Debug: Software: %s\nPath: %s\nVersion: %s" %(prog, p, prog_ver), 'yellow'))
 
 		if (prog_ver == 'n.a.'):
 			continue
@@ -267,8 +267,8 @@ def get_version(prog, path, Debug=False):
 
 	## debug messages
 	if (Debug):
-		print(colored("** Debug: regex: %s" %regex,'red'))
-		print(colored("** Debug: args: %s" %args, 'red'))
+		print(colored("** Debug: regex: %s" %regex,'yellow'))
+		print(colored("** Debug: args: %s" %args, 'yellow'))
 
 	if prog == 'spades':
 		cmd_output = subprocess.Popen(['python3', path, args], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
@@ -284,7 +284,7 @@ def get_version(prog, path, Debug=False):
 
 	## debug messages
 	if (Debug):
-		print(colored("** Debug: cmd_output:\n %s" %cmd_output,'red'))
+		print(colored("** Debug: cmd_output:\n %s" %cmd_output,'yellow'))
 
 	## retrieve version information
 	for line in cmd_output:
@@ -360,7 +360,7 @@ def check_dependencies(install_option, install_path, Debug):
 				if (Debug):
 						print ("Install software: ", soft)
 	
-				installed = install_dependencies.install(soft, min_version, install_path)
+				installed = install_dependencies.install(soft, min_version, install_path, Debug)
 				message2 = check_install_module(installed, soft_name, min_version, 'Software')
 				if (message2 == 'OK'):
 					continue

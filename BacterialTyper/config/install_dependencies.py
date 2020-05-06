@@ -6,10 +6,6 @@
 """
 Installs external dependencies if not satisfied
 """
-## this modules is an idea from ARIBA (https://github.com/sanger-pathogens/ariba)
-## give credit to them appropriately
-
-## [TODO]
 
 ## useful imports
 import os
@@ -24,18 +20,13 @@ import stat
 import subprocess
 import pandas as pd
 from termcolor import colored
+from distutils.version import LooseVersion
 
 ## import my modules
 from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.config import extern_progs
 
-##################
-## [TODO]
-## def install(software): edirect NCBI
-
-
-## [TODO]
 ##################
 def get_info_software():
 	"""Read software information
@@ -45,31 +36,6 @@ def get_info_software():
 	"""
 	info_file = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'software', 'software_details.csv'))
 	return(functions.get_data(info_file, ',', 'index_col=0'))
-
-##################
-def install(software, min_version, install_path):
-	
-	##
-	Debug=True
-	
-	## install busco
-	if (software == 'busco' or software == 'busco_plot'):
-		install_BUSCO(install_path)
-	
-	## install edirect
-	elif (software == 'efetch' or software == 'esearch' or software == 'xtract' ):
-		install_edirect(install_path)
-	else:
-		install_soft(software, min_version, install_path, Debug)
-			
-	print ("Install missing software: ", software)
-	print ("To do....")
-	
-	## try to install: 
-	print(colored("**Check paths or install it in the system and add it to $PATH environment variable.",'green'))
-
-	versionInstalled = 'n.a.'
-	return (versionInstalled)
 
 #######################
 def print_error_message(module_name, path):
@@ -95,119 +61,260 @@ def python_package_install(package, version2install):
 	return (versioninstalled)
 
 ##################
+def install(software, min_version, install_path, Debug):
+	
+	(path2Export, versionInstalled) = install_soft(software, min_version, install_path, Debug)
+			
+	## failed to install:
+	if not path2Export:
+		print(colored("**Check paths or install it in the system and add it to $PATH environment variable.",'yellow'))
+		return ()
+	
+	else:
+		## add to $PATH: include in environment bin
+		env_bin_directory = os.path.dirname(os.environ['_'])
+		
+		print ("\n+ Add software to path")
+
+		file_list = []
+
+		## unique file to export
+		if (software == 'fastqc' or software == 'trimmomatic'):
+			file_list.append(path2Export)
+		
+		else:
+		## all folder
+			if (software == 'spades'):
+				pathToExport = os.path.join(path2Export, 'bin')
+		
+			if (software == 'prokka'):
+				pathToExport = os.path.join(path2Export, 'bin')
+			
+			file_list = functions.get_fullpath_list(path2Export)
+			
+			## add binaries compiled for linux
+			if (software == 'prokka'):
+				pathToExport2 = os.path.join(path2Export, 'binaries', 'linux')
+				file_list = file_list + functions.get_fullpath_list(pathToExport2)
+			
+		## discard some files obtain
+		file_list = [s for s in file_list if '.a' not in s]
+		file_list = [s for s in file_list if '.c' not in s]
+		file_list = [s for s in file_list if '.o' not in s]
+		file_list = [s for s in file_list if '.h' not in s]		
+		file_list = [s for s in file_list if '.git' not in s]
+		file_list = [s for s in file_list if '.git/' not in s]
+		file_list = [s for s in file_list if '.gitignore' not in s]
+		file_list = [s for s in file_list if 'Makefile' not in s]
+		file_list = [s for s in file_list if '.pdf' not in s]
+		file_list = [s for s in file_list if '.tar.gz' not in s]
+		file_list = [s for s in file_list if 'README.md' not in s]
+		file_list = [s for s in file_list if '__pycache__' not in s]
+		file_list = [s for s in file_list if 'db/' not in s]
+		file_list = [s for s in file_list if 'doc/' not in s]
+		file_list = [s for s in file_list if 'test/' not in s]
+		file_list = [s for s in file_list if 'aux/' not in s]
+			
+		## debug messages
+		if Debug:
+			print(colored("** Debug: list to include in path",'yellow'))
+			print (file_list)
+			print()
+		
+		## create symbolic link in bin directory in environment
+		functions.get_symbolic_link(file_list, env_bin_directory)
+		print(colored("**Software (%s - Version: %s) installed in the system and add it to $PATH environment variable." %(software, versionInstalled),'green'))
+
+	return (versionInstalled)
 
 #######################
 def install_soft(software, min_version, install_path, Debug):
-	
 	# check info from file: software_details.txt
 	info = get_info_software()
-
-	## print debugging messages
-	if Debug:
-		print(colored("** Debug: info data frame retrieved from file", 'yellow'))
-		print(info)	
-	
-	## get info for file: web site & ext
-	type= info.loc[software, 'type']
-
-	if (type=='extract'):
-		install_binary(software, min_version, install_path, Debug)
-	elif (type=='git'):
-		install_git_repo(software, min_version, install_path, Debug)
+		
+	## install busco
+	if (software == 'busco' or software == 'busco_plot'):
+		install_BUSCO(install_path)
+		software='busco'
+		
 	else:
+		
+		## install edirect
+		if (software == 'efetch' or software == 'esearch' or software == 'xtract' ):
+			software = 'edirect'
+			
+		## install blast
+		elif (software == 'tblastn' or software == 'blastn' or software == 'makeblastdb' ):
+			software = 'blast'
+		
+		## get info for file: web site & ext
+		site= info.loc[software, 'site']
+		ext = info.loc[software, 'ext']
+		folder_name = info.loc[software, 'folder']
+		bin_name = info.loc[software, 'bin_name']
+		version2install = info.loc[software, 'version']
+		type= info.loc[software, 'type']
+			
+		## check if folder already available
+		folder_software = os.path.join(install_path, folder_name)
+	
+		## print debugging messages
+		if Debug:
+			print(colored("** Debug: info data frame retrieved from file", 'yellow'))
+			print(info)	
+		
+		## Git clone, extract or compile according to software 
+		if (type=='extract'):
+			print ("+ Extracting binary:")
+			print ("\tSoftware: ", software)
+			print ("\tURL: ", site)
+			print ("\tVersion: ", version2install)
+			print ("\tPath: ", install_path)
+
+			install_binary(folder_software, site, install_path, Debug)
+		
+		elif (type=='git'):
+			print ("+ Installing from git:")
+			print ("\tSoftware: ", software)
+			print ("\tPath: ", install_path)
+			print ("\tGit repo: ", site)
+			
+			install_git_repo(site, folder_software, install_path, ext, Debug)	
+		
+		elif (type=='source'):
+			print ("+ Installing from source:")
+			print ("\tSoftware: ", software)
+			print ("\tURL: ", site)
+			print ("\tVersion: ", version2install)
+			print ("\tPath: ", install_path)
+			
+			install_source(software, install_path, Debug)
+		else:
+			print()
+	
+	## check installation		
+	VersionInstalled = ""
+	
+	## add exceptions: blast
+	if (software == 'blast'):
+		## get version as an example using blastn
+		folder_software = os.path.join(folder_software, bin_name)
+		file_software = os.path.join(folder_software, 'blastn')
+		functions.chmod_rights(file_software, stat.S_IRWXU) ## execute permissions for group
+		VersionInstalled = set_config.get_version('blastn', file_software, Debug)
+		
+	elif (software == 'edirect'):
+		## run setup.sh
+		file_setup = os.path.join(folder_software, 'setup.sh')
+		functions.system_call(file_setup)
+		
+		## get version as an example using efetch
+		file_software = os.path.join(folder_software, 'efetch')
+		functions.chmod_rights(file_software, stat.S_IRWXU) ## execute permissions for group
+		VersionInstalled = set_config.get_version('efetch', file_software, Debug)
+	
+	elif (software == 'busco'):
+		## setup busco
 		print()
 
-#######################
-def install_git_repo(software, min_version, install_path, Debug):
-	""" """
-	# check info from file: software_details.txt
-	info = get_info_software()
+	else:
+		## get version
+		file_software = os.path.join(folder_software, bin_name)
+		functions.chmod_rights(file_software, stat.S_IRWXU) ## execute permissions for group
+		VersionInstalled = set_config.get_version(software, file_software, Debug)
 
-	## get info for file: web site & ext
-	git_repo= info.loc[software, 'site']
-	folder_name = info.loc[software, 'folder']
-	bin_name = info.loc[software, 'bin_name']
-	
-	print ("+ Installing:")
-	print ("\tSoftware: ", software)
-	print ("\tPath: ", install_path)
-	print ("\tGit repo: ", git_repo)
-	
 	## debug messages
 	if Debug:
 		print(colored("** Debug:", 'yellow'))
-		print(colored("\nGit repo: %s" %git_repo, 'yellow'))
-		print(colored("Folder clone: %s" %folder_name, 'yellow'))
-		print(colored("Binary name: %s\n" %bin_name, 'yellow'))
+		print(colored('folderExtracted: %s' %folder_software, 'yellow'))
+		print(colored('file_software: %s' %file_software, 'yellow'))
+		print(colored("VersionInstalled: %s" %VersionInstalled, 'yellow'))
 	
-	## option
-	option = info.loc[software, 'ext']
-	folder_name = info.loc[software, 'folder']
-	binary_name = info.loc[software, 'bin_name']
-	folder_path = os.path.join(install_path, folder_name)
+	if (VersionInstalled == 'na'):
+		print_error_message(software, folder_software)
+		return ()
+	
+	## check version
+	if min_version:
+		## debug messages
+		if Debug:
+			print(colored("** Debug: Min version required: %s" %min_version, 'yellow'))
+	
+		## check min version
+		if LooseVersion(VersionInstalled) >= LooseVersion(min_version):
+			## debug messages
+			if Debug:
+				print(colored("** Debug: Min version satisfied: %s > %s" %(VersionInstalled, min_version), 'yellow'))
+		else:
+			## min version not satisfied
+			## debug messages
+			if Debug:
+				print(colored("** Debug: Min version not satisfied: %s < %s" %(VersionInstalled, min_version), 'red'))
+			
+			## error
+			return ()
+	
+	## return path to include in $PATH
+	if (software == 'fastqc' or software == 'trimmomatic'):
+		pathToExport = file_software
+	
+	elif (software == 'spades'):
+		pathToExport = os.path.join(folder_software, 'bin')
+	else:
+		pathToExport = folder_software
 
+	if (software == 'busco'):
+		print()
+
+	if (software == 'prokka'):
+		## it is necessary to setup the database
+		setup_cmd = file_software + ' --setupdb'
+		print ("+ Set up prokka databases...")
+		functions.system_call(setup_cmd)
+			## return
+	
+	return(pathToExport, VersionInstalled)
+
+#######################
+def install_git_repo(git_repo, folder_sofware, install_path, option, Debug):
+	""" """
+	
 	## current path
 	current_path = os.getcwd()
+	os.chdir(install_path)
 	
 	## git clone repo
-	print ('+ Clone repository...')
+	print ('+ Using git to get code...')
 	git_exe = set_config.get_exe('git', Debug)
 	
-	if os.path.exists(folder_path):
+	if os.path.exists(folder_sofware):
+		print ('+ Clone repository...')
 		## pull
-		os.chdir(folder_path)
+		os.chdir(folder_sofware)
 		cmd = git_exe + ' pull'
 	else:
+		print ('+ Clone repository...')
 		## clone
 		cmd = git_exe + ' clone ' + git_repo 
 	
 	## call git
 	functions.system_call(cmd)
 
-	## Compile
-	print ('+ Compile software...')
+	## compile if necessary
 	if (option == 'make'):
+		## Compile
+		print ('+ Compile software...')
 		## make
-		os.chdir(folder_path)
+		os.chdir(folder_sofware)
 		functions.system_call('make')
-		
-	else:
-		## no need to compile
-		print ()
-	
-	## get software path
-	file_software = os.path.join(folder_path, binary_name)
-	
-	## add some exceptions
-	if (software == 'prokka'):
-		## get software path
-		file_software = os.path.join(folder_path, 'bin', binary_name)
-		
-	## debug messages
-	if Debug:
-		print(colored("** Debug:", 'yellow'))
-		print(colored('folder_path: %s' %folder_path, 'yellow'))
-		print(colored('file_software: %s' %file_software, 'yellow'))
-	
-	## change permissions
-	functions.chmod_rights(file_software, stat.S_IRWXU) ## execute permissions for group
-	
-	## get version
-	VersionInstalled = set_config.get_version(software, file_software, Debug)
-	
-	## debug messages
-	if Debug:
-		print(colored("** Debug: VersionInstalled: %s" %VersionInstalled, 'yellow'))
 	
 	## chdir to previous path
 	os.chdir(current_path)
 	
-	##
-	return (VersionInstalled)
-	
-	
+	return()	
+
 #######################
-def install_binary(software, min_version, install_path, Debug):
+def install_binary(folder_software, site, install_path, Debug):
 	"""Install binary software
 	
 	For some software packages there are already compiled binaries for Linux. 
@@ -223,31 +330,7 @@ def install_binary(software, min_version, install_path, Debug):
 		- :func:`BacterialTyper.config.set_config.get_version`
 		
 	"""
-	
-	# check info from file: software_details.txt
-	info = get_info_software()
 
-	## get info for file: web site & ext
-	site= info.loc[software, 'site']
-	ext = info.loc[software, 'ext']
-	folder_name = info.loc[software, 'folder']
-	bin_name = info.loc[software, 'bin_name']
-	version2install = info.loc[software, 'version']
-	
-	print ("+ Installing:")
-	print ("\tSoftware: ", software)
-	print ("\tVersion: ", version2install)
-	print ("\tPath: ", install_path)
-	
-	## debug messages
-	if Debug:
-		print(colored("\nSite: %s" %site, 'yellow'))
-		print(colored("Extension: %s" %ext, 'yellow'))
-		print(colored("Folder downloaded: %s" %folder_name, 'yellow'))
-		print(colored("Binary name: %s\n" %bin_name, 'yellow'))
-	
-	## check if folder already available
-	folder_software = os.path.join(install_path, folder_name)
 	if os.path.exists(folder_software):
 		shutil.rmtree(folder_software)
 			
@@ -259,38 +342,12 @@ def install_binary(software, min_version, install_path, Debug):
 	
 	## extract
 	functions.extract(compress_file_name, install_path, remove=False)
-	file_software = os.path.join(folder_software, bin_name)
-	
-	## debug messages
-	if Debug:
-		print(colored("** Debug:", 'yellow'))
-		print(colored('file2extract: %s' %compress_file_name, 'yellow'))
-		print(colored('folderExtracted: %s' %folder_software, 'yellow'))
-		print(colored('file_software: %s' %file_software, 'yellow'))
-	
-	## change permissions
-	functions.chmod_rights(file_software, stat.S_IRWXU) ## execute permissions for group
-	
-	## get version
-	VersionInstalled = set_config.get_version(software, file_software, Debug)
-	
-	## debug messages
-	if Debug:
-		print(colored("** Debug: VersionInstalled: %s" %VersionInstalled, 'yellow'))
+	return()
 
-	## return	
-	return(VersionInstalled)
-	
 ##################
-def install_edirect(install_path):
-	"""
-	Installs and configures Edirect 
-	
-	Read further information of the Edirect utilities in https://www.ncbi.nlm.nih.gov/books/NBK179288/
-	"""
-	
-	print ()
-	
+def install_source(software, install_path, Debug):
+	return()
+
 ##################
 def install_BUSCO(install_path):
 	## git clone https://gitlab.com/ezlab/busco.git
@@ -410,14 +467,21 @@ def BUSCO_config():
 	#
 	file_hd.close()
 
-
+##################
 def main():
+	""" Just for debugging purposes"""
+	install('spades', '3.14', '/home/jfsanchez/software', True)
+	exit()
+	
+	install('fastqc', '0.11.9', '/home/jfsanchez/software', True)
+	install('spades', '3.14', '/home/jfsanchez/software', True)
+	install('prokka', '', '/home/jfsanchez/software', True)
+	install('trimmomatic', '0.39', '/home/jfsanchez/software', True)
+	install('kma', '', '/home/jfsanchez/software', True)
+	install('blastn', '2.10', '/home/jfsanchez/software', True)
+	install('efetch', '11.7', '/home/jfsanchez/software', True)
 
-
-	install_soft('spades', '', '/home/jfsanchez/software', True)
-	install_soft('prokka', '', '/home/jfsanchez/software', True)
-	install_soft('trimmomatic', '', '/home/jfsanchez/software', True)
-
+##################
 if __name__ == "__main__":
 	main()
 

@@ -98,15 +98,16 @@ def run(options):
 			exit()
 	else:
 		## get python environment path
-		from distutils.sysconfig import get_python_lib; 
-		install_path_tmp = get_python_lib()
+		env_bin_directory = os.path.dirname(os.environ['_'])
 
 		##os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'templates'))
-		options.install_path = os.path.abspath(os.path.join(install_path_tmp, '../../..'))
+		options.install_path = os.path.abspath(os.path.join(env_bin_directory, '../software'))
 
 		if (Debug):
 			print ("Retrieve environment path as installation path:")
 			print ("Path: " + options.install_path)
+
+		functions.create_folder(options.install_path)
 
 	## install or only check
 	option_install = False
@@ -141,8 +142,11 @@ def run(options):
 	this_python_version = str(sys.version)
 	python_min_version = extern_progs.return_min_version_soft('python')
 	if LooseVersion(this_python_version) >= LooseVersion(python_min_version):
-		print ("Minimun version (%s) satistied: %s" %( python_min_version, this_python_version))
-
+		print (colored("Minimun version (%s) satistied: %s" %( python_min_version, this_python_version), 'green'))
+	else:
+		print (colored("Minimun version (%s) not satistied: %s" %(python_min_version, this_python_version), 'red'))
+		exit()
+		
 	## perl_version
 	print ('\n')
 	functions.print_sepLine("+", 50, False)
@@ -153,7 +157,10 @@ def run(options):
 	this_perl_path = set_config.get_exe("perl", Debug)
 	this_perl_version = set_config.get_version("perl", this_perl_path, Debug)
 	if LooseVersion(this_perl_version) >= LooseVersion(perl_min_version):
-		print ("Minimun version (%s) satistied: %s" %(perl_min_version, this_perl_version))
+		print (colored("Minimun version (%s) satistied: %s" %(perl_min_version, this_perl_version), 'green'))
+	else:
+		print (colored("Minimun version (%s) not satistied: %s" %(perl_min_version, this_perl_version), 'red'))
+		exit()
 
 	## third-party software
 	print ('\n')
