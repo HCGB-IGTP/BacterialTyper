@@ -3,6 +3,7 @@
 ## Jose F. Sanchez					##
 ## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain	##
 ##########################################################
+
 """
 Provides configuration for the pipeline.
 
@@ -740,7 +741,7 @@ def check_install_module(installed, module_name, min_version, tag):
 	:type min_version: string
 	"""
 	 ## Not installed
-	if (installed == 'n.a.'):
+	if (installed == 'n.a.' or not installed):
 		message = 'NOT FOUND'
 		color = 'red'
 		print_module_comparison(module_name, message, color, tag)

@@ -195,7 +195,7 @@ def get_symbolic_link (sample_list, directory):
 	"""Creates symbolic links, using system call, for list of files given in directory provided"""
 	for samplex in sample_list:
 		cmd = 'ln -s %s %s' %(samplex, directory)
-		system_call(cmd)
+		system_call(cmd, returned=False)
 
 	files2return = os.listdir(directory)
 	return files2return

@@ -38,7 +38,7 @@ def get_info_software():
 	return(functions.get_data(info_file, ',', 'index_col=0'))
 
 #######################
-def print_error_message(module_name, path):
+def print_error_message(module_name, path, option):
 	"""
 	Print error messages generated during installation
 
@@ -50,7 +50,7 @@ def print_error_message(module_name, path):
 
 	:returns: Print messages.
 	"""
-	print ("\nSome error happened while installing module [ %s ]." %module_name)
+	print ("\nSome error happened while installing %s [ %s ]." %(option, module_name))
 	print ("Path: " + path)
 	print ("Please retry or install it manually to continue with BacterialTyper")
 
@@ -134,18 +134,21 @@ def install_soft(software, min_version, install_path, Debug):
 		
 	## install busco
 	if (software == 'busco' or software == 'busco_plot'):
-		install_BUSCO(install_path)
+		code = install_BUSCO(install_path)
+		folder_software=""
 		software='busco'
-		
-	else:
-		
+	else:		
 		## install edirect
 		if (software == 'efetch' or software == 'esearch' or software == 'xtract' ):
-			software = 'edirect'
-			
+			software = 'edirect'			
 		## install blast
 		elif (software == 'tblastn' or software == 'blastn' or software == 'makeblastdb' ):
 			software = 'blast'
+		
+		## check
+		if software not in info.index:
+			print_error_message(software, "No dependencies found", 'software')
+			return ('','')
 		
 		## get info for file: web site & ext
 		site= info.loc[software, 'site']
@@ -171,7 +174,7 @@ def install_soft(software, min_version, install_path, Debug):
 			print ("\tVersion: ", version2install)
 			print ("\tPath: ", install_path)
 
-			install_binary(folder_software, site, install_path, Debug)
+			code = install_binary(folder_software, site, install_path, Debug)
 		
 		elif (type=='git'):
 			print ("+ Installing from git:")
@@ -179,7 +182,7 @@ def install_soft(software, min_version, install_path, Debug):
 			print ("\tPath: ", install_path)
 			print ("\tGit repo: ", site)
 			
-			install_git_repo(site, folder_software, install_path, ext, Debug)	
+			code = install_git_repo(site, folder_software, install_path, ext, Debug)	
 		
 		elif (type=='source'):
 			print ("+ Installing from source:")
@@ -188,9 +191,14 @@ def install_soft(software, min_version, install_path, Debug):
 			print ("\tVersion: ", version2install)
 			print ("\tPath: ", install_path)
 			
-			install_source(software, install_path, Debug)
+			code = install_source(software, install_path, Debug)
 		else:
 			print()
+	
+	## some error ocurred
+	if not code:
+		print_error_message(software, folder_software, 'software')
+		return ('','')
 	
 	## check installation		
 	VersionInstalled = ""
@@ -231,8 +239,8 @@ def install_soft(software, min_version, install_path, Debug):
 		print(colored("VersionInstalled: %s" %VersionInstalled, 'yellow'))
 	
 	if (VersionInstalled == 'na'):
-		print_error_message(software, folder_software)
-		return ()
+		print_error_message(software, folder_software, 'software')
+		return ('','')
 	
 	## check version
 	if min_version:
@@ -252,7 +260,7 @@ def install_soft(software, min_version, install_path, Debug):
 				print(colored("** Debug: Min version not satisfied: %s < %s" %(VersionInstalled, min_version), 'red'))
 			
 			## error
-			return ()
+			return ('','')
 	
 	## return path to include in $PATH
 	if (software == 'fastqc' or software == 'trimmomatic'):
@@ -311,7 +319,7 @@ def install_git_repo(git_repo, folder_sofware, install_path, option, Debug):
 	## chdir to previous path
 	os.chdir(current_path)
 	
-	return()	
+	return(True)	
 
 #######################
 def install_binary(folder_software, site, install_path, Debug):
@@ -342,14 +350,18 @@ def install_binary(folder_software, site, install_path, Debug):
 	
 	## extract
 	functions.extract(compress_file_name, install_path, remove=False)
-	return()
+	return(True)
 
 ##################
 def install_source(software, install_path, Debug):
 	return()
+	
+	return(True)
 
 ##################
 def install_BUSCO(install_path):
+	
+	return(False)
 	## git clone https://gitlab.com/ezlab/busco.git
 
 	## install within our environment
@@ -364,6 +376,8 @@ def install_BUSCO(install_path):
 	# AUGUSTUS_CONFIG_PATH
 	#cp -r /path/to/AUGUSTUS/augustus-3.2.3/config /folder/augustus/config
 	#export AUGUSTUS_CONFIG_PATH="/folder/augustus/config"
+	
+	return(True)
 
 ##################
 def BUSCO_config():

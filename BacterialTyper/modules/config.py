@@ -177,7 +177,7 @@ def run(options):
 	print ('Python packages:')
 	functions.print_sepLine("+", 20, False)
 
-	set_config.check_python_packages(option_install, options.install_path, Debug)
+	set_config.check_python_packages(Debug, option_install, options.install_path)
 	functions.print_sepLine("+", 20, False)
 	print ('\n')
 
