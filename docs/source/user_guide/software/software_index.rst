@@ -9,6 +9,7 @@ This is a general guide for the software that we employed along the ``BacterialT
 
 .. toctree::
    
+   edirect.rst
    fastqc.rst
    kma.rst
    prokka.rst

@@ -76,13 +76,13 @@ We will follow the rules for the documentation generated for the `Matplotlib doc
 Installing dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-To build the docs, you will need to install several python modules because 
-documentation is generated from reStructuredText_ (ReST) using the 
-Sphinx_ documentation generation tool. 
-
 .. attention::
 
   * You will need a minimal working ``LaTeX`` distribution.
+
+To build the docs, you will need to install several python modules because 
+documentation is generated from reStructuredText_ (ReST) using the 
+Sphinx_ documentation generation tool. 
 
 There are several extra ``python`` requirements that are needed to build the documentation. 
 They are listed in :file:`docs/config/doc-requirements.txt`, which is shown below:
@@ -98,29 +98,35 @@ additionally install documentation requirements using ``pip``.
 
    pip install docs/config/doc-requirements.txt
 
-Also, there is a ``perl`` module required for the documentation generation:
+Also, there is a ``perl`` module required for the documentation generation. It is called ``latexmk`` and it should
+be available if you have a working ``LaTeX`` installation. 
+
+See additional details here:
 
 .. include:: ../../../config/perl_packages.txt
    :literal:
 
-We encorage to install this module using CPAN (https://www.cpan.org/) or any other ``perl`` package
+We encourage to install this module using CPAN (https://www.cpan.org/) or any other ``perl`` package
 installer of your interest.
 
 Finally, in order to generate the ``python`` graph dependency images, the tool ``graphviz`` and 
 an specific ``python`` module is required.
-
-To install ``graphviz`` type:
-
-.. code-block:: sh
-
-   sudo apt install graphviz
-   
+ 
 The ``python`` module ``pyan`` needs to be installed using ``pip`` from ``github``. 
 See https://github.com/ttylec/pyan for additional details. Type:
 
 .. code-block:: sh
 
    pip install git+https://github.com/ttylec/pyan
+   
+To install ``graphviz`` type and other ``LaTeX`` dependencies, check file :file:`docs/config/system-requirements.sh`
+
+.. include:: ../../../config/system-requirements.sh
+   :literal:
+   
+.. code-block:: sh
+
+   sh docs/config/system-requirements.sh
 
 .. ###############################################
 .. _building-docs-guide:

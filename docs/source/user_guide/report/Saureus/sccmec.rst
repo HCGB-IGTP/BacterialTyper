@@ -1,5 +1,3 @@
-.. _sccmec-description:
-
 SCCmec
 ======
 
@@ -39,7 +37,7 @@ J regions (standing for junkyard): J1, J2, and J3.
    :file: sccmec_typing.csv
    
 
-.. figure:: ../../../images/sccmec_structures_PMID-24265961.jpg
+.. figure:: ../../../images/report/sccmec_structures_PMID-24265961.jpg
    
    Original source: Hiramatsu et. al. 2013 (PMID: 24265961)
    

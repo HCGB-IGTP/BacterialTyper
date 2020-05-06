@@ -15,7 +15,7 @@ database for this purpose is the SeqNet/Ridom Spa Server.
 Each new base composition of the polymorphic repeat found in a strain is assigned a 
 unique repeat code. The order of specific repeats for a given strain determines its spa type. 
 
-.. figure:: ../../../images/spaTyping_Bionumerics.png
+.. figure:: ../../../images/report/spaTyping_BioNumerics.png
 
    Original source: Applied Maths Bionumerics `website <https://www.applied-maths.com/applications/staphylococcus-aureus-spa-typing>`_. 
    First, a repeat classification is generated. Then, based on the specific repeat order the spa type is determined.

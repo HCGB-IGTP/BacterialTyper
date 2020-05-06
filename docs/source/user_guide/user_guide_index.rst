@@ -18,6 +18,7 @@ This User Guide provides information on ``BacterialTyper`` usage and documentati
     quickStart.rst
     modules/user_guide_modules_index.rst
     ../tutorial/tutorial_index.rst
+    report/report_index.rst
     software/software_index.rst
     faqs.rst
 

@@ -92,13 +92,9 @@ You might need to have installed some basic libraries:
 	- Bio::Perl
 
 
-.. code-block:: sh
+.. include:: ../../../../env/apt-install.sh
+	:literal:
 	
-	sudo apt install default-jre
-	sudo apt-get install libz-dev
-	sudo apt-get install build-essential
-	sudo apt-get install libdatetime-perl libxml-simple-perl libdigest-md5-perl bioperl
-	sudo cpan Bio::Perl
 
 You can test for any missing software dependencies using the ``BacterialTyper config`` module. Once you 
 identified the missing dependencies and minimum versions required you can either install them and 
