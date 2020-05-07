@@ -676,12 +676,12 @@ def edirect_ident(dataFrame, outdir_dict):
 		out_docsum_file_assembly = edirect_folder + '/assembly_docsum.txt'
 		AssemblyAcc_outfile = edirect_folder + '/AssemblyAcc.csv'
 		
+		edirect_caller.generate_docsum_call('assembly', AssemblyAcc, out_docsum_file_assembly)
+		edirect_caller.generate_xtract_call(out_docsum_file_assembly, 'DocumentSummary', 'Genbank', AssemblyAcc_outfile) 
+		
 		## some error ocurred
 		if not functions.is_non_zero_file(out_docsum_file_assembly):
 			continue
-		
-		edirect_caller.generate_docsum_call('assembly', AssemblyAcc, out_docsum_file_assembly)
-		edirect_caller.generate_xtract_call(out_docsum_file_assembly, 'DocumentSummary', 'Genbank', AssemblyAcc_outfile) 
 		
 		## Is it better to download Refseq or Genbank?
 		## https://www.quora.com/What-is-the-difference-between-Refseq-and-Genbank		
@@ -708,7 +708,7 @@ def edirect_ident(dataFrame, outdir_dict):
 
 ####################################
 def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_databases):
-	"""Generate MLST profile idenfitication
+	"""Generate MLST profile identification
 	
 	This functions uses the `MLSTar software`_ to retrieve Multi locus sequence typing (MLST) profiles from PubMLST_ for the given species previously identified by KMA. It generates MLST profiling for each sample. 
 	
