@@ -3,12 +3,13 @@ library("optparse")
 
 ## get options
 option_list = list(
-  make_option(c("-d_seq", "--dir_seq"), type="character", help="folder path for sequences download", metavar="character"),
-  make_option(c("-d_prf", "--dir_profile"), type="character", help="folder path for profile download", metavar="character"),
+  make_option(c("-s", "--dir_seq"), type="character", help="folder path for sequences download", metavar="character"),
+  make_option(c("-p", "--dir_profile"), type="character", help="folder path for profile download", metavar="character"),
   make_option(c("-f", "--file"), type="character", help="fasta file", metavar="character"),
   make_option(c("-d", "--dir"), type="character", help="folder path", metavar="character"),
   make_option(c("-t", "--threads"), type="integer", default=2, help="threads", metavar="integer"),
-  make_option(c("-n", "--name"), type="character", help="name", metavar="integer")  
+  make_option(c("-n", "--name"), type="character", help="name", metavar="integer"),
+  make_option(c("-l", "--lib.loc"),type="character",help="MLSTar library location", metavar="character")
 );
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
@@ -20,7 +21,7 @@ if (is.null(opt$dir_seq)){
 }
 
 ##
-library(MLSTar)
+library(MLSTar, lib.loc=opt$lib.loc)
 
 setwd(opt$dir)
 nameDir = paste0(opt$name, '_alleles')
