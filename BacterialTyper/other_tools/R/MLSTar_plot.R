@@ -3,9 +3,9 @@ library("optparse")
 
 ## get options
 option_list = list(
-  make_option(c("-f_profile", "--folder_profile"), type="character", help="folder path to profile tabular file", metavar="character"),
-  make_option(c("-f_result", "--file_result"), type="character", help="path to results file", metavar="character"),
-  make_option(c("-out", "--output"), type="character", help="path to create image", metavar="character")
+  make_option(c("-f", "--folder_profile"), type="character", help="folder path to profile tabular file", metavar="character"),
+  make_option(c("-r", "--file_result"), type="character", help="path to results file", metavar="character"),
+  make_option(c("-o", "--output"), type="character", help="path to create image", metavar="character")
 ); 
 
 opt_parser = OptionParser(option_list=option_list);
@@ -18,7 +18,7 @@ if (is.null(opt$folder_profile)){
 }
 
 ## load library
-library(MLSTar)
+library(MLSTar, lib.loc=opt$lib.loc)
 
 ## get results
 result_get <- read.delim(file=opt$file_result, header=TRUE, sep=",")

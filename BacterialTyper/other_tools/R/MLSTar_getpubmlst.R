@@ -3,8 +3,8 @@ library("optparse")
 
 ## get options
 option_list = list(
-  make_option(c("-sp", "--species"), type="character", help="organism name", metavar="character"),
-  make_option(c("-out", "--output"), type="character", help="output file name", metavar="character")
+  make_option(c("-s", "--species"), type="character", help="organism name", metavar="character"),
+  make_option(c("-o", "--output"), type="character", help="output file name", metavar="character")
   
 ); 
 
@@ -18,7 +18,7 @@ if (is.null(opt$sp)){
 }
 
 ## load library
-library(MLSTar)
+library(MLSTar, lib.loc=opt$lib.loc)
 
 ## Check available PUBMLST schemes available
 
