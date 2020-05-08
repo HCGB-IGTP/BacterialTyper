@@ -719,7 +719,6 @@ def R_package_path_installed():
 		print ("+ No MLSTar package available. Please install it manually or use the config module")
 		exit()
 
-
 ################
 def get_R_packages():
 	dep_file = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'R_dependencies.csv'))
@@ -727,7 +726,7 @@ def get_R_packages():
 	return (dep_file_data)
 
 ################
-def check_R_packages(install, Debug, install_path):
+def check_R_packages(install, install_path, Debug):
 	
 	packages = get_R_packages()
 	check_install_system = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'check_install_system.R'))
