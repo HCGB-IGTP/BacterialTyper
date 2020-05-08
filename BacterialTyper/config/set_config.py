@@ -752,7 +752,7 @@ def check_R_packages(install, install_path, Debug):
 
 			## check if installed in path
 			cmd_check_path = R_script_exe + ' ' + check_install_path + ' -l ' + index + ' -p ' + install_path
-			code2 = functions.system_call(cmd_check_path, message=True, returned=True)
+			code2 = functions.system_call(cmd_check_path, message=False, returned=False)
 
 			if (code2):
 				check_install_module('1', index, '0', 'Install path package')
