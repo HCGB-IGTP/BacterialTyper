@@ -130,7 +130,7 @@ def run_ident(options):
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: retrieve_database **", 'yellow'))
-		pd.set_option('display.max_colwidth', -1)
+		pd.set_option('display.max_colwidth', None)
 		pd.set_option('display.max_columns', None)
 		print (retrieve_databases)
 	
@@ -143,13 +143,13 @@ def run_ident(options):
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
-		pd.set_option('display.max_colwidth', -1)
+		pd.set_option('display.max_colwidth', None)
 		pd.set_option('display.max_columns', None)
 		print ("dataframe_kma")
 		print (dataFrame_kma)
 	
 	######## EDirect identification
-	dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict)
+	dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict, Debug)
 	
 	## functions.timestamp
 	start_time_partial = functions.timestamp(start_time_partial)
@@ -157,7 +157,7 @@ def run_ident(options):
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: retrieve results from NCBI **", 'yellow'))
-		pd.set_option('display.max_colwidth', -1)
+		pd.set_option('display.max_colwidth', None)
 		pd.set_option('display.max_columns', None)
 		print ("dataFrame_edirect")
 		print (dataFrame_edirect)
@@ -171,7 +171,7 @@ def run_ident(options):
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
-		pd.set_option('display.max_colwidth', -1)
+		pd.set_option('display.max_colwidth', None)
 		pd.set_option('display.max_columns', None)
 		print ("MLST_results")
 		print (MLST_results)
@@ -277,7 +277,7 @@ def run_ident(options):
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: dataFrame_edirect **", 'yellow'))
-			pd.set_option('display.max_colwidth', -1)
+			pd.set_option('display.max_colwidth', None)
 			pd.set_option('display.max_columns', None)
 			print (dataFrame_edirect)
 
@@ -425,7 +425,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 		### [TODO]: parse data according to database: bacteria, plasmids or user data or genbank data provided
 		
 		basename_db = os.path.basename(db2use)
-		pd.set_option('display.max_colwidth', -1)
+		pd.set_option('display.max_colwidth', None)
 		pd.set_option('display.max_columns', None)
 
 		###
@@ -578,7 +578,7 @@ def get_outfile(output_dir, name, index_name):
 	
 
 ####################################
-def edirect_ident(dataFrame, outdir_dict):
+def edirect_ident(dataFrame, outdir_dict, Debug):
 	"""Connect to NCBI for information retrieval
 	
 	This functions uses the software edirect_ to connect to NCBI and retrieve some information regarding samples, assemblies, publications, etc.
@@ -622,18 +622,28 @@ def edirect_ident(dataFrame, outdir_dict):
 	################################################
 	## TODO: What to do if multi-isolate sample?
 	################################################
-
+	
 	## edirect	
 	functions.boxymcboxface("EDirect information")
 	print ("+ Connect to NCBI to get information from samples identified...")
 
-	# Group dataframe sample name
-	sample_results = dataFrame.groupby(["Sample"])
-
 	## create dataframe to return results
 	edirect_frame = pd.DataFrame(columns=("sample", "genus", "species", "strain", "BioSample", "genome", "Plasmids"))
 
+	## debugging messages
+	if Debug:
+		print ("*******************************************************")
+		print ("Dataframe sample_results: ")
+		
+	# Group dataframe sample name
+	sample_results = dataFrame.groupby(["Sample"])
+	
 	for name, grouped in sample_results:
+		## debugging messages
+		if Debug:
+			print ("Name: ", name)
+			print (grouped)
+		
 		## use edirect to get Species_name and entry for later identification
 		edirect_folder = functions.create_subfolder('edirect', outdir_dict[name])
 		
@@ -701,6 +711,9 @@ def edirect_ident(dataFrame, outdir_dict):
 
 		stamp =	functions.print_time_stamp(filename_stamp)
 
+	## debugging messages
+	if Debug:
+		print ("*******************************************************")
 	
 	return (edirect_frame)
 

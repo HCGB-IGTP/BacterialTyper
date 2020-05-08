@@ -104,7 +104,7 @@ def run_cluster(options):
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: retrieve_database **", 'yellow'))
-		pd.set_option('display.max_colwidth', -1)
+		pd.set_option('display.max_colwidth', None)
 		pd.set_option('display.max_columns', None)
 		print (retrieve_databases)
 

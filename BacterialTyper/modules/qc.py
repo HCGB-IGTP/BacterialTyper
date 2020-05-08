@@ -229,7 +229,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 	## debug message
 	if (options.debug):
 		print (colored("**DEBUG: dataFrame_results **", 'yellow'))
-		pd.set_option('display.max_colwidth', -1)
+		pd.set_option('display.max_colwidth', None)
 		pd.set_option('display.max_columns', None)
 		print (dataFrame_results)
 	

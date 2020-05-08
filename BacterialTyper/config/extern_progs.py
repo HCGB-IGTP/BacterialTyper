@@ -131,7 +131,7 @@ def print_dependencies():
 
 	df_programs = pd.DataFrame.from_dict(progs, orient='index', columns=('Executable path', 'Version'))
 	df_programs = df_programs.stack().str.lstrip().unstack()
-	pd.set_option('display.max_colwidth', -1)
+	pd.set_option('display.max_colwidth', None)
 	pd.set_option('display.max_columns', None)
 	print (df_programs)
 

@@ -93,7 +93,7 @@ def print_help_BUSCO():
 def print_available_BUSCO():
 	print_df = busco_datasets()
 	print_df = print_df.set_index('Dataset')
-	pd.set_option('display.max_colwidth', -1)
+	pd.set_option('display.max_colwidth', None)
 	functions.print_sepLine("-", 100, False)
 	print (print_df)
 	functions.print_sepLine("-", 100, False)

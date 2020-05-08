@@ -55,7 +55,7 @@ def print_all():
 	print ("")
 	df_software_citation = pd.DataFrame.from_dict(software_citation(), orient='index', columns=('Article Title', 'Authors', 'PUBMED ID', 'Website'))	
 	df_software_citation.index.names = ['Software']
-	pd.set_option('display.max_colwidth', -1)
+	pd.set_option('display.max_colwidth', None)
 	pd.set_option('display.max_columns', None)
 	print (df_software_citation)
 	print ("")
