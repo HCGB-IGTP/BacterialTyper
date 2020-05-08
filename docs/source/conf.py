@@ -26,8 +26,12 @@ author = 'Jose F. Sanchez-Herrero'
 # The version & release will remain so far the same
 ## Release corresponds to official releases we will generate periodically
 ## Version reflects minor updates or bugs fixed
-release = '0.3'
-version = '0.3'
+
+with open("../../VERSION", 'r') as f:
+    v = f.readline().strip()
+
+release = v
+version = v
 
 
 # -- General configuration ---------------------------------------------------
