@@ -201,3 +201,14 @@ def run(options):
 		set_config.check_IslandPath(Debug, option_install, options.install_path)
 		functions.print_sepLine("+", 20, False)
 		print ('\n')
+
+
+	## R packages
+	print ('\n')
+	functions.print_sepLine("+", 20, False)
+	print ('R packages:')
+	functions.print_sepLine("+", 20, False)
+
+	set_config.check_R_packages(option_install, options.install_path, Debug)
+	functions.print_sepLine("+", 20, False)
+	print ('\n')

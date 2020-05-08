@@ -4,8 +4,8 @@ library("optparse")
 ## get options
 option_list = list(
   make_option(c("-s", "--species"), type="character", help="organism name", metavar="character"),
-  make_option(c("-o", "--output"), type="character", help="output file name", metavar="character")
-  
+  make_option(c("-o", "--output"), type="character", help="output file name", metavar="character"),
+  make_option(c("-l", "--lib.loc"),type="character",help="Install path location", metavar="character")
 ); 
 
 opt_parser = OptionParser(option_list=option_list);
@@ -17,8 +17,9 @@ if (is.null(opt$sp)){
   stop("No arguments provided", call.=FALSE)
 }
 
-## load library
-library(MLSTar, lib.loc=opt$lib.loc)
+## load additional library
+.libPaths(opt$lib.loc)
+library(MLSTar)
 
 ## Check available PUBMLST schemes available
 

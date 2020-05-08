@@ -5,7 +5,8 @@ library("optparse")
 option_list = list(
   make_option(c("-f", "--folder_profile"), type="character", help="folder path to profile tabular file", metavar="character"),
   make_option(c("-r", "--file_result"), type="character", help="path to results file", metavar="character"),
-  make_option(c("-o", "--output"), type="character", help="path to create image", metavar="character")
+  make_option(c("-o", "--output"), type="character", help="path to create image", metavar="character"),
+  make_option(c("-l", "--lib.loc"),type="character",help="Install path location", metavar="character")
 ); 
 
 opt_parser = OptionParser(option_list=option_list);
@@ -17,8 +18,9 @@ if (is.null(opt$folder_profile)){
   stop("No arguments provided", call.=FALSE)
 }
 
-## load library
-library(MLSTar, lib.loc=opt$lib.loc)
+## load additional library
+.libPaths(opt$lib.loc)
+library(MLSTar)
 
 ## get results
 result_get <- read.delim(file=opt$file_result, header=TRUE, sep=",")

@@ -539,6 +539,8 @@ def check_package_version(package, Debug):
 		print ('Package:', package)
 		print ('Version:', version)
 	return(version)
+################
+
 
 ################
 ## Perl
@@ -685,7 +687,7 @@ def check_perl_package_version(package, Debug):
 		print (perl_one_line_command)
 
 	## execute one line perl command
-	output_one_line = functions.system_call(perl_one_line_command, True)
+	output_one_line = functions.system_call(perl_one_line_command, returned=True, message=False)
 	return(functions.decode(output_one_line))
 
 ################
@@ -699,6 +701,70 @@ def check_IslandPath(Debug, option_install, install_path):
 	## check additional software required
 	print ("+ Check additional software for IslandPath optional analysis...")
 
+################
+
+################
+## R
+################
+def R_package_path_installed():
+	"""Provides absolute path to file ``R_package.info.txt`` containing path to missing R packages installed"""
+	
+	## check if exists or try to install
+	RDir_package = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'R', 'R_package.info.txt')
+	
+	if functions.is_non_zero_file(RDir_package):
+		list=functions.readList_fromFile(RDir_package)
+		return (list[0])
+	else:
+		print ("+ No MLSTar package available. Please install it manually or use the config module")
+		exit()
+
+
+################
+def get_R_packages():
+	dep_file = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'R_dependencies.csv'))
+	dep_file_data = functions.get_data(dep_file, ',', 'index_col=0')
+	return (dep_file_data)
+
+################
+def check_R_packages(install, Debug, install_path):
+	
+	packages = get_R_packages()
+	check_install_system = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'check_install_system.R'))
+	check_install_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'check_install_path.R'))
+	R_script_exe = get_exe('Rscript')
+	
+	## if no install path, check for previous store information in R_package_info.txt
+	if not install_path:
+		 install_path = R_package_path_installed()
+	
+	for index,row in packages.iterrows():
+		## debugging messages
+		if Debug:
+			print ('\n+ Check package: ', index)
+			print('+ Source: ', row['source'])
+		
+		cmd_check = R_script_exe + ' ' + check_install_system + ' -l ' + index
+		code = functions.system_call(cmd_check, message=False, returned=False)
+		if (code=='OK'):
+			check_install_module('1', index, '0', 'package')
+		else:
+			check_install_module('0', index, '1', 'System package')
+
+			## check if installed in path
+			cmd_check_path = R_script_exe + ' ' + check_install_path + ' -l ' + index + ' -p ' + install_path
+			code2 = functions.system_call(cmd_check_path, message=True, returned=True)
+
+			if (code2):
+				check_install_module('1', index, '0', 'Install path package')
+			else:
+				check_install_module('0', index, '1', 'Install path package')
+				if (install):
+					install_dependencies.install_R_packages(index, row['source'], install_path, row['extra'])
+				else:
+					print ("Please install module %s manually to continue with BacterialTyper" %index)
+				
+		
 ################
 ## Miscellaneous
 ################
@@ -723,6 +789,7 @@ def print_module_comparison(module_name, message, color, tag):
 #########
 
 ##################
+
 def check_install_module(installed, module_name, min_version, tag):
 	"""
 	Checks modules installation 
@@ -758,4 +825,4 @@ def check_install_module(installed, module_name, min_version, tag):
 	## return message
 	return (message)
 
-#########
+#########	

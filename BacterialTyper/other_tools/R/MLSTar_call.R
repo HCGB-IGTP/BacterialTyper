@@ -20,8 +20,9 @@ if (is.null(opt$dir_seq)){
   stop("No arguments provided", call.=FALSE)
 }
 
-##
-library(MLSTar, lib.loc=opt$lib.loc)
+## load additional library
+.libPaths(opt$lib.loc)
+library(MLSTar)
 
 setwd(opt$dir)
 nameDir = paste0(opt$name, '_alleles')

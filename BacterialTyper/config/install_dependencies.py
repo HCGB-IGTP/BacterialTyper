@@ -61,6 +61,31 @@ def python_package_install(package, version2install):
 	return (versioninstalled)
 
 ##################
+def install_R_packages(package, source, install_path, extra):
+	install_R = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'install_package.R'))
+	install_github_package = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'install_github.R'))
+	
+	functions.create_folder(install_path)
+	Rscript_exe = set_config.get_exe('Rscript')
+	print("+ Installing %s package..." %package)
+	install_file = install_R
+	if (source == 'github'):
+		install_file = install_github_package
+		package= extra + '/' + package
+	
+	cmd_R = '%s %s -l %s -p %s' %(Rscript_exe, install_file, package, install_path)
+	functions.system_call(cmd_R)
+	
+	## check if exists or try to install
+	MLSTar_package = os.path.join(install_path, 'MLSTar')
+	if os.path.exists(MLSTar_package):
+		RDir_package = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'R', 'R_package.info.txt')
+		functions.printList2file(RDir_package, [install_path])
+	else:
+		print_error_message(package, "No R package found", 'package')
+		print ('Please install manually to proceed...')
+
+##################
 def install(software, min_version, install_path, Debug):
 	
 	(path2Export, versionInstalled) = install_soft(software, min_version, install_path, Debug)
@@ -484,7 +509,8 @@ def BUSCO_config():
 ##################
 def main():
 	""" Just for debugging purposes"""
-	install('spades', '3.14', '/home/jfsanchez/software', True)
+	
+	set_config.check_R_packages(False, True, '')
 	exit()
 	
 	install('fastqc', '0.11.9', '/home/jfsanchez/software', True)

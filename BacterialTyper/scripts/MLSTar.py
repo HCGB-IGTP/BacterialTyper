@@ -20,6 +20,7 @@ from sys import argv
 from io import open
 import pandas as pd
 from termcolor import colored
+import shutil
 
 import matplotlib
 matplotlib.use('agg')
@@ -85,6 +86,8 @@ def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threa
 
 	print ('+ Generating profile for sample...')
 
+	folder_results = os.path.join(path, name  + '_alleles') 
+	
 	## success timestamp
 	filename_stamp = path + '/.success'
 	if os.path.isfile(filename_stamp):
@@ -94,8 +97,11 @@ def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threa
 		return(res_file)
 		
 	else:
+		if os.path.exists(folder_results):
+			shutil.rmtree(folder_results)
+			
 		logFile = path + '_logFile.txt'
-		cmd_profiler = "%s %s --dir_profile %s --dir_seq %s --file %s --dir %s --name %s --threads %s 2> %s" %(rscript, MLSTarR_script, profile_folder, seq_folder, fileGiven, path, name, threads, logFile)
+		cmd_profiler = "%s %s --dir_profile %s --dir_seq %s --file %s --dir %s --name %s --threads %s --lib.loc %s 2> %s" %(rscript, MLSTarR_script, profile_folder, seq_folder, fileGiven, path, name, threads, get_MLSTar_package_installed(), logFile)
 		callCode = functions.system_call(cmd_profiler)
 
 	if callCode == 'OK':
@@ -157,7 +163,7 @@ def get_MLSTar_species(genus, species):
 	return ('NaN')
 		
 ##########################################
-def getPUBMLST(species, out_name):
+def getPUBMLST(species, rscript, out_name):
 	"""
 	Using `MLSTar software`_ retrieve for the given `species` the available schemes in PubMLST_.  
 
@@ -185,16 +191,17 @@ def getPUBMLST(species, out_name):
 	
 	MLSTarR_getpubmlst = tools.R_scripts('MLSTar_getpubmlst')
 
-	
 	## species is a comma separated string
+	path_package = get_MLSTar_package_installed()
 	#MLSTar_getpubmlst
-	cmd_getPUBMLST = "%s %s --species %s --output %s 2> /dev/null" %(rscript, MLSTarR_getpubmlst, species, out_name)
+	cmd_getPUBMLST = "%s %s --species %s --output %s --lib.loc %s 2> /dev/null" %(rscript, MLSTarR_getpubmlst, species, out_name, path_package)
 	return(functions.system_call(cmd_getPUBMLST))
 
 ##########################################
 def plot_MLST(results, profile, rscript):
+	path_package = get_MLSTar_package_installed()
 	path_folder = os.path.dirname(results)
-	cmd_plotter = "%s %s --output %s --folder_profile %s --file_result %s" %(rscript, MLSTarR_plot, path_folder, profile, results)
+	cmd_plotter = "%s %s --output %s --folder_profile %s --file_result %s --lib.loc %s" %(rscript, MLSTarR_plot, path_folder, profile, results, path_package)
 	return(functions.system_call(cmd_plotter))
 	
 ##########################################
@@ -223,7 +230,7 @@ def download_PubMLST(profile_folder, scheme, seq_folder, rscript, species):
 		print ('+ Profile file for scheme will be downloaded...')
 		print ('+ Downloading profile...')
 		logFile = profile_folder + '_download.log'
-		cmd_profile = "%s %s --species %s --scheme %s --dir_profile %s 2> %s" %(rscript, MLSTarR_download_prf, species, scheme, profile_folder, logFile)
+		cmd_profile = "%s %s --species %s --scheme %s --dir_profile %s --lib.loc %s 2> %s" %(rscript, MLSTarR_download_prf, species, scheme, profile_folder, get_MLSTar_package_installed(), logFile)
 		callCode = functions.system_call(cmd_profile)
 		
 		if (callCode == 'OK'):
@@ -268,13 +275,17 @@ def download_PubMLST(profile_folder, scheme, seq_folder, rscript, species):
 			print ('+ Sequence files for scheme will be downloaded...')
 			print ('+ Downloading sequences...')
 			logFile = seq_folder + '_download.log'
-			cmd_seq = "%s %s --species %s --scheme %s --dir_seq %s 2> %s" %(rscript, MLSTarR_download_seq, species, scheme, seq_folder, logFile)
+			cmd_seq = "%s %s --species %s --scheme %s --dir_seq %s --lib.loc %s 2> %s" %(rscript, MLSTarR_download_seq, species, scheme, seq_folder, get_MLSTar_package_installed(), logFile)
 			callCode = functions.system_call(cmd_seq)
 			
 			if (callCode == 'OK'):
 				## success timestamp
 				filename_stamp = seq_folder + '/.success'
 				stamp =	functions.print_time_stamp(filename_stamp)
+
+def get_MLSTar_package_installed():
+	return (set_config.R_package_path_installed())
+	
 
 ##########################################
 def main():
@@ -315,7 +326,7 @@ def main():
 	scheme = 1
 		
 	## call MLST
-	(results, profile_folder) = run_MLSTar(database, rscript, species, scheme, name, path, genome, threads)
+	(results, profile_folder) = run_MLSTar(species_mlst_folder, rscript, species, scheme, name, path, genome, threads)
 		
 	## plot MLST
 	plot_MLST(results, profile_folder, rscript)

@@ -10,6 +10,7 @@ Retrieves files within ``other_tools`` directory and returns path to given scrip
 import os
 ## import my modules
 from BacterialTyper.scripts import functions
+from BacterialTyper.config import install_dependencies
 
 ####################################################################
 def perl_scripts(script):
@@ -44,3 +45,8 @@ def R_scripts(script):
 		name = os.path.splitext(os.path.basename(f))[0]
 		if (name == script):
 			return (f)
+		
+
+
+		
+	

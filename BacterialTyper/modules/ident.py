@@ -510,8 +510,6 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 	
 		- :func:`BacterialTyper.module.ident.get_outfile`
 		
-		- :func:`BacterialTyper.scripts.functions.system_call`
-	
 		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
 		
 		

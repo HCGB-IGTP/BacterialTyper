@@ -1,1 +1,8 @@
-iferres/MLSTar,github
+package,source,extra
+igraph,CRAN
+BioCircos,bioconductor,
+ggplot2,CRAN,
+optparse,CRAN,
+devtools,CRAN,
+withr,CRAN,
+MLSTar,github,iferres

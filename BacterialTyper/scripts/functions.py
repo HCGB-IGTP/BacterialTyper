@@ -270,12 +270,12 @@ def chmod_rights(file, access_rights):
 ########################################################################
 
 ###############
-def system_call(cmd, returned=False):
+def system_call(cmd, returned=False, message=True):
 	"""Generates system call using subprocess.check_output"""
 	## call system
 	## send command
-	if not (returned):
-		print (colored("[** System: %s **]" % cmd, 'green'))
+	if (message):
+		print (colored("[** System: %s **]" % cmd, 'magenta'))
 
 	try:
 		out = subprocess.check_output(cmd, shell = True)
@@ -284,10 +284,12 @@ def system_call(cmd, returned=False):
 		return ('OK')
 	except subprocess.CalledProcessError as err:
 		if (returned):
-			return ('')
-		print (colored("** ERROR **", 'red'))
-		print (colored(err.output, 'red'))
-		print (colored("** ERROR **", 'red'))
+			return (err.output)
+		if (message):
+			print (colored("** ERROR **", 'red'))
+			print (colored(err.output, 'red'))
+			print (colored("** ERROR **", 'red'))
+		
 		return ('FAIL')
 
 ###############
