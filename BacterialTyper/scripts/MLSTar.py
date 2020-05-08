@@ -3,12 +3,12 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-'''
+"""
 Generates a multi locus sequence typing (MLST) using MLSTar R package.
 - Downloads profiles
 - Searches assembly fasta sequences
 - Plots MLST profiles
-'''
+"""
 
 ## useful imports
 import time

@@ -4,7 +4,7 @@
 Quick start
 ***********
 
-This is quick start guide for impacient people. 
+This is quick start guide for impatient people. 
 
 Installation
 ============

@@ -30,7 +30,7 @@ Multiple tasks are performed by several modules including:
  - mobile genetic elements identification (plasmids, putative pathogenicity islands or phage insertions regions) 
  - phylogenetic analysis
  - integration of metadata
- - preparation of resuls for integrative visualization
+ - preparation of results for integrative visualization
 
 The tool uses and updates periodically external databases from different sources. It also allows the comparison of 
 obtained results with those previously generated (internal database).

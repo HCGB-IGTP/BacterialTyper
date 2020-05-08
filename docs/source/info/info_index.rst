@@ -15,10 +15,10 @@ Additional information
 Project Status
 ==============
 
-The project is available on `GitHub<https://github.com/JFsanchezherrero/BacterialTyper>`_. You can 
-`report issues<https://github.com/JFsanchezherrero/BacterialTyper/issues>`_ or contribute to the project by 
-`forking the project<https://help.github.com/en/github/getting-started-with-github/fork-a-repo>`_
-and `creating pull requests<https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests>`_. 
+The project is available on `GitHub <https://github.com/JFsanchezherrero/BacterialTyper>`_. You can 
+`report issues <https://github.com/JFsanchezherrero/BacterialTyper/issues>`_ or contribute to the project by 
+`forking the project <https://help.github.com/en/github/getting-started-with-github/fork-a-repo>`_
+and `creating pull requests <https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests>`_. 
 See additional details on BacterialTyper :ref:`developer guidelines<developer>` and how to :ref:`work with Git<git-guidelines>`.
 
 

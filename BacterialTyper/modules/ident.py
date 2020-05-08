@@ -679,7 +679,7 @@ def edirect_ident(dataFrame, outdir_dict):
 		edirect_caller.generate_docsum_call('assembly', AssemblyAcc, out_docsum_file_assembly)
 		edirect_caller.generate_xtract_call(out_docsum_file_assembly, 'DocumentSummary', 'Genbank', AssemblyAcc_outfile) 
 		
-		## some error ocurred
+		## some error occurred
 		if not functions.is_non_zero_file(out_docsum_file_assembly):
 			continue
 		
