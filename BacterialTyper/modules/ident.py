@@ -525,7 +525,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 
 	## check if previously run and succeeded
 	basename_tag = os.path.basename(outfile)
-	filename_stamp = outdir_dict_kma[name] + '/.success_' + basename_tag
+	filename_stamp = os.path.join(outdir_dict_kma[name],  '.success_' + basename_tag)
 	
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
@@ -648,56 +648,67 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
 		edirect_folder = functions.create_subfolder('edirect', outdir_dict[name])
 		
 		## chromosome match
-		nucc_entry = grouped.loc[grouped['Database'] == 'bacteria.ATG']['#Template'].values[0].split()
-		## e.g. NZ_CP029680.1 Staphylococcus aureus strain AR_0215 chromosome, complete genome
-
-		##
-		out_docsum_file = edirect_folder + '/nuccore_docsum.txt'
-		tmp_species_outfile = edirect_folder + '/info.csv'
-		filename_stamp = edirect_folder + '/.success_species'
-				
-		if os.path.isfile(filename_stamp):
-			stamp =	functions.read_time_stamp(filename_stamp)
-			print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
-
-		else: 
-			edirect_caller.generate_docsum_call('nuccore', nucc_entry[0], out_docsum_file)
-			edirect_caller.generate_xtract_call(out_docsum_file, 'DocumentSummary', 'Organism,BioSample,AssemblyAcc,Strain', tmp_species_outfile)
+		if (length(grouped.loc[grouped['Database'] == 'bacteria.ATG']['#Template']) == 0):
+			if Debug:
+				print ("Name: ", name)
+				print ("No chromosome match identified by kmer")
 			
-		########################################	
-		## get information from edirect call
-		########################################	
-		taxa_name_tmp = functions.get_info_file(tmp_species_outfile)
-		Organism = taxa_name_tmp[0].split(',')[0].split()
-		genus = Organism[0] 							## genus
-		species = Organism[1] 							## species
-		BioSample_name = taxa_name_tmp[0].split(',')[1]	## BioSample
-		AssemblyAcc = taxa_name_tmp[0].split(',')[2] 	## AssemblyAcc
+			genus = ''
+			species = ''
+			BioSample_name = ''
+			AssemblyAcc = ''			
 		
-		## sometimes strain is missing
-		if len(taxa_name_tmp[0].split(',')) > 3:
-			strain = taxa_name_tmp[0].split(',')[3] 	## strain
 		else:
-			strain = 'NaN'
-		
-		## get GenBank accession ID
-		out_docsum_file_assembly = edirect_folder + '/assembly_docsum.txt'
-		AssemblyAcc_outfile = edirect_folder + '/AssemblyAcc.csv'
-		
-		edirect_caller.generate_docsum_call('assembly', AssemblyAcc, out_docsum_file_assembly)
-		edirect_caller.generate_xtract_call(out_docsum_file_assembly, 'DocumentSummary', 'Genbank', AssemblyAcc_outfile) 
-		
-		## some error occurred
-		if not functions.is_non_zero_file(out_docsum_file_assembly):
-			continue
-		
-		## Is it better to download Refseq or Genbank?
-		## https://www.quora.com/What-is-the-difference-between-Refseq-and-Genbank		
-		
-		GenbankAcc = functions.get_info_file(AssemblyAcc_outfile)
-		if Debug:
-			print("Sample: ", name)
-			print("Genbank Acc: ", GenbankAcc[0])
+			nucc_entry = grouped.loc[grouped['Database'] == 'bacteria.ATG']['#Template'].values[0].split()
+			## e.g. NZ_CP029680.1 Staphylococcus aureus strain AR_0215 chromosome, complete genome
+
+			##
+			out_docsum_file = edirect_folder + '/nuccore_docsum.txt'
+			tmp_species_outfile = edirect_folder + '/info.csv'
+			filename_stamp = edirect_folder + '/.success_species'
+					
+			if os.path.isfile(filename_stamp):
+				stamp =	functions.read_time_stamp(filename_stamp)
+				print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
+	
+			else: 
+				edirect_caller.generate_docsum_call('nuccore', nucc_entry[0], out_docsum_file)
+				edirect_caller.generate_xtract_call(out_docsum_file, 'DocumentSummary', 'Organism,BioSample,AssemblyAcc,Strain', tmp_species_outfile)
+				
+			########################################	
+			## get information from edirect call
+			########################################	
+			taxa_name_tmp = functions.get_info_file(tmp_species_outfile)
+			Organism = taxa_name_tmp[0].split(',')[0].split()
+			genus = Organism[0] 							## genus
+			species = Organism[1] 							## species
+			BioSample_name = taxa_name_tmp[0].split(',')[1]	## BioSample
+			AssemblyAcc = taxa_name_tmp[0].split(',')[2] 	## AssemblyAcc
+			
+			## sometimes strain is missing
+			if len(taxa_name_tmp[0].split(',')) > 3:
+				strain = taxa_name_tmp[0].split(',')[3] 	## strain
+			else:
+				strain = 'NaN'
+			
+			## get GenBank accession ID
+			out_docsum_file_assembly = edirect_folder + '/assembly_docsum.txt'
+			AssemblyAcc_outfile = edirect_folder + '/AssemblyAcc.csv'
+			
+			edirect_caller.generate_docsum_call('assembly', AssemblyAcc, out_docsum_file_assembly)
+			edirect_caller.generate_xtract_call(out_docsum_file_assembly, 'DocumentSummary', 'Genbank', AssemblyAcc_outfile) 
+			
+			## some error occurred
+			if not functions.is_non_zero_file(out_docsum_file_assembly):
+				continue
+			
+			## Is it better to download Refseq or Genbank?
+			## https://www.quora.com/What-is-the-difference-between-Refseq-and-Genbank		
+			
+			GenbankAcc = functions.get_info_file(AssemblyAcc_outfile)
+			if Debug:
+				print("Sample: ", name)
+				print("Genbank Acc: ", GenbankAcc[0])
 		
 		## plasmid match
 		group_plasmid = grouped.loc[grouped['Database'] == 'plasmids.T' ]
