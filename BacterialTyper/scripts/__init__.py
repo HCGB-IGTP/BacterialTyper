@@ -14,6 +14,7 @@ __all__ = [
     'MLSTar',
     'min_hash_caller',
     'multiQC_report',
+    'plasmidID_call',
     'sampleParser',
     'spades_assembler',
     'species_identification_KMA',
