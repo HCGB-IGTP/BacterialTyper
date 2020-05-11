@@ -648,7 +648,7 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
 		edirect_folder = functions.create_subfolder('edirect', outdir_dict[name])
 		
 		## chromosome match
-		if (length(grouped.loc[grouped['Database'] == 'bacteria.ATG']['#Template']) == 0):
+		if (len(grouped.loc[grouped['Database'] == 'bacteria.ATG']['#Template']) == 0):
 			if Debug:
 				print ("Name: ", name)
 				print ("No chromosome match identified by kmer")
