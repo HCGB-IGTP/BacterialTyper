@@ -234,6 +234,8 @@ def run_phylo(options):
     ####################################
     ## select samples to map    
     ####################################
+    pd_samples_retrieved_merge = pd.DataFrame()
+
     ## all_data // only_project_data
     if (options.all_data or options.only_project_data):
         ## get files to map
@@ -269,13 +271,16 @@ def run_phylo(options):
             pd_samples_retrieved_merge = db_frame_user_Data   
     
     ## check data
-    if db_frame_user_Data.empty:
+    try:
+        if db_frame_user_Data.empty:
+            print ()   
+    except:
         pd_samples_retrieved_merge = pd_samples_retrieved   
-    
+   
     ## debug message
     if (Debug):
-        print (colored("**DEBUG: pd_samples_retrieve_merged **", 'yellow'))
-        print (pd_samples_retrieve_merged)
+        print (colored("**DEBUG: pd_samples_retrieved_merge **", 'yellow'))
+        print (pd_samples_retrieved_merge)
         print (colored("**DEBUG: outdir_dict **", 'yellow'))
         print (outdir_dict)
         
@@ -300,7 +305,7 @@ def run_phylo(options):
     
     ## send for each sample
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
-        commandsSent = { executor.submit(variant_calling.snippy_call, row['sample'], threads_job, outdir_dict[index], index, contig_option, options.other_options, Debug): index for index, row in pd_samples_retrieved_merge.iterrows() }
+        commandsSent = { executor.submit(variant_calling.snippy_call,reference_gbk_file, row['sample'], threads_job, outdir_dict[row['name']], row['name'], contig_option, options.other_options, Debug): index for index, row in pd_samples_retrieved_merge.iterrows() }
         for cmd2 in concurrent.futures.as_completed(commandsSent):
             details = commandsSent[cmd2]
             try:
