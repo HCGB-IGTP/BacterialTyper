@@ -491,15 +491,16 @@ def getdbs(source, database_folder, option, debug):
 		## info_file = dir_path + '/info.txt'
 
 		### Check if folder exists
+		path_genbank = os.path.join(database_folder, source, 'genbank')
 		db2use_abs = functions.create_subfolder(dbs2use[0], database_folder)
 		
 		### genbank entries downloaded
 		if dbs2use[0] == 'genbank':
 			##
-			if os.path.exists(db2use_abs + '/bacteria/'):
-				genbank_entries = os.listdir(db2use_abs + '/bacteria/')
+			if os.path.exists(path_genbank):
+				genbank_entries = os.listdir(os.path.join(path_genbank, 'bacteria'))
 				for entry in genbank_entries:
-					this_db = db2use_abs + '/bacteria/' + entry
+					this_db = os.path.join(path_genbank,'bacteria', entry)
 					db_Dataframe.loc[len(db_Dataframe)] = ['NCBI:genbank', entry, this_db]
 
 		elif dbs2use[0] == 'tax_id':		
