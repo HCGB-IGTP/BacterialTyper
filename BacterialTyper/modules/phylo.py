@@ -21,6 +21,9 @@ from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
 from BacterialTyper.scripts import sampleParser
+from BacterialTyper.scripts import database_generator
+from BacterialTyper.scripts import database_user
+
 
 ####################################
 def run_phylo(options):
@@ -76,8 +79,51 @@ def run_phylo(options):
         Project=False
         outdir = os.path.abspath(options.output_folder)
 
-    ## get files
-    print ("+ Retrieve all files available...")
+    ### parse the reference
+    print ("+ Retrieve the reference...")
+    
+    ## get the database 
+    options.database = os.path.abspath(options.database)
+    db_frame_user_Data = database_generator.getdbs('user_data', options.database, 'user_data', Debug)
+    db_frame_ncbi = database_generator.getdbs('user_data', options.database, 'user_data', Debug)
+    
+    ## return both dataframes
+    retrieve_databases = pd.concat([db_frame_user_Data, db_frame_ncbi], sort=True, ignore_index=True)
+
+    ## debug message
+    if (Debug):
+        print (colored("**DEBUG: retrieve_database **", 'yellow'))
+        pd.set_option('display.max_colwidth', None)
+        pd.set_option('display.max_columns', None)
+        print (retrieve_databases)    
+    
+    ## Genbank_ID
+    if options.Genbank_ID:
+        print()
+    
+    ## user_sample_ID
+    elif options.user_sample_ID:
+        print()
+    
+    ## project_sample_ID
+    elif options.project_sample_ID:
+        print()
+    
+    ## user_gbk
+    elif options.user_gbk:
+        print()
+    
+    else:
+        print()
+
+
+
+
+
+
+
+    ## get files to map
+    print ("+ Retrieve samples to map available...")
     pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim_'])
     
     ## debug message

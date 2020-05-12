@@ -541,15 +541,14 @@ initial_group_phylo.add_argument("--batch", action="store_true", help="Provide t
 
 reference_group_phylo_name = subparser_phylo.add_argument_group("Reference")
 reference_group_phylo = reference_group_phylo_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-reference_group_phylo.add_argument("--Genbank_ID", help="Genbank ID of the reference strain.", required= not any(elem in help_options for elem in sys.argv))
-reference_group_phylo.add_argument("--user_sample_ID", help="User sample ID previously analyzed.", required= not any(elem in help_options for elem in sys.argv))
-reference_group_phylo.add_argument("--project_sample_ID", help="Project sample ID.", required= not any(elem in help_options for elem in sys.argv))
-reference_group_phylo.add_argument("--user_gbk", help="Genbank file format provided by the user.", required= not any(elem in help_options for elem in sys.argv))
+reference_group_phylo.add_argument("--Genbank_ID", help="Genbank ID of the reference strain. Available or not in database")
+reference_group_phylo.add_argument("--user_sample_ID", help="Sample ID previously analyzed and available in database.")
+reference_group_phylo.add_argument("--project_sample_ID", help="Project sample ID.")
+reference_group_phylo.add_argument("--user_gbk", help="Genbank file format provided by the user.")
 
 parameters_group_phylo = subparser_phylo.add_argument_group("Parameters")
 parameters_group_phylo.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 parameters_group_phylo.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv))
-parameters_group_phylo.add_argument("--gbk_file", help="Genbank file format of the reference sample.", required = '--user_gbk' in sys.argv)
 
 options_group_phylo_name = subparser_phylo.add_argument_group("Analysis")
 options_group_phylo = options_group_phylo_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))

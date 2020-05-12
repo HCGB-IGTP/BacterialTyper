@@ -222,14 +222,15 @@ def run_ident(options):
 		
 		## read MLST
 		if MLST_results:
-			sample_MLST = pd.read_csv(MLST_results[name], header=0, sep=',')
-			sample_MLST['genus'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'genus'].values[0]
-			sample_MLST['species'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'species'].values[0]
-			sample_MLST.to_excel(writer_sample, sheet_name="MLST") ## write excel handle
-		
-			## Return information to excel
-			MLST_all = pd.concat([MLST_all, sample_MLST]) 
-		
+			if name in MLST_results.index:
+				sample_MLST = pd.read_csv(MLST_results[name], header=0, sep=',')
+				sample_MLST['genus'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'genus'].values[0]
+				sample_MLST['species'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'species'].values[0]
+				sample_MLST.to_excel(writer_sample, sheet_name="MLST") ## write excel handle
+			
+				## Return information to excel
+				MLST_all = pd.concat([MLST_all, sample_MLST]) 
+			
 		## close excel handle
 		writer_sample.save() 		
 

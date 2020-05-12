@@ -285,30 +285,27 @@ def update_db_data_file(data, csv):
 		
 ##################################################
 def getdbs(source, database_folder, option, debug):
-	"""Get databases available within the folder 'database_folder' provided.
+	"""Get databases available within the folder provided.
 	
-	Arguments:
-		source: str
-			Type of database to search: ARIBA, KMA, NCBI, MLST, MASH. 
-		
-		database_folder: str
-			Path where the dabases was initiated
-		
-		option: str
-			String containing multiple entries separated by '#' that indicate the type of database entries to search within each source type.
-		
-			e.g.: 	source = KMA
-					option = kma:archaea,plasmids,bacteria#kma_external:/path/to/file1,/path/to/file2#user_data#genbank **
-					
-					source = NCBI
-					option = genbank
-					
-		debug: bool
-			True/False for debugging messages.
+	:param source: Type of database to search: ARIBA, KMA, NCBI, MLST, user_data
+	:param database_folder: Absolute path to database folder.
+	:param option: String containing multiple entries separated by '#' that indicate the type of database entries to search within each source type.
+	:param debug: True/False for debugging messages.
 	
-	Returns:
-		Returns dataframe containing absolute paths to the available databases for each type requested.
-		Dafaframe consists of columns for: "source", "db", "path"
+	:type source: string
+	:type database_folder: string
+	:type option: string
+	:type debug: bool
+	
+	:returns: Dataframe containing absolute paths to the available databases for each type requested. 
+	It contains columns for: "source", "db", "path"
+		
+	e.g.: 	source = KMA
+			option = kma:archaea,plasmids,bacteria#kma_external:/path/to/file1,/path/to/file2#user_data#genbank **
+			
+	e.g.: 	source = NCBI
+			option = genbank
+	
 	"""
 	
 	## read folders within database
