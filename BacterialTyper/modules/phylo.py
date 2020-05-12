@@ -3,7 +3,6 @@
 ## Jose F. Sanchez                                          ##
 ## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain     ##
 ##############################################################
-from ete3.orthoxml._orthoxml import database
 """
 Generates a phylogenetic reconstruction
 """
@@ -85,7 +84,8 @@ def run_phylo(options):
     
     ## get the database 
     options.database = os.path.abspath(options.database)
-    db_frame_user_Data = database_generator.getdbs('user_data', options.database, 'user_data', Debug)
+    #db_frame_user_Data = database_generator.getdbs('user_data', options.database, 'user_data', Debug)
+    db_frame_user_Data = database_user.get_userData_files(options, os.path.join(options.database, 'user_data'))
     db_frame_ncbi = database_generator.getdbs('NCBI', options.database, 'genbank', Debug)
     
     ## return both dataframes
@@ -101,24 +101,35 @@ def run_phylo(options):
         
         print ("db_frame_ncbi")
         print (db_frame_ncbi)
+
     
     ####################
     ## Genbank_ID
     ####################
     reference_gbk_file = ""
     if options.Genbank_ID:
-        dir_path = os.path.join(NCBI_folder, 'bacteria', options.Genbank_ID)    
-        if (db_frame_ncbi.loc['db'] == options.Genbank_ID): 
-            print('+ Reference (%s) available in database provided')
+        NCBI_folder = os.path.join(options.database, 'NCBI')
+        dir_path = os.path.join(NCBI_folder, 'genbank', 'bacteria', options.Genbank_ID)    
+        if (options.Genbank_ID in db_frame_ncbi.index): 
+            print('+ Reference (%s) available in database provided' %options.Genbank_ID)
         else:
-            print ('+ Reference (%s) is not available in database provided')
+            print ('+ Reference (%s) is not available in database provided' %options.Genbank_ID)
             print ('+ Try to download it.')
             NCBI_folder = os.path.join(options.database, 'NCBI')
             database_generator.ngd_download(dir_path, options.Genbank_ID, NCBI_folder)
     
+        if Debug:
+                print ('dir_path:' + dir_path)
+
+
         ## get files download
         (genome, prot, gff, gbk) = database_generator.get_files_download(dir_path)
-            
+        if Debug:
+                print ('genome:' + genome)
+                print ('prot:' + prot)
+                print ('gff:' + gff)
+                print ('gbk:' + gbk)
+	            
         if functions.is_non_zero_file(gbk):
             print('+ Genbank file format reference available.')
             reference_gbk_file = gbk
@@ -130,26 +141,37 @@ def run_phylo(options):
     ## user_sample_ID
     ####################
     elif options.user_sample_ID:
-        if (db_frame_user_Data.loc['db'] == options.user_sample_ID): 
-            print('+ Reference (%s) available in database provided')
+        df_data = db_frame_user_Data.groupby('name')
+        this_sample_df = df_data.get_group(options.user_sample_ID)
+        if not this_sample_df.empty:
+            print('+ Reference (%s) available in database provided' %options.user_sample_ID)
         else:
-            print('+ Reference (%s) not available in database provided')
-            print('+ Updating the database first')
+            print('+ Reference (%s) not available in database provided' %options.user_sample_ID)
+            print('+ Updating0 the database first')
             db_frame_user_dataUpdated = database_user.update_database_user_data(options.database, options.input, Debug, options)
-            if (db_frame_user_dataUpdated.loc['db'] == options.user_sample_ID): 
-                print('+ Reference (%s) available in database provided')
+            df_data = db_frame_user_dataUpdated.groupby('name')
+            this_sample_df = df_data.get_group(options.user_sample_ID)
+
+            if not this_sample_df.empty: 
+                print('+ Reference (%s) available in database updated' %options.user_sample_ID)
             else:
-                print('+ Reference (%s) not available in database updated.')
-                print(colored('\n+ No reference (%s) available in database updated. Some error occurred...', 'red'))
+                print(colored('\n+ No reference (%s) available in database updated. Some error occurred...' %options.user_sample_ID, 'red'))
                 exit()
+
+            df_data = db_frame_user_dataUpdated
             
-            gbk = db_frame_user_dataUpdated.loc[options.user_sample_ID,'gbk']
-            if functions.is_non_zero_file(gbk):
-                print('+ Genbank file format reference available.')
-                reference_gbk_file = gbk
-            else:
-                print(colored('\n+ No genbank file available for the reference specified. Some error occurred while downloading', 'red'))
-                exit()
+
+        if Debug:
+            print ("** DEBUG: this_sample_df")
+            print (this_sample_df)
+  
+        gbk = this_sample_df.loc[ this_sample_df['ext']=='gbf','sample'].values[0]
+        if functions.is_non_zero_file(gbk):
+            print('+ Genbank file format reference available.')
+            reference_gbk_file = gbk
+        else:
+            print(colored('\n+ No genbank file available for the reference specified. Some error occurred while downloading', 'red'))
+            exit()
         
     ####################    
     ## project_sample_ID
@@ -161,8 +183,6 @@ def run_phylo(options):
     ## user_gbk
     ####################
     elif options.user_gbk:
-        print()
-        
         options.user_gbk = os.path.abspath(options.user_gbk)
         if functions.is_non_zero_file(options.user_gbk):
             print('+ Reference provided via --user_gbk is available and ready to use.')
@@ -177,7 +197,7 @@ def run_phylo(options):
 
 
 
-
+    exit()
 
 
     ## get files to map

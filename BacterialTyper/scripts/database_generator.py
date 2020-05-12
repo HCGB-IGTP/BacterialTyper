@@ -240,20 +240,22 @@ def NCBIdownload(acc_ID, data, data_folder):
 def get_files_download(folder):
 	## check if files are gunzip
 	files = os.listdir(folder)
-	genome=()
-	prot=()
-	gff=()
-	gbk=()
+	print (files)
+	genome=""
+	prot=""
+	gff=""
+	gbk=""
 	for f in files:
 		if f.endswith('genomic.fna'):
-			genome = folder + '/' + f
+			genome = os.path.join(folder, f)
 		elif f.endswith('genomic.gff'):
-			gff = folder + '/' + f
+			gff = os.path.join(folder, f)
 		elif f.endswith('genomic.gbk'):
-			gbk = folder + '/' + f
-		
+			gbk = os.path.join(folder, f)
+		elif f.endswith('genomic.gbff'):
+			gbk = os.path.join(folder, f)
 		elif f.endswith('protein.faa'):
-			prot = folder + '/' + f
+			prot = os.path.join(folder, f)
 
 	return(genome, prot, gff, gbk)			
 
