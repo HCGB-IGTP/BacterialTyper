@@ -84,30 +84,19 @@ def run_phylo(options):
     
     ## get the database 
     options.database = os.path.abspath(options.database)
-    #db_frame_user_Data = database_generator.getdbs('user_data', options.database, 'user_data', Debug)
-    db_frame_user_Data = database_user.get_userData_files(options, os.path.join(options.database, 'user_data'))
-    db_frame_ncbi = database_generator.getdbs('NCBI', options.database, 'genbank', Debug)
-    
-    ## return both dataframes
-    ##retrieve_databases = pd.concat([db_frame_user_Data, db_frame_ncbi], sort=True, ignore_index=True)
-
-    ## debug message
-    if (Debug):
-        print (colored("**DEBUG: retrieve_database **", 'yellow'))
-        pd.set_option('display.max_colwidth', None)
-        pd.set_option('display.max_columns', None)
-        print ("db_frame_user_Data")
-        print (db_frame_user_Data)
-        
-        print ("db_frame_ncbi")
-        print (db_frame_ncbi)
-
-    
+       
     ####################
     ## Genbank_ID
     ####################
     reference_gbk_file = ""
     if options.Genbank_ID:
+        db_frame_ncbi = database_generator.getdbs('NCBI', options.database, 'genbank', Debug)
+    
+        ## debug message
+        if (Debug):
+            print (colored("**DEBUG: db_frame_ncbi **", 'yellow'))
+            print (db_frame_ncbi) 
+
         NCBI_folder = os.path.join(options.database, 'NCBI')
         dir_path = os.path.join(NCBI_folder, 'genbank', 'bacteria', options.Genbank_ID)    
         if (options.Genbank_ID in db_frame_ncbi.index): 
@@ -118,10 +107,6 @@ def run_phylo(options):
             NCBI_folder = os.path.join(options.database, 'NCBI')
             database_generator.ngd_download(dir_path, options.Genbank_ID, NCBI_folder)
     
-        if Debug:
-                print ('dir_path:' + dir_path)
-
-
         ## get files download
         (genome, prot, gff, gbk) = database_generator.get_files_download(dir_path)
         if Debug:
@@ -141,31 +126,45 @@ def run_phylo(options):
     ## user_sample_ID
     ####################
     elif options.user_sample_ID:
+        db_frame_user_Data = database_user.get_userData_files(options, os.path.join(options.database, 'user_data'))
         df_data = db_frame_user_Data.groupby('name')
-        this_sample_df = df_data.get_group(options.user_sample_ID)
-        if not this_sample_df.empty:
-            print('+ Reference (%s) available in database provided' %options.user_sample_ID)
-        else:
-            print('+ Reference (%s) not available in database provided' %options.user_sample_ID)
-            print('+ Updating0 the database first')
-            db_frame_user_dataUpdated = database_user.update_database_user_data(options.database, options.input, Debug, options)
-            df_data = db_frame_user_dataUpdated.groupby('name')
-            this_sample_df = df_data.get_group(options.user_sample_ID)
 
-            if not this_sample_df.empty: 
+        try:
+            this_sample_df = df_data.get_group(options.project_sample_ID)
+            print('+ Reference (%s) available in database folder provided' %options.user_sample_ID)
+        except:
+            print (colored('** WARNING: Reference (%s) not available in database folder provided' %options.user_sample_ID, 'yellow'))
+            print ('+ Lets try to update the database first.')
+            db_frame_user_dataUpdated = database_user.update_database_user_data(options.database, input_dir, Debug, options)
+            df_data = db_frame_user_dataUpdated.groupby('name')
+ 
+            try:
+                this_sample_df = df_data.get_group(options.user_sample_ID)
                 print('+ Reference (%s) available in database updated' %options.user_sample_ID)
-            else:
-                print(colored('\n+ No reference (%s) available in database updated. Some error occurred...' %options.user_sample_ID, 'red'))
+                db_frame_user_Data = db_frame_user_dataUpated
+
+            except:
+                print(colored('\n** ERROR: No reference (%s) available in database updated. Some error occurred...' %options.user_sample_ID, 'red'))
                 exit()
 
-            df_data = db_frame_user_dataUpdated
-            
+         ## debug message
+        if (Debug):
+            print (colored("**DEBUG: db_frame_user_Data **", 'yellow'))
+            print (db_frame_user_Data)
+            print (colored("**DEBUG: this_sample_df (groupby name)**", 'yellow'))
+            print (this_sample_df)
 
+
+       ## get gbk file
+        gbk = this_sample_df.loc[ this_sample_df['ext']=='gbf','sample'].values[0]
+        
+        ## debug
         if Debug:
             print ("** DEBUG: this_sample_df")
             print (this_sample_df)
+            print ('gbk:' + gbk)
   
-        gbk = this_sample_df.loc[ this_sample_df['ext']=='gbf','sample'].values[0]
+        ## check if exists
         if functions.is_non_zero_file(gbk):
             print('+ Genbank file format reference available.')
             reference_gbk_file = gbk
@@ -177,8 +176,42 @@ def run_phylo(options):
     ## project_sample_ID
     ####################
     elif options.project_sample_ID:
-        print()
-    
+        
+        db_frame_project_Data = database_user.get_userData_files(options, options.input)
+        df_data = db_frame_project_Data.groupby('name')
+
+        try:
+            this_sample_df = df_data.get_group(options.project_sample_ID)
+            print('+ Reference (%s) available in project folder provided' %options.project_sample_ID)
+        except:
+            print (colored('** ERROR: Reference (%s) not available in project folder provided' %options.project_sample_ID, 'red'))
+            print ('+ Check the spelling or provide a valid ID.')
+            exit()
+ 
+        ## debug message
+        if (Debug):
+            print (colored("**DEBUG: db_frame_project_Data **", 'yellow'))
+            print (db_frame_project_Data)
+            print (colored("**DEBUG: this_sample_df (groupby name)**", 'yellow'))
+            print (this_sample_df)
+
+        ## get gbk file
+        gbk = this_sample_df.loc[ this_sample_df['ext']=='gbf','sample'].values[0]
+
+        ## debug
+        if Debug:
+            print ("** DEBUG: this_sample_df")
+            print (this_sample_df)
+            print ('gbk:' + gbk)
+
+        ## check if exists
+        if functions.is_non_zero_file(gbk):
+            print('+ Genbank file format reference available.')
+            reference_gbk_file = gbk
+        else:
+            print(colored('\n+ No genbank file available for the reference specified. Some error occurred while downloading', 'red'))
+            exit()
+
     ####################
     ## user_gbk
     ####################
