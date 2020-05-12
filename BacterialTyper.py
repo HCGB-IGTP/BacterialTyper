@@ -538,6 +538,7 @@ initial_group_phylo.add_argument("--output_folder", help="Output folder.", requi
 initial_group_phylo.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_phylo.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 initial_group_phylo.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+initial_group_phylo.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 
 reference_group_phylo_name = subparser_phylo.add_argument_group("Reference")
 reference_group_phylo = reference_group_phylo_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
@@ -549,6 +550,7 @@ reference_group_phylo.add_argument("--user_gbk", help="Genbank file format provi
 parameters_group_phylo = subparser_phylo.add_argument_group("Parameters")
 parameters_group_phylo.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 parameters_group_phylo.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv))
+parameters_group_phylo.add_argument("--name", help="Name ID to identify the analysis", required= not any(elem in help_options for elem in sys.argv))
 
 options_group_phylo_name = subparser_phylo.add_argument_group("Analysis")
 options_group_phylo = options_group_phylo_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))

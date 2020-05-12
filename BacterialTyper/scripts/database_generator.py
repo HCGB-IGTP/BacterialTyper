@@ -146,26 +146,25 @@ def NCBI_descendant(tax_ID, NCBI_folder, Debug):
 	## and call NCBI_DB to download and update database, then returned dataframe.
 
 
-##########################################################################################
-def NCBIdownload(acc_ID, data, data_folder):	
-	
-	## module ngd requires to download data in bacteria subfolder under genbank folder
-	dir_path = data_folder + '/genbank/bacteria/' + acc_ID 
+def ngd_download(dir_path, acc_ID, data_folder):
 	download = False
+	print ('+ Check data for ID: ', acc_ID)
 	if os.path.exists(dir_path):
 		print ('+ Folder already exists: ', dir_path)
 		## get files download
-		(genome, prot, gff) = get_files_download(dir_path)
-		if all([genome, prot, gff]):
+		(genome, prot, gff, gbk) = get_files_download(dir_path)
+		if all([genome, prot, gff], gbk):
 			download = False
 		else:
+			print ('+ Not all necessary data is available. Download it again.')
 			download = True
 	else:
 		download = True
 	
 	if download:
+		print ('+ Downloading:')
 		## download in data folder provided
-		ngd.download(section='genbank', file_format='fasta,gff,protein-fasta', assembly_accessions=acc_ID, output=data_folder, group='bacteria')
+		ngd.download(section='genbank', file_format='fasta,gff,protein-fasta,genbank', assembly_accessions=acc_ID, output=data_folder, group='bacteria')
 
 		## check if files are gunzip
 		files = os.listdir(dir_path)
@@ -179,8 +178,16 @@ def NCBIdownload(acc_ID, data, data_folder):
 	else:
 		print ('+ Data is already available, no need to download it again')
 
+
+##########################################################################################
+def NCBIdownload(acc_ID, data, data_folder):	
+	
+	## module ngd requires to download data in bacteria subfolder under genbank folder
+	dir_path = os.path.join(data_folder, 'genbank', 'bacteria', acc_ID) 
+	ngd_download(dir_path, acc_ID, data_folder)
+	
 	## get files download
-	(genome, prot, gff) = get_files_download(dir_path)
+	(genome, prot, gff, gbk) = get_files_download(dir_path)
 
 	## check if any plasmids downloaded
 	plasmid_count = 0
@@ -212,8 +219,11 @@ def NCBIdownload(acc_ID, data, data_folder):
 	if plasmid_count == 0:
 		plasmid_out_file = ""
 		
-	data2download=pd.DataFrame(columns=('ID','folder','genus','species','name','genome', 'chr', 'GFF','proteins','plasmids_number','plasmids_ID','plasmids'))
-	data2download.loc[len(data2download)] = (acc_ID, dir_path, data.loc[acc_ID]['genus'], data.loc[acc_ID]['species'], data.loc[acc_ID]['name'], genome, contig_out_file, gff, prot, plasmid_count, "::".join(plasmid_id), plasmid_out_file)
+	data2download=pd.DataFrame(columns=('ID','folder','genus','species','name','genome', 'chr', 'GFF','GBK', 'proteins','plasmids_number','plasmids_ID','plasmids'))
+	data2download.loc[len(data2download)] = (acc_ID, dir_path, data.loc[acc_ID]['genus'], 
+											data.loc[acc_ID]['species'], data.loc[acc_ID]['name'], genome, 
+											contig_out_file, gff, prot, gbk,
+											plasmid_count, "::".join(plasmid_id), plasmid_out_file)
 
 	## dump to file
 	info_file = dir_path + '/info.txt'
@@ -233,16 +243,19 @@ def get_files_download(folder):
 	genome=()
 	prot=()
 	gff=()
-
+	gbk=()
 	for f in files:
 		if f.endswith('genomic.fna'):
 			genome = folder + '/' + f
 		elif f.endswith('genomic.gff'):
 			gff = folder + '/' + f
+		elif f.endswith('genomic.gbk'):
+			gbk = folder + '/' + f
+		
 		elif f.endswith('protein.faa'):
 			prot = folder + '/' + f
 
-	return(genome, prot, gff)			
+	return(genome, prot, gff, gbk)			
 
 ##########################################################################################
 def get_database(db_frame, Debug):
