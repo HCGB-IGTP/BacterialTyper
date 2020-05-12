@@ -551,6 +551,7 @@ parameters_group_phylo = subparser_phylo.add_argument_group("Parameters")
 parameters_group_phylo.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 parameters_group_phylo.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv))
 parameters_group_phylo.add_argument("--name", help="Name ID to identify the analysis", required= not any(elem in help_options for elem in sys.argv))
+parameters_group_phylo.add_argument("--other_options", help="String of options to include in snippy call")
 
 options_group_phylo_name = subparser_phylo.add_argument_group("Analysis")
 options_group_phylo = options_group_phylo_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
@@ -558,11 +559,6 @@ options_group_phylo.add_argument("--all_data", action="store_true",  help="Use a
 options_group_phylo.add_argument("--only_project_data", action="store_true", help="Only use samples in the project folder provided.")
 options_group_phylo.add_argument("--user_data", action="store_true",  help="Use only indexed genomes previously identified stored in database folder.")
 options_group_phylo.add_argument("--genbank_data", action="store_true",  help="Use only reference genomes previously downloaded from NCBI stored in database folder.")
-options_group_phylo.add_argument("--only_external_data", action="store_true",  help="Use only reference genomes previously downloaded from NCBI stored in database folder.")
-
-#parameters_minHash_group_phylo = subparser_phylo.add_argument_group("Parameters MinHash")
-#parameters_minHash_group_phylo.add_argument("--n_sketch", type=int, help="Sketch size. Each sketch will have at most this many non-redundant min-hashes. [Default: 5000].", default=5000)
-#parameters_minHash_group_phylo.add_argument("--kmer_size", type=int, help="Hashes will be based on strings of this many nucleotides. [Default: 51]", default=51)
 
 info_group_phylo = subparser_phylo.add_argument_group("Additional information")
 info_group_phylo.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")

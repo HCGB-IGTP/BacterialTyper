@@ -81,6 +81,9 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 		print (colored("**DEBUG: snippy_cmd **", 'yellow'))	
 		print (snippy_cmd)
 	
+	print(snippy_cmd)
+	return()
+	
 	## create system call
 	return(functions.system_call(snippy_cmd, returned=False, message=True))
 
