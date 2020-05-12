@@ -67,6 +67,7 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 	snippy_cmd = '%s --cpus %s --reference %s --outdir %s --rgid %s' %(
 		snippy_exe, threads, reference_fasta, outdir, name)
 	
+	
 	## add files to map
 	if contig_option:
 		snippy_cmd = snippy_cmd + ' --ctgs ' + list_files[0]
