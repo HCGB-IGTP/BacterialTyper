@@ -23,6 +23,7 @@ from BacterialTyper.modules import help_info
 from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import database_generator
 from BacterialTyper.scripts import database_user
+from BacterialTyper.scripts import variant_calling
 
 
 ####################################
@@ -222,44 +223,97 @@ def run_phylo(options):
         else:
             print('+ Reference provided via --user_gbk not available or accessible.')
             print(colored('\n+ Check the path or integrity of the file. Some error occurred...', 'red'))
-            exit()        
-    
-    else:
-        print()
-
-
-
-
-    exit()
-
-
-    ## get files to map
-    print ("+ Retrieve samples to map available...")
-    pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim_'])
-    
-    ## debug message
-    if (Debug):
-        print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
-        print (pd_samples_retrieved)
-
+            exit()
+        reference_gbk_file = options.user_gbk
+            
     ## generate output folder, if necessary
     print ("\n+ Create output folder(s):")
     if not options.project:
         functions.create_folder(outdir)
     
-    ## for samples
-    outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "phylo")
+    ####################################
+    ## select samples to map    
+    ####################################
+    ## all_data // only_project_data
+    if (options.all_data or options.only_project_data):
+        ## get files to map
+        print ("+ Retrieve samples to map available...")
+        pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim_'])
+        
+        ## discard the sample used as reference if any
+        if options.project_sample_ID:
+            pd_samples_retrieved = pd_samples_retrieved.drop(index=options.project_sample_ID)
+    
+        ## create output directories
+        outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "phylo")
+    
+    ####################################
+    ## user_data // genbank_data // only_external_data
+    if (options.all_data or options.user_data): 
+        print ("+ Retrieve samples to map from user database...")
+        db_frame_user_Data = database_user.get_userData_files(options, os.path.join(options.database, 'user_data'))
 
+        ## discard the sample used as reference if any
+        if options.user_sample_ID:
+            db_frame_user_Data = pd_samples_retrieved.drop(index=options.user_sample_ID)
+            
+        ## create output directories
+        outdir_dict2 = functions.outdir_project(os.path.join(options.database, 'user_data'), options.project, db_frame_user_Data, "phylo")
+        
+        ## merge if both contain data
+        if not pd_samples_retrieved.empty:
+            pd_samples_retrieved_merge = pd.concat([db_frame_user_Data, pd_samples_retrieved], sort=True, ignore_index=True).drop_duplicates()
+            outdir_dict.update(outdir_dict2)
+        else:
+            outdir_dict = outdir_dict2
+            pd_samples_retrieved_merge = db_frame_user_Data   
     
+    ## check data
+    if db_frame_user_Data.empty:
+        pd_samples_retrieved_merge = pd_samples_retrieved   
     
+    ## debug message
+    if (Debug):
+        print (colored("**DEBUG: pd_samples_retrieve_merged **", 'yellow'))
+        print (pd_samples_retrieve_merged)
+        print (colored("**DEBUG: outdir_dict **", 'yellow'))
+        print (outdir_dict)
+        
+    ####################################
+    ## for fastq samples
+    ####################################
+
+    # optimize threads
+    name_list = set(pd_samples_retrieved_merge["name"].tolist())
+    threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+    max_workers_int = int(options.threads/threads_job)
+
+    ## debug message
+    if (Debug):
+        print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
+        print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
+        print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
+
+    ## call snippy
+    print ("\n+ Create mapping of fastq reads for project samples:")
+    contig_option = ""
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    ## send for each sample
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
+        commandsSent = { executor.submit(variant_calling.snippy_call, row['sample'], threads_job, outdir_dict[index], index, contig_option, options.other_options, Debug): index for index, row in pd_samples_retrieved_merge.iterrows() }
+        for cmd2 in concurrent.futures.as_completed(commandsSent):
+            details = commandsSent[cmd2]
+            try:
+                data = cmd2.result()
+            except Exception as exc:
+                print ('***ERROR:')
+                print (cmd2)
+                print('%r generated an exception: %s' % (details, exc))
+
+    ## time stamp
+    start_time_partial = functions.timestamp(start_time_total)
+
+    if (options.all_data or options.genbank_data):
+        print ()
+
+  
