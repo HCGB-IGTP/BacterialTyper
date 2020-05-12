@@ -25,8 +25,10 @@ from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import bacteriophage
 from BacterialTyper.scripts import trimmomatic_call
 from BacterialTyper.scripts import multiQC_report
+from BacterialTyper.scripts import MLSTar
 from BacterialTyper.modules import MGE
 from BacterialTyper.scripts import min_hash_caller
+from BacterialTyper.scripts import variant_calling
 
 ##########################
 def run_info(options):
@@ -95,6 +97,10 @@ def run_info(options):
 	## information for Min Hash Software
 	if (options.help_Mash):
 		min_hash_caller.helpMash()
+		exit()
+	
+	if (options.help_Snippy):
+		variant_calling.help_Snippy()
 		exit()
 		
 	

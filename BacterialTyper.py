@@ -34,7 +34,8 @@ help_options = ('--help_format',
 				'--help_MLSTar',
 				'--help_MGE_analysis',
 				'--help_Mash',
-				'--help_input_MGE')
+				'--help_input_MGE',
+                '--help_Snippy')
 
 ## space
 ##subparser_space = subparsers.add_parser('-----------------------', help='')
@@ -520,6 +521,60 @@ info_group_cluster.add_argument("--help_Mash", action="store_true", help="Print 
 subparser_cluster.set_defaults(func=BacterialTyper.modules.cluster.run_cluster)
 ##-------------------------------------------------------------##
 
+##--------------------------- cluster ---------------------------- ##
+subparser_phylo = subparsers.add_parser(
+    'phylo',
+    help='Phylogenetic analysis.',
+    description='This module calls ...',
+)
+phylo_mode_name = subparser_phylo.add_argument_group("Mode")
+phylo_mode = phylo_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+phylo_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
+phylo_mode.add_argument("--detached", action="store_true", help="Isolated mode. Provided as --input a csv file containing different fields. See --help_input_MGE for further details.")
+
+initial_group_phylo = subparser_phylo.add_argument_group("Input/Output")
+initial_group_phylo.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'.\nIf not, provide full path using --batch option", required = '--project' in sys.argv)
+initial_group_phylo.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
+initial_group_phylo.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+initial_group_phylo.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+initial_group_phylo.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+
+reference_group_phylo_name = subparser_phylo.add_argument_group("Reference")
+reference_group_phylo = reference_group_phylo_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+reference_group_phylo.add_argument("--Genbank_ID", help="Genbank ID of the reference strain.", required= not any(elem in help_options for elem in sys.argv))
+reference_group_phylo.add_argument("--user_sample_ID", help="User sample ID previously analyzed.", required= not any(elem in help_options for elem in sys.argv))
+reference_group_phylo.add_argument("--project_sample_ID", help="Project sample ID.", required= not any(elem in help_options for elem in sys.argv))
+reference_group_phylo.add_argument("--user_gbk", help="Genbank file format provided by the user.", required= not any(elem in help_options for elem in sys.argv))
+
+parameters_group_phylo = subparser_phylo.add_argument_group("Parameters")
+parameters_group_phylo.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+parameters_group_phylo.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv))
+parameters_group_phylo.add_argument("--gbk_file", help="Genbank file format of the reference sample.", required = '--user_gbk' in sys.argv)
+
+options_group_phylo_name = subparser_phylo.add_argument_group("Analysis")
+options_group_phylo = options_group_phylo_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+options_group_phylo.add_argument("--all_data", action="store_true",  help="Use all data available provided: project samples, genbank, previous identified user data..")
+options_group_phylo.add_argument("--only_project_data", action="store_true", help="Only use samples in the project folder provided.")
+options_group_phylo.add_argument("--user_data", action="store_true",  help="Use only indexed genomes previously identified stored in database folder.")
+options_group_phylo.add_argument("--genbank_data", action="store_true",  help="Use only reference genomes previously downloaded from NCBI stored in database folder.")
+options_group_phylo.add_argument("--only_external_data", action="store_true",  help="Use only reference genomes previously downloaded from NCBI stored in database folder.")
+
+#parameters_minHash_group_phylo = subparser_phylo.add_argument_group("Parameters MinHash")
+#parameters_minHash_group_phylo.add_argument("--n_sketch", type=int, help="Sketch size. Each sketch will have at most this many non-redundant min-hashes. [Default: 5000].", default=5000)
+#parameters_minHash_group_phylo.add_argument("--kmer_size", type=int, help="Hashes will be based on strings of this many nucleotides. [Default: 51]", default=51)
+
+info_group_phylo = subparser_phylo.add_argument_group("Additional information")
+info_group_phylo.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+info_group_phylo.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
+info_group_phylo.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
+info_group_phylo.add_argument("--help_Snippy", action="store_true", help="Print further information for Snippy analysis.")
+
+subparser_phylo.set_defaults(func=BacterialTyper.modules.phylo.run_phylo)
+##-------------------------------------------------------------##
+
+
+
+
 ## space
 subparser_space = subparsers.add_parser(' ', help='')
 
@@ -545,6 +600,10 @@ subparser_help.add_argument("--help_KMA", action="store_true", help="Show additi
 subparser_help.add_argument("--help_input_MGE", action="store_true", help="Print further information for input options under MGE module.")
 subparser_help.add_argument("--help_MGE_analysis", action="store_true", help="Print further information for Mobile Genetic Element module analysis.")
 subparser_help.add_argument("--help_PhiSpy", action="store_true", help="Print further information for PhiSpy analysis.")
+subparser_help.add_argument("--help_Mash", action="store_true", help="Print further information for Mash clustering analysis.")
+subparser_help.add_argument("--help_Snippy", action="store_true", help="Print further information for Snippy analysis.")
+subparser_help.add_argument("--help_MLSTar", action="store_true", help="Print further information for MLST analysis.")
+
 subparser_help.set_defaults(func=BacterialTyper.modules.help_info.run_info)
 ##-------------------------------------------------------------##
 

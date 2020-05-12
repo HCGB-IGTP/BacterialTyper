@@ -9,11 +9,14 @@ This is a general guide for the software that we employed along the ``BacterialT
 
 .. contents::
 
+	
 .. include:: edirect.rst
 
 .. include:: fastqc.rst
 
 .. include:: kma.rst
+
+.. include:: MLSTar.rst
 
 .. include:: prokka.rst
 
