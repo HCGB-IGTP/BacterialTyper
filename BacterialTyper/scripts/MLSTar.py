@@ -250,7 +250,7 @@ def download_PubMLST(profile_folder, scheme, seq_folder, rscript, species):
 		
 		if os.path.isfile(filename_stamp):
 			stamp =	functions.read_time_stamp(filename_stamp)
-			print (colored("\tA previous command generated results on: %s (%s -- %s)" %(stamp, species,'sequence'), 'yellow'))
+			print (colored("\tA previous command generated results on: %s [%s -- %s]" %(stamp, species,'sequence'), 'yellow'))
 
 			########################################################################
 			#else

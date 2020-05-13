@@ -222,7 +222,7 @@ def run_ident(options):
 		
 		## read MLST
 		if MLST_results:
-			if name in MLST_results.index:
+			if name in MLST_results:
 				sample_MLST = pd.read_csv(MLST_results[name], header=0, sep=',')
 				sample_MLST['genus'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'genus'].values[0]
 				sample_MLST['species'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'species'].values[0]
@@ -527,6 +527,9 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 	## check if previously run and succeeded
 	basename_tag = os.path.basename(outfile)
 	filename_stamp = os.path.join(outdir_dict_kma[name],  '.success_' + basename_tag)
+	
+	print ("Outdir: ", outdir_dict_kma[name])
+	print ("Filename_stamp: ", filename_stamp)
 	
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
