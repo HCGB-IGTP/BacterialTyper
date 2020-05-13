@@ -176,7 +176,7 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     max_workers_int = int(options.threads/threads_job)
 
     ## debug message
-    if (Debug):
+    if (options.debug):
         print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
         print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
         print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
@@ -190,7 +190,7 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     
     ## send for each sample
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
-        commandsSent = { executor.submit(snippy_variant_caller,reference_gbk_file, sorted(cluster["sample"].tolist()), threads_job, outdir_dict[name], name, contig_option, options.other_options, Debug): name for name, cluster in sample_frame }
+        commandsSent = { executor.submit(snippy_variant_caller,reference_gbk_file, sorted(cluster["sample"].tolist()), threads_job, outdir_dict[name], options.name, contig_option, options.other_options, options.debug): name for name, cluster in sample_frame }
         for cmd2 in concurrent.futures.as_completed(commandsSent):
             details = commandsSent[cmd2]
             try:
@@ -215,10 +215,10 @@ def get_reference_gbk(options):
     ####################
     reference_gbk_file = ""
     if options.Genbank_ID:
-        db_frame_ncbi = database_generator.getdbs('NCBI', options.database, 'genbank', Debug)
+        db_frame_ncbi = database_generator.getdbs('NCBI', options.database, 'genbank', options.debug)
     
         ## debug message
-        if (Debug):
+        if (options.debug):
             print (colored("**DEBUG: db_frame_ncbi **", 'yellow'))
             print (db_frame_ncbi) 
 
@@ -234,7 +234,7 @@ def get_reference_gbk(options):
     
         ## get files download
         (genome, prot, gff, gbk) = database_generator.get_files_download(dir_path)
-        if Debug:
+        if options.debug:
                 print ('genome:' + genome)
                 print ('prot:' + prot)
                 print ('gff:' + gff)
@@ -260,7 +260,7 @@ def get_reference_gbk(options):
         except:
             print (colored('** WARNING: Reference (%s) not available in database folder provided' %options.user_sample_ID, 'yellow'))
             print ('+ Lets try to update the database first.')
-            db_frame_user_dataUpdated = database_user.update_database_user_data(options.database, input_dir, Debug, options)
+            db_frame_user_dataUpdated = database_user.update_database_user_data(options.database, input_dir, options.debug, options)
             df_data = db_frame_user_dataUpdated.groupby('name')
  
             try:
@@ -273,7 +273,7 @@ def get_reference_gbk(options):
                 exit()
 
          ## debug message
-        if (Debug):
+        if (options.debug):
             print (colored("**DEBUG: db_frame_user_Data **", 'yellow'))
             print (db_frame_user_Data)
             print (colored("**DEBUG: this_sample_df (groupby name)**", 'yellow'))
@@ -284,7 +284,7 @@ def get_reference_gbk(options):
         gbk = this_sample_df.loc[ this_sample_df['ext']=='gbf','sample'].values[0]
         
         ## debug
-        if Debug:
+        if options.debug:
             print ("** DEBUG: this_sample_df")
             print (this_sample_df)
             print ('gbk:' + gbk)
@@ -314,7 +314,7 @@ def get_reference_gbk(options):
             exit()
  
         ## debug message
-        if (Debug):
+        if (options.debug):
             print (colored("**DEBUG: db_frame_project_Data **", 'yellow'))
             print (db_frame_project_Data)
             print (colored("**DEBUG: this_sample_df (groupby name)**", 'yellow'))
@@ -324,7 +324,7 @@ def get_reference_gbk(options):
         gbk = this_sample_df.loc[ this_sample_df['ext']=='gbf','sample'].values[0]
 
         ## debug
-        if Debug:
+        if options.debug:
             print ("** DEBUG: this_sample_df")
             print (this_sample_df)
             print ('gbk:' + gbk)
@@ -363,10 +363,12 @@ def snippy_variant_caller(reference, files, threads, outdir, name, contig_option
     filename_stamp = subdir + '/.success'
 
     if os.path.isfile(filename_stamp):
-        stamp =    functions.read_time_stamp(filename_stamp)
+        stamp = functions.read_time_stamp(filename_stamp)
         print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
-        return()
     else:
          # Call variant calling
-        return(variant_calling.snippy_call(reference, files, threads, subdir, name, contig_option, other_options, Debug))
-  
+        code = variant_calling.snippy_call(reference, files, threads, subdir, name, contig_option, other_options, Debug)
+        if code == 'OK':
+            stamp = functions.print_time_stamp(filename_stamp)
+
+        return(code)
