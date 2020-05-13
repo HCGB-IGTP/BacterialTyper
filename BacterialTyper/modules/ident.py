@@ -528,8 +528,8 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 	basename_tag = os.path.basename(outfile)
 	filename_stamp = os.path.join(outdir_dict_kma[name],  '.success_' + basename_tag)
 	
-	print ("Outdir: ", outdir_dict_kma[name])
-	print ("Filename_stamp: ", filename_stamp)
+	#print ("Outdir: ", outdir_dict_kma[name])
+	#print ("Filename_stamp: ", filename_stamp)
 	
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
@@ -555,6 +555,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 	
 		# Call KMA
 		species_identification_KMA.kma_ident_call(outfile, list_files, name, database, kma_bin, option, threads)
+		stamp =	functions.print_time_stamp(filename_stamp)
 
 ####################################
 def get_outfile(output_dir, name, index_name):

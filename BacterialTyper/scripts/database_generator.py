@@ -153,7 +153,7 @@ def ngd_download(dir_path, acc_ID, data_folder):
 		print ('+ Folder already exists: ', dir_path)
 		## get files download
 		(genome, prot, gff, gbk) = get_files_download(dir_path)
-		if all([genome, prot, gff], gbk):
+		if all([genome, prot, gff, gbk]):
 			download = False
 		else:
 			print ('+ Not all necessary data is available. Download it again.')
