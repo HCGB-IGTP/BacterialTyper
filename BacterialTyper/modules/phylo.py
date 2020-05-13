@@ -97,6 +97,11 @@ def run_phylo(options):
     ####################################
     print ("+ Retrieve samples to map available...")
     dict_folders = map_samples(options, reference_gbk_file, input_dir, outdir)
+    
+    if Debug:
+        print (colored("**DEBUG: dict_folders **", 'yellow'))
+        print (dict_folders)
+    
     ## time stamp
     start_time_partial = functions.timestamp(start_time_total)
 
@@ -202,8 +207,13 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     if (options.all_data or options.genbank_data):
         print ()
 
+    ## subfolder within phylo for this mapping
+    new_outdir_dict = {}
+    for key,value in outdir_dict.items():
+        tag = os.path.join(value, key + '_vs_' + options.name)
+        new_outdir_dict[key] = tag 
 
-    return (outdir_dict)
+    return (new_outdir_dict)
 
 ####################
 def get_reference_gbk(options):
