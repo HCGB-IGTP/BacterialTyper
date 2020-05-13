@@ -84,8 +84,6 @@ def NCBI_DB(strains2get, data_folder, Debug):
 	strains2get.index.names = ['ID'] ## rename index
 	strains2get = strains2get.drop_duplicates()
 	
-	Debug=True
-	
 	#########
 	if Debug:
 		print (colored("DEBUG: NCBI data provided: ", 'yellow'))
@@ -240,7 +238,6 @@ def NCBIdownload(acc_ID, data, data_folder):
 def get_files_download(folder):
 	## check if files are gunzip
 	files = os.listdir(folder)
-	print (files)
 	genome=""
 	prot=""
 	gff=""

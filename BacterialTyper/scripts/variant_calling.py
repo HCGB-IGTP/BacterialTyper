@@ -82,9 +82,8 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 		print (colored("**DEBUG: snippy_cmd **", 'yellow'))	
 		print (snippy_cmd)
 	
-	print(snippy_cmd)
+	print (snippy_cmd)
 	return()
-	
 	## create system call
 	return(functions.system_call(snippy_cmd, returned=False, message=True))
 
@@ -99,8 +98,7 @@ def snippy_core_call(list_folder, options, name):
 	snippy_core_exe = set_config.get_exe('snippy_core', Debug)
 	
 	## start snippy_cmd 
-	snippy_core_cmd = '%s --cpus %s --reference %s --outdir %s --rgid %s' %(
-		snippy_core_exe, threads, reference_fasta, outdir, name)
+	snippy_core_cmd = '%s -aformat phylip --prefix %s %s' %(snippy_core_exe, name, list_folder)
 	
 
 def main():
