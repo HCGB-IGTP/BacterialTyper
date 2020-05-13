@@ -94,9 +94,21 @@ def run_phylo(options):
     if not options.project:
         functions.create_folder(outdir)
     
+    ##################################
+    ## select samples and map    
     ####################################
-    ## select samples to map    
-    ####################################
+    dict_folders = map_samples(options, reference_gbk_file)
+    
+    ##################################
+    ## Create core alingment
+    ##################################
+    list_folders = list(dict_folders.values())
+    options_string = ""
+    variant_calling.snippy_core_call(list_folders, options_string, option.name)
+    
+    
+def map_samples(options, reference_gbk_file):    
+    
     pd_samples_retrieved_merge = pd.DataFrame()
 
     ## all_data // only_project_data
@@ -171,7 +183,7 @@ def run_phylo(options):
     
     ## send for each sample
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
-        commandsSent = { executor.submit(variant_calling.snippy_variant_caller,reference_gbk_file, sorted(cluster["sample"].tolist()), threads_job, outdir_dict[name], name, contig_option, options.other_options, Debug): name for name, cluster in sample_frame }
+        commandsSent = { executor.submit(snippy_variant_caller,reference_gbk_file, sorted(cluster["sample"].tolist()), threads_job, outdir_dict[name], name, contig_option, options.other_options, Debug): name for name, cluster in sample_frame }
         for cmd2 in concurrent.futures.as_completed(commandsSent):
             details = commandsSent[cmd2]
             try:
@@ -187,6 +199,9 @@ def run_phylo(options):
     ## TODO: use contig option
     if (options.all_data or options.genbank_data):
         print ()
+
+
+    return (outdir_dict)
 
 ####################
 def get_reference_gbk(options):

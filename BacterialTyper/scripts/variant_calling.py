@@ -100,6 +100,10 @@ def snippy_core_call(list_folder, options, name):
 	## start snippy_cmd 
 	snippy_core_cmd = '%s -aformat phylip --prefix %s %s' %(snippy_core_exe, name, list_folder)
 	
+	print (snippy_core_cmd)
+	return()
+
+
 
 def main():
 
