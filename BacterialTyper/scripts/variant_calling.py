@@ -120,11 +120,11 @@ def snippy_core_call(list_folder, options, name, output_dir, Debug):
 	
 	## start snippy_cmd 
 	list_folder_string = " ".join(list_folder)
-	log_file = os.path.join(outdir, "snippy_cmd.log")
-	name_outidr =  os.path.join(output_dir, name)
-	snippy_core_cmd = '%s -aformat phylip --prefix %s %s 2> %s' %(snippy_core_exe, name_outdir, list_folder_string)
+	log_file = os.path.join(output_dir, "snippy_cmd.log")
+	name_outdir =  os.path.join(output_dir, name)
+	snippy_core_cmd = '%s -aformat phylip --prefix %s %s 2> %s' %(snippy_core_exe, name_outdir, list_folder_string, log_file)
 	
-	return (snippy_core_cmd)
+	return (functions.system_call(snippy_core_cmd))
 
 
 def main():

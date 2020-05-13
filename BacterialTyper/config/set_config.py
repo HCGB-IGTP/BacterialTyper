@@ -85,7 +85,7 @@ def get_exe(prog, Debug=False, Return_Version=False):
 
 	## return if not available
 	## no min version available
-	if not min_version:
+	if min_version == 'na':
 		if exe_path_tmp:
 			if (Return_Version):
 				return (exe_path_tmp[0], '') ## return first item

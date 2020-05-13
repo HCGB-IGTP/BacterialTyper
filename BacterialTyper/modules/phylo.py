@@ -233,10 +233,10 @@ def get_reference_gbk(options):
         ## get files download
         (genome, prot, gff, gbk) = database_generator.get_files_download(dir_path)
         if options.debug:
-                print ('genome:' + genome)
-                print ('prot:' + prot)
-                print ('gff:' + gff)
-                print ('gbk:' + gbk)
+                print (colored("**DEBUG: genome:" + genome, 'yellow'))
+                print (colored("**DEBUG: prot:" + prot, 'yellow'))
+                print (colored("**DEBUG: gff:" + gff, 'yellow'))
+                print (colored("**DEBUG: gbk:" + gbk, 'yellow'))
                 
         if functions.is_non_zero_file(gbk):
             print('\t+ Genbank file format reference available.')
@@ -355,14 +355,15 @@ def get_reference_gbk(options):
 def snippy_variant_caller(reference, files, threads, outdir, name, contig_option, other_options, sample_name, Debug):
     
     ## create subfolder within phylo for this mapping
-    subdir = functions.create_subfolder(name, outdir)
+    tag = sample_name + '_vs_' + name
+    subdir = functions.create_subfolder(tag, outdir)
        
     ## check if previously process and succeeded
     filename_stamp = subdir + '/.success'
-
+    
     if os.path.isfile(filename_stamp):
         stamp = functions.read_time_stamp(filename_stamp)
-        print (colored("\tA previous command generated results on: %s [%s vs %s]" %(stamp, sample_name, name), 'yellow'))
+        print (colored("\tA previous command generated results on: %s [%s]" %(stamp, tag), 'yellow'))
     else:
          # Call variant calling
         code = variant_calling.snippy_call(reference, files, threads, subdir, name, contig_option, other_options, Debug)
