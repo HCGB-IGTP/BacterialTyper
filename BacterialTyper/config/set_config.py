@@ -79,22 +79,26 @@ def get_exe(prog, Debug=False, Return_Version=False):
 	## get min_version
 	min_version = extern_progs.return_min_version_soft(prog)
 	
-	## no min version available
-	if not min_version:
-		if exe_path_tmp:
-			return (exe_path_tmp[0]) ## return first item
-		else:
-			return('ERROR')
-	
 	## debug message
 	if (Debug):
 		print(colored("** Debug: min_version: %s" %min_version,'yellow'))
 
 	## return if not available
-	if not exe_path_tmp:
+	## no min version available
+	if not min_version:
+		if exe_path_tmp:
+			if (Return_Version):
+				return (exe_path_tmp[0], '') ## return first item
+			else:
+				return (exe_path_tmp[0]) ## return first item
+	
+	## not installed in path
+	if (len(exe_path_tmp) == 0):
 		if (Return_Version):
-			return ('ERROR', 'n.a.')
+			print(colored("\n**ERROR: Software %s could not be found." % prog,'red'))
+			return('ERROR', 'n.a.')
 		else:
+			print(colored("\n**ERROR: Software %s could not be found." % prog,'red'))
 			return('ERROR')
 
 	## Loop for all possibilities
@@ -113,17 +117,9 @@ def get_exe(prog, Debug=False, Return_Version=False):
 			else:
 				return (p)
 
-	if (len(exe_path_tmp) == 0):
-		print(colored("\n**ERROR: Software %s could not be found." % prog,'red'))
-		exit()
-	else:
-		print(colored("\n**ERROR: Software %s version smaller than minimum version expected %s." %(prog,min_version),'red'))
-		exit()
 
-	if (Return_Version):
-		return ('ERROR', 'n.a.')
-	else:
-		return('ERROR')
+	print(colored("\n**ERROR: Software %s version smaller than minimum version expected %s." %(prog,min_version),'red'))
+	exit()
 
 ################
 def access_check(fn, mode=os.F_OK | os.X_OK):

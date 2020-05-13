@@ -110,7 +110,7 @@ def run_phylo(options):
         
     list_folders = list(dict_folders.values())
     options_string = ""
-    variant_calling.snippy_core_call(list_folders, options_string, options.name, snippy_dir)
+    variant_calling.snippy_core_call(list_folders, options_string, options.name, snippy_dir, Debug)
     
     
 def map_samples(options, reference_gbk_file, input_dir, outdir):    

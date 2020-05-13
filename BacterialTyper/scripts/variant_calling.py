@@ -102,7 +102,7 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 	return(functions.system_call(snippy_cmd, returned=False, message=True))
 
 ######
-def snippy_core_call(list_folder, options, name, output_dir):
+def snippy_core_call(list_folder, options, name, output_dir, Debug):
 	"""
 	Create core alignment for samples align to the same reference
 	
@@ -116,7 +116,7 @@ def snippy_core_call(list_folder, options, name, output_dir):
 	"""
 	
 	## create snippy-core call
-	snippy_core_exe = set_config.get_exe('snippy_core')
+	snippy_core_exe = set_config.get_exe('snippy_core', Debug)
 	
 	## start snippy_cmd 
 	list_folder_string = " ".join(list_folder)
