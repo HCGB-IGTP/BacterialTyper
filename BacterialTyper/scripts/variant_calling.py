@@ -74,8 +74,9 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 	snippy_exe = set_config.get_exe('snippy', Debug)
 	
 	## start snippy_cmd 
-	snippy_cmd = '%s --cpus %s --reference %s --force --unmapped --outdir %s --rgid %s' %(
-		snippy_exe, threads, reference_fasta, outdir, name)
+	log_file = os.path.join(outdir, "snippy_cmd.log")
+	snippy_cmd = '%s --cpus %s --reference %s --force --unmapped --outdir %s --rgid %s 2> %s' %(
+		snippy_exe, threads, reference_fasta, outdir, name, log_file)
 	
 	## force option: prevent finish early if folder exists
 	## unmapped option: keep unmapped reads
@@ -98,7 +99,7 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 	return(functions.system_call(snippy_cmd, returned=False, message=True))
 
 ######
-def snippy_core_call(list_folder, options, name):
+def snippy_core_call(list_folder, options, name, output_dir):
 	"""
 	Create core alignment for samples align to the same reference
 	
@@ -116,7 +117,9 @@ def snippy_core_call(list_folder, options, name):
 	
 	## start snippy_cmd 
 	list_folder_string = " ".join(list_folder)
-	snippy_core_cmd = '%s -aformat phylip --prefix %s %s' %(snippy_core_exe, name, list_folder_string)
+	log_file = os.path.join(outdir, "snippy_cmd.log")
+	name_outdir =  os.path.join(output_dir, name)
+	snippy_core_cmd = '%s -aformat phylip --prefix %s %s 2> %s' %(snippy_core_exe, name_outdir, list_folder_string)
 	
 	return (snippy_core_cmd)
 

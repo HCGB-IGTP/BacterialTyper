@@ -101,14 +101,17 @@ def run_phylo(options):
     ## time stamp
     start_time_partial = functions.timestamp(start_time_total)
 
-    exit()
-
     ##################################
     ## Create core alingment
     ##################################
+    outdir_report = functions.create_subfolder("report", outdir)
+    phylo_dir = functions.create_subfolder("phylo", outdir_report)
+    analysis_dir = functions.create_subfolder(options.name, phylo_dir)
+    snippy_dir = functions.create_subfolder("snippy", analysis_dir)
+        
     list_folders = list(dict_folders.values())
     options_string = ""
-    variant_calling.snippy_core_call(list_folders, options_string, options.name)
+    variant_calling.snippy_core_call(list_folders, options_string, options.name, snippy_dir)
     
     
 def map_samples(options, reference_gbk_file, input_dir, outdir):    
