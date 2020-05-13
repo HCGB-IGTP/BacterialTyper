@@ -116,7 +116,7 @@ def snippy_core_call(list_folder, options, name, output_dir):
 	"""
 	
 	## create snippy-core call
-	snippy_core_exe = set_config.get_exe('snippy_core', Debug)
+	snippy_core_exe = set_config.get_exe('snippy_core')
 	
 	## start snippy_cmd 
 	list_folder_string = " ".join(list_folder)

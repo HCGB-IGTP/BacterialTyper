@@ -78,6 +78,14 @@ def get_exe(prog, Debug=False, Return_Version=False):
 
 	## get min_version
 	min_version = extern_progs.return_min_version_soft(prog)
+	
+	## no min version available
+	if not min_version:
+		if exe_path_tmp:
+			return (exe_path_tmp[0]) ## return first item
+		else:
+			return('ERROR')
+	
 	## debug message
 	if (Debug):
 		print(colored("** Debug: min_version: %s" %min_version,'yellow'))

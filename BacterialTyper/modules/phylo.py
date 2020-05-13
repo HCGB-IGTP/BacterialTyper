@@ -80,13 +80,11 @@ def run_phylo(options):
         Project=False
         outdir = os.path.abspath(options.output_folder)
 
-    ### parse the reference
-    print ("+ Retrieve the reference...")
-    
     ## get the database 
     options.database = os.path.abspath(options.database)
     
-    ## get the reference
+    ### parse the reference
+    print ("+ Retrieve the reference...")
     reference_gbk_file = get_reference_gbk(options)
                  
     ## generate output folder, if necessary
@@ -97,6 +95,7 @@ def run_phylo(options):
     ##################################
     ## select samples and map    
     ####################################
+    print ("+ Retrieve samples to map available...")
     dict_folders = map_samples(options, reference_gbk_file, input_dir, outdir)
     ## time stamp
     start_time_partial = functions.timestamp(start_time_total)
@@ -121,7 +120,6 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     ## all_data // only_project_data
     if (options.all_data or options.only_project_data):
         ## get files to map
-        print ("+ Retrieve samples to map available...")
         pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim_'])
         
         ## discard the sample used as reference if any
@@ -190,7 +188,7 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     
     ## send for each sample
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
-        commandsSent = { executor.submit(snippy_variant_caller,reference_gbk_file, sorted(cluster["sample"].tolist()), threads_job, outdir_dict[name], options.name, contig_option, options.other_options, options.debug): name for name, cluster in sample_frame }
+        commandsSent = { executor.submit(snippy_variant_caller,reference_gbk_file, sorted(cluster["sample"].tolist()), threads_job, outdir_dict[name], options.name, contig_option, options.other_options, name, options.debug): name for name, cluster in sample_frame }
         for cmd2 in concurrent.futures.as_completed(commandsSent):
             details = commandsSent[cmd2]
             try:
@@ -225,10 +223,10 @@ def get_reference_gbk(options):
         NCBI_folder = os.path.join(options.database, 'NCBI')
         dir_path = os.path.join(NCBI_folder, 'genbank', 'bacteria', options.Genbank_ID)    
         if (options.Genbank_ID in db_frame_ncbi.index): 
-            print('+ Reference (%s) available in database provided' %options.Genbank_ID)
+            print('\t+ Reference (%s) available in database provided' %options.Genbank_ID)
         else:
-            print ('+ Reference (%s) is not available in database provided' %options.Genbank_ID)
-            print ('+ Try to download it.')
+            print ('\t+ Reference (%s) is not available in database provided' %options.Genbank_ID)
+            print ('\t+ Try to download it.')
             NCBI_folder = os.path.join(options.database, 'NCBI')
             database_generator.ngd_download(dir_path, options.Genbank_ID, NCBI_folder)
     
@@ -241,7 +239,7 @@ def get_reference_gbk(options):
                 print ('gbk:' + gbk)
                 
         if functions.is_non_zero_file(gbk):
-            print('+ Genbank file format reference available.')
+            print('\t+ Genbank file format reference available.')
             reference_gbk_file = gbk
         else:
             print(colored('\n+ No genbank file available for the reference specified. Some error occurred while downloading', 'red'))
@@ -256,16 +254,16 @@ def get_reference_gbk(options):
 
         try:
             this_sample_df = df_data.get_group(options.project_sample_ID)
-            print('+ Reference (%s) available in database folder provided' %options.user_sample_ID)
+            print('\t+ Reference (%s) available in database folder provided' %options.user_sample_ID)
         except:
             print (colored('** WARNING: Reference (%s) not available in database folder provided' %options.user_sample_ID, 'yellow'))
-            print ('+ Lets try to update the database first.')
+            print ('\t+ Lets try to update the database first.')
             db_frame_user_dataUpdated = database_user.update_database_user_data(options.database, input_dir, options.debug, options)
             df_data = db_frame_user_dataUpdated.groupby('name')
  
             try:
                 this_sample_df = df_data.get_group(options.user_sample_ID)
-                print('+ Reference (%s) available in database updated' %options.user_sample_ID)
+                print('\t+ Reference (%s) available in database updated' %options.user_sample_ID)
                 db_frame_user_Data = db_frame_user_dataUpated
 
             except:
@@ -291,10 +289,10 @@ def get_reference_gbk(options):
   
         ## check if exists
         if functions.is_non_zero_file(gbk):
-            print('+ Genbank file format reference available.')
+            print('\t+ Genbank file format reference available.')
             reference_gbk_file = gbk
         else:
-            print(colored('\n+ No genbank file available for the reference specified. Some error occurred while downloading', 'red'))
+            print(colored('\n** ERROR: No genbank file available for the reference specified. Some error occurred while downloading', 'red'))
             exit()
         
     ####################    
@@ -307,10 +305,10 @@ def get_reference_gbk(options):
 
         try:
             this_sample_df = df_data.get_group(options.project_sample_ID)
-            print('+ Reference (%s) available in project folder provided' %options.project_sample_ID)
+            print('\t+ Reference (%s) available in project folder provided' %options.project_sample_ID)
         except:
             print (colored('** ERROR: Reference (%s) not available in project folder provided' %options.project_sample_ID, 'red'))
-            print ('+ Check the spelling or provide a valid ID.')
+            print ('\t+ Check the spelling or provide a valid ID.')
             exit()
  
         ## debug message
@@ -331,10 +329,10 @@ def get_reference_gbk(options):
 
         ## check if exists
         if functions.is_non_zero_file(gbk):
-            print('+ Genbank file format reference available.')
+            print('\t+ Genbank file format reference available.')
             reference_gbk_file = gbk
         else:
-            print(colored('\n+ No genbank file available for the reference specified. Some error occurred while downloading', 'red'))
+            print(colored('\n** ERROR: No genbank file available for the reference specified. Some error occurred while downloading', 'red'))
             exit()
 
     ####################
@@ -343,9 +341,9 @@ def get_reference_gbk(options):
     elif options.user_gbk:
         options.user_gbk = os.path.abspath(options.user_gbk)
         if functions.is_non_zero_file(options.user_gbk):
-            print('+ Reference provided via --user_gbk is available and ready to use.')
+            print('\t+ Reference provided via --user_gbk is available and ready to use.')
         else:
-            print('+ Reference provided via --user_gbk not available or accessible.')
+            print('\n** ERROR: Reference provided via --user_gbk not available or accessible.')
             print(colored('\n+ Check the path or integrity of the file. Some error occurred...', 'red'))
             exit()
         reference_gbk_file = options.user_gbk
@@ -354,7 +352,7 @@ def get_reference_gbk(options):
     return (reference_gbk_file)
 
 #############################################
-def snippy_variant_caller(reference, files, threads, outdir, name, contig_option, other_options, Debug):
+def snippy_variant_caller(reference, files, threads, outdir, name, contig_option, other_options, sample_name, Debug):
     
     ## create subfolder within phylo for this mapping
     subdir = functions.create_subfolder(name, outdir)
@@ -364,7 +362,7 @@ def snippy_variant_caller(reference, files, threads, outdir, name, contig_option
 
     if os.path.isfile(filename_stamp):
         stamp = functions.read_time_stamp(filename_stamp)
-        print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
+        print (colored("\tA previous command generated results on: %s [%s vs %s]" %(stamp, sample_name, name), 'yellow'))
     else:
          # Call variant calling
         code = variant_calling.snippy_call(reference, files, threads, subdir, name, contig_option, other_options, Debug)
