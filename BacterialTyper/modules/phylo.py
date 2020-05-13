@@ -97,17 +97,21 @@ def run_phylo(options):
     ##################################
     ## select samples and map    
     ####################################
-    dict_folders = map_samples(options, reference_gbk_file)
-    
+    dict_folders = map_samples(options, reference_gbk_file, input_dir, outdir)
+    ## time stamp
+    start_time_partial = functions.timestamp(start_time_total)
+
+    exit()
+
     ##################################
     ## Create core alingment
     ##################################
     list_folders = list(dict_folders.values())
     options_string = ""
-    variant_calling.snippy_core_call(list_folders, options_string, option.name)
+    variant_calling.snippy_core_call(list_folders, options_string, options.name)
     
     
-def map_samples(options, reference_gbk_file):    
+def map_samples(options, reference_gbk_file, input_dir, outdir):    
     
     pd_samples_retrieved_merge = pd.DataFrame()
 
@@ -192,9 +196,6 @@ def map_samples(options, reference_gbk_file):
                 print ('***ERROR:')
                 print (cmd2)
                 print('%r generated an exception: %s' % (details, exc))
-
-    ## time stamp
-    start_time_partial = functions.timestamp(start_time_total)
 
     ## TODO: use contig option
     if (options.all_data or options.genbank_data):
@@ -351,16 +352,18 @@ def get_reference_gbk(options):
 
 #############################################
 def snippy_variant_caller(reference, files, threads, outdir, name, contig_option, other_options, Debug):
+    
+    ## create subfolder within phylo for this mapping
+    subdir = functions.create_subfolder(name, outdir)
+       
     ## check if previously process and succeeded
-    filename_stamp = sample_folder + '/.success'
+    filename_stamp = subdir + '/.success'
 
     if os.path.isfile(filename_stamp):
         stamp =    functions.read_time_stamp(filename_stamp)
         print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
         return()
     else:
-        ## create subfolder within phylo for this mapping
-        subdir = functions.create_subfolder(name, outdir)
-        # Call variant calling
+         # Call variant calling
         return(variant_calling.snippy_call(reference, files, threads, subdir, name, contig_option, other_options, Debug))
   

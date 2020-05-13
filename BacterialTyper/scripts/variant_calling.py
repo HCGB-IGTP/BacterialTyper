@@ -30,6 +30,16 @@ def	help_options():
 def help_Snippy():
 	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
+
+def parse_snippy_files(folder_results):
+	"""
+	Parse Snippy output files 
+	
+	Check details of results generated in :ref:`snippy-output-files`_
+	"""
+	
+	return ()
+
 ######
 def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_option, other_options, Debug):
 	"""
@@ -64,9 +74,11 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 	snippy_exe = set_config.get_exe('snippy', Debug)
 	
 	## start snippy_cmd 
-	snippy_cmd = '%s --cpus %s --reference %s --outdir %s --rgid %s' %(
+	snippy_cmd = '%s --cpus %s --reference %s --force --unmapped --outdir %s --rgid %s' %(
 		snippy_exe, threads, reference_fasta, outdir, name)
 	
+	## force option: prevent finish early if folder exists
+	## unmapped option: keep unmapped reads
 	
 	## add files to map
 	if contig_option:
@@ -82,27 +94,31 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 		print (colored("**DEBUG: snippy_cmd **", 'yellow'))	
 		print (snippy_cmd)
 	
-	print (snippy_cmd)
-	return()
 	## create system call
 	return(functions.system_call(snippy_cmd, returned=False, message=True))
 
 ######
-
 def snippy_core_call(list_folder, options, name):
 	"""
+	Create core alignment for samples align to the same reference
 	
+	:param list_folder:
+	:param options:
+	:param name:
+	
+	:type list_folder: list
+	:type options: string
+	:type name: string 
 	"""
 	
 	## create snippy-core call
 	snippy_core_exe = set_config.get_exe('snippy_core', Debug)
 	
 	## start snippy_cmd 
-	snippy_core_cmd = '%s -aformat phylip --prefix %s %s' %(snippy_core_exe, name, list_folder)
+	list_folder_string = " ".join(list_folder)
+	snippy_core_cmd = '%s -aformat phylip --prefix %s %s' %(snippy_core_exe, name, list_folder_string)
 	
-	print (snippy_core_cmd)
-	return()
-
+	return (snippy_core_cmd)
 
 
 def main():
@@ -113,15 +129,6 @@ def main():
 	else:
 		help_options()
 		exit()    	
-
-	data = os.path.abspath(argv[1])
-	reference = os.path.abspath(argv[2])
-	sample = argv[3]
-	mccortex_bin = argv[4]
-	kmergenie_bin = argv[5]
-	threads = int(argv[6])
-	path = 	argv[7]
-	
 	
 	
 ######
