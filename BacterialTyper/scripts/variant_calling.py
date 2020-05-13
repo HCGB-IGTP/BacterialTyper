@@ -75,8 +75,8 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 	
 	## start snippy_cmd 
 	log_file = os.path.join(outdir, "snippy_cmd.log")
-	snippy_cmd = '%s --cpus %s --reference %s --force --unmapped --outdir %s --rgid %s 2> %s' %(
-		snippy_exe, threads, reference_fasta, outdir, name, log_file)
+	snippy_cmd = '%s --cpus %s --reference %s --force --unmapped --outdir %s --rgid %s' %(
+		snippy_exe, threads, reference_fasta, outdir, name)
 	
 	## force option: prevent finish early if folder exists
 	## unmapped option: keep unmapped reads
@@ -89,7 +89,10 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 			snippy_cmd = snippy_cmd + ' --se ' + list_files[0]
 		elif (len(list_files) == 2):
 			snippy_cmd = snippy_cmd + ' --pe1 ' + list_files[0] + ' --pe2 ' + list_files[1]
-		
+	
+	## add log
+	snippy_cmd = snippy_cmd + ' 2> ' + log_file
+	
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: snippy_cmd **", 'yellow'))	
@@ -118,7 +121,7 @@ def snippy_core_call(list_folder, options, name, output_dir):
 	## start snippy_cmd 
 	list_folder_string = " ".join(list_folder)
 	log_file = os.path.join(outdir, "snippy_cmd.log")
-	name_outdir =  os.path.join(output_dir, name)
+	name_outidr =  os.path.join(output_dir, name)
 	snippy_core_cmd = '%s -aformat phylip --prefix %s %s 2> %s' %(snippy_core_exe, name_outdir, list_folder_string)
 	
 	return (snippy_core_cmd)
