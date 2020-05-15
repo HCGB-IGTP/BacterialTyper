@@ -34,7 +34,6 @@ within each one.
    test.rst
    trimm.rst
    version.rst
-
    
 .. _shared-arguments:
 
@@ -68,5 +67,11 @@ Here we include a brief description of the shared command-line arguments for som
    **Additional information:**
    
    --debug        Show additional message for debugging purposes.
-   
-         
+
+
+.. _project-organization:
+
+Details of the BacterialTyper project folder
+**************************************************
+
+TODO

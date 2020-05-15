@@ -118,12 +118,14 @@ def is_non_zero_file(fpath):
 
 ###############
 def outdir_project(outdir, project_mode, pd_samples, mode):
-
+	"""
+	"""
 	# Group dataframe by sample name
-	sample_frame = pd_samples.groupby(["name"])
+	sample_frame = pd_samples.groupby(["new_name"])
 
 	dict_outdir = {}	
 	for name, cluster in sample_frame:
+		print (name)
 		if (project_mode):
 			#print ("Create subdir for every sample: ", mode)
 			sample_dir = create_subfolder('data', outdir)		
@@ -199,6 +201,12 @@ def get_symbolic_link (sample_list, directory):
 
 	files2return = os.listdir(directory)
 	return files2return
+
+############### 
+def get_symbolic_link_file (file2link, newfile):
+	"""Creates symbolic link for a file into a new name file"""
+	cmd = 'ln -s %s %s' %(file2link, newfile)
+	system_call(cmd, returned=False)
 
 #################
 def get_fullpath_list(dir_given):
@@ -607,3 +615,7 @@ def collect_info_run(out_folder, module, userinput, runInfo):
 	with open(result_json_file, "w") as outfile:  
 	   json.dump(data, outfile)
 	
+def print_all_pandaDF(pd_df):
+	pd.set_option('display.max_colwidth', None)
+	pd.set_option('display.max_columns', None)
+	print (pd_df)

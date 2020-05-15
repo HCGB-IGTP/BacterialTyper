@@ -22,69 +22,103 @@ from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 
 ###############
-def help_format():
+def help_fastq_format():
+	"""
+	Explanation of fastq format details.
+	
+	See additional information in section under user-guide: 
+	:ref:`format fastq files<format-fastq-files>` 
+	"""
 
 	functions.boxymcboxface("Name format for samples")
 
-	print ("Format for fastq files can be:\n")
+	print ("Format for fastq files can be:")
+	print ("name.fastq.gz, name_1.fastq.gz, name_R2.fastq.gz, name_L001_R1.fastq.gz, etc.")
+	print ("\nThere are many options and here we provide some guidelines of the format.")
+	print ("\n")
+
 	functions.print_sepLine("*",20,"red")
-	print ("[1] Single end files")
+	print ("[1] Length limitation")
 	functions.print_sepLine("*",20,"red")
+	print ("There is a limitation for the sample ID ('name') of 10 characters.")
+	print (colored("** BacterialTyper provides an option to rename samples if necessary: module prep option --rename **", 'yellow'))
+	print ("\n")
+
+	functions.print_sepLine("*",20,"red")
+	print ("[2] Single end files")
+	functions.print_sepLine("*",20,"red")
+	print ("It is possible to provide NGS single-end files although some steps ")
+	print ("of the process could not be accomplished using single-end files.")
+	print (colored('** Use option --single-end in the different BacterialTyper modules **', 'yellow'))
 	print ("name.fastq.gz")
 	print ("name.fastq")
 	print ("name.fq")
 	print ("\n")
 
 	functions.print_sepLine("*",20,"red")
-	print ("[2] Paired-end files")
+	print ("[3] Paired-end files")
 	functions.print_sepLine("*",20,"red")
-	print ("Read1 => name_1.fastq.gz\tname_R1.fastq.gz")
-	print ("Read2 => name_2.fastq.gz\tname_R2.fastq.gz")
+	print ("Paired-end files are full supported. The format for these files are:")
+	print ("Read1 => name_1.fastq.g or name_R1.fastq.gz")
+	print ("Read2 => name_2.fastq.gz or name_R2.fastq.gz")
 	print ("\n")
 
 	functions.print_sepLine("*",55,"red")
-	print ("[3] Containing Lane information (*L00x* and/or *00x*):")
+	print ("[4] Lane information:")
 	functions.print_sepLine("*",55,"red")
+	print ("In some cases, files might contain lane information (*L00x* and/or *00x*).")
+	print ("BacterialTyper supports these names as long as follow these examples:")
 	print ("name_L00x_R1.fastq.gz\tname_L00x_R2.fastq.gz")
 	print ("name_L00x_1.fastq.gz\tname_L00x_2.fastq.gz")
-	print ("name_L00x_R1_00x.fastq.gz\tname_L00x_R1_00x.fastq.gz")
-	print (" ** Merge lane files using module option merge module prep **")
+	print ("name_L00x_R1_00x.fastq.gz\tname_L00x_R2_00x.fastq.gz")
+	print (colored("\n** If you need to merge fastq files from different lanes, use option --merge within module prep **", 'yellow'))
 	print ("\n")
 
 	functions.print_sepLine("*",15,"red")
-	print ("[4] Extensions:")
+	print ("[5] Extensions:")
 	functions.print_sepLine("*",15,"red")
 	print ("name_L00x_R2.fastq\tname_L00x_R2.fq\nname_L00x_R2.fastq.gz\tname_L00x_R2.fq.gz")
 	print ("\n")
 
 ###############
-def get_fields(file_name_list, pair=True, Debug=False):
-
+def get_fields(file_name_list, pair, Debug):
+	"""
+	Get information from files
+	
+	Creates and returns a dataframe containing information for each sample for:
+	"sample", "dirname", "name", "new_name", "name_len", "lane", "read_pair","lane_file","ext","gz", "tag"
+	
+	:param file_name_list: List of files to parse
+	:param pair: True/false for Paired-end files
+	:param Debug: True/false for debugging messages
+	
+	:type file_name_list: list
+	:type pair: bool
+	:type Debug: bool
+	
+	:returns: Pandas dataframe.
+	
+	"""
 	## init dataframe
-	name_columns = ("sample", "dirname", "name", "lane", "read_pair","lane_file","ext","gz", "tag")
+	name_columns = ("sample", "dirname", "name", "new_name", "name_len", 
+				"lane", "read_pair","lane_file","ext","gz", "tag")
 	name_frame = pd.DataFrame(columns=name_columns)
 	
 	## loop through list
 	for path_files in file_name_list:
-		
 		## get file name
 		file_name = os.path.basename(path_files)
 		dirN = os.path.dirname(path_files)
-
-		##	
 		trim_search = re.search(r".*trim.*", file_name)
 		lane_search = re.search(r".*\_L\d+\_.*", file_name)
-
 		## get name
 		if (pair):
-		
 			## pair could be: R1|R2 or 1|2
-			## lane should contain L00x			
-	
 			if (trim_search):
 				name_search = re.search(r"(.*)\_trim\_(R1|1|R2|2)\.(f.*q)(\..*){0,1}", file_name)
 			else:
 				## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
+				## lane should contain L00x			
 				if (lane_search):
 					name_search = re.search(r"(.*)\_(L\d+)\_(R1|1|R2|2)(.*)\.(f.*q)(\..*){0,1}", file_name)
 				else:
@@ -102,6 +136,7 @@ def get_fields(file_name_list, pair=True, Debug=False):
 	
 		if name_search:
 			name = name_search.group(1)
+			name_len = len(name)
 			if (pair):
 				## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
 				if (lane_search):
@@ -119,7 +154,8 @@ def get_fields(file_name_list, pair=True, Debug=False):
 				ext = name_search.group(2)
 				gz = name_search.group(3)
 	
-			name_frame.loc [len(name_frame)] = (path_files, dirN, name, lane_id, read_pair, lane_file, ext, gz, "reads")
+			name_frame.loc [len(name_frame)] = (path_files, dirN, name, name, name_len, 
+											lane_id, read_pair, lane_file, ext, gz, "reads")
 	
 		else:
 			## debug message
@@ -127,13 +163,35 @@ def get_fields(file_name_list, pair=True, Debug=False):
 				print (colored("**DEBUG: sampleParser.get_fields **", 'yellow'))
 				print (colored("*** ATTENTION: Sample did not match the possible parsing options...", 'yellow'))
 				print (file_name)
+			
+			print (colored("*** ATTENTION: Sample (%s) did not match the possible parsing options..." %path_files, 'yellow'))
 
 	return (name_frame)
 
 ###############
 def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debug=False):
-    
-    #Get all files in the folder "path_to_samples"    
+	"""
+	Select samples
+	
+	Given a sample prefix (any or a given list), this function retrieves
+	sample files from a list given. If exclude option provided, excludes 
+	the files retrieved from the total.
+	
+	:param list_samples: List of absolute path for fastq files
+	:param samples_prefix: List of prefix to search 
+	:param pair: True/false for paired-end files
+	:param exclude: True/false for exclude found files from the total
+	:param Debug: True/false for debugging messages
+	
+	:type list_samples: list
+	:type samples_prefix: list
+	:type pair: bool
+	:type exclude: bool
+	:type Debug: bool
+	
+	:returns: something
+	"""
+	#Get all files in the folder "path_to_samples"
 	sample_list = []
 	for names in samples_prefix:
 		for path_fastq in list_samples:	
@@ -161,20 +219,30 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debu
 					if (Debug):
 						print (colored("**DEBUG: sampleParser.select_samples **", 'yellow'))
 						print (colored("** ERROR: %s is a file that is neither in fastq.gz or .fastq format, so it is not included" %path_fastq, 'yellow'))
-
+							
 	## discard duplicates if any
-	non_duplicate_samples = list(set(sample_list))	
+	non_duplicate_samples = list(set(sample_list))
 	
 	## get fields
 	name_frame_samples = get_fields(non_duplicate_samples, pair, Debug)	
-	number_samples = name_frame_samples.index.size
+	number_files = name_frame_samples.index.size
 	total_samples = set(name_frame_samples['name'].to_list())
 	
+	## debugging messages
+	if Debug:
+		print (colored("** DEBUG: select_samples",'yellow'))
+		print ("name_frame_samples:")
+		print (name_frame_samples)
+		print ("number_files:")
+		print (number_files)
+		print ("total_samples:")
+		print (total_samples)
+	
 	### get some stats
-	if (number_samples == 0):
+	if (number_files == 0):
 		print (colored("\n**ERROR: No samples were retrieved. Check the input provided\n",'red'))
 		exit()
-	print (colored("\t" + str(number_samples) + " files selected...", 'yellow'))
+	print (colored("\t" + str(number_files) + " files selected...", 'yellow'))
 	print (colored("\t" + str(len(total_samples)) + " samples selected...", 'yellow'))
 	if (pair):
 		print (colored("\tPaired-end mode selected...", 'yellow'))
@@ -277,7 +345,16 @@ def select_other_samples (project, list_samples, samples_prefix, mode, extension
 
 ###############    
 def gunzip_merge(outfile, list_files):
+	"""
+	Merge gunzip files into final file
 	
+	:param outfile: String for output file
+	:param list_files: List of files to merge
+	
+	:type outfile: string
+	:type list_files: list
+		
+	"""
 	list_files = list(list_files)
 	list_files.sort()
 	print ("\tMerging files into: ", outfile)
@@ -292,14 +369,17 @@ def gunzip_merge(outfile, list_files):
 	
 ###############    
 def one_file_per_sample(dataFrame, outdir_dict, threads, outdir, Debug=False):
-	## merge sequencing files for sample, no matter of sector or lane generated.
+	"""
+	Merge fastq files from different lanes positions for each sample
 	
-	list_samples = set(dataFrame['name'].tolist())
+	"""
+	## merge sequencing files for sample, no matter of sector or lane generated.	
+	list_samples = set(dataFrame['new_name'].tolist())
 	print (colored("\t" + str(len(list_samples)) + " samples to be merged from the input provided...", 'yellow'))
 	print ("+ Merging sequencing files for samples")
 
 	##
-	sample_frame = dataFrame.groupby(["name", "read_pair"])
+	sample_frame = dataFrame.groupby(["new_name", "read_pair"])
 	
 	### get extension for files
 	ext_list = dataFrame.ext.unique()
@@ -308,7 +388,7 @@ def one_file_per_sample(dataFrame, outdir_dict, threads, outdir, Debug=False):
 
 	# We can use a with statement to ensure threads are cleaned up promptly
 	with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor: ## need to do 1 by one as there is a problem with the working directory
-		commandsSent = { executor.submit(gunzip_merge, outdir_dict[name[0]] + '/' + name[0] + '_' + name[1] + ext, sorted(set(cluster["sample"].tolist()))): name for name, cluster in sample_frame }
+		commandsSent = { executor.submit(gunzip_merge, outdir_dict[name[0]] + '/' + cluster["new_name"][0] + '_' + name[1] + ext, sorted(set(cluster["sample"].tolist()))): name for name, cluster in sample_frame }
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
 			try:
@@ -316,11 +396,10 @@ def one_file_per_sample(dataFrame, outdir_dict, threads, outdir, Debug=False):
 			except Exception as exc:
 				print ('***ERROR:')
 				print (cmd2)
-				print('%r generated an exception: %s' % (details, exc))
-				
+				print('%r generated an exception: %s' % (details, exc))				
 							
 	## return output name merged generated in dataframe
-	name_columns = ("name", "dirname", "read_pair", "sample", "ext", "gz")
+	name_columns = ("new_name", "dirname", "read_pair", "new_file", "ext", "gz")
 	name_frame = pd.DataFrame(columns=name_columns)
 
 	## print to a file
@@ -329,10 +408,12 @@ def one_file_per_sample(dataFrame, outdir_dict, threads, outdir, Debug=False):
 	merge_details_hd = open(merge_details, 'w')
 
 	for name, cluster in sample_frame: ## loop over samples
-		outfile = outdir_dict[name[0]] + '/' + name[0] + '_' + name[1] + ext
+		outfile = outdir_dict[name[0]] + '/' + cluster["new_name"][0] + '_' + name[1] + ext
 		
 		merge_details_hd.write("####################\n")		
 		merge_details_hd.write("Sample: " + name[0] + '\n')
+		merge_details_hd.write("New name: " + cluster['new_name'][0] + '\n')
+		
 		merge_details_hd.write("Read: " + name[1] + '\n')
 		merge_details_hd.write("Files:\n")
 		merge_details_hd.write(",".join(cluster["sample"].tolist()))
@@ -343,14 +424,27 @@ def one_file_per_sample(dataFrame, outdir_dict, threads, outdir, Debug=False):
 
 	merge_details_hd.close()
 	return(name_frame)
-	
-###############
-def help_options():
-	print ("\nUSAGE:\npython %s in_folder out_folder threads\n"  %os.path.abspath(sys.argv[0]))
 
 ################################
 def get_files(options, input_dir, mode, extension):
+	"""
+	Parser function to get files
 	
+	Given an input dir and a mode in retrieves
+	matching files with the extension desired.
+	
+	:param options: BacterialTyper options as parser.parse_args options.
+	:param input_dir: Absolute path to input dir containing samples.
+	:param mode: Options are: fastq, trim, annot, assembly.
+	:param extension: List of possible extension to retrieve.
+	
+	:type options: parser.parse_args
+	:type input_dir: string 
+	:type mode: string 
+	:type extension: list
+	
+	:returns: Pandas dataframe with sample and file information.
+	"""
 	## get list of input files
 	files = []
 	
@@ -361,7 +455,7 @@ def get_files(options, input_dir, mode, extension):
 	if (options.project):
 		### a folder containing a project is provided
 		if os.path.exists(input_dir):
-			#print ('+ Input folder exists')
+			print ('+ Input folder exists')
 			## get files in folder
 			files = []
 			for ext in extension:
@@ -415,6 +509,10 @@ def get_files(options, input_dir, mode, extension):
 				print (colored('***ERROR: input folder does not exist or it is not readable', 'red'))
 				exit()
 
+	if options.debug:
+		print (colored("** DEBUG: sampleParser.get_files files", 'yellow'))
+		print (files)
+
 	## get list of samples
 	samples_names = []
 	exclude=False
@@ -457,8 +555,8 @@ def get_files(options, input_dir, mode, extension):
 	## files list...
 	if (options.debug):
 		print (colored("\n**DEBUG: sampleParser.get_files files list to check **", 'yellow'))
-		##print ('DO NOT PRINT THIS LIST: It could be very large...')
-		print (files, '\n')
+		print ('DO NOT PRINT THIS LIST: It could be very large...')
+		##print (files, '\n')
 
 	## get information
 	if mode in ['fastq', 'trim']:
@@ -467,34 +565,3 @@ def get_files(options, input_dir, mode, extension):
 		pd_samples_retrieved = select_other_samples(options.project, files, samples_names, mode, extension, exclude, options.debug)		
 		
 	return(pd_samples_retrieved)
-
-######
-def main():
-	## this code runs when call as a single script
-
-  	## control if options provided or help
-	if len(sys.argv) > 1:
-		print ("")
-	else:
-		help_options()
-		exit()
-	
-	in_folder = os.path.abspath(sys.argv[1])
-	out_folder = os.path.abspath(sys.argv[2])
-	threads = int(sys.argv[3])
-	
-	## get files path
-	list_files = []
-	
-	for root, dirs, files in os.walk(in_folder):
-		for f in files:
-			list_files.append(os.path.join(root,f))
-	
-	names = ['.*']
-	datareturn = select_samples(list_files, names, True, False, True, True)
-	one_file_per_sample(datareturn, out_folder, threads)
-	
-######
-if __name__== "__main__":
-	main()
-
