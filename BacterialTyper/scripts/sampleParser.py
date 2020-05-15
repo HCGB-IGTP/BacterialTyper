@@ -388,7 +388,9 @@ def one_file_per_sample(dataFrame, outdir_dict, threads, outdir, Debug=False):
 
 	# We can use a with statement to ensure threads are cleaned up promptly
 	with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor: ## need to do 1 by one as there is a problem with the working directory
-		commandsSent = { executor.submit(gunzip_merge, outdir_dict[name[0]] + '/' + cluster["new_name"][0] + '_' + name[1] + ext, sorted(set(cluster["sample"].tolist()))): name for name, cluster in sample_frame }
+		commandsSent = { executor.submit(gunzip_merge, 
+										outdir_dict[name[0]] + '/' + name[0] + '_' + name[1] + ext, 
+										sorted(set(cluster["sample"].tolist()))): name for name, cluster in sample_frame }
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
 			try:
@@ -408,11 +410,11 @@ def one_file_per_sample(dataFrame, outdir_dict, threads, outdir, Debug=False):
 	merge_details_hd = open(merge_details, 'w')
 
 	for name, cluster in sample_frame: ## loop over samples
-		outfile = outdir_dict[name[0]] + '/' + cluster["new_name"][0] + '_' + name[1] + ext
+		outfile = outdir_dict[name[0]] + '/' + name[0] + '_' + name[1] + ext
 		
 		merge_details_hd.write("####################\n")		
 		merge_details_hd.write("Sample: " + name[0] + '\n')
-		merge_details_hd.write("New name: " + cluster['new_name'][0] + '\n')
+		merge_details_hd.write("New name: " + name[0] + '\n')
 		
 		merge_details_hd.write("Read: " + name[1] + '\n')
 		merge_details_hd.write("Files:\n")
