@@ -106,6 +106,8 @@ def snippy_core_call(list_folder, options, name, output_dir, Debug):
 	"""
 	Create core alignment for samples align to the same reference
 	
+	ATTENTION: Requires sample names to be different within the first 10 characters.
+	
 	:param list_folder:
 	:param options:
 	:param name:

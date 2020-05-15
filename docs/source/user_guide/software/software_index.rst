@@ -20,6 +20,8 @@ This is a general guide for the software that we employed along the ``BacterialT
 
 .. include:: prokka.rst
 
+.. include:: Phyml.rst
+
 .. include:: spades.rst
 
 .. include:: snippy.rst

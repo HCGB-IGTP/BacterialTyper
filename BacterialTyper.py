@@ -22,7 +22,8 @@ parser = argparse.ArgumentParser(
 subparsers = parser.add_subparsers(title='Available modules', help='', metavar='')
 
 ## help options list
-help_options = ('--help_format',
+help_options = ('--help_Database',
+                '--help_format',
 				'--help_BUSCO',
 				'--help_project',
 				'--help_Prokka',
