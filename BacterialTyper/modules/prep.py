@@ -123,7 +123,6 @@ def run_prep(options):
 	
 	## check character limitation
 	list_lengths = pd_samples_retrieved.loc[:,'name_len'].to_list()
-	print (list_lengths)
 	if any(i > 10 for i in list_lengths):
 		print (colored("\t ** Name lengths exceeds the 10 character limitation...", 'yellow'))
 		if not (options.rename):
@@ -138,6 +137,8 @@ def run_prep(options):
 		if (options.debug):
 			print (colored('** DEBUG: names_retrieved', 'yellow'))
 			print (names_retrieved)
+			
+		## TODO: check integrity of new names and special characters
 	
 		## print to a file
 		timestamp = functions.create_human_timestamp()
@@ -166,6 +167,9 @@ def run_prep(options):
 		print ("+ Sample files have been renamed...")
 	else:
 		pd_samples_retrieved['new_file'] = pd_samples_retrieved['sample']
+
+	## create outdir for each sample
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "raw")	
 		
 	## merge option
 	if (options.merge):
@@ -187,9 +191,6 @@ def run_prep(options):
 		print ("+ Exiting prep module.")
 		exit()
 	
-	## create outdir for each sample
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "raw")	
-
 	## debugging messages
 	if (options.debug):
 		print (colored("** DEBUG: pd_samples_retrieved", 'yellow'))
