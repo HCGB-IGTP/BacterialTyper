@@ -804,7 +804,7 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 
 	## get assembly files
 	input_dir = os.path.abspath(options.input)
-	assembly_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", "fna")
+	assembly_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"])
 
 	## debug message
 	if (Debug):

@@ -189,7 +189,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 
 	## get files and get dir for each sample according to mode
 	if mode == 'genome':
-		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", "fna")
+		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"])
 
 		if not options.project:
 			outdir = functions.create_subfolder("assembly_qc", outdir)

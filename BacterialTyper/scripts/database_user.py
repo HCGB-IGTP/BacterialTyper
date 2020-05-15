@@ -191,7 +191,7 @@ def get_userData_files(options, project_folder):
 	## get information regarding files
 
 	## get assembly files
-	pd_samples_assembly = sampleParser.get_files(options, project_folder, "assembly", "fna")
+	pd_samples_assembly = sampleParser.get_files(options, project_folder, "assembly", ["fna"])
 	pd_samples_assembly = pd_samples_assembly.set_index('name')
 
 	## get annotation files

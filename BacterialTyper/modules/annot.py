@@ -87,7 +87,7 @@ def run_annotation(options):
 	print ("+ Retrieve all genomes assembled...")
 
 	## get files
-	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", "fna")
+	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"])
 
 	## debug message
 	if (Debug):

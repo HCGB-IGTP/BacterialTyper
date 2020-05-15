@@ -75,7 +75,7 @@ def run_cluster(options):
 		outdir = os.path.abspath(options.output_folder)
 
 	## get files
-	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", "fna")
+	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"])
 
 	## debug message
 	if (Debug):
