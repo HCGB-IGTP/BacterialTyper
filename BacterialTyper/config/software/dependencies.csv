@@ -1,6 +1,7 @@
 soft,version_cmd,get_version,min_version,soft_name
 fastqc,-v,FastQC.*v([0-9\.]+).*,0.11.4,fastqc
 kma,-v,KMA-([0-9\.]+).*,1.2.2,kma
+iqtree,--version,IQ-TREE.*([0-9\.]+).*,2.0.5,iqtree2
 prokka,-v,prokka\s([0-9\.]+).*,1.12,prokka
 spades,--version,SPAdes.*\s+v([0-9\.]+).*,3.9.0,spades.py
 trimmomatic,-version,([0-9\.]+).*,0.36,trimmomatic-0.39.jar
@@ -25,3 +26,7 @@ busco_plot,--version,BUSCO\s([0-9\.]+),3.1.0,generate_plot.py
 cdhit,'',CD-HIT version ([0-9\.]+) \(,4.6,cd-hit-est
 hmmsearch,-h,HMMER\s([0-9]\..*)\s,3.1b2,hmmsearch
 nucmer,--version,([0-9]+\.[0-9\.]+.*$),3.1,nucmer
+
+IQ-TREE .* 2.0.5 for
+
+

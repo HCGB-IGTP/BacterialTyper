@@ -102,7 +102,7 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 	return(functions.system_call(snippy_cmd, returned=False, message=True))
 
 ######
-def snippy_core_call(list_folder, options, name, output_dir, Debug):
+def snippy_core_call(list_folder, options, name, output_dir, output_format, Debug):
 	"""
 	Create core alignment for samples align to the same reference
 	
@@ -111,10 +111,17 @@ def snippy_core_call(list_folder, options, name, output_dir, Debug):
 	:param list_folder:
 	:param options:
 	:param name:
+	:param output_dir:
+	:param output_format:
+	:param Debug:
 	
 	:type list_folder: list
 	:type options: string
-	:type name: string 
+	:type name: string
+	:type output_dir:
+	:type output_format:
+	:type Debug:
+	 
 	"""
 	
 	## create snippy-core call
@@ -124,7 +131,7 @@ def snippy_core_call(list_folder, options, name, output_dir, Debug):
 	list_folder_string = " ".join(list_folder)
 	log_file = os.path.join(output_dir, "snippy_cmd.log")
 	name_outdir =  os.path.join(output_dir, name)
-	snippy_core_cmd = '%s -aformat phylip --prefix %s %s 2> %s' %(snippy_core_exe, name_outdir, list_folder_string, log_file)
+	snippy_core_cmd = '%s -aformat %s --prefix %s %s 2> %s' %(snippy_core_exe, output_format, name_outdir, list_folder_string, log_file)
 	
 	return (functions.system_call(snippy_core_cmd))
 

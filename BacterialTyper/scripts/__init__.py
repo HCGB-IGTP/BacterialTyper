@@ -15,6 +15,7 @@ __all__ = [
     'min_hash_caller',
     'multiQC_report',
     'plasmidID_call',
+    'phylo_parser',
     'sampleParser',
     'spades_assembler',
     'species_identification_KMA',

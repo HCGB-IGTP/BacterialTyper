@@ -24,7 +24,7 @@ from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import database_generator
 from BacterialTyper.scripts import database_user
 from BacterialTyper.scripts import variant_calling
-
+from BacterialTyper.scripts import phylo_parser
 
 ####################################
 def run_phylo(options):
@@ -115,17 +115,30 @@ def run_phylo(options):
         
     list_folders = list(dict_folders.values())
     options_string = ""
-    variant_calling.snippy_core_call(list_folders, options_string, options.name, snippy_dir, Debug)
+    variant_calling.snippy_core_call(list_folders, options_string, options.name, 
+                                     snippy_dir, options.output_format, Debug)
 
+    ## time stamp
+    start_time_partial = functions.timestamp(start_time_total)
+
+    ## snp distance matrix
+    snp_distance_dir = functions.create_subfolder("snp_distance", analysis_dir)
+    name_matrix = os.path.join(snp_distance_dir, "snp_matrix_" + options.name)
+    
+    countGaps = False
+    aln_file = os.path.join(snippy_dir, options.name + '.aln')
+    phylo_parser.get_snp_distance(aln_file, options.output_format, countGaps, name_matrix, Debug)
+    
     ## time stamp
     start_time_partial = functions.timestamp(start_time_total)
 
     ## phylogenetic analysis
-    ml_tree(snippy_dir, options.name, Debug)
+    iqtree_output = functions.create_subfolder("iqtree", analysis_dir)
+    phylo_parser.ml_tree(snippy_dir, options.name, options.threads, iqtree_output, Debug)
+    
     ## time stamp
     start_time_partial = functions.timestamp(start_time_total)
 
-        
     print ("\n*************** Finish *******************")
     start_time_partial = functions.timestamp(start_time_total)
 
@@ -393,42 +406,11 @@ def snippy_variant_caller(reference, files, threads, outdir, name, contig_option
         print (colored("\tA previous command generated results on: %s [%s]" %(stamp, tag), 'yellow'))
     else:
          # Call variant calling
-        code = variant_calling.snippy_call(reference, files, threads, subdir, name, contig_option, other_options, Debug)
+        code = variant_calling.snippy_call(reference, files, threads, subdir, 
+                                           name, contig_option, other_options, Debug)
         if code == 'OK':
             stamp = functions.print_time_stamp(filename_stamp)
 
-        return(code)
-def ml_tree(folder, name, Debug):
-    """
-    Create Maximum Likelihood tree reconstruction 
-    
-    We use PhyML but it might be appropriate to include a multi-threaded software for this purpose.
-    
-    :param folder: Snippy-core folder containing results.
-    :param name: Name of the analysis.
-    :param Debug: True/false for debugging messages
-    
-    :type folder: string 
-    :type name: string
-    :type Debug: bool 
-    """
-    
-    phyml_exe = set_config.get_exe('phyml', Debug) 
-    bootstrap_number = '1000'
-    aln_file = os.path.join(folder, name + '.aln')  
-    
-    phyml_cmd = '%s -i %s -b %' %(phyml_exe, aln_file, bootstrap_number)
-    code = functions.system_call(phyml_cmd)
-    
-    if code == 'OK':
-        return ()
-    else:
-        print ("Some error occurred...")
-        return()
-    
-    
-    ## raxml is available as conda package
-    ## https://anaconda.org/bioconda/raxml
-    
+        return(code)    
     
     

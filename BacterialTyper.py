@@ -553,6 +553,7 @@ parameters_group_phylo.add_argument("--threads", type=int, help="Number of CPUs 
 parameters_group_phylo.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv))
 parameters_group_phylo.add_argument("--name", help="Name ID to identify the analysis", required= not any(elem in help_options for elem in sys.argv))
 parameters_group_phylo.add_argument("--other_options", help="String of options to include in snippy call")
+parameters_group_phylo.add_argument("--output_format", help="Alignment output format. [Default: fasta]", default="fasta", choices=['nexus', 'phylip', 'clustalw', 'fasta'])
 
 options_group_phylo_name = subparser_phylo.add_argument_group("Analysis")
 options_group_phylo = options_group_phylo_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))

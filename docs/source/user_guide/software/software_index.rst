@@ -14,6 +14,8 @@ This is a general guide for the software that we employed along the ``BacterialT
 
 .. include:: fastqc.rst
 
+.. include:: iqtree.rst
+
 .. include:: kma.rst
 
 .. include:: MLSTar.rst

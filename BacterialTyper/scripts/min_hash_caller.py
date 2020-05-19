@@ -197,7 +197,7 @@ def compare(siglist, output, Debug):
 	with open(labeloutname, 'w') as fp:
 		fp.write("\n".join(labeltext_string))
 		
-	## save matrix as txt ub csv format file
+	## save matrix in csv format file
 	numpy.savetxt(output + ".matrix.csv", D, delimiter=",", header= ",".join(labeltext_string) )
 
 	## Debug messages
@@ -301,7 +301,7 @@ def plot(D, labeltext, filename, pdf, colorLabel):
 	## I get code from the source code for this function and use it here.
 	## Get to generate a slightly different image representation
 
-	Y = sch.linkage(D, method='single')
+	Y = sch.linkage(D, method='single') ## https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html
 	fig3 = pylab.figure(figsize=(15, 10))
 	ax1 = fig3.add_axes([0.09, 0.1, 0.2, 0.6])
 
