@@ -215,6 +215,8 @@ def get_fields(file_name_list, pair, Debug, include_all):
 			print (colored("*** ATTENTION: Sample (%s) did not match the possible parsing options..." %path_files, 'yellow'))
 
 	return (name_frame)
+
+####################
 def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debug=False, lane=False, include_all=False):
 	"""
 	Select samples
@@ -247,7 +249,7 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debu
 	for names in samples_prefix:
 		for path_fastq in list_samples:	
 			fastq = os.path.basename(path_fastq)
-			samplename_search = re.search(r"(%s)\_{0,1}(R1|1|R2|2){0,1}\.f.*q.*" % names, fastq)
+			samplename_search = re.search(r"(%s)\_{0,1}(R1|1|R2|2){0,1}(.*){0,1}\.f.*q.*" % names, fastq)
 			enter = ""
 			if samplename_search:
 				if (exclude): ## exclude==True
@@ -289,10 +291,9 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debu
 		if bool(set(samples_prefix).intersection(non_duplicate_names)):
 			print(colored("** ERROR: Some non desired samples are included", 'red'))
 	else: ## exclude==True
-		non_duplicate_names = set(samples_prefix).intersection(non_duplicate_names)
+		non_duplicate_names = set(sorted(samples_prefix)).intersection(sorted(non_duplicate_names))
 
-	## get fields
-	
+	## get fields	
 	tmp = sample_list[ sample_list['sample'].isin(non_duplicate_names) ]
 	non_duplicate_samples = tmp['file'].to_list()
 	
@@ -307,7 +308,9 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debu
 		print (non_duplicate_samples)
 		print ("tmp dataframe")
 		functions.print_all_pandaDF(tmp)
-				
+	
+	## 
+			
 	## get info
 	name_frame_samples = get_fields(non_duplicate_samples, pair, Debug, include_all)	
 	number_files = name_frame_samples.index.size
@@ -571,7 +574,7 @@ def get_files(options, input_dir, mode, extension):
 					for d in dir_list:
 						if os.path.exists(d):
 							print ('+ Folder (%s) exists' %d)
-							files = files + functions.get_fullpath_list(d)
+							files.extend(functions.get_fullpath_list(d))
 						else:
 							## input folder does not exist...
 							if (options.debug):
@@ -592,10 +595,11 @@ def get_files(options, input_dir, mode, extension):
 		if (options.batch):
 			if os.path.isfile(input_dir):
 				dir_list = [line.rstrip('\n') for line in open(input_dir)]
+				files=[]
 				for d in dir_list:
 					if os.path.exists(d):
 						print ('+ Folder (%s) exists' %d)
-						files = files.append(functions.get_fullpath_list(d))
+						files.extend(functions.get_fullpath_list(d))
 					else:
 						## input folder does not exist...
 						if (options.debug):
@@ -668,8 +672,11 @@ def get_files(options, input_dir, mode, extension):
 	## files list...
 	if (options.debug):
 		print (colored("\n**DEBUG: sampleParser.get_files files list to check **", 'yellow'))
-		print ('DO NOT PRINT THIS LIST: It could be very large...')
-		##print (files, '\n')
+		if (len(files) > 50):
+			print ('DO NOT PRINT THIS LIST: It could be very large...')
+			print ('Length:' + str(len(files)))	
+		else:
+			print (files, '\n')
 
 	## get information
 	if mode in ['fastq', 'trim']:
