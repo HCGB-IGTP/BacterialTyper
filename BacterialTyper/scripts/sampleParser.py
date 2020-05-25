@@ -21,67 +21,99 @@ import concurrent.futures
 from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 
-###############
 def help_fastq_format():
-	"""
-	Explanation of fastq format details.
-	
-	See additional information in section under user-guide: 
-	:ref:`format fastq files<format-fastq-files>` 
-	"""
+    """
+    Explanation of fastq format details.
+    """
 
-	functions.boxymcboxface("Name format for samples")
+    functions.boxymcboxface("Name format for samples")
 
-	print ("Format for fastq files can be:")
-	print ("name.fastq.gz, name_1.fastq.gz, name_R2.fastq.gz, name_L001_R1.fastq.gz, etc.")
-	print ("\nThere are many options and here we provide some guidelines of the format.")
-	print ("\n")
+    print ("Format for fastq files can be:")
+    print ("name.fastq.gz, name_1.fastq.gz, name_R2.fastq.gz, name_L001_R1.fastq.gz, name_L001_R1_001.fastq.gz etc.")
+    print ("\nThere are many options and here we provide some guidelines on the name format.")
+    print ("\n")
 
-	functions.print_sepLine("*",20,"red")
-	print ("[1] Length limitation")
-	functions.print_sepLine("*",20,"red")
-	print ("There is a limitation for the sample ID ('name') of 10 characters.")
-	print (colored("** BacterialTyper provides an option to rename samples if necessary: module prep option --rename **", 'yellow'))
-	print ("\n")
+    functions.print_sepLine("*",20,"red")
+    print ("[1] Length limitation")
+    functions.print_sepLine("*",20,"red")
+    print ("There is a limitation for the sample ID ('name') of 25 characters.")
+    print (colored("** BacterialTyper provides an option to rename samples if necessary: module prep option --rename **", 'yellow'))
+    print ("\n")
 
-	functions.print_sepLine("*",20,"red")
-	print ("[2] Single end files")
-	functions.print_sepLine("*",20,"red")
-	print ("It is possible to provide NGS single-end files although some steps ")
-	print ("of the process could not be accomplished using single-end files.")
-	print (colored('** Use option --single-end in the different BacterialTyper modules **', 'yellow'))
-	print ("name.fastq.gz")
-	print ("name.fastq")
-	print ("name.fq")
-	print ("\n")
+    functions.print_sepLine("*",20,"red")
+    print ("[2] Single end files")
+    functions.print_sepLine("*",20,"red")
+    print (colored('** Use option --single-end in the different BacterialTyper modules **', 'yellow'))
+    print ("name.fastq.gz")
+    print ("name.fastq")
+    print ("name.fq")
+    print ("\n")
 
-	functions.print_sepLine("*",20,"red")
-	print ("[3] Paired-end files")
-	functions.print_sepLine("*",20,"red")
-	print ("Paired-end files are full supported. The format for these files are:")
-	print ("Read1 => name_1.fastq.g or name_R1.fastq.gz")
-	print ("Read2 => name_2.fastq.gz or name_R2.fastq.gz")
-	print ("\n")
+    functions.print_sepLine("*",20,"red")
+    print ("[3] Paired-end files")
+    functions.print_sepLine("*",20,"red")
+    print ("Paired-end files are full supported. The format for these files are:")
+    print ("Read1 => name_1.fastq.g or name_R1.fastq.gz")
+    print ("Read2 => name_2.fastq.gz or name_R2.fastq.gz")
+    print (colored('** See additional details for Lane information **', 'yellow'))
+    print ("\n")
 
-	functions.print_sepLine("*",55,"red")
-	print ("[4] Lane information:")
-	functions.print_sepLine("*",55,"red")
-	print ("In some cases, files might contain lane information (*L00x* and/or *00x*).")
-	print ("BacterialTyper supports these names as long as follow these examples:")
-	print ("name_L00x_R1.fastq.gz\tname_L00x_R2.fastq.gz")
-	print ("name_L00x_1.fastq.gz\tname_L00x_2.fastq.gz")
-	print ("name_L00x_R1_00x.fastq.gz\tname_L00x_R2_00x.fastq.gz")
-	print (colored("\n** If you need to merge fastq files from different lanes, use option --merge within module prep **", 'yellow'))
-	print ("\n")
+    functions.print_sepLine("*",55,"red")
+    print ("[4] Lane information:")
+    functions.print_sepLine("*",55,"red")
+    print ("In some cases, files might contain lane information (*L00x* and/or *00x*).")
+    print ("BacterialTyper supports these names as long as follow these examples:")
+    print ("name_L00x_R1.fastq.gz\tname_L00x_R2.fastq.gz")
+    print ("name_L00x_1.fastq.gz\tname_L00x_2.fastq.gz")
+    print ("name_L00x_R1.fastq.gz\tname_L00x_R2.fastq.gz")
+    print ("name_L00x_R1_00x.fastq.gz\tname_L00x_R2_00x.fastq.gz")
+    print ("\n")
+    print ("Sometimes it might be appropriate to include lane tags (*L00X*) within the name.")
+    print (colored("** Use option --include-lane within each module", 'yellow'))
+    
+    print (colored("\n** If you need to merge fastq files from different lanes, use option within module prep **", 'yellow'))
+    print("As an example:")
+    print (colored("\n** Option --merge within module prep **", 'yellow'))
+    print ("sample1_L001_R1.fastq.gz\tsample1_L001_R2.fastq.gz")
+    print ("sample1_L002_R1.fastq.gz\tsample1_L002_R2.fastq.gz")
+    print ("sample1_L003_R1.fastq.gz\tsample1_L003_R2.fastq.gz")
+    print ("sample1_L004_R1.fastq.gz\tsample1_L004_R2.fastq.gz")
+    print ("Result:")
+    print ("--------------------------------------------------")
+    print ("sample1_R1.fastq.gz\tsample1_R2.fastq.gz")
+    print ("\n")
+    print (colored("\n** Option --merge-by-lane within module prep **", 'yellow'))
+    print ("sample1_L001_R1_001.fastq.gz\tsample1_L001_R2_001.fastq.gz")
+    print ("sample1_L001_R1_002.fastq.gz\tsample1_L001_R2_002.fastq.gz")
+    print ("sample1_L002_R1_001.fastq.gz\tsample1_L002_R2_001.fastq.gz")
+    print ("sample1_L002_R1_002.fastq.gz\tsample1_L002_R2_002.fastq.gz")
+    print ("--------------------------------------------------")
+    print ("Result:")
+    print ("sample1_L001_R1.fastq.gz\tsample1_L001_R2.fastq.gz")
+    print ("sample1_L002_R1.fastq.gz\tsample1_L002_R2.fastq.gz")
+    print (colored("** Remember to use option --include_lane within each module", 'yellow'))
+    print ("\n")
+    
+    functions.print_sepLine("*",55,"red")
+    print ("[5] Include all information:")
+    functions.print_sepLine("*",55,"red")
+    print ("In some cases, files might contain other information and it is necessay to " +
+           "include it all as a tag nane. See as an example:")
+    print ("sample1_L001_XYZ_R1_001.fastq.gz\tsample1_L001_XYZ_R2_001.fastq.gz")
+    print (colored("** Remember to use option --include_all within each module", 'yellow'))
+    print (colored("** It might be appropiate to change samples names using --rename option under prep module", 'yellow'))
+    
+    print ("\n")
+    functions.print_sepLine("*",15,"red")
+    print ("[6] Extensions:")
+    functions.print_sepLine("*",15,"red")
+    print ("name_L00x_R2.fastq\tname_L00x_R2.fq\nname_L00x_R2.fastq.gz\tname_L00x_R2.fq.gz")
+    print ("\n")
 
-	functions.print_sepLine("*",15,"red")
-	print ("[5] Extensions:")
-	functions.print_sepLine("*",15,"red")
-	print ("name_L00x_R2.fastq\tname_L00x_R2.fq\nname_L00x_R2.fastq.gz\tname_L00x_R2.fq.gz")
-	print ("\n")
+
 
 ###############
-def get_fields(file_name_list, pair, Debug):
+def get_fields(file_name_list, pair, Debug, include_all):
 	"""
 	Get information from files
 	
@@ -101,7 +133,7 @@ def get_fields(file_name_list, pair, Debug):
 	"""
 	## init dataframe
 	name_columns = ("sample", "dirname", "name", "new_name", "name_len", 
-				"lane", "read_pair","lane_file","ext","gz", "tag")
+				"lane", "read_pair","lane_file","ext","gz", "tag", "file")
 	name_frame = pd.DataFrame(columns=name_columns)
 	
 	## loop through list
@@ -112,20 +144,28 @@ def get_fields(file_name_list, pair, Debug):
 		trim_search = re.search(r".*trim.*", file_name)
 		lane_search = re.search(r".*\_L\d+\_.*", file_name)
 		## get name
-		if (pair):
-			## pair could be: R1|R2 or 1|2
-			if (trim_search):
-				name_search = re.search(r"(.*)\_trim\_(R1|1|R2|2)\.(f.*q)(\..*){0,1}", file_name)
+		if (include_all):
+			if (pair):
+				name_search = re.search(r"(.*)\_(R1|1|R2|2)\_{0,1}(.*)\.(f.*q)(\..*){0,1}", file_name)
 			else:
-				## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
-				## lane should contain L00x			
-				if (lane_search):
-					name_search = re.search(r"(.*)\_(L\d+)\_(R1|1|R2|2)\_{0,1}(.*)\.(f.*q)(\..*){0,1}", file_name)
+                                name_search = re.search(r"(.*)\.(f.*q)(\..*){0,1}", file_name)
+
+		else:	
+			if (pair):
+				## pair could be: R1|R2 or 1|2
+				if (trim_search):
+					name_search = re.search(r"(.*)\_trim\_(R1|1|R2|2)\.(f.*q)(\..*){0,1}", file_name)
+					
 				else:
-					name_search = re.search(r"(.*)\_(R1|1|R2|2)\.(f.*q)(\..*){0,1}", file_name)
-		else:
-			name_search = re.search(r"(.*)\.(f.*q)(\..*){0,1}", file_name)
-	
+					## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
+					## lane should contain L00x			
+					if (lane_search):
+						name_search = re.search(r"(.*)\_(L\d+)\_(R1|1|R2|2)\_{0,1}(.*)\.(f.*q)(\..*){0,1}", file_name)
+					else:
+						name_search = re.search(r"(.*)\_(R1|1|R2|2)\.(f.*q)(\..*){0,1}", file_name)
+			else:
+				name_search = re.search(r"(.*)\.(f.*q)(\..*){0,1}", file_name)
+		
 		### declare
 		name= ""
 		lane_id= ""
@@ -138,8 +178,15 @@ def get_fields(file_name_list, pair, Debug):
 			name = name_search.group(1)
 			name_len = len(name)
 			if (pair):
+				if (include_all):
+					lane_id = ""
+					read_pair = name_search.group(2)
+					lane_file = name_search.group(3)
+					ext = name_search.group(4)
+					gz = name_search.group(5)
+								
 				## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
-				if (lane_search):
+				elif (lane_search):
 					lane_id = name_search.group(2)
 					read_pair = name_search.group(3)
 					lane_file = name_search.group(4)
@@ -154,8 +201,9 @@ def get_fields(file_name_list, pair, Debug):
 				ext = name_search.group(2)
 				gz = name_search.group(3)
 	
+			## populate dataframe
 			name_frame.loc [len(name_frame)] = (path_files, dirN, name, name, name_len, 
-											lane_id, read_pair, lane_file, ext, gz, "reads")
+											lane_id, read_pair, lane_file, ext, gz, "reads", os.path.basename(path_files))
 	
 		else:
 			## debug message
@@ -167,9 +215,7 @@ def get_fields(file_name_list, pair, Debug):
 			print (colored("*** ATTENTION: Sample (%s) did not match the possible parsing options..." %path_files, 'yellow'))
 
 	return (name_frame)
-
-###############
-def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debug=False):
+def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debug=False, lane=False, include_all=False):
 	"""
 	Select samples
 	
@@ -182,21 +228,26 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debu
 	:param pair: True/false for paired-end files
 	:param exclude: True/false for exclude found files from the total
 	:param Debug: True/false for debugging messages
+	:param lane:
+	:param include_all:
 	
 	:type list_samples: list
 	:type samples_prefix: list
 	:type pair: bool
 	:type exclude: bool
 	:type Debug: bool
+	:type lane:
+	:type include_all:
 	
 	:returns: something
 	"""
 	#Get all files in the folder "path_to_samples"
-	sample_list = []
+	sample_list = pd.DataFrame(columns=('sample', 'file'))
+	
 	for names in samples_prefix:
 		for path_fastq in list_samples:	
 			fastq = os.path.basename(path_fastq)
-			samplename_search = re.search(r"(%s).*" % names, fastq)
+			samplename_search = re.search(r"(%s)\_{0,1}(R1|1|R2|2){0,1}\.f.*q.*" % names, fastq)
 			enter = ""
 			if samplename_search:
 				if (exclude): ## exclude==True
@@ -210,10 +261,8 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debu
 					enter = False
 					
 			if enter:
-				if fastq.endswith('.gz'):
-					sample_list.append(path_fastq)
-				elif fastq.endswith('fastq'):
-					sample_list.append(path_fastq)
+				if fastq.endswith('.gz') or fastq.endswith('fastq') or fastq.endswith('fq'):
+					sample_list.loc[len(sample_list)] = (names, path_fastq) 
 				else:
 					## debug message
 					if (Debug):
@@ -221,13 +270,55 @@ def select_samples (list_samples, samples_prefix, pair=True, exclude=False, Debu
 						print (colored("** ERROR: %s is a file that is neither in fastq.gz or .fastq format, so it is not included" %path_fastq, 'yellow'))
 							
 	## discard duplicates if any
-	non_duplicate_samples = list(set(sample_list))
+	non_duplicate_names = sample_list['sample'].to_list() #
+	non_duplicate_names = list(set(non_duplicate_names))
 	
+	## it might be a bug in exclude list.
+	## if sample X1 is provided to be excluded, we might be also excluding
+	## sample X12, sample X13, etc.
+	## TODO: check this
+
+	## debugging messages
+	if Debug:
+		print (colored("** DEBUG: select_samples",'yellow'))
+		print ("non_duplicate_names:")
+		print (non_duplicate_names)
+	
+	## check they match with given input
+	if (exclude): ## exclude==True
+		if bool(set(samples_prefix).intersection(non_duplicate_names)):
+			print(colored("** ERROR: Some non desired samples are included", 'red'))
+	else: ## exclude==True
+		non_duplicate_names = set(samples_prefix).intersection(non_duplicate_names)
+
 	## get fields
-	name_frame_samples = get_fields(non_duplicate_samples, pair, Debug)	
+	
+	tmp = sample_list[ sample_list['sample'].isin(non_duplicate_names) ]
+	non_duplicate_samples = tmp['file'].to_list()
+	
+	## debugging messages
+	if Debug:
+		print (colored("** DEBUG: select_samples",'yellow'))
+		print ("non_duplicate_names:")
+		print (non_duplicate_names)
+		print ("samples_prefix")
+		print (samples_prefix)
+		print ("non_duplicate_samples")
+		print (non_duplicate_samples)
+		print ("tmp dataframe")
+		functions.print_all_pandaDF(tmp)
+				
+	## get info
+	name_frame_samples = get_fields(non_duplicate_samples, pair, Debug, include_all)	
 	number_files = name_frame_samples.index.size
 	total_samples = set(name_frame_samples['name'].to_list())
 	
+	##
+	if (lane):
+		## include lane tag within name
+		name_frame_samples['name'] = name_frame_samples['name'] + '_' + name_frame_samples['lane']
+		name_frame_samples['new_name'] = name_frame_samples['name']
+			
 	## debugging messages
 	if Debug:
 		print (colored("** DEBUG: select_samples",'yellow'))
@@ -578,7 +669,7 @@ def get_files(options, input_dir, mode, extension):
 
 	## get information
 	if mode in ['fastq', 'trim']:
-		pd_samples_retrieved = select_samples(files, samples_names, options.pair, exclude, options.debug)
+		pd_samples_retrieved = select_samples(files, samples_names, options.pair, exclude, options.debug, options.include_lane, options.include_all)
 	else:
 		pd_samples_retrieved = select_other_samples(options.project, files, samples_names, mode, extension, exclude, options.debug)		
 		
