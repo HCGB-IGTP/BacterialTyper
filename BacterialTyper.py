@@ -49,8 +49,6 @@ help_options = ('--help_Database',
 #######################
 ## submodules
 ##------------------------------ config ---------------------- ##
-
-## [TODO]
 subparser_config = subparsers.add_parser(
     'config',
     help='Configure the pipeline',
@@ -61,6 +59,7 @@ subparser_config.add_argument("--install_path", help="Path to install missing mo
 subparser_config.add_argument("--IslandPath", action="store_true", help="Check for additional perl and software packages required for IslandPath.")
 subparser_config.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 subparser_config.set_defaults(func=BacterialTyper.modules.config.run)
+##-------------------------------------------------------------##
 
 ## add fake module blank to add space
 subparser_space = subparsers.add_parser(' ', help='')

@@ -131,6 +131,12 @@ def run_prep(options):
 
 	### rename files 
 	if (options.rename):
+		options.rename = os.path.abspath(options.rename)
+		if not functions.is_non_zero_file(options.rename):
+			print (colored("** ERROR: File provided with rename information is not readable.", 'red'))
+			print (options.rename)
+			exit()
+		
 		names_retrieved = pd.read_csv(options.rename, sep=',', 
 									index_col=0, squeeze=True, 
 									header=None).to_dict() ## read csv to dictionary
@@ -219,7 +225,9 @@ def run_prep(options):
 			list_reads.append(row['new_file'])
 			
 			if options.project:
-				functions.get_symbolic_link_file(row['sample'], os.path.join(outdir_dict[row['new_name']], row['new_file']))
+				functions.get_symbolic_link_file(row['new_file'], 
+				                                                os.path.join(outdir_dict[row['new_name']], row['new_name'] + '.' + row['ext'] + row['gz']))
+
 
 	if (options.copy):
 		print ("+ Sample files have been copied...")

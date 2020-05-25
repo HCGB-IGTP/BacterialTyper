@@ -26,7 +26,3 @@ busco_plot,--version,BUSCO\s([0-9\.]+),3.1.0,generate_plot.py
 cdhit,'',CD-HIT version ([0-9\.]+) \(,4.6,cd-hit-est
 hmmsearch,-h,HMMER\s([0-9]\..*)\s,3.1b2,hmmsearch
 nucmer,--version,([0-9]+\.[0-9\.]+.*$),3.1,nucmer
-
-IQ-TREE .* 2.0.5 for
-
-
