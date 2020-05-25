@@ -145,14 +145,14 @@ in_out_group_prep.add_argument("--batch", action="store_true", help="Provide thi
 in_out_group_prep.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_prep.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 in_out_group_prep.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
+in_out_group_prep.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
+in_out_group_prep.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
 options_group_prep = subparser_prep.add_argument_group("Options")
 options_group_prep.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 options_group_prep.add_argument("--copy", action="store_true", help="Instead of generating symbolic links, copy files into output folder. [Default OFF].")
 options_group_prep.add_argument("--merge", action="store_true", help="Merges FASTQ files for the same sample [Default OFF].")
 options_group_prep.add_argument("--rename", help="File containing original name and final name for each sample separated by comma. No need to provide a name for each pair if paired-end files. If provided with option '--merge', the merge files would be renamed accordingly.")
-options_group_prep.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
-options_group_prep.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
 info_group_prep = subparser_prep.add_argument_group("Additional information")
 info_group_prep.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
@@ -178,6 +178,8 @@ in_out_group_qc.add_argument("--batch", action="store_true", help="Provide this 
 in_out_group_qc.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_qc.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 in_out_group_qc.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
+in_out_group_qc.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
+in_out_group_qc.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
 exclusive_group_qc_name = subparser_qc.add_argument_group("Options")
 exclusive_group_qc = exclusive_group_qc_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
@@ -217,6 +219,8 @@ in_out_group_trimm.add_argument("--batch", action="store_true", help="Provide th
 in_out_group_trimm.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_trimm.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 in_out_group_trimm.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
+in_out_group_trimm.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
+in_out_group_trimm.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
 options_group_trimm = subparser_trimm.add_argument_group("Options")
 options_group_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]. See details in --help_multiqc")
@@ -250,6 +254,8 @@ in_out_group_assembly.add_argument("--batch", action="store_true", help="Provide
 in_out_group_assembly.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_assembly.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 in_out_group_assembly.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
+in_out_group_assembly.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
+in_out_group_assembly.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
 dataset_group_assembly = subparser_assemble.add_argument_group("Datasets")
 dataset_group_assembly.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
@@ -257,7 +263,7 @@ dataset_group_assembly.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='
 
 options_group_assembly = subparser_assemble.add_argument_group("Options")
 options_group_assembly.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-dataset_group_assembly.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]. See details in --help_multiqc")
+options_group_assembly.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]. See details in --help_multiqc")
 
 info_group_assemble = subparser_assemble.add_argument_group("Additional information")
 info_group_assemble.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
@@ -330,6 +336,8 @@ initial_group_ident.add_argument("--batch", action="store_true", help="Provide t
 initial_group_ident.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_ident.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 initial_group_ident.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
+initial_group_ident.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
+initial_group_ident.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
 dataset_group_ident = subparser_ident.add_argument_group("Datasets")
 dataset_group_ident.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
@@ -380,6 +388,8 @@ initial_group_profile.add_argument("--batch", action="store_true", help="Provide
 initial_group_profile.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_profile.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 initial_group_profile.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
+initial_group_profile.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
+initial_group_profile.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
 dataset_group_profile = subparser_profile.add_argument_group("Datasets")
 dataset_group_profile.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
@@ -459,6 +469,8 @@ initial_group_cluster.add_argument("--in_sample", help="File containing a list o
 initial_group_cluster.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 initial_group_cluster.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 initial_group_cluster.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
+initial_group_cluster.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
+initial_group_cluster.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
 parameters_group_cluster = subparser_cluster.add_argument_group("Parameters")
 parameters_group_cluster.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
@@ -487,7 +499,7 @@ info_group_cluster.add_argument("--help_Mash", action="store_true", help="Print 
 subparser_cluster.set_defaults(func=BacterialTyper.modules.cluster.run_cluster)
 ##-------------------------------------------------------------##
 
-##--------------------------- cluster ---------------------------- ##
+##--------------------------- phylo ---------------------------- ##
 subparser_phylo = subparsers.add_parser(
     'phylo',
     help='Phylogenetic analysis.',
@@ -501,6 +513,8 @@ initial_group_phylo.add_argument("--ex_sample", help="File containing a list of 
 initial_group_phylo.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 initial_group_phylo.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 initial_group_phylo.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
+initial_group_phylo.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
+initial_group_phylo.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
 reference_group_phylo_name = subparser_phylo.add_argument_group("Reference")
 reference_group_phylo = reference_group_phylo_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
@@ -531,9 +545,6 @@ info_group_phylo.add_argument("--help_Snippy", action="store_true", help="Print 
 
 subparser_phylo.set_defaults(func=BacterialTyper.modules.phylo.run_phylo)
 ##-------------------------------------------------------------##
-
-
-
 
 ## space
 subparser_space = subparsers.add_parser(' ', help='')
