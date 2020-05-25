@@ -80,13 +80,15 @@ def run_profile(options):
 
 	## set mode: project/detached
 	global Project
-	if (options.project):
-		outdir = input_dir		
-		Project=True
-	elif (options.detached):
-		Project=False
+	if (options.detached):
+		options.project = False
 		outdir = os.path.abspath(options.output_folder)
-
+		Project=False
+	else:
+		options.project = True
+		outdir = input_dir	
+		Project=True
+	
 	## get files
 	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim_'])
 	

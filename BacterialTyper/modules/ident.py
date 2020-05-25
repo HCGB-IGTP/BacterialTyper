@@ -92,14 +92,18 @@ def run_ident(options):
 	input_dir = os.path.abspath(options.input)
 	outdir=""
 
-	## set mode: project/detached
-	global Project
-	if (options.project):
-		outdir = input_dir		
-		Project=True
-	elif (options.detached):
-		Project=False
+	## Project mode as default
+	global Project 
+	
+	if (options.detached):
+		options.project = False
+		project_mode=False
 		outdir = os.path.abspath(options.output_folder)
+		Project=False
+	else:
+		options.project = True
+		outdir = input_dir
+		Project=True
 
 	## get files
 	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim_'])
@@ -185,7 +189,7 @@ def run_ident(options):
 	#####################################
 
 	## parse results
-	if Project:
+	if options.project:
 		final_dir = outdir + '/report/ident'
 		functions.create_folder(final_dir) 
 	else:

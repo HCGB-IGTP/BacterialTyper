@@ -76,11 +76,13 @@ def run_QC(options):
 	input_dir = os.path.abspath(options.input)
 	outdir=""
 
-	## set mode: project/detached
-	if (options.project):
-		outdir = input_dir		
-	elif (options.detached):
+	## Project mode as default
+	if (options.detached):
+		options.project = False
 		outdir = os.path.abspath(options.output_folder)
+	else:
+		options.project = True
+		outdir = input_dir		
 	
 	### option
 	if (options.raw_reads):

@@ -65,15 +65,16 @@ def run_cluster(options):
 	input_dir = os.path.abspath(options.input)
 	outdir=""
 
-	## set mode: project/detached
-	global Project
-	if (options.project):
-		outdir = input_dir		
-		Project=True
-	elif (options.detached):
-		Project=False
+	## Project mode as default
+	project_mode=True
+	if (options.detached):
+		options.project = False
+		project_mode=False
 		outdir = os.path.abspath(options.output_folder)
-
+	else:
+		options.project = True
+		outdir = input_dir	
+	
 	## get files
 	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"])
 
@@ -219,7 +220,7 @@ def run_cluster(options):
 		print(colorLabels)
 
 	## parse results
-	if Project:
+	if options.project:
 		final_dir = outdir + '/report/cluster'
 		functions.create_folder(final_dir) 
 	else:

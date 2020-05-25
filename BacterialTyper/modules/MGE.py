@@ -89,6 +89,12 @@ def run_MGE(options):
 	### init dataframe
 	pd_samples_retrieved = pd.DataFrame()
 
+	## Project mode as default
+	if (options.detached):
+		options.project = False		
+	else:
+		options.project = True
+		
 	## set mode: project/detached
 	global Project
 	if (options.project):

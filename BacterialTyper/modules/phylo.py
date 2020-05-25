@@ -72,14 +72,16 @@ def run_phylo(options):
     outdir=""
 
     ## set mode: project/detached
-    global Project
-    if (options.project):
-        outdir = input_dir        
-        Project=True
-    elif (options.detached):
-        Project=False
+    ## Project mode as default
+    project_mode=True
+    if (options.detached):
+        options.project = False
+        project_mode=False
         outdir = os.path.abspath(options.output_folder)
-
+    else:
+        options.project = True
+        outdir = input_dir    
+    
     ## get the database 
     options.database = os.path.abspath(options.database)
     
