@@ -652,6 +652,9 @@ def get_files(options, input_dir, mode, extension):
 	else:
 		samples_names = ['.*']
 
+	## discard empty sample_names
+	samples_names = list(filter(None, samples_names)) ## empty space
+
 	## discard some files obtain
 	files = [s for s in files if 'single_copy_busco_sequences' not in s]
 	files = [s for s in files if 'orphan' not in s]
