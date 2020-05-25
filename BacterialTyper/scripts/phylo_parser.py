@@ -47,11 +47,11 @@ def get_snp_distance(aln_file, mode, countGaps, output, Debug):
 
     ## create minimum spanning tree
         ## https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html
-        #Y = sch.linkage(D, method='single', optimal_ordering=True)
+    Y = sch.linkage(D, method='single', optimal_ordering=True)
+    min_hash_caller.get_Newick_tree(Y, D, labeltext, output)
         
         ##D_network = networkx.convert_matrix.from_numpy_matrix(D)
         ##MST = networkx.minimum_spanning_tree(D_network)
-        #min_hash_caller.get_Newick_tree(Y, D, labeltext, output)
         ##print (MST)
         ##fig3 = pylab.figure(figsize=(15, 10))
         ##networkx.draw_networkx(MST, with_labels=True, node_size = 45)
