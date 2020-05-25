@@ -660,7 +660,7 @@ def get_files(options, input_dir, mode, extension):
 	files = [s for s in files if 'configs' not in s]
 	files = [s for s in files if '00.0_0.cor.fastq.gz' not in s]
 	files = [s for s in files if 'report_summary' not in s]
-	files = [s for s in files if '' not in s] ## empty space
+	files = list(filter(None, files)) ## empty space
 	
 	## files list...
 	if (options.debug):
