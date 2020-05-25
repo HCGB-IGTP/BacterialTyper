@@ -225,7 +225,7 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     
     ## send for each sample
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
-        commandsSent = { executor.submit(snippy_variant_caller,reference_gbk_file, sorted(cluster["sample"].tolist()), threads_job, outdir_dict[name], options.name, contig_option, options.other_options, name, options.debug): name for name, cluster in sample_frame }
+        commandsSent = { executor.submit(snippy_variant_caller, reference_gbk_file, sorted(cluster["sample"].tolist()), threads_job, outdir_dict[name], options.name, contig_option, options.other_options, name, options.debug): name for name, cluster in sample_frame }
         for cmd2 in concurrent.futures.as_completed(commandsSent):
             details = commandsSent[cmd2]
             try:
@@ -378,17 +378,17 @@ def get_reference_gbk(options):
             exit()
 
     ####################
-    ## user_gbk
+    ## user_ref
     ####################
-    elif options.user_gbk:
-        options.user_gbk = os.path.abspath(options.user_gbk)
-        if functions.is_non_zero_file(options.user_gbk):
-            print('\t+ Reference provided via --user_gbk is available and ready to use.')
+    elif options.user_ref:
+        options.user_ref = os.path.abspath(options.user_ref)
+        if functions.is_non_zero_file(options.user_ref):
+            print('\t+ Reference provided via --user_ref is available and ready to use.')
         else:
-            print('\n** ERROR: Reference provided via --user_gbk not available or accessible.')
+            print('\n** ERROR: Reference provided via --user_ref not available or accessible.')
             print(colored('\n+ Check the path or integrity of the file. Some error occurred...', 'red'))
             exit()
-        reference_gbk_file = options.user_gbk
+        reference_gbk_file = options.user_ref
 
     
     return (reference_gbk_file)

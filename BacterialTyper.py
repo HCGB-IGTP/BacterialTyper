@@ -521,7 +521,7 @@ reference_group_phylo = reference_group_phylo_name.add_mutually_exclusive_group(
 reference_group_phylo.add_argument("--Genbank_ID", help="Genbank ID of the reference strain. Available or not in database")
 reference_group_phylo.add_argument("--user_sample_ID", help="Sample ID previously analyzed and available in database.")
 reference_group_phylo.add_argument("--project_sample_ID", help="Project sample ID.")
-reference_group_phylo.add_argument("--user_gbk", help="Genbank file format provided by the user.")
+reference_group_phylo.add_argument("--user_ref", help="Genbank format file or fasta format file provided by the user.")
 
 parameters_group_phylo = subparser_phylo.add_argument_group("Parameters")
 parameters_group_phylo.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)

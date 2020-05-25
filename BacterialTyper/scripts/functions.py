@@ -125,7 +125,6 @@ def outdir_project(outdir, project_mode, pd_samples, mode):
 
 	dict_outdir = {}	
 	for name, cluster in sample_frame:
-		print (name)
 		if (project_mode):
 			#print ("Create subdir for every sample: ", mode)
 			sample_dir = create_subfolder('data', outdir)		
