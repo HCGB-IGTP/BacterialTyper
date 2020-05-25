@@ -86,14 +86,12 @@ def run_prep(options):
 	else:
 		options.pair = True
 
-	## initial retrieved
-	project_mode=False
-	if (options.project):
+	## Project mode as default
+	project_mode=True
+	if (options.detached):
 		options.project = False
-		project_mode=True
-	
-	## set option
-	if (project_mode):
+		project_mode=False
+	else:
 		options.project = True
 
 	## output folder	

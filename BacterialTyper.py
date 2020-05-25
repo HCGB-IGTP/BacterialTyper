@@ -137,11 +137,6 @@ subparser_prep = subparsers.add_parser(
     description='This module prepares fastq files from a sequencing run. It could renamed, copy, link or merge them when multiples files have been generated for the same sample e.g different lanes. It concatenates these files according the common identifier and generates a unique file, one per paired-read if necessary',
 )
 
-prep_mode_name = subparser_prep.add_argument_group("Mode")
-prep_mode = prep_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-prep_mode.add_argument("--project", action="store_true", help="It initiates --output_folder folder to contain a project with samples, metadata, configuration etc. [Default]")
-prep_mode.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps.")
-
 in_out_group_prep = subparser_prep.add_argument_group("Input/Output")
 in_out_group_prep.add_argument("--input", help="Folder containing fastq files. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. All files would be retrieved.", required= not any(elem in help_options for elem in sys.argv))
 in_out_group_prep.add_argument("--output_folder", help="Output folder. Name for the project folder.", required= not any(elem in help_options for elem in sys.argv))
@@ -149,6 +144,7 @@ in_out_group_prep.add_argument("--single_end", action="store_true", help="Single
 in_out_group_prep.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_prep.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_prep.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+in_out_group_prep.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
 
 options_group_prep = subparser_prep.add_argument_group("Options")
 options_group_prep.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
@@ -173,17 +169,13 @@ subparser_qc = subparsers.add_parser(
 annotation_options = ('--assembly', '--annotation')
 detached_options = ('--detached', '--output_folder')
 
-qc_mode_name = subparser_qc.add_argument_group("Mode")
-qc_mode = qc_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-qc_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-qc_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containing samples, contigs or protein sequences. Provide a unique path o several using --batch option")
-
 in_out_group_qc = subparser_qc.add_argument_group("Input/Output")
 in_out_group_qc.add_argument("--input", help="Folder containing input. Project or raw reads, assembly or annotation fasta files according to mode option provided.", required= not any(elem in help_options for elem in sys.argv))
 in_out_group_qc.add_argument("--output_folder", help="Output folder. Required if '--detached' mode. Under '--project' mode, information will be stored following a designed scheme. See instructions for further details", required = '--detached' in sys.argv)
 in_out_group_qc.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_qc.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_qc.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+in_out_group_qc.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
 
 exclusive_group_qc_name = subparser_qc.add_argument_group("Options")
 exclusive_group_qc = exclusive_group_qc_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
@@ -215,11 +207,6 @@ subparser_trimm = subparsers.add_parser(
     help='Trimms sequencing adapters.',
     description='This module trimms sequencing adapters that could be present in next generation sequencing files',
 )
-trimm_mode_name = subparser_trimm.add_argument_group("Mode")
-trimm_mode = trimm_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-trimm_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-trimm_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containing fastq reads. Provide a unique path o several using --batch option")
-
 in_out_group_trimm = subparser_trimm.add_argument_group("Input/Output")
 in_out_group_trimm.add_argument("--input", help="Folder containing a project or reads, according to the mode selected. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv))
 in_out_group_trimm.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
@@ -227,6 +214,7 @@ in_out_group_trimm.add_argument("--single_end", action="store_true", help="Singl
 in_out_group_trimm.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_trimm.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_trimm.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+in_out_group_trimm.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
 
 options_group_trimm = subparser_trimm.add_argument_group("Options")
 options_group_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]. See details in --help_multiqc")
@@ -252,11 +240,6 @@ subparser_assemble = subparsers.add_parser(
     help='Assembly for each sample.',
     description='This module assembles sequencing reads into contigs using spades. Input must be trimmed sequences.'
 )
-assembly_mode_name = subparser_assemble.add_argument_group("Mode")
-assembly_mode = assembly_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-assembly_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-assembly_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containing trimmed fastq reads. Provide a unique path o several using --batch option")
-
 in_out_group_assembly = subparser_assemble.add_argument_group("Input/Output")
 in_out_group_assembly.add_argument("--input", help="Folder containing a project or reads, according to the mode selected. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv))
 in_out_group_assembly.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
@@ -264,6 +247,7 @@ in_out_group_assembly.add_argument("--single_end", action="store_true", help="Si
 in_out_group_assembly.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 in_out_group_assembly.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_assembly.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+in_out_group_assembly.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
 
 dataset_group_assembly = subparser_assemble.add_argument_group("Datasets")
 dataset_group_assembly.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
@@ -292,17 +276,13 @@ subparser_annotate = subparsers.add_parser(
     help='Annotation for each sample.',
     description='This module annotates contig/scaffold assemblies and generates protein, gff and other annotation information. Input must be fasta/fna assemblies.'
 )
-annotate_mode_name = subparser_annotate.add_argument_group("Mode")
-annotate_mode = annotate_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-annotate_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-annotate_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containing assemblies or scaffolds. Provide a unique path o several using --batch option")
-
 in_out_group_annot = subparser_annotate.add_argument_group("Input/Output")
 in_out_group_annot.add_argument("--input", help="Folder containing a project or assemblies. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv) )
 in_out_group_annot.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
 ##in_out_group_annot.add_argument("--batch", help="Provide a csv file containing the name and the path for each assembly. No header. Provided it in format: name,tag,file. tag = chromosome/plasmid. e.g. sample1,chromosome,/path/to/sample1/assembly/file.fasta\nsample1,plasmid,/path/to/sample1/assembly/file.fasta")
 in_out_group_annot.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_annot.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+in_out_group_annot.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
 
 dataset_group_annot = subparser_annotate.add_argument_group("Datasets")
 dataset_group_annot.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv) )
@@ -340,11 +320,6 @@ subparser_ident = subparsers.add_parser(
     help='Species identification for each sample.',
     description='This module calls a kmer strategy for a species and strain identification',
 )
-ident_mode_name = subparser_ident.add_argument_group("Mode")
-ident_mode = ident_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-ident_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-ident_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containing assemblies or scaffolds. Provide a unique path o several using --batch option")
-
 initial_group_ident = subparser_ident.add_argument_group("Input/Output")
 initial_group_ident.add_argument("--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required = not any(elem in help_options for elem in sys.argv))
 initial_group_ident.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
@@ -352,6 +327,7 @@ initial_group_ident.add_argument("--single_end", action="store_true", help="Sing
 initial_group_ident.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 initial_group_ident.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_ident.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+initial_group_ident.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
 
 dataset_group_ident = subparser_ident.add_argument_group("Datasets")
 dataset_group_ident.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
@@ -394,11 +370,6 @@ subparser_profile = subparsers.add_parser(
     help='Virulence & Resistance profile.',
     description='This module generates a resistance and virulence profile using several databases ...',
 )
-profile_mode_name = subparser_profile.add_argument_group("Mode")
-profile_mode = profile_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-profile_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-profile_mode.add_argument("--detached", action="store_true", help="Isolated mode. --input is a folder containing assemblies or scaffolds. Provide a unique path o several using --batch option")
-
 initial_group_profile = subparser_profile.add_argument_group("Input/Output")
 initial_group_profile.add_argument("--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required= not any(elem in help_options for elem in sys.argv))
 initial_group_profile.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
@@ -406,6 +377,7 @@ initial_group_profile.add_argument("--single_end", action="store_true", help="Si
 initial_group_profile.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 initial_group_profile.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_profile.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+initial_group_profile.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
 
 dataset_group_profile = subparser_profile.add_argument_group("Datasets")
 dataset_group_profile.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
@@ -437,17 +409,13 @@ subparser_MGE = subparsers.add_parser(
     help='Mobile Genetic Elements (MGE) analysis.',
     description='This module identifies Mobile Genetic elements: plasmids, bacteriophages and genomic islands',
 )
-MGE_mode_name = subparser_MGE.add_argument_group("Mode")
-MGE_mode = MGE_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-MGE_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-MGE_mode.add_argument("--detached", action="store_true", help="Isolated mode. Provided as --input a csv file containing different fields. See --help_input_MGE for further details.")
-
 initial_group_MGE = subparser_MGE.add_argument_group("Input/Output")
 initial_group_MGE.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'.\nIf not, provide full path using --batch option", required = '--project' in sys.argv)
 initial_group_MGE.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
 initial_group_MGE.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 initial_group_MGE.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_MGE.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+initial_group_MGE.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
 
 parameters_group_MGE = subparser_MGE.add_argument_group("Parameters")
 parameters_group_MGE.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
@@ -482,17 +450,13 @@ subparser_cluster = subparsers.add_parser(
     help='Cluster sequence analysis.',
     description='This module calls ...',
 )
-cluster_mode_name = subparser_cluster.add_argument_group("Mode")
-cluster_mode = cluster_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-cluster_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-cluster_mode.add_argument("--detached", action="store_true", help="Isolated mode. Provided as --input a csv file containing different fields. See --help_input_MGE for further details.")
-
 initial_group_cluster = subparser_cluster.add_argument_group("Input/Output")
 initial_group_cluster.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'.\nIf not, provide full path using --batch option", required = '--project' in sys.argv)
 initial_group_cluster.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
 initial_group_cluster.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_cluster.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 initial_group_cluster.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+initial_group_cluster.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
 
 parameters_group_cluster = subparser_cluster.add_argument_group("Parameters")
 parameters_group_cluster.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
@@ -527,11 +491,6 @@ subparser_phylo = subparsers.add_parser(
     help='Phylogenetic analysis.',
     description='This module calls ...',
 )
-phylo_mode_name = subparser_phylo.add_argument_group("Mode")
-phylo_mode = phylo_mode_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-phylo_mode.add_argument("--project", action="store_true", help="Requires as --input a folder containing a project with samples, metadata, configuration etc. [Default]")
-phylo_mode.add_argument("--detached", action="store_true", help="Isolated mode. Provided as --input a csv file containing different fields. See --help_input_MGE for further details.")
-
 initial_group_phylo = subparser_phylo.add_argument_group("Input/Output")
 initial_group_phylo.add_argument("--input", help="Folder containing assemblies. Contig/Scaffolds files could be within a project folder or in the input folder. File must end with tag '_chromosome(.fasta/.fna)'.\nIf not, provide full path using --batch option", required = '--project' in sys.argv)
 initial_group_phylo.add_argument("--output_folder", help="Output folder.", required = '--detached' in sys.argv)
@@ -539,6 +498,7 @@ initial_group_phylo.add_argument("--in_sample", help="File containing a list of 
 initial_group_phylo.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 initial_group_phylo.add_argument("--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
 initial_group_phylo.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
+initial_group_phylo.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
 
 reference_group_phylo_name = subparser_phylo.add_argument_group("Reference")
 reference_group_phylo = reference_group_phylo_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
