@@ -169,7 +169,7 @@ def ml_tree(folder, name, threads, output, Debug):
     output_log = os.path.join(output, 'iqtree.error.log')
     output_files = os.path.join(output, 'iqtree_' + name)
     
-    iqtree_cmd = '%s -s %s --threads-max %s --prefix %s -B % 2> %s' %(iqtree_exe, aln_file, 
+    iqtree_cmd = '%s -s %s --threads-max %s --prefix %s -B %s 2> %s' %(iqtree_exe, aln_file, 
                                                                       threads, output_files, 
                                                                       bootstrap_number, output_log)
     code = functions.system_call(iqtree_cmd)
