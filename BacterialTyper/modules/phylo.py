@@ -409,7 +409,7 @@ def snippy_variant_caller(reference, files, threads, outdir, name, contig_option
     else:
          # Call variant calling
         code = variant_calling.snippy_call(reference, files, threads, subdir, 
-                                           name, contig_option, other_options, Debug)
+                                           sample_name, contig_option, other_options, Debug)
         if code == 'OK':
             stamp = functions.print_time_stamp(filename_stamp)
 

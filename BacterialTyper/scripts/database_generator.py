@@ -320,17 +320,20 @@ def getdbs(source, database_folder, option, debug):
 	
 	"""
 	
+	## init dataframe
+	colname = ["source", "db", "path"]
+	db_Dataframe  = pd.DataFrame(columns = colname)
+
 	## read folders within database
-	files = os.listdir(database_folder) ## ARIBA/KMA_db/genbank/user_data
+	if os.path.isdir(database_folder):
+		files = os.listdir(database_folder) ## ARIBA/KMA_db/genbank/user_data
+	else:
+		return db_Dataframe
 
 	## debug message
 	if (debug):
 		print (colored("Folders: " + str(files),'yellow'))
 		print ()
-	
-	## init dataframe
-	colname = ["source", "db", "path"]
-	db_Dataframe  = pd.DataFrame(columns = colname)
 	
 	## user input
 	dbs2use = []
