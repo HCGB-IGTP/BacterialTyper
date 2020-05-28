@@ -43,8 +43,8 @@ def get_snp_distance(aln_file, mode, countGaps, output, Debug):
         fp.write("\n".join(labeltext_string))
         
     ## save matrix in csv format file
-    numpy.set_printoptions(precision=3, suppress=True)
-    numpy.savetxt(output + ".csv", D, delimiter=",", header= ",".join(labeltext_string) )
+    numpy.set_printoptions(suppress=True)
+    numpy.savetxt(output + ".csv", D, delimiter=",", fmt='%5.4g', header= ",".join(labeltext_string) )
 
     ## create minimum spanning tree
         ## https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html
