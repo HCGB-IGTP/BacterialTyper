@@ -141,6 +141,7 @@ def get_fields(file_name_list, pair, Debug, include_all):
 		## get file name
 		file_name = os.path.basename(path_files)
 		dirN = os.path.dirname(path_files)
+        
 		trim_search = re.search(r".*trim.*", file_name)
 		lane_search = re.search(r".*\_L\d+\_.*", file_name)
 		## get name
