@@ -148,14 +148,13 @@ def get_fields(file_name_list, pair, Debug, include_all):
 			if (pair):
 				name_search = re.search(r"(.*)\_(R1|1|R2|2)\_{0,1}(.*)\.(f.*q)(\..*){0,1}", file_name)
 			else:
-                                name_search = re.search(r"(.*)\.(f.*q)(\..*){0,1}", file_name)
+				name_search = re.search(r"(.*)\.(f.*q)(\..*){0,1}", file_name)
 
 		else:	
 			if (pair):
 				## pair could be: R1|R2 or 1|2
 				if (trim_search):
 					name_search = re.search(r"(.*)\_trim\_(R1|1|R2|2)\.(f.*q)(\..*){0,1}", file_name)
-					
 				else:
 					## Lane files: need to merge by file_name: 33i_S5_L004_R1_001.fastq.gz
 					## lane should contain L00x			
@@ -163,11 +162,11 @@ def get_fields(file_name_list, pair, Debug, include_all):
 						name_search = re.search(r"(.*)\_(L\d+)\_(R1|1|R2|2)\_{0,1}(.*)\.(f.*q)(\..*){0,1}", file_name)
 					else:
 						name_search = re.search(r"(.*)\_(R1|1|R2|2)\.(f.*q)(\..*){0,1}", file_name)
-            else:
-                if (trim_search):
-                    name_search = re.search(r"(.*)\_trim\.(f.*q)(\..*){0,1}", file_name)
-                else:
-                    name_search = re.search(r"(.*)\.(f.*q)(\..*){0,1}", file_name)
+			else:
+				if (trim_search):
+					name_search = re.search(r"(.*)\_trim\.(f.*q)(\..*){0,1}", file_name)
+				else:
+					name_search = re.search(r"(.*)\.(f.*q)(\..*){0,1}", file_name)
 
 		### declare
 		name= ""

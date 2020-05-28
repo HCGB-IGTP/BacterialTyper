@@ -43,6 +43,7 @@ def get_snp_distance(aln_file, mode, countGaps, output, Debug):
         fp.write("\n".join(labeltext_string))
         
     ## save matrix in csv format file
+    numpy.set_printoptions(precision=3, suppress=True)
     numpy.savetxt(output + ".csv", D, delimiter=",", header= ",".join(labeltext_string) )
 
     ## create minimum spanning tree
@@ -83,7 +84,6 @@ def snp_distance(aln_file, mode, countGaps, Debug):
     
     # build the distance matrix
     D = numpy.zeros([len(alignment), len(alignment)])
-    numpy.set_printoptions(precision=3, suppress=True)
 
     labeltext = []
     
