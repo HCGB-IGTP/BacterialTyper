@@ -357,6 +357,15 @@ def select_other_samples (project, list_samples, samples_prefix, mode, extension
     ## initiate dataframe
     df_samples = pd.DataFrame(columns=name_columns)
 
+    ## debug message
+    if (Debug):
+        print (colored("**DEBUG: samples_prefix **", 'yellow'))
+        print (samples_prefix)
+        print (colored("**DEBUG: mode **", 'yellow'))
+        print (mode)
+        print (colored("**DEBUG: extensions **", 'yellow'))
+        print (extensions)
+
     #Get all files in the folder "path_to_samples"    
     sample_list = []
     for names in samples_prefix:
@@ -392,38 +401,42 @@ def select_other_samples (project, list_samples, samples_prefix, mode, extension
 
                     elif mode== 'assembly':
                         #### name_assembly.faa
-                        f_search = re.search(r"(.*)\_%s\.%s$" %(mode, extensions), f)
-                        if f_search:
-                            file_name = f_search.group(1) 
-                            df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, extensions, mode]    
+                        for ext in extensions:
+                            f_search = re.search(r"(.*)\_%s\.%s$" %(mode, ext), f)
+                            if f_search:
+                                file_name = f_search.group(1) 
+                                df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, ext, mode]    
 
                     elif mode== 'mash':
                         #### name.sig
-                        f_search = re.search(r".*\/%s\/(.*)\.%s$" %(mode, extensions[0]), path_file)
-                        if f_search:
-                            file_name = f_search.group(1) 
-                            df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, extensions[0], mode]    
+                        for ext in extensions:
+                            f_search = re.search(r".*\/%s\/(.*)\.%s$" %(mode, ext), path_file)
+                            if f_search:
+                                file_name = f_search.group(1) 
+                                df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, ext, mode]    
 
                     else:
-                        f_search = re.search(r".*\/(.*)\/%s\/(.*)\_summary\.%s$" %(mode, extensions[0]), path_file)
-                        if f_search:
-                            ### get information
-                            if mode == 'profile':
-                                name = f_search.group(1)
-                                db_name = f_search.group(2).split('_')[-1]
-                                if not name.startswith('report'):
-                                    df_samples.loc[len(df_samples)] = [path_file, dirN, name, db_name, mode]    
-
-                            elif mode == 'ident':
-                                name = f_search.group(1)
-                                df_samples.loc[len(df_samples)] = [path_file, dirN, name, 'csv', mode]    
+                        for ext in extensions:
+                            f_search = re.search(r".*\/(.*)\/%s\/(.*)\_summary\.%s$" %(mode, ext), path_file)
+                            if f_search:
+                                ### get information
+                                if mode == 'profile':
+                                    name = f_search.group(1)
+                                    db_name = f_search.group(2).split('_')[-1]
+                                    if not name.startswith('report'):
+                                        df_samples.loc[len(df_samples)] = [path_file, dirN, name, db_name, mode]    
+    
+                                elif mode == 'ident':
+                                    name = f_search.group(1)
+                                    df_samples.loc[len(df_samples)] = [path_file, dirN, name, 'csv', mode]    
 
                 ## detached mode
                 else:
-                    if f.endswith(extensions):
-                        file_name, ext = os.path.splitext(f)
-                        df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, db_name, mode]    
-                    
+                    for ext in extensions:
+                        if f.endswith(ext):
+                            file_name, ext1 = os.path.splitext(f)
+                            df_samples.loc[len(df_samples)] = [path_file, dirN, file_name, db_name, mode]    
+                        
     ## debug message
     if (Debug):
         print (colored("**DEBUG: df_samples **", 'yellow'))
