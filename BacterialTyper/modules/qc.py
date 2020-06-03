@@ -196,6 +196,10 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		if not options.project:
 			outdir = functions.create_subfolder("assembly_qc", outdir)
 
+		if Debug:
+			print ("** DEBUG: pd_samples_retrieved")
+			print (pd_samples_retrieved)
+		
 		BUSCO_outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "assemble_qc")
 
 	elif mode == 'proteins':
@@ -204,6 +208,10 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		if not options.project:
 			outdir = functions.create_subfolder("annot_qc", outdir)
 
+		if Debug:
+			print ("** DEBUG: pd_samples_retrieved")
+			print (pd_samples_retrieved)
+			
 		BUSCO_outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "annot_qc")
 
 	## add column to dataframe
