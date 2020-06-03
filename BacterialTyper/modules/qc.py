@@ -196,7 +196,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		if not options.project:
 			outdir = functions.create_subfolder("assembly_qc", outdir)
 
-		if Debug:
+		if options.debug:
 			print ("** DEBUG: pd_samples_retrieved")
 			print (pd_samples_retrieved)
 		
@@ -208,7 +208,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		if not options.project:
 			outdir = functions.create_subfolder("annot_qc", outdir)
 
-		if Debug:
+		if options.debug:
 			print ("** DEBUG: pd_samples_retrieved")
 			print (pd_samples_retrieved)
 			
