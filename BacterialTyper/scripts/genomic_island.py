@@ -3,6 +3,7 @@
 Calls IslandPath Dimob software for identification of putative genomics islands within a genome.
 """
 ## useful imports
+from sys import argv
 import time
 import io
 import os
@@ -63,23 +64,27 @@ def GI_module(genbank_file, name, outdir, Debug, cutoff_dinuc_bias=8, min_length
 
     # check if previously done
     if os.path.isfile(filename_stamp):
-        stamp =    functions.read_time_stamp(filename_stamp)
+        stamp = BacterialTyper.scripts.functions.read_time_stamp(filename_stamp)
         print (colored("\tA previous command generated results on: %s [%s -- Dimob]" %(stamp, name), 'yellow'))
     else:    
         ## debug message
         if (Debug):
             print (colored("**DEBUG: Call Dimob for sample %s " %name + "**", 'yellow'))
-
+            print ("genbank_file", genbank_file)
+            print ("outdir: ", outdir)
+           
         ## Call IslandPath Dimob executable perl file.
-        dimob_pl = set_config.get_exe("dimob")
-        perl_exe = set_config.get_exe("perl")
+        dimob_pl = set_config.get_exe("dimob", Debug)
+        perl_exe = set_config.get_exe("perl", Debug)
+        
+        ## command
         perl_cmd = '%s %s %s %s %s %s' %(perl_exe, dimob_pl, genbank_file, outdir, cutoff_dinuc_bias, min_length)
     
-        code = functions.system_call(perl_cmd)
+        code = BacterialTyper.scripts.functions.system_call(perl_cmd)
         ##
         if code:
             ## when finished print time stamp in  output + '/.Dimob'
-            stamp =    functions.print_time_stamp(filename_stamp)
+            stamp = BacterialTyper.scripts.functions.print_time_stamp(filename_stamp)
         else:
             return False
     
@@ -93,7 +98,7 @@ def help_options():
     
 def main():
     ## control if options provided or help
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 4:
         help_options()
         exit()
     
