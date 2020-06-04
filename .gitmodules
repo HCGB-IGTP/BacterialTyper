@@ -1,9 +1,10 @@
 [submodule "third_party/IslandPath-DIMOB"]
 	path = third_party/IslandPath-DIMOB
 	url = https://github.com/JFsanchezherrero/islandpath
-[submodule "third_party/pyan"]
-	path = third_party/pyan
-	url = https://github.com/JFsanchezherrero/pyan
 [submodule "third_party/spa_typing"]
 	path = third_party/spa_typing
 	url = https://github.com/JFsanchezherrero/spa_typing.git
+[submodule "third_party/pyan"]
+        path = third_party/pyan
+        url = https://github.com/JFsanchezherrero/pyan.git
+
