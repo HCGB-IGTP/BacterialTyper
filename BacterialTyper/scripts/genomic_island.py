@@ -86,7 +86,7 @@ def GI_module(genbank_file, name, outdir, Debug, cutoff_dinuc_bias=8, min_length
         ##
         if code:
             ## when finished print time stamp in  output + '/.Dimob'
-            stamp = BacterialTyper.scripts.functions.print_time_stamp(filename_stamp)
+            stamp = functions.print_time_stamp(filename_stamp)
         else:
             return False
     
