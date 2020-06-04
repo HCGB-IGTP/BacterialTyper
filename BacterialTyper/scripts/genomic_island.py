@@ -88,3 +88,26 @@ def GI_module(genbank_file, name, outdir, Debug, cutoff_dinuc_bias=8, min_length
 def help_Dimob():
     print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
     
+def help_options():
+    print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
+    
+def main():
+    ## control if options provided or help
+    if len(sys.argv) != 3:
+        help_options()
+        exit()
+    
+    ## argv
+    gbk_file = os.path.abspath(argv[1])
+    outdir = os.path.abspath(argv[2])
+    name=argv[3]
+    
+    ## call
+    print ("\n+ Generate annotation of putative Genomic Islands for sample %s in folder: %s" %(name, outdir))
+    GI_module(gbk_file, name, outdir, True)    
+    
+######
+'''******************************************'''
+if __name__== "__main__":
+    main()
+    
