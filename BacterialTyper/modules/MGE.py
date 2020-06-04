@@ -395,7 +395,7 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 												window_size=options.window_size, number_phage_genes=options.phage_genes)
 			
 			## Parse results
-			bacteriophage.results_PhiSpy(outdir_dict_phage[name], name)
+			bacteriophage.results_PhiSpy(outdir_phage, name)
 
 	####################
 	## Genomic Island analysis
