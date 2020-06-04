@@ -271,7 +271,7 @@ def run_MGE(options):
 	name_list = set(pd_samples_retrieved["name"].tolist())
 	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
 	max_workers_int = int(options.threads/threads_job)
-	max_workers_int = 1
+	max_workers_int = 2
 
 	## there is a problem with RAM, we would set one sample at a time until satisfied
 
@@ -333,7 +333,7 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 
 		## debug message
 		if (Debug):
-			print (colored("**DEBUG: Dir" + str(outdir_dict_plasmid), 'yellow'))
+			print (colored("**DEBUG: Dir" + str(outdir_plasmid), 'yellow'))
 			
 			## ToDo implement plasmid analysis
 			
@@ -351,7 +351,7 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 
 		## debug message
 		if (Debug):
-			print (colored("**DEBUG: Dir" + str(outdir_dict_phage), 'yellow'))
+			print (colored("**DEBUG: Dir" + str(outdir_phage), 'yellow'))
 	
 		##
 		filename_stamp = outdir_phage + '/.PhiSpy_results'
@@ -378,7 +378,7 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 
 		## debug message
 		if (Debug):
-			print (colored("**DEBUG: Dir"+ str(outdir_dict_GI), 'yellow'))
+			print (colored("**DEBUG: Dir"+ str(outdir_GI), 'yellow'))
 		
 			## Call phispy
 			genomic_island.GI_module(gbk_file[0], name, outdir_GI, options.cutoff_dinuc_bias, options.min_length)
