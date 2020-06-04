@@ -80,7 +80,8 @@ def GI_module(genbank_file, name, outdir, Debug, cutoff_dinuc_bias=8, min_length
         
         ## command
         outdir_sample = os.path.join(outdir, name)
-        perl_cmd = '%s %s %s %s %s %s' %(perl_exe, dimob_pl, genbank_file, outdir_sample, cutoff_dinuc_bias, min_length)
+        log_file = outdir_sample + '.log'
+        perl_cmd = '%s %s %s %s %s %s > %s' %(perl_exe, dimob_pl, genbank_file, outdir_sample, cutoff_dinuc_bias, min_length, log_file)
     
         code = functions.system_call(perl_cmd)
         ##

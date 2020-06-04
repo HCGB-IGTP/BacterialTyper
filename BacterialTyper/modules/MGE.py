@@ -296,7 +296,32 @@ def run_MGE(options):
 				print (cmd2)
 				print('%r generated an exception: %s' % (details, exc))
 
-		exit()
+	
+	## create summary in report for each
+	## get all analysis stats
+	print ("+ Create summary of all samples analyzed.")
+	outdir_report = functions.create_subfolder("report", outdir)
+	final_dir = functions.create_subfolder("MGE_analysis", outdir_report)
+	
+	if (bacteriophage_bool):
+		
+		phages_dir = functions.create_subfolder("phages", final_dir)
+		print ("+ See deatils of phages in folder:")
+		print ("\t -", phages_dir)
+		
+		
+	if (genomic_island_bool):
+		GI_dir = functions.create_subfolder("genomicIslands", final_dir)
+		print ("+ See deatils of genomic islands in folder:")
+		print ("\t -", GI_dir)
+		
+	if (plasmid_bool):
+		plasmid_dir = functions.create_subfolder("plasmids", final_dir)
+		print ("+ See deatils of plasmids in folder:")
+		print ("\t -", plasmid_dir)
+		
+	
+	
 
 ###########################
 def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
