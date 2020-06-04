@@ -428,6 +428,8 @@ initial_group_MGE.add_argument("--single_end", action="store_true", help="Single
 initial_group_MGE.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 initial_group_MGE.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
 initial_group_MGE.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
+initial_group_MGE.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
+initial_group_MGE.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
 parameters_group_MGE = subparser_MGE.add_argument_group("Parameters")
 parameters_group_MGE.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
