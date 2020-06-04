@@ -3,6 +3,7 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
+import BacterialTyper
 '''
 Prints help messages for several modules and options.
 '''
@@ -16,7 +17,7 @@ from io import open
 from termcolor import colored
 	
 ## import my modules
-from BacterialTyper.scripts import functions, genomic_island
+from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts import annotation
 from BacterialTyper.scripts import BUSCO_caller
@@ -29,6 +30,7 @@ from BacterialTyper.scripts import MLSTar
 from BacterialTyper.modules import MGE
 from BacterialTyper.scripts import min_hash_caller
 from BacterialTyper.scripts import variant_calling
+from BacterialTyper.scripts import genomic_island
 
 ##########################
 def run_info(options):
