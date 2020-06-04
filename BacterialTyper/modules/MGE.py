@@ -271,7 +271,7 @@ def run_MGE(options):
 	name_list = set(pd_samples_retrieved["name"].tolist())
 	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
 	max_workers_int = int(options.threads/threads_job)
-	max_workers_int = 1
+	max_workers_int = 8
 
 	## there is a problem with RAM, we would set one sample at a time until satisfied
 
