@@ -16,7 +16,7 @@ from io import open
 from termcolor import colored
 	
 ## import my modules
-from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import functions, genomic_island
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts import annotation
 from BacterialTyper.scripts import BUSCO_caller
@@ -99,10 +99,16 @@ def run_info(options):
 		min_hash_caller.helpMash()
 		exit()
 	
+	## information for Snippy
 	if (options.help_Snippy):
 		variant_calling.help_Snippy()
 		exit()
-		
+
+	## information for Dimob
+	if (options.help_Dimob):
+		genomic_island.help_Dimob()
+		exit()
+	
 	
 ##########################
 def project_help():

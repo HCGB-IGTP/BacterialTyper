@@ -19,7 +19,7 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper.scripts import functions, bacteriophage
+from BacterialTyper.scripts import functions, bacteriophage, genomic_island
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts import annotation
 from BacterialTyper.scripts import bacteriophage
@@ -58,6 +58,13 @@ def run_MGE(options):
 		## information for PhiSpy
 		help_input_MGE()
 		exit()
+
+	if (options.help_Dimob):
+		## information for PhiSpy
+		help_input_Dimob()
+		exit()
+
+
 
 	## debugging messages
 	global Debug
@@ -239,12 +246,18 @@ def run_MGE(options):
 	## parameters 
 	print ("+ Parameters:")
 	if (bacteriophage_bool):
+		print ("+ PhiSpy:")
 		print ("\tPhiSpy Training set: ", str(options.training_set))
 		print ("\tPhiSpy Window size: ", str(options.window_size))
 		print ("\tPhiSpy Phage genes: ", str(options.phage_genes))
 		
-	print ("")
-	print ("")
+	if (genomic_island_bool):
+		print ("+ Dimob:")
+		print ("\tDimob dinucleotide bias cutoff (%):", str(options.cutoff_dinuc_bias))
+		print ("\tDimob Genomic Island minimum length (bp):", str(options.min_length))
+		
+	if (plasmid_bool):
+		print ("")
 
 	## re-index dataframe
 	pd_samples_retrieved = pd_samples_retrieved.reset_index()
@@ -258,6 +271,9 @@ def run_MGE(options):
 	name_list = set(pd_samples_retrieved["name"].tolist())
 	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
 	max_workers_int = int(options.threads/threads_job)
+	max_workers_int = 1
+
+	## there is a problem with RAM, we would set one sample at a time until satisfied
 
 	# Group dataframe by sample name	
 	sample_frame = pd_samples_retrieved.groupby(["name"])
@@ -301,7 +317,10 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 	"""
 	
 	print ("+ MGE analysis for sample: ", name)
-	print ("")
+	
+	## get Genbank file generated with PROKKA
+	gbk_file = dataFrame_sample.loc[dataFrame_sample['ext'] == 'gbf']['sample'].tolist() ## [TODO: Fix SettingWithCopyWarning]
+	
 	
 	if plasmid_bool:
 
@@ -310,7 +329,7 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 		functions.print_sepLine("*",50, False)
 
 		## for each sample
-		outdir_dict_plasmid = functions.outdir_subproject(output_dir, dataFrame_sample, "plasmid")
+		outdir_plasmid = functions.create_subfolder("plasmid", output_dir)
 
 		## debug message
 		if (Debug):
@@ -328,21 +347,25 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 		functions.print_sepLine("*",50, False)
 		
 		## for each sample
-		outdir_dict_phage = functions.outdir_subproject(output_dir, dataFrame_sample, "phage")
+		outdir_phage = functions.create_subfolder("phage", output_dir)
 
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: Dir" + str(outdir_dict_phage), 'yellow'))
-
-		## get Genbank file generated with PROKKA
-		gbk_file = dataFrame_sample.loc[dataFrame_sample['ext'] == 'gbf']['sample'].tolist() ## [TODO: Fix SettingWithCopyWarning]
-		
-		## Call phispy
-		bacteriophage.ident_bacteriophage(gbk_file[0], name, outdir_dict_phage[name], options.training_set, Debug, 
-											window_size=options.window_size, number_phage_genes=options.phage_genes)
-		
-		## Parse results
-		bacteriophage.results_PhiSpy(outdir_dict_phage[name], name)
+	
+		##
+		filename_stamp = outdir_phage + '/.PhiSpy_results'
+		# check if previously done
+		if os.path.isfile(filename_stamp):
+			stamp =	functions.read_time_stamp(filename_stamp)
+			print (colored("\tA previous command generated results on: %s [%s -- Bacteriophage]" %(stamp, name), 'yellow'))
+		else:		
+			## Call phispy
+			bacteriophage.ident_bacteriophage(gbk_file[0], name, outdir_phage, options.training_set, Debug, 
+												window_size=options.window_size, number_phage_genes=options.phage_genes)
+			
+			## Parse results
+			bacteriophage.results_PhiSpy(outdir_dict_phage[name], name)
 
 	if genomic_island_bool:
 
@@ -351,15 +374,16 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 		functions.print_sepLine("*",50, False)
 
 		## for each sample
-		outdir_dict_GI = functions.outdir_subproject(output_dir, dataFrame_sample, "genomic_island")
+		outdir_GI = functions.create_subfolder("genomic_island", output_dir)
 
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: Dir"+ str(outdir_dict_GI), 'yellow'))
 		
-		
-			## ToDo implement genomic_island analysis
-		
+			## Call phispy
+			genomic_island.GI_module(gbk_file[0], name, outdir_GI, options.cutoff_dinuc_bias, options.min_length)
+			
+			
 		print ("")
 
 ###########################

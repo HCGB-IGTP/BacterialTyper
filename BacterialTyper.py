@@ -447,6 +447,10 @@ phispy_options.add_argument("--training_set", type=int, help="Choose a training 
 phispy_options.add_argument("--window_size", type=int, help="Window size of consecutive genes to look through to find phages. [Default: 20]", default=20)
 phispy_options.add_argument("--phage_genes", type=int, help="Number of consecutive genes in a region of window size that must be prophage genes to be called. [Default: 5]", default=5)
 
+dimob_options = subparser_MGE.add_argument_group("Dimob options")
+dimob_options.add_argument("--cutoff_dinuc_bias", type=int, help="Dinucleotide bias cutoff", default=8)
+dimob_options.add_argument("--min_length", type=int, help="Minimum length for each Genomic Island", default=8000)
+
 info_group_MGE = subparser_MGE.add_argument_group("Additional information")
 info_group_MGE.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 info_group_MGE.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
@@ -454,6 +458,7 @@ info_group_MGE.add_argument("--help_project", action="store_true", help="Show ad
 info_group_MGE.add_argument("--help_input_MGE", action="store_true", help="Print further information for input options under MGE module.")
 info_group_MGE.add_argument("--help_MGE_analysis", action="store_true", help="Print further information for Mobile Genetic Element module analysis.")
 info_group_MGE.add_argument("--help_PhiSpy", action="store_true", help="Print further information for PhiSpy analysis.")
+info_group_MGE.add_argument("--help_Dimob", action="store_true", help="Print further information for Dimob analysis.")
 
 subparser_MGE.set_defaults(func=BacterialTyper.modules.MGE.run_MGE)
 ##-------------------------------------------------------------##

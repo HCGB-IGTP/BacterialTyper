@@ -138,7 +138,10 @@ def results_PhiSpy(folder, name):
 	return ()
 
 ######
-def ident_bacteriophage(gbk_file, name, output_dir, training_set, Debug=False, min_contig_size=5000, window_size=30, nonprophage_genegaps=10, number_phage_genes=5,randomforest_trees=500, expand_slope=False, kmers_type="all", keep=False):
+def ident_bacteriophage(gbk_file, name, output_dir, training_set, Debug=False, 
+					min_contig_size=5000, window_size=30, nonprophage_genegaps=10, 
+					number_phage_genes=5,randomforest_trees=500, expand_slope=False, 
+					kmers_type="all", keep=False):
 
 	"""Identify putative bacteriophages inserted.
 	
@@ -213,7 +216,7 @@ def ident_bacteriophage(gbk_file, name, output_dir, training_set, Debug=False, m
 	# check if previously done
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
-		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
+		print (colored("\tA previous command generated results on: %s [%s -- PhiSpy]" %(stamp, name), 'yellow'))
 	else:	
 		## debug message
 		if (Debug):
@@ -230,7 +233,8 @@ def ident_bacteriophage(gbk_file, name, output_dir, training_set, Debug=False, m
 		if ncontigs == 0:
 			## debug message
 			if (Debug):
-				print (colored("**DEBUG: 100% contigs in %i are less than %i bp" %(gbk_file, min_contig_size)), 'yellow')
+				print (colored("**DEBUG: 100% contigs in %i are less than %i bp" 
+							%(gbk_file, min_contig_size)), 'yellow')
 			
 			return(0)
 
@@ -238,13 +242,15 @@ def ident_bacteriophage(gbk_file, name, output_dir, training_set, Debug=False, m
 		sets_Available = get_list_PhiSpy_trainingSets()
 
 		set_name = sets_Available.loc[int(training_set), "Set_Name"]
-		print ("\t+ Training Set selected: ", training_set)
-		print ("\t+ Training Set name: ", set_name)
-		print ("\t+ Training Set Genus: ", sets_Available.loc[int(training_set), "genus"])
-		print ("\t+ Training Set Species: ", sets_Available.loc[int(training_set), "species"])
-		print ("\t+ Training Set Tag: ", sets_Available.loc[int(training_set), "Tag"])
 		training_set_formated = "data/" + set_name + ".txt"
 
+		if (Debug):
+			print ("\t+ Training Set selected: ", training_set)
+			print ("\t+ Training Set name: ", set_name)
+			print ("\t+ Training Set Genus: ", sets_Available.loc[int(training_set), "genus"])
+			print ("\t+ Training Set Species: ", sets_Available.loc[int(training_set), "species"])
+			print ("\t+ Training Set Tag: ", sets_Available.loc[int(training_set), "Tag"])
+		
 		## create argparse with arguments provided to call PhiSpy
 		arg_parser = argparse.Namespace(infile=gbk_file, output_dir=output_dir,
 								training_set = training_set_formated, min_contig_size = min_contig_size,
