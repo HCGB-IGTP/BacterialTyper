@@ -266,7 +266,6 @@ def get_version(prog, path, Debug=False):
 	## get information for prog
 	regex = re.compile(dependencies_pd.loc[prog, 'get_version'])
 	args = dependencies_pd.loc[prog, 'version_cmd']
-	cmd = path + ' ' + args
 
 	## debug messages
 	if (Debug):
@@ -274,15 +273,22 @@ def get_version(prog, path, Debug=False):
 		print(colored("** Debug: args: %s" %args, 'yellow'))
 
 	if prog == 'spades':
-		cmd_output = subprocess.Popen(['python3', path, args], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
+		cmd = "python3 " + path + " " + args
+		cmd_output = subprocess.Popen(cmd, shell=False, 
+									stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
 	elif prog == 'dimob':
-		cmd_output = subprocess.Popen(['perl', path], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
+		cmd = "perl " + path
+		cmd_output = subprocess.Popen(cmd, shell=True, 
+									stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
 	elif prog == 'trimmomatic':
 		java_bin = get_exe('java')
 		java_jar = java_bin + ' -jar ' + path + ' ' + args
-		cmd_output = subprocess.Popen(java_jar, shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
+		cmd_output = subprocess.Popen(java_jar, shell=True, 
+									stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
 	else:
-		cmd_output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+		cmd = path + ' ' + args
+		cmd_output = subprocess.Popen(cmd, shell=True, 
+									stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
 	## debug messages
 	if (Debug):
