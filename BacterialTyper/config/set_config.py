@@ -284,12 +284,12 @@ def get_version(prog, path, Debug=False):
 	else:
 		cmd_output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
-	## decode command
-	cmd_output = functions.decode(cmd_output[0]).split('\n')[:-1] + functions.decode(cmd_output[1]).split('\n')[:-1]
-
 	## debug messages
 	if (Debug):
 		print(colored("** Debug: cmd_output:\n %s" %cmd_output,'yellow'))
+	
+	## decode command
+	cmd_output = functions.decode(cmd_output[0]).split('\n')[:-1] + functions.decode(cmd_output[1]).split('\n')[:-1]
 
 	## retrieve version information
 	for line in cmd_output:
