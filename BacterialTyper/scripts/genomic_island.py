@@ -17,6 +17,7 @@ from termcolor import colored
 from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 
+
 ######
 def GI_module(genbank_file, name, outdir, Debug, cutoff_dinuc_bias=8, min_length=1000):
     """Identify genomic islands (GI) within the genbank file provided. They are calculated
