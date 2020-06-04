@@ -276,7 +276,7 @@ def get_version(prog, path, Debug=False):
 	if prog == 'spades':
 		cmd_output = subprocess.Popen(['python3', path, args], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
 	elif prog == 'dimob':
-		cmd_output = subprocess.Popen(['perl', path, args], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
+		cmd_output = subprocess.Popen(['perl', path], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
 	elif prog == 'trimmomatic':
 		java_bin = get_exe('java')
 		java_jar = java_bin + ' -jar ' + path + ' ' + args
