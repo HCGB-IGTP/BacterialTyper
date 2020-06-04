@@ -65,7 +65,7 @@ def GI_module(genbank_file, name, outdir, Debug, cutoff_dinuc_bias=8, min_length
 
     # check if previously done
     if os.path.isfile(filename_stamp):
-        stamp = BacterialTyper.scripts.functions.read_time_stamp(filename_stamp)
+        stamp = functions.read_time_stamp(filename_stamp)
         print (colored("\tA previous command generated results on: %s [%s -- Dimob]" %(stamp, name), 'yellow'))
     else:    
         ## debug message
@@ -81,7 +81,7 @@ def GI_module(genbank_file, name, outdir, Debug, cutoff_dinuc_bias=8, min_length
         ## command
         perl_cmd = '%s %s %s %s %s %s' %(perl_exe, dimob_pl, genbank_file, outdir, cutoff_dinuc_bias, min_length)
     
-        code = BacterialTyper.scripts.functions.system_call(perl_cmd)
+        code = functions.system_call(perl_cmd)
         ##
         if code:
             ## when finished print time stamp in  output + '/.Dimob'
