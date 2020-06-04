@@ -10,7 +10,7 @@
 =head1 SYNOPSIS
 
 	perl Dimob.pl <genome.gbk> <output_name> [cutoff_dinuc_bias] [min_length]
-	Version: v2019-06
+	Version: v2019.06.27
 	
 	Default values:
 		cutoff_dinuc_bias = 8
@@ -81,7 +81,7 @@ MAIN: {
 
     # usage help
     my $usage = "Usage:\nperl Dimob.pl <genome.gbk> <output_name> [cutoff_dinuc_bias] [min_length]\n";
-    $usage .= "Version: v2019-06\n";
+    $usage .= "Version: v2019.06.27\n";
     $usage .= "\nDefault values:\n\tcutoff_dinuc_bias = 8\n\tmin_length = 8000\n\n";
     $usage .= "Example:\n\tperl Dimob.pl example/NC_003210.gbk NC_003210_GIs\n";
     $usage .= "\tperl Dimob.pl example/NC_003210.gbk NC_003210_GIs 6 10000\n";

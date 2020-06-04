@@ -277,9 +277,12 @@ def get_version(prog, path, Debug=False):
 		cmd_output = subprocess.Popen(cmd, shell=False, 
 									stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
 	elif prog == 'dimob':
-		cmd = "perl " + path
+		perl_exe = get_exe("perl")
+		cmd = perl_exe + ' ' + path
 		cmd_output = subprocess.Popen(cmd, shell=True, 
 									stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
+		print (cmd_output)
+
 	elif prog == 'trimmomatic':
 		java_bin = get_exe('java')
 		java_jar = java_bin + ' -jar ' + path + ' ' + args
