@@ -281,7 +281,6 @@ def get_version(prog, path, Debug=False):
 		cmd = perl_exe + ' ' + path
 		cmd_output = subprocess.Popen(cmd, shell=True, 
 									stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
-		print (cmd_output)
 
 	elif prog == 'trimmomatic':
 		java_bin = get_exe('java')
@@ -293,13 +292,14 @@ def get_version(prog, path, Debug=False):
 		cmd_output = subprocess.Popen(cmd, shell=True, 
 									stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
-	## debug messages
-	if (Debug):
-		print(colored("** Debug: cmd_output:\n %s" %cmd_output,'yellow'))
-	
 	## decode command
 	cmd_output = functions.decode(cmd_output[0]).split('\n')[:-1] + functions.decode(cmd_output[1]).split('\n')[:-1]
 
+	## debug messages
+	if (Debug):
+		print(colored("** Debug: cmd_output:\n ",'yellow'))
+		print (cmd_output)
+		
 	## retrieve version information
 	for line in cmd_output:
 		hits = regex.search(line)
