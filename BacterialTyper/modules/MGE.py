@@ -389,7 +389,7 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 			print (colored("**DEBUG: Dir: "+ str(outdir_GI), 'yellow'))
 		
 		## Call phispy
-		genomic_island.GI_module(gbk_file[0], name, outdir_GI, options.cutoff_dinuc_bias, options.min_length, Debug)
+		genomic_island.GI_module(gbk_file[0], name, outdir_GI, Debug, options.cutoff_dinuc_bias, options.min_length)
 		
 			
 		print ("")
