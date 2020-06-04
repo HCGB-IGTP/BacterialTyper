@@ -68,7 +68,7 @@ def GI_module(genbank_file, name, outdir, Debug, cutoff_dinuc_bias=8, min_length
     else:    
         ## debug message
         if (Debug):
-            print (colored("**DEBUG: Call Dimob for sample %s " %gbk_file + "**", 'yellow'))
+            print (colored("**DEBUG: Call Dimob for sample %s " %name + "**", 'yellow'))
 
         ## Call IslandPath Dimob executable perl file.
         dimob_pl = set_config.get_exe("dimob")
