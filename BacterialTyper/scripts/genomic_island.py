@@ -79,7 +79,8 @@ def GI_module(genbank_file, name, outdir, Debug, cutoff_dinuc_bias=8, min_length
         perl_exe = set_config.get_exe("perl", Debug)
         
         ## command
-        perl_cmd = '%s %s %s %s %s %s' %(perl_exe, dimob_pl, genbank_file, outdir, cutoff_dinuc_bias, min_length)
+        outdir_sample = os.path.join(outdir, name)
+        perl_cmd = '%s %s %s %s %s %s' %(perl_exe, dimob_pl, genbank_file, outdir_sample, cutoff_dinuc_bias, min_length)
     
         code = functions.system_call(perl_cmd)
         ##
