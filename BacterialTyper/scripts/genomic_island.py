@@ -23,7 +23,7 @@ from BacterialTyper.config import set_config
 ## to fix:  dimob_perl_script = "/imppc/labs/lslab/jsanchez/git_repo/BacterialTyper/third_party/IslandPath-DIMOB/Dimob.pl"
 
 ######
-def GI_module(genbank_file, name, outdir, cutoff_dinuc_bias=8, min_length=1000):
+def GI_module(genbank_file, name, outdir, cutoff_dinuc_bias=8, min_length=1000, Debug):
     """Identify genomic islands (GI) within the genbank file provided. They are calculated
     based on gene annotation and dinucleotide bias region using the software `IslandPath-DIMOB`_.
     

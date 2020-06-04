@@ -271,7 +271,7 @@ def run_MGE(options):
 	name_list = set(pd_samples_retrieved["name"].tolist())
 	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
 	max_workers_int = int(options.threads/threads_job)
-	max_workers_int = 2
+	max_workers_int = 1
 
 	## there is a problem with RAM, we would set one sample at a time until satisfied
 
@@ -321,11 +321,13 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 	## get Genbank file generated with PROKKA
 	gbk_file = dataFrame_sample.loc[dataFrame_sample['ext'] == 'gbf']['sample'].tolist() ## [TODO: Fix SettingWithCopyWarning]
 	
-	
+	####################
+	## plasmid analysis
+	####################
 	if plasmid_bool:
 
 		functions.print_sepLine("*",50, False)
-		print (' Plasmid identification analysis')
+		print ('Plasmid identification analysis')
 		functions.print_sepLine("*",50, False)
 
 		## for each sample
@@ -333,13 +335,16 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 
 		## debug message
 		if (Debug):
-			print (colored("**DEBUG: Dir" + str(outdir_plasmid), 'yellow'))
+			print (colored("**DEBUG: Dir: " + str(outdir_plasmid), 'yellow'))
 			
 			## ToDo implement plasmid analysis
 			
 			
 		print ("")
 		
+	####################
+	## phage analysis
+	####################
 	if bacteriophage_bool:
 		
 		functions.print_sepLine("*",50, False)
@@ -351,7 +356,7 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 
 		## debug message
 		if (Debug):
-			print (colored("**DEBUG: Dir" + str(outdir_phage), 'yellow'))
+			print (colored("**DEBUG: Dir: " + str(outdir_phage), 'yellow'))
 	
 		##
 		filename_stamp = outdir_phage + '/.PhiSpy_results'
@@ -367,6 +372,9 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 			## Parse results
 			bacteriophage.results_PhiSpy(outdir_dict_phage[name], name)
 
+	####################
+	## Genomic Island analysis
+	####################
 	if genomic_island_bool:
 
 		functions.print_sepLine("*",50, False)
@@ -378,11 +386,11 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 
 		## debug message
 		if (Debug):
-			print (colored("**DEBUG: Dir"+ str(outdir_GI), 'yellow'))
+			print (colored("**DEBUG: Dir: "+ str(outdir_GI), 'yellow'))
 		
-			## Call phispy
-			genomic_island.GI_module(gbk_file[0], name, outdir_GI, options.cutoff_dinuc_bias, options.min_length)
-			
+		## Call phispy
+		genomic_island.GI_module(gbk_file[0], name, outdir_GI, options.cutoff_dinuc_bias, options.min_length, Debug)
+		
 			
 		print ("")
 
