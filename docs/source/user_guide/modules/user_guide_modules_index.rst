@@ -28,6 +28,7 @@ within each one.
    metadata.rst
    prep.rst
    profile.rst
+   phylo.rst
    qc.rst
    report_generation.rst
    run.rst

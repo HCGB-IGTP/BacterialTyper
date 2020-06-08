@@ -23,6 +23,7 @@ Developer guidelines for ``BacterialTyper`` modules.
    help_info.rst
    qc.rst
    profile.rst
+   phylo.rst
    MGE.rst
    metadata.rst
    report_generation.rst

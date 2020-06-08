@@ -20,5 +20,6 @@ This User Guide provides information on ``BacterialTyper`` usage and documentati
     ../tutorial/tutorial_index.rst
     report/report_index.rst
     software/software_index.rst
+    info/info_index.rst
     faqs.rst
 

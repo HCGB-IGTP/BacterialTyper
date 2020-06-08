@@ -309,8 +309,7 @@ def getdbs(source, database_folder, option, debug):
 	:type option: string
 	:type debug: bool
 	
-	:returns: Dataframe containing absolute paths to the available databases for each type requested. 
-	It contains columns for: "source", "db", "path"
+	:returns: Dataframe containing absolute paths to the available databases for each type requested. It contains columns for: "source", "db", "path"
 		
 	e.g.: 	source = KMA
 			option = kma:archaea,plasmids,bacteria#kma_external:/path/to/file1,/path/to/file2#user_data#genbank **

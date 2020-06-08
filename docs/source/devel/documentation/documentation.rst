@@ -169,6 +169,31 @@ for a full description. But some hints and conventions uses are describing as a 
 for creating documentation.
 
 .. ###############################################
+.. _headers-section:
+
+Section headers
+^^^^^^^^^^^^^^^^
+
+Section headers are created by underlining the section title with a punctuation character, 
+at least as long as the text:
+
+Normally, there are no heading levels assigned to certain characters as the structure is 
+determined from the succession of headings. However, this convention is used in Python’s 
+Style Guide for documenting which you may follow:
+
+	- "#" with overline, for parts
+	
+	- "*" with overline, for chapters
+	
+	- "=" for sections
+	
+	- "-" for subsections
+	
+	- "^" for subsubsections
+	
+	- '"' for paragraphs
+
+.. ###############################################
 .. _internal-section-refs:
 
 Referring to other documents and sections
