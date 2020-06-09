@@ -310,27 +310,30 @@ def run_MGE(options):
 	
 	if Debug:
 		print ("*** DEBUG: MGE_Results ***")
-		print (MGE_Results)
+		print (phage_Results)
+		print (GI_Results)
 		
-	print (MGE_Results)
-		
+	## DEBUG
+	print (phage_Results)
+	print (GI_Results)
+			
 	
 	if (bacteriophage_bool):
 		
 		phages_dir = functions.create_subfolder("phages", final_dir)
 		print ("+ See details of phages results in folder:")
-		print ("\t -", phages_dir)
+		print ("\t", phages_dir)
 		
 		
 	if (genomic_island_bool):
 		GI_dir = functions.create_subfolder("genomicIslands", final_dir)
 		print ("+ See details of genomic islands results in folder:")
-		print ("\t -", GI_dir)
+		print ("\t", GI_dir)
 		
 	if (plasmid_bool):
 		plasmid_dir = functions.create_subfolder("plasmids", final_dir)
 		print ("+ See details of plasmids results in folder:")
-		print ("\t -", plasmid_dir)
+		print ("\t", plasmid_dir)
 		
 	
 	## use BioCircos to represent this information?
@@ -355,7 +358,7 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 	
 	"""
 	
-	print ("+ MGE analysis for sample: ", name)
+	#print ("+ MGE analysis for sample: ", name)
 	
 	## get Genbank file generated with PROKKA
 	gbk_file = dataFrame_sample.loc[dataFrame_sample['ext'] == 'gbf']['sample'].tolist() ## [TODO: Fix SettingWithCopyWarning]
