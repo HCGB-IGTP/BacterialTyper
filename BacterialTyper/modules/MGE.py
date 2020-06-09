@@ -29,8 +29,11 @@ from BacterialTyper.scripts import database_generator
 from BacterialTyper.scripts import database_user
 
 ###
-global MGE_Results
-MGE_Results = pd.DataFrame(columns=("sample", "type", "file"))
+global phage_Results
+phage_Results = {}
+global GI_Results
+GI_Results = {}
+
 
 ####################################
 def run_MGE(options):
@@ -408,8 +411,9 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 			## Parse results
 			bacteriophage.results_PhiSpy(outdir_phage, name)
 			
-		MGE_Results.loc[len(MGE_Results)] = [name, 'phage', outdir_phage]
-
+		## save results
+		phage_Results[name] = outdir_phage
+		
 	####################
 	## Genomic Island analysis
 	####################
@@ -429,7 +433,8 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 		## Call phispy
 		genomic_island.GI_module(gbk_file[0], name, outdir_GI, Debug, options.cutoff_dinuc_bias, options.min_length)
 		
-		MGE_Results.loc[len(MGE_Results)] = [name, 'GI', outdir_GI]
+		## save results
+		GI_Results[name] = outdir_GI
 	
 		print ("")
 
