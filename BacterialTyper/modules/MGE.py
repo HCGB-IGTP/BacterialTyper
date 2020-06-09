@@ -30,7 +30,7 @@ from BacterialTyper.scripts import database_user
 
 ###
 global MGE_Results
-MGE_Results = pd.DataFrame(columns=c("sample", "type", "file"))
+MGE_Results = pd.DataFrame(columns=("sample", "type", "file"))
 
 ####################################
 def run_MGE(options):
@@ -67,8 +67,6 @@ def run_MGE(options):
 		## information for PhiSpy
 		help_input_Dimob()
 		exit()
-
-
 
 	## debugging messages
 	global Debug
@@ -364,9 +362,9 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 	####################
 	if plasmid_bool:
 
-		functions.print_sepLine("*",50, False)
-		print ('Plasmid identification analysis')
-		functions.print_sepLine("*",50, False)
+		#functions.print_sepLine("*",50, False)
+		#print ('Plasmid identification analysis')
+		#functions.print_sepLine("*",50, False)
 
 		## for each sample
 		outdir_plasmid = functions.create_subfolder("plasmid", output_dir)
@@ -385,9 +383,9 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 	####################
 	if bacteriophage_bool:
 		
-		functions.print_sepLine("*",50, False)
-		print (' Phage identification analysis')
-		functions.print_sepLine("*",50, False)
+		#functions.print_sepLine("*",50, False)
+		#print (' Phage identification analysis')
+		#functions.print_sepLine("*",50, False)
 		
 		## for each sample
 		outdir_phage = functions.create_subfolder("phage", output_dir)
@@ -410,16 +408,16 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 			## Parse results
 			bacteriophage.results_PhiSpy(outdir_phage, name)
 			
-			MGE_Results.loc[name]['phage'] = outdir_phage
+		MGE_Results.loc[len(MGE_Results)] = [name, 'phage', outdir_phage]
 
 	####################
 	## Genomic Island analysis
 	####################
 	if genomic_island_bool:
 
-		functions.print_sepLine("*",50, False)
-		print (' Genomic island identification analysis')
-		functions.print_sepLine("*",50, False)
+		#functions.print_sepLine("*",50, False)
+		#print (' Genomic island identification analysis')
+		#functions.print_sepLine("*",50, False)
 
 		## for each sample
 		outdir_GI = functions.create_subfolder("genomic_island", output_dir)
@@ -431,8 +429,8 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 		## Call phispy
 		genomic_island.GI_module(gbk_file[0], name, outdir_GI, Debug, options.cutoff_dinuc_bias, options.min_length)
 		
-		MGE_Results.loc[name]['GI'] = outdir_GI
-			
+		MGE_Results.loc[len(MGE_Results)] = [name, 'GI', outdir_GI]
+	
 		print ("")
 
 ###########################
