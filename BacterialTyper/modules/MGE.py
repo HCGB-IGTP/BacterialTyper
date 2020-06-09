@@ -28,6 +28,10 @@ from BacterialTyper.modules import help_info
 from BacterialTyper.scripts import database_generator
 from BacterialTyper.scripts import database_user
 
+###
+global MGE_Results
+MGE_Results = pd.DataFrame(columns=c("sample", "type", "file"))
+
 ####################################
 def run_MGE(options):
 
@@ -303,26 +307,35 @@ def run_MGE(options):
 	outdir_report = functions.create_subfolder("report", outdir)
 	final_dir = functions.create_subfolder("MGE_analysis", outdir_report)
 	
+	if Debug:
+		print ("*** DEBUG: MGE_Results ***")
+		print (MGE_Results)
+		
+	print (MGE_Results)
+		
+	
 	if (bacteriophage_bool):
 		
 		phages_dir = functions.create_subfolder("phages", final_dir)
-		print ("+ See deatils of phages in folder:")
+		print ("+ See details of phages results in folder:")
 		print ("\t -", phages_dir)
 		
 		
 	if (genomic_island_bool):
 		GI_dir = functions.create_subfolder("genomicIslands", final_dir)
-		print ("+ See deatils of genomic islands in folder:")
+		print ("+ See details of genomic islands results in folder:")
 		print ("\t -", GI_dir)
 		
 	if (plasmid_bool):
 		plasmid_dir = functions.create_subfolder("plasmids", final_dir)
-		print ("+ See deatils of plasmids in folder:")
+		print ("+ See details of plasmids results in folder:")
 		print ("\t -", plasmid_dir)
 		
 	
+	## use BioCircos to represent this information?
+	## Example: 
+	## https://github.com/molevol-ub/BacterialDuplicates/blob/master/scripts/R/BioCircos_plotter.R	
 	
-
 ###########################
 def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 	"""Identify Mobile Genetic Elements
@@ -379,7 +392,6 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 		## for each sample
 		outdir_phage = functions.create_subfolder("phage", output_dir)
 
-
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: Dir: " + str(outdir_phage), 'yellow'))
@@ -397,6 +409,8 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 			
 			## Parse results
 			bacteriophage.results_PhiSpy(outdir_phage, name)
+			
+			MGE_Results.loc[name]['phage'] = outdir_phage
 
 	####################
 	## Genomic Island analysis
@@ -417,6 +431,7 @@ def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 		## Call phispy
 		genomic_island.GI_module(gbk_file[0], name, outdir_GI, Debug, options.cutoff_dinuc_bias, options.min_length)
 		
+		MGE_Results.loc[name]['GI'] = outdir_GI
 			
 		print ("")
 
