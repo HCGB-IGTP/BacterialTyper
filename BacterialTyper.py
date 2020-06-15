@@ -38,16 +38,38 @@ help_options = ('--help_Database',
 				'--help_input_MGE',
                 '--help_Snippy')
 
-## space
-##subparser_space = subparsers.add_parser('-----------------------', help='')
-##subparser_space = subparsers.add_parser('Pipeline configuration', help='')
-##subparser_space = subparsers.add_parser('-----------------------', help='')
-##subparser_space = subparsers.add_parser(' ', help='')
+subparser_space = subparsers.add_parser('Configuration', help='')
+subparser_space = subparsers.add_parser('==============', help='')
 
 #######################
 #### Configuration ####
 #######################
-## submodules
+##------------------------------ Information help ---------------------- ##
+subparser_help = subparsers.add_parser(
+    'info',
+    help='Print additional information & help messages ',
+    description='For different modules, options or parameters print additional information and help messages',
+)
+subparser_help_name = subparser_help.add_argument_group("Show additional help information")
+subparser_help = subparser_help_name.add_mutually_exclusive_group(required= True)
+subparser_help.add_argument("--help_project", action="store_true", help="...")
+subparser_help.add_argument("--help_format", action="store_true", help="...")
+subparser_help.add_argument("--help_trimm_adapters", action="store_true", help="Show additional information on trimm adapters.")
+subparser_help.add_argument("--help_BUSCO", action="store_true", help="...")
+subparser_help.add_argument("--help_Prokka", action="store_true", help="...")
+subparser_help.add_argument("--help_multiqc", action="store_true", help="Show additional help on the multiQC module.")
+subparser_help.add_argument("--help_ARIBA", action="store_true", help="...")
+subparser_help.add_argument("--help_KMA", action="store_true", help="Show additional help on KMA software and options.")
+subparser_help.add_argument("--help_input_MGE", action="store_true", help="Print further information for input options under MGE module.")
+subparser_help.add_argument("--help_MGE_analysis", action="store_true", help="Print further information for Mobile Genetic Element module analysis.")
+subparser_help.add_argument("--help_PhiSpy", action="store_true", help="Print further information for PhiSpy analysis.")
+subparser_help.add_argument("--help_Mash", action="store_true", help="Print further information for Mash clustering analysis.")
+subparser_help.add_argument("--help_Snippy", action="store_true", help="Print further information for Snippy analysis.")
+subparser_help.add_argument("--help_MLSTar", action="store_true", help="Print further information for MLST analysis.")
+
+subparser_help.set_defaults(func=BacterialTyper.modules.help_info.run_info)
+##-------------------------------------------------------------##
+
 ##------------------------------ config ---------------------- ##
 subparser_config = subparsers.add_parser(
     'config',
@@ -61,14 +83,9 @@ subparser_config.add_argument("--debug", action="store_true", help="Show additio
 subparser_config.set_defaults(func=BacterialTyper.modules.config.run)
 ##-------------------------------------------------------------##
 
-## add fake module blank to add space
-subparser_space = subparsers.add_parser(' ', help='')
-##-------------------------------------------------------------##
-
 ###################
 #### Databases ####
 ###################
-
 ##---------------------  database -------------------- ##
 subparser_database = subparsers.add_parser(
     'database',
@@ -125,6 +142,9 @@ subparser_database.set_defaults(func=BacterialTyper.modules.database.run_databas
 
 ## space
 subparser_space = subparsers.add_parser(' ', help='')
+
+subparser_space = subparsers.add_parser('Analysis', help='')
+subparser_space = subparsers.add_parser('==============', help='')
 
 #########################
 #### Prepare samples ####
@@ -315,8 +335,7 @@ info_group_annot.add_argument("--help_project", action="store_true", help="Show 
 subparser_annotate.set_defaults(func=BacterialTyper.modules.annot.run_annotation)
 ##-------------------------------------------------------------##
 
-## space
-subparser_space = subparsers.add_parser(' ', help='')
+## space subparser_space = subparsers.add_parser(' ', help='')
 
 ########################
 #### Identification ####
@@ -559,31 +578,9 @@ subparser_space = subparsers.add_parser(' ', help='')
 #############################
 #### Additional messages ####
 #############################
-##------------------------------ Information help ---------------------- ##
-subparser_help = subparsers.add_parser(
-    'info',
-    help='Print additional information & help messages ',
-    description='For different modules, options or parameters print additional information and help messages',
-)
-subparser_help_name = subparser_help.add_argument_group("Show additional help information")
-subparser_help = subparser_help_name.add_mutually_exclusive_group(required= True)
-subparser_help.add_argument("--help_project", action="store_true", help="...")
-subparser_help.add_argument("--help_format", action="store_true", help="...")
-subparser_help.add_argument("--help_trimm_adapters", action="store_true", help="Show additional information on trimm adapters.")
-subparser_help.add_argument("--help_BUSCO", action="store_true", help="...")
-subparser_help.add_argument("--help_Prokka", action="store_true", help="...")
-subparser_help.add_argument("--help_multiqc", action="store_true", help="Show additional help on the multiQC module.")
-subparser_help.add_argument("--help_ARIBA", action="store_true", help="...")
-subparser_help.add_argument("--help_KMA", action="store_true", help="Show additional help on KMA software and options.")
-subparser_help.add_argument("--help_input_MGE", action="store_true", help="Print further information for input options under MGE module.")
-subparser_help.add_argument("--help_MGE_analysis", action="store_true", help="Print further information for Mobile Genetic Element module analysis.")
-subparser_help.add_argument("--help_PhiSpy", action="store_true", help="Print further information for PhiSpy analysis.")
-subparser_help.add_argument("--help_Mash", action="store_true", help="Print further information for Mash clustering analysis.")
-subparser_help.add_argument("--help_Snippy", action="store_true", help="Print further information for Snippy analysis.")
-subparser_help.add_argument("--help_MLSTar", action="store_true", help="Print further information for MLST analysis.")
 
-subparser_help.set_defaults(func=BacterialTyper.modules.help_info.run_info)
-##-------------------------------------------------------------##
+subparser_space = subparsers.add_parser('Additional information', help='')
+subparser_space = subparsers.add_parser('======================', help='')
 
 ##-------------------------- version ------------------------- ##
 subparser_version = subparsers.add_parser(
