@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-#########################################################
+##########################################################
 ## Jose F. Sanchez                                      ##
-## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain      ##
+## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain ##
 ##########################################################
 """
 Main script for the BacterialTyper project.
