@@ -17,6 +17,7 @@ from io import open
 import concurrent.futures
 from termcolor import colored
 import pandas as pd
+import shutil
 
 ## import my modules
 from BacterialTyper.scripts import functions, bacteriophage, genomic_island
@@ -301,7 +302,6 @@ def run_MGE(options):
 				print (cmd2)
 				print('%r generated an exception: %s' % (details, exc))
 
-	
 	## create summary in report for each
 	## get all analysis stats
 	print ("+ Create summary of all samples analyzed.")
@@ -312,11 +312,9 @@ def run_MGE(options):
 		print ("*** DEBUG: MGE_Results ***")
 		print (phage_Results)
 		print (GI_Results)
-		
-	## DEBUG
-	print (phage_Results)
-	print (GI_Results)
-			
+	
+	results_summary = pd.DataFrame(columns=("sample", "phage", "genomic_island", "plasmid"))
+	results_summary = results_summary.set_index("sample")
 	
 	if (bacteriophage_bool):
 		
@@ -324,22 +322,41 @@ def run_MGE(options):
 		print ("+ See details of phages results in folder:")
 		print ("\t", phages_dir)
 		
-		
+		for key,value in phage_Results.items():
+			file_coord=os.path.join(value, key + '_PhiSpy-prophage-coordinates.tsv')
+			if functions.is_non_zero_file(file_coord):
+				shutil.copy(file_coord, phages_dir)
+				coordinates_pd = pd.read_csv(file_coord, sep="\t")
+				results_summary.loc[key, "phage"] = len(coordinates_pd)
+	
 	if (genomic_island_bool):
 		GI_dir = functions.create_subfolder("genomicIslands", final_dir)
 		print ("+ See details of genomic islands results in folder:")
 		print ("\t", GI_dir)
 		
+		for key,value in GI_Results.items():
+			file_coord=os.path.join(value, key + '.txt')
+			if functions.is_non_zero_file(file_coord):
+				shutil.copy(file_coord, GI_dir)
+				coordinates_pd = pd.read_csv(file_coord, sep="\t")
+				results_summary.loc[key, "genomic_island"] = len(coordinates_pd)
+	
 	if (plasmid_bool):
 		plasmid_dir = functions.create_subfolder("plasmids", final_dir)
 		print ("+ See details of plasmids results in folder:")
 		print ("\t", plasmid_dir)
 		
-	
 	## use BioCircos to represent this information?
 	## Example: 
 	## https://github.com/molevol-ub/BacterialDuplicates/blob/master/scripts/R/BioCircos_plotter.R	
 	
+	print ("+ Printing summary results in XLSX file")
+	print ("+ See details in directory: ", final_dir)
+	name_excel_summary = os.path.join(final_dir, "MGE_summary.xlsx")
+	writer_summary = pd.ExcelWriter(name_excel_summary, engine='xlsxwriter') ## open excel handle
+	results_summary.to_excel(writer_summary, sheet_name="summary") ## write excel handle
+	writer_summary.save() ## close excel handle
+
 ###########################
 def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 	"""Identify Mobile Genetic Elements

@@ -5,3 +5,4 @@
 *pyc
 env/BacterialTyper/
 *.swp
+/tmp_files
