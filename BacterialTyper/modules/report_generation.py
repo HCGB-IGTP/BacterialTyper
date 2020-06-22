@@ -113,7 +113,7 @@ def run_report(options):
     
     ## create species specific report if any
     species_specific_df = pd.DataFrame()
-    if options.species_report == "Saures":
+    if options.species_report == "Saureus":
         Saureus_specific(pd_samples_retrieved, pd_samples_info, species_specific_df, options)
         
     
@@ -140,12 +140,11 @@ def Saureus_specific(samples_df, samples_info, results_df, options):
     
     ## get European Quality Control genes
     
-    
     ## get spatyping
-    samples_df.loc[:, "tag"] = "assembly"
-    print (samples_df)
-    #dictionary_fasta_files = 
-    #get_spa_typing.module_call(options.database, dictionary_fasta_files, options.debug)
+    assembly_files = samples_df.loc[samples_df['tag'] == "assembly", "sample"]
+    results_df = get_spa_typing.module_call(options.database, assembly_files.to_dict(), options.debug)
+    
+    print (results_df)
     
     ## get sccmec
     

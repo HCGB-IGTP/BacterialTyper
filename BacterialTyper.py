@@ -603,7 +603,7 @@ dataset_group_report = subparser_report.add_argument_group("Databases")
 dataset_group_report.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv) )
 
 species_report = subparser_report.add_argument_group("Species specific")
-species_report.add_argument("--species", dest='species_report', nargs='*', choices=['Saureus'])
+species_report.add_argument("--species", dest='species_report', choices=['Saureus'])
 
 
 info_group_report = subparser_report.add_argument_group("Additional information")

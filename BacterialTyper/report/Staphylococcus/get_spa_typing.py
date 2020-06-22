@@ -16,6 +16,7 @@ from sys import argv
 from io import open
 from termcolor import colored
 import spaTyper
+import pandas as pd
 
 ## import my modules
 from BacterialTyper.scripts import functions
@@ -74,7 +75,7 @@ def module_call(db_folder, dictionary_fasta_files, debug):
     seqDict, letDict, typeDict, seqLengths = spaTyper.spa_typing.getSpaTypes(spaTyper_repeats, spaTyper_types, debug)
     
     ## debug messages
-    if args.debug:
+    if debug:
         print ('## Debug: seqDict: Too large to print: See repeat_file for details')
         print ('## Debug: typeDict: Too large to print: See repeat_order_file for details')
         print ('## Debug: letDict: conversion dictionary')
@@ -88,7 +89,7 @@ def module_call(db_folder, dictionary_fasta_files, debug):
     ## for each sample get spaType
     for key, value in dictionary_fasta_files.items():
         print ("+ Sample: ", key)
-        returned_value = call_spaTyper(value, qDict, seqDict, letDict, typeDict, seqLengths, debug)
+        returned_value = call_spaTyper(value, seqDict, letDict, typeDict, seqLengths, debug)
         
         for j in returned_value.keys():
             splitted = returned_value[j].split('::')
