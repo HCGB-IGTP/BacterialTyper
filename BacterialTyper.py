@@ -209,7 +209,7 @@ exclusive_group_qc.add_argument("--annotation", action="store_true",  help="Chec
 
 options_group_qc = subparser_qc.add_argument_group("Configuration")
 options_group_qc.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end. Only applicable if --raw_reads option.")
-options_group_qc.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
+options_group_qc.add_argument("--skip_", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
 options_group_qc.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 
 dataset_group_qc = subparser_qc.add_argument_group("Datasets")
@@ -581,6 +581,38 @@ subparser_space = subparsers.add_parser(' ', help='')
 
 subparser_space = subparsers.add_parser('Additional information', help='')
 subparser_space = subparsers.add_parser('======================', help='')
+
+
+##--------------------------- report ----------------------- ##
+subparser_report = subparsers.add_parser(
+    'report',
+    help='Report generation for samples.',
+    description='This module creates a report summarizing and providing information of the analysis generated.'
+)
+in_out_group_report = subparser_report.add_argument_group("Input/Output")
+in_out_group_report.add_argument("--input", help="Folder containing a project or assemblies. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv) )
+##in_out_group_annot.add_argument("--batch", help="Provide a csv file containing the name and the path for each assembly. No header. Provided it in format: name,tag,file. tag = chromosome/plasmid. e.g. sample1,chromosome,/path/to/sample1/assembly/file.fasta\nsample1,plasmid,/path/to/sample1/assembly/file.fasta")
+in_out_group_report.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+in_out_group_report.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+in_out_group_report.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
+in_out_group_report.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
+in_out_group_report.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
+in_out_group_report.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
+
+dataset_group_report = subparser_report.add_argument_group("Databases")
+dataset_group_report.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv) )
+
+species_report = subparser_report.add_argument_group("Species specific")
+species_report.add_argument("--species", dest='species_report', nargs='*', choices=['Saureus'])
+
+
+info_group_report = subparser_report.add_argument_group("Additional information")
+info_group_report.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+info_group_report.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
+
+subparser_report.set_defaults(func=BacterialTyper.modules.report_generation.run_report)
+##-------------------------------------------------------------##
+
 
 ##-------------------------- version ------------------------- ##
 subparser_version = subparsers.add_parser(

@@ -15,7 +15,8 @@ __all__ = [
 	'modules',
 	'other_tools',
 	'config',
-	'scripts'
+	'scripts',
+	'report'
 ]
 
 from BacterialTyper import *

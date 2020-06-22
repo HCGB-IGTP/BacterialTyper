@@ -127,7 +127,7 @@ def main():
         
     fasta_file = os.path.abspath(argv[1])
     db_folder = os.path.abspath(argv[2])
-    debug=True
+    debug=False
 
     ## get pattern
     (spaTyper_repeats, spaTyper_types) = check_files(db_folder, debug)

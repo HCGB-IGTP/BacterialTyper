@@ -25,6 +25,7 @@ For additional details, visit:
    
    http://www.staphylococcus.net/index.php/en/sccmec-descrption
    
+   
 SCCmec typing
 -------------
 
@@ -33,6 +34,7 @@ class of mec-gene complex :cite:`hiramatsu13`. Subtype of the SCCmec is based on
 J regions (standing for junkyard): J1, J2, and J3.
 
 .. csv-table::
+   :widths: auto
    :header-rows: 1
    :file: sccmec_typing.csv
    

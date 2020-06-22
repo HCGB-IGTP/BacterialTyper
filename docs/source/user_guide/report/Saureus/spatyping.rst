@@ -20,8 +20,9 @@ unique repeat code. The order of specific repeats for a given strain determines 
    Original source: Applied Maths Bionumerics `website <https://www.applied-maths.com/applications/staphylococcus-aureus-spa-typing>`_. 
    First, a repeat classification is generated. Then, based on the specific repeat order the spa type is determined.
 
-``BacterialTyper`` relies on a ``python`` module named ``spa_typing`` (https://github.com/mjsull/spa_typing) 
-(developed in collaboration) that automatically synchronizes repeats and spa type signatures with the SeqNet/Ridom Spa Server.  
+``BacterialTyper`` relies on a ``python`` module named ``spaTyper`` (https://github.com/JFsanchezherrero/spa_typing,
+ https://pypi.org/project/spaTyper/) (developed in collaboration with Mitchell Sullivan). This module automatically 
+synchronizes repeats and spa type signatures with the SeqNet/Ridom Spa Server and identifies spa protein in a given assembly.  
 
 It automatically retrieves repeats from: http://spa.ridom.de/dynamic/sparepeats.fasta 
 and spa types from http://spa.ridom.de/dynamic/spatypes.txt
@@ -34,6 +35,7 @@ Here we show an example of SPA repeats:
 And an example of SPA typing:
 
 .. csv-table::
+   :widths: auto
    :header: "Spa Type", "Spa Repeat combination"
    :file: spaTypes_example.txt
    

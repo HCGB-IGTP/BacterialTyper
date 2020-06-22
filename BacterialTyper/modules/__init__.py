@@ -16,6 +16,7 @@ __all__ = [
 	'prep',
 	'qc',
 	'run',
+	'report_generation',
 	'test',
 	'trimm',
 	'version'

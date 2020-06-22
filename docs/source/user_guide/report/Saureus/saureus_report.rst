@@ -28,11 +28,12 @@ Genes to report
 A list of important genes is provided in file: 
 
 .. csv-table::
+   :widths: 4,12,25
    :header-rows: 1 
    :file: EQC_genes-description.csv
    
    
-.. test: :file: ../../../../BacterialTyper/data/report/Staphylococcus/EQC_genes.csv
+.. test: :file: ../../../../BacterialTyper/report/Staphylococcus/EQC_genes.csv
     
 .. include:: sccmec.rst
 
