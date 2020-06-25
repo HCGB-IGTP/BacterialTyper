@@ -35,7 +35,7 @@ def parse_snippy_files(folder_results):
 	"""
 	Parse Snippy output files 
 	
-	Check details of results generated in :ref:`snippy-output-files`_
+	Check details of results generated in :ref:`snippy-output-files`
 	"""
 	
 	return ()

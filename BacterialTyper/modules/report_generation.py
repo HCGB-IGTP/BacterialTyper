@@ -131,6 +131,7 @@ def run_report(options):
     start_time_partial = functions.timestamp(start_time_total)        
 
 
+#######################3
 def Saureus_specific(samples_df, samples_info, results_df, options):
     """
     Retrieves Saureus specific information.
@@ -139,13 +140,24 @@ def Saureus_specific(samples_df, samples_info, results_df, options):
     """
     
     ## get European Quality Control genes
+    Staphylococcus_path = os.path.abspath( os.path.join( os.path.realpath(__file__), '..', '..', 'report', 'Staphylococcus'))
+    EQC_genes = os.path.join(Staphylococcus_path, "EQC_genes.csv")
+    arcA_gene = os.path.join(Staphylococcus_path, "arcA.fasta")
+    
+    EQC_genes_df = functions.get_data(EQC_genes, ',')
+
+
+    if options.debug:
+        print ("## DEBUG: Saureus_specific")
+        print (Staphylococcus_path)
+        print (EQC_genes)
+        print (arcA_gene)
     
     ## get spatyping
     assembly_files = samples_df.loc[samples_df['tag'] == "assembly", "sample"]
     results_df = get_spa_typing.module_call(options.database, assembly_files.to_dict(), options.debug)
     
-    print (results_df)
-    
+    results_df.to_csv("/home/labs/lslab/jsanchez/proc_data/20200405_CPrat_SaureusPaper/analysis/test_spaTyper.csv")    
     ## get sccmec
     
     

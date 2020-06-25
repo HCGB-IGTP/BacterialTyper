@@ -21,7 +21,7 @@ unique repeat code. The order of specific repeats for a given strain determines 
    First, a repeat classification is generated. Then, based on the specific repeat order the spa type is determined.
 
 ``BacterialTyper`` relies on a ``python`` module named ``spaTyper`` (https://github.com/JFsanchezherrero/spa_typing,
- https://pypi.org/project/spaTyper/) (developed in collaboration with Mitchell Sullivan). This module automatically 
+https://pypi.org/project/spaTyper/) (developed in collaboration with Mitchell Sullivan). This module automatically 
 synchronizes repeats and spa type signatures with the SeqNet/Ridom Spa Server and identifies spa protein in a given assembly.  
 
 It automatically retrieves repeats from: http://spa.ridom.de/dynamic/sparepeats.fasta 

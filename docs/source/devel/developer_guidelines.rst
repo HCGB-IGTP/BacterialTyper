@@ -83,7 +83,7 @@ PhiSpy training Sets available
 File :file:`devel/info/PhiSpy_training-sets.txt` contains the description of the different training sets available for bacteriophage analysis using PhiSpy_.
 
 .. csv-table::
-   :widths: auto
+   :widths: 10,15,15,15,15,20
    :header-rows: 1
    :file: info/PhiSpy_training-sets.txt
 

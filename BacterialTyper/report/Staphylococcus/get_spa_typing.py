@@ -60,7 +60,10 @@ def check_files(db_folder, debug):
 
 ##############
 def module_call(db_folder, dictionary_fasta_files, debug):
+    """
     
+    """
+        
     functions.create_folder(db_folder)
     if db_folder.endswith("spaTyper"):
         spaTyper_db = db_folder
@@ -91,19 +94,39 @@ def module_call(db_folder, dictionary_fasta_files, debug):
         print ("+ Sample: ", key)
         returned_value = call_spaTyper(value, seqDict, letDict, typeDict, seqLengths, debug)
         
+        if len(returned_value.keys()) > 1:
+            print (colored("** Attention: >1 spaTypes detected for sample: %s" %key, 'red'))
+
         for j in returned_value.keys():
             splitted = returned_value[j].split('::')
-            if len(returned_value.keys()) > 1:
-                print (colored("** Attention: >1 spaTypes detected for sample: %s" %key, 'red'))
             
             results_summary.loc[len(results_summary)] = (key, j, splitted[2], splitted[1])    
-            print("Sequence name: ",j, "Repeats:", splitted[2], "Repeat Type:", splitted[1], '\n')    
+            ## debug messages
+            if debug:
+                print("Sequence name: ",j, "Repeats:", splitted[2], "Repeat Type:", splitted[1], '\n')    
     
     ##
     return (results_summary)
 
 ##############
 def call_spaTyper(fasta_file, seqDict, letDict, typeDict, seqLengths, debug):
+    """
+    Call spaTyper for a fasta file provided using precomputed spa repeats orders and types.
+    
+    :param fasta_file: Assembly fasta file to check for spa repeats.
+    :param seqDict: Sequence dictionary
+    :param letDict:
+    :param typeDict:
+    :param seqLengths:
+    :param debug:
+    
+    :type fasta_file:
+    :type seqDict:
+    :type letDict:
+    :type typeDict:
+    :type seqLengths:
+    :type debug:
+    """
     
     #######################
     ## findPatterns for each fasta file

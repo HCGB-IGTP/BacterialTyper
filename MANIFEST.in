@@ -1,0 +1,6 @@
+include BacterialTyper/config/python/*
+include BacterialTyper/config/R/*
+include BacterialTyper/config/software/*
+include BacterialTyper/config/perl/*
+include BacterialTyper/data/*
+include BacterialTyper/report/*

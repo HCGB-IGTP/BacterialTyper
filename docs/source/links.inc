@@ -37,6 +37,8 @@
 .. _BUSCO: https://busco.ezlab.org/
 .. _Phandango: https://jameshadfield.github.io/phandango/#/
 .. _sourmash: https://sourmash.readthedocs.io/en/latest/index.html
+.. _Snippy: https://github.com/tseemann/snippy
+.. _SpaTyper: https://pypi.org/project/spaTyper/
 
 .. #### Twitter links
 .. _JF: https://twitter.com/JFSanchezBioinf
