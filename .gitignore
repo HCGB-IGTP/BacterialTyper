@@ -15,3 +15,10 @@ env/BacterialTyper/
 
 ## information generated 
 BacterialTyper/config/R/R_package.info.txt
+
+
+## build
+BacterialTyper.egg-info/
+build/
+dist/
+
