@@ -209,7 +209,7 @@ exclusive_group_qc.add_argument("--annotation", action="store_true",  help="Chec
 
 options_group_qc = subparser_qc.add_argument_group("Configuration")
 options_group_qc.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end. Only applicable if --raw_reads option.")
-options_group_qc.add_argument("--skip_", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
+options_group_qc.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
 options_group_qc.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 
 dataset_group_qc = subparser_qc.add_argument_group("Datasets")
