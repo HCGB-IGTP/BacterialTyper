@@ -1,8 +1,17 @@
+##
 *__pycache__/
 *.project
 *.pydevproject
+
+## docs
 *docs/build/
+
 *pyc
+
+# environment
 env/BacterialTyper/
 *.swp
 /tmp_files
+
+## information generated 
+BacterialTyper/config/R/R_package.info.txt

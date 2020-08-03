@@ -275,7 +275,7 @@ def ident_bacteriophage(gbk_file, name, output_dir, training_set, Debug=False,
 		## Classification
 		PhiSpyModules.call_randomforest(**vars(arg_parser))
 		PhiSpyModules.make_initial_tbl(**vars(arg_parser))
-
+		
 		## Consider unknown functions
 		if (training_set == 'data/trainSet_genericAll.txt'): ## TODO: Debug test with genericAll (Default: 0)
 			PhiSpyModules.consider_unknown(arg_parser.output_dir)

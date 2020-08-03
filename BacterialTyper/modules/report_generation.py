@@ -25,6 +25,8 @@ from BacterialTyper.report.Staphylococcus import get_spa_typing
 ## for klebsiella: kleborate
 ## for micobacterium tuberculosis: MTBSeq
 
+## R package: http://bioconductor.org/packages/release/bioc/html/ReportingTools.html
+
 ####################################
 def run_report(options):
     
