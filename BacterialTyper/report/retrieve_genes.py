@@ -44,7 +44,7 @@ def retrieve_genes(profile, gene_ID, debug):
         print ("** DEBUG **")
         print ("assembled_genes_list: ", assembled_genes_list)
 
-    assembled_genes_list = [s for s in assembled_genes_list if 'aribta.tmp' not in s]
+    assembled_genes_list = [s for s in assembled_genes_list if 'ariba.tmp' not in s]
     
     if debug:
         print ("** DEBUG **")

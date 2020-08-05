@@ -161,12 +161,30 @@ def run_report(options):
         if Debug:
             print (results_geneIDs) 
     
-    print (results_geneIDs) 
+    ## save for each gene in a separate fasta file
+    list_of_genes = set(results_geneIDs.loc['gene'].to_list())
+    genes_folder = functions.create_subfolder('genes', summary_report)
+    for gene_retrieved in list_of_genes:
+        this_frame = results_geneIDs[results_geneIDs.loc['gene'] == gene_retrieved]
+        
+        gene_retrieved_file = os.path.join(genes_folder, gene_retrieved)
+        gene_retrieved_fasta = gene_retrieved_file + ".fasta"
+        gene_retrieved_info = gene_retrieved_file + "_info.txt"
+        fasta_hd = open(gene_retrieved_fasta, 'w')
+        info_hd = open(gene_retrieved_info, 'w')
+        
+        for item, row in this_frame.iterrows():
+            string2write = ">" + row['sample'] + '_' + row['gene'] + '\n' + row['sequence'] + '\n'  
+            string2write_info = ">" + row['sample'] + '\t' + row['gene'] + row['id'] 
+            fasta_hd.write(string2write)
+            info_hd.write(string2write_info)
+            
+        fasta_hd.close()
+        info_hd.close()
     
     if options.genes_fasta:
         ## given a list of fasta sequences search using blast against proteins annotated or genome
         print()    
-    
     
     print ("\n*************** Finish *******************")
     start_time_partial = functions.timestamp(start_time_total)
