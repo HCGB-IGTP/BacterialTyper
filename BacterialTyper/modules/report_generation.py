@@ -137,7 +137,7 @@ def run_report(options):
         if os.path.isfile(os.path.abspath(options.genes_ids_fasta)):
             in_file = os.path.abspath(options.genes_ids_fasta)
             gene_names = [line.rstrip('\n') for line in open(in_file)]
-            print ('+ Retrieve selected genes from the profile analysis for each sample.')
+            print ('+ Retrieve selected genes sequences from the profile analysis for each sample.')
             print ('+ Searching gene:')
             
             ## get profiles available

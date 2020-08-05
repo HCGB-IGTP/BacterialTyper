@@ -60,10 +60,12 @@ def retrieve_genes_ids_sequences(profile, gene_ID, debug):
 
         return('','')
 
-## retrieve info
+##############
 def get_genes_profile(samples_info, gene_names, debug):
     """    
     """
+    print ('\n+ Retrieve selected genes profile for each sample.')
+    print ('+ Searching gene:')
     results_profileIDs = pd.DataFrame(columns=('sample', 'gene', 'value'))
     sample_frame = samples_info.groupby(["name"])
     for g in gene_names:
@@ -82,8 +84,8 @@ def get_genes_profile(samples_info, gene_names, debug):
                 if (value == 'no'):
                     results_profileIDs.loc[len(results_profileIDs)] = (name, g, value)
                 else:
-                    for colName, colData in value.iteritems():
-                        results_profileIDs.loc[len(results_profileIDs)] = (name, colName, colData) 
+                    for Name, Data in value.iterrows():
+                        results_profileIDs.loc[len(results_profileIDs)] = (name, Name, Data) 
     
     return (results_profileIDs)
 
@@ -93,6 +95,8 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug):
     """
     ## read data    
     get_csv_data = functions.main_functions.get_data(profile, ',', '')
+    list_Genes = get_csv_data['Genes'].to_list()
+    get_csv_data.index = get_csv_data['Genes'] 
     
     ## debug messages
     if debug:
@@ -101,19 +105,24 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug):
         print ("gene_id: ", gene_ID)
         print ("data")
         print (get_csv_data)
+        print ("Genes")
+        print (list_Genes)
     
-    if (get_csv_data.filter(regex=('^' + gene_ID + '.*')).empty):
-        return('no')
-    else:
-        this_df = get_csv_data.filter(regex=('^' + gene_ID + '.*'))
-        filtered_genes = this_df.columns.values
+    regex_search = re.compile("^" + gene_ID + ".*")
+    filtered_genes = list(filter(regex_search.match, list_Genes))
+    
+    if (len(filtered_genes) > 0):
+        
         ## debug messages
         if debug:
             print ("** DEBUG **")
             print (filtered_genes)
-            print (this_df[filtered_genes])
+            print (get_csv_data.loc[filtered_genes]['Status'])
         
-        return (this_df[filtered_genes])     
+        return (get_csv_data.loc[filtered_genes]['Status'])     
+    
+    else:
+        return('no')
     
 ##############
 def main():
