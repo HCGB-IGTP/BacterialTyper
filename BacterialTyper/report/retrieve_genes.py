@@ -61,7 +61,7 @@ def retrieve_genes_ids_sequences(profile, gene_ID, debug):
         return('','')
 
 ## retrieve info
-def get_genes_profile(samples_info, gene_names):
+def get_genes_profile(samples_info, gene_names, debug):
     """    
     """
     results_profileIDs = pd.DataFrame(columns=('sample', 'gene', 'value'))
@@ -70,14 +70,14 @@ def get_genes_profile(samples_info, gene_names):
         print ("\t+", g)
         for name, cluster_df in sample_frame:
             my_list_profiles = cluster_df.loc[cluster_df['tag'] == 'profile']['ext'].to_list()
-            if options.debug:
+            if debug:
                 print ("name: ", name)
                 print ("my_list_profiles:")
                 print (my_list_profiles)
             
             for p in my_list_profiles:
                 profile_csv = cluster_df.loc[cluster_df['ext'] == p]['sample'][0]
-                value = retrieve_genes.retrieve_genes_ids_profile(profile_csv, g, Debug)
+                value = retrieve_genes_ids_profile(profile_csv, g, debug)
                 ## save results 
                 if (value == 'no'):
                     results_profileIDs.loc[len(results_profileIDs)] = (name, g, value)

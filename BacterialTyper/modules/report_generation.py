@@ -207,7 +207,7 @@ def run_report(options):
         else:
             in_file = os.path.abspath(options.genes_ids_profile)
             gene_names = [line.rstrip('\n') for line in open(in_file)]
-            results_Profiles = retrieve_genes.get_genes_profile(samples_info, gene_names)
+            results_Profiles = retrieve_genes.get_genes_profile(samples_info, gene_names, options.debug)
             if options.debug:
                 print ("results_Profiles")
                 print (results_Profiles)
@@ -240,7 +240,7 @@ def run_report(options):
 
 
 #######################3
-def Saureus_specific(samples_df, samples_info, results_df, options, folder):
+def Saureus_specific(samples_df, samples_info, options, folder):
     """
     Retrieves Saureus specific information.
     
@@ -254,7 +254,7 @@ def Saureus_specific(samples_df, samples_info, results_df, options, folder):
     EQC_genes = os.path.join(Staphylococcus_path, "EQC_genes.csv")
     arcA_gene = os.path.join(Staphylococcus_path, "arcA.fasta")
     
-    EQC_genes_df = functions.get_data(EQC_genes, ',')
+    EQC_genes_df = functions.get_data(EQC_genes, ',', '')
     ## Gene,ID,Source
     ## mecA,ARO:3000617,CARD
     ## mecC,ARO:3001209,CARD
@@ -293,7 +293,7 @@ def Saureus_specific(samples_df, samples_info, results_df, options, folder):
     ####################
     ## get gene info
     ####################
-    results_Profiles = retrieve_genes.get_genes_profile(samples_info, gene_names)
+    results_Profiles = retrieve_genes.get_genes_profile(samples_info, gene_names, options.debug)
     if options.debug:
         print ("results_Profiles")
         print (results_Profiles)
