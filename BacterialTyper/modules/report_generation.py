@@ -19,6 +19,7 @@ from BacterialTyper.scripts import functions
 from BacterialTyper.scripts import database_user
 from BacterialTyper.config import set_config
 from BacterialTyper.report.Staphylococcus import get_spa_typing
+from BacterialTyper.report import retrieve_genes
 
 ## example report check: https://github.com/tseemann/nullarbor
 
@@ -128,18 +129,33 @@ def run_report(options):
             in_file = os.path.abspath(options.genes_ids)
             gene_names = [line.rstrip('\n') for line in open(in_file)]
             print ('+ Retrieve selected genes from the profile analysis for each sample.')
-            print ('+ Genes:')
-            print (gene_names)
+            print ('+ Searching gene:')
             
             ## get profiles available
-            my_list_profiles = pd_samples_info.loc[pd_samples_info['tag'] == 'profile']['ext'].to_list()
-            if options.debug:
-                print ("my_list_profiles")
-                print (my_list_profiles)
-                
+            results_geneIDs = pd.DataFrame(columns=('sample', 'gene', 'id', 'sequence'))
+            sample_frame = pd_samples_info.groupby(["name"])
             for g in gene_names:
-                print (g)
+                print ("\t -", g)
+                for name, cluster_df in sample_frame:
+                    my_list_profiles = cluster_df.loc[cluster_df['tag'] == 'profile']['ext'].to_list()
+                    if options.debug:
+                        print ("name: ", name)
+                        print ("my_list_profiles:")
+                        print (my_list_profiles)
+                    
+                    for p in my_list_profiles:
+                        main_profile_folder = cluster_df['ext']['dirname'][0]
+                        if p == 'VFDB':
+                            p = p.lower() + '_full'
+                        
+                        profile_folder = os.path.join(main_profile_folder, p)
+                        (seq_id, seq_sequence) = retrieve_genes.retrieve_genes(profile_folder, g, Debug)
+                        results_geneIDs.loc(length(results_geneIDs)) = (name, g, seq_id, seq_sequence)
 
+        ## debug
+        if Debug:
+            print (results_geneIDs) 
+    
     
     if options.genes_fasta:
         ## given a list of fasta sequences search using blast against proteins annotated or genome
