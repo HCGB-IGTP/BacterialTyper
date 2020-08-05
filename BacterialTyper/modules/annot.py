@@ -17,14 +17,21 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts import annotation
 from BacterialTyper.scripts import BUSCO_caller
 from BacterialTyper.modules import qc
 from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.modules import help_info
+
 from BacterialTyper.scripts import sampleParser
+from BacterialTyper.scripts import functions
+
+## my HCGB_python_functions modules
+##from HCGB.functions import time_functions
+##from HCGB.functions import system_call_functions
+##from HCGB.functions import aesthetics_functions
+##from HCGB import sampleParser
 
 ####################################
 def run_annotation(options):

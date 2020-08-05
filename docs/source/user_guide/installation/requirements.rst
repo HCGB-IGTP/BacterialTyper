@@ -10,7 +10,7 @@ are needed and are summarized in the following table.
 
 .. csv-table::
    :header: "Module", "Version"
-   :file: ../../data/installation/python_requirements_summary.csv
+   :file: ../../../../BacterialTyper/config/python_requirements_summary.csv
 
 These modules might have extra dependencies. Details of the list of 
 all modules required are listed in :file:`BacterialTyper/config/python/python_requirements.txt`. 

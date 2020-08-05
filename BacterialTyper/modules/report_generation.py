@@ -15,7 +15,8 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper.scripts import functions, database_user
+from BacterialTyper.scripts import functions
+from BacterialTyper.scripts import database_user
 from BacterialTyper.config import set_config
 from BacterialTyper.report.Staphylococcus import get_spa_typing
 
@@ -96,7 +97,6 @@ def run_report(options):
         print (colored("**DEBUG: pd_samples_info **", 'yellow'))
         print (pd_samples_info)
         
-    
     ## generate output folder, if necessary
     print ("\n\n\n+ Generate a report summarizing analysis and sample information")
     if not options.project:
@@ -118,11 +118,34 @@ def run_report(options):
     if options.species_report == "Saureus":
         Saureus_specific(pd_samples_retrieved, pd_samples_info, species_specific_df, options)
         
+        ## time stamp
+        start_time_partial = functions.timestamp(start_time_partial)
+
+    ## create gene specific report if any
+    if options.genes_ids:
+        ## given a list of genes ids, retrieve sequence for all samples from profile 
+        if os.path.isfile(os.path.abspath(options.genes_ids)):
+            in_file = os.path.abspath(options.genes_ids)
+            gene_names = [line.rstrip('\n') for line in open(in_file)]
+            print ('+ Retrieve selected genes from the profile analysis for each sample.')
+            print ('+ Genes:')
+            print (gene_names)
+            
+            ## get profiles available
+            my_list_profiles = pd_samples_info.loc[pd_samples_info['tag'] == 'profile']['ext'].to_list()
+            if options.debug:
+                print ("my_list_profiles")
+                print (my_list_profiles)
+                
+            for g in gene_names:
+                print (g)
+
     
-    ## time stamp
-    start_time_partial = functions.timestamp(start_time_partial)
-
-
+    if options.genes_fasta:
+        ## given a list of fasta sequences search using blast against proteins annotated or genome
+        print()    
+    
+    
     print ("\n*************** Finish *******************")
     start_time_partial = functions.timestamp(start_time_total)
 

@@ -4,17 +4,17 @@ import sys
 import glob
 from setuptools import setup, find_packages, Extension
 
+#######
 def get_require_modules():
     """
     Get main python requirements modules
     """
-    with open("./docs/source/data/installation/python_requirements_summary.csv", 'r') as f:
+    with open("./BacterialTyper/config/python_requirements_summary.csv", 'r') as f:
         myModules = [line.strip().split(',')[0] for line in f]
     
-    ## To Do: Debug
-    print(myModules)
     return myModules
 
+#######
 def get_version():
     """
     Original code: PhiSpy setup.py 
@@ -31,11 +31,12 @@ def get_version():
 #    islandpath_files,
 #    include_dirs=[os.path.join('third_party', 'Islandpath-DIMOB')],
 #)
-
+#######
 long_description_text = ""
 with open("README.md", "r") as fh:
     long_description_text = fh.read()
 
+#######
 setup(
     name='BacterialTyper',
     version=get_version(),
