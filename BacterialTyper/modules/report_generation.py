@@ -161,12 +161,14 @@ def run_report(options):
         if Debug:
             print (results_geneIDs) 
     
+ 
     ## save for each gene in a separate fasta file
-    list_of_genes = set(results_geneIDs.loc['gene'].to_list())
+    list_of_genes = set(results_geneIDs['gene'].to_list())
+
     genes_folder = functions.create_subfolder('genes', summary_report)
     for gene_retrieved in list_of_genes:
-        this_frame = results_geneIDs[results_geneIDs.loc['gene'] == gene_retrieved]
-        
+        this_frame = results_geneIDs[results_geneIDs['gene'] == gene_retrieved]
+
         gene_retrieved_file = os.path.join(genes_folder, gene_retrieved)
         gene_retrieved_fasta = gene_retrieved_file + ".fasta"
         gene_retrieved_info = gene_retrieved_file + "_info.txt"
@@ -175,7 +177,7 @@ def run_report(options):
         
         for item, row in this_frame.iterrows():
             string2write = ">" + row['sample'] + '_' + row['gene'] + '\n' + row['sequence'] + '\n'  
-            string2write_info = ">" + row['sample'] + '\t' + row['gene'] + row['id'] 
+            string2write_info = row['sample'] + '\t' + row['gene'] + '\t' + row['id'] + '\n'
             fasta_hd.write(string2write)
             info_hd.write(string2write_info)
             
