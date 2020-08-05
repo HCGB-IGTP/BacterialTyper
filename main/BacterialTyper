@@ -606,7 +606,8 @@ species_report = subparser_report.add_argument_group("Species specific")
 species_report.add_argument("--species", dest='species_report', choices=['Saureus'])
 
 gene_report = subparser_report.add_argument_group("Gene specific")
-gene_report.add_argument("--genes_ids", help="List of gene IDs to retrieve fasta file from profile analysis")
+gene_report.add_argument("--genes_ids_fasta", help="List of gene IDs to retrieve fasta file from profile analysis")
+gene_report.add_argument("--genes_ids_profile", help="List of gene IDs to retrieve profile value from profile analysis")
 gene_report.add_argument("--genes_fasta", help="Fasta sequence of genes to retrieve fasta file")
 
 info_group_report = subparser_report.add_argument_group("Additional information")

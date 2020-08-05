@@ -115,19 +115,27 @@ def run_report(options):
     ## time stamp
     start_time_partial = functions.timestamp(start_time_partial)
     
+    ########################################
     ## create species specific report if any
-    species_specific_df = pd.DataFrame()
-    if options.species_report == "Saureus":
-        Saureus_specific(pd_samples_retrieved, pd_samples_info, species_specific_df, options)
+    ########################################
+    if (options.species_report):
+        ## Saureus
+        if options.species_report == "Saureus":
+            Saureus_specific(pd_samples_retrieved, pd_samples_info, options, summary_report)
         
+        ## else
+        ## to add accordingly        
+            
         ## time stamp
         start_time_partial = functions.timestamp(start_time_partial)
-
-    ## create gene specific report if any
-    if options.genes_ids:
+        
+    ###########################################################
+    ## create gene fasta sequences retrieval if desired
+    ###########################################################
+    if options.genes_ids_fasta:
         ## given a list of genes ids, retrieve sequence for all samples from profile 
-        if os.path.isfile(os.path.abspath(options.genes_ids)):
-            in_file = os.path.abspath(options.genes_ids)
+        if os.path.isfile(os.path.abspath(options.genes_ids_fasta)):
+            in_file = os.path.abspath(options.genes_ids_fasta)
             gene_names = [line.rstrip('\n') for line in open(in_file)]
             print ('+ Retrieve selected genes from the profile analysis for each sample.')
             print ('+ Searching gene:')
@@ -136,7 +144,6 @@ def run_report(options):
             results_geneIDs = pd.DataFrame(columns=('sample', 'gene', 'id', 'sequence'))
             sample_frame = pd_samples_info.groupby(["name"])
             for g in gene_names:
-                print ("----------------")
                 print ("\t+", g)
                 for name, cluster_df in sample_frame:
                     my_list_profiles = cluster_df.loc[cluster_df['tag'] == 'profile']['ext'].to_list()
@@ -152,42 +159,76 @@ def run_report(options):
                             p = p + '_full'
                         
                         profile_folder = os.path.join(main_profile_folder, p)
-                        (seq_id, seq_sequence) = retrieve_genes.retrieve_genes(profile_folder, g, Debug)
+                        (seq_id, seq_sequence) = retrieve_genes.retrieve_genes_ids_sequences(profile_folder, g, Debug)
                         if (seq_id):
                              ## save results 
                              results_geneIDs.loc[len(results_geneIDs)] = (name, g, seq_id, seq_sequence)
 
+        ## save for each gene in a separate fasta file
+        list_of_genes = set(results_geneIDs['gene'].to_list())
+
         ## debug
         if Debug:
+            print ("** DEBUG **")
             print (results_geneIDs) 
-    
- 
-    ## save for each gene in a separate fasta file
-    list_of_genes = set(results_geneIDs['gene'].to_list())
-
-    genes_folder = functions.create_subfolder('genes', summary_report)
-    for gene_retrieved in list_of_genes:
-        this_frame = results_geneIDs[results_geneIDs['gene'] == gene_retrieved]
-
-        gene_retrieved_file = os.path.join(genes_folder, gene_retrieved)
-        gene_retrieved_fasta = gene_retrieved_file + ".fasta"
-        gene_retrieved_info = gene_retrieved_file + "_info.txt"
-        fasta_hd = open(gene_retrieved_fasta, 'w')
-        info_hd = open(gene_retrieved_info, 'w')
+            print (list_of_genes)
         
-        for item, row in this_frame.iterrows():
-            string2write = ">" + row['sample'] + '_' + row['gene'] + '\n' + row['sequence'] + '\n'  
-            string2write_info = row['sample'] + '\t' + row['gene'] + '\t' + row['id'] + '\n'
-            fasta_hd.write(string2write)
-            info_hd.write(string2write_info)
+        ## Save results
+        genes_folder = functions.create_subfolder('genes', summary_report)
+        for gene_retrieved in list_of_genes:
+            this_frame = results_geneIDs[results_geneIDs['gene'] == gene_retrieved]
+        
+            gene_retrieved_file = os.path.join(genes_folder, gene_retrieved)
+            gene_retrieved_fasta = gene_retrieved_file + ".fasta"
+            gene_retrieved_info = gene_retrieved_file + "_info.txt"
+            fasta_hd = open(gene_retrieved_fasta, 'w')
+            info_hd = open(gene_retrieved_info, 'w')
             
-        fasta_hd.close()
-        info_hd.close()
+            for item, row in this_frame.iterrows():
+                string2write = ">" + row['sample'] + '_' + row['gene'] + '\n' + row['sequence'] + '\n'  
+                string2write_info = row['sample'] + '\t' + row['gene'] + '\t' + row['id'] + '\n'
+                fasta_hd.write(string2write)
+                info_hd.write(string2write_info)
+                
+            fasta_hd.close()
+            info_hd.close()
+        
+        ## time stamp
+        start_time_partial = functions.timestamp(start_time_partial)
     
+    ########################################
+    ## create gene specific report if any
+    ########################################
+    if options.genes_ids_profile:
+        if options.species_report == "Saureus":
+            if Debug:
+                print ("** options.genes_ids_profile **")
+                print ("Analysis already done for Saureus")
+        else:
+            in_file = os.path.abspath(options.genes_ids_profile)
+            gene_names = [line.rstrip('\n') for line in open(in_file)]
+            results_Profiles = retrieve_genes.get_genes_profile(samples_info, gene_names)
+            if options.debug:
+                print ("results_Profiles")
+                print (results_Profiles)
+        
+            ## time stamp
+            start_time_partial = functions.timestamp(start_time_partial)
+        
+    ###############################################
+    ## Search for any additional fasta sequence
+    ###############################################
     if options.genes_fasta:
         ## given a list of fasta sequences search using blast against proteins annotated or genome
-        print()    
+        print("** THIS OPTION IS NOT IMPLEMENTED YET... **")
     
+    ####################
+    ## save results
+    ####################
+    # results_Profiles
+    # results_df    
+    ## already saved results_geneIDs
+
     print ("\n*************** Finish *******************")
     start_time_partial = functions.timestamp(start_time_total)
 
@@ -199,33 +240,87 @@ def run_report(options):
 
 
 #######################3
-def Saureus_specific(samples_df, samples_info, results_df, options):
+def Saureus_specific(samples_df, samples_info, results_df, options, folder):
     """
     Retrieves Saureus specific information.
     
     See additional information in :doc:`../../user_guide/report/Saureus/saureus_report`
     """
     
+    ########################################
     ## get European Quality Control genes
+    ########################################
     Staphylococcus_path = os.path.abspath( os.path.join( os.path.realpath(__file__), '..', '..', 'report', 'Staphylococcus'))
     EQC_genes = os.path.join(Staphylococcus_path, "EQC_genes.csv")
     arcA_gene = os.path.join(Staphylococcus_path, "arcA.fasta")
     
     EQC_genes_df = functions.get_data(EQC_genes, ',')
-
-
+    ## Gene,ID,Source
+    ## mecA,ARO:3000617,CARD
+    ## mecC,ARO:3001209,CARD
+    ## mupA,ARO:3000521,CARD
+    
+    ## get gene names
+    gene_names = EQC_genes_df['Gene'].to_list()
+    
+    ## debugging messages
     if options.debug:
         print ("## DEBUG: Saureus_specific")
         print (Staphylococcus_path)
-        print (EQC_genes)
         print (arcA_gene)
+        
+        print ("EQC genes")
+        print (EQC_genes)
+        print (EQC_genes_df)
+        
+        print ("gene_names")
+        print (gene_names)
+        
+    ########################################
+    ## add additional genes if required
+    ########################################
+    if options.genes_ids_profile:
+        in_file = os.path.abspath(options.genes_ids_profile)
+        gene_names2 = [line.rstrip('\n') for line in open(in_file)]
+        gene_names = gene_names + gene_names2
+        
+        if options.debug:
+            print ("gene_names2")
+            print (gene_names2)
+            print ("gene_names")
+            print (gene_names)
+            
+    ####################
+    ## get gene info
+    ####################
+    results_Profiles = retrieve_genes.get_genes_profile(samples_info, gene_names)
+    if options.debug:
+        print ("results_Profiles")
+        print (results_Profiles)
+        
+    #################################
+    ## get blast sequence         ###
+    #################################
+    # arcA_gene
     
-    ## get spatyping
+    
+    ####################
+    ## get spatyping  ##
+    ####################
     assembly_files = samples_df.loc[samples_df['tag'] == "assembly", "sample"]
+    results_df = pd.DataFrame()
     results_df = get_spa_typing.module_call(options.database, assembly_files.to_dict(), options.debug)
     
-    results_df.to_csv("/home/labs/lslab/jsanchez/proc_data/20200405_CPrat_SaureusPaper/analysis/test_spaTyper.csv")    
+    
+    ####################
     ## get sccmec
+    ####################
     
     
     
+    ####################
+    ## save results
+    ####################
+    # results_Profiles
+    # results_df    
+
