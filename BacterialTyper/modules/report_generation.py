@@ -212,6 +212,15 @@ def run_report(options):
                 print ("results_Profiles")
                 print (results_Profiles)
         
+            
+            ## open excel writer
+            name_excel = summary_report + '/gene_ids_profile.xlsx'
+            writer = pd.ExcelWriter(name_excel, engine='xlsxwriter')
+            results_Profiles.to_excel(writer, sheet_name="gene_ids") 
+            
+            ## close
+            writer.save()
+
             ## time stamp
             start_time_partial = functions.timestamp(start_time_partial)
         
@@ -222,13 +231,6 @@ def run_report(options):
         ## given a list of fasta sequences search using blast against proteins annotated or genome
         print("** THIS OPTION IS NOT IMPLEMENTED YET... **")
     
-    ####################
-    ## save results
-    ####################
-    # results_Profiles
-    # results_df    
-    ## already saved results_geneIDs
-
     print ("\n*************** Finish *******************")
     start_time_partial = functions.timestamp(start_time_total)
 
@@ -303,24 +305,30 @@ def Saureus_specific(samples_df, samples_info, options, folder):
     #################################
     # arcA_gene
     
-    
     ####################
     ## get spatyping  ##
     ####################
     assembly_files = samples_df.loc[samples_df['tag'] == "assembly", "sample"]
-    results_df = pd.DataFrame()
-    results_df = get_spa_typing.module_call(options.database, assembly_files.to_dict(), options.debug)
-    
+    results_spaType = pd.DataFrame()
+    results_spaType = get_spa_typing.module_call(options.database, assembly_files.to_dict(), options.debug)
     
     ####################
     ## get sccmec
     ####################
     
     
-    
     ####################
     ## save results
     ####################
+    ## open excel writer
+    name_excel = folder + '/Saureus_report.xlsx'
+    writer = pd.ExcelWriter(name_excel, engine='xlsxwriter')
+    
     # results_Profiles
-    # results_df    
+    results_Profiles.to_excel(writer, sheet_name="gene_ids")
+    # results_spaType
+    results_spaType.to_excel(writer, sheet_name="spaTyper")
+
+    ## close
+    writer.save()
 
