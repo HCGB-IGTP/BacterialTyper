@@ -13,13 +13,14 @@ import re
 import time
 from termcolor import colored
 import pandas as pd
+from Bio import SeqIO
 
 ## import my modules
 from BacterialTyper.scripts import functions
 from BacterialTyper.scripts import database_user
 from BacterialTyper.config import set_config
-from BacterialTyper.report.Staphylococcus import get_spa_typing
 from BacterialTyper.report import retrieve_genes
+from BacterialTyper.report.Staphylococcus import get_spa_typing
 
 ## example report check: https://github.com/tseemann/nullarbor
 
@@ -135,7 +136,8 @@ def run_report(options):
             results_geneIDs = pd.DataFrame(columns=('sample', 'gene', 'id', 'sequence'))
             sample_frame = pd_samples_info.groupby(["name"])
             for g in gene_names:
-                print ("\t -", g)
+                print ("----------------")
+                print ("\t+", g)
                 for name, cluster_df in sample_frame:
                     my_list_profiles = cluster_df.loc[cluster_df['tag'] == 'profile']['ext'].to_list()
                     if options.debug:
@@ -144,18 +146,22 @@ def run_report(options):
                         print (my_list_profiles)
                     
                     for p in my_list_profiles:
-                        main_profile_folder = cluster_df['ext']['dirname'][0]
-                        if p == 'VFDB':
-                            p = p.lower() + '_full'
+                        main_profile_folder = cluster_df.loc[cluster_df['ext'] == p]['dirname'][0]
+                        p = p.lower()
+                        if p == 'vfdb':
+                            p = p + '_full'
                         
                         profile_folder = os.path.join(main_profile_folder, p)
                         (seq_id, seq_sequence) = retrieve_genes.retrieve_genes(profile_folder, g, Debug)
-                        results_geneIDs.loc(length(results_geneIDs)) = (name, g, seq_id, seq_sequence)
+                        if (seq_id):
+                             ## save results 
+                             results_geneIDs.loc[len(results_geneIDs)] = (name, g, seq_id, seq_sequence)
 
         ## debug
         if Debug:
             print (results_geneIDs) 
     
+    print (results_geneIDs) 
     
     if options.genes_fasta:
         ## given a list of fasta sequences search using blast against proteins annotated or genome

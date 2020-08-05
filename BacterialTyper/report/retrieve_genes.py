@@ -39,23 +39,28 @@ def retrieve_genes(profile, gene_ID, debug):
         print ("gene_id: ", gene_ID)
         
     ##
-    assembled_genes = functions.main_functions.retrieve_matching_files(profile, "assembled_genes.fa", debug)[0]
-    if os.path.isfile(assembled_genes):
-        for record in SeqIO.parse(assembled_seqs, "fasta"):
+    assembled_genes_list = functions.main_functions.retrieve_matching_files(profile, "assembled_genes.fa", debug)
+    if debug:
+        print ("** DEBUG **")
+        print ("assembled_genes_list: ", assembled_genes_list)
+
+    assembled_genes_list = [s for s in assembled_genes_list if 'aribta.tmp' not in s]
+    
+    if debug:
+        print ("** DEBUG **")
+        print ("assembled_genes_list: ", assembled_genes_list)
+
+    if os.path.isfile(assembled_genes_list[0]):
+        for record in SeqIO.parse(assembled_genes_list[0], "fasta"):
             if debug:
-                print ("** DEBUG **")
-                print (record.description)
-                print (record.seq)
-            
+                print ("** DEBUG: ", record.description, " **")
+                #print (record.seq)
+ 
             search_ID = re.search(gene_ID, record.description)
             if (search_ID):
-                print (record.description)
-                print (record.seq)
-       
-                return (record.description, record.seq)
+                return (record.id, str(record.seq))
 
-        ## no return
-        return("n.a", "n.a")        
+        return('','')
 
 ##############
 def main():
