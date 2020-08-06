@@ -120,4 +120,5 @@ def run(options):
 		print (colored("\n+ BacterialTyper citation:", 'blue'))
 		only_us()
 	
+	return()
 	

@@ -201,7 +201,7 @@ def run_annotation(options):
 	start_time_partial = functions.timestamp(start_time_total)
 
 	print ("+ Exiting Annotation module.")
-	exit()
+	return()
 
 
 #############################################

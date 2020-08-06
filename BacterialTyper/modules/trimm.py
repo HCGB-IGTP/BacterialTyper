@@ -185,7 +185,7 @@ def run(options):
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)
 	print ("\n+ Exiting trimm module.")
-	exit()
+	return()
 	
 
 #############################################

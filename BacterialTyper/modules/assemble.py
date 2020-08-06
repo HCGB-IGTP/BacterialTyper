@@ -258,7 +258,7 @@ def run_assembly(options):
 	start_time_partial = functions.timestamp(start_time_total)
 
 	print ("+ Exiting Assembly module.")
-	exit()
+	return()
 
 #############################################
 def check_sample_assembly(name, sample_folder, files, threads):

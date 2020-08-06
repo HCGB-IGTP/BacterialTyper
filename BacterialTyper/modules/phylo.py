@@ -145,7 +145,7 @@ def run_phylo(options):
     start_time_partial = functions.timestamp(start_time_total)
 
     print ("+ Exiting Annotation module.")
-    exit()
+    return()
     
 def map_samples(options, reference_gbk_file, input_dir, outdir):    
     """

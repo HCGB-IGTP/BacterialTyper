@@ -242,6 +242,7 @@ def run_cluster(options):
 	## generate newick tree 
 	min_hash_caller.get_Newick_tree(cluster_returned, DataMatrix, labeltext, tag_cluster_info)	
 	
+	return()
 
 ############################################################	
 def get_options_db(options):

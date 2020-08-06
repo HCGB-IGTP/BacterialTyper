@@ -84,3 +84,4 @@ def run(options):
 		print (colored("\n+ BacterialTyper version:", 'yellow'))
 		only_us()
 
+	return()

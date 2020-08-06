@@ -357,6 +357,8 @@ def run_MGE(options):
 	results_summary.to_excel(writer_summary, sheet_name="summary") ## write excel handle
 	writer_summary.save() ## close excel handle
 
+	return()
+
 ###########################
 def MGE_caller(output_dir, name, options, threads, dataFrame_sample):
 	"""Identify Mobile Genetic Elements

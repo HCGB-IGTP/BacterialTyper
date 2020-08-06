@@ -143,7 +143,7 @@ def run_profile(options):
 	start_time_partial = functions.timestamp(start_time_total)
 
 	print ("+ Exiting Virulence & Resistance profile module.")
-	exit()
+	return()
 
 ####################################
 def get_options_db(options):

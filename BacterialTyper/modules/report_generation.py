@@ -235,11 +235,7 @@ def run_report(options):
     start_time_partial = functions.timestamp(start_time_total)
 
     print ("+ Exiting Report generation module.")
-    exit()
-    
-    ## time stamp
-    start_time_partial = functions.timestamp(start_time_total)        
-
+    return()
 
 #######################3
 def Saureus_specific(samples_df, samples_info, options, folder):

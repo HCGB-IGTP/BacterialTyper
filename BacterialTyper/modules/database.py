@@ -287,5 +287,4 @@ def run_database(options):
 	start_time_partial = functions.timestamp(start_time_total)
 
 	print ("+ Exiting Database module.\n")
-	exit()
-
+	return()

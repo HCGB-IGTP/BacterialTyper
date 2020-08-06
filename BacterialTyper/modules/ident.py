@@ -303,7 +303,7 @@ def run_ident(options):
 	start_time_partial = functions.timestamp(start_time_total)
 
 	print ("+ Exiting identification module.")
-	exit()
+	return()
 
 ####################################
 def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, time_partial):

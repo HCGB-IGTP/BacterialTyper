@@ -91,6 +91,8 @@ def run_QC(options):
 		BUSCO_check(input_dir, outdir, options, start_time_total, "genome")
 	elif (options.annotation):
 		BUSCO_check(input_dir, outdir, options, start_time_total, "proteins")
+		
+	return()
 
 ################################################
 def fastqc(input_dir, outdir, options, start_time_total):
