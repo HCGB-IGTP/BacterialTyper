@@ -215,9 +215,18 @@ def get_userData_files(options, project_folder):
 	df = pd.concat([pd_samples_reads, pd_samples_annot, pd_samples_assembly], sort=True, join='inner').drop_duplicates()
 	## joining by inner we only get common columns among all
 
+	## debug message
+	if (options.debug):
+		print (colored("**DEBUG: pd_concat **", 'yellow'))
+		print (df)
+	
 	## set new column with name of samples
-	df['name'] = df.index
 	df = df.reset_index()
+
+	## debug message
+	if (options.debug):
+		print (colored("**DEBUG: pd_concat reset_index**", 'yellow'))
+		print (df)
 	##
 	return(df)
 	
@@ -258,10 +267,19 @@ def get_userData_info(options, project_folder):
 	df = pd.concat([pd_samples_profile, pd_samples_ident, pd_samples_mash], join='inner', sort=True).drop_duplicates()
 	## joining by inner we only get common columns among all
 
+	## debug message
+	if (options.debug):
+		print (colored("**DEBUG: pd_concat **", 'yellow'))
+		print (df)
+	
 	## set new column with name of samples
-	df['name'] = df.index
 	df = df.reset_index()
 
+	## debug message
+	if (options.debug):
+		print (colored("**DEBUG: pd_concat reset_index**", 'yellow'))
+		print (df)
+	##
 	return(df)
 
 ############################################
