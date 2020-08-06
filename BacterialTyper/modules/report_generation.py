@@ -153,7 +153,7 @@ def run_report(options):
                         print (my_list_profiles)
                     
                     for p in my_list_profiles:
-                        main_profile_folder = cluster_df.loc[cluster_df['ext'] == p]['dirname'][0]
+                        main_profile_folder = cluster_df.loc[cluster_df['ext'] == p]['dirname'].to_list()[0]
                         p = p.lower()
                         if p == 'vfdb':
                             p = p + '_full'
@@ -308,6 +308,7 @@ def Saureus_specific(samples_df, samples_info, options, folder):
     ####################
     ## get spatyping  ##
     ####################
+    samples_df = samples_df.set_index('name')
     assembly_files = samples_df.loc[samples_df['tag'] == "assembly", "sample"]
     results_spaType = pd.DataFrame()
     results_spaType = get_spa_typing.module_call(options.database, assembly_files.to_dict(), options.debug)

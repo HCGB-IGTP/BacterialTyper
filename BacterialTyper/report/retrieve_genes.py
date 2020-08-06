@@ -82,7 +82,7 @@ def get_genes_profile(samples_info, gene_names, debug):
 
             fill=False
             for p in my_list_profiles:
-                profile_csv = cluster_df.loc[cluster_df['ext'] == p]['sample']
+                profile_csv = cluster_df.loc[cluster_df['ext'] == p]['sample'].to_list()[0]
                 if debug:
                     print ("profile_csv: ", profile_csv)
             
