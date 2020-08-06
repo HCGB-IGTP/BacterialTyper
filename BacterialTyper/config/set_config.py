@@ -93,12 +93,10 @@ def get_exe(prog, Debug=False, Return_Version=False):
 				return (exe_path_tmp[0]) ## return first item
 	
 	## not installed in path
-	if (len(exe_path_tmp) == 0):
+	if (not exe_path_tmp):
 		if (Return_Version):
-			print(colored("\n**ERROR: Software %s could not be found." % prog,'red'))
 			return('ERROR', 'n.a.')
 		else:
-			print(colored("\n**ERROR: Software %s could not be found." % prog,'red'))
 			return('ERROR')
 
 	## Loop for all possibilities
@@ -116,10 +114,13 @@ def get_exe(prog, Debug=False, Return_Version=False):
 				return (p, prog_ver)
 			else:
 				return (p)
-
-
-	print(colored("\n**ERROR: Software %s version smaller than minimum version expected %s." %(prog,min_version),'red'))
-	exit()
+		else: 
+			print(colored("\n**ERROR: Software %s version smaller than minimum version expected %s." %(prog,min_version),'red'))
+			print (p)
+			print (prog_ver)
+			exit()
+			
+	return('ERROR')
 
 ################
 def access_check(fn, mode=os.F_OK | os.X_OK):
@@ -311,7 +312,7 @@ def get_version(prog, path, Debug=False):
 	if Debug:
 		print (colored('Attention: I tried to get the version of ' + prog + ' with: "' + cmd + '" and the output didn\'t match this regular expression: "' + regex.pattern + '"', 'red'))
 
-	return("n.a.")
+	return("")
 
 def check_dependencies(install_option, install_path, Debug):
 	"""
@@ -381,6 +382,7 @@ def check_dependencies(install_option, install_path, Debug):
 				else:
 					print ("+ attempt to install software: ", soft_name, " failed. Install it manually to continue with BacterialTyper\n\n")
 			else:
+				print(colored("\n**ERROR: Software %s could not be found." % soft_name,'red'))
 				print ("+ Please install manually software: ", soft_name, " to continue with BacterialTyper\n\n")
 	
 ################

@@ -9,7 +9,7 @@ def get_require_modules():
     """
     Get main python requirements modules
     """
-    with open("./BacterialTyper/config/python_requirements_summary.csv", 'r') as f:
+    with open("./BacterialTyper/config/python/python_requirements_summary.csv", 'r') as f:
         myModules = [line.strip().split(',')[0] for line in f]
     
     return myModules
