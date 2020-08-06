@@ -77,11 +77,17 @@ def get_genes_profile(samples_info, gene_names, debug):
                 print ("name: ", name)
                 print ("my_list_profiles:")
                 print (my_list_profiles)
+                print ("cluster_df")
+                print (cluster_df)
 
             fill=False
             for p in my_list_profiles:
-                profile_csv = cluster_df.loc[cluster_df['ext'] == p]['sample'][0]
+                profile_csv = cluster_df.loc[cluster_df['ext'] == p]['sample']
+                if debug:
+                    print ("profile_csv: ", profile_csv)
+            
                 value = retrieve_genes_ids_profile(profile_csv, g, debug)
+            
                 ## save results 
                 if (not value.empty):
                     for Name, Data in value.iterrows():
