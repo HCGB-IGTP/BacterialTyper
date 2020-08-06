@@ -2,8 +2,9 @@ name,type,version,site,ext,folder,bin_name
 fastqc,extract,0.11.9,https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip,zip,FastQC,fastqc
 trimmomatic,extract,0.39,http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.39.zip,zip,Trimmomatic-0.39,trimmomatic-0.39.jar
 kma,git,,https://bitbucket.org/genomicepidemiology/kma.git,make,kma,kma
-prokka,git,,https://github.com/tseemann/prokka.git,,prokka,bin/prokka
 blast,extract,2.10,https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.10.0+-x64-linux.tar.gz,tar.gz,ncbi-blast-2.10.0+,bin
 edirect,extract,,ftp://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/edirect.tar.gz,tar.gz,edirect,
 spades,source,3.14,http://cab.spbu.ru/files/release3.14.1/SPAdes-3.14.1.tar.gz,make,SPAdes-3.14.1,bin/spades.py
 iqtree,extract,2.0.5,https://github.com/Cibiv/IQ-TREE/releases/download/v2.0.5/iqtree-2.0.5-Linux.tar.gz,tar.gz,bin/iqtree2
+prokka,git,,https://github.com/tseemann/prokka.git,,prokka,bin/prokka
+snippy,git,,https://github.com/tseemann/snippy.git,,snippy,bin/snippy
