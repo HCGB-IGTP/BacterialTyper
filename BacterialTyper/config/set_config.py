@@ -68,8 +68,18 @@ def get_exe(prog, Debug=False, Return_Version=False):
 	else:
 		exe = extern_progs.return_defatult_soft(prog) ## install in the system
 
-	## get paths
-	exe_path_tmp = my_which(exe)
+	## fix for trimmomatic
+	if prog == 'trimmomatic':
+		list_v = ['0.36','0.37','0.38','0.39']
+		for v in list_v:
+			exe="trimmomatic-" + v + ".jar"
+			## get paths
+			exe_path_tmp = my_which(exe)
+			if (exe_path_tmp):
+				break	
+	else:
+		## get paths
+		exe_path_tmp = my_which(exe)
 
 	## debug message
 	if (Debug):
@@ -106,7 +116,7 @@ def get_exe(prog, Debug=False, Return_Version=False):
 		if (Debug):
 			print (colored("** Debug: Software: %s\nPath: %s\nVersion: %s" %(prog, p, prog_ver), 'yellow'))
 
-		if (prog_ver == 'n.a.'):
+		if (not prog_ver):
 			continue
 
 		if LooseVersion(prog_ver) >= LooseVersion(min_version):
@@ -275,7 +285,7 @@ def get_version(prog, path, Debug=False):
 
 	if prog == 'spades':
 		cmd = "python3 " + path + " " + args
-		cmd_output = subprocess.Popen(cmd, shell=False, 
+		cmd_output = subprocess.Popen(cmd, shell=True, 
 									stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
 	elif prog == 'dimob':
 		perl_exe = get_exe("perl")
@@ -382,8 +392,8 @@ def check_dependencies(install_option, install_path, Debug):
 				else:
 					print ("+ attempt to install software: ", soft_name, " failed. Install it manually to continue with BacterialTyper\n\n")
 			else:
-				print(colored("\n**ERROR: Software %s could not be found." % soft_name,'red'))
-				print ("+ Please install manually software: ", soft_name, " to continue with BacterialTyper\n\n")
+				#print(colored("\n**ERROR: Software %s could not be found." % soft_name,'red'))
+				print ("\t+ Please install manually software: ", soft_name, " to continue with BacterialTyper\n\n")
 	
 ################
 ## Python
