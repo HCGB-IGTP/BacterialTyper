@@ -10,5 +10,5 @@ opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
 
 ## load additional library
-.libPaths(opt$lib.loc)
+.libPaths(opt$path)
 library(opt$lib, character.only = TRUE)

@@ -121,6 +121,9 @@ def get_exe(prog, Debug=False, Return_Version=False):
 		if (not prog_ver):
 			continue
 
+		if (prog_ver == "."):
+			continue
+
 		if LooseVersion(prog_ver) >= LooseVersion(min_version):
 			if (Return_Version):
 				return (p, prog_ver)
