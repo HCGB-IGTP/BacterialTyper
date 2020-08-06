@@ -108,7 +108,8 @@ def get_exe(prog, Debug=False, Return_Version=False):
 		if (Return_Version):
 			return('ERROR', 'n.a.')
 		else:
-			return('ERROR')
+			print(colored("\n**ERROR: Software %s could not be found." % prog,'red'))
+			exit()
 
 	## Loop for all possibilities
 	for p in exe_path_tmp:
@@ -131,7 +132,11 @@ def get_exe(prog, Debug=False, Return_Version=False):
 			print (prog_ver)
 			exit()
 			
-	return('ERROR', 'n.a.')
+	if (Return_Version):
+		return('ERROR', 'n.a.')
+	else:
+		print(colored("\n**ERROR: Software %s version doest not match minimum version expected [%s]." %(prog,min_version),'red'))
+		exit()
 
 ################
 def access_check(fn, mode=os.F_OK | os.X_OK):
@@ -393,7 +398,6 @@ def check_dependencies(install_option, install_path, Debug):
 				else:
 					print ("+ attempt to install software: ", soft_name, " failed. Install it manually to continue with BacterialTyper\n\n")
 			else:
-				#print(colored("\n**ERROR: Software %s could not be found." % soft_name,'red'))
 				print ("\t+ Please install manually software: ", soft_name, " to continue with BacterialTyper\n\n")
 	
 ################
@@ -771,6 +775,7 @@ def check_R_packages(install, install_path, Debug):
 			print ('\n+ Check package: ', index)
 			print('+ Source: ', row['source'])
 		
+		## first try to check if package available in system
 		cmd_check = R_script_exe + ' ' + check_install_system + ' -l ' + index
 		code = functions.system_call(cmd_check, message=False, returned=False)
 		if (code=='OK'):
@@ -782,7 +787,7 @@ def check_R_packages(install, install_path, Debug):
 			cmd_check_path = R_script_exe + ' ' + check_install_path + ' -l ' + index + ' -p ' + install_path
 			code2 = functions.system_call(cmd_check_path, message=False, returned=False)
 
-			if (code2):
+			if (code2=='OK'):
 				check_install_module('1', index, '0', 'Install path package')
 			else:
 				check_install_module('0', index, '1', 'Install path package')
