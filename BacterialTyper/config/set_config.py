@@ -76,7 +76,8 @@ def get_exe(prog, Debug=False, Return_Version=False):
 			## get paths
 			exe_path_tmp = my_which(exe)
 			if (exe_path_tmp):
-				break	
+				break
+				
 	else:
 		## get paths
 		exe_path_tmp = my_which(exe)
@@ -130,7 +131,7 @@ def get_exe(prog, Debug=False, Return_Version=False):
 			print (prog_ver)
 			exit()
 			
-	return('ERROR')
+	return('ERROR', 'n.a.')
 
 ################
 def access_check(fn, mode=os.F_OK | os.X_OK):
