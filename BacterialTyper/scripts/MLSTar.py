@@ -299,7 +299,7 @@ def main():
 		exit()
 	
 	#fileGiven = os.path.abspath(argv[1])
-	genome = os.path.abspath(argv[1])
+	genome = os.path.abspath(argv[1]) ## assembly
 	species = argv[2]
 	rscript = argv[3]
 	database = os.path.abspath(argv[4])
