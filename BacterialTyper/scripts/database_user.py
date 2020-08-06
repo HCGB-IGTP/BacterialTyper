@@ -217,6 +217,7 @@ def get_userData_files(options, project_folder):
 
 	## set new column with name of samples
 	df['name'] = df.index
+	df = df.reset_index()
 	##
 	return(df)
 	
@@ -259,7 +260,8 @@ def get_userData_info(options, project_folder):
 
 	## set new column with name of samples
 	df['name'] = df.index
-	
+	df = df.reset_index()
+
 	return(df)
 
 ############################################

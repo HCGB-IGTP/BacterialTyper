@@ -387,7 +387,6 @@ def check_dependencies(install_option, install_path, Debug):
 		if (message == 'OK'):
 			continue
 		else:
-			continue
 			if (install_option):
 				if (Debug):
 						print ("Install software: ", soft)
