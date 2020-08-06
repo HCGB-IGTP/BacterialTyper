@@ -207,7 +207,7 @@ def run_report(options):
         else:
             in_file = os.path.abspath(options.genes_ids_profile)
             gene_names = [line.rstrip('\n') for line in open(in_file)]
-            results_Profiles = retrieve_genes.get_genes_profile(samples_info, gene_names, options.debug)
+            results_Profiles = retrieve_genes.get_genes_profile(pd_samples_info, gene_names, options.debug)
             if options.debug:
                 print ("results_Profiles")
                 print (results_Profiles)
