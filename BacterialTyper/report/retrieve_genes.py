@@ -111,7 +111,6 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug, option):
         get_csv_data.index = get_csv_data['Genes']
     elif option == 'ID':
         list_Genes = get_csv_data['ID'].to_list()
-        get_csv_data.index = get_csv_data['ID']
     
     ## debug messages
     if debug:
@@ -128,16 +127,25 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug, option):
     if option == 'name':
         regex_search = re.compile("^" + gene_ID + ".*")
         filtered_genes = list(filter(regex_search.match, list_Genes))
-    else:
-        filtered_genes = [gene_ID]
-    
-     ## debug messages
-    if debug:
-        print ("** DEBUG **")
-        print (filtered_genes)
-        print (get_csv_data.loc[filtered_genes])
         
-    return (get_csv_data.loc[filtered_genes])     
+        ## debug messages
+        if debug:
+            print ("** DEBUG **")
+            print (filtered_genes)
+            print (get_csv_data.loc[filtered_genes])
+        
+        return (get_csv_data.loc[filtered_genes]) 
+        
+    else:
+        
+        ## debug messages
+        if debug:
+            print ("** DEBUG **")
+            print ("gene_ID: ", gene_ID)
+            print (get_csv_data[get_csv_data.loc['ID' == gene_ID]])
+        
+        return (get_csv_data[get_csv_data.loc['ID' == gene_ID]])
+         
     
 ##############
 def main():
