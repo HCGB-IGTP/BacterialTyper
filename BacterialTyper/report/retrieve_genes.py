@@ -111,6 +111,8 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug, option):
         get_csv_data.index = get_csv_data['Genes']
     elif option == 'ID':
         list_Genes = get_csv_data['ID'].to_list()
+        get_csv_data.index = get_csv_data['ID']
+
     
     ## debug messages
     if debug:
@@ -137,15 +139,15 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug, option):
         return (get_csv_data.loc[filtered_genes]) 
         
     else:
-        
-        ## debug messages
-        if debug:
-            print ("** DEBUG **")
-            print ("gene_ID: ", gene_ID)
-            print (get_csv_data[get_csv_data.loc['ID' == gene_ID]])
-        
-        return (get_csv_data[get_csv_data.loc['ID' == gene_ID]])
-         
+        if gene_ID in list_Genes:
+            ## debug messages
+            if debug:
+                print ("** DEBUG **")
+                print ("gene_ID: ", gene_ID)
+                print (get_csv_data.loc[gene_ID])
+            return (get_csv_data.loc[gene_ID])
+        else:
+            return(pd.DataFrame()) 
     
 ##############
 def main():
