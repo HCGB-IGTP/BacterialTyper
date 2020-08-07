@@ -207,7 +207,7 @@ def run_report(options):
         else:
             in_file = os.path.abspath(options.genes_ids_profile)
             gene_names = [line.rstrip('\n') for line in open(in_file)]
-            results_Profiles = retrieve_genes.get_genes_profile(pd_samples_info, gene_names, options.debug)
+            results_Profiles = retrieve_genes.get_genes_profile(pd_samples_info, gene_names, options.debug, "name")
             if options.debug:
                 print ("results_Profiles")
                 print (results_Profiles)
@@ -258,9 +258,6 @@ def Saureus_specific(samples_df, samples_info, options, folder):
     ## mecC,ARO:3001209,CARD
     ## mupA,ARO:3000521,CARD
     
-    ## get gene names
-    gene_names = EQC_genes_df['Gene'].to_list()
-    
     ## debugging messages
     if options.debug:
         print ("## DEBUG: Saureus_specific")
@@ -274,28 +271,34 @@ def Saureus_specific(samples_df, samples_info, options, folder):
         print ("gene_names")
         print (gene_names)
         
+    ####################
+    ## get gene info by unique ID
+    ####################
+    ## get gene names
+    gene_IDs = EQC_genes_df['ID'].to_list()
+    
+    results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'ID')
+    if options.debug:
+        print ("results_Profiles")
+        print (results_Profiles)
+    
     ########################################
     ## add additional genes if required
     ########################################
     if options.genes_ids_profile:
         in_file = os.path.abspath(options.genes_ids_profile)
-        gene_names2 = [line.rstrip('\n') for line in open(in_file)]
-        gene_names = gene_names + gene_names2
+        gene_names = [line.rstrip('\n') for line in open(in_file)]
         
         if options.debug:
-            print ("gene_names2")
-            print (gene_names2)
             print ("gene_names")
             print (gene_names)
-            
-    ####################
-    ## get gene info
-    ####################
-    results_Profiles = retrieve_genes.get_genes_profile(samples_info, gene_names, options.debug)
-    if options.debug:
-        print ("results_Profiles")
-        print (results_Profiles)
+    
+        results_Profiles_names = retrieve_genes.get_genes_profile(samples_info, gene_names, options.debug, 'name')
+        if options.debug:
+            print ("results_Profiles")
+            print (results_Profiles)
         
+            
     #################################
     ## get blast sequence         ###
     #################################
@@ -312,7 +315,7 @@ def Saureus_specific(samples_df, samples_info, options, folder):
     ####################
     ## get sccmec
     ####################
-    
+    ## todo
     
     ####################
     ## save results
@@ -321,8 +324,13 @@ def Saureus_specific(samples_df, samples_info, options, folder):
     name_excel = folder + '/Saureus_report.xlsx'
     writer = pd.ExcelWriter(name_excel, engine='xlsxwriter')
     
-    # results_Profiles
-    results_Profiles.to_excel(writer, sheet_name="gene_ids")
+    # results_Profiles ids
+    results_Profiles_ids.to_excel(writer, sheet_name="gene_ids")
+
+    if options.genes_ids_profile:
+        # results_Profiles names
+        results_Profiles_ids.to_excel(writer, sheet_name="gene_names")
+
     # results_spaType
     results_spaType.to_excel(writer, sheet_name="spaTyper")
 

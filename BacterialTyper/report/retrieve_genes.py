@@ -61,15 +61,15 @@ def retrieve_genes_ids_sequences(profile, gene_ID, debug):
         return('','')
 
 ##############
-def get_genes_profile(samples_info, gene_names, debug):
+def get_genes_profile(samples_info, gene_names, debug, option):
     """    
     """
+    ## search by group id or gene name
     print ('\n+ Retrieve selected genes profile for each sample.')
-    print ('+ Searching gene:')
     results_profileIDs = pd.DataFrame()
     sample_frame = samples_info.groupby(["name"])
     for g in gene_names:
-        print ("\t+", g)
+        #print ("\t+", g)
         for name, cluster_df in sample_frame:
             my_list_profiles = cluster_df.loc[cluster_df['tag'] == 'profile']['ext'].to_list()
 	   
@@ -86,7 +86,7 @@ def get_genes_profile(samples_info, gene_names, debug):
                 if debug:
                     print ("profile_csv: ", profile_csv)
             
-                value = retrieve_genes_ids_profile(profile_csv, g, debug)
+                value = retrieve_genes_ids_profile(profile_csv, g, debug, option)
             
                 ## save results 
                 if (not value.empty):
@@ -100,13 +100,18 @@ def get_genes_profile(samples_info, gene_names, debug):
     return (results_profileIDs)
 
 ##############
-def retrieve_genes_ids_profile(profile, gene_ID, debug):
+def retrieve_genes_ids_profile(profile, gene_ID, debug, option):
     """    
     """
     ## read data    
     get_csv_data = functions.main_functions.get_data(profile, ',', '')
-    list_Genes = get_csv_data['Genes'].to_list()
-    get_csv_data.index = get_csv_data['Genes'] 
+    
+    if option == 'name':
+        list_Genes = get_csv_data['Genes'].to_list()
+        get_csv_data.index = get_csv_data['Genes']
+    elif option == 'ID':
+        list_Genes = get_csv_data['ID'].to_list()
+        get_csv_data.index = get_csv_data['ID']
     
     ## debug messages
     if debug:
@@ -115,24 +120,21 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug):
         print ("gene_id: ", gene_ID)
         print ("data")
         print (get_csv_data)
+        print ("Option: ", option)
         print ("Genes")
         print (list_Genes)
+        
     
     regex_search = re.compile("^" + gene_ID + ".*")
     filtered_genes = list(filter(regex_search.match, list_Genes))
     
-#    if (len(filtered_genes) > 0):
-        
-        ## debug messages
+     ## debug messages
     if debug:
         print ("** DEBUG **")
         print (filtered_genes)
         print (get_csv_data.loc[filtered_genes])
         
     return (get_csv_data.loc[filtered_genes])     
-#
-#    else:
-#        return('')
     
 ##############
 def main():
