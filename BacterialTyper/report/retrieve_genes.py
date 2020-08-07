@@ -124,9 +124,12 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug, option):
         print ("Genes")
         print (list_Genes)
         
-    
-    regex_search = re.compile("^" + gene_ID + ".*")
-    filtered_genes = list(filter(regex_search.match, list_Genes))
+    ## search accordingly
+    if option == 'name':
+        regex_search = re.compile("^" + gene_ID + ".*")
+        filtered_genes = list(filter(regex_search.match, list_Genes))
+    else:
+        filtered_genes = [gene_ID]
     
      ## debug messages
     if debug:
