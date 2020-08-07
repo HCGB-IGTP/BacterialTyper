@@ -638,10 +638,6 @@ def get_files(options, input_dir, mode, extension):
                 print (colored('***ERROR: input folder does not exist or it is not readable', 'red'))
                 exit()
 
-    if options.debug:
-        print (colored("** DEBUG: sampleParser.get_files files", 'yellow'))
-        print (files)
-
     ## get list of samples
     samples_names = []
     exclude=False

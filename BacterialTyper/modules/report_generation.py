@@ -267,10 +267,8 @@ def Saureus_specific(samples_df, samples_info, options, folder):
         print ("EQC genes")
         print (EQC_genes)
         print (EQC_genes_df)
-        
-        print ("gene_names")
-        print (gene_names)
-        
+ 
+
     ####################
     ## get gene info by unique ID
     ####################
