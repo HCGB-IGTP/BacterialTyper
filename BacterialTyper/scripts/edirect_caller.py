@@ -55,6 +55,27 @@ def xtract_call(docsum_file, pattern, element, outfile, xtract_bin):
 	cmd = ("cat %s | %s -pattern %s -sep ',' -element %s > %s" %(docsum_file, xtract_bin, pattern, element, outfile))
 	return(functions.system_call(cmd))	
 
+###############
+def generate_seq_search_call(db, query, outfile, revcomp, start=0, end=-1, format='fasta'):
+
+	## Sequence Range
+	##   -seq_start     First sequence position to retrieve
+	##   -seq_stop      Last sequence position to retrieve
+	##   -strand        1 = forward DNA strand, 2 = reverse complement
+	##   -revcomp       Shortcut for strand 2
+
+	efetch_bin = set_config.get_exe("efetch")
+	cmd = ("%s -db %s -id %s -seq_start %s -seq_stop %s -format %s" %(efetch_bin, db, query, start, end, format))
+	
+	## add reverse complement
+	if (revcomp):
+		cmd = cmd + ' -revcomp'
+
+	## add output file
+	cmd = cmd + ' > %s' %outfile
+		
+	return(functions.system_call(cmd))
+
 ## docsum Nucleotide entry
 ##esearch -db nuccore -query NZ_CP029083.1 | efetch -format docsum > docsum_nucleotide_entry.txt
 ##cat docsum_nucleotide_entry.txt | xtract -pattern DocumentSummary -element BioSample > BioSample.txt
