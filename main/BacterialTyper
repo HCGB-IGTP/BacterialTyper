@@ -36,7 +36,8 @@ help_options = ('--help_Database',
 				'--help_MGE_analysis',
 				'--help_Mash',
 				'--help_input_MGE',
-                '--help_Snippy')
+                '--help_Snippy',
+                '--help_spaTyper')
 
 subparser_space = subparsers.add_parser('Configuration', help='')
 subparser_space = subparsers.add_parser('==============', help='')
@@ -613,6 +614,7 @@ gene_report.add_argument("--genes_fasta", help="Fasta sequence of genes to retri
 info_group_report = subparser_report.add_argument_group("Additional information")
 info_group_report.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 info_group_report.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
+info_group_report.add_argument("--help_spaTyper", action="store_true", help="Show additional help on spaTyper analysis.")
 
 subparser_report.set_defaults(func=BacterialTyper.modules.report_generation.run_report)
 ##-------------------------------------------------------------##

@@ -40,6 +40,17 @@ def run_report(options):
     ### show help messages if desired    
     ##################################
 
+    if (options.help_spaTyper):
+        ## help_format option
+        get_spa_typing.help_spaTyper()
+        exit()
+
+    elif (options.help_project):
+        ## information for project
+        help_info.project_help()
+        exit()
+
+
     ## debugging messages
     global Debug
     if (options.debug):

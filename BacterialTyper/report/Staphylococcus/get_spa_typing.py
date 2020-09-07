@@ -29,8 +29,9 @@ def help_options():
 
 ##############
 def help_spaTyper():
-    print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
-
+    print (spaTyper.utils.extra_info())
+    exit()
+    
 ##############
 def check_files(db_folder, debug):
     """
