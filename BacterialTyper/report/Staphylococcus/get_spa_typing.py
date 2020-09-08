@@ -19,9 +19,10 @@ import spaTyper
 import pandas as pd
 
 ## import my modules
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 
+## import my HCGB module 
+from HCGB.functions import files_functions
 
 ##############
 def help_options():
@@ -65,12 +66,12 @@ def module_call(db_folder, dictionary_fasta_files, debug):
     
     """
         
-    functions.create_folder(db_folder)
+    files_functions.create_folder(db_folder)
     if db_folder.endswith("spaTyper"):
         spaTyper_db = db_folder
     else:
         spaTyper_db = os.path.join(db_folder, "spaTyper")
-        functions.create_folder(spaTyper_db)
+        files_functions.create_folder(spaTyper_db)
         
     ## check if files are available
     (spaTyper_repeats, spaTyper_types) = check_files(spaTyper_db, debug)

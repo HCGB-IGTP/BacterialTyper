@@ -19,8 +19,10 @@ import pandas as pd
 from Bio import SeqIO
 
 ## import my modules
-from HCGB import functions
 from BacterialTyper.config import set_config
+
+## import my HCGB module 
+from HCGB.functions import main_functions
 
 ##############
 def help_options():
@@ -41,7 +43,7 @@ def retrieve_genes_ids_sequences(profile, gene_ID, debug):
         print ("gene_id: ", gene_ID)
         
     ##
-    assembled_genes_list = functions.main_functions.retrieve_matching_files(profile, "assembled_genes.fa", debug)
+    assembled_genes_list = main_functions.retrieve_matching_files(profile, "assembled_genes.fa", debug)
     assembled_genes_list = [s for s in assembled_genes_list if 'ariba.tmp' not in s]
     
     if debug:
