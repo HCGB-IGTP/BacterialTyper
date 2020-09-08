@@ -129,15 +129,7 @@ def get_exe(prog, Debug=False, Return_Version=False):
 				return (p, prog_ver)
 			else:
 				return (p)
-		else: 
-			if (Return_Version):
-				return('ERROR', 'n.a.')
-			else:
-				print(colored("\n**ERROR: Software %s version smaller than minimum version expected %s." %(prog,min_version),'red'))
-				print (p)
-				print (prog_ver)
-				exit()
-			
+
 	if (Return_Version):
 		return('ERROR', 'n.a.')
 	else:
