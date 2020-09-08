@@ -61,10 +61,7 @@ def get_sequence(path, probe_ID, nucc_entry, format, revcomp=False, start=0, sto
         stamp = time_functions.print_time_stamp(filename_stamp)
     
     for record in SeqIO.parse(out_fasta_file, 'fasta'):
-        probe_fasta = str(record.seq)
-        probe_fasta_id = record.id
-
-    return(probe_fasta, probe_fasta_id)
+        return(str(record.seq), record.id)
 
 
 def get_alleles(csv_file, path, debug):
