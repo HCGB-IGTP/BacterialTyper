@@ -90,7 +90,7 @@ def run_profile(options):
 		Project=True
 	
 	## get files
-	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim_'])
+	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
 	
 	## debug message
 	if (Debug):

@@ -199,7 +199,7 @@ def get_userData_files(options, project_folder):
 	pd_samples_annot = pd_samples_annot.set_index('name')
 
 	## get trimmed ngs files
-	pd_samples_reads = sampleParser.get_files(options, project_folder, "trim", ['_trim_'])
+	pd_samples_reads = sampleParser.get_files(options, project_folder, "trim", ['_trim'])
 	pd_samples_reads = pd_samples_reads.set_index('name')
 
 	## debug message

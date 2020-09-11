@@ -157,7 +157,7 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     ## all_data // only_project_data
     if (options.all_data or options.only_project_data):
         ## get files to map
-        pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim_'])
+        pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
         
         ## discard the sample used as reference if any
         if options.project_sample_ID:

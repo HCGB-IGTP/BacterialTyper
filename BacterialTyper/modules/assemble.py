@@ -125,7 +125,7 @@ def run_assembly(options):
 		outdir = input_dir	
 		
 	## get files
-	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim_'])
+	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
 	
 	## debug message
 	if (Debug):
