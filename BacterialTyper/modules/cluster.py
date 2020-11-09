@@ -76,12 +76,22 @@ def run_cluster(options):
 		outdir = input_dir	
 	
 	## get files
-	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"])
+	if options.reads:
+		if options.noTrim:
+			## raw reads
+			pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
+		else:
+			## trimm reads
+			pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
+	else:
+		## default
+		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"])
 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
 		print (pd_samples_retrieved)
+		exit()
 
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
