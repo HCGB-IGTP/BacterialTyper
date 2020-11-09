@@ -9,6 +9,7 @@
 *pyc
 
 # environment
+env/BacterialTyper_deb8/
 env/BacterialTyper/
 *.swp
 /tmp_files

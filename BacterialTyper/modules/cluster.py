@@ -18,7 +18,7 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper.scripts import sampleParser
+from HCGB import sampleParser
 from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
@@ -51,10 +51,10 @@ def run_cluster(options):
 		Debug = False
 		
 	### set as default paired_end mode
-	#if (options.single_end):
-	#	options.pair = False
-	#else:
-	#	options.pair = True
+	if (options.single_end):
+		options.pair = False
+	else:
+		options.pair = True
 	
 	functions.pipeline_header()
 	functions.boxymcboxface("Clustering samples")
@@ -79,19 +79,29 @@ def run_cluster(options):
 	if options.reads:
 		if options.noTrim:
 			## raw reads
-			pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
+			pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
 		else:
 			## trimm reads
-			pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'], options.debug)
+			pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "trim", ['_trim'], options.debug)
+
+		## keep only R1 reads if paired-end
+		if options.pair:
+			pd_samples_retrieved = pd_samples_retrieved.loc[pd_samples_retrieved['read_pair']== "R1"]
+
 	else:
 		## default
-		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"], options.debug)
+		pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "assembly", ["fna"], options.debug)
 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
 		print (pd_samples_retrieved)
+	
+	# exit if empty
+	if pd_samples_retrieved.empty:
+		print ("No data has been retrieved from the project folder provided. Exiting now...")
 		exit()
+
 
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
@@ -236,8 +246,9 @@ def run_cluster(options):
 
 	## parse results
 	if options.project:
-		final_dir = outdir + '/report/cluster'
-		functions.create_folder(final_dir) 
+		outdir_report = functions.create_subfolder("report", outdir)
+		#final_dir = outdir + '/report/cluster'
+		final_dir = functions.create_subfolder("cluster", outdir_report) 
 	else:
 		final_dir = outdir
 

@@ -500,6 +500,7 @@ initial_group_cluster.add_argument("--include_lane", action="store_true", help="
 initial_group_cluster.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 initial_group_cluster.add_argument("--reads", action="store_true", help="Use reads to generate sketches. By default, assembled contigs are employed. [Default OFF]")
 initial_group_cluster.add_argument("--noTrim", action='store_true', help="Use non-trimmed reads [or not containing '_trim' in the name].")
+initial_group_cluster.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
 
 parameters_group_cluster = subparser_cluster.add_argument_group("Parameters")
 parameters_group_cluster.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
