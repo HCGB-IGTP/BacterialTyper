@@ -79,13 +79,13 @@ def run_cluster(options):
 	if options.reads:
 		if options.noTrim:
 			## raw reads
-			pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
+			pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
 		else:
 			## trimm reads
-			pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
+			pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'], options.debug)
 	else:
 		## default
-		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"])
+		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"], options.debug)
 
 	## debug message
 	if (Debug):
@@ -111,6 +111,11 @@ def run_cluster(options):
 	
 	## time stamp
 	start_time_partial = functions.timestamp(start_time_total)
+	
+	## remove samples if specified
+	if options.ex_sample:
+		ex_samples = functions.get_info_file(options.ex_sample)
+		retrieve_databases = retrieve_databases.loc[~retrieve_databases.index.isin(ex_samples)]
 	
 	## debug message
 	if (Debug):
