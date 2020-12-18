@@ -131,7 +131,10 @@ def snippy_core_call(list_folder, options, name, output_dir, output_format, Debu
 	list_folder_string = " ".join(list_folder)
 	log_file = os.path.join(output_dir, "snippy_cmd.log")
 	name_outdir =  os.path.join(output_dir, name)
-	snippy_core_cmd = '%s -aformat %s --prefix %s %s 2> %s' %(snippy_core_exe, output_format, name_outdir, list_folder_string, log_file)
+	
+	## use one reference: must be the same for all comparisons
+	reference_fasta = list_folder[1] + "/ref.fa"	
+	snippy_core_cmd = '%s -aformat %s --ref %s --prefix %s %s 2> %s' %(snippy_core_exe, output_format, reference_fasta, name_outdir, list_folder_string, log_file)
 	
 	return (functions.system_call(snippy_core_cmd))
 
