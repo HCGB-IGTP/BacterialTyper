@@ -36,7 +36,7 @@ from BacterialTyper.data import data_files
 
 ## R scripts
 MLSTarR_script = tools.R_scripts('MLSTar_call')
-MLSTarR_plot =tools.R_scripts('MLSTar_plot')
+MLSTarR_plot = tools.R_scripts('MLSTar_plot')
 MLSTarR_download_seq = tools.R_scripts('MLSTar_downloadPubMLST_seq')
 MLSTarR_download_prf = tools.R_scripts('MLSTar_downloadPubMLST_profile')
 MLSTarR_getpubmlst = tools.R_scripts('MLSTar_getpubmlst')

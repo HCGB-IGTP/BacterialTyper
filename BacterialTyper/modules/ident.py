@@ -679,14 +679,18 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
 			if os.path.isfile(filename_stamp):
 				stamp =	functions.read_time_stamp(filename_stamp)
 				print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
-	
+				status=True	
 			else: 
 				edirect_caller.generate_docsum_call('nuccore', nucc_entry[0], out_docsum_file)
-				edirect_caller.generate_xtract_call(out_docsum_file, 'DocumentSummary', 'Organism,BioSample,AssemblyAcc,Strain', tmp_species_outfile)
+				status = edirect_caller.generate_xtract_call(out_docsum_file, 'DocumentSummary', 'Organism,BioSample,AssemblyAcc,Strain', tmp_species_outfile)
 				
 			########################################	
 			## get information from edirect call
 			########################################	
+			if not status:
+				print ("NO INFORMATION")
+				continue
+
 			taxa_name_tmp = functions.get_info_file(tmp_species_outfile)
 			Organism = taxa_name_tmp[0].split(',')[0].split()
 			genus = Organism[0] 							## genus
@@ -819,12 +823,12 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 	MLST_results = {}
 		
 	## get MLST_profile: default or provided
-	mlst_profile = retrieve_databases.loc[ retrieve_databases['db'] == 'PubMLST']['path'].item()
+	mlst_profile_list = retrieve_databases.loc[ retrieve_databases['db'] == 'PubMLST']['path'].tolist()
 
 	if (Debug):
 		print ("** Debug **")
-		print ("mlst_profile")
-		print (mlst_profile)
+		print ("mlst_profile_list")
+		print (mlst_profile_list)
 
 		print ("dataFrame_edirect")
 		print (dataFrame_edirect)
@@ -838,43 +842,43 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 			print (colored("\t- Not available PubMLST profile for sample [%s] identified as %s %s" %(row['sample'], row['genus'], row['species']), 'orange'))
 		
 		else:
+			for mlst_profile in mlst_profile_list:
 
-			## species folder
-			#species_mlst_folder = functions.create_subfolder(MLSTar_taxa_name, pubmlst_folder)
-			species_mlst = mlst_profile.split(',')[0]
-			species_mlst_folder = mlst_profile.split(',')[1]
+				## species folder
+				#species_mlst_folder = functions.create_subfolder(MLSTar_taxa_name, pubmlst_folder)
+				species_mlst = mlst_profile.split(',')[0]
+				species_mlst_folder = mlst_profile.split(',')[1]
 			
-			## output file
-			output_file = species_mlst_folder + '/PubMLST_available_scheme.csv'
-			filename_stamp = species_mlst_folder + '/.success_scheme'
+				## output file
+				output_file = species_mlst_folder + '/PubMLST_available_scheme.csv'
+				filename_stamp = species_mlst_folder + '/.success_scheme'
 			
-			## 
-			if MLSTar_taxa_name == species_mlst:		
-				if os.path.isfile(filename_stamp):
-					stamp =	functions.read_time_stamp(filename_stamp)
-					print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+				## 
+				if MLSTar_taxa_name == species_mlst:		
+					if os.path.isfile(filename_stamp):
+						stamp =	functions.read_time_stamp(filename_stamp)
+						print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
+					else:
+						### get scheme available
+						MLSTar.getPUBMLST(MLSTar_taxa_name, rscript, output_file)
+						stamp =	functions.print_time_stamp(filename_stamp)
+
+					## parse and get scheme for classical MLST
+					schemes_MLST = pd.read_csv(output_file, sep=',', header=0)
+
+					##
+					for item, cluster in schemes_MLST.iterrows():
+						if cluster['len'] < 10:
+							scheme2use = int(cluster['scheme'])
+							continue			
+					### 
+					sample = row['sample']
+					MLSTar_folder = functions.create_subfolder('MLST', outdir_dict[sample])
+					genome_file = assembly_samples_retrieved.loc[assembly_samples_retrieved['name'] == sample]['sample'].values[0]
 	
-			else: 
-				### get scheme available
-				MLSTar.getPUBMLST(MLSTar_taxa_name, rscript, output_file)
-				stamp =	functions.print_time_stamp(filename_stamp)
-	
-			## parse and get scheme for classical MLST
-			schemes_MLST = pd.read_csv(output_file, sep=',', header=0)
-			
-			##
-			for item, cluster in schemes_MLST.iterrows():
-				if cluster['len'] < 10:
-					scheme2use = int(cluster['scheme'])
-					continue			
-			### 
-			sample = row['sample']
-			MLSTar_folder = functions.create_subfolder('MLST', outdir_dict[sample])
-			genome_file = assembly_samples_retrieved.loc[assembly_samples_retrieved['name'] == sample]['sample'].values[0]
-	
-			## call MLST
-			(results, profile_folder) = MLSTar.run_MLSTar(species_mlst_folder, rscript, MLSTar_taxa_name, scheme2use, sample, MLSTar_folder, genome_file, options.threads)
-			MLST_results[sample] = results
+					## call MLST
+					(results, profile_folder) = MLSTar.run_MLSTar(species_mlst_folder, rscript, MLSTar_taxa_name, scheme2use, sample, MLSTar_folder, genome_file, options.threads)
+					MLST_results[sample] = results
 
 	##	
 	print ("+ Finish this step...")
