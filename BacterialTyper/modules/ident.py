@@ -839,7 +839,7 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 		MLSTar_taxa_name = MLSTar.get_MLSTar_species(row['genus'], row['species'] )
 		
 		if (MLSTar_taxa_name == 'NaN'):
-			print (colored("\t- Not available PubMLST profile for sample [%s] identified as %s %s" %(row['sample'], row['genus'], row['species']), 'orange'))
+			print (colored("\t- Not available PubMLST profile for sample [%s] identified as %s %s" %(row['sample'], row['genus'], row['species']), 'yellow'))
 		
 		else:
 			for mlst_profile in mlst_profile_list:

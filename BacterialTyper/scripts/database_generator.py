@@ -162,7 +162,7 @@ def ngd_download(dir_path, acc_ID, data_folder):
 	if download:
 		print ('+ Downloading:')
 		## download in data folder provided
-		ngd.download(section='genbank', file_format='fasta,gff,protein-fasta,genbank', assembly_accessions=acc_ID, output=data_folder, group='bacteria')
+		ngd.download(section='genbank', file_formats='fasta,gff,protein-fasta,genbank', assembly_accessions=acc_ID, output=data_folder, groups='bacteria')
 
 		## check if files are gunzip
 		files = os.listdir(dir_path)
@@ -511,7 +511,7 @@ def getdbs(source, database_folder, option, debug):
 		### genbank entries downloaded
 		if dbs2use[0] == 'genbank':
 			##
-			if os.path.exists(path_genbank):
+			if os.path.exists(path_genbank + '/bacteria'):
 				genbank_entries = os.listdir(os.path.join(path_genbank, 'bacteria'))
 				for entry in genbank_entries:
 					this_db = os.path.join(path_genbank,'bacteria', entry)

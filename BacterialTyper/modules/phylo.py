@@ -153,6 +153,7 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     
     
     pd_samples_retrieved_merge = pd.DataFrame()
+    pd_samples_retrieved = pd.DataFrame()
 
     ## all_data // only_project_data
     if (options.all_data or options.only_project_data):
@@ -221,7 +222,7 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     contig_option = ""
     
     # Group dataframe by sample name
-    sample_frame = pd_samples_retrieved.groupby(["name"])
+    sample_frame = pd_samples_retrieved_merge.groupby(["name"])
     
     ## send for each sample
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
