@@ -175,10 +175,11 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
 
         ## discard the sample used as reference if any
         if options.user_sample_ID:
-            db_frame_user_Data = pd_samples_retrieved.drop(index=options.user_sample_ID)
+            #db_frame_user_Data = pd_samples_retrieved.drop(index=options.user_sample_ID)
+            db_frame_user_Data = db_frame_user_Data.drop(index=options.user_sample_ID) ## Why not this?
             
-        ## create output directories
-        outdir_dict2 = functions.outdir_project(os.path.join(options.database, 'user_data'), options.project, db_frame_user_Data, "phylo")
+        ## create output directories in database entries in user_data
+        outdir_dict2 = functions.outdir_subproject(os.path.join(options.database, 'user_data'), db_frame_user_Data, "phylo")
         
         ## merge if both contain data
         if not pd_samples_retrieved.empty:
@@ -205,6 +206,8 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     ####################################
     ## for fastq samples
     ####################################
+
+    exit()
 
     # optimize threads
     name_list = set(pd_samples_retrieved_merge["name"].tolist())
