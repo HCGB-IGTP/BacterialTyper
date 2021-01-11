@@ -150,7 +150,7 @@ def outdir_subproject(outdir, pd_samples, mode):
 	sample_frame = pd_samples.groupby(["name"])
 	dict_outdir = {}	
 	for name, cluster in sample_frame:
-		mode_name_dir = create_subfolder(mode, outdir)		
+		mode_name_dir = create_subfolder(mode,os.path.join(outdir, name))		
 		dict_outdir[name] = mode_name_dir
 
 	return (dict_outdir)

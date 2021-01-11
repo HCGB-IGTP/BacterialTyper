@@ -89,6 +89,9 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 			snippy_cmd = snippy_cmd + ' --se ' + list_files[0]
 		elif (len(list_files) == 2):
 			snippy_cmd = snippy_cmd + ' --pe1 ' + list_files[0] + ' --pe2 ' + list_files[1]
+		else:
+			print(colored("** ERROR: No reads or contigs provided...", "red"))
+			return(False)		
 	
 	## add log
 	snippy_cmd = snippy_cmd + ' 2> ' + log_file
