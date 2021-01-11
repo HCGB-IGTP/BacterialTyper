@@ -150,7 +150,9 @@ def run_phylo(options):
 def map_samples(options, reference_gbk_file, input_dir, outdir):    
     """
     """
-    
+
+    ## set it as variable
+    contig_option = False
     
     pd_samples_retrieved_merge = pd.DataFrame()
     pd_samples_retrieved = pd.DataFrame()
@@ -170,6 +172,10 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     ####################################
     ## user_data // genbank_data // only_external_data
     if (options.all_data or options.user_data): 
+        
+        ## --------------------------- ##
+        ### get user database
+        ## --------------------------- ##
         print ("+ Retrieve samples to map from user database...")
         db_frame_user_Data = database_user.get_userData_files(options, os.path.join(options.database, 'user_data'))
 
@@ -181,6 +187,14 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
         ## create output directories in database entries in user_data
         outdir_dict2 = functions.outdir_subproject(os.path.join(options.database, 'user_data'), db_frame_user_Data, "phylo")
         
+        ## If user desires to map contigs, map trimmed as default
+        if (contig_option):
+            # filter for assemblies retrieved
+            db_frame_user_Data = db_frame_user_Data.loc[db_frame_user_Data['tag'] == "assembly",]
+        else:
+             # filter for raw reads
+             db_frame_user_Data = db_frame_user_Data.loc[db_frame_user_Data['tag'] == "reads",]
+        
         ## merge if both contain data
         if not pd_samples_retrieved.empty:
             pd_samples_retrieved_merge = pd.concat([db_frame_user_Data, pd_samples_retrieved], sort=True, ignore_index=True).drop_duplicates()
@@ -188,6 +202,11 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
         else:
             outdir_dict = outdir_dict2
             pd_samples_retrieved_merge = db_frame_user_Data   
+    
+        ## --------------------------- ##
+        ### get genbank database
+        ## --------------------------- ##
+        ## set contig option for these data only
     
     ## check data
     try:
@@ -203,11 +222,13 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
         print (colored("**DEBUG: outdir_dict **", 'yellow'))
         print (outdir_dict)
         
+    ## TODO: use contig option
+    if (contig_option or options.genbank_data):
+        print ()
+        
     ####################################
     ## for fastq samples
     ####################################
-
-    exit()
 
     # optimize threads
     name_list = set(pd_samples_retrieved_merge["name"].tolist())
@@ -222,7 +243,6 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
 
     ## call snippy
     print ("\n+ Create mapping of fastq reads for project samples:")
-    contig_option = ""
     
     # Group dataframe by sample name
     sample_frame = pd_samples_retrieved_merge.groupby(["name"])
@@ -238,10 +258,6 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
                 print ('***ERROR:')
                 print (cmd2)
                 print('%r generated an exception: %s' % (details, exc))
-
-    ## TODO: use contig option
-    if (options.all_data or options.genbank_data):
-        print ()
 
     ## subfolder within phylo for this mapping
     new_outdir_dict = {}
