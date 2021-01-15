@@ -168,16 +168,16 @@ def download_kma_database(folder, database, debug):
 			functions.extract(tar_file, folder)	
 
 		else:
-			print (colored("*** ERROR: Some error ocurred during the downloading and file is corrupted ***", 'red'))
+			print (colored("*** ERROR: Some error occurred during the downloading and file is corrupted ***", 'red'))
 			return ("Error")
 			
 		## database should be unzipped and containing files...
 		return_code_extract = check_db_indexed(index_name, folder)
 		
 		if (return_code_extract):
-			print("+ Database (%s) succesfully extracted in folder: %s..." %(database, folder))
+			print("+ Database (%s) successfully extracted in folder: %s..." %(database, folder))
 		else:
-			string = "*** ERROR: Some error ocurred during the extraction of the database (%s). Please check folder (%s) and downloading and file is corrupted ***" %(database, folder)
+			string = "*** ERROR: Some error occurred during the extraction of the database (%s). Please check folder (%s) and downloading and file is corrupted ***" %(database, folder)
 			print (colored(string, 'red'))
 			return ("Error")
 		
@@ -217,11 +217,15 @@ def check_db_indexed(index_name, folder):
 	print ("\t+ Checking if database has been previously indexed...")
 	for sufix in my_index_list:
 		##print (sufix)
+		
 		my_file = index_name + sufix
 		if os.path.isfile(my_file):
 			print ("\t" + my_file + ' exists...')
 		else:
 			if (sufix == '.index.b'):
+				continue
+			elif (sufix == '.name'):
+				## viral databases does not contain .name but .tax
 				continue
 			else:
 				return(False)
