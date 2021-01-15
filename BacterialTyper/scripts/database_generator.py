@@ -476,6 +476,8 @@ def getdbs(source, database_folder, option, debug):
 				##
 				if (db == 'plasmids'):
 					prefix = '.T'
+				elif (db == 'viral'):
+					prefix = '.TG'
 				else:
 					prefix = '.ATG'
 

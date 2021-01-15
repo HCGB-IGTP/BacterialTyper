@@ -224,9 +224,6 @@ def check_db_indexed(index_name, folder):
 		else:
 			if (sufix == '.index.b'):
 				continue
-			elif (sufix == '.name'):
-				## viral databases does not contain .name but .tax
-				continue
 			else:
 				return(False)
 	
