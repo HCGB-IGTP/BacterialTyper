@@ -78,10 +78,11 @@ def download_kma_database(folder, database, debug):
 	"""
 
 	## ToDo: update with latest version
-	#ftp_site = "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/latest/"
+	ftp_site = "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/latest/"
 	
-	## So far there is not a plasmid database within the latest database section
-	
+	## In v20190107 there was a plasmid database.
+	#ftp_site = "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/20190107/"
+
 	## ToDo: Set automatic: download config file and look for prefix for each sample and generate a dictionary to code the prefix for each db.
 	
 	# Database configuration file - Describes the content of the database
@@ -121,8 +122,6 @@ def download_kma_database(folder, database, debug):
 
 		## Download data
 		print ("\t+ Downloading data now, it may take a while....")
-
-		ftp_site = "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/20190107/"
 
 		## debug message
 		if (debug):
