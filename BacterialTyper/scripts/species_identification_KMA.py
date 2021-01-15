@@ -54,7 +54,7 @@ def download_kma_database(folder, database, debug):
 	It also downloads the md5sum for the dataset selected and compares with the 
 	
 	:param folder: Absolute path to folder that contains database.
-	:param database: Possible options: [bacteria, archaea, protozoa, fungi, plasmids, typestrains].
+	:param database: Possible options: [bacteria, archaea, protozoa, fungi, plasmids, typestrains, viral].
 	:param debug: True/false for printing debugging messages.
 	
 	:type folder: string
@@ -102,6 +102,8 @@ def download_kma_database(folder, database, debug):
 	## prefix
 	if (database == 'plasmids'):
 		prefix = '.T'
+	elif (database == 'viral'):
+		prefix = '.TG'
 	else:
 		prefix = '.ATG'
 		
@@ -118,7 +120,7 @@ def download_kma_database(folder, database, debug):
 	if (return_code_down == False): ## folder does not exists
 
 		## Download data
-		print ("\t+ Downloading data now, it migth take a while....")
+		print ("\t+ Downloading data now, it may take a while....")
 
 		ftp_site = "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/20190107/"
 
