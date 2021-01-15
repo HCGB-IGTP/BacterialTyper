@@ -31,7 +31,7 @@ from HCGB.functions import main_functions
 
 ##############
 def help_options():
-    print ("\nUSAGE: python %s csv_file_alleles sample...\n"  %os.path.realpath(__file__))
+    print ("\nUSAGE: python %s csv_file_alleles path sample...\n"  %os.path.realpath(__file__))
 
 ##############
 def get_sequence(path, probe_ID, nucc_entry, format, revcomp=False, start=0, stop=-1):
@@ -143,7 +143,8 @@ def get_alleles(csv_file, path, debug):
                 if (row['Primer_Seq']):
                     primer_fasta = row['Primer_Seq']
         
-            ## get results for each
+            ## generate results for each
+            
             
             
                 
