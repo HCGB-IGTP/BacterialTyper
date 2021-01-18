@@ -524,7 +524,6 @@ def send_kma_job(outdir_file, list_files, name, database, threads, Debug):
 		print (list_files)
 		print ("name: " + name)
 		print ("database: " + database)
-		print ("threads: " + threads)
 		
 	## outdir_KMA
 	outdir_dict_kma = functions.create_subfolder("kma", outdir_file)
@@ -537,10 +536,12 @@ def send_kma_job(outdir_file, list_files, name, database, threads, Debug):
 
 	## check if previously run and succeeded
 	basename_tag = os.path.basename(outfile)
-	filename_stamp = os.path.join(outdir_dict_kma,  + '/.success_' + basename_tag)
+	filename_stamp = os.path.join(outdir_dict_kma,  '/.success_' + basename_tag)
 	
-	#print ("Outdir: ", outdir_dict_kma)
-	#print ("Filename_stamp: ", filename_stamp)
+	if (Debug):
+		print ("Outdir: ", outdir_dict_kma)
+		print ("outfile: ", outfile)
+		print ("Filename_stamp: ", filename_stamp)
 	
 	if os.path.isfile(filename_stamp):
 		stamp =	functions.read_time_stamp(filename_stamp)
