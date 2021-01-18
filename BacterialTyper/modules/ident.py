@@ -335,8 +335,6 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	
 		- :func:`BacterialTyper.scripts.functions.boxymcboxface`
 		
-		- :func:`BacterialTyper.scripts.functions.outdir_subproject`
-		
 		- :func:`BacterialTyper.modules.ident.send_kma_job`
 		
 		- :func:`BacterialTyper.modules.ident.get_outfile`
@@ -438,7 +436,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			
 			## get result
 			## outdir_KMA
-			outdir_dict_kma = functions.outdir_subproject(outdir_dict[name], cluster, "kma")
+			outdir_dict_kma = functions.create_subfolder("kma", outdir_dict[name])
 			result = get_outfile(outdir_dict_kma[name], name, db2use)
 			#print ('\t- File: ' + result + '.spa')
 			
@@ -507,8 +505,6 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 	
 	.. seealso:: This function depends on other ``BacterialTyper`` functions called:
 	
-		- :func:`BacterialTyper.scripts.functions.outdir_subproject`
-	
 		- :func:`BacterialTyper.config.set_config.get_exe`
 	
 		- :func:`BacterialTyper.scripts.species_identification_KMA.kma_ident_call`
@@ -520,7 +516,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 		
 	"""
 	## outdir_KMA
-	outdir_dict_kma = functions.outdir_subproject(outdir_file, dataFrame_sample, "kma")
+	outdir_dict_kma = functions.create_subfolder("kma", outdir_file)
 
 	## set defaults
 	kma_bin = set_config.get_exe("kma")
