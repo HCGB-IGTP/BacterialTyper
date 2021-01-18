@@ -399,7 +399,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			print ("+ Loading database on memory for faster identification.")
 			return_code_load = species_identification_KMA.load_db(kma_bin, db2use)
 			## send for each sample
-			commandsSent = { executor.submit(send_kma_job, outdir_dict[name], sorted(cluster["sample"].tolist()), name, db2use, threads_job, cluster): name for name, cluster in sample_frame }
+			commandsSent = { executor.submit(send_kma_job, outdir_dict[name], sorted(cluster["sample"].tolist()), name, db2use, threads_job, Debug): name for name, cluster in sample_frame }
 
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
@@ -482,7 +482,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	return (results_summary)
 
 ###################################
-def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sample):
+def send_kma_job(outdir_file, list_files, name, database, threads, Debug):
 	"""
 	Executes KMA identification jobs
 	
@@ -515,6 +515,17 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 		
 		
 	"""
+	
+	if (Debug):
+		print (colored("**DEBUG: ident.send_kma_job call**", 'yellow'))
+		print ("outdir_file")
+		print (outdir_file)
+		print ("list_files")
+		print (list_files)
+		print ("name: " + name)
+		print ("database: " + database)
+		print ("threads: " + threads)
+		
 	## outdir_KMA
 	outdir_dict_kma = functions.create_subfolder("kma", outdir_file)
 
@@ -526,7 +537,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, dataFrame_sam
 
 	## check if previously run and succeeded
 	basename_tag = os.path.basename(outfile)
-	filename_stamp = os.path.join(outdir_dict_kma[name],  '.success_' + basename_tag)
+	filename_stamp = os.path.join(outdir_dict_kma[name],  + '/.success_' + basename_tag)
 	
 	#print ("Outdir: ", outdir_dict_kma[name])
 	#print ("Filename_stamp: ", filename_stamp)
