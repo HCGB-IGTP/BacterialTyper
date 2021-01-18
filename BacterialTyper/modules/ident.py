@@ -450,7 +450,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			## get result
 			## outdir_KMA
 			outdir_dict_kma = functions.create_subfolder("kma", outdir_dict[name])
-			result = get_outfile(outdir_dict_kma[name], name, db2use)
+			result = get_outfile(outdir_dict_kma, name, db2use)
 			#print ('\t- File: ' + result + '.spa')
 			
 			## get results using a cutoff value [Defaulta: 80]
