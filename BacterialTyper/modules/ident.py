@@ -152,33 +152,43 @@ def run_ident(options):
 		print ("dataframe_kma")
 		print (dataFrame_kma)
 	
-	######## EDirect identification
-	dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict, Debug)
 	
-	## functions.timestamp
-	start_time_partial = functions.timestamp(start_time_partial)
-
-	## debug message
-	if (Debug):
-		print (colored("**DEBUG: retrieve results from NCBI **", 'yellow'))
-		pd.set_option('display.max_colwidth', None)
-		pd.set_option('display.max_columns', None)
-		print ("dataFrame_edirect")
-		print (dataFrame_edirect)
+	## exit if viral search
+	if (len(options.kma_dbs) == 1):
+		if (options.kma_dbs[0] == 'viral'):
+			print ()
+			MLST_results = ''
+			options.fast = True
+	
+		else:
+			
+			######## EDirect identification
+			dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict, Debug)
+			
+			## functions.timestamp
+			start_time_partial = functions.timestamp(start_time_partial)
 		
-	######## MLST identification
-	MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, dataFrame_edirect, retrieve_databases)
-
-	## functions.timestamp
-	start_time_partial = functions.timestamp(start_time_partial)
+			## debug message
+			if (Debug):
+				print (colored("**DEBUG: retrieve results from NCBI **", 'yellow'))
+				pd.set_option('display.max_colwidth', None)
+				pd.set_option('display.max_columns', None)
+				print ("dataFrame_edirect")
+				print (dataFrame_edirect)
+				
+			######## MLST identification
+			MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, dataFrame_edirect, retrieve_databases)
+		
+			## functions.timestamp
+			start_time_partial = functions.timestamp(start_time_partial)
 	
-	## debug message
-	if (Debug):
-		print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
-		pd.set_option('display.max_colwidth', None)
-		pd.set_option('display.max_columns', None)
-		print ("MLST_results")
-		print (MLST_results)
+			## debug message
+			if (Debug):
+				print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
+				pd.set_option('display.max_colwidth', None)
+				pd.set_option('display.max_columns', None)
+				print ("MLST_results")
+				print (MLST_results)
 
 	## generate summary for sample: all databases
 	## MLST, plasmids, genome, etc
@@ -260,8 +270,11 @@ def run_ident(options):
 	results_summary_KMA = results_summary_KMA.sort_values(by=['Sample', 'Database', 'Query_Coverage'],ascending=[True, True,True])
 	results_summary_KMA.to_excel(writer, sheet_name='KMA') ## write excel handle
 	
+	## write MLST
+	if (MLST_results):
+		MLST_all.to_excel(writer, sheet_name='MLST')
+	
 	## write excel and close
-	MLST_all.to_excel(writer, sheet_name='MLST')
 	writer.save() ## close excel handle
 
 	print ("\n+ Check summary of results in file generated" )
@@ -446,7 +459,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 
 			### check if db2use is plasmids as it could be several.
 			if (results.index.size > 1):
-				if (basename_db == "plasmids.T"):
+				if (basename_db == "plasmids.T" or basename_db == "viral.TG"):
 					## let it be several entries
 					results['Sample'] = name
 					results_summary = results_summary.append(results, ignore_index=True)
