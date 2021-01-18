@@ -536,7 +536,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, Debug):
 
 	## check if previously run and succeeded
 	basename_tag = os.path.basename(outfile)
-	filename_stamp = os.path.join(outdir_dict_kma,  '/.success_' + basename_tag)
+	filename_stamp = outdir_dict_kma + '/.success_' + basename_tag
 	
 	if (Debug):
 		print ("Outdir: ", outdir_dict_kma)
