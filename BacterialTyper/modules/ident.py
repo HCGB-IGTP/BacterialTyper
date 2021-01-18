@@ -533,13 +533,13 @@ def send_kma_job(outdir_file, list_files, name, database, threads, Debug):
 	kma_bin = set_config.get_exe("kma")
 
 	## get outfile
-	outfile = get_outfile(outdir_dict_kma[name], name, database)
+	outfile = get_outfile(outdir_dict_kma, name, database)
 
 	## check if previously run and succeeded
 	basename_tag = os.path.basename(outfile)
-	filename_stamp = os.path.join(outdir_dict_kma[name],  + '/.success_' + basename_tag)
+	filename_stamp = os.path.join(outdir_dict_kma,  + '/.success_' + basename_tag)
 	
-	#print ("Outdir: ", outdir_dict_kma[name])
+	#print ("Outdir: ", outdir_dict_kma)
 	#print ("Filename_stamp: ", filename_stamp)
 	
 	if os.path.isfile(filename_stamp):
@@ -549,7 +549,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, Debug):
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: species_identification_KMA.kma_ident_module call**", 'yellow'))
-			print ("outfile = get_outfile(outdir_dict_kma[name], name, db2use)")
+			print ("outfile = get_outfile(outdir_dict_kma, name, db2use)")
 			print ("outfile: ", outfile)
 			print ("species_identification_KMA.kma_ident_module(outfile, list_files, name, database, threads) ")
 			print ("species_identification_KMA.kma_ident_module" + "\t" + outfile + "\t" + str(list_files) + "\t" + name + "\t" + database + "\t" + str(threads) + "\n") 
