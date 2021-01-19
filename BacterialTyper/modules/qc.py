@@ -86,7 +86,13 @@ def run_QC(options):
 	
 	### option
 	if (options.raw_reads):
-		fastqc(input_dir, outdir, options, start_time_total)
+		## get files
+		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
+		fastqc(pd_samples_retrieved, outdir, options, start_time_total, "raw")
+	elif (options.trim_reads):
+		## get files
+		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
+		fastqc(pd_samples_retrieved, outdir, options, start_time_total, "trimmed")
 	elif (options.assembly):
 		BUSCO_check(input_dir, outdir, options, start_time_total, "genome")
 	elif (options.annotation):
@@ -95,12 +101,9 @@ def run_QC(options):
 	return()
 
 ################################################
-def fastqc(input_dir, outdir, options, start_time_total):
+def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysis):
 	
 	functions.boxymcboxface("FASTQC Quality check for samples")
-	
-	## get files
-	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
 	
 	## debug message
 	if (Debug):
@@ -115,7 +118,7 @@ def fastqc(input_dir, outdir, options, start_time_total):
 	## in this case, in some other cases might not occur	
 	if not options.project:
 		functions.create_folder(outdir)
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "fastqc")
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "fastqc_" + name_analysis)
 	
 	print ("+ Checking quality for each sample retrieved...")
 	start_time_partial = start_time_total
@@ -174,8 +177,9 @@ def fastqc(input_dir, outdir, options, start_time_total):
 			print ("\n")
 		
 		fastqc_report = functions.create_subfolder("FASTQC", outdir_report)
-		multiQC_report.multiQC_module_call(my_outdir_list, "FASTQC", fastqc_report,"")
-		print ('\n+ A summary HTML report of each sample is generated in folder: %s' %fastqc_report)
+		fastqc_final_report = functions.create_subfolder(name_analysis, fastqc_report)
+		multiQC_report.multiQC_module_call(my_outdir_list, "FASTQC", fastqc_final_report,"")
+		print ('\n+ A summary HTML report of each sample is generated in folder: %s' %fastqc_final_report)
 
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)

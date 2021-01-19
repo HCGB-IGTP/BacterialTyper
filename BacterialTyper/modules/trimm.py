@@ -23,6 +23,7 @@ from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
+from BacterialTyper.modules import qc
 from BacterialTyper.data import data_files
 
 ##############################################
@@ -181,6 +182,10 @@ def run(options):
 		trimm_report = functions.create_subfolder("trimm", outdir_report)
 		multiQC_report.multiQC_module_call(my_outdir_list, "Trimmomatic", trimm_report,"")
 		print ('\n+ A summary HTML report of each sample is generated in folder: %s' %trimm_report)
+		
+		## create fastqc for trimmed reads
+		pd_samples_retrieved_trimmed = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
+		qc.fastqc(pd_samples_retrieved_trimmed, outdir, options, start_time_partial, "trimmed")
 		
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)

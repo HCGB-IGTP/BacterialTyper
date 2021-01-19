@@ -146,7 +146,8 @@ def run_phylo(options):
 
     print ("+ Exiting Annotation module.")
     return()
-    
+
+#####################
 def map_samples(options, reference_gbk_file, input_dir, outdir):    
     """
     """
