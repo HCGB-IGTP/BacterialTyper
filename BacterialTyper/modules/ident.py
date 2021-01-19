@@ -154,41 +154,46 @@ def run_ident(options):
 	
 	
 	## exit if viral search
+	skip=False
 	if (len(options.kma_dbs) == 1):
-		if (options.kma_dbs[0] == 'viral'):
-			print ()
-			MLST_results = ''
-			options.fast = True
-	
-		else:
+		for i in options.kma_dbs:
+			if (i == 'viral'):
+				print ()
+				MLST_results = ''
+				options.fast = True
+				skip=True
 			
-			######## EDirect identification
-			dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict, Debug)
+			## what if only plasmids?
 			
-			## functions.timestamp
-			start_time_partial = functions.timestamp(start_time_partial)
+	## do edirect and MLST if bacteria
+	if (not skip):		
+		######## EDirect identification
+		dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict, Debug)
 		
-			## debug message
-			if (Debug):
-				print (colored("**DEBUG: retrieve results from NCBI **", 'yellow'))
-				pd.set_option('display.max_colwidth', None)
-				pd.set_option('display.max_columns', None)
-				print ("dataFrame_edirect")
-				print (dataFrame_edirect)
-				
-			######## MLST identification
-			MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, dataFrame_edirect, retrieve_databases)
-		
-			## functions.timestamp
-			start_time_partial = functions.timestamp(start_time_partial)
+		## functions.timestamp
+		start_time_partial = functions.timestamp(start_time_partial)
 	
-			## debug message
-			if (Debug):
-				print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
-				pd.set_option('display.max_colwidth', None)
-				pd.set_option('display.max_columns', None)
-				print ("MLST_results")
-				print (MLST_results)
+		## debug message
+		if (Debug):
+			print (colored("**DEBUG: retrieve results from NCBI **", 'yellow'))
+			pd.set_option('display.max_colwidth', None)
+			pd.set_option('display.max_columns', None)
+			print ("dataFrame_edirect")
+			print (dataFrame_edirect)
+			
+		######## MLST identification
+		MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, dataFrame_edirect, retrieve_databases)
+	
+		## functions.timestamp
+		start_time_partial = functions.timestamp(start_time_partial)
+
+		## debug message
+		if (Debug):
+			print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
+			pd.set_option('display.max_colwidth', None)
+			pd.set_option('display.max_columns', None)
+			print ("MLST_results")
+			print (MLST_results)
 
 	## generate summary for sample: all databases
 	## MLST, plasmids, genome, etc
