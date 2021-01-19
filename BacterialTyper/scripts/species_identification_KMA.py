@@ -192,7 +192,7 @@ def check_db_indexed(index_name, folder):
 	Check the status of a database
 	
 	:param index_name: Index name for the database
-	:param folder: Absolute path of the folder containing the databse.
+	:param folder: Absolute path of the folder containing the database.
 	
 	:type index_name: string
 	:type folder: string
