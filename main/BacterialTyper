@@ -204,7 +204,8 @@ in_out_group_qc.add_argument("--include_all", action="store_true", help="Include
 
 exclusive_group_qc_name = subparser_qc.add_argument_group("Options")
 exclusive_group_qc = exclusive_group_qc_name.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-exclusive_group_qc.add_argument("--raw_reads", action="store_true",  help="Check quality for each sample using FASTQC analysis. Input: reads (fastq/fq). See --help_format for further details.")
+exclusive_group_qc.add_argument("--raw_reads", action="store_true",  help="Check quality for each raw reads sample using FASTQC analysis. Input: reads (fastq/fq). See --help_format for further details.")
+exclusive_group_qc.add_argument("--trim_reads", action="store_true",  help="Check quality for each trimmed reads sample using FASTQC analysis. Input: trimmed reads (fastq/fq). See --help_format for further details.")
 exclusive_group_qc.add_argument("--assembly", action="store_true",  help="Check assembly completeness using BUSCO and descriptive statistics. Input: draft assemblies, scaffolds, contigs... See --help_BUSCO for additional details.")
 exclusive_group_qc.add_argument("--annotation", action="store_true",  help="Check annotation completenes using BUSCO statistics. Input: protein sequences in fasta format. See --help_BUSCO for additional details.")
 
