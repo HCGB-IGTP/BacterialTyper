@@ -37,7 +37,8 @@ help_options = ('--help_Database',
 				'--help_Mash',
 				'--help_input_MGE',
                 '--help_Snippy',
-                '--help_spaTyper')
+                '--help_spaTyper',
+                '--no_BUSCO')
 
 subparser_space = subparsers.add_parser('Configuration', help='')
 subparser_space = subparsers.add_parser('==============', help='')
@@ -286,6 +287,7 @@ dataset_group_assembly.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='
 options_group_assembly = subparser_assemble.add_argument_group("Options")
 options_group_assembly.add_argument("--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 options_group_assembly.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]. See details in --help_multiqc")
+options_group_assembly.add_argument("--no_BUSCO", action="store_true", help="Do not create BUSCO analysis")
 
 info_group_assemble = subparser_assemble.add_argument_group("Additional information")
 info_group_assemble.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")

@@ -88,11 +88,11 @@ def run_QC(options):
 	if (options.raw_reads):
 		## get files
 		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
-		fastqc(pd_samples_retrieved, outdir, options, start_time_total, "raw")
+		fastqc(pd_samples_retrieved, outdir, options, start_time_total, "raw", Debug)
 	elif (options.trim_reads):
 		## get files
 		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
-		fastqc(pd_samples_retrieved, outdir, options, start_time_total, "trimmed")
+		fastqc(pd_samples_retrieved, outdir, options, start_time_total, "trimmed", Debug)
 	elif (options.assembly):
 		BUSCO_check(input_dir, outdir, options, start_time_total, "genome")
 	elif (options.annotation):
@@ -101,7 +101,7 @@ def run_QC(options):
 	return()
 
 ################################################
-def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysis):
+def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysis, Debug):
 	
 	functions.boxymcboxface("FASTQC Quality check for samples")
 	

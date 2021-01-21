@@ -185,7 +185,7 @@ def run(options):
 		
 		## create fastqc for trimmed reads
 		pd_samples_retrieved_trimmed = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
-		qc.fastqc(pd_samples_retrieved_trimmed, outdir, options, start_time_partial, "trimmed")
+		qc.fastqc(pd_samples_retrieved_trimmed, outdir, options, start_time_partial, "trimmed", Debug)
 		
 	print ("\n*************** Finish *******************")
 	start_time_partial = functions.timestamp(start_time_total)

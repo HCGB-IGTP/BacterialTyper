@@ -251,7 +251,10 @@ def run_assembly(options):
 	print ("+ Retrieve all genomes assembled...")
 	
 	### BUSCO check assembly
-	results = qc.BUSCO_check(outdir, outdir, options, start_time_partial, "genome")
+	if (options.no_BUSCO):
+		print ()
+	else:
+		results = qc.BUSCO_check(outdir, outdir, options, start_time_partial, "genome")
 	
 	## print to file results	 	
 	print ("\n*************** Finish *******************")
