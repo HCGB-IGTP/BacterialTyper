@@ -20,7 +20,7 @@ def get_version():
     Original code: PhiSpy setup.py 
     https://github.com/linsalrob/PhiSpy/blob/master/setup.py
     """
-    with open("VERSION", 'r') as f:
+    with open("./VERSION", 'r') as f:
         v = f.readline().strip()
     return v
 
@@ -58,7 +58,7 @@ setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Topic :: Scientific/Engineering :: Bio-Informatics",
+        "Topic :: Scientific/Engineering :: BioInformatics"
     ],
 )
 

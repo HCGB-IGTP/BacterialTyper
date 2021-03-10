@@ -22,4 +22,4 @@ BacterialTyper/config/R/R_package.info.txt
 BacterialTyper.egg-info/
 build/
 dist/
-
+.pypirc
