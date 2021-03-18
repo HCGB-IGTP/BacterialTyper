@@ -37,7 +37,10 @@ requirements:
         - ariba
         - spatyper 
         - mummer
-        
+        - r-ggplot2
+        - r-optparse
+        - r-withr
+        - r-devtools        
         
 about:
     home: https://github.com/HCGB-IGTP/BacterialTyper
