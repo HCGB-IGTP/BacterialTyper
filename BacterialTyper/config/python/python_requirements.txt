@@ -22,7 +22,7 @@ frozendict==1.2
 future==0.18.2
 humanfriendly==8.0
 idna==2.9
-Jinja2==2.11.1
+Jinja2==2.11.3
 joblib==0.14.1
 khmer==2.1.1
 kiwisolver==1.1.0
