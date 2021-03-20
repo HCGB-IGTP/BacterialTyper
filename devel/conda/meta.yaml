@@ -35,7 +35,8 @@ requirements:
         - busco
         - cd-hit
         - ariba
-        - spatyper 
+        - spatyper
+        - phispy
         - mummer
         - r-ggplot2
         - r-optparse
