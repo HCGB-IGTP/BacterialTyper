@@ -4,3 +4,5 @@ include BacterialTyper/config/software/*
 include BacterialTyper/config/perl/*
 include BacterialTyper/data/*
 include BacterialTyper/report/*
+include docs/source/images/workflow/all.jpg
+include VERSION

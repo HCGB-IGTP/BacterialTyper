@@ -20,7 +20,10 @@ requirements:
         - zlib
         
     run:
-        - python >=3.7
+        - perl
+		- perl-net-easy
+		- entrez-direct
+		- python >=3.7
         - fastqc
         - kma
         - iqtree
@@ -28,7 +31,6 @@ requirements:
         - spades
         - trimmomatic
         - snippy
-        - entrez-direct
         - blast
         - augustus
         - bowtie2
@@ -40,8 +42,10 @@ requirements:
         - mummer
         - r-ggplot2
         - r-optparse
-        - r-withr
-        - r-devtools        
+        - r-withr        
+        - r-devtools
+		- perl-net-ssleay
+		- 
         
 about:
     home: https://github.com/HCGB-IGTP/BacterialTyper
