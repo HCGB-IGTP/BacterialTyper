@@ -47,7 +47,7 @@ pyparsing==2.4.6
 pysam==0.15.4
 python-dateutil==2.8.1
 pytz==2019.3
-PyYAML==5.3
+PyYAML==5.4
 requests==2.23.0
 scikit-learn==0.22.2
 scipy==1.4.1
