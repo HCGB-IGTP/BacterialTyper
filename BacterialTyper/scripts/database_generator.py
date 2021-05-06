@@ -142,6 +142,9 @@ def NCBI_descendant(tax_ID, NCBI_folder, Debug):
 	## get information from NCBItaxonomy from module ete3
 	## and generate a dataframe containing as header: genus,species,name,NCBI_assembly_ID
 	## and call NCBI_DB to download and update database, then returned dataframe.
+	
+	# Use BacDup implementation for this purpose
+	
 
 
 def ngd_download(dir_path, acc_ID, data_folder):
