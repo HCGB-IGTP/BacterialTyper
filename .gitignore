@@ -17,6 +17,9 @@ env/BacterialTyper/
 ## information generated 
 BacterialTyper/config/R/R_package.info.txt
 
+#developer
+test_subset_reads/
+
 
 ## build
 BacterialTyper.egg-info/
