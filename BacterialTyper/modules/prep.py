@@ -17,9 +17,16 @@ import pandas as pd
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper.scripts import sampleParser
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
+from BacterialTyper.modules import help_info
+
+import HCGB
+from HCGB import sampleParser
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
+
 
 ################################
 def run_prep(options):
@@ -37,41 +44,29 @@ def run_prep(options):
 	See additional details of this module in user_guide :ref:`prep module entry<prep-description>`. 
 
 	
-	.. seealso:: This function depends on other BacterialTyper functions called:
+	.. seealso:: This function depends on other HCGB functions called:
 	
-		- :func:`BacterialTyper.scripts.sampleParser.help_format`
+		- :func:`HCGB.sampleParser`
 		
-		- :func:`BacterialTyper.scripts.sampleParser.get_files`
+		- :func:`HCGB.functions.aesthetics_functions`
 		
-		- :func:`BacterialTyper.scripts.sampleParser.one_file_per_sample`
+		- :func:`HCGB.functions.time_functions`
 	
-		- :func:`BacterialTyper.scripts.functions.pipeline_header`
+		- :func:`HCGB.functions.main_functions`
 		
-		- :func:`BacterialTyper.scripts.functions.boxymcboxface`
-	
-		- :func:`BacterialTyper.scripts.functions.print_time`
+		- :func:`HCGB.functions.file_functions`
 		
-		- :func:`BacterialTyper.scripts.functions.create_folder`
-		
-		- :func:`BacterialTyper.scripts.functions.outdir_project`
-		
-		- :func:`BacterialTyper.scripts.functions.create_subfolder`
-		
-		- :func:`BacterialTyper.scripts.functions.get_symbolic_link`
-		
-		- :func:`BacterialTyper.scripts.functions.create_human_timestamp`
-
 	"""
 	
 	## help_format option
 	if (options.help_format):
-		sampleParser.help_fastq_format()
+		help_info.help_fastq_format()
 		exit()
 		
-	functions.pipeline_header()
-	functions.boxymcboxface("Preparing samples")
+	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.boxymcboxface("Preparing samples")
 	print ("--------- Starting Process ---------")
-	functions.print_time()
+	HCGB_time.print_time()
 	
 	## init time
 	start_time_total = time.time()
@@ -96,28 +91,28 @@ def run_prep(options):
 
 	## output folder	
 	print ("\n+ Create output folder(s):")
-	functions.create_folder(outdir)
+	HCGB_files.create_folder(outdir)
 
 	### info
 	final_dir = ""
 	if (options.project):
 		print ("+ Generate a directory containing information within the project folder provided")
-		final_dir = functions.create_subfolder("info", outdir)
+		final_dir = HCGB_files.create_subfolder("info", outdir)
 	else:
 		final_dir = outdir
 	
 	## get files
-	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
+	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
 		
 	## Information returned in pd_samples_retrieved
 	### sample, dirname, name, name_len, lane, read_pair, lane_file, ext, gz
 	
 	if options.debug:
-		print (colored("** DEBUG: pd_samples_retrieved", 'yellow'))
-		functions.print_all_pandaDF(pd_samples_retrieved)
+		HCGB_aes.debug_message("pd_samples_retrieved", "yellow")
+		HCGB_main.print_all_pandaDF(pd_samples_retrieved)
 	
 	## time stamp
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 	
 	## check character limitation
 	list_lengths = pd_samples_retrieved.loc[:,'name_len'].to_list()
@@ -130,7 +125,7 @@ def run_prep(options):
 	### rename files 
 	if (options.rename):
 		options.rename = os.path.abspath(options.rename)
-		if not functions.is_non_zero_file(options.rename):
+		if not HCGB_files.is_non_zero_file(options.rename):
 			print (colored("** ERROR: File provided with rename information is not readable.", 'red'))
 			print (options.rename)
 			exit()
@@ -139,13 +134,13 @@ def run_prep(options):
 									index_col=0, squeeze=True, 
 									header=None).to_dict() ## read csv to dictionary
 		if (options.debug):
-			print (colored('** DEBUG: names_retrieved', 'yellow'))
+			HCGB_aes.debug_message("names_retrieved", "yellow")
 			print (names_retrieved)
 			
 		## TODO: check integrity of new names and special characters
 	
 		## print to a file
-		timestamp = functions.create_human_timestamp()
+		timestamp = time_functions.create_human_timestamp()
 		rename_details = final_dir + '/' + timestamp + '_prep_renameDetails.txt'
 		rename_details_hd = open(rename_details, 'w')
 	
@@ -182,13 +177,13 @@ def run_prep(options):
 		pd_samples_retrieved['new_file'] = pd_samples_retrieved['file']
 
 	## create outdir for each sample
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "raw")	
+	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "raw", options.debug)	
 		
 	## merge option
 	if (options.merge):
 		print ("+ Sample files will be merged...")
 		## TODO: check when rename option provided
-		pd_samples_merged = sampleParser.one_file_per_sample(
+		pd_samples_merged = sampleParser.merge.one_file_per_sample(
 			pd_samples_retrieved, outdir_dict, options.threads,	
 			final_dir, options.debug)
 		
@@ -199,7 +194,7 @@ def run_prep(options):
 		
 		## process is finished here
 		print ("\n*************** Finish *******************")
-		start_time_partial = functions.timestamp(start_time_total)
+		start_time_partial = HCGB_time.timestamp(start_time_total)
 	
 		print ("+ Exiting prep module.")
 		exit()
@@ -207,7 +202,7 @@ def run_prep(options):
 	## debugging messages
 	if (options.debug):
 		print (colored("** DEBUG: pd_samples_retrieved", 'yellow'))
-		functions.print_all_pandaDF(pd_samples_retrieved)
+		HCGB_main.print_all_pandaDF(pd_samples_retrieved)
 		print (colored("** DEBUG: outdir_dict", 'yellow'))
 		print (outdir_dict)
 	
@@ -215,7 +210,7 @@ def run_prep(options):
 	if (options.copy):
 		print ("+ Sample files will be copied...")
 		## print to a file
-		timestamp = functions.create_human_timestamp()
+		timestamp = HCGB_time.create_human_timestamp()
 		copy_details = final_dir + '/' + timestamp + '_prep_copyDetails.txt'
 		copy_details_hd = open(copy_details, 'w')
 	else:
@@ -232,7 +227,8 @@ def run_prep(options):
 		    list_reads.append(row['new_file'])
 		    
 		    if options.project:
-		        functions.get_symbolic_link_file(row['sample'], 
+		    	
+		        HCGB_files.get_symbolic_link_file(row['sample'], 
 		                                         os.path.join(outdir_dict[row['new_name']], row['new_file']))
 
 	if (options.copy):
@@ -240,10 +236,10 @@ def run_prep(options):
 		copy_details_hd.close()
 	else:
 		if not options.project:
-			functions.get_symbolic_link(list_reads, outdir)
+			HCGB_files.get_symbolic_link(list_reads, outdir)
 	
 	print ("\n*************** Finish *******************")
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 
 	print ("+ Exiting prep module.")
 	return()

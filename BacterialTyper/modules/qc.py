@@ -18,14 +18,19 @@ import pandas as pd
 import shutil
 from termcolor import colored
 
-## import my modules
+## import my modules, scripts, config
 from BacterialTyper.scripts import fastqc_caller
-from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.scripts import BUSCO_caller
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
+
+import HCGB
+from HCGB import sampleParser
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
 
 ################################################
 def run_QC(options):
@@ -38,7 +43,7 @@ def run_QC(options):
 	##################################
 	if (options.help_format):
 		## help_format option
-		sampleParser.help_format()
+		help_info.help_format()
 		exit()
 	elif (options.help_BUSCO):
 		## information for BUSCO
@@ -67,10 +72,10 @@ def run_QC(options):
 		options.pair = True
 	
 	## set main header
-	functions.pipeline_header()
-	functions.boxymcboxface("Quality check")
+	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.boxymcboxface("Quality check")
 	print ("--------- Starting Process ---------")
-	functions.print_time()
+	HCGB_time.print_time()
 
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
@@ -87,11 +92,11 @@ def run_QC(options):
 	### option
 	if (options.raw_reads):
 		## get files
-		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
+		pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
 		fastqc(pd_samples_retrieved, outdir, options, start_time_total, "raw", Debug)
 	elif (options.trim_reads):
 		## get files
-		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
+		pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "trim", ['_trim'], options.debug)
 		fastqc(pd_samples_retrieved, outdir, options, start_time_total, "trimmed", Debug)
 	elif (options.assembly):
 		BUSCO_check(input_dir, outdir, options, start_time_total, "genome")
@@ -103,7 +108,7 @@ def run_QC(options):
 ################################################
 def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysis, Debug):
 	
-	functions.boxymcboxface("FASTQC Quality check for samples")
+	HCGB_aes.boxymcboxface("FASTQC Quality check for samples")
 	
 	## debug message
 	if (Debug):
@@ -118,7 +123,7 @@ def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysi
 	## in this case, in some other cases might not occur	
 	if not options.project:
 		functions.create_folder(outdir)
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "fastqc_" + name_analysis)
+	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "fastqc_" + name_analysis, options.debug)
 	
 	print ("+ Checking quality for each sample retrieved...")
 	start_time_partial = start_time_total
@@ -128,7 +133,7 @@ def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysi
 
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())
-	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
 	max_workers_int = int(options.threads/threads_job)
 
 	## debug message
@@ -154,13 +159,13 @@ def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysi
 	print ("+ FASTQC for samples has finished...")	
 	
 	## functions.timestamp
-	start_time_partial = functions.timestamp(start_time_partial)
+	start_time_partial = HCGB_time.timestamp(start_time_partial)
 
 	if (options.skip_report):
 		print ("+ No report generation...")
 	else:
 		print ("\n+ Generating a report using MultiQC module.")
-		outdir_report = functions.create_subfolder("report", outdir)
+		outdir_report = HCGB_files.create_subfolder("report", outdir)
 
 		## get subdirs generated and call multiQC report module
 		givenList = []
@@ -176,13 +181,13 @@ def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysi
 			print (my_outdir_list)
 			print ("\n")
 		
-		fastqc_report = functions.create_subfolder("FASTQC", outdir_report)
-		fastqc_final_report = functions.create_subfolder(name_analysis, fastqc_report)
+		fastqc_report = HCGB_files.create_subfolder("FASTQC", outdir_report)
+		fastqc_final_report = HCGB_files.create_subfolder(name_analysis, fastqc_report)
 		multiQC_report.multiQC_module_call(my_outdir_list, "FASTQC", fastqc_final_report,"")
 		print ('\n+ A summary HTML report of each sample is generated in folder: %s' %fastqc_final_report)
 
 	print ("\n*************** Finish *******************")
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 
 	print ("+ Exiting qc module.")
 	exit()
@@ -190,35 +195,35 @@ def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysi
 ################################################
 def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 
-	functions.boxymcboxface("BUSCO Assembly Quality check")
+	HCGB_aes.boxymcboxface("BUSCO Assembly Quality check")
 
 	## absolute path for in & out
 	database_folder = os.path.abspath(options.database)
 
 	## get files and get dir for each sample according to mode
 	if mode == 'genome':
-		pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"])
+		pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "assembly", ["fna"], options.debug)
 
 		if not options.project:
-			outdir = functions.create_subfolder("assembly_qc", outdir)
+			outdir = HCGB_files.create_subfolder("assembly_qc", outdir)
 
 		if options.debug:
 			print ("** DEBUG: pd_samples_retrieved")
 			print (pd_samples_retrieved)
 		
-		BUSCO_outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "assemble_qc")
+		BUSCO_outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "assemble_qc")
 
 	elif mode == 'proteins':
-		pd_samples_retrieved = sampleParser.get_files(options, outdir, "annot", ["faa"]) ##
+		pd_samples_retrieved = sampleParser.files.get_files(options, outdir, "annot", ["faa"], options.debug) ##
 
 		if not options.project:
-			outdir = functions.create_subfolder("annot_qc", outdir)
+			outdir = HCGB_files.create_subfolder("annot_qc", outdir)
 
 		if options.debug:
 			print ("** DEBUG: pd_samples_retrieved")
 			print (pd_samples_retrieved)
 			
-		BUSCO_outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "annot_qc")
+		BUSCO_outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "annot_qc")
 
 	## add column to dataframe
 	pd_samples_retrieved['busco_folder'] = ""
@@ -227,38 +232,36 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 
 	## debug message
 	if (options.debug):
-		print (colored("**DEBUG: df_samples_busco **", 'yellow'))
+		HCGB_aes.debug_message("df_samples_busco", 'yellow')
 		print (pd_samples_retrieved)
 		
-		print (colored("**DEBUG: BUSCO_outdir_dict **", 'yellow'))
+		HCGB_aes.debug_message("BUSCO_outdir_dict", 'yellow')
 		print (BUSCO_outdir_dict)
 
 	## Check each using BUSCO
 	database_folder = os.path.abspath(options.database)
 	BUSCO_Database = database_folder + '/BUSCO'
 	if not os.path.exists(BUSCO_Database):
-		functions.create_folder(BUSCO_Database)
+		HCGB_files.create_folder(BUSCO_Database)
 
 	## call
 	(dataFrame_results, stats_results) = BUSCO_call(options.BUSCO_dbs, pd_samples_retrieved, BUSCO_Database, options.threads, mode)
 	
 	## debug message
 	if (options.debug):
-		print (colored("**DEBUG: dataFrame_results **", 'yellow'))
-		pd.set_option('display.max_colwidth', None)
-		pd.set_option('display.max_columns', None)
-		print (dataFrame_results)
+		HCGB_aes.debug_message("dataFrame_results", 'yellow')
+		HCGB_main.print_all_pandaDF(dataFrame_results)
 	
 	## functions.timestamp
 	print ("+ Quality control of all samples finished: ")
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 	
 	## multiqc report plot
 	if (options.skip_report):
 		print ("+ No report generation...")
 	else:
 		print ("\n+ Generating a report BUSCO plot.")
-		outdir_report = functions.create_subfolder("report", outdir)
+		outdir_report = HCGB_files.create_subfolder("report", outdir)
 
 		## get subdirs generated and call multiQC report module
 		givenList = []
@@ -266,9 +269,9 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		
 		## name folder according to mode
 		if mode == 'genome':
-			BUSCO_report = functions.create_subfolder("BUSCO_assembly", outdir_report)
+			BUSCO_report = HCGB_files.create_subfolder("BUSCO_assembly", outdir_report)
 		elif mode == 'proteins':
-			BUSCO_report = functions.create_subfolder("BUSCO_annot", outdir_report)
+			BUSCO_report = HCGB_files.create_subfolder("BUSCO_annot", outdir_report)
 
 		## generate plots
 		print ("+ Generate summarizing plots...")
@@ -346,7 +349,7 @@ def BUSCO_call(datasets, pd_samples, database_folder, threads, mode):
 ################################################
 def BUSCO_runner(sample_name, DataSet, sample, dataset_path, output, threads, mode):
 	#file_name = os.path.basename(sample)
-	sample_name_dir = functions.create_subfolder(sample_name, output) ## to check in detached mode
+	sample_name_dir = HCGB_files.create_subfolder(sample_name, output) ## to check in detached mode
 
 	## run busco	
 	code = BUSCO_caller.BUSCO_run( dataset_path, sample, threads, sample_name_dir, DataSet, mode)
@@ -364,13 +367,13 @@ def BUSCO_plots(dataFrame_results, outdir, threads):
 	list_datasets = set(dataFrame_results['busco_dataset'].tolist())
 	list_samples = set(dataFrame_results['name'].tolist())
 
-	plot_folder = functions.create_subfolder('BUSCO_plots', outdir)
+	plot_folder = HCGB_files.create_subfolder('BUSCO_plots', outdir)
 	outdir_busco_plot = []
 	
 	print ("+ Get results for all samples summarized by dataset:")
 	for dataset in list_datasets:
 		print ("\t+ Get results for: ", dataset)
-		plot_folder_dataset = functions.create_subfolder(dataset, plot_folder)
+		plot_folder_dataset = HCGB_files.create_subfolder(dataset, plot_folder)
 		outdir_busco_plot.append(plot_folder_dataset)
 	
 		for index, row in dataFrame_results.iterrows():
@@ -380,7 +383,7 @@ def BUSCO_plots(dataFrame_results, outdir, threads):
 	print ("+ Get results for summarized by sample:")
 	for sample in list_samples:
 		print ("\t+ Get results for: ", sample)
-		plot_folder_sample = functions.create_subfolder(sample, plot_folder)
+		plot_folder_sample = HCGB_files.create_subfolder(sample, plot_folder)
 		outdir_busco_plot.append(plot_folder_sample)
 
 		for index, row in dataFrame_results.iterrows():
