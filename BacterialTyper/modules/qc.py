@@ -43,7 +43,7 @@ def run_QC(options):
 	##################################
 	if (options.help_format):
 		## help_format option
-		help_info.help_format()
+		help_info.help_fastq_format()
 		exit()
 	elif (options.help_BUSCO):
 		## information for BUSCO
@@ -138,9 +138,9 @@ def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysi
 
 	## debug message
 	if (Debug):
-		print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
-		print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
-		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
+		HCGB_aes.debug_message("options.threads: " + str(options.threads), "yellow")
+		HCGB_aes.debug_message("max_workers: " + str(max_workers_int), "yellow")
+		HCGB_aes.debug_message("threads_job: " + str(threads_job), "yellow")
 
 	## send for each sample
 	print ("+ Calling fastqc for samples...")	

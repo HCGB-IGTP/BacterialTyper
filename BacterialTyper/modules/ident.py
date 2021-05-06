@@ -575,12 +575,13 @@ def send_kma_job(outdir_file, list_files, name, database, threads, Debug):
 	
 		## Sparse or not
 		#if any(name in basename_tag for name in ['userData_KMA', 'genbank_KMA']):
-		if (basename_tag == 'userData_KMA'):
-			option = ''
-		else:
-			option = '-Sparse '
+#		if (basename_tag == 'userData_KMA'):
+#			option = ''
+#		else:
+#			option = '-Sparse '
 	
 		## Add option to retrieve databse from memory
+		option = ""
 		option = option + '-shm 1'
 	
 		# Call KMA

@@ -19,12 +19,17 @@ from termcolor import colored
 ## import my modules
 from BacterialTyper.scripts import trimmomatic_call
 from BacterialTyper.scripts import multiQC_report
-from BacterialTyper.scripts import sampleParser
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
 from BacterialTyper.modules import qc
 from BacterialTyper.data import data_files
+
+import HCGB
+from HCGB import sampleParser
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
 
 ##############################################
 def run(options):
@@ -37,7 +42,7 @@ def run(options):
 	##################################
 	if (options.help_format):
 		## help_format option
-		sampleParser.help_format()
+		help_info.help_fastq_format()
 		exit()
 	elif (options.help_trimm_adapters):
 		## help on trimm adapters
@@ -65,10 +70,10 @@ def run(options):
 	else:
 		options.pair = True
 	
-	functions.pipeline_header()
-	functions.boxymcboxface("Trimming samples")
+	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.boxymcboxface("Trimming samples")
 	print ("--------- Starting Process ---------")
-	functions.print_time()
+	HCGB_time.print_time()
 
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
@@ -83,23 +88,23 @@ def run(options):
 		outdir = input_dir	
 	
 	## get files
-	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"))
+	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
 	
 	## debug message
 	if (Debug):
-		print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
-		print (pd_samples_retrieved)
+		HCGB_aes.debug_message("pd_samples_retrieved", 'yellow')
+		HCGB_main.print_all_pandaDF(pd_samples_retrieved)
 
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
 	if not options.project:
-		functions.create_folder(outdir)
+		HCGB_files.create_folder(outdir)
 	## for samples
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "trimm")
+	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "trimm", options.debug)
 	
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())
-	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
 	max_workers_int = int(options.threads/threads_job)
 
 	## debug message
@@ -138,11 +143,11 @@ def run(options):
 
 	print ("\n\n+ Trimming samples has finished...")
 	## functions.timestamp
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 
 	## get files generated and generate symbolic link
 	if not options.project:
-		dir_symlinks = functions.create_subfolder('link_files', outdir)
+		dir_symlinks = HCGB_files.create_subfolder('link_files', outdir)
 		files2symbolic = []
 		folders = os.listdir(outdir)
 
@@ -161,13 +166,13 @@ def run(options):
 					if files_search:
 						files2symbolic.append(this_folder + '/' + files)
 	
-		functions.get_symbolic_link(files2symbolic, dir_symlinks)
+		HCGB_files.get_symbolic_link(files2symbolic, dir_symlinks)
 
 	if (options.skip_report):
 		print ("+ No report generation...")
 	else:
 		print ("\n+ Generating a report using MultiQC module.")
-		outdir_report = functions.create_subfolder("report", outdir)
+		outdir_report = HCGB_files.create_subfolder("report", outdir)
 	
 		## call multiQC report module
 		givenList = [ v for v in outdir_dict.values() ]
@@ -175,20 +180,20 @@ def run(options):
 		
 		## debug message
 		if (Debug):
-			print (colored("\n**DEBUG: my_outdir_list for multiqc report **", 'yellow'))
+			HCGB_aes.debug_message("my_outdir_list for multiqc report", "yellow")
 			print (my_outdir_list)
 			print ("\n")
 
-		trimm_report = functions.create_subfolder("trimm", outdir_report)
+		trimm_report = HCGB_files.create_subfolder("trimm", outdir_report)
 		multiQC_report.multiQC_module_call(my_outdir_list, "Trimmomatic", trimm_report,"")
 		print ('\n+ A summary HTML report of each sample is generated in folder: %s' %trimm_report)
 		
 		## create fastqc for trimmed reads
-		pd_samples_retrieved_trimmed = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
+		pd_samples_retrieved_trimmed = sampleParser.files.get_files(options, input_dir, "trim", ['_trim'], options.debug)
 		qc.fastqc(pd_samples_retrieved_trimmed, outdir, options, start_time_partial, "trimmed", Debug)
 		
 	print ("\n*************** Finish *******************")
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 	print ("\n+ Exiting trimm module.")
 	return()
 	
@@ -198,7 +203,7 @@ def trimmo_caller(list_reads, sample_folder, name, threads, Debug, adapters):
 	## check if previously assembled and succeeded
 	filename_stamp = sample_folder + '/.success'
 	if os.path.isfile(filename_stamp):
-		stamp =	functions.read_time_stamp(filename_stamp)
+		stamp =	HCGB_time.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 	else:
 		# Call trimmomatic
