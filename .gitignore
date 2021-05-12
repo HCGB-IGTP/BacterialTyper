@@ -13,6 +13,7 @@ env/BacterialTyper_deb8/
 env/BacterialTyper/
 *.swp
 /tmp_files
+test/
 
 ## information generated 
 BacterialTyper/config/R/R_package.info.txt

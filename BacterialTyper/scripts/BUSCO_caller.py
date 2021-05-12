@@ -72,8 +72,8 @@ def print_help_BUSCO():
 	functions.print_sepLine("*", 50, 'yellow')
 	print ("Benchmarking of Universal Single Copy Orhtologs (BUSCO)\n")	
 	
-	print ("BUSCO v3 provides quantitative measures for the assessment of genome assembly, gene set, and transcriptome completeness.")
-	print ("It is based on evolutionarily-informed expectations of gene content from near-universal single-copy orthologs selected from OrthoDB v9.\n")
+	print ("BUSCO provides quantitative measures for the assessment of genome assembly, gene set, and transcriptome completeness.")
+	print ("It is based on evolutionary-informed expectations of gene content from near-universal single-copy orthologs selected from OrthoDB v9.\n")
 	
 	print ("BUSCO assessments are implemented in open-source software, with a large selection of lineage-specific sets of Single-Copy Orthologs.")
 	print ("These conserved orthologs are ideal candidates for large-scale phylogenomics studies, and the annotated BUSCO gene models built during ")

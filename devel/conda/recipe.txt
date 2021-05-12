@@ -1,0 +1,6 @@
+conda create -n BacterialTyper python=3.7
+conda install -c conda-forge -c bioconda -c defaults spades=3.15.2 --force-reinstall
+conda install -c conda-forge -c bioconda -c defaults busco=5.1.2 --force-reinstall
+
+already installed:
+blast, entrez-direct

@@ -156,7 +156,7 @@ def download_kma_database(folder, database, debug):
 		md5_string = line.split(",")[0]
 		
 		## calculate md5 for file
-		result_md5 = functions.check_md5sum(md5_string, tar_file)
+		result_md5 = functions.check_md5sum(md5_string, tar_file) ## FIXME: Not conda supported
 		if (result_md5 == True):
 		
 			## debug message
