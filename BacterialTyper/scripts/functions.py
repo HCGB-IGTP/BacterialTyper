@@ -31,7 +31,7 @@ import json
 from datetime import datetime
 from Bio import SeqIO
 from termcolor import colored
-from filehash import FileHash
+#from filehash import FileHash ## not conda supported
 import pandas as pd
 import patoolib ## to extract
 import shutil
@@ -319,6 +319,7 @@ def wget_download(url, path):
 	print ('\n')
 
 ###############
+## not conda supported
 def check_md5sum(string, File):
 	md5hasher = FileHash('md5')
 	md5_file = md5hasher.hash_file(File)
