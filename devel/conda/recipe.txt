@@ -2,15 +2,15 @@
 conda create -n BacterialTyper python=3.7
 
 ## spades
-conda install -c conda-forge -c bioconda -c defaults spades=3.15.2 --force-reinstall
+conda install -c conda-forge -c bioconda -c defaults spades=3.15.2
 
 ## busco
-conda install -c conda-forge -c bioconda -c defaults busco=5.1.2 --force-reinstall
+conda install -c conda-forge -c bioconda -c defaults busco=5.1.2
 installs: 
 	blast, entrez-direct, augustus, biopython, hmmer, prodigal, 
 
 ## prokka
-conda install -c conda-forge -c bioconda -c defaults prokka=1.13.4
+conda install -c conda-forge -c bioconda -c defaults prokka=1.14.6
 installs: 
 	bioperl, aragorn, tbl2asn, parallel, bedtools, barrnap, tcoffee, clustalw
 
@@ -34,5 +34,7 @@ installs:
 ## kma
 conda install -c conda-forge -c bioconda -c defaults kma=1.3.15
 
+## spatyper
+conda install -c conda-forge -c bioconda -c defaults spatyper
 
-spatyper, kma, 
+

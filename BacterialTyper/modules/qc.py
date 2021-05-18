@@ -211,7 +211,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 			print ("** DEBUG: pd_samples_retrieved")
 			print (pd_samples_retrieved)
 		
-		BUSCO_outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "assemble_qc")
+		BUSCO_outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "assemble_qc", options.debug)
 
 	elif mode == 'proteins':
 		pd_samples_retrieved = sampleParser.files.get_files(options, outdir, "annot", ["faa"], options.debug) ##
@@ -223,7 +223,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 			print ("** DEBUG: pd_samples_retrieved")
 			print (pd_samples_retrieved)
 			
-		BUSCO_outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "annot_qc")
+		BUSCO_outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "annot_qc", options.debug)
 
 	## add column to dataframe
 	pd_samples_retrieved['busco_folder'] = ""

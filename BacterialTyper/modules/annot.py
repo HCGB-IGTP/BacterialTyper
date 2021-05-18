@@ -73,6 +73,10 @@ def run_annotation(options):
 		annotation.print_list_prokka()
 		exit()
 
+
+	## set default
+	options.batch = False
+	
 	### 
 	functions.pipeline_header()
 	functions.boxymcboxface("Assembly annotation")
