@@ -2,7 +2,7 @@ import os
 import shutil
 import sys
 import glob
-from setuptools import setup, find_packages, Extension
+import setuptools
 
 #######
 def get_require_modules():
@@ -37,7 +37,7 @@ with open("README.md", "r") as fh:
     long_description_text = fh.read()
 
 #######
-setup(
+setuptools.setup(
     name='BacterialTyper',
     version=get_version(),
 
@@ -51,14 +51,13 @@ setup(
     url="https://github.com/HCGB-IGTP/BacterialTyper/",
 
     install_requires=get_require_modules(),
-    packages = find_packages(),
+    packages = setuptools.find_packages(),
 
     license='MIT License',    
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-        "Topic :: Scientific/Engineering :: BioInformatics"
+        "Operating System :: OS Independent"
     ],
 )
 
