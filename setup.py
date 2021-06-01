@@ -52,6 +52,7 @@ setuptools.setup(
 
     install_requires=get_require_modules(),
     packages = setuptools.find_packages(),
+    include_package_data=True,
 
     license='MIT License',    
     classifiers=[
