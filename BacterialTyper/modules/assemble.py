@@ -210,9 +210,16 @@ def get_assembly_stats_all(assembly_stats_dict, outdir, ):
             "Capture Gaps", "Capture Gaps Length", "Capture Gaps Length/Total Length (%)", 
             "MinLen", "MaxLen", "Average Len", "Median Len", "N50", "L50", "Length (no Ns)")
 	
+	print(assembly_stats)
+	exit()
+	
 	for stats in assembly_stats:
+		
 		##
 		file_stats = assembly_stats[stats]
+		print(file_stats)
+		
+		
 		shutil.copy(file_stats, final_sub_dir)
 	
 		tmp_name = os.path.splitext(file_stats)

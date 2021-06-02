@@ -23,6 +23,13 @@ from termcolor import colored
 ## import my modules
 from BacterialTyper.scripts import assembly_stats_caller
 
+import HCGB
+from HCGB import sampleParser
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
+
 from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts.blast_parser import parse
@@ -66,7 +73,7 @@ def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads)
 		print ("\n\n***ERROR: plasmidSPADES failed for sample " + sample)	
 		exit()
 
-	scaffolds_retrieved = functions.retrieve_matching_files(path + '/' + name, "scaffolds.fasta")
+	scaffolds_retrieved = HCGB_main.retrieve_matching_files(path + '/' + name, "scaffolds.fasta")
 	if scaffolds_retrieved == '':	
 		print ('\n\n***ATTENTION: No plasmids assembly...')
 
@@ -112,7 +119,7 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 		print ("\n\n***ERROR: SPADES failed for sample " + sample)
 		return ('FAIL')
 
-	scaffolds_retrieved = functions.retrieve_matching_files(path, "scaffolds.fasta")
+	scaffolds_retrieved = HCGB_main.retrieve_matching_files(path, "scaffolds.fasta")
 	if scaffolds_retrieved == '':	
 		print ('\n\n***ERROR: No scaffolds assembly...')
 		return ('FAIL')
