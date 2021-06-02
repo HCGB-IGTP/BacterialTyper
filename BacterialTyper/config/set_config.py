@@ -72,7 +72,15 @@ def get_exe(prog, Debug=False, Return_Version=False):
 	if prog == 'trimmomatic':
 		list_v = ['0.36','0.37','0.38','0.39']
 		for v in list_v:
+		
+			## if using conda: there is caller	
 			exe="trimmomatic-" + v + ".jar"
+			## get paths
+			exe_path_tmp = my_which(exe)
+			if (exe_path_tmp):
+				break
+			
+			exe = "trimmomatic"
 			## get paths
 			exe_path_tmp = my_which(exe)
 			if (exe_path_tmp):

@@ -109,9 +109,14 @@ def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, t
 	trim_R2 = ""
 	orphan_R2 = ""
 
+	## conda installation includes a wrapper and no java jar call is required
+	if trimmomatic_jar.endswith('jar'):
+		cmd = "%s -jar %s"  %(java_path, trimmomatic_jar)
+	else:
+		cmd = "%s"  %(trimmomatic_jar)
+
 	## Paired or single end
 	## set command
-	cmd = ""	
 	if (len(files) == 2): ## paired-end
 		file_R1 = files[0]
 		file_R2 = files[1]
@@ -122,13 +127,13 @@ def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, t
 		trim_R2 = sample_folder + '/' + sample_name + '_trim_R2.fastq'
 		orphan_R2 = sample_folder + '/' + sample_name + '_orphan_R2.fastq'
 
-		cmd = "%s -jar %s PE -threads %s -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(java_path, trimmomatic_jar, threads, log_file, file_R1, file_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters, trimmo_log)
+		cmd = cmd + " PE -threads %s -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(threads, log_file, file_R1, file_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters, trimmo_log)
 
 	else: ## single end
 		file_R1 = files[0]
 		trim_R1 = sample_folder + '/' + sample_name + '_trim.fastq'
 
-		cmd = "%s -jar %s SE -threads %s -trimlog %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(java_path, trimmomatic_jar, threads, log_file, file_R1, trim_R1, trimmomatic_adapters, trimmo_log)
+		cmd = cmd + " SE -threads %s -trimlog %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(threads, log_file, file_R1, trim_R1, trimmomatic_adapters, trimmo_log)
 
 	## system call & return
 	code = functions.system_call(cmd)
