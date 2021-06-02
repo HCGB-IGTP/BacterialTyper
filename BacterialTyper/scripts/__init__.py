@@ -1,4 +1,5 @@
 __all__ = [
+    'assembly_stats_caller',
     'annotation',
     'ariba_caller',
     'bacteriophage',

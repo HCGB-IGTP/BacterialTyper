@@ -21,6 +21,8 @@ import shutil
 from termcolor import colored
 
 ## import my modules
+from BacterialTyper.scripts import assembly_stats_caller
+
 from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts.blast_parser import parse
@@ -244,11 +246,11 @@ def run_module_assembly(name, folder, file1, file2, threads):
 	else:
 		## contig stats
 		#print ('+ Get assembly statistics:...\n')
-		contig_out = contig_stats(path_to_contigs, "1000,10000")	
+		(stats_dict, excel_file) = contig_stats(path_to_contigs, True)
 	
 		## check statistics in file
-		print ("+ Check statistics for sample %s in file:\n%s" %(name, contig_out))
-		return(contig_out)
+		print ("+ Check statistics for sample %s in file:\n%s" %(name, excel_file))
+		return(stats_dict)
 
 ################################################
 def discardPlasmids(contigs, plasmids, path, sample):
@@ -346,42 +348,24 @@ def discardPlasmids(contigs, plasmids, path, sample):
 	return (contig_out_file, plasmid_out_file)
 
 ################################################
-def contig_stats(assembly_file, csv_arg):
+
+def contig_stats(assembly_file, debug):
 	"""Generate assembly statistics
 	
-	Calls additional perl script to generate contig statistics. Steps:
-	
-	- Retrieve information of additional perl script location (using :func:`BacterialTyper.other_tools.tools.perl_scripts`)
-	
-	- Create system call (using :func:`BacterialTyper.scripts.functions.system_call`) and return output statistic file created.
+	Create assembly statistics using the script assembly_stats_caller and pip module assembly_stats
 	
 	:param assembly_file: Absolute path to assembly fasta file.
 	:type assembly_file: string
-	:param csv_arg: Comma separated values for splitting sets. Default: 1000,10000
-	:type csv_arg: string
+	:param debug: Boolean for debugging messages
+	:type debug: bool
 	:return: Text file containing statistics for later analysis.
 	:rtype: string
 	
-	The perl script contig_stats.pl has a mandatory argument which is a single fasta file and default splitting sets are: 1000, 10000. User can provide new parts using a csv argument for the script:
-	
-	.. code-block:: sh
-
-		perl BacterialTyper/other_tools/perl/contig_stats.pl fasta_file 1000,10000
-		
-
-	.. seealso:: This function depends on other BacterialTyper functions called:
-	
-		- :func:`BacterialTyper.scripts.functions.system_call`
-		
-		- :func:`BacterialTyper.other_tools.tools.perl_scripts`
 	"""
-	contig_stats_script = tools.perl_scripts('contig_stats')
-
+	name_file_list = assembly_file.split(".fna")
+	assembly_stats_caller.assembly_stats_caller(assembly_file, name_file_list[0], debug)
+	return ()
 	
-	file_out = assembly_file + '_stats.txt'
-	cmd_stats = 'perl %s %s %s > %s' %(contig_stats_script, assembly_file, csv_arg, file_out) ## [TODO] Generate this code in python
-	code_chr = functions.system_call(cmd_stats)
-	return (file_out)
 
 ################################################
 def	help_options():
@@ -448,7 +432,7 @@ def main():
 	print ('+ Get assembly statistics:...\n')
 
 	## get contig statistics	
-	contig_out = contig_stats(new_contigs, "1000,10000")	
+	contig_out = contig_stats(new_contigs, True)	
 	contig_out_file = open(contig_out, 'r')
 	contig_out_file_read = contig_out_file.read()
 	contig_out_file.close()
@@ -461,7 +445,7 @@ def main():
 		print ('+ No plasmids identified...\n')
 	else:
 		print ('+ Plasmids assembly')
-		plasmid_out = contig_stats(new_plasmids, "1000,10000")	
+		plasmid_out = contig_stats(new_plasmids, True)	
 
 		## dump in screen
 		plasmid_out_file = open(plasmid_out, 'r')
