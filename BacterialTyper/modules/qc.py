@@ -195,7 +195,7 @@ def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysi
 ################################################
 def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 
-	HCGB_aes.boxymcboxface("BUSCO Assembly Quality check")
+	HCGB_aes.boxymcboxface("BUSCO Analysis Quality check")
 
 	## absolute path for in & out
 	database_folder = os.path.abspath(options.database)
