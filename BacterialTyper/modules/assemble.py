@@ -144,8 +144,8 @@ def run_assembly(options):
 	## debug message
 	if (Debug):
 		HCGB_aes.debug_message("options.threads: " + str(options.threads), "yellow")
-		HCGB_aes.debug_message("max_workers: " + str(max_workers), "yellow")
-		HCGB_aes.debug_message("cpu_here: " + str(cpu_here), "yellow")
+		HCGB_aes.debug_message("max_workers: " + str(max_workers_int), "yellow")
+		HCGB_aes.debug_message("cpu_here: " + str(threads_job), "yellow")
 		
 	# Group dataframe by sample name
 	sample_frame = pd_samples_retrieved.groupby(["name"])
@@ -177,7 +177,7 @@ def run_assembly(options):
 			print (assembly_stats)
 	
 		## create single file	
-		get_assembly_stats_all(assembly_stats, outdir)		
+		get_assembly_stats_all(assembly_stats, outdir, Debug)		
 	
 	### symbolic links
 	print ("+ Retrieve all genomes assembled...")
@@ -196,7 +196,7 @@ def run_assembly(options):
 	return()
 
 ####################################
-def get_assembly_stats_all(assembly_stats_dict, outdir, ):
+def get_assembly_stats_all(assembly_stats_dict, outdir, debug):
 	## get all assembly stats
 	outdir_report = HCGB_files.create_subfolder("report", outdir)
 	final_dir = HCGB_files.create_subfolder("assembly_stats", outdir_report)
@@ -204,62 +204,52 @@ def get_assembly_stats_all(assembly_stats_dict, outdir, ):
 	
 	#### summary and information
 	results_summary_toPrint_all = pd.DataFrame()		
-	column_names = ("Total Sequences", "Total Length (bp)", "Total length (no Ns)", 
-            "Adenine (A)", "Thymine (T)", "Cytosine (C)", "Guanine (G)", "A+T", "C+G", "Any Nucleotide (N)", 
-            "Capture Gaps", "Capture Gaps Length", "Capture Gaps Length/Total Length (%)", 
-            "MinLen", "MaxLen", "Average Len", "Median Len", "N50", "L50", "Length (no Ns)")
+	column_names = ("Type", "Sample", "Total Sequences", "GC% Content", "Longest sequence", "Shortest sequence", "Median length",
+				"Mean length", "Total Length (bp)",	"L10", "N10", "L20", "N20", "L30", "N30", "L40", "N40", "L50", "N50")
 	
-	print(assembly_stats)
-	exit()
-	
-	for stats in assembly_stats:
+	## debugging messages
+	if debug:
+		HCGB_aes.debug_message("Create assembly statistic for all samples")
 		
-		##
-		file_stats = assembly_stats[stats]
-		print(file_stats)
+	for sample_name in assembly_stats:
+		excel_file_stats = assembly_stats[sample_name][1]
 		
-		
-		shutil.copy(file_stats, final_sub_dir)
-	
-		tmp_name = os.path.splitext(file_stats)
-		#csv
-		csv_file = tmp_name[0] + '.csv'
-
-		######
-		if Debug:
-			HCGB_aes.debug_message("file_stats: " + str(file_stats), "yellow")
-			HCGB_aes.debug_message("tmp_name: " + str(tmp_name), "yellow")
-			HCGB_aes.debug_message("csv_file: " + str(csv_file), "yellow")
+		if debug:
+			HCGB_aes.debug_message("sample_name: " + sample_name, 'yellow')
+			HCGB_aes.debug_message("excel: " + excel_file_stats, 'yellow')
+			HCGB_aes.debug_message("contig stats dictionary: ", 'yellow')
+			print (assembly_stats[sample_name][0]['Contig Stats'])
+			HCGB_aes.debug_message("scaffold stats dictionary: ", 'yellow')
+			print (assembly_stats[sample_name][0]['Scaffold Stats'])
 			
-		## subset dataframe	& print result
-		results_summary_toPrint = pd.read_csv(csv_file, sep=',', header=None).transpose()
-		
-		## TODO: check if file read contains the correct amount of columns.
-		## It might produce stop failure if not matches.
+		# get contig
+		contig_stats = pd.DataFrame.from_dict(assembly_stats[sample_name][0]['Contig Stats'], orient='index').transpose()
+		contig_stats['type'] = 'contigs'
+		contig_stats['sample_name'] = sample_name
 
-		results_summary_toPrint.columns = column_names
-		results_summary_toPrint['sample'] = stats
+		# get scaffold
+		scaff_stats = pd.DataFrame.from_dict(assembly_stats[sample_name][0]['Scaffold Stats'], orient='index').transpose()
+		scaff_stats['type'] = 'scaffolds'
+		scaff_stats['sample_name'] = sample_name
+
+		## copy individual excel file
+		shutil.copy(excel_file_stats, final_sub_dir)
 	
 		## add all data
-		results_summary_toPrint_all = pd.concat([results_summary_toPrint_all, results_summary_toPrint], ignore_index=True)
+		results_summary_toPrint_all = pd.concat([results_summary_toPrint_all, contig_stats, scaff_stats], ignore_index=True)
 
+	## reorder columns
+	cols = results_summary_toPrint_all.columns.tolist()
+	cols = cols[-1:] + cols[:-1]
+	cols = cols[-1:] + cols[:-1]
+	results_summary_toPrint_all = results_summary_toPrint_all[cols]
+	
 	## write to excel
 	name_excel_summary = final_dir + '/summary_stats.xlsx'
 	writer_summary = pd.ExcelWriter(name_excel_summary, engine='xlsxwriter') ## open excel handle
 	
 	## filter important columns		
-	results_summary_toPrint_all = results_summary_toPrint_all.set_index('sample')			
-	results_summary_toPrint_all = results_summary_toPrint_all[["Total Sequences", "Total Length (bp)", "Total length (no Ns)",
-	"Adenine (A)", "Thymine (T)", "Cytosine (C)", "Guanine (G)", "A+T", "C+G", "Any Nucleotide (N)", "MinLen", "MaxLen", "Average Len", "Median Len", "N50", "L50"]]
-	
-	
-	## >10 kb subset
-	#subset_summary_toPrint_all = results_summary_toPrint_all[["Total Sequences", "Total Length (bp)", "Number Seqs > 10 kb", "% Bases > 10 kb", "Median Len", "N50", "L50"]]
-	#subset_summary_toPrint_all.to_excel(writer_summary, sheet_name="summary") ## write excel handle
-	
-	## nucleotide tab
-	nucleotides_summary_toPrint_all = results_summary_toPrint_all[["Adenine (A)", "Thymine (T)", "Cytosine (C)", "Guanine (G)", "A+T", "C+G", "Any Nucleotide (N)"]]
-	nucleotides_summary_toPrint_all.to_excel(writer_summary, sheet_name="nucleotides") ## write excel handle
+	results_summary_toPrint_all = results_summary_toPrint_all.set_axis(column_names, 1)
 	
 	## save in excel
 	results_summary_toPrint_all.to_excel(writer_summary, sheet_name="all_data") ## write excel handle
@@ -295,7 +285,15 @@ def check_sample_assembly(name, sample_folder, files, threads):
 	if os.path.isfile(filename_stamp):
 		stamp =	HCGB_time.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
-		assembly_stats[name] = sample_folder + '/' + name + "_assembly.fna_stats.txt"
+		
+		## Get information
+		stat_output = {
+			'Contig Stats': HCGB_main.file2dictionary(sample_folder + '/' + name + '_assembly-contigs.csv',','),
+            'Scaffold Stats': HCGB_main.file2dictionary(sample_folder + '/' + name + '_assembly-scaffolds.csv',',')
+        }
+		    	
+    	## populate main dictionary
+		assembly_stats[name] = [stat_output, sample_folder + '/' + name + '_assembly_stats.xlsx']
 
 	else:
 	
@@ -311,5 +309,7 @@ def check_sample_assembly(name, sample_folder, files, threads):
 			## success stamps
 			filename_stamp = sample_folder + '/.success_all'
 			stamp =	HCGB_time.print_time_stamp(filename_stamp)
-			assembly_stats[name] = code
+			assembly_stats[name] = code # list containing dictionary of data and excel
+		else:
+			print("Some error ocurred for sample %s while generating the assembly. " %name)
 

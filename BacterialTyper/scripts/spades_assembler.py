@@ -32,53 +32,10 @@ import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
 import HCGB.functions.fasta_functions as HCGB_fasta
 import HCGB.functions.blast_functions as HCGB_blast
+import HCGB.functions.system_call_functions as HCGB_sys
 
 ################################################
-def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads):
-	"""Generate plasmid assembly using SPADES
-	
-	- Calls SPADES to assemble plasmids using --plasmid option (using :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`) 
-	
-	- SPADES generates a file named as *scaffolds.fasta* within the directory provided. This function retrieves path to contigs/scaffolds assembled.
-	
-	:param path: Absolute path to folder.
-	:param file1: Absolute path to fastq reads (R1).
-	:param file2: Absolute path to fastq reads (R2).
-	:param sample: Sample name or tag to identify sample
-	:param SPADES_bin: Binary executable for SPADES assembly software.
-	:param threads: Number of CPUs to use.
-	:type path: string
-	:type file1: string
-	:type file2: string
-	:type name: string
-	:type threads: integer
-	:return: Plasmid contigs/scaffolds assembled.
-	:rtype: string : Path to assembly fasta file.
-	:warnings: Returns **FAIL** if assembly process stopped.
-	
-	.. seealso:: This function depends on other BacterialTyper functions called:
-	
-		- :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`
-	
-		- :func:`HCGB_main.retrieve_matching_files`
-	"""
-	print ('+ Running plasmid assembly...')
-	name = sample + '_plasmid'
-	options = '--plasmid '
-	message_return = SPADES_systemCall(path, file1, file2, name, SPADES_bin, options, threads)
-
-	if 	message_return == 'FAIL':	
-		print ("\n\n***ERROR: plasmidSPADES failed for sample " + sample)	
-		exit()
-
-	scaffolds_retrieved = HCGB_main.retrieve_matching_files(path + '/' + name, "scaffolds.fasta")
-	if scaffolds_retrieved == '':	
-		print ('\n\n***ATTENTION: No plasmids assembly...')
-
-	return (scaffolds_retrieved[0])
-
-################################################
-def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
+def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads, debug=False):
 	"""Generate main assembly using SPADES
 	
 	- Calls SPADES to assemble reads (using :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`) 
@@ -112,12 +69,12 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 	"""
 	##print ('+ Running main assembly...')
 	options = ''
-	message_return = SPADES_systemCall(path, file1, file2, sample, SPADES_bin, options, threads)
+	message_return = SPADES_systemCall(path, file1, file2, sample, SPADES_bin, options, threads, debug)
 	if 	message_return == 'FAIL':	
 		print ("\n\n***ERROR: SPADES failed for sample " + sample)
 		return ('FAIL')
 
-	scaffolds_retrieved = HCGB_main.retrieve_matching_files(path, "scaffolds.fasta")
+	scaffolds_retrieved = HCGB_main.retrieve_matching_files(path, "scaffolds.fasta", debug)
 	if scaffolds_retrieved == '':	
 		print ('\n\n***ERROR: No scaffolds assembly...')
 		return ('FAIL')
@@ -137,7 +94,7 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 	return (new_contigs)
 
 ################################################
-def SPADES_systemCall(sample_folder, file1, file2, name, SPADES_bin, options, threads):
+def SPADES_systemCall(sample_folder, file1, file2, name, SPADES_bin, options, threads, debug=False):
 	"""Generate SPADES system call.
 	
 	It calls system for SPADES and generates time stamp file in the folder provided (sample_folder + '/.success_assembly') for later analysis.
@@ -187,7 +144,7 @@ def SPADES_systemCall(sample_folder, file1, file2, name, SPADES_bin, options, th
 	
 	## command	
 	cmd_SPADES = '%s %s-t %s -o %s -1 %s -2 %s > %s 2> %s' %(SPADES_bin, options, threads, sample_folder, file1, file2, logFile, logFile)
-	code = HCGB_main.system_call(cmd_SPADES)
+	code = HCGB_sys.system_call(cmd_SPADES)
 	
 	if (code == 'OK'):
 		## success stamps
@@ -198,7 +155,7 @@ def SPADES_systemCall(sample_folder, file1, file2, name, SPADES_bin, options, th
 	return "FAIL"
 	
 ################################################
-def run_module_assembly(name, folder, file1, file2, threads):
+def run_module_assembly(name, folder, file1, file2, threads, debug=False):
 	"""Assembly main module call.
 	
 	It calls assembly function to process data provided and returns genome statistics. Steps: 
@@ -244,18 +201,130 @@ def run_module_assembly(name, folder, file1, file2, threads):
 	SPADES_bin = set_config.get_exe('spades')
 	
 	## assembly main 
-	path_to_contigs = run_SPADES_assembly(folder, file1, file2, name, SPADES_bin, threads)
+	path_to_contigs = run_SPADES_assembly(folder, file1, file2, name, SPADES_bin, threads, debug)
 	
 	if path_to_contigs == 'FAIL':
 		return ('FAIL')
 	else:
 		## contig stats
 		#print ('+ Get assembly statistics:...\n')
-		(stats_dict, excel_file) = contig_stats(path_to_contigs, True)
+		(stats_dict, excel_file) = contig_stats(path_to_contigs, debug)
 	
 		## check statistics in file
 		print ("+ Check statistics for sample %s in file:\n%s" %(name, excel_file))
-		return(stats_dict)
+		return([stats_dict, excel_file])
+
+
+################################################
+
+def contig_stats(assembly_file, debug):
+	"""Generate assembly statistics
+	
+	Create assembly statistics using the script assembly_stats_caller and pip module assembly_stats
+	
+	:param assembly_file: Absolute path to assembly fasta file.
+	:type assembly_file: string
+	:param debug: Boolean for debugging messages
+	:type debug: bool
+	:return: Text file containing statistics for later analysis.
+	:rtype: string
+	
+	"""
+	name_file_list = assembly_file.split(".fna")
+	info = assembly_stats_caller.assembly_stats_caller(assembly_file, name_file_list[0], debug)
+	return (info)	
+
+################################################
+def	help_options():
+	"""Help options when run spades_assembler.py as a single script
+	
+	Parameters reflected here refer to spades_assembler.py main function.
+	
+	:param file1: Absolute path to fastq reads (R1).
+	:param file2: Absolute path to fastq reads (R2).
+	:param sample: Sample name or tag to identify sample
+	:param SPADES_bin: Binary executable for SPADES assembly software.
+	:param threads: Number of CPUs to use.
+	:param path: Absolute path to folder.
+	
+	:type file1: string
+	:type file2: string
+	:type sample: string
+	:type SPADES_bin: string
+	:type threads: integer
+	:type path: string	
+	"""
+	print ("\nUSAGE: python %s file1 file2 name SPADES_bin threads path\n"  %os.path.realpath(__file__))
+
+################################################
+def main():
+	## control if options provided or help
+	if len(sys.argv) > 1:
+		print ("")
+	else:
+		help_options()
+		exit()    	
+
+	file1 = os.path.abspath(argv[1])
+	file2 = os.path.abspath(argv[2])
+	sample = argv[3]
+	SPADES_bin = argv[4]
+	threads = int(argv[5])
+	path = 	argv[6]
+
+	folder = HCGB_files.create_subfolder(sample, path)
+
+	## assembly main 
+	path_to_contigs = run_SPADES_assembly(folder, file1, file2, sample, SPADES_bin, threads, debug=True)
+	
+	## assembly plasmids
+	path_to_plasmids = run_SPADES_plasmid_assembly(folder, file1, file2, sample, SPADES_bin, threads)
+
+	## discard plasmids from main
+	tmp_contigs, tmp_plasmids = discardPlasmids(path_to_contigs, path_to_plasmids, folder, sample)
+	
+	## rename fasta sequences
+	new_contigs_list = tmp_contigs.split(".tmp")
+	new_contigs = new_contigs_list[0]
+	rename_contigs(tmp_contigs, "scaffolds_chr", new_contigs)
+	
+	new_plasmids=""
+	if os.path.isfile(tmp_plasmids):
+		new_plasmids_list = tmp_plasmids.split(".tmp")
+		new_plasmids = new_plasmids_list[0]
+		rename_contigs(tmp_plasmids, "scaffolds_plasmids", new_plasmids)
+	
+	
+	## generate contig statistics
+	print ('+ Get assembly statistics:...\n')
+
+	## get contig statistics	
+	contig_out = contig_stats(new_contigs, True)	
+	contig_out_file = open(contig_out, 'r')
+	contig_out_file_read = contig_out_file.read()
+	contig_out_file.close()
+	
+	## dump in screen
+	print (contig_out_file_read)
+	print ()	
+
+	if (new_plasmids == 'FAIL'):
+		print ('+ No plasmids identified...\n')
+	else:
+		print ('+ Plasmids assembly')
+		plasmid_out = contig_stats(new_plasmids, True)	
+
+		## dump in screen
+		plasmid_out_file = open(plasmid_out, 'r')
+		plasmid_file_read = plasmid_out_file.read()
+		plasmid_out_file.close()
+		print(plasmid_file_read)	
+	
+######
+
+'''******************************************'''
+if __name__== "__main__":
+	main()
 
 ################################################
 def discardPlasmids(contigs, plasmids, path, sample):
@@ -352,117 +421,6 @@ def discardPlasmids(contigs, plasmids, path, sample):
 	
 	return (contig_out_file, plasmid_out_file)
 
-################################################
-
-def contig_stats(assembly_file, debug):
-	"""Generate assembly statistics
-	
-	Create assembly statistics using the script assembly_stats_caller and pip module assembly_stats
-	
-	:param assembly_file: Absolute path to assembly fasta file.
-	:type assembly_file: string
-	:param debug: Boolean for debugging messages
-	:type debug: bool
-	:return: Text file containing statistics for later analysis.
-	:rtype: string
-	
-	"""
-	name_file_list = assembly_file.split(".fna")
-	assembly_stats_caller.assembly_stats_caller(assembly_file, name_file_list[0], debug)
-	return ()
-	
-
-################################################
-def	help_options():
-	"""Help options when run spades_assembler.py as a single script
-	
-	Parameters reflected here refer to spades_assembler.py main function.
-	
-	:param file1: Absolute path to fastq reads (R1).
-	:param file2: Absolute path to fastq reads (R2).
-	:param sample: Sample name or tag to identify sample
-	:param SPADES_bin: Binary executable for SPADES assembly software.
-	:param threads: Number of CPUs to use.
-	:param path: Absolute path to folder.
-	
-	:type file1: string
-	:type file2: string
-	:type sample: string
-	:type SPADES_bin: string
-	:type threads: integer
-	:type path: string	
-	"""
-	print ("\nUSAGE: python %s file1 file2 name SPADES_bin threads path\n"  %os.path.realpath(__file__))
-
-################################################
-def main():
-	## control if options provided or help
-	if len(sys.argv) > 1:
-		print ("")
-	else:
-		help_options()
-		exit()    	
-
-	file1 = os.path.abspath(argv[1])
-	file2 = os.path.abspath(argv[2])
-	sample = argv[3]
-	SPADES_bin = argv[4]
-	threads = int(argv[5])
-	path = 	argv[6]
-
-	folder = HCGB_files.create_subfolder(sample, path)
-
-	## assembly main 
-	path_to_contigs = run_SPADES_assembly(folder, file1, file2, sample, SPADES_bin, threads)
-	
-	## assembly plasmids
-	path_to_plasmids = run_SPADES_plasmid_assembly(folder, file1, file2, sample, SPADES_bin, threads)
-
-	## discard plasmids from main
-	tmp_contigs, tmp_plasmids = discardPlasmids(path_to_contigs, path_to_plasmids, folder, sample)
-	
-	## rename fasta sequences
-	new_contigs_list = tmp_contigs.split(".tmp")
-	new_contigs = new_contigs_list[0]
-	rename_contigs(tmp_contigs, "scaffolds_chr", new_contigs)
-	
-	new_plasmids=""
-	if os.path.isfile(tmp_plasmids):
-		new_plasmids_list = tmp_plasmids.split(".tmp")
-		new_plasmids = new_plasmids_list[0]
-		rename_contigs(tmp_plasmids, "scaffolds_plasmids", new_plasmids)
-	
-	
-	## generate contig statistics
-	print ('+ Get assembly statistics:...\n')
-
-	## get contig statistics	
-	contig_out = contig_stats(new_contigs, True)	
-	contig_out_file = open(contig_out, 'r')
-	contig_out_file_read = contig_out_file.read()
-	contig_out_file.close()
-	
-	## dump in screen
-	print (contig_out_file_read)
-	print ()	
-
-	if (new_plasmids == 'FAIL'):
-		print ('+ No plasmids identified...\n')
-	else:
-		print ('+ Plasmids assembly')
-		plasmid_out = contig_stats(new_plasmids, True)	
-
-		## dump in screen
-		plasmid_out_file = open(plasmid_out, 'r')
-		plasmid_file_read = plasmid_out_file.read()
-		plasmid_out_file.close()
-		print(plasmid_file_read)	
-	
-######
-
-'''******************************************'''
-if __name__== "__main__":
-	main()
 
 ################################################
 def run_module_SPADES_old(name, folder, file1, file2, threads):
@@ -500,3 +458,46 @@ def run_module_SPADES_old(name, folder, file1, file2, threads):
 	filename_stamp = folder + '/.success'
 	stamp =	HCGB_time.print_time_stamp(filename_stamp)
 
+################################################
+def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads, debug=False):
+	"""Generate plasmid assembly using SPADES
+	
+	- Calls SPADES to assemble plasmids using --plasmid option (using :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`) 
+	
+	- SPADES generates a file named as *scaffolds.fasta* within the directory provided. This function retrieves path to contigs/scaffolds assembled.
+	
+	:param path: Absolute path to folder.
+	:param file1: Absolute path to fastq reads (R1).
+	:param file2: Absolute path to fastq reads (R2).
+	:param sample: Sample name or tag to identify sample
+	:param SPADES_bin: Binary executable for SPADES assembly software.
+	:param threads: Number of CPUs to use.
+	:type path: string
+	:type file1: string
+	:type file2: string
+	:type name: string
+	:type threads: integer
+	:return: Plasmid contigs/scaffolds assembled.
+	:rtype: string : Path to assembly fasta file.
+	:warnings: Returns **FAIL** if assembly process stopped.
+	
+	.. seealso:: This function depends on other BacterialTyper functions called:
+	
+		- :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`
+	
+		- :func:`HCGB_main.retrieve_matching_files`
+	"""
+	print ('+ Running plasmid assembly...')
+	name = sample + '_plasmid'
+	options = '--plasmid '
+	message_return = SPADES_systemCall(path, file1, file2, name, SPADES_bin, options, threads)
+
+	if 	message_return == 'FAIL':	
+		print ("\n\n***ERROR: plasmidSPADES failed for sample " + sample)	
+		exit()
+
+	scaffolds_retrieved = HCGB_main.retrieve_matching_files(path + '/' + name, "scaffolds.fasta", debug)
+	if scaffolds_retrieved == '':	
+		print ('\n\n***ATTENTION: No plasmids assembly...')
+
+	return (scaffolds_retrieved[0])

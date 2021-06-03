@@ -56,7 +56,7 @@ def assembly_stats_caller(fasta_file, out_file, debug):
     HCGB_main.printDict2file(out_file + '-scaffolds.csv', scaffold_stats, ",")
     
     ## create stats in excel file
-    assembly_stats_file = out_file + '-assembly_stats.xlsx'
+    assembly_stats_file = out_file + '_stats.xlsx'
     parse_stats(stat_output, assembly_stats_file, debug)
     
     return(stat_output, assembly_stats_file)
