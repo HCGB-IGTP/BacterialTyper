@@ -21,6 +21,7 @@ import shutil
 from termcolor import colored
 
 ## import my modules
+from BacterialTyper.config import set_config
 from BacterialTyper.scripts import assembly_stats_caller
 
 import HCGB
@@ -29,11 +30,8 @@ import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
-
-from BacterialTyper.scripts import functions
-from BacterialTyper.config import set_config
-from BacterialTyper.scripts.blast_parser import parse
-from BacterialTyper.other_tools import tools
+import HCGB.functions.fasta_functions as HCGB_fasta
+import HCGB.functions.blast_functions as HCGB_blast
 
 ################################################
 def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads):
@@ -41,7 +39,7 @@ def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads)
 	
 	- Calls SPADES to assemble plasmids using --plasmid option (using :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`) 
 	
-	- SPADES generates a file named as *scaffolds.fasta* within the directory provided. This function retrieves path to contigs/scaffolds assembled (using :func:`BacterialTyper.scripts.functions.retrieve_matching_files`).
+	- SPADES generates a file named as *scaffolds.fasta* within the directory provided. This function retrieves path to contigs/scaffolds assembled.
 	
 	:param path: Absolute path to folder.
 	:param file1: Absolute path to fastq reads (R1).
@@ -62,7 +60,7 @@ def run_SPADES_plasmid_assembly(path, file1, file2, sample, SPADES_bin, threads)
 	
 		- :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`
 	
-		- :func:`BacterialTyper.scripts.functions.retrieve_matching_files`
+		- :func:`HCGB_main.retrieve_matching_files`
 	"""
 	print ('+ Running plasmid assembly...')
 	name = sample + '_plasmid'
@@ -85,7 +83,7 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 	
 	- Calls SPADES to assemble reads (using :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`) 
 	
-	- SPADES generates a file named as *scaffolds.fasta* within the directory provided. This function retrieves path to contigs/scaffolds assembled (using :func:`BacterialTyper.scripts.functions.retrieve_matching_files`).
+	- SPADES generates a file named as *scaffolds.fasta* within the directory provided. This function retrieves path to contigs/scaffolds assembled (using :func:`HCGB_main.retrieve_matching_files`).
 	
 	- Renames contigs retrieved using sample name (using :func:`BacterialTyper.scripts.spades_assembler.rename_contigs`).
 		
@@ -108,9 +106,9 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 	
 		- :func:`BacterialTyper.scripts.spades_assembler.SPADES_systemCall`
 	
-		- :func:`BacterialTyper.scripts.functions.retrieve_matching_files`
+		- :func:`HCGB.functions.main_functions.retrieve_matching_files`
 	
-		- :func:`BacterialTyper.scripts.functions.rename_fasta_seqs`
+		- :func:`HCGB.functions.fasta_functions.rename_fasta_seqs`
 	"""
 	##print ('+ Running main assembly...')
 	options = ''
@@ -128,7 +126,7 @@ def run_SPADES_assembly(path, file1, file2, sample, SPADES_bin, threads):
 	### locus tag identification. This might affect later annotation process and subsequent analysis
 	### https://github.com/tseemann/prokka/issues/337 
 	new_contigs = path + '/' + sample + '_assembly.fna'
-	id_conversion_file = functions.rename_fasta_seqs(scaffolds_retrieved[0], sample, new_contigs)
+	id_conversion_file = HCGB_fasta.rename_fasta_seqs(scaffolds_retrieved[0], sample, new_contigs)
 		
 	if	id_conversion_file == 'FAIL':	
 		print ("\n\n***ERROR: Rename contigs failed for sample " + sample)
@@ -146,9 +144,9 @@ def SPADES_systemCall(sample_folder, file1, file2, name, SPADES_bin, options, th
 	
 	Steps:
 	
-	- It generates system call for SPADES assembly (using :func:`BacterialTyper.scripts.functions.system_call`). 
+	- It generates system call for SPADES assembly. 
 	
-	- It generates timestamp file (See :func:`BacterialTyper.scripts.functions.print_time_stamp`).
+	- It generates timestamp file.
 	
 	:param sample_folder: Absolute path to store results. It must exists.
 	:param file1: Absolute path to fastq reads (R1).
@@ -172,15 +170,15 @@ def SPADES_systemCall(sample_folder, file1, file2, name, SPADES_bin, options, th
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.scripts.functions.system_call`
+		- :func:`HCGB.functions.main_functions.system_call`
 	
-		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
+		- :func:`HCGB.functions.time_functions.print_time_stamp`
 	"""
 	
 	## check if previously assembled and succeeded
 	filename_stamp = sample_folder + '/.success_assembly'
 	if os.path.isfile(filename_stamp):
-		stamp =	functions.read_time_stamp(filename_stamp)
+		stamp =	HCGB_time.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 		return('OK')
 
@@ -189,12 +187,12 @@ def SPADES_systemCall(sample_folder, file1, file2, name, SPADES_bin, options, th
 	
 	## command	
 	cmd_SPADES = '%s %s-t %s -o %s -1 %s -2 %s > %s 2> %s' %(SPADES_bin, options, threads, sample_folder, file1, file2, logFile, logFile)
-	code = functions.system_call(cmd_SPADES)
+	code = HCGB_main.system_call(cmd_SPADES)
 	
 	if (code == 'OK'):
 		## success stamps
 		filename_stamp = sample_folder + '/.success_assembly'
-		stamp =	functions.print_time_stamp(filename_stamp)
+		stamp =	HCGB_time.print_time_stamp(filename_stamp)
 		return('OK')
 
 	return "FAIL"
@@ -274,16 +272,16 @@ def discardPlasmids(contigs, plasmids, path, sample):
 	## discard 
 	print ('+ Check if any plasmids are also reported in main assembly...')
 
-	folder = functions.create_subfolder('blast_search', path)	
+	folder = HCGB_files.create_subfolder('blast_search', path)	
 	
 	## makeblastDB
 	dbName = folder + '/mainAssembly'
-	functions.makeblastdb(dbName, contigs)
+	HCGB_.makeblastdb(dbName, contigs)
 	
 	## blastn command
 	outFile = folder + '/blastn_output.txt'
 	threads = 1
-	functions.blastn(outFile, dbName, plasmids, threads)
+	HCGB_blast.blastn(outFile, dbName, plasmids, threads)
 	
 	########################
 	## parseBlast results
@@ -301,7 +299,7 @@ def discardPlasmids(contigs, plasmids, path, sample):
 	print ('+ Parsing BLAST results generated...\n')
 	## get results
 	fh = open(outFile)
-	for blast_record in parse(fh, eval_thresh=eval_thresh_float, aln_thresh=aln_thresh_given, length_thresh=min_length):
+	for blast_record in HCGB_blast.parse(fh, eval_thresh=eval_thresh_float, aln_thresh=aln_thresh_given, length_thresh=min_length):
 		for hit in blast_record.hits:
 			for hsp in hit:
 				output_file.write('****Alignment****')
@@ -412,7 +410,7 @@ def main():
 	threads = int(argv[5])
 	path = 	argv[6]
 
-	folder = functions.create_subfolder(sample, path)
+	folder = HCGB_files.create_subfolder(sample, path)
 
 	## assembly main 
 	path_to_contigs = run_SPADES_assembly(folder, file1, file2, sample, SPADES_bin, threads)
@@ -472,7 +470,7 @@ def run_module_SPADES_old(name, folder, file1, file2, threads):
 	print ("+ Calling spades assembly for sample...", name)	
 
 	## folder create
-	functions.create_folder(folder)
+	HCGB_files.create_folder(folder)
 	
 	## get configuration
 	SPADES_bin = set_config.get_exe('spades')
@@ -500,5 +498,5 @@ def run_module_SPADES_old(name, folder, file1, file2, threads):
 	
 	## success stamps
 	filename_stamp = folder + '/.success'
-	stamp =	functions.print_time_stamp(filename_stamp)
+	stamp =	HCGB_time.print_time_stamp(filename_stamp)
 

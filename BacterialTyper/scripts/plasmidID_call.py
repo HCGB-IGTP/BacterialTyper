@@ -20,7 +20,8 @@ import concurrent.futures
 ## import modules
 from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
-from BacterialTyper.scripts.blast_parser import parse
+import HCGB
+import HCGB.functions.blast_functions as HCGB_blast
 
 ## perl scripts
 perlDir = os.path.dirname(os.path.realpath(__file__)) + '/../tools/perl'
@@ -102,7 +103,7 @@ def filter_and_cluster_database(database_path, threads):
 	
 	## get results
 	fh = open(outFile_merged)
-	for blast_record in parse(fh, eval_thresh=eval_thresh_float, aln_thresh=aln_thresh_given, length_thresh=min_length):
+	for blast_record in HCGB_blast.parse(fh, eval_thresh=eval_thresh_float, aln_thresh=aln_thresh_given, length_thresh=min_length):
 		### show progress bar
 		n +=10
 		functions.progbar(n, lines, 100)

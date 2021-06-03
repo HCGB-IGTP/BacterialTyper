@@ -16,7 +16,6 @@ import pandas as pd
 import shutil
 
 ## import my modules
-from BacterialTyper.config import set_config
 from BacterialTyper.scripts import spades_assembler
 from BacterialTyper.scripts import annotation
 from BacterialTyper.scripts import BUSCO_caller

@@ -3,7 +3,6 @@ __all__ = [
     'annotation',
     'ariba_caller',
     'bacteriophage',
-    'blast_parser',
     'BUSCO_caller',
     'card_trick_caller',
     'database_generator',
