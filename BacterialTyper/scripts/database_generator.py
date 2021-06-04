@@ -40,7 +40,6 @@ import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.files_functions as HCGB_files
 import HCGB.functions.main_functions as HCGB_main
 
-
 ##########################################################################################
 def NCBI_DB(strains2get, data_folder, Debug):
 	"""Donwloads given taxa from NCBI if not available and updates database information.
