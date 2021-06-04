@@ -18,7 +18,10 @@ from sys import argv
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper.scripts import functions
+import HCGB
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.system_call_functions as HCGB_sys
+
 from BacterialTyper.config import set_config
 
 ################################################
@@ -136,11 +139,11 @@ def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, t
 		cmd = cmd + " SE -threads %s -trimlog %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(threads, log_file, file_R1, trim_R1, trimmomatic_adapters, trimmo_log)
 
 	## system call & return
-	code = functions.system_call(cmd)
+	code = HCGB_sys.system_call(cmd)
 	if code == 'OK':
 		## success stamps
 		filename_stamp = sample_folder + '/.success'
-		stamp =	functions.print_time_stamp(filename_stamp)	
+		stamp =	HCGB_time.print_time_stamp(filename_stamp)	
 		return('OK')	
 	else:
 		return('FAIL')	

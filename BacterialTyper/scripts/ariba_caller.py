@@ -19,7 +19,12 @@ import pandas as pd
 from ete3 import Tree
 
 ## import my modules
-from BacterialTyper.scripts import functions
+import HCGB
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.system_call_functions as HCGB_sys
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.files_functions as HCGB_files
+
 from BacterialTyper.config import set_config
 from BacterialTyper.modules import citation
 
@@ -58,42 +63,42 @@ def help_ARIBA():
 	dict_ariba = citation.ariba_citation()
 	## to do: finish filling information for different databases
 	print ("")
-	functions.print_sepLine("*", 50, False)
+	HCGB_aes.print_sepLine("*", 50, False)
 	print ("CARD:")
 	print ("The Comprehensive Antibiotic Resistance Database (CARD) is a rigorously curated collection of characterized, peer-reviewed  resistance determinants and associated antibiotics, organized by the Antibiotic Resistance Ontology (ARO) and AMR gene detection models.")
 	print ('Citation:', dict_ariba['CARD'])
 	print ("")	
-	functions.print_sepLine("*", 50, False)
+	HCGB_aes.print_sepLine("*", 50, False)
 	print ("VFDB:")
 	print ("The virulence factor database (VFDB) is an integrated and comprehensive online resource for curating information about virulence factors of bacterial pathogens. Since its inception in 2004, VFDB has been dedicated to providing up-to-date knowledge of VFs from various medically significant bacterial pathogens.")
 	print ('Citation:', dict_ariba['VFDB'])
 	print ("")	
-	functions.print_sepLine("*", 50, False)
+	HCGB_aes.print_sepLine("*", 50, False)
 	print ("ARG-ANNOT:\n")
 	print ("...")
 	print ('Citation:', dict_ariba['ARG-ANNOT'])
 	print ("")	
-	functions.print_sepLine("*", 50, False)
+	HCGB_aes.print_sepLine("*", 50, False)
 	print ("MEGARes:")
 	print ("The MEGARes database contains sequence data for approximately 4,000 hand-curated antimicrobial resistance genes accompanied by an annotation structure that is optimized for use with high throughput sequencing.")
 	print ('Citation:', dict_ariba['MEGARes'])
 	print ("")	
-	functions.print_sepLine("*", 50, False)
+	HCGB_aes.print_sepLine("*", 50, False)
 	print ("PlasmidFinder:\n")
 	print ("...")
 	print ('Citation:', dict_ariba['PlasmidFinder'])
 	print ("")	
-	functions.print_sepLine("*", 50, False)
+	HCGB_aes.print_sepLine("*", 50, False)
 	print ("ResFinder:\n")
 	print ("The ResFinder database is a curated database of acquired resistance genes.")
 	print ('Citation:', dict_ariba['ResFinder'])
 	print ("")	
-	functions.print_sepLine("*", 50, False)
+	HCGB_aes.print_sepLine("*", 50, False)
 	print ("srst2:")
 	print ("...")
 	print ('Citation:', dict_ariba['srst2'])
 	print ("")
-	functions.print_sepLine("*", 50, False)
+	HCGB_aes.print_sepLine("*", 50, False)
 	print ("")
 	
 ############################################################### 
@@ -115,9 +120,9 @@ def download_ariba_databases(list_dbs, main_folder, Debug, threads):
 	
 	 .. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.scripts.functions.create_subfolder`
+		- :func:`HCGB.functions.file_functions.create_subfolder`
 		
-		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
+		- :func:`HCGB.functions.time_functions.read_time_stamp`
 		
 		- :func:`BacterialTyper.scripts.ariba_caller.get_ARIBA_dbs`
 	
@@ -128,7 +133,7 @@ def download_ariba_databases(list_dbs, main_folder, Debug, threads):
 	"""
 
 	print("\n\n+ Download databases for Antimicrobial Resistance Identification By Assembly (ARIBA).")
-	ariba_folder = functions.create_subfolder("ARIBA", main_folder)
+	ariba_folder = HCGB_files.create_subfolder("ARIBA", main_folder)
 
 	## print ARIBA databases: 
 	print ("+ Available databases:")
@@ -136,11 +141,11 @@ def download_ariba_databases(list_dbs, main_folder, Debug, threads):
 	
 	for db_set in dbs:
 
-		functions.print_sepLine("-",30, False)
+		HCGB_aes.print_sepLine("-",30, False)
 		print (colored("+ " + db_set,'yellow'))
 		
 		## prepare folders
-		folder_set = functions.create_subfolder(db_set, ariba_folder)
+		folder_set = HCGB_files.create_subfolder(db_set, ariba_folder)
 		outdir_prepare_ref = folder_set + '_prepareref'
 
 		## stamp time file
@@ -148,7 +153,7 @@ def download_ariba_databases(list_dbs, main_folder, Debug, threads):
 	
 		## check if previously done
 		if os.path.isfile(filename_stamp_prepare):
-			stamp =	functions.read_time_stamp(filename_stamp_prepare)
+			stamp =	HCGB_time.read_time_stamp(filename_stamp_prepare)
 			print ("\t+ Database is downloaded in folder: ", folder_set)
 			print ("\t+ Data is available and indexed in folder: ", outdir_prepare_ref)
 			print (colored("\tDatabase was previously downloaded and prepared on: %s" %stamp, 'yellow'))
@@ -180,7 +185,7 @@ def check_db_indexed(folder, option):
 	 
 	 .. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
+		- :func:`HCGB.functions.time_functions.read_time_stamp`
 	 
 	.. include:: ../../links.inc
 	"""
@@ -188,7 +193,7 @@ def check_db_indexed(folder, option):
 	path_basename = folder.split('/')
 	if os.path.isfile(folder + '00.info.txt'):
 		if os.path.isfile(folder + '.success'):
-			stamp =	functions.read_time_stamp(folder + '.success')
+			stamp =	HCGB_time.read_time_stamp(folder + '.success')
 			print (colored("\tA previous command generated results on: %s [%s]" %(stamp, path_basename[-2]), 'yellow'))
 			return True
 	else:
@@ -235,7 +240,7 @@ def ariba_summary(out, infileList, options):
 
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.scripts.functions.system_call`
+		- :func:`HCGB.functions.system_call_functions.system_call`
 	
 	"""
 	
@@ -243,7 +248,7 @@ def ariba_summary(out, infileList, options):
 	infileList_string = " ".join(infileList)
 	cmd_summary = 'ariba summary %s %s %s 2> %s' %(options, out, infileList_string, logFile)
 	
-	return(functions.system_call(cmd_summary))
+	return(HCGB_sys.system_call(cmd_summary))
 
 ##########
 def ariba_getref(database, outdir, Debug, threads):
@@ -271,15 +276,15 @@ def ariba_getref(database, outdir, Debug, threads):
 	filename_stamp = outdir + '/.success'
 
 	if os.path.isfile(filename_stamp):
-		stamp =	functions.read_time_stamp(filename_stamp)
+		stamp =	HCGB_time.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 		download_ariba_cmd = 'OK'
 	else:
 		cmd_getref = 'ariba getref %s %s' %(database, outdir_name)
-		download_ariba_cmd = functions.system_call(cmd_getref)
+		download_ariba_cmd = HCGB_sys.system_call(cmd_getref)
 	
 	if (download_ariba_cmd == 'OK'):
-		stamp =	functions.print_time_stamp(filename_stamp)
+		stamp =	HCGB_time.print_time_stamp(filename_stamp)
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: ariba getref %s succeed " %database + "**", 'yellow'))
@@ -296,7 +301,7 @@ def ariba_getref(database, outdir, Debug, threads):
 	## check if previously prepareref and succeeded
 	filename_stamp_prepare = outdir_prepare_ref + '/.success'
 	if os.path.isfile(filename_stamp_prepare):
-		stamp =	functions.read_time_stamp(filename_stamp_prepare)
+		stamp =	HCGB_time.read_time_stamp(filename_stamp_prepare)
 		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 	
 	else:
@@ -315,7 +320,7 @@ def ariba_getref(database, outdir, Debug, threads):
 		if (code == 'OK'):
 			filename_stamp = outdir_prepare_ref + '/.success'
 
-		functions.print_time_stamp(filename_stamp_prepare)
+		HCGB_time.print_time_stamp(filename_stamp_prepare)
 
 	return()		
 	
@@ -323,7 +328,7 @@ def ariba_getref(database, outdir, Debug, threads):
 def ariba_prepareref(fasta, metadata, outfolder, threads):
 	## prepareref
 	cmd_prepareref = 'ariba prepareref -f %s -m %s %s --threads %s' %(fasta, metadata, outfolder, threads)
-	return(functions.system_call(cmd_prepareref))
+	return(HCGB_sys.system_call(cmd_prepareref))
 	
 	######################################################################################
 	## usage: ariba prepareref [options] <outdir>
@@ -395,7 +400,7 @@ def ariba_expandflag(input_file, output_file):
 	## generate description
 	flag_file_out = tmp_name + '-description.tsv'
 	cmd = 'ariba expandflag "%s" %s' %(flag_file, flag_file_out)
-	functions.system_call(cmd)
+	HCGB_sys.system_call(cmd)
 	
 	os.remove(flag_file)	
 	return(flag_file_out)
@@ -413,9 +418,9 @@ def ariba_pubmlstget(species, outdir):
 	
 	## download information in database folder provided by config
 	print ("+ Call ariba module 'pubmlstget' to retrieve MLST information.")
-	functions.create_folder(outdir)
+	HCGB_files.create_folder(outdir)
 	cmd = 'ariba pubmlstget "%s" %s' %(species, outdir)
-	return(functions.system_call(cmd))
+	return(HCGB_sys.system_call(cmd))
 	
 ##########
 def ariba_run(database, files, outdir, threads, threshold):
@@ -444,9 +449,9 @@ def ariba_run(database, files, outdir, threads, threshold):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.scripts.functions.system_call`
+		- :func:`HCGB.functions.system_call_functions.system_call`
 		
-		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
+		- :func:`HCGB.functions.time_functions.print_time_stamp`
 		
 		- :func:`BacterialTyper.scripts.virulence_resistance.check_results` 
 		
@@ -507,12 +512,11 @@ def ariba_run(database, files, outdir, threads, threshold):
 		exit()
 
 	##
-	code = functions.system_call(cmd)
+	code = HCGB_sys.system_call(cmd)
 
 	## make stamp time
 	if (code == 'OK'): 
 		filename_stamp = outdir + '/.success'
-		functions.print_time_stamp(filename_stamp)
 		return ('OK')
 	else:
 		return ('FAIL')

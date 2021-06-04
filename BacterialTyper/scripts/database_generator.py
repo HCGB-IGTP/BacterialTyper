@@ -27,11 +27,19 @@ from Bio import SeqIO
 import concurrent.futures
 
 ## import my modules
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts import ariba_caller
 from BacterialTyper.scripts import species_identification_KMA
 from BacterialTyper.scripts import min_hash_caller
+
+#from BacterialTyper.scripts import functions
+import HCGB
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.system_call_functions as HCGB_sys
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.main_functions as HCGB_main
+
 
 ##########################################################################################
 def NCBI_DB(strains2get, data_folder, Debug):
@@ -63,9 +71,9 @@ def NCBI_DB(strains2get, data_folder, Debug):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.scripts.functions.create_folder`
+		- :func:`HCGB.functions.file_funtcions.create_folder`
 	
-		- :func:`BacterialTyper.scripts.functions.get_data`
+		- :func:`HCGB.functions.main_functions.get_data`
 	
 		- :func:`BacterialTyper.scripts.database_generator.get_dbs`
 	
@@ -91,7 +99,7 @@ def NCBI_DB(strains2get, data_folder, Debug):
 
 	## get data existing database
 	print ("+ Create the database in folder: \n", data_folder)
-	functions.create_folder(data_folder)
+	HCGB_files.create_folder(data_folder)
 	
 	## read database 
 	db_frame = getdbs('NCBI', data_folder, 'genbank', Debug)
@@ -109,7 +117,7 @@ def NCBI_DB(strains2get, data_folder, Debug):
 	
 	## loop and download
 	for index, row in strains2get.iterrows():
-		functions.print_sepLine("+", 75, False)
+		HCGB_aes.print_sepLine("+", 75, False)
 		acc_ID = index #strains2get.loc[index]['NCBI_assembly_ID']
 		info = "Genus: " + strains2get.loc[index]['genus'] + '\n' + "Species: " +  strains2get.loc[index]['species'] + '\n' + "Strain: " +  strains2get.loc[index]['name'] + '\n' + "ID accession: " +  acc_ID + '\n'
 		dir_path = data_folder + '/genbank/bacteria/' + acc_ID ## module ngd requires to download data in bacteria subfolder under genbank folder
@@ -124,7 +132,7 @@ def NCBI_DB(strains2get, data_folder, Debug):
 			print ("\n+ Downloading data for:")	
 			print (colored(info, 'green'))
 			data_accID = NCBIdownload(acc_ID, strains2get, data_folder)
-			this_db = functions.get_data(data_accID, ',', 'index_col=0')
+			this_db = HCGB_main.get_data(data_accID, ',', 'index_col=0')
 			this_db = this_db.set_index('ID')
 			database_df = database_df.append(this_db)
 
@@ -174,7 +182,7 @@ def ngd_download(dir_path, acc_ID, data_folder):
 			if f.endswith('gz'):
 				files_list.append(f)
 				print ("\t- Extracting files: ", f)
-				functions.extract(dir_path + '/' + f, dir_path)
+				HCGB_files.extract(dir_path + '/' + f, dir_path)
 				#os.remove(dir_path + '/' + f)
 	else:
 		print ('+ Data is already available, no need to download it again')
@@ -232,7 +240,7 @@ def NCBIdownload(acc_ID, data, data_folder):
 	
 	## timestamp
 	filename_stamp = dir_path + '/.success'
-	stamp =	functions.print_time_stamp(filename_stamp)
+	stamp =	HCGB_time.print_time_stamp(filename_stamp)
 
 	## return data
 	return(info_file)		
@@ -268,14 +276,14 @@ def get_database(db_frame, Debug):
 		if os.path.isfile(this_file):
 			print ('+ Reading information for sample: ', db_frame.loc[index]['db'])
 			print (colored("\t+ Obtaining information from file: %s" %this_file, 'yellow'))
-			this_db = functions.get_data(this_file, ',', 'index_col=0')
+			this_db = HCGB_main.get_data(this_file, ',', 'index_col=0')
 			data4db = data4db.append(this_db)
 			timestamp = db_frame.loc[index]['path'] + '/.success'
 			if os.path.isfile(timestamp):
-				stamp =	functions.read_time_stamp(timestamp)
+				stamp =	HCGB_time.read_time_stamp(timestamp)
 				print (colored("\t+ Data generated on: %s" %stamp, 'yellow'))
 
-			functions.print_sepLine("*",25, False)
+			HCGB_aes.print_sepLine("*",25, False)
 
 	## index by ID
 	if not data4db.empty:
@@ -288,7 +296,7 @@ def update_db_data_file(data, csv):
 	if os.path.isfile(csv):
 		print ("\n+ Updating database")
 		print ("+ Obtaining information from database file: %s" %csv)
-		db2update = functions.get_data(csv, ',', 'index_col=0')
+		db2update = HCGB_main.get_data(csv, ',', 'index_col=0')
 		
 		## TODO: provide preference to db2update
 		df = pd.concat([db2update, data], join='inner', sort=True).drop_duplicates()
@@ -421,7 +429,7 @@ def getdbs(source, database_folder, option, debug):
 	###############
 	if (source == 'ARIBA'):
 		### Check if folder exists
-		functions.create_subfolder('ARIBA', database_folder)
+		HCGB_files.create_subfolder('ARIBA', database_folder)
 		
 		### get information
 		ARIBA_dbs = ariba_caller.get_ARIBA_dbs(dbs2use) ## get names
@@ -435,7 +443,7 @@ def getdbs(source, database_folder, option, debug):
 			else:
 				print ("+ Database: ", ariba_db, " is not downloaded...")
 				print ("+ Download now:")
-				folder_db = functions.create_subfolder(ariba_db, database_folder + '/ARIBA')
+				folder_db = HCGB_files.create_subfolder(ariba_db, database_folder + '/ARIBA')
 				code_db = ariba_caller.ariba_getref(ariba_db, folder_db, debug, 2) ## get names 
 				if (code_db == 'OK'):
 					db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db]
@@ -446,7 +454,7 @@ def getdbs(source, database_folder, option, debug):
 	#############
 	elif (source == 'KMA'):
 		### Check if folder exists
-		KMA_db_abs = functions.create_subfolder('KMA_db', database_folder)
+		KMA_db_abs = HCGB_files.create_subfolder('KMA_db', database_folder)
 		kma_dbs = os.listdir(KMA_db_abs)
 
 		## debug message
@@ -511,7 +519,7 @@ def getdbs(source, database_folder, option, debug):
 
 		### Check if folder exists
 		path_genbank = os.path.join(database_folder, source, 'genbank')
-		db2use_abs = functions.create_subfolder(dbs2use[0], database_folder)
+		db2use_abs = HCGB_files.create_subfolder(dbs2use[0], database_folder)
 		
 		### genbank entries downloaded
 		if dbs2use[0] == 'genbank':
@@ -530,7 +538,7 @@ def getdbs(source, database_folder, option, debug):
 	###################
 	elif (source == 'user_data'):
 		### Check if folder exists
-		db2use_abs = functions.create_subfolder(dbs2use[0], database_folder)
+		db2use_abs = HCGB_files.create_subfolder(dbs2use[0], database_folder)
 
 		user_entries = os.listdir(db2use_abs)
 		for entry in user_entries:
@@ -545,7 +553,7 @@ def getdbs(source, database_folder, option, debug):
 		for db in dbs2use:
 			if db == 'PubMLST':
 				### Check if folder exists
-				db2use_abs = functions.create_subfolder('PubMLST', database_folder)
+				db2use_abs = HCGB_files.create_subfolder('PubMLST', database_folder)
 				list_profiles = os.listdir(db2use_abs)
 
 				for entry in list_profiles:
@@ -597,19 +605,19 @@ def getdbs(source, database_folder, option, debug):
 							print ('\t\t+ Rename into: ', entry_strain)
 													
 																	 
-						list_msh = functions.retrieve_matching_files(this_db, '.sig')
+						list_msh = HCGB_main.retrieve_matching_files(this_db, '.sig')
 						if (list_msh):
 							## print original in file
 							file2print = this_db + '/.original'
 							if not os.path.exists(file2print):
 								original = ['NaN']
 							else:
-								original = functions.readList_fromFile(file2print)
+								original = HCGB_main.readList_fromFile(file2print)
 
 							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry_strain, list_msh[0], this_db + '/mash/' + original[0], original[1], original[2], this_db]
 						else:
 							## index assembly or reads...
-							list_fna = functions.retrieve_matching_files(this_db, 'genomic.fna')
+							list_fna = HCGB_main.retrieve_matching_files(this_db, 'genomic.fna')
 
 							## not available
 							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry_strain, 'NaN', list_fna[0], 'NaN', 'NaN', this_db]
@@ -617,7 +625,7 @@ def getdbs(source, database_folder, option, debug):
 			#### user_data
 			elif (db == "user_data"):
 				print (colored("\n\t- user_data: including information from user previously generated results", 'green')) ## include user data
-				db2use_abs = functions.create_subfolder('user_data', database_folder)
+				db2use_abs = HCGB_files.create_subfolder('user_data', database_folder)
 				user_entries = os.listdir(db2use_abs)
 				for entry in user_entries:
 					if entry == 'user_database.csv':
@@ -632,13 +640,13 @@ def getdbs(source, database_folder, option, debug):
 						if not os.path.exists(file2print):
 							original = ['NaN', 'NaN', 'NaN']
 						else:
-							original = functions.readList_fromFile(file2print)
+							original = HCGB_main.readList_fromFile(file2print)
 
 						##
 						db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, this_mash_db, this_db + '/mash/' + original[0], original[1], original[2], this_db + '/mash']
 					else:
 						## not available
-						list_fna = functions.retrieve_matching_files(this_db + '/assembly', '.fna')
+						list_fna = HCGB_main.retrieve_matching_files(this_db + '/assembly', '.fna')
 						db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, 'NaN', list_fna[0], 'NaN', 'NaN', this_db + '/mash']
 
 	#### external_data
@@ -654,7 +662,7 @@ def getdbs(source, database_folder, option, debug):
 			if not os.path.exists(outfile):
 				path_file = os.path.dirname(row['path'])
 				this_db_file = min_hash_caller.sketch_database([row['path']], mash_bin, row['path'], row['db'], path_file)
-				functions.print_sepLine("*",50, False)
+				HCGB_aes.print_sepLine("*",50, False)
 
 			db_Dataframe.loc[row['db']] = ['Mash_external', row['db'], outfile, row['path']]
 	

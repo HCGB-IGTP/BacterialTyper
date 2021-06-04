@@ -42,7 +42,10 @@ import pylab
 import scipy.cluster.hierarchy as sch
 
 ## import my modules
-from BacterialTyper.scripts import functions
+import HCGB
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
+
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts import database_generator
 
@@ -117,7 +120,7 @@ def sketch_database(dict_files, folder, Debug, ksize_n, num_sketch):
 	siglist_file = []
 
 	### save as signature
-	functions.create_folder(folder)
+	HCGB_files.create_folder(folder)
 	for names,hashes in minhashes.items():
 		sig1 = SourmashSignature(hashes, name=names)
 		outfile_name = folder + '/' + str(names) + '.sig'
@@ -370,7 +373,7 @@ def get_Newick_tree(cluster_hierachy, DataMatrix, labeltext, output):
 	Newick_tree = generateNewick(tree, "", DataMatrix, labeltext)
 	
 	Newick_tree_file = output + '.nwk'
-	functions.printList2file(Newick_tree_file, [Newick_tree])
+	HCGB_main.printList2file(Newick_tree_file, [Newick_tree])
 	
 	handle = StringIO(Newick_tree)
 	treePhylo = Phylo.read(handle, "newick")
@@ -382,7 +385,7 @@ def get_Newick_tree(cluster_hierachy, DataMatrix, labeltext, output):
 	
 	## BUG: the list is printed alphabetically ordered
 	Newick_tree_leaves =  output + '.leaves.txt'
-	functions.printList2file(Newick_tree_leaves, leaves_tree)
+	HCGB_main.printList2file(Newick_tree_leaves, leaves_tree)
 
 def	help_options():
 	print ("\nUSAGE: python %s fasta_1,ID1 fasta_2,ID2 ... fasta_n,IDn \n"  %os.path.realpath(__file__))

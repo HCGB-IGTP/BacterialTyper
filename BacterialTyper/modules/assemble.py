@@ -311,5 +311,5 @@ def check_sample_assembly(name, sample_folder, files, threads):
 			stamp =	HCGB_time.print_time_stamp(filename_stamp)
 			assembly_stats[name] = code # list containing dictionary of data and excel
 		else:
-			print("Some error ocurred for sample %s while generating the assembly. " %name)
+			print("Some error occurred for sample %s while generating the assembly. " %name)
 

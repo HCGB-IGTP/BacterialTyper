@@ -25,7 +25,10 @@ import pandas as pd
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper.scripts import functions
+#from BacterialTyper.scripts import functions
+import HCGB
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.system_call_functions as HCGB_sys
 from BacterialTyper.config import set_config
 
 ### print info prokka
@@ -43,14 +46,12 @@ def print_list_prokka():
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
 		- :func:`BacterialTyper.scripts.set_config.get_exe`
-		
-		- :func:`BacterialTyper.scripts.functions.system_call`
-	
+			
 	.. include:: ../../links.inc	 	
 	"""
 	prokka_bin = set_config.get_exe('prokka')
 	cmd = prokka_bin + " --listdb"
-	functions.system_call(cmd)
+	HCGB_sys.system_call(cmd)
 
 ######
 def module_call(sequence_fasta, kingdom, genus, path, name, threads):
@@ -59,9 +60,9 @@ def module_call(sequence_fasta, kingdom, genus, path, name, threads):
 	
 	- It uses Prokka_ via :func:`BacterialTyper.scripts.annotation.prokka_call`.
 	
-	- It checks if previously generated using :func:`BacterialTyper.scripts.functions.read_time_stamp`. 
+	- It checks if previously generated 
 	
-	- Once finished, it prints timestamp (:func:`BacterialTyper.scripts.functions.print_time_stamp`). 
+	- Once finished, it prints timestamp 
 	
 	:param sequence_fasta: Assembled sequences in fasta file format. 
 	:param kingdom: Available kingdoms mode for Prokka software: Archaea|Bacteria|Mitochondria|Viruses
@@ -81,11 +82,11 @@ def module_call(sequence_fasta, kingdom, genus, path, name, threads):
 	
 		- :func:`BacterialTyper.scripts.set_config.get_exe`
 		
-		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
+		- :func:`HCGB.functions.time_functions.read_time_stamp`
 		
-		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
+		- :func:`HCGB.functions.time_functions.print_time_stamp`
 				
-		- :func:`BacterialTyper.scripts.annotation.prokka_call`	
+		- :func:`HCGB.functions.time_functions.prokka_call`	
 
 	.. include:: ../../links.inc	 	
 	"""
@@ -95,7 +96,7 @@ def module_call(sequence_fasta, kingdom, genus, path, name, threads):
 
 	if os.path.isdir(path):
 		if os.path.isfile(filename_stamp):
-			stamp =	functions.read_time_stamp(filename_stamp)
+			stamp =	HCGB_time.read_time_stamp(filename_stamp)
 			print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 			return ()
 	
@@ -105,7 +106,7 @@ def module_call(sequence_fasta, kingdom, genus, path, name, threads):
 
 	## success stamps
 	filename_stamp = path + '/.success'
-	stamp =	functions.print_time_stamp(filename_stamp)
+	stamp =	HCGB_time.print_time_stamp(filename_stamp)
 
 	return(dirname)	
 

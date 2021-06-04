@@ -17,7 +17,9 @@ from sys import argv
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper.scripts import functions
+import HCGB
+import HCGB.functions.system_call_functions as HCGB_sys
+import HCGB.functions.main_functions as HCGB_main
 from BacterialTyper.config import set_config
 
 ############
@@ -37,13 +39,13 @@ def multiQC_module_call(givenList, name, path, option):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.scripts.functions.printList2file`
+		- :func:`HCGB.functions.main_functions.printList2file`
 		
 		- :func:`BacterialTyper.scripts.multiQC_report.multiQC_call`
 	
 	"""
 	pathFile = path + '/' + 'samples.txt'
-	functions.printList2file(pathFile, givenList)
+	HCGB_main.printList2file(pathFile, givenList)
 	multiQC_call(pathFile, name, path, option)	
 	
 ############
@@ -65,7 +67,7 @@ def multiQC_call(pathFile, name, folder, option):
 		
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.scripts.functions.system_call`
+		- :func:`HCGB.functions.system_call_functions`
 	
 	"""
 	multiqc_bin = "multiqc" ## if we activate the environment it should be in $PATH
@@ -74,7 +76,7 @@ def multiQC_call(pathFile, name, folder, option):
 	
 	## if a report was previously generated in the folder 
 	## force to delete and generate a new one
-	return(functions.system_call(cmd))
+	return(HCGB_sys.system_call(cmd))
 
 ############
 def	help_options():

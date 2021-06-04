@@ -19,7 +19,11 @@ from termcolor import colored
 import card_trick
 
 ## import my modules
-from BacterialTyper.scripts import functions
+import HCGB
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.main_functions as HCGB_main
+
 from BacterialTyper.config import set_config
 
 ##########
@@ -37,17 +41,17 @@ def prepare_card_data(database_folder):
 	
 	## create CARD folder
 	abs_folder = os.path.abspath(database_folder)
-	CARD_folder = functions.create_subfolder('CARD', abs_folder)
+	CARD_folder = HCGB_files.create_subfolder('CARD', abs_folder)
 	
 	## make stamp time
 	filename_stamp = CARD_folder + '/.success'
 
 	if os.path.isfile(filename_stamp):
-		stamp =	functions.read_time_stamp(filename_stamp)
+		stamp =	HCGB_time.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s [CARD Ontology Data]" %stamp, 'yellow'))
 
 		## check time passed
-		days_passed = functions.get_diff_time(stamp)
+		days_passed = HCGB_time.get_diff_time(stamp)
 		print ("\t+ %s days ago" %days_passed)		
 		if (days_passed > 30): ## download again
 			print ("+ Downloading information again just to be sure...")
@@ -70,7 +74,7 @@ def prepare_card_data(database_folder):
 		if not return_frame.empty:
 			## success stamps
 			filename_stamp = CARD_folder + '/.success'
-			stamp =	functions.print_time_stamp(filename_stamp)	
+			stamp =	HCGB_time.print_time_stamp(filename_stamp)	
 		else:
 			return (FAIL)
 
@@ -87,7 +91,7 @@ def dead_code():
 	out_file_handle = open(outfile, 'w')	
 	
 	## get info
-	lines = functions.readList_fromFile(rename_info)
+	lines = HCGB_main.readList_fromFile(rename_info)
 	for l in lines:
 		names = l.split('\t')
 		## original name \t ariba_name

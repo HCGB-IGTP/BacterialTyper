@@ -16,7 +16,10 @@ import pandas as pd
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper.scripts import functions
+import HCGB
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.system_call_functions as HCGB_sys
+import HCGB.functions.aesthetics_functions as HCGB_aes
 from BacterialTyper.config import set_config
 
 ## additional information:
@@ -27,7 +30,7 @@ def help_edirect():
 	"""
 	Prints edirect_caller script help options
 	"""
-	functions.boxymcboxface("ENTREZ DIRECT (EDirect)")
+	HCGB_aes.boxymcboxface("ENTREZ DIRECT (EDirect)")
 	print ("+ Connects with NCBI entrez databases")
 	print ("+ Searches, retrieves, and parses data from NCBI databases through the Unix command line")
 	print ("+ Provides access to the NCBI's suite of interconnected databases")
@@ -43,7 +46,7 @@ def generate_docsum_call(db, query, outfile):
 ###############
 def docsum_call(db, query, outfile, esearch_bin, efetch_bin):
 	cmd = ("%s -db %s -query %s | %s -format docsum > %s" %(esearch_bin, db, query, efetch_bin, outfile))
-	return(functions.system_call(cmd))
+	return(HCGB_sys.system_call(cmd))
 	
 ###############
 def generate_xtract_call(docsum_file, pattern, element, outfile):
@@ -53,7 +56,7 @@ def generate_xtract_call(docsum_file, pattern, element, outfile):
 ###############
 def xtract_call(docsum_file, pattern, element, outfile, xtract_bin):
 	cmd = ("cat %s | %s -pattern %s -sep ',' -element %s > %s" %(docsum_file, xtract_bin, pattern, element, outfile))
-	return(functions.system_call(cmd))	
+	return(HCGB_sys.system_call(cmd))	
 
 ###############
 def generate_seq_search_call(db, query, outfile, revcomp, start=0, end=-1, format='fasta'):
@@ -74,7 +77,7 @@ def generate_seq_search_call(db, query, outfile, revcomp, start=0, end=-1, forma
 	## add output file
 	cmd = cmd + ' > %s' %outfile
 		
-	return(functions.system_call(cmd))
+	return(HCGB_sys.system_call(cmd))
 
 ## docsum Nucleotide entry
 ##esearch -db nuccore -query NZ_CP029083.1 | efetch -format docsum > docsum_nucleotide_entry.txt
