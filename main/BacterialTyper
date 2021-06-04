@@ -216,7 +216,11 @@ options_group_qc.add_argument("-t", "--threads", type=int, help="Number of CPUs 
 
 dataset_group_qc = subparser_qc.add_argument_group("Datasets")
 dataset_group_qc.add_argument("-db", "--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= any(elem in annotation_options for elem in sys.argv))
-dataset_group_qc.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", required= any(elem in annotation_options for elem in sys.argv))
+dataset_group_qc.add_argument("--BUSCO_dataset", 
+                              dest='BUSCO_dbs', nargs='*', 
+                              help="""BUSCO dataset to use according to your sample(s) expected taxonomic range. Check --help_BUSCO for details.
+                              Options: 1) Provide a single dataset or multiple datasets if desired. 2) Provide 'auto-lineage' if auto-lineage detection mode desired. 
+                               """, required= any(elem in annotation_options for elem in sys.argv))
 
 info_group_qc = subparser_qc.add_argument_group("Additional information")
 info_group_qc.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")

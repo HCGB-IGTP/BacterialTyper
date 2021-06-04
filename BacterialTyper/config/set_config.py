@@ -310,6 +310,9 @@ def get_version(prog, path, Debug=False):
 		java_jar = java_bin + ' -jar ' + path + ' ' + args
 		cmd_output = subprocess.Popen(java_jar, shell=True, 
 									stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
+	
+	elif prog == 'generate_plot':
+		return("12")
 	else:
 		cmd = path + ' ' + args
 		cmd_output = subprocess.Popen(cmd, shell=True, 

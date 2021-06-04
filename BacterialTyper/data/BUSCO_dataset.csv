@@ -1,16 +1,100 @@
-"All bacteria dataset","bacteria","http://busco.ezlab.org/v2/datasets/bacteria_odb9.tar.gz"
-"phylum Proteobacteria all","proteobacteria","http://busco.ezlab.org/v2/datasets/proteobacteria_odb9.tar.gz"
-"phylum Proteobacteria: Alphaproteobacteria :: Order Rhizobiales","rhizobiales","http://busco.ezlab.org/v2/datasets/rhizobiales_odb9.tar.gz"
-"phylum Proteobacteria: Betaproteobacteria","betaproteobacteria","http://busco.ezlab.org/v2/datasets/betaproteobacteria_odb9.tar.gz"
-"phylum Proteobacteria: Gammaproteobacteria all","gammaproteobacteria","http://busco.ezlab.org/v2/datasets/gammaproteobacteria_odb9.tar.gz"
-"phylum Proteobacteria: Gammaproteobacteria :: Order Enterobacteriales","enterobacteriales","http://busco.ezlab.org/v2/datasets/enterobacteriales_odb9.tar.gz"
-"phylum Proteobacteria: Delta and Epsilon proteobacteria","deltaepsilonsub","http://busco.ezlab.org/v2/datasets/deltaepsilonsub_odb9.tar.gz"
-"phylum Actinobacteria","actinobacteria","http://busco.ezlab.org/v2/datasets/actinobacteria_odb9.tar.gz"
-"phylum Cyanobacteria","cyanobacteria","http://busco.ezlab.org/v2/datasets/cyanobacteria_odb9.tar.gz"
-"phylum Firmcutes all","firmicutes","http://busco.ezlab.org/v2/datasets/firmicutes_odb9.tar.gz"
-"phylum Firmcutes: Clostridia","clostridia","http://busco.ezlab.org/v2/datasets/clostridia_odb9.tar.gz"
-"phylum Firmcutes: Bacilli :: order Lactobacillales","lactobacillales","http://busco.ezlab.org/v2/datasets/lactobacillales_odb9.tar.gz"
-"phylum Firmcutes: Bacilli :: order Bacillales","bacillales","http://busco.ezlab.org/v2/datasets/bacillales_odb9.tar.gz"
-"phylum Bacteroidetes","bacteroidetes","http://busco.ezlab.org/v2/datasets/bacteroidetes_odb9.tar.gz"
-"phylum Spirochaetes","spirochaetes","http://busco.ezlab.org/v2/datasets/spirochaetes_odb9.tar.gz"
-"phylum Tenericutes","tenericutes","http://busco.ezlab.org/v2/datasets/tenericutes_odb9.tar.gz"
+Kindgom,Phylum,Class,Order,Family
+bacteria_odb10
+,acidobacteria_odb10
+,actinobacteria_phylum_odb10
+,,actinobacteria_class_odb10
+,,,corynebacteriales_odb10
+,,,micrococcales_odb10
+,,,propionibacteriales_odb10
+,,,streptomycetales_odb10
+,,,streptosporangiales_odb10
+,,coriobacteriia_odb10
+,,,coriobacteriales_odb10
+,aquificae_odb10
+,bacteroidetes-chlorobi_group_odb10
+,,bacteroidetes_odb10
+,,,bacteroidia_odb10
+,,,,bacteroidales_odb10
+,,,cytophagia_odb10
+,,,,cytophagales_odb10
+,,,flavobacteriia_odb10
+,,,,flavobacteriales_odb10
+,,,sphingobacteriia_odb10
+,,chlorobi_odb10
+,chlamydiae_odb10
+,chloroflexi_odb10
+,cyanobacteria_odb10
+,,chroococcales_odb10
+,,nostocales_odb10
+,,oscillatoriales_odb10
+,,synechococcales_odb10
+,firmicutes_odb10
+,,bacilli_odb10
+,,,bacillales_odb10
+,,,lactobacillales_odb10
+,,clostridia_odb10
+,,,clostridiales_odb10
+,,,thermoanaerobacterales_odb10
+,,selenomonadales_odb10
+,,tissierellia_odb10
+,,,tissierellales_odb10
+,fusobacteria_odb10
+,,fusobacteriales_odb10
+,planctomycetes_odb10
+,proteobacteria_odb10
+,,alphaproteobacteria_odb10
+,,,rhizobiales_odb10
+,,,,rhizobium-agrobacterium_group_odb10
+,,,rhodobacterales_odb10
+,,,rhodospirillales_odb10
+,,,rickettsiales_odb10
+,,,sphingomonadales_odb10
+,,betaproteobacteria_odb10
+,,,burkholderiales_odb10
+,,,neisseriales_odb10
+,,,nitrosomonadales_odb10
+,,delta-epsilon-subdivisions_odb10
+,,,deltaproteobacteria_odb10
+,,,,desulfobacterales_odb10
+,,,,desulfovibrionales_odb10
+,,,,desulfuromonadales_odb10
+,,,epsilonproteobacteria_odb10
+,,,,campylobacterales_odb10
+,,gammaproteobacteria_odb10
+,,,alteromonadales_odb10
+,,,cellvibrionales_odb10
+,,,chromatiales_odb10
+,,,enterobacterales_odb10
+,,,legionellales_odb10
+,,,oceanospirillales_odb10
+,,,pasteurellales_odb10
+,,,pseudomonadales_odb10
+,,,thiotrichales_odb10
+,,,vibrionales_odb10
+,,,xanthomonadales_odb10
+,spirochaetes_odb10
+,,spirochaetia_odb10
+,,,spirochaetales_odb10
+,synergistetes_odb10
+,tenericutes_odb10
+,,mollicutes_odb10
+,,,entomoplasmatales_odb10
+,,,mycoplasmatales_odb10
+,thermotogae_odb10
+,verrucomicrobia_odb10
+archaea_odb10
+,thaumarchaeota_odb10
+,thermoprotei_odb10
+,,thermoproteales_odb10
+,,sulfolobales_odb10
+,,desulfurococcales_odb10
+,euryarchaeota_odb10
+,,thermoplasmata_odb10
+,,methanococcales_odb10
+,,methanobacteria_odb10
+,,methanomicrobia_odb10
+,,,methanomicrobiales_odb10
+,,halobacteria_odb10
+,,,halobacteriales_odb10
+,,,natrialbales_odb10
+,,,haloferacales_odb10

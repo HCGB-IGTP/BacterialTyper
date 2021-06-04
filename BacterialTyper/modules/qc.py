@@ -240,12 +240,12 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 
 	## Check each using BUSCO
 	database_folder = os.path.abspath(options.database)
-	BUSCO_Database = database_folder + '/BUSCO'
+	BUSCO_Database = HCGB_files.create_subfolder('BUSCO', database_folder)
 	if not os.path.exists(BUSCO_Database):
 		HCGB_files.create_folder(BUSCO_Database)
 
 	## call
-	(dataFrame_results, stats_results) = BUSCO_call(options.BUSCO_dbs, pd_samples_retrieved, BUSCO_Database, options.threads, mode)
+	(dataFrame_results, stats_results) = BUSCO_caller.BUSCO_call(options.BUSCO_dbs, pd_samples_retrieved, BUSCO_Database, options.threads, mode)
 	
 	## debug message
 	if (options.debug):
@@ -275,7 +275,7 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 
 		## generate plots
 		print ("+ Generate summarizing plots...")
-		BUSCO_plots(dataFrame_results, BUSCO_report, options.threads)	
+		BUSCO_caller.BUSCO_plots(dataFrame_results, BUSCO_report, options.threads)	
 		print ('\n+ Check quality plots in folder: %s' %BUSCO_report)
 
 		##	TODO 
@@ -292,124 +292,3 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		print ('\n+ Check quality statistics in folder: %s' %BUSCO_report)
 	
 	return(dataFrame_results)
-
-################################################
-def BUSCO_call(datasets, pd_samples, database_folder, threads, mode):
-	## 
-	## argument mode = proteins or genome
-	##
-	
-	## get datasets
-	print ("+ Check folder provided as database for available BUSCO datasets...")
-	BUSCO_datasets = BUSCO_caller.BUSCO_retrieve_sets(datasets, database_folder)
-	
-	## BUSCO needs to chdir to output folder
-	path_here = os.getcwd()
-	
-	print ("+ Checking quality for each sample retrieved...")
-	## optimize threads: No need to optimize. There is a problem with the working dir of BUSCO and we need to change every time
-	# We can use a with statement to ensure threads are cleaned up promptly
-	with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor: ## need to do 1 by one as there is a problem with the working directory
-		for DataSet in BUSCO_datasets:
-			## send for each sample
-			commandsSent = { executor.submit( BUSCO_runner, row['name'], DataSet, row['sample'], BUSCO_datasets[DataSet], row['busco_folder'], threads, mode): name for name, row in pd_samples.iterrows() }
-
-			for cmd2 in concurrent.futures.as_completed(commandsSent):
-				details = commandsSent[cmd2]
-				try:
-					data = cmd2.result()
-				except Exception as exc:
-					print ('***ERROR:')
-					print (cmd2)
-					print('%r generated an exception: %s' % (details, exc))
-			
-			print ("+ Jobs finished for dataset %s\n+ Collecting information..." %DataSet)
-
-	print ("Finish here...")
-	os.chdir(path_here)
-	
-	## init dataframe
-	short_summary = pd.DataFrame(columns=('sample', 'dirname', 'name', 'ext', 'tag', 'busco_folder', 'busco_dataset', 'busco_summary', 'busco_results'))
-	stats_summary = pd.DataFrame()
-
-	## generate results
-	for DataSet in BUSCO_datasets:
-		for index, row in pd_samples.iterrows():
-			#my_BUSCO_results_folder = row['busco_folder'] + '/run_' + DataSet
-			my_BUSCO_results_folder = row['busco_folder'] + '/' + row['name'] + '/run_' + DataSet
-			my_short_txt = 	my_BUSCO_results_folder + '/short_summary_' + DataSet + '.txt'
-			
-			if os.path.isfile(my_short_txt):
-				short_summary.loc[len(short_summary)] = [ row['sample'], row['dirname'], row['name'], row['ext'], row['tag'], row['busco_folder'], DataSet, my_short_txt, my_BUSCO_results_folder ]
-				my_stats = BUSCO_caller.BUSCO_stats(my_short_txt, row['name'], DataSet)
-				stats_summary = pd.concat([stats_summary, my_stats])
-		
-	return (short_summary, stats_summary)
-
-################################################
-def BUSCO_runner(sample_name, DataSet, sample, dataset_path, output, threads, mode):
-	#file_name = os.path.basename(sample)
-	sample_name_dir = HCGB_files.create_subfolder(sample_name, output) ## to check in detached mode
-
-	## run busco	
-	code = BUSCO_caller.BUSCO_run( dataset_path, sample, threads, sample_name_dir, DataSet, mode)
-	
-	## retry it just in case
-	if (code == 'FAIL'):
-		BUSCO_caller.BUSCO_run( dataset_path, sample, threads, sample_name_dir, DataSet, mode)
-	else:
-		return ()
-
-################################################
-def BUSCO_plots(dataFrame_results, outdir, threads):
-
-	## DataFrame columns ('sample', 'dirname', 'name', 'ext', 'tag', 'busco_folder', 'busco_dataset', 'busco_summary', 'busco_results'))
-	list_datasets = set(dataFrame_results['busco_dataset'].tolist())
-	list_samples = set(dataFrame_results['name'].tolist())
-
-	plot_folder = HCGB_files.create_subfolder('BUSCO_plots', outdir)
-	outdir_busco_plot = []
-	
-	print ("+ Get results for all samples summarized by dataset:")
-	for dataset in list_datasets:
-		print ("\t+ Get results for: ", dataset)
-		plot_folder_dataset = HCGB_files.create_subfolder(dataset, plot_folder)
-		outdir_busco_plot.append(plot_folder_dataset)
-	
-		for index, row in dataFrame_results.iterrows():
-			if (dataset == row['busco_dataset']):
-				shutil.copy(row['busco_summary'], plot_folder_dataset + '/short_summary_' + dataset + '_' + row['name'] + '.txt')
-		
-	print ("+ Get results for summarized by sample:")
-	for sample in list_samples:
-		print ("\t+ Get results for: ", sample)
-		plot_folder_sample = HCGB_files.create_subfolder(sample, plot_folder)
-		outdir_busco_plot.append(plot_folder_sample)
-
-		for index, row in dataFrame_results.iterrows():
-			if (sample == row['name']):
-				shutil.copy(row['busco_summary'], plot_folder_sample + '/short_summary_' + row['busco_dataset'] + '_' + sample + '.txt')
-	
-	print ("+ Generate plots for each subset")
-	
-	## optimize threads
-	threads_job = 1  ## threads optimization
-	max_workers_int = threads
-
-	# We can use a with statement to ensure threads are cleaned up promptly
-	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor: ## need to do 1 by one as there is a problem with the working directory
-		## send for each sample
-		commandsSent = { executor.submit( BUSCO_caller.BUSCO_plot , plot): plot for plot in outdir_busco_plot }
-
-		for cmd2 in concurrent.futures.as_completed(commandsSent):
-			details = commandsSent[cmd2]
-			try:
-				data = cmd2.result()
-			except Exception as exc:
-				print ('***ERROR:')
-				print (cmd2)
-				print('%r generated an exception: %s' % (details, exc))
-			
-	print ("+ All plots generated...")
-	print ("+ Check results under folders in : ", plot_folder)		
-
