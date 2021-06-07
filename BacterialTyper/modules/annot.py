@@ -24,14 +24,12 @@ from BacterialTyper.modules import qc
 from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.modules import help_info
 
-from BacterialTyper.scripts import sampleParser
-from BacterialTyper.scripts import functions
-
-## my HCGB_python_functions modules
-##from HCGB.functions import time_functions
-##from HCGB.functions import system_call_functions
-##from HCGB.functions import aesthetics_functions
-##from HCGB import sampleParser
+import HCGB
+from HCGB import sampleParser
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
 
 ####################################
 def run_annotation(options):
@@ -78,11 +76,11 @@ def run_annotation(options):
 	options.batch = False
 	
 	### 
-	functions.pipeline_header()
-	functions.boxymcboxface("Assembly annotation")
+	HCGB_aes.pipeline_header()
+	HCGB_aes.boxymcboxface("Assembly annotation")
 
 	print ("--------- Starting Process ---------")
-	functions.print_time()
+	HCGB_time.print_time()
 
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
@@ -112,10 +110,10 @@ def run_annotation(options):
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
 	if not options.project:
-		functions.create_folder(outdir)
+		HCGB_files.create_folder(outdir)
 	
 	## for samples
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "annot")
+	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "annot")
 
 	## annotate
 	print ("+ Annotate assemblies using prokka:")
@@ -131,7 +129,7 @@ def run_annotation(options):
 
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())
-	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
 	max_workers_int = int(options.threads/threads_job)
 
 	## debug message
@@ -153,7 +151,7 @@ def run_annotation(options):
 				print('%r generated an exception: %s' % (details, exc))
 
 	## time stamp
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 
 	## get folders
 	givenList = [ v for v in outdir_dict.values() ]
@@ -161,17 +159,17 @@ def run_annotation(options):
 	print ("+ Detail information for each sample could be identified in separate folders:")
 	for folder in givenList:
 		print ('\t + ', folder)
-		protein_files.extend(functions.retrieve_matching_files(folder, '.faa'))
+		protein_files.extend(HCGB_main.retrieve_matching_files(folder, '.faa'))
 
 	### report generation
 	if (options.skip_report):
 		print ("+ No annotation report generation...")
 	else:
 		### report generation
-		functions.boxymcboxface("Annotation report")
-		outdir_report = functions.create_subfolder("report", outdir)
+		HCGB_aes.boxymcboxface("Annotation report")
+		outdir_report = HCGB_files.create_subfolder("report", outdir)
 		
-		PROKKA_report = functions.create_subfolder("annotation", outdir_report)
+		PROKKA_report = HCGB_files.create_subfolder("annotation", outdir_report)
 		print ('\n+ A summary HTML report of each sample is generated in folder: %s' %PROKKA_report)
 		
 		## check if previously report generated
@@ -179,7 +177,7 @@ def run_annotation(options):
 		done=0
 		if os.path.isdir(PROKKA_report):
 			if os.path.isfile(filename_stamp):
-				stamp =	functions.read_time_stamp(filename_stamp)
+				stamp =	HCGB_time.read_time_stamp(filename_stamp)
 				print (colored("\tA previous report generated results on: %s" %stamp, 'yellow'))
 				done=1
 		
@@ -191,10 +189,10 @@ def run_annotation(options):
 		
 			## success stamps
 			filename_stamp = PROKKA_report + '/.success'
-			stamp =	functions.print_time_stamp(filename_stamp)
+			stamp =	HCGB_time.print_time_stamp(filename_stamp)
 
 	## time stamp
-	start_time_partial_BUSCO = functions.timestamp(start_time_total)
+	start_time_partial_BUSCO = HCGB_time.timestamp(start_time_total)
 
 	## Check each annotation using BUSCO
 	results = qc.BUSCO_check(input_dir, outdir, options, start_time_partial_BUSCO, "proteins")
@@ -202,7 +200,7 @@ def run_annotation(options):
 	## print to file: results	 
 	
 	print ("\n*************** Finish *******************")
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 
 	print ("+ Exiting Annotation module.")
 	return()
@@ -214,7 +212,7 @@ def annot_caller(seq_file, sample_folder, options, name, threads):
 	filename_stamp = sample_folder + '/.success'
 
 	if os.path.isfile(filename_stamp):
-		stamp =	functions.read_time_stamp(filename_stamp)
+		stamp =	HCGB_time.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 	else:
 	

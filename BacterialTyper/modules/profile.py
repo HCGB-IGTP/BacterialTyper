@@ -19,15 +19,21 @@ import pandas as pd
 import shutil
 
 ## import my modules
-from BacterialTyper.scripts import functions
-from BacterialTyper.config import set_config
-from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import virulence_resistance
 from BacterialTyper.scripts import database_generator
 from BacterialTyper.scripts import ariba_caller
 from BacterialTyper.scripts import card_trick_caller
 from BacterialTyper.modules import help_info
 from BacterialTyper.scripts import database_user
+
+from BacterialTyper.config import set_config
+
+import HCGB
+from HCGB import sampleParser
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
 
 ####################################
 def run_profile(options):
@@ -67,10 +73,10 @@ def run_profile(options):
 		options.pair = True
 
 	## message header
-	functions.pipeline_header()
-	functions.boxymcboxface("Virulence & Resistance profile module")
+	HCGB_aes.pipeline_header()
+	HCGB_aes.boxymcboxface("Virulence & Resistance profile module")
 	print ("--------- Starting Process ---------")
-	functions.print_time()
+	HCGB_time.print_time()
 	
 	## absolute path for in & out
 	options.database = os.path.abspath(options.database)
@@ -100,9 +106,9 @@ def run_profile(options):
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
 	if not options.project:
-		functions.create_folder(outdir)
+		HCGB_files.create_folder(outdir)
 	## for each sample
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "profile")
+	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "profile")
 	
 	###
 	print ("+ Generate a sample profile for virulence and resistance candidate genes for each sample retrieved using:")
@@ -113,7 +119,7 @@ def run_profile(options):
 	retrieve_databases = get_options_db(options)
 	
 	## functions.timestamp
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 		
 	########
 	ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
@@ -123,9 +129,9 @@ def run_profile(options):
 	######################################
 	if not options.fast:
 		## functions.timestamp
-		start_time_partial = functions.timestamp(start_time_partial)
+		start_time_partial = HCGB_time.timestamp(start_time_partial)
 
-		functions.boxymcboxface("Update Sample Database")
+		HCGB_aes.boxymcboxface("Update Sample Database")
 
 		## update db
 		print ("+ Update database with samples identified")
@@ -140,7 +146,7 @@ def run_profile(options):
 		print ("+ No update of the database has been requested using option --fast")
 
 	print ("\n*************** Finish *******************")
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 
 	print ("+ Exiting Virulence & Resistance profile module.")
 	return()
@@ -192,7 +198,7 @@ def get_options_db(options):
 
 ####################################
 def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial):
-	functions.boxymcboxface("ARIBA Identification")
+	HCGB_aes.boxymcboxface("ARIBA Identification")
 
 	##################
 	## check status	##	
@@ -254,7 +260,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())
-	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
 	max_workers_int = int(options.threads/threads_job)
 
 	## debug message
@@ -282,7 +288,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 			print ("+ Jobs finished for database %s ..." %db2use)
 
 			## functions.timestamp
-			start_time_partial = functions.timestamp(start_time_partial)
+			start_time_partial = HCGB_time.timestamp(start_time_partial)
 			
 			print ("+ Collecting information for each sample analyzed:")
 			## check results for each database
@@ -290,7 +296,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 			results_df = pd.concat([results_df, results_df_tmp])
 						
 			## functions.timestamp
-			start_time_partial = functions.timestamp(start_time_partial)
+			start_time_partial = HCGB_time.timestamp(start_time_partial)
 
 	######################################################
 	## Generate final report for all samples
@@ -301,13 +307,13 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 	## parse results
 	if Project:
 		final_dir = input_dir + '/report/profile'
-		functions.create_folder(final_dir) 
+		HCGB_files.create_folder(final_dir) 
 	else:
 		final_dir = os.path.abspath(options.output_folder)
 
 	##
 	vfdb = False
-	subfolder = functions.create_subfolder("ariba_summary", final_dir)
+	subfolder = HCGB_files.create_subfolder("ariba_summary", final_dir)
 	## subfolder_samples = functions.create_subfolder("samples", final_dir) ## TODO: Copy all xlsx files to a common folder. Is it necessary?
 
 	## open excel writer
@@ -376,10 +382,10 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 	######################################################
 	if (vfdb):
 		print ("\n\n")
-		functions.print_sepLine("*", 50, False)
+		HCGB_aes.print_sepLine("*", 50, False)
 		print ("+ Check VFDB details in files downloaded from vfdb website:")
 		files_VFDB = virulence_resistance.check_VFDB(final_dir + '/VFDB_information')
-		functions.print_sepLine("*", 50, False)
+		HCGB_aes.print_sepLine("*", 50, False)
 
 	######################################################
 	print ("\n+ Please check additional summary files generated at folder ", final_dir)
@@ -395,7 +401,7 @@ def ariba_run_caller(db2use, list_files, folder_out, threads, cutoff):
 	## make stamp time
 	filename_stamp = folder_out + '/.success'
 	if os.path.isfile(filename_stamp):
-		stamp =	functions.read_time_stamp(filename_stamp)
+		stamp =	HCGB_time.read_time_stamp(filename_stamp)
 		files_names = [os.path.basename(s) for s in list_files]
 		print (colored("\tA previous command generated results on: %s [Files: %s]" %(stamp, files_names), 'yellow'))
 	
@@ -419,7 +425,7 @@ def get_outfile(output_dir, name, index_name):
 	if Project:
 		out_file = output_dir + '/' + basename	
 	else:
-		output_path = functions.create_subfolder(name, output_dir)
+		output_path = HCGB_files.create_subfolder(name, output_dir)
 		out_file = output_path + '/' + name + '_' + basename	
 	
 	## message debug

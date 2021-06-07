@@ -14,6 +14,37 @@ conda install -c conda-forge -c bioconda -c defaults prokka=1.14.6
 installs: 
 	bioperl, aragorn, tbl2asn, parallel, bedtools, barrnap, tcoffee, clustalw
 
+#----------------------------------------------------------------------------------------------#
+## some errors:
+UnsatisfiableError: The following specifications were found to be incompatible with each other:
+
+Output in format: Requested package -> Available versions
+
+Package libstdcxx-ng conflicts for:
+python=3.8 -> libstdcxx-ng[version='>=7.3.0|>=7.5.0|>=9.3.0']
+prokka=1.14.6 -> blast[version='>=2.7.1'] -> libstdcxx-ng[version='>=4.9|>=7.3.0|>=7.5.0|>=9.3.0']
+python=3.8 -> libffi[version='>=3.2.1,<3.3.0a0'] -> libstdcxx-ng[version='>=4.9|>=7.2.0']
+
+#----------------------------------------------------------------------------------------------#
+(BacterialTyper) jfsanchez@debian:~/tests/test_BacterialTyper$ conda config --describe channel_priority
+# # channel_priority (ChannelPriority)
+# #   Accepts values of 'strict', 'flexible', and 'disabled'. The default
+# #   value is 'flexible'. With strict channel priority, packages in lower
+# #   priority channels are not considered if a package with the same name
+# #   appears in a higher priority channel. With flexible channel priority,
+# #   the solver may reach into lower priority channels to fulfill
+# #   dependencies, rather than raising an unsatisfiable error. With channel
+# #   priority disabled, package version takes precedence, and the
+# #   configured priority of channels is used only to break ties. In
+# #   previous versions of conda, this parameter was configured as either
+# #   True or False. True is now an alias to 'flexible'.
+# # 
+# channel_priority: flexible
+
+(BacterialTyper) jfsanchez@debian:~/tests/test_BacterialTyper$ conda config --set channel_priority strict
+#----------------------------------------------------------------------------------------------#
+
+
 ## snippy
 conda install -c conda-forge -c bioconda -c defaults snippy=4.6
 installs:

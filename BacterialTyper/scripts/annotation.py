@@ -141,9 +141,9 @@ def prokka_call(prokka_bin, sequence_fasta, kingdom, genus, outdir_name, name, t
 	
 		- :func:`BacterialTyper.scripts.set_config.get_exe`
 		
-		- :func:`BacterialTyper.scripts.functions.read_time_stamp`
+		- :func:`HCGB.functions.time_functions.read_time_stamp`
 		
-		- :func:`BacterialTyper.scripts.functions.print_time_stamp`
+		- :func:`HCGB.functions.time_functions.print_time_stamp`
 				
 		- :func:`BacterialTyper.scripts.annotation.prokka_call`	
 	
@@ -157,7 +157,7 @@ def prokka_call(prokka_bin, sequence_fasta, kingdom, genus, outdir_name, name, t
 	if genus != "Other":
 		options = options + " --usegenus --genus " + genus
 	prokka = "%s --force --outdir %s --prefix %s --locustag %s %s --cpus %s %s 2> %s" %(prokka_bin, outdir_name, name, name, options, threads, sequence_fasta, log_file)
-	functions.system_call(prokka)
+	HCGB_sys.system_call(prokka)
 	return(outdir_name)
 
 ######
