@@ -64,7 +64,7 @@ def get_exe(prog, Debug=False, Return_Version=False):
 	"""
 	exe = ""
 	if prog in os.environ: 
-		exe = os.environ[env_var] ## python environent variables
+		exe = os.environ[prog] ## python environent variables
 	else:
 		exe = extern_progs.return_defatult_soft(prog) ## install in the system
 

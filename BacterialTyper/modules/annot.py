@@ -76,7 +76,7 @@ def run_annotation(options):
 	options.batch = False
 	
 	### 
-	HCGB_aes.pipeline_header()
+	HCGB_aes.pipeline_header("BacterialTyper")
 	HCGB_aes.boxymcboxface("Assembly annotation")
 
 	print ("--------- Starting Process ---------")
@@ -100,7 +100,7 @@ def run_annotation(options):
 	print ("+ Retrieve all genomes assembled...")
 
 	## get files
-	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"])
+	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "assembly", ["fna"], options.debug)
 
 	## debug message
 	if (Debug):
@@ -113,7 +113,7 @@ def run_annotation(options):
 		HCGB_files.create_folder(outdir)
 	
 	## for samples
-	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "annot")
+	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "annot", options.debug)
 
 	## annotate
 	print ("+ Annotate assemblies using prokka:")
@@ -159,7 +159,7 @@ def run_annotation(options):
 	print ("+ Detail information for each sample could be identified in separate folders:")
 	for folder in givenList:
 		print ('\t + ', folder)
-		protein_files.extend(HCGB_main.retrieve_matching_files(folder, '.faa'))
+		protein_files.extend(HCGB_main.retrieve_matching_files(folder, '.faa', Debug))
 
 	### report generation
 	if (options.skip_report):

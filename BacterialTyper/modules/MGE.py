@@ -215,7 +215,7 @@ def run_MGE(options):
 		functions.create_folder(outdir)
 
 	## for each sample
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "MGE")
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "MGE", options.debug)
 	
 	### time stamp
 	start_time_partial = start_time_total

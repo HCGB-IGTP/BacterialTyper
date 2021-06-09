@@ -25,7 +25,8 @@ from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 
 ## import my modules
-from BacterialTyper.scripts import functions
+import HCGB
+import HCGB.functions.system_call_functions as HCGB_sys
 from BacterialTyper.config import set_config
 
 ############
@@ -48,7 +49,7 @@ def call_fastqc(path, file1, file2, sample, fastqc_bin, threads):
 	       cmd_fastqc = '%s --extract -t %s -o %s %s %s > %s 2> %s' %(fastqc_bin, threads, path, file1, file2, logFile, logFile)
 	
     ## send command	
-	return (functions.system_call( cmd_fastqc ))
+	return (HCGB_sys.system_call( cmd_fastqc ))
 		
 	
 ############

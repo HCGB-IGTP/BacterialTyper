@@ -45,7 +45,7 @@ def perl_package_install_targz(name, version2install, http_tar_gz, install_dir, 
     functions.wget_download(http_tar_gz, path2download_name)
 
     ## get targz file
-    tar_gz = functions.retrieve_matching_files(path2download_name, 'tar.gz')
+    tar_gz = functions.retrieve_matching_files(path2download_name, 'tar.gz', Debug)
     functions.extract(tar_gz[0], path2download_name)
 
     ## debugging messages
@@ -93,7 +93,7 @@ def install_package_targz(package_path, install_path, Debug, name):
     print ("## Installing module: " + name + " ##")
 
     ## perl Makefile.PL
-    makefile_perl = functions.retrieve_matching_files(package_path, "Makefile.PL")
+    makefile_perl = functions.retrieve_matching_files(package_path, "Makefile.PL", Debug)
     perl_exe = set_config.get_exe("perl", Debug)
 
     ## two installation possibilities: Makefile.PL or Build.PL
@@ -132,7 +132,7 @@ def install_package_targz(package_path, install_path, Debug, name):
             return('n.a.')
     else:
         ## perl Makefile.PL
-        Build_perl = functions.retrieve_matching_files(package_path, "Build.PL")
+        Build_perl = functions.retrieve_matching_files(package_path, "Build.PL", Debug)
         if (Build_perl):
             print ("+ Create Build file")
             perl_build_cmd = perl_exe + ' ' + Build_perl[0]

@@ -18,14 +18,20 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper.scripts import functions
-from BacterialTyper.config import set_config
-from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import species_identification_KMA
 from BacterialTyper.scripts import database_generator
 from BacterialTyper.scripts import MLSTar
 from BacterialTyper.scripts import edirect_caller
 from BacterialTyper.modules import help_info
+from BacterialTyper.config import set_config
+
+import HCGB
+from HCGB import sampleParser
+
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
 
 ####################################
 def run_ident(options):
@@ -82,11 +88,11 @@ def run_ident(options):
 		options.pair = True
 
 	### species_identification_KMA -> most similar taxa
-	functions.pipeline_header()
-	functions.boxymcboxface("Species identification")
+	HCGB_aes.pipeline_header()
+	HCGB_aes.boxymcboxface("Species identification")
 
 	print ("--------- Starting Process ---------")
-	functions.print_time()
+	HCGB_time.print_time()
 
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
@@ -106,7 +112,7 @@ def run_ident(options):
 		Project=True
 
 	## get files
-	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
+	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "trim", ['_trim'], options.debug)
 	
 	## debug message
 	if (Debug):
@@ -116,9 +122,9 @@ def run_ident(options):
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
 	if not options.project:
-		functions.create_folder(outdir)
+		HCGB_files.create_folder(outdir)
 	## for each sample
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "ident")	
+	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "ident", options.debug)	
 	
 	## let's start the process
 	print ("+ Generate an species typification for each sample retrieved using:")
@@ -129,7 +135,7 @@ def run_ident(options):
 	retrieve_databases = get_options_db(options)
 	
 	## time stamp
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 	
 	## debug message
 	if (Debug):
@@ -142,7 +148,7 @@ def run_ident(options):
 	dataFrame_kma = KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
 	
 	## functions.timestamp
-	start_time_partial = functions.timestamp(start_time_partial)
+	start_time_partial = HCGB_time.timestamp(start_time_partial)
 	
 	## debug message
 	if (Debug):
@@ -171,7 +177,7 @@ def run_ident(options):
 		dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict, Debug)
 		
 		## functions.timestamp
-		start_time_partial = functions.timestamp(start_time_partial)
+		start_time_partial = HCGB_time.timestamp(start_time_partial)
 	
 		## debug message
 		if (Debug):
@@ -185,7 +191,7 @@ def run_ident(options):
 		MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, dataFrame_edirect, retrieve_databases)
 	
 		## functions.timestamp
-		start_time_partial = functions.timestamp(start_time_partial)
+		start_time_partial = HCGB_time.timestamp(start_time_partial)
 
 		## debug message
 		if (Debug):
@@ -197,7 +203,7 @@ def run_ident(options):
 
 	## generate summary for sample: all databases
 	## MLST, plasmids, genome, etc
-	functions.boxymcboxface("Results Summary")
+	HCGB_aes.boxymcboxface("Results Summary")
 	
 	#####################################
 	## Summary identification results  ##
@@ -206,12 +212,12 @@ def run_ident(options):
 	## parse results
 	if options.project:
 		final_dir = outdir + '/report/ident'
-		functions.create_folder(final_dir) 
+		HCGB_files.create_folder(final_dir) 
 	else:
 		final_dir = outdir
 
 	###
-	excel_folder = functions.create_subfolder("samples", final_dir)
+	excel_folder = HCGB_files.create_subfolder("samples", final_dir)
 	print ('+ Print summary results in folder: ', final_dir)
 	print ('+ Print sample results in folder: ', excel_folder)
 	
@@ -285,14 +291,14 @@ def run_ident(options):
 	print ("\n+ Check summary of results in file generated" )
 	
 	### timestamp
-	start_time_partial = functions.timestamp(start_time_partial)
+	start_time_partial = HCGB_time.timestamp(start_time_partial)
 	
 	######################################
 	## update database for later usage
 	######################################
 	if not options.fast:
 
-		functions.boxymcboxface("Update Sample Database")
+		HCGB_aes.boxymcboxface("Update Sample Database")
 
 		## update db
 		print ("+ Update database with samples identified")
@@ -318,7 +324,7 @@ def run_ident(options):
 		print ("+ No update of the database has been requested using option --fast")
 		
 	print ("\n*************** Finish *******************")
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 
 	print ("+ Exiting identification module.")
 	return()
@@ -367,7 +373,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	"""
 	
 	### print header
-	functions.boxymcboxface("KMA Identification")
+	HCGB_time.boxymcboxface("KMA Identification")
 
 	## set defaults
 	kma_bin = set_config.get_exe("kma")	
@@ -397,7 +403,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())
-	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
 	max_workers_int = int(options.threads/threads_job)
 
 	## debug message
@@ -417,7 +423,10 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			print ("+ Loading database on memory for faster identification.")
 			return_code_load = species_identification_KMA.load_db(kma_bin, db2use)
 			## send for each sample
-			commandsSent = { executor.submit(send_kma_job, outdir_dict[name], sorted(cluster["sample"].tolist()), name, db2use, threads_job, Debug): name for name, cluster in sample_frame }
+			commandsSent = { executor.submit(send_kma_job, 
+											outdir_dict[name], 
+											sorted(cluster["sample"].tolist()), 
+											name, db2use, threads_job, Debug): name for name, cluster in sample_frame }
 
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
@@ -436,7 +445,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 				print (colored("***ERROR: Removing database from memory failed. Please do it manually! Execute command: %s" %cmd_rm_db,'red'))
 		
 			## functions.timestamp
-			time_partial = functions.timestamp(time_partial)
+			time_partial = HCGB_time.timestamp(time_partial)
 		
 	## parse results		
 	print ("+ KMA identification call finished for all samples...")
@@ -454,7 +463,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 			
 			## get result
 			## outdir_KMA
-			outdir_dict_kma = functions.create_subfolder("kma", outdir_dict[name])
+			outdir_dict_kma = HCGB_files.create_subfolder("kma", outdir_dict[name])
 			result = get_outfile(outdir_dict_kma, name, db2use)
 			#print ('\t- File: ' + result + '.spa')
 			
@@ -544,7 +553,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, Debug):
 		print ("database: " + database)
 		
 	## outdir_KMA
-	outdir_dict_kma = functions.create_subfolder("kma", outdir_file)
+	outdir_dict_kma = HCGB_files.create_subfolder("kma", outdir_file)
 
 	## set defaults
 	kma_bin = set_config.get_exe("kma")
@@ -562,7 +571,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, Debug):
 		print ("Filename_stamp: ", filename_stamp)
 	
 	if os.path.isfile(filename_stamp):
-		stamp =	functions.read_time_stamp(filename_stamp)
+		stamp =	HCGB_time.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 	else:
 		## debug message
@@ -586,7 +595,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, Debug):
 	
 		# Call KMA
 		species_identification_KMA.kma_ident_call(outfile, list_files, name, database, kma_bin, option, threads)
-		stamp =	functions.print_time_stamp(filename_stamp)
+		stamp =	HCGB_time.print_time_stamp(filename_stamp)
 
 ####################################
 def get_outfile(output_dir, name, index_name):
@@ -607,7 +616,7 @@ def get_outfile(output_dir, name, index_name):
 	if Project:
 		output_path = output_dir
 	else:
-		output_path = functions.create_subfolder(name, output_dir)
+		output_path = HCGB_files.create_subfolder(name, output_dir)
 		
 	out_file = output_path + '/' + name + '_' + basename_tag	
 	return(out_file)
@@ -660,7 +669,7 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
 	################################################
 	
 	## edirect	
-	functions.boxymcboxface("EDirect information")
+	HCGB_aes.boxymcboxface("EDirect information")
 	print ("+ Connect to NCBI to get information from samples identified...")
 
 	## create dataframe to return results
@@ -681,7 +690,7 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
 			print (grouped)
 		
 		## use edirect to get Species_name and entry for later identification
-		edirect_folder = functions.create_subfolder('edirect', outdir_dict[name])
+		edirect_folder = HCGB_files.create_subfolder('edirect', outdir_dict[name])
 		
 		## chromosome match
 		if (len(grouped.loc[grouped['Database'] == 'bacteria.ATG']['#Template']) == 0):
@@ -704,7 +713,7 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
 			filename_stamp = edirect_folder + '/.success_species'
 					
 			if os.path.isfile(filename_stamp):
-				stamp =	functions.read_time_stamp(filename_stamp)
+				stamp =	HCGB_time.read_time_stamp(filename_stamp)
 				print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 				status=True	
 			else: 
@@ -718,7 +727,7 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
 				print ("NO INFORMATION")
 				continue
 
-			taxa_name_tmp = functions.get_info_file(tmp_species_outfile)
+			taxa_name_tmp = HCGB_main.get_info_file(tmp_species_outfile)
 			Organism = taxa_name_tmp[0].split(',')[0].split()
 			genus = Organism[0] 							## genus
 			species = Organism[1] 							## species
@@ -739,13 +748,13 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
 			edirect_caller.generate_xtract_call(out_docsum_file_assembly, 'DocumentSummary', 'Genbank', AssemblyAcc_outfile) 
 			
 			## some error occurred
-			if not functions.is_non_zero_file(out_docsum_file_assembly):
+			if not HCGB_main.is_non_zero_file(out_docsum_file_assembly):
 				continue
 			
 			## Is it better to download Refseq or Genbank?
 			## https://www.quora.com/What-is-the-difference-between-Refseq-and-Genbank		
 			
-			GenbankAcc = functions.get_info_file(AssemblyAcc_outfile)
+			GenbankAcc = HCGB_main.get_info_file(AssemblyAcc_outfile)
 			if Debug:
 				print("Sample: ", name)
 				print("Genbank Acc: ", GenbankAcc[0])
@@ -760,7 +769,7 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
 		#("sample", "taxa", strain, genome "BioSample", "Plasmids"))
 		edirect_frame.loc[len(edirect_frame)] = (name, genus, species, strain, BioSample_name, GenbankAcc[0], plasmid_entries_str)
 
-		stamp =	functions.print_time_stamp(filename_stamp)
+		stamp =	HCGB_time.print_time_stamp(filename_stamp)
 
 	## debugging messages
 	if Debug:
@@ -810,7 +819,7 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 		
 		- :func:`BacterialTyper.scripts.MLSTar.run_MLSTar`
 		
-		- :func:`BacterialTyper.scripts.sampleParser.get_files`
+		- :func:`HCGB.sampleParser.files.get_files`
 		
 		- :func:`BacterialTyper.scripts.MLSTar.get_MLSTar_species`
 		
@@ -834,12 +843,12 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 		print (dataFrame_edirect)
 
 	## MLST call	
-	functions.boxymcboxface("MLST typing")
+	HCGB_aes.boxymcboxface("MLST typing")
 	print ("+ Create classical MLST typification of each sample according to species retrieved by kmer...")
 
 	## get assembly files
 	input_dir = os.path.abspath(options.input)
-	assembly_samples_retrieved = sampleParser.get_files(options, input_dir, "assembly", ["fna"])
+	assembly_samples_retrieved = sampleParser.files.get_files(options, input_dir, "assembly", ["fna"], options.debug)
 
 	## debug message
 	if (Debug):
@@ -883,12 +892,12 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 				## 
 				if MLSTar_taxa_name == species_mlst:		
 					if os.path.isfile(filename_stamp):
-						stamp =	functions.read_time_stamp(filename_stamp)
+						stamp =	HCGB_time.read_time_stamp(filename_stamp)
 						print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
 					else:
 						### get scheme available
 						MLSTar.getPUBMLST(MLSTar_taxa_name, rscript, output_file)
-						stamp =	functions.print_time_stamp(filename_stamp)
+						stamp =	HCGB_time.print_time_stamp(filename_stamp)
 
 					## parse and get scheme for classical MLST
 					schemes_MLST = pd.read_csv(output_file, sep=',', header=0)
@@ -900,7 +909,7 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 							continue			
 					### 
 					sample = row['sample']
-					MLSTar_folder = functions.create_subfolder('MLST', outdir_dict[sample])
+					MLSTar_folder = HCGB_files.create_subfolder('MLST', outdir_dict[sample])
 					genome_file = assembly_samples_retrieved.loc[assembly_samples_retrieved['name'] == sample]['sample'].values[0]
 	
 					## call MLST
@@ -1063,7 +1072,7 @@ def get_options_db(options):
 	###############
 	print ("\n+ Parsing information to retrieve databases")
 	print ("+ Reading from database: " + database2use)
-	functions.print_sepLine("-",50, False)
+	HCGB_aes.print_sepLine("-",50, False)
 
 	###############
 	## debug message
@@ -1074,7 +1083,7 @@ def get_options_db(options):
 	pd_KMA = database_generator.getdbs("KMA", database2use, option_db, Debug)
 	pd_PubMLST = database_generator.getdbs("MLST", database2use, option_db_PubMLST, Debug)
 
-	functions.print_sepLine("-",50, False)
+	HCGB_aes.print_sepLine("-",50, False)
 
 	## return both dataframes
 	pd_Merge = pd.concat([pd_KMA, pd_PubMLST], sort=True, ignore_index=True)

@@ -24,12 +24,18 @@ from Bio import SeqIO
 import concurrent.futures
 
 ## import my modules
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts import species_identification_KMA
 from BacterialTyper.scripts import min_hash_caller
 from BacterialTyper.scripts import database_generator
-from BacterialTyper.scripts import sampleParser
+
+## HCGB module
+from HCGB import sampleParser
+import HCGB
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.main_functions as HCGB_main
 
 ##########################################################################################
 def update_database_user_data(database_folder, project_folder, Debug, options):
@@ -77,7 +83,7 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 	print ("\n+ Updating information from user data folder: ", project_folder)
 	
 	## create folder
-	own_data = functions.create_subfolder("user_data", database_folder)
+	own_data = HCGB_files.create_subfolder("user_data", database_folder)
 	
 	## Default missing options
 	options.project = True
@@ -110,7 +116,7 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 		print("project_all_data")
 		print(project_all_data)
 	
-	functions.print_sepLine("-", 75, False)
+	HCGB_aes.print_sepLine("-", 75, False)
 	print ('\n+ Get database information')
 	db_frame = database_generator.getdbs('user_data', database_folder, 'user_data', Debug)
 	user_data_db = database_generator.get_database(db_frame, Debug)
@@ -122,7 +128,7 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 	## optimize threads
 	####################################
 	name_list = project_all_data.index.values.tolist()
-	threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+	threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
 	max_workers_int = int(options.threads/threads_job)
 
 	## debug message
@@ -132,7 +138,7 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
 
 	
-	functions.print_sepLine("-", 75, False)
+	HCGB_aes.print_sepLine("-", 75, False)
 	print ('\n+ Updating information using %s threads and %s parallel jobs' %(options.threads, max_workers_int))
 
 	####################################
@@ -150,7 +156,7 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 				print (cmd2)
 				print('%r generated an exception: %s' % (details, exc))
 	
-	functions.print_sepLine("+", 75, False)
+	HCGB_aes.print_sepLine("+", 75, False)
 	print ("\n+ Retrieve information ...")
 
 	####################################
@@ -160,7 +166,7 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 		###### dump to file
 		info_file = own_data + '/' + name + '/info.txt'
 		if os.path.exists(info_file):
-			dataGot = functions.get_data(info_file, ',', 'index_col=0')
+			dataGot = HCGB_main.get_data(info_file, ',', 'index_col=0')
 			dataGot = dataGot.set_index('ID')
 		
 			if (options.debug):
@@ -174,7 +180,7 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 		print (colored("**DEBUG: user_data_db dataframe **", 'yellow'))
 		print (user_data_db)
 
-	functions.print_sepLine("+", 75, False)	
+	HCGB_aes.print_sepLine("+", 75, False)	
 
 	####################################
 	## update db		
@@ -191,15 +197,15 @@ def get_userData_files(options, project_folder):
 	## get information regarding files
 
 	## get assembly files
-	pd_samples_assembly = sampleParser.get_files(options, project_folder, "assembly", ["fna"])
+	pd_samples_assembly = sampleParser.files.get_files(options, project_folder, "assembly", ["fna"], options.debug)
 	pd_samples_assembly = pd_samples_assembly.set_index('name')
 
 	## get annotation files
-	pd_samples_annot = sampleParser.get_files(options, project_folder, "annot", ['gbf', 'faa', 'gff'])
+	pd_samples_annot = sampleParser.files.get_files(options, project_folder, "annot", ['gbf', 'faa', 'gff'], options.debug)
 	pd_samples_annot = pd_samples_annot.set_index('name')
 
 	## get trimmed ngs files
-	pd_samples_reads = sampleParser.get_files(options, project_folder, "trim", ['_trim'])
+	pd_samples_reads = sampleParser.files.get_files(options, project_folder, "trim", ['_trim'], options.debug)
 	pd_samples_reads = pd_samples_reads.set_index('name')
 
 	## debug message
@@ -238,17 +244,17 @@ def get_userData_info(options, project_folder):
 		## additional information: MGE, etc
 
 	## get profile information
-	pd_samples_profile = sampleParser.get_files(options, project_folder, "profile", ["csv"])
+	pd_samples_profile = sampleParser.files.get_files(options, project_folder, "profile", ["csv"], options.debug)
 	if not pd_samples_profile.empty:
 		pd_samples_profile = pd_samples_profile.set_index('name')
 
 	## get identification information
-	pd_samples_ident = sampleParser.get_files(options, project_folder, "ident", ["csv"])
+	pd_samples_ident = sampleParser.files.get_files(options, project_folder, "ident", ["csv"], options.debug)
 	if not pd_samples_ident.empty:
 		pd_samples_ident = pd_samples_ident.set_index('name')
 	
 	## get mash information
-	pd_samples_mash = sampleParser.get_files(options, project_folder, "mash", ["sig"])
+	pd_samples_mash = sampleParser.files.get_files(options, project_folder, "mash", ["sig"], options.debug)
 	if not pd_samples_mash.empty:
 		pd_samples_mash = pd_samples_mash.set_index('name')
 
@@ -298,7 +304,7 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 	############################################
 
 	## generate sample
-	dir_sample = functions.create_subfolder(name, own_data)
+	dir_sample = HCGB_files.create_subfolder(name, own_data)
 	
 	if name in user_data_db.index:
 		print (colored("\t\t+ Data available in database for sample: %s. Checking integrity..." %name, 'yellow'))
@@ -311,7 +317,7 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 	##########
 	## assembly
 	##########
-	assembly_dir = functions.create_subfolder('assembly', dir_sample)
+	assembly_dir = HCGB_files.create_subfolder('assembly', dir_sample)
 	assembly_file = cluster.loc[cluster['tag'] == 'assembly']['sample'].to_list()
 	if assembly_file:
 		assembly_file_name = os.path.basename(assembly_file[0])
@@ -324,7 +330,7 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 	##########
 	## annot
 	##########
-	annot_dir = functions.create_subfolder('annot', dir_sample)
+	annot_dir = HCGB_files.create_subfolder('annot', dir_sample)
 	annot_files = cluster.loc[cluster['tag'] == 'annot']['sample'].to_list()
 	prof = ""
 	gff = ""
@@ -347,7 +353,7 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 	##########
 	## trimm
 	##########
-	trimm_dir = functions.create_subfolder('trimm', dir_sample)
+	trimm_dir = HCGB_files.create_subfolder('trimm', dir_sample)
 	reads_files = cluster.loc[cluster['tag'] == 'reads']['sample'].to_list()
 	reads = []
 	if reads_files:
@@ -361,7 +367,7 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 	##########
 	## ident
 	##########
-	ident_dir = functions.create_subfolder('ident', dir_sample)
+	ident_dir = HCGB_files.create_subfolder('ident', dir_sample)
 	ident_file = cluster.loc[cluster['tag'] == 'ident']['sample'].to_list()
 	if ident_file:
 		file_name = os.path.basename(ident_file[0])
@@ -374,7 +380,7 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 	##########
 	## profile
 	##########
-	profile_dir = functions.create_subfolder('profile', dir_sample)
+	profile_dir = HCGB_files.create_subfolder('profile', dir_sample)
 	profile_files = cluster.loc[cluster['tag'] == 'profile']['sample'].to_list()
 	profile_file = []
 	if profile_files:
@@ -388,7 +394,7 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 	##########
 	## mash profile
 	##########
-	mash_dir = functions.create_subfolder('mash', dir_sample)
+	mash_dir = HCGB_files.create_subfolder('mash', dir_sample)
 	mash_file = cluster.loc[cluster['tag'] == 'mash']['sample'].to_list()
 	if mash_file:
 		file_name = os.path.basename(mash_file[0])
@@ -416,7 +422,7 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 
 	###### timestamp
 	filename_stamp = dir_sample + '/.success'
-	stamp =	functions.print_time_stamp(filename_stamp)
+	stamp =	HCGB_time.print_time_stamp(filename_stamp)
 
 	return()
 

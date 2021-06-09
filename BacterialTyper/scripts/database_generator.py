@@ -604,7 +604,7 @@ def getdbs(source, database_folder, option, debug):
 							print ('\t\t+ Rename into: ', entry_strain)
 													
 																	 
-						list_msh = HCGB_main.retrieve_matching_files(this_db, '.sig')
+						list_msh = HCGB_main.retrieve_matching_files(this_db, '.sig', debug)
 						if (list_msh):
 							## print original in file
 							file2print = this_db + '/.original'
@@ -616,7 +616,7 @@ def getdbs(source, database_folder, option, debug):
 							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry_strain, list_msh[0], this_db + '/mash/' + original[0], original[1], original[2], this_db]
 						else:
 							## index assembly or reads...
-							list_fna = HCGB_main.retrieve_matching_files(this_db, 'genomic.fna')
+							list_fna = HCGB_main.retrieve_matching_files(this_db, 'genomic.fna', debug)
 
 							## not available
 							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry_strain, 'NaN', list_fna[0], 'NaN', 'NaN', this_db]
@@ -645,7 +645,7 @@ def getdbs(source, database_folder, option, debug):
 						db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, this_mash_db, this_db + '/mash/' + original[0], original[1], original[2], this_db + '/mash']
 					else:
 						## not available
-						list_fna = HCGB_main.retrieve_matching_files(this_db + '/assembly', '.fna')
+						list_fna = HCGB_main.retrieve_matching_files(this_db + '/assembly', '.fna', debug)
 						db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, 'NaN', list_fna[0], 'NaN', 'NaN', this_db + '/mash']
 
 	#### external_data

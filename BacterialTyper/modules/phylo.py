@@ -17,15 +17,21 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper.scripts import functions
-from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
-from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import database_generator
 from BacterialTyper.scripts import database_user
 from BacterialTyper.scripts import variant_calling
 from BacterialTyper.scripts import phylo_parser
+from BacterialTyper.config import set_config
 
+from BacterialTyper.scripts import functions
+
+import HCGB
+from HCGB import sampleParser
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
 ####################################
 def run_phylo(options):
     """
@@ -61,11 +67,11 @@ def run_phylo(options):
     else:
         options.pair = True
 
-    functions.pipeline_header()
-    functions.boxymcboxface("Phylogenetic reconstruction")
+    HCGB_aes.pipeline_header("BacterialTyper")
+    HCGB_aes.boxymcboxface("Phylogenetic reconstruction")
 
     print ("--------- Starting Process ---------")
-    functions.print_time()
+    HCGB_time.print_time()
 
     ## absolute path for in & out
     input_dir = os.path.abspath(options.input)
@@ -92,7 +98,7 @@ def run_phylo(options):
     ## generate output folder, if necessary
     print ("\n+ Create output folder(s):")
     if not options.project:
-        functions.create_folder(outdir)
+        HCGB_files.create_folder(outdir)
     
     ##################################
     ## select samples and map    
@@ -105,15 +111,15 @@ def run_phylo(options):
         print (dict_folders)
     
     ## time stamp
-    start_time_partial = functions.timestamp(start_time_total)
+    start_time_partial = HCGB_time.timestamp(start_time_total)
 
     ##################################
     ## Create core alingment
     ##################################
-    outdir_report = functions.create_subfolder("report", outdir)
-    phylo_dir = functions.create_subfolder("phylo", outdir_report)
-    analysis_dir = functions.create_subfolder(options.name, phylo_dir)
-    snippy_dir = functions.create_subfolder("snippy", analysis_dir)
+    outdir_report = HCGB_files.create_subfolder("report", outdir)
+    phylo_dir = HCGB_files.create_subfolder("phylo", outdir_report)
+    analysis_dir = HCGB_files.create_subfolder(options.name, phylo_dir)
+    snippy_dir = HCGB_files.create_subfolder("snippy", analysis_dir)
         
     list_folders = list(dict_folders.values())
     options_string = ""
@@ -121,10 +127,10 @@ def run_phylo(options):
                                      snippy_dir, options.output_format, Debug)
 
     ## time stamp
-    start_time_partial = functions.timestamp(start_time_total)
+    start_time_partial = HCGB_time.timestamp(start_time_total)
 
     ## snp distance matrix
-    snp_distance_dir = functions.create_subfolder("snp_distance", analysis_dir)
+    snp_distance_dir = HCGB_files.create_subfolder("snp_distance", analysis_dir)
     name_matrix = os.path.join(snp_distance_dir, "snp_matrix_" + options.name)
     
     countGaps = False
@@ -132,17 +138,17 @@ def run_phylo(options):
     phylo_parser.get_snp_distance(aln_file, options.output_format, countGaps, name_matrix, Debug)
     
     ## time stamp
-    start_time_partial = functions.timestamp(start_time_total)
+    start_time_partial = HCGB_time.timestamp(start_time_total)
 
     ## phylogenetic analysis
-    iqtree_output = functions.create_subfolder("iqtree", analysis_dir)
+    iqtree_output = HCGB_files.create_subfolder("iqtree", analysis_dir)
     phylo_parser.ml_tree(snippy_dir, options.name, options.threads, iqtree_output, Debug)
     
     ## time stamp
-    start_time_partial = functions.timestamp(start_time_total)
+    start_time_partial = HCGB_files.timestamp(start_time_total)
 
     print ("\n*************** Finish *******************")
-    start_time_partial = functions.timestamp(start_time_total)
+    start_time_partial = HCGB_time.timestamp(start_time_total)
 
     print ("+ Exiting Annotation module.")
     return()
@@ -161,14 +167,14 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     ## all_data // only_project_data
     if (options.all_data or options.only_project_data):
         ## get files to map
-        pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
+        pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "trim", ['_trim'], options.debug)
         
         ## discard the sample used as reference if any
         if options.project_sample_ID:
             pd_samples_retrieved = pd_samples_retrieved.drop(index=options.project_sample_ID)
     
         ## create output directories
-        outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "phylo")
+        outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "phylo", options.debug)
     
     ####################################
     ## user_data // genbank_data // only_external_data
@@ -186,7 +192,7 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
             db_frame_user_Data = db_frame_user_Data.drop(index=options.user_sample_ID) ## Why not this?
             
         ## create output directories in database entries in user_data
-        outdir_dict2 = functions.outdir_subproject(os.path.join(options.database, 'user_data'), db_frame_user_Data, "phylo")
+        outdir_dict2 = HCGB_files.outdir_subproject(os.path.join(options.database, 'user_data'), db_frame_user_Data, "phylo")
         
         ## If user desires to map contigs, map trimmed as default
         if (contig_option):
@@ -233,7 +239,7 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
 
     # optimize threads
     name_list = set(pd_samples_retrieved_merge["name"].tolist())
-    threads_job = functions.optimize_threads(options.threads, len(name_list)) ## threads optimization
+    threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
     max_workers_int = int(options.threads/threads_job)
 
     ## debug message
@@ -301,7 +307,7 @@ def get_reference_gbk(options):
                 print (colored("**DEBUG: gff:" + gff, 'yellow'))
                 print (colored("**DEBUG: gbk:" + gbk, 'yellow'))
                 
-        if functions.is_non_zero_file(gbk):
+        if HCGB_main.is_non_zero_file(gbk):
             print('\t+ Genbank file format reference available.')
             reference_gbk_file = gbk
         else:
@@ -351,7 +357,7 @@ def get_reference_gbk(options):
             print ('gbk:' + gbk)
   
         ## check if exists
-        if functions.is_non_zero_file(gbk):
+        if HCGB_main.is_non_zero_file(gbk):
             print('\t+ Genbank file format reference available.')
             reference_gbk_file = gbk
         else:

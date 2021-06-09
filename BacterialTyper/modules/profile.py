@@ -73,7 +73,7 @@ def run_profile(options):
 		options.pair = True
 
 	## message header
-	HCGB_aes.pipeline_header()
+	HCGB_aes.pipeline_header("BacterialTyper")
 	HCGB_aes.boxymcboxface("Virulence & Resistance profile module")
 	print ("--------- Starting Process ---------")
 	HCGB_time.print_time()
@@ -96,7 +96,7 @@ def run_profile(options):
 		Project=True
 	
 	## get files
-	pd_samples_retrieved = sampleParser.get_files(options, input_dir, "trim", ['_trim'])
+	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "trim", ['_trim'], options.debug)
 	
 	## debug message
 	if (Debug):
@@ -108,7 +108,7 @@ def run_profile(options):
 	if not options.project:
 		HCGB_files.create_folder(outdir)
 	## for each sample
-	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "profile")
+	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "profile", options.debug)
 	
 	###
 	print ("+ Generate a sample profile for virulence and resistance candidate genes for each sample retrieved using:")

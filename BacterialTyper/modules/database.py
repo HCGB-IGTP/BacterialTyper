@@ -19,10 +19,14 @@ from BacterialTyper.scripts import database_user
 from BacterialTyper.scripts import ariba_caller
 from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.scripts import species_identification_KMA
-from BacterialTyper.config import set_config 
-from BacterialTyper.scripts import functions
 from BacterialTyper.scripts import BUSCO_caller
+from BacterialTyper.config import set_config 
 
+import HCGB
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
 ###############################################################
 def run_database(options):
 
@@ -39,10 +43,10 @@ def run_database(options):
 		Debug = False
 
 	## message header
-	functions.pipeline_header()
-	functions.boxymcboxface("Database")
+	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.boxymcboxface("Database")
 	print ("--------- Starting Process ---------")
-	functions.print_time()
+	HCGB_time.print_time()
 
 	kma_bin = set_config.get_exe("kma")
 
@@ -65,7 +69,7 @@ def run_database(options):
 	## create folder
 	## absolute
 	options.path = os.path.abspath(options.path)	
-	functions.create_folder(options.path)
+	HCGB_files.create_folder(options.path)
 
 	#########
 	if Debug:
@@ -77,18 +81,18 @@ def run_database(options):
 	## if any NCBI options provided
 	if any ([options.ID_file, options.descendant]):
 		## create folders
-		NCBI_folder = functions.create_subfolder('NCBI', options.path)
+		NCBI_folder = HCGB_files.create_subfolder('NCBI', options.path)
 		if (options.ID_file):
 			## get path and check if it is file
 			abs_path_file = os.path.abspath(options.ID_file)
 			if os.path.isfile(abs_path_file):
 				print ()
-				functions.print_sepLine("*",50, False)
+				HCGB_aes.print_sepLine("*",50, False)
 				print ("--------- Check NCBI ids provided ---------\n")
-				functions.print_sepLine("*",70, False)
+				HCGB_aes.print_sepLine("*",70, False)
 				## get file information
 				print ("\t+ Obtaining information from file: %s" %abs_path_file)
-				strains2get = functions.get_data(abs_path_file, ',', '')
+				strains2get = HCGB_main.get_data(abs_path_file, ',', '')
 				dataBase_NCBI = database_generator.NCBI_DB(strains2get, NCBI_folder, Debug)
 
 				#########
@@ -97,7 +101,7 @@ def run_database(options):
 					print (options.ID_file)
 
 				## functions.timestamp
-				start_time_partial = functions.timestamp(start_time_partial)
+				start_time_partial = HCGB_time.timestamp(start_time_partial)
 				## strains downloaded would be included to a kma index
 
 		## Get all entries belonging to this taxon provided
@@ -107,9 +111,9 @@ def run_database(options):
 				print (colored("DEBUG: NCBI descendant option: ON ", 'yellow'))
 			
 			print ()
-			functions.print_sepLine("*",70, False)
+			HCGB_aes.print_sepLine("*",70, False)
 			print ("--------- Check descendant NCBI taxonomy ids provided ---------\n")
-			functions.print_sepLine("*",70, False)
+			HCGB_aes.print_sepLine("*",70, False)
 			## [TODO]
 			dataBase_NCBI = database_generator.NCBI_descendant(options.descendant, NCBI_folder, Debug)
 			
@@ -118,14 +122,14 @@ def run_database(options):
 		##############################################################
 		print ('\n\n+ Update database for later identification analysis...')
 		list_of_files = dataBase_NCBI['genome'].tolist()
-		kma_db = functions.create_subfolder('KMA_db', options.path)	
-		genbank_kma_db = functions.create_subfolder('genbank', kma_db)	
+		kma_db = HCGB_files.create_subfolder('KMA_db', options.path)	
+		genbank_kma_db = HCGB_files.create_subfolder('genbank', kma_db)	
 		
 		print ('+ Database to update: ', genbank_kma_db)
 		species_identification_KMA.generate_db(list_of_files, 'genbank_KMA', genbank_kma_db, 'new', 'batch', Debug, kma_bin)
 
 		## time stamp
-		start_time_partial = functions.timestamp(start_time_total)
+		start_time_partial = HCGB_time.timestamp(start_time_total)
 
 	###############
 	## user_data ##
@@ -142,9 +146,9 @@ def run_database(options):
 				print (colored("DEBUG: User provides folder containing project", 'yellow'))
 
 			print ()
-			functions.print_sepLine("*",70, False)
+			HCGB_aes.print_sepLine("*",70, False)
 			print ("--------- Check user provided project folder ---------")
-			functions.print_sepLine("*",70, False)
+			HCGB_aes.print_sepLine("*",70, False)
 			dataBase_user = database_user.update_database_user_data(options.path, abs_project_folder, Debug, options)
 		else:
 			print (colored("ERROR: Folder provided does not exists: %s" %options.project_folder, 'red'))
@@ -155,22 +159,22 @@ def run_database(options):
 		##############################################################
 		print ('\n\n+ Update database for later identification analysis...')
 		list_of_files = dataBase_user['genome'].tolist()
-		kma_db = functions.create_subfolder('KMA_db', options.path)	
-		user_kma_db = functions.create_subfolder('user_data', kma_db)	
+		kma_db = HCGB_files.create_subfolder('KMA_db', options.path)	
+		user_kma_db = HCGB_files.create_subfolder('user_data', kma_db)	
 		
 		print ('+ Database to update: ', user_kma_db)
 		species_identification_KMA.generate_db(list_of_files, 'userData_KMA', user_kma_db, 'new', 'batch', Debug, kma_bin)
 		
 		## time stamp
-		start_time_partial = functions.timestamp(start_time_total)
+		start_time_partial = HCGB_time.timestamp(start_time_total)
 
 	##########
 	## ARIBA
 	##########
 	print ()
-	functions.print_sepLine("*",50, False)
+	HCGB_aes.print_sepLine("*",50, False)
 	print ("--------- Check ARIBA parameters provided --------")
-	functions.print_sepLine("*",50, False)
+	HCGB_aes.print_sepLine("*",50, False)
 	if (options.no_ARIBA):
 		print ("+ No ARIBA databases would be downloaded...")
 		
@@ -212,16 +216,16 @@ def run_database(options):
 			## ariba prepareref fasta and metadata
 
 		### timestamp
-		start_time_partial = functions.timestamp(start_time_partial)					
+		start_time_partial = HCGB_time.timestamp(start_time_partial)					
 
 	#########
 	## kma ##
 	#########
 	print ()
-	functions.print_sepLine("*",50, False)
+	HCGB_aes.print_sepLine("*",50, False)
 	print ("--------- Check KMA parameters provided ----------")
 	kma_database = options.path + '/KMA_db'	
-	functions.create_folder(kma_database)
+	HCGB_files.create_folder(kma_database)
 	
 	## types: bacteria, archaea, protozoa, fungi, plasmids, typestrains
 	## downloads all "bacterial" genomes from KMA website
@@ -258,33 +262,34 @@ def run_database(options):
 	## Get databases
 	for db in options.kma_dbs:
 		print (colored("\n+ " + db, 'yellow'))
-		db_folder = functions.create_subfolder(db, kma_database)		
+		db_folder = HCGB_files.create_subfolder(db, kma_database)		
 		species_identification_KMA.download_kma_database(db_folder, db, Debug)
 
 	### timestamp
-	start_time_partial = functions.timestamp(start_time_partial)					
+	start_time_partial = HCGB_time.timestamp(start_time_partial)					
 
 	###########	
 	## BUSCO ##
 	###########
 	if (options.BUSCO_dbs):
 		print ()
-		functions.print_sepLine("*",50, False)
+		HCGB_aes.print_sepLine("*",50, False)
 		print ("--------- Check BUSCO datasets provided ---------")
-		BUSCO_folder = functions.create_subfolder("BUSCO", options.path)
+		BUSCO_folder = HCGB_files.create_subfolder("BUSCO", options.path)
 
 		#########
 		if Debug:
 			print (colored("DEBUG: options.BUSCO_dbs", 'yellow'))
 			print (options.BUSCO_dbs)
 
-		BUSCO_caller.BUSCO_retrieve_sets(options.BUSCO_dbs, BUSCO_folder)
+		print("+ BUSCO datasets would be downloaded when executed...")
+		#BUSCO_caller.BUSCO_retrieve_sets(options.BUSCO_dbs, BUSCO_folder)
 
 		### timestamp
-		start_time_partial = functions.timestamp(start_time_partial)					
+		start_time_partial = HCGB_time.timestamp(start_time_partial)					
 
 	print ("\n*************** Finish *******************\n")
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 
 	print ("+ Exiting Database module.\n")
 	return()

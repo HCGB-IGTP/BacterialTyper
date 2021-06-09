@@ -109,7 +109,7 @@ def run_cluster(options):
 		functions.create_folder(outdir)
 	
 	## for each sample
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "mash")	
+	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "mash", options.debug)	
 
 	## debug message
 	if (Debug):
