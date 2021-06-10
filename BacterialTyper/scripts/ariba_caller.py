@@ -31,8 +31,6 @@ from BacterialTyper.modules import citation
 ############################################################### 
 def get_ARIBA_dbs(list_dbs):
 	
-	
-
 	## General
 	dbs = [
 		"argannot", "card", "megares", 

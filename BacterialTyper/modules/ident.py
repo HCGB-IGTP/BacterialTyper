@@ -88,7 +88,7 @@ def run_ident(options):
 		options.pair = True
 
 	### species_identification_KMA -> most similar taxa
-	HCGB_aes.pipeline_header()
+	HCGB_aes.pipeline_header("BacterialTyper")
 	HCGB_aes.boxymcboxface("Species identification")
 
 	print ("--------- Starting Process ---------")
@@ -984,8 +984,9 @@ def get_options_db(options):
 	############################################################
 	kma_dbs = []
 	if not options.only_kma_db: ## exclusive
-		kma_dbs = ["bacteria", "plasmids"]
-	
+		#kma_dbs = ["bacteria", "plasmids"]
+		kma_dbs = ["bacteria"]
+			
 	if (options.kma_dbs):
 		options.kma_dbs = options.kma_dbs + kma_dbs
 		options.kma_dbs = set(options.kma_dbs)		

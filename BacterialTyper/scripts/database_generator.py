@@ -428,12 +428,12 @@ def getdbs(source, database_folder, option, debug):
 	###############
 	if (source == 'ARIBA'):
 		### Check if folder exists
-		HCGB_files.create_subfolder('ARIBA', database_folder)
+		ARIBA_folder = HCGB_files.create_subfolder('ARIBA', database_folder)
 		
 		### get information
 		ARIBA_dbs = ariba_caller.get_ARIBA_dbs(dbs2use) ## get names
 		for ariba_db in ARIBA_dbs:
-			this_db = database_folder + '/ARIBA/' + ariba_db + '_prepareref/'
+			this_db = os.path.join(ARIBA_folder, ariba_db + '_prepareref')
 			if os.path.exists(this_db):
 				code_check_db = ariba_caller.check_db_indexed(this_db, 'NO')
 				if (code_check_db == True):
@@ -442,7 +442,7 @@ def getdbs(source, database_folder, option, debug):
 			else:
 				print ("+ Database: ", ariba_db, " is not downloaded...")
 				print ("+ Download now:")
-				folder_db = HCGB_files.create_subfolder(ariba_db, database_folder + '/ARIBA')
+				folder_db = HCGB_files.create_subfolder(ariba_db, ARIBA_folder)
 				code_db = ariba_caller.ariba_getref(ariba_db, folder_db, debug, 2) ## get names 
 				if (code_db == 'OK'):
 					db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db]
@@ -491,7 +491,7 @@ def getdbs(source, database_folder, option, debug):
 				else:
 					prefix = '.ATG'
 
-				this_db_file = this_db + '/' + db + prefix
+				this_db_file =os.path.join(this_db, db + prefix)
 				if os.path.isfile(this_db_file + '.comp.b'):
 					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_db', db, this_db_file]
 					print (colored("\t- KMA: including information from database " + db, 'green'))
@@ -500,7 +500,8 @@ def getdbs(source, database_folder, option, debug):
 
 					## if missing: call download module
 					print ("+ Download missing KMA_db (%s) provided" %db)
-					species_identification_KMA.download_kma_database(database_folder + '/KMA_db/' + db, db, debug)
+					species_identification_KMA.download_kma_database(
+						os.path.join(database_folder, 'KMA_db', db), db, debug)
 
 					if os.path.isfile(this_db_file + '.comp.b'):
 						db_Dataframe.loc[len(db_Dataframe)] = ['KMA_db', db, this_db_file]

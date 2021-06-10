@@ -113,7 +113,7 @@ initdb_user_data_options_group.add_argument("--ex_sample", help="File containing
 
 ## KMA
 initdb_KMAoptions_group = subparser_database.add_argument_group("KMA Databases")
-initdb_KMAoptions_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to download. Provide several input if desired. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains', 'viral'])
+initdb_KMAoptions_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to download. Provide several input if desired. [Default: bacteria]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'typestrains', 'viral'])
 initdb_KMAoptions_group.add_argument("--no_def_kma", action="store_true", help="Only applicable if kma_db is ON. It discards default databases (bacteria & plasmids) from kma_db. Only user selected databases indexed. [Default: OFF]")
 ##initdb_KMAoptions_group.add_argument("--index_kma", action="store_true", help="Index the genomes downloaded for later usage during species identification. Not compatible with --kma_db options: available databases with broader taxonomic ranges. [Default: OFF]")
 
@@ -370,9 +370,9 @@ dataset_group_ident.add_argument("-db", "--database", help="Directory containing
 dataset_group_ident.add_argument("--MLST_profile", help="Directory containing MLST profile. By default, a folder named PubMLST is generated under database folder. Provide this option if profile to be used is from another source than PubMLST.org.")
 
 kma_group = subparser_ident.add_argument_group("KMA Databases Configuration")
-kma_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to check. Provide several input if desired. If it is not available it would be downloaded and included in default database folder. [Default: bacteria & plasmids]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'plasmids', 'typestrains', 'viral'])
+kma_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to check. Provide several input if desired. If it is not available it would be downloaded and included in default database folder. [Default: bacteria]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'typestrains', 'viral'])
 kma_group.add_argument("--kma_external_file", dest='kma_external_files', nargs='*', help="External fasta file to include in the search. It could be indexed or not. [Default OFF].")
-kma_group.add_argument("--only_kma_db", action="store_true", help="Provide this option if only user defined kma database(s) provided via --kma_db should be used for species identification. Discard Bacteria and Plasmids as default.")
+kma_group.add_argument("--only_kma_db", action="store_true", help="Provide this option if only user defined kma database(s) provided via --kma_db should be used for species identification. Discard Bacteria as default.")
 
 options_group_name_ident = subparser_ident.add_argument_group("Options")
 options_group_name_ident.add_argument("--user_data", action="store_true", help="Use previously identified samples in user_data [Default OFF].")
