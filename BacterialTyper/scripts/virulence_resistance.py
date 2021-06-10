@@ -18,10 +18,18 @@ from io import open
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper.scripts import functions
-from BacterialTyper.config import set_config
 from BacterialTyper.scripts import ariba_caller
 from BacterialTyper.scripts import card_trick_caller
+from BacterialTyper.config import set_config
+
+## Import HCGB functions
+import HCGB
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.system_call_functions as HCGB_sys
+
 
 #############################################################
 def parse_vfdb(folder, sampleName, fileResults, fileFlags, summary, assembly_cutoff):
@@ -111,7 +119,7 @@ def parse_card(folder, sampleName, fileResults, fileFlags, summary, assembly_cut
 	summary_data = pd.read_csv(summary, header=0, sep=',') 			## report_summary.csv :: parse information from ARIBA 
 	fileFlags_data = pd.read_csv(fileFlags, header=0, sep='\t')		## flags_explain.tsv :: ariba expand flag: explained flags
 	original_data = pd.read_csv(fileResults, header=0, sep='\t')	## report.tsv :: ariba report generated
-	card_ontology = functions.get_data(card_trick_info + '/aro.obo.csv', ',', 'index_col=0') 		## read card_info generated for card_trick parse
+	card_ontology = HCGB_main.get_data(card_trick_info + '/aro.obo.csv', ',', 'index_col=0') 		## read card_info generated for card_trick parse
 	
 	## summary data
 	summary_data = summary_data.set_index('name')
@@ -374,6 +382,7 @@ def parse_results(folder, sampleName, fileResults, fileFlags, summary):
 	## [TODO]
 	print (colored("\n\n***** TODO: Implement if a different database provided (!= CARD, VFDB) *****\n\n", 'red'))
 	#return(name_excel, name_csv)
+	return("", "")
 
 #############################################################
 def check_results(db2use, outdir_sample, assembly_cutoff, card_trick_info):
@@ -400,10 +409,10 @@ def check_results(db2use, outdir_sample, assembly_cutoff, card_trick_info):
 
 			folderResults = data2.loc[sample, db2use]['output']
 			outfolder = data2.loc[sample, db2use]['dirname']
-			if db2use.endswith('card_prepareref/'):
+			if db2use == 'card':
 				database = 'card'
 				name_db = 'CARD'
-			elif db2use.endswith('vfdb_full_prepareref/'):
+			elif db2use == 'vfdb_full':
 				database = 'vfdb_full'
 				name_db = 'VFDB'
 			else:
@@ -414,7 +423,7 @@ def check_results(db2use, outdir_sample, assembly_cutoff, card_trick_info):
 			## TODO: check
 			filename_stamp = outfolder + '/.success_' + database
 			if os.path.isfile(filename_stamp):
-				stamp =	functions.read_time_stamp(filename_stamp)
+				stamp =	HCGB_time.read_time_stamp(filename_stamp)
 				print (colored("\tA previous command generated results on: %s [%s]" %(stamp, sample), 'yellow'))
 				name_excel = outfolder + '/' + sample + '_' + name_db + '_results.xlsx'
 				name_csv = outfolder + '/' + sample + '_' + name_db + '_summary.csv'
@@ -456,7 +465,7 @@ def results_parser(database, folderResults, sampleName, outfolder, assembly_cuto
 	for f in list_files:
 		filePath = os.path.join(folderResults, f)
 		if f.endswith('.gz'):
-			functions.extract(filePath, folderResults)
+			HCGB_files.extract(filePath, folderResults)
 		if (f=='report.tsv'):
 			fileResults=filePath
 		elif (f=='assemblies.fa.gz'):
@@ -466,7 +475,7 @@ def results_parser(database, folderResults, sampleName, outfolder, assembly_cuto
 	print ("\n")
 	
 	## no results generated
-	if not functions.is_non_zero_file(fileResults):
+	if not HCGB_files.is_non_zero_file(fileResults):
 		print('+ No results generated for sample: ', sampleName)
 		return('','')
 		
@@ -508,7 +517,7 @@ def results_parser(database, folderResults, sampleName, outfolder, assembly_cuto
 	
 	## print success timestamp
 	filename_stamp = outfolder + '/.success_' + database
-	stamp =	functions.print_time_stamp(filename_stamp)
+	stamp =	HCGB_time.print_time_stamp(filename_stamp)
 
 	return (name_excel, name_csv)
 
@@ -552,23 +561,23 @@ def download_VFDB_files(folder):
 	filename_stamp = folder + '/download_timestamp.txt' 
 	if os.path.exists(folder):
 		if os.path.isfile(filename_stamp):
-			stamp = functions.read_time_stamp(filename_stamp)
+			stamp = HCGB_time.read_time_stamp(filename_stamp)
 			print ("+ A previous download generated results on: ", stamp)
-			days_passed = functions.get_diff_time(stamp)
-			print ("+ %s days ago" %days_passed)		
+			days_passed = HCGB_time.get_diff_time(filename_stamp)
+			print ("\t\t** %s days ago" %days_passed)		
 			if (days_passed > 30): ## download again
-				print ("+ Downloading information again just to be sure...")
+				print ("\t\t** Downloading information again just to be sure...")
 			else:
-				print ("+ No need to download data again.")
+				print ("\t\t** No need to download data again.")
 				return()
 	else:
-		functions.create_folder(folder)
+		HCGB_files.create_folder(folder)
 	
 	## Open file and readlines
 	print ('+ Downloading files:\n')
 	for line in links:
 		if not line.startswith('#'):  
-			functions.wget_download(line, folder)
+			HCGB_sys.wget_download(line, folder)
 	
 	## decompress files			
 	print ('+ Decompressing gzip files\n')
@@ -576,10 +585,10 @@ def download_VFDB_files(folder):
 	for item in files:
 		#print (folder)
 		if item.endswith('.gz'):
-			functions.extract(folder + '/' + item, folder)
+			HCGB_files.extract(folder + '/' + item, folder)
 
 	## make stamp time
-	functions.print_time_stamp(filename_stamp)
+	HCGB_time.print_time_stamp(filename_stamp)
 	
 	return()
 

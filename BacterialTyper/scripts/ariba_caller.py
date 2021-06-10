@@ -158,8 +158,14 @@ def download_ariba_databases(list_dbs, main_folder, Debug, threads):
 			print ("\t+ Data is available and indexed in folder: ", outdir_prepare_ref)
 			print (colored("\tDatabase was previously downloaded and prepared on: %s" %stamp, 'yellow'))
 		
-			## [TODO]: Check if necessary to download again after several months/days
-			return_ariba_getref = 'OK'
+			## Check if necessary to download again after several months/days
+			days_passed = HCGB_time.get_diff_time(filename_stamp_prepare)
+			print ("\t\t** %s days ago" %days_passed)		
+			if (days_passed > 30): ## download again
+				print ("\t\t** Downloading information again just to be sure...")
+				return_ariba_getref = ariba_getref(db_set, folder_set, Debug, threads)
+			else:
+				return_ariba_getref = 'OK'
 		else:
 			return_ariba_getref = ariba_getref(db_set, folder_set, Debug, threads)
 		
@@ -167,7 +173,6 @@ def download_ariba_databases(list_dbs, main_folder, Debug, threads):
 			print()
 		else:
 			print (colored("** ARIBA getref failed or generated a warning for " + db_set, 'red'))
-
 
 ##########
 def check_db_indexed(folder, option):

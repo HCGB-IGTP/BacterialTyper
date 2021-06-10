@@ -51,13 +51,13 @@ def prepare_card_data(database_folder):
 		print (colored("\tA previous command generated results on: %s [CARD Ontology Data]" %stamp, 'yellow'))
 
 		## check time passed
-		days_passed = HCGB_time.get_diff_time(stamp)
-		print ("\t+ %s days ago" %days_passed)		
+		days_passed = HCGB_time.get_diff_time(filename_stamp)
+		print ("\t** %s days ago" %days_passed)		
 		if (days_passed > 30): ## download again
-			print ("+ Downloading information again just to be sure...")
+			print ("\t ** Downloading information again just to be sure...")
 			download=True
 		else:
-			print ("\t+ No need to download data again.")
+			print ("\t ** No need to download data again.")
 			download=False
 	else:
 		download=True

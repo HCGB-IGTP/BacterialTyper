@@ -62,11 +62,11 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.scripts.functions.create_subfolder`
+		- :func:`HCGB.functions.files_functions.create_subfolder`
 		
-		- :func:`BacterialTyper.scripts.functions.get_data`
+		- :func:`HCGB.functions.main_functions.functions.get_data`
 		
-		- :func:`BacterialTyper.scripts.functions.optimize_threads`
+		- :func:`HCGB.functions.main_functions.optimize_threads`
 		
 		- :func:`BacterialTyper.scripts.database_user.get_userData_files`
 		
@@ -102,21 +102,20 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 	project_info_df = get_userData_info(options, project_folder)
 	
 	## merge data
-	project_all_data = pd.concat([project_data_df, project_info_df], join='inner', sort=True).drop_duplicates()
-	project_all_data.index.name = 'name'
+	project_all_data = pd.concat([project_data_df, project_info_df], join='outer', sort=True).drop_duplicates()
+	#project_all_data.index.name = 'name'
 
 	## debug messages:
 	if Debug:
-		print("project_data_df")
+		HCGB_aes.debug_message("project_data_df", 'yellow')
 		print(project_data_df)
 		
-		print("project_info_df")
+		HCGB_aes.debug_message("project_info_df", 'yellow')
 		print(project_info_df)
 
-		print("project_all_data")
+		HCGB_aes.debug_message("project_all_data", 'yellow')
 		print(project_all_data)
 	
-	HCGB_aes.print_sepLine("-", 75, False)
 	print ('\n+ Get database information')
 	db_frame = database_generator.getdbs('user_data', database_folder, 'user_data', Debug)
 	user_data_db = database_generator.get_database(db_frame, Debug)
@@ -138,7 +137,6 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 		print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
 
 	
-	HCGB_aes.print_sepLine("-", 75, False)
 	print ('\n+ Updating information using %s threads and %s parallel jobs' %(options.threads, max_workers_int))
 
 	####################################
@@ -146,7 +144,8 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 	####################################
 	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
 		## send for each	
-		commandsSent = { executor.submit(update_sample, name, cluster, own_data, user_data_db, Debug): name for name, cluster in sample_frame }
+		commandsSent = { executor.submit(update_sample, name, cluster, 
+										own_data, user_data_db, Debug): name for name, cluster in sample_frame }
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
 			try:
@@ -196,17 +195,29 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
 def get_userData_files(options, project_folder):
 	## get information regarding files
 
-	## get assembly files
-	pd_samples_assembly = sampleParser.files.get_files(options, project_folder, "assembly", ["fna"], options.debug)
-	pd_samples_assembly = pd_samples_assembly.set_index('name')
-
-	## get annotation files
-	pd_samples_annot = sampleParser.files.get_files(options, project_folder, "annot", ['gbf', 'faa', 'gff'], options.debug)
-	pd_samples_annot = pd_samples_annot.set_index('name')
-
 	## get trimmed ngs files
+	print()
+	HCGB_aes.print_sepLine("-", 60, 'yellow')
+	print ("+ Retrieve trimmed reads information:")
 	pd_samples_reads = sampleParser.files.get_files(options, project_folder, "trim", ['_trim'], options.debug)
 	pd_samples_reads = pd_samples_reads.set_index('name')
+	HCGB_aes.print_sepLine("-", 60, 'yellow')
+
+	## get assembly files
+	print()
+	HCGB_aes.print_sepLine("-", 60, 'yellow')
+	print ("+ Retrieve assembly information:")
+	pd_samples_assembly = sampleParser.files.get_files(options, project_folder, "assembly", ["fna"], options.debug)
+	pd_samples_assembly = pd_samples_assembly.set_index('name')
+	HCGB_aes.print_sepLine("-", 60, 'yellow')
+
+	## get annotation files
+	print()
+	HCGB_aes.print_sepLine("-", 60, 'yellow')
+	print ("+ Retrieve annotation information:")
+	pd_samples_annot = sampleParser.files.get_files(options, project_folder, "annot", ['gbf', 'faa', 'gff'], options.debug)
+	pd_samples_annot = pd_samples_annot.set_index('name')
+	HCGB_aes.print_sepLine("-", 60, 'yellow')
 
 	## debug message
 	if (options.debug):
@@ -244,19 +255,32 @@ def get_userData_info(options, project_folder):
 		## additional information: MGE, etc
 
 	## get profile information
+	print()
+	HCGB_aes.print_sepLine("-", 60, 'yellow')
+	print ("+ Retrieve virulence/resistance profile information:")
 	pd_samples_profile = sampleParser.files.get_files(options, project_folder, "profile", ["csv"], options.debug)
 	if not pd_samples_profile.empty:
 		pd_samples_profile = pd_samples_profile.set_index('name')
+	HCGB_aes.print_sepLine("-", 60, 'yellow')
 
 	## get identification information
+	print()
+	HCGB_aes.print_sepLine("-", 60, 'yellow')
+	print ("+ Retrieve species identification information:")
 	pd_samples_ident = sampleParser.files.get_files(options, project_folder, "ident", ["csv"], options.debug)
 	if not pd_samples_ident.empty:
 		pd_samples_ident = pd_samples_ident.set_index('name')
+	HCGB_aes.print_sepLine("-", 60, 'yellow')
 	
 	## get mash information
+	print()
+	HCGB_aes.print_sepLine("-", 60, 'yellow')
+	print ("+ Retrieve cluster information:")
 	pd_samples_mash = sampleParser.files.get_files(options, project_folder, "mash", ["sig"], options.debug)
 	if not pd_samples_mash.empty:
 		pd_samples_mash = pd_samples_mash.set_index('name')
+	HCGB_aes.print_sepLine("-", 60, 'yellow')
+	print()
 
 	## add other if necessary
 
@@ -281,10 +305,14 @@ def get_userData_info(options, project_folder):
 	## set new column with name of samples
 	df = df.reset_index()
 
+	## rename column
+	df.rename(columns={'index':'name'}, inplace=True)
+	
 	## debug message
 	if (options.debug):
 		print (colored("**DEBUG: pd_concat reset_index**", 'yellow'))
 		print (df)
+
 	##
 	return(df)
 
@@ -296,6 +324,9 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
 		print (colored("**DEBUG: sample_frame groupby: name & cluster **", 'yellow'))
 		print (name)			
 		print (cluster)
+	
+	if (name == 'report'):
+		return()
 	
 	print ('\t+ Sending command for sample: ', name)
 

@@ -203,7 +203,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 	##################
 	## check status	##	
 	##################
-	databases2use = []
+	databases2use = [] ## path, db name
 	card_trick_info = ""
 	print ('+ Check databases status: ')
 	for	index, db2use in retrieve_databases.iterrows():
@@ -212,7 +212,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 			index_status = ariba_caller.check_db_indexed(db2use['path'], 'YES')
 			if (index_status == True):
 				#print (colored("\t+ Databases %s seems to be fine...\n\n" % db2use['db'], 'green'))
-				databases2use.append(db2use['path'])
+				databases2use.append([ db2use['path'], db2use['db'] ])
 			
 				## prepare card database ontology for later 		
 				if (db2use['db'] == 'card'):
@@ -223,7 +223,8 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 
 	## debug message
 	if (Debug):
-		print (colored("**DEBUG: databases2use\n" +  "\n".join(databases2use) + "\n**", 'yellow'))
+		print (colored("**DEBUG: databases2use\n**", 'yellow'))
+		print (databases2use)
 		if (card_trick_info):
 			print (colored("**DEBUG: card_trick_info: " + card_trick_info + " **", 'yellow'))
 		
@@ -240,8 +241,8 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 
 	for name, cluster in sample_frame:
 		for db2use in databases2use:
-			tmp = get_outfile(outdir_dict[name], name, db2use)
-			outdir_samples.loc[len(outdir_samples)] = (name, outdir_dict[name], db2use, tmp)
+			tmp = get_outfile(outdir_dict[name], name, db2use[0])
+			outdir_samples.loc[len(outdir_samples)] = (name, outdir_dict[name], db2use[1], tmp)
 
 	## multi-index
 	outdir_samples = outdir_samples.set_index(['sample', 'db'])
@@ -273,8 +274,13 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 	results_df = pd.DataFrame()
 	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
 		for db2use in databases2use:
+			print (colored("+ Working with database: " + db2use[1], 'yellow'))
 			## send for each sample
-			commandsSent = { executor.submit(ariba_run_caller, db2use, sorted(cluster["sample"].tolist()), outdir_samples.loc[(name, db2use), 'output'], threads_job, options.ARIBA_cutoff): name for name, cluster in sample_frame }
+			commandsSent = { executor.submit(ariba_run_caller, 
+											db2use[0], db2use[1], 								## database path & dbname
+											sorted(cluster["sample"].tolist()), 				## files
+											outdir_samples.loc[(name, db2use[1]), 'output'],	## output
+											threads_job, options.ARIBA_cutoff): name for name, cluster in sample_frame }
 				
 			for cmd2 in concurrent.futures.as_completed(commandsSent):
 				details = commandsSent[cmd2]
@@ -285,14 +291,15 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 					print (cmd2)
 					print('%r generated an exception: %s' % (details, exc))
 			
-			print ("+ Jobs finished for database %s ..." %db2use)
+			print ("+ Jobs finished for database %s ..." %db2use[1])
 
 			## functions.timestamp
 			start_time_partial = HCGB_time.timestamp(start_time_partial)
 			
-			print ("+ Collecting information for each sample analyzed:")
+			print()
+			print ("+ Collecting information for each sample analyzed for database: " + db2use[1])
 			## check results for each database
-			results_df_tmp = virulence_resistance.check_results(db2use, outdir_samples, options.ARIBA_cutoff, card_trick_info)
+			results_df_tmp = virulence_resistance.check_results(db2use[1], outdir_samples, options.ARIBA_cutoff, card_trick_info)
 			results_df = pd.concat([results_df, results_df_tmp])
 						
 			## functions.timestamp
@@ -394,12 +401,12 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 	## print additional help?
 	
 ####################################
-def ariba_run_caller(db2use, list_files, folder_out, threads, cutoff):
+def ariba_run_caller(db2use, db_name, list_files, folder_out, threads, cutoff):
 	## check if already is done
 	# generate a stamp when finish parsing each file
 
 	## make stamp time
-	filename_stamp = folder_out + '/.success'
+	filename_stamp = os.path.join(folder_out, '.success_' + db_name)
 	if os.path.isfile(filename_stamp):
 		stamp =	HCGB_time.read_time_stamp(filename_stamp)
 		files_names = [os.path.basename(s) for s in list_files]
@@ -413,6 +420,9 @@ def ariba_run_caller(db2use, list_files, folder_out, threads, cutoff):
 		code = ariba_caller.ariba_run(db2use, list_files, folder_out, threads, cutoff)
 		if code == 'FAIL':
 			print ("*** ERROR: System call failed for ", folder_out)		
+
+		## print success timestamp
+		HCGB_time.print_time_stamp(filename_stamp)
 
 ####################################
 def get_outfile(output_dir, name, index_name):
