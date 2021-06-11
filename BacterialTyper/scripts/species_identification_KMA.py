@@ -3,7 +3,6 @@
 ## Jose F. Sanchez										##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
 ##########################################################
-from pickle import FALSE
 """
 Call KMA_ software to find the best match in reads file or fasta file in a (kmer) database produced using the KMA program 
 

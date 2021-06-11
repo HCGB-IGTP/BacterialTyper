@@ -26,9 +26,14 @@ from distutils.version import LooseVersion
 import pkg_resources
 
 ## import my modules
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import extern_progs
 from BacterialTyper.config import install_dependencies
+
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.system_call_functions as HCGB_sys
 
 ################
 ## Software
@@ -319,7 +324,7 @@ def get_version(prog, path, Debug=False):
 									stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
 	## decode command
-	cmd_output = functions.decode(cmd_output[0]).split('\n')[:-1] + functions.decode(cmd_output[1]).split('\n')[:-1]
+	cmd_output = HCGB_main.decode(cmd_output[0]).split('\n')[:-1] + HCGB_main.decode(cmd_output[1]).split('\n')[:-1]
 
 	## debug messages
 	if (Debug):
@@ -436,7 +441,7 @@ def get_python_packages(Debug):
 	## get import names for packages:
 	## some modules do not have the same name when install from pip and called from import
 	file_module_dependecies = extern_progs.file_list("module_dependencies")
-	module_dependencies = functions.file2dictionary(file_module_dependecies, ',')
+	module_dependencies = HCGB_main.file2dictionary(file_module_dependecies, ',')
 
 	my_packages_installed = {}
 
@@ -496,7 +501,7 @@ def check_python_packages(Debug, option_install, install_path):
 
 	## my module name conversion
 	file_module_dependecies = extern_progs.file_list("module_dependencies")
-	module_dependencies = functions.file2dictionary(file_module_dependecies, ',')
+	module_dependencies = HCGB_main.file2dictionary(file_module_dependecies, ',')
 
 	## check each package
 	for each in my_packages_requirements:
@@ -608,7 +613,7 @@ def get_perl_packages(Debug, file_name):
 	"""
 	## get info for perl modules
 	perl_lib_dependecies_file = extern_progs.file_list(file_name)
-	perl_lib_dependecies = functions.get_data(perl_lib_dependecies_file, ',', 'index_col=0')
+	perl_lib_dependecies = HCGB_main.get_data(perl_lib_dependecies_file, ',', 'index_col=0')
 
 	my_packages_installed = {}
 	for index_name, row in perl_lib_dependecies.iterrows():
@@ -675,7 +680,7 @@ def check_perl_packages(file_name, Debug, option_install, install_path):
 
 	## get info for perl modules
 	perl_lib_dependecies_file = extern_progs.file_list(file_name)
-	perl_lib_dependecies = functions.get_data(perl_lib_dependecies_file, ',', 'index_col=0')
+	perl_lib_dependecies = HCGB_main.get_data(perl_lib_dependecies_file, ',', 'index_col=0')
 
 	## check each package
 	for each in my_packages_requirements:
@@ -728,8 +733,8 @@ def check_perl_package_version(package, Debug):
 		print (perl_one_line_command)
 
 	## execute one line perl command
-	output_one_line = functions.system_call(perl_one_line_command, returned=True, message=False)
-	return(functions.decode(output_one_line))
+	output_one_line = HCGB_sys.system_call(perl_one_line_command, returned=True, message=False)
+	return(HCGB_main.decode(output_one_line))
 
 ################
 ## IslandPath
@@ -753,25 +758,32 @@ def R_package_path_installed():
 	## check if exists or try to install
 	RDir_package = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'R', 'R_package.info.txt')
 	
-	if functions.is_non_zero_file(RDir_package):
-		list=functions.readList_fromFile(RDir_package)
+	if HCGB_files.is_non_zero_file(RDir_package):
+		list=HCGB_main.readList_fromFile(RDir_package)
 		return (list[0])
 	else:
-		print ("+ No MLSTar package available. Please install it manually or use the config module")
-		exit()
-
+		path2install = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'R', 'install_packages')
+		HCGB_files.create_folder(path2install) 
+		return (path2install)
+	
 ################
 def get_R_packages():
 	dep_file = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'R_dependencies.csv'))
-	dep_file_data = functions.get_data(dep_file, ',', 'index_col=0')
+	dep_file_data = HCGB_main.get_data(dep_file, ',', 'index_col=0')
 	return (dep_file_data)
+
+################
+def get_check_R_files():
+	check_install_system = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'check_install_system.R'))
+	check_install_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'check_install_path.R'))
+	
+	return (check_install_system, check_install_path)
 
 ################
 def check_R_packages(install, install_path, Debug):
 	
 	packages = get_R_packages()
-	check_install_system = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'check_install_system.R'))
-	check_install_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'check_install_path.R'))
+	(check_install_system, check_install_path) = get_check_R_files()
 	R_script_exe = get_exe('Rscript')
 	
 	## if no install path, check for previous store information in R_package_info.txt
@@ -786,7 +798,7 @@ def check_R_packages(install, install_path, Debug):
 		
 		## first try to check if package available in system
 		cmd_check = R_script_exe + ' ' + check_install_system + ' -l ' + index
-		code = functions.system_call(cmd_check, message=False, returned=False)
+		code = HCGB_sys.system_call(cmd_check, message=False, returned=False)
 		if (code=='OK'):
 			check_install_module('1', index, '0', 'package')
 		else:
@@ -794,7 +806,7 @@ def check_R_packages(install, install_path, Debug):
 
 			## check if installed in path
 			cmd_check_path = R_script_exe + ' ' + check_install_path + ' -l ' + index + ' -p ' + install_path
-			code2 = functions.system_call(cmd_check_path, message=False, returned=False)
+			code2 = HCGB_sys.system_call(cmd_check_path, message=False, returned=False)
 
 			if (code2=='OK'):
 				check_install_module('1', index, '0', 'Install path package')

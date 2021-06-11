@@ -463,6 +463,10 @@ def getdbs(source, database_folder, option, debug):
 		### get information
 		for db in dbs2use:
 			this_db = KMA_db_abs + '/' + db
+
+			## debug message
+			if (debug):
+				print (colored("this_db:" + this_db , 'yellow'))
 			
 			#### genbank	
 			if (db == "genbank"):
@@ -491,7 +495,11 @@ def getdbs(source, database_folder, option, debug):
 				else:
 					prefix = '.ATG'
 
-				this_db_file =os.path.join(this_db, db + prefix)
+				this_db_file =os.path.join(this_db, db, db + prefix)
+				## debug message
+				if (debug):
+					print (colored("this_db_file:" + this_db_file , 'yellow'))
+
 				if os.path.isfile(this_db_file + '.comp.b'):
 					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_db', db, this_db_file]
 					print (colored("\t- KMA: including information from database " + db, 'green'))

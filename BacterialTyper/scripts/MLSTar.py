@@ -31,6 +31,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 ## import my modules
 from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
+from BacterialTyper.config import install_dependencies
 from BacterialTyper.other_tools import tools
 from BacterialTyper.data import data_files
 
@@ -283,9 +284,38 @@ def download_PubMLST(profile_folder, scheme, seq_folder, rscript, species):
 				filename_stamp = seq_folder + '/.success'
 				stamp =	functions.print_time_stamp(filename_stamp)
 
-def get_MLSTar_package_installed():
-	return (set_config.R_package_path_installed())
+def get_MLSTar_package_installed(debug=False):
+
+	install_path = set_config.R_package_path_installed()
+	(check_install_system, check_install_path) = set_config.get_check_R_files()
+	R_script_exe = set_config.get_exe('Rscript')
 	
+	if debug:
+		print ('\n+ Check package: MLSTar')
+		
+	## ATTENTION: optparse library missing, no installation withn conda
+	
+	## first try to check if package available in system
+	cmd_check = R_script_exe + ' ' + check_install_system + ' -l MLSTar'
+	code = functions.system_call(cmd_check, message=False, returned=False)
+	if (code=='OK'):
+		return('system')
+	else:
+		## check if installed in path
+		cmd_check_path = R_script_exe + ' ' + check_install_path + ' -l MLSTar -p ' + install_path
+		code2 = functions.system_call(cmd_check_path, message=False, returned=False)
+
+		if (code2=='OK'):
+			return(install_path)
+		else:
+			(install_R, install_github_package) = install_dependencies.get_install_R_files()
+			cmd_R = '%s %s -l iferres/MLSTar -p %s' %(R_script_exe, install_github_package, install_path)
+			code3 = functions.system_call(cmd_R, message=False, returned=False)
+			if (code3):
+				return (install_path)
+			else:
+				print ('ERROR')
+				exit()	
 
 ##########################################
 def main():

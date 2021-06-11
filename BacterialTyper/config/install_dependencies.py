@@ -23,9 +23,14 @@ from termcolor import colored
 from distutils.version import LooseVersion
 
 ## import my modules
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.config import extern_progs
+
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.system_call_functions as HCGB_sys
 
 ##################
 def get_info_software():
@@ -35,7 +40,7 @@ def get_info_software():
 	and returns pandas data frame.	
 	"""
 	info_file = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'software', 'software_details.csv'))
-	return(functions.get_data(info_file, ',', 'index_col=0'))
+	return(HCGB_main.get_data(info_file, ',', 'index_col=0'))
 
 #######################
 def print_error_message(module_name, path, option):
@@ -61,11 +66,17 @@ def python_package_install(package, version2install):
 	return (versioninstalled)
 
 ##################
-def install_R_packages(package, source, install_path, extra):
+def get_install_R_files():
 	install_R = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'install_package.R'))
 	install_github_package = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'R', 'install_github.R'))
+	return(install_R, install_github_package)
+
+##################
+def install_R_packages(package, source, install_path, extra):
 	
-	functions.create_folder(install_path)
+	(install_R, install_github_package) = get_install_R_files()
+	
+	HCGB_files.create_folder(install_path)
 	Rscript_exe = set_config.get_exe('Rscript')
 	print("+ Installing %s package..." %package)
 	install_file = install_R
@@ -74,13 +85,13 @@ def install_R_packages(package, source, install_path, extra):
 		package= extra + '/' + package
 	
 	cmd_R = '%s %s -l %s -p %s' %(Rscript_exe, install_file, package, install_path)
-	functions.system_call(cmd_R)
+	HCGB_sys.system_call(cmd_R)
 	
 	## check if exists or try to install
 	MLSTar_package = os.path.join(install_path, 'MLSTar')
 	if os.path.exists(MLSTar_package):
 		RDir_package = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'R', 'R_package.info.txt')
-		functions.printList2file(RDir_package, [install_path])
+		HCGB_main.printList2file(RDir_package, [install_path])
 	else:
 		print_error_message(package, "No R package found", 'package')
 		print ('Please install manually to proceed...')
@@ -115,12 +126,12 @@ def install(software, min_version, install_path, Debug):
 			if (software == 'prokka'):
 				pathToExport = os.path.join(path2Export, 'bin')
 			
-			file_list = functions.get_fullpath_list(path2Export)
+			file_list = HCGB_main.get_fullpath_list(path2Export)
 			
 			## add binaries compiled for linux
 			if (software == 'prokka'):
 				pathToExport2 = os.path.join(path2Export, 'binaries', 'linux')
-				file_list = file_list + functions.get_fullpath_list(pathToExport2)
+				file_list = file_list + HCGB_main.get_fullpath_list(pathToExport2)
 			
 		## discard some files obtain
 		file_list = [s for s in file_list if '.a' not in s]
@@ -147,7 +158,7 @@ def install(software, min_version, install_path, Debug):
 			print()
 		
 		## create symbolic link in bin directory in environment
-		functions.get_symbolic_link(file_list, env_bin_directory)
+		HCGB_main.get_symbolic_link(file_list, env_bin_directory)
 		print(colored("**Software (%s - Version: %s) installed in the system and add it to $PATH environment variable." %(software, versionInstalled),'green'))
 
 	return (versionInstalled)
@@ -233,17 +244,17 @@ def install_soft(software, min_version, install_path, Debug):
 		## get version as an example using blastn
 		folder_software = os.path.join(folder_software, bin_name)
 		file_software = os.path.join(folder_software, 'blastn')
-		functions.chmod_rights(file_software, stat.S_IRWXU) ## execute permissions for group
+		HCGB_sys.chmod_rights(file_software, stat.S_IRWXU) ## execute permissions for group
 		VersionInstalled = set_config.get_version('blastn', file_software, Debug)
 		
 	elif (software == 'edirect'):
 		## run setup.sh
 		file_setup = os.path.join(folder_software, 'setup.sh')
-		functions.system_call(file_setup)
+		HCGB_sys.system_call(file_setup)
 		
 		## get version as an example using efetch
 		file_software = os.path.join(folder_software, 'efetch')
-		functions.chmod_rights(file_software, stat.S_IRWXU) ## execute permissions for group
+		HCGB_sys.chmod_rights(file_software, stat.S_IRWXU) ## execute permissions for group
 		VersionInstalled = set_config.get_version('efetch', file_software, Debug)
 	
 	elif (software == 'busco'):
@@ -253,7 +264,7 @@ def install_soft(software, min_version, install_path, Debug):
 	else:
 		## get version
 		file_software = os.path.join(folder_software, bin_name)
-		functions.chmod_rights(file_software, stat.S_IRWXU) ## execute permissions for group
+		HCGB_sys.chmod_rights(file_software, stat.S_IRWXU) ## execute permissions for group
 		VersionInstalled = set_config.get_version(software, file_software, Debug)
 
 	## debug messages
@@ -303,7 +314,7 @@ def install_soft(software, min_version, install_path, Debug):
 		## it is necessary to setup the database
 		setup_cmd = file_software + ' --setupdb'
 		print ("+ Set up prokka databases...")
-		functions.system_call(setup_cmd)
+		HCGB_sys.system_call(setup_cmd)
 			## return
 	
 	return(pathToExport, VersionInstalled)
@@ -331,7 +342,7 @@ def install_git_repo(git_repo, folder_sofware, install_path, option, Debug):
 		cmd = git_exe + ' clone ' + git_repo 
 	
 	## call git
-	functions.system_call(cmd)
+	HCGB_sys.system_call(cmd)
 
 	## compile if necessary
 	if (option == 'make'):
@@ -339,7 +350,7 @@ def install_git_repo(git_repo, folder_sofware, install_path, option, Debug):
 		print ('+ Compile software...')
 		## make
 		os.chdir(folder_sofware)
-		functions.system_call('make')
+		HCGB_sys.system_call('make')
 	
 	## chdir to previous path
 	os.chdir(current_path)
@@ -369,12 +380,12 @@ def install_binary(folder_software, site, install_path, Debug):
 			
 	## check if file already available
 	compress_file_name = os.path.join(install_path, site.rsplit('/', 1)[-1])
-	if not functions.is_non_zero_file(compress_file_name):
+	if not HCGB_main.is_non_zero_file(compress_file_name):
 		## download
-		functions.wget_download(site, install_path)
+		HCGB_sys.wget_download(site, install_path)
 	
 	## extract
-	functions.extract(compress_file_name, install_path, remove=False)
+	HCGB_files.extract(compress_file_name, install_path, remove=False)
 	return(True)
 
 ##################

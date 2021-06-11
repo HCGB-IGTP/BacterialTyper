@@ -173,8 +173,10 @@ def run_ident(options):
 			
 	## do edirect and MLST if bacteria
 	if (not skip):		
+		dataFrame_edirect = pd.DataFrame()
+		
 		######## EDirect identification
-		dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict, Debug)
+		#dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict, Debug)
 		
 		## functions.timestamp
 		start_time_partial = HCGB_time.timestamp(start_time_partial)
@@ -211,7 +213,7 @@ def run_ident(options):
 
 	## parse results
 	if options.project:
-		final_dir = outdir + '/report/ident'
+		final_dir = os.path.join(outdir, 'report', 'ident')
 		HCGB_files.create_folder(final_dir) 
 	else:
 		final_dir = outdir
@@ -241,7 +243,9 @@ def run_ident(options):
 		writer_sample = pd.ExcelWriter(name_sample_excel, engine='xlsxwriter') ## open excel handle
 		
 		## subset dataframe	& print result
-		results_summary_toPrint_sample = grouped[['Sample','#Template','Query_Coverage','Template_Coverage','Depth', 'Database']] 
+		results_summary_toPrint_sample = grouped[['Sample','#Template',
+												'Query_Coverage','Template_Coverage',
+												'Depth', 'Database']] 
 		results_summary_toPrint_sample.to_excel(writer_sample, sheet_name="KMA") ## write excel handle
 		results_summary_toPrint_sample.to_csv(name_sample_csv) ## write csv for sample
 		
@@ -265,7 +269,9 @@ def run_ident(options):
 	writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') ## open excel handle
 
 	## KMA dataframe: print result for sources
-	results_summary_KMA = dataFrame_kma[['Sample','#Template','Query_Coverage','Template_Coverage','Depth', 'Database']] 
+	results_summary_KMA = dataFrame_kma[['Sample','#Template',
+										'Query_Coverage','Template_Coverage',
+										'Depth', 'Database']] 
 	
 	## Sum plasmid and chromosome statistics ##
 	## sum coverage
@@ -372,8 +378,11 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	
 	"""
 	
+	return(pd.DataFrame())
+	
+	
 	### print header
-	HCGB_time.boxymcboxface("KMA Identification")
+	HCGB_aes.boxymcboxface("KMA Identification")
 
 	## set defaults
 	kma_bin = set_config.get_exe("kma")	
@@ -825,12 +834,18 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 		
 	.. include:: ../../links.inc	
 	"""
-
-	## TODO: Samples might not be assembled...to take into account and return 0
-	## TODO: Fix and install MLSTar during installation
-	########################################################################################
+	## set config
+	rscript = set_config.get_exe("Rscript")
 	
-	rscript = set_config.get_exe("Rscript") 
+	## TODO: Samples might not be assembled...to take into account and return 0
+	
+	
+	## TODO: Fix and install MLSTar during installation
+	print(MLSTar.get_MLSTar_package_installed())
+	exit()
+	
+	
+	
 	########################################################################################
 
 	## TODO: What to do if multi-isolate sample?
