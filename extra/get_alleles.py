@@ -3,7 +3,6 @@
 ## Jose F. Sanchez                                      ##
 ## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain ##
 ##########################################################
-from builtins import print
 """
 Searches for alleles sequences provided
 """

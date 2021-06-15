@@ -5,6 +5,7 @@ _libgcc_mutex=0.1=main
 _openmp_mutex=4.5=1_gnu
 _r-mutex=1.0.1=anacondar_1
 _sysroot_linux-64_curr_repodata_hack=3=ha9d2b57_10
+agrvate=1.0=hdfd78af_0
 any2fasta=0.4.2=1
 appdirs=1.4.4=pypi_0
 aragorn=1.2.38=h779adbc_4
@@ -45,7 +46,7 @@ chardet=4.0.0=pypi_0
 click=8.0.1=pypi_0
 clustalw=2.1=h7d875b9_6
 colorama=0.4.4=pypi_0
-coloredlogs=15.0.1=pypi_0
+coloredlogs=15.0.1=py37h89c1867_0
 colormath=3.0.0=pypi_0
 commonmark=0.9.1=pypi_0
 curl=7.77.0=hea6ffbf_0
@@ -56,7 +57,9 @@ deprecation=2.1.0=pypi_0
 diamond=2.0.9=hdcc8f71_0
 entrez-direct=13.9=pl5262he881be0_2
 ete3=3.1.2=pypi_0
+executor=23.2=pyhd3deb0d_0
 expat=2.4.1=h9c3ff4c_0
+fasteners=0.16.2=pyhd3eb1b0_0
 fastobo=0.10.1=pypi_0
 fastqc=0.11.9=hdfd78af_1
 fastqcparser=1.1=pypi_0
@@ -91,7 +94,7 @@ harfbuzz=2.8.1=h83ec7ef_0
 hcgb=0.3.7=pypi_0
 hmmer=3.1b2=3
 htslib=1.12=h9093b5e_1
-humanfriendly=9.2=pypi_0
+humanfriendly=9.2=py37h89c1867_0
 icu=68.1=h58526e2_0
 idna=2.10=pypi_0
 importlib-metadata=4.5.0=pypi_0
@@ -414,6 +417,7 @@ pluggy=0.13.1=pypi_0
 prodigal=2.6.3=h779adbc_3
 prokka=1.14.6=pl5262hdfd78af_1
 pronto=2.4.2=pypi_0
+property-manager=3.0=py_0
 py=1.10.0=pypi_0
 pycparser=2.20=pypi_0
 pyfastaq=3.17.0=py_2
@@ -540,6 +544,7 @@ scipy=1.6.3=py37h29e03ee_0
 screed=1.0.5=pypi_0
 sed=4.8=he412f7d_0
 sepp=4.5.1=py37_0
+seqkit=0.16.1=h9ee0642_0
 seqtk=1.3=h5bf99c6_3
 setuptools=52.0.0=py37h06a4308_0
 simplejson=3.17.2=pypi_0
@@ -553,6 +558,7 @@ spades=3.15.2=h95f258a_1
 spatyper=0.3.3=pypi_0
 spectra=0.0.11=pypi_0
 sqlite=3.35.4=hdfb4753_0
+staphopia-sccmec=1.0.0=hdfd78af_0
 suitesparse=5.7.2=h717dc36_0
 sysroot_linux-64=2.17=h77966d4_10
 t_coffee=11.0.8=py37hea885bf_8
@@ -572,6 +578,7 @@ ucsc-fatotwobit=377=h0b8a92a_4
 ucsc-twobitinfo=377=h0b8a92a_2
 urllib3=1.26.5=pypi_0
 vcflib=1.0.2=h3198e80_5
+verboselogs=1.7=py_0
 vt=2015.11.10=he941832_3
 wget=3.2=pypi_0
 wheel=0.36.2=pyhd3eb1b0_0

@@ -16,11 +16,18 @@ import pandas as pd
 from Bio import SeqIO
 
 ## import my modules
-from BacterialTyper.scripts import functions
 from BacterialTyper.scripts import database_user
 from BacterialTyper.config import set_config
 from BacterialTyper.report import retrieve_genes
+from BacterialTyper.report import get_promoter
 from BacterialTyper.report.Staphylococcus import get_spa_typing
+
+##
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.system_call_functions as HCGB_sys
 
 ## example report check: https://github.com/tseemann/nullarbor
 
@@ -65,10 +72,10 @@ def run_report(options):
         options.pair = True
 
     ## message header
-    functions.pipeline_header()
-    functions.boxymcboxface("Report generation module")
+    HCGB_aes.pipeline_header("BacterialTyper")
+    HCGB_aes.boxymcboxface("Report generation module")
     print ("--------- Starting Process ---------")
-    functions.print_time()
+    HCGB_time.print_time()
     
     ## call assemble using spades
     start_time_partial = start_time_total
@@ -113,18 +120,18 @@ def run_report(options):
     ## generate output folder, if necessary
     print ("\n\n\n+ Generate a report summarizing analysis and sample information")
     if not options.project:
-        functions.create_folder(outdir)
+        HCGB_files.create_folder(outdir)
         outdir_report = outdir
     else:
         ### report generation
-        outdir_report = functions.create_subfolder("report", outdir)
+        outdir_report = HCGB_files.create_subfolder("report", outdir)
     
     ## create report with all data
-    summary_report = functions.create_subfolder("summary_report", outdir_report)
+    summary_report = HCGB_files.create_subfolder("summary_report", outdir_report)
     print ("Folder: ", summary_report)
     
     ## time stamp
-    start_time_partial = functions.timestamp(start_time_partial)
+    start_time_partial = HCGB_time.timestamp(start_time_partial)
     
     ########################################
     ## create species specific report if any
@@ -138,7 +145,7 @@ def run_report(options):
         ## to add accordingly        
             
         ## time stamp
-        start_time_partial = functions.timestamp(start_time_partial)
+        start_time_partial = HCGB_time.timestamp(start_time_partial)
         
     ###########################################################
     ## create gene fasta sequences retrieval if desired
@@ -185,7 +192,7 @@ def run_report(options):
             print (list_of_genes)
         
         ## Save results
-        genes_folder = functions.create_subfolder('genes', summary_report)
+        genes_folder = HCGB_files.create_subfolder('genes', summary_report)
         for gene_retrieved in list_of_genes:
             this_frame = results_geneIDs[results_geneIDs['gene'] == gene_retrieved]
         
@@ -205,7 +212,15 @@ def run_report(options):
             info_hd.close()
         
         ## time stamp
-        start_time_partial = functions.timestamp(start_time_partial)
+        start_time_partial = HCGB_time.timestamp(start_time_partial)
+    
+        ########################################
+        ## create gene promoter fasta sequences retrieval if desired
+        ########################################
+        if options.promoter_bp:
+            ## retrieve as many bp as necessary from genes_ids_fasta
+            print("** THIS OPTION IS NOT IMPLEMENTED YET... **")
+            #get_promoter.get_promoter(file, geneOfInterest, basePairs, sampleName, option, debug=False):
     
     ########################################
     ## create gene specific report if any
@@ -233,7 +248,7 @@ def run_report(options):
             writer.save()
 
             ## time stamp
-            start_time_partial = functions.timestamp(start_time_partial)
+            start_time_partial = HCGB_time.timestamp(start_time_partial)
         
     ###############################################
     ## Search for any additional fasta sequence
@@ -243,7 +258,7 @@ def run_report(options):
         print("** THIS OPTION IS NOT IMPLEMENTED YET... **")
     
     print ("\n*************** Finish *******************")
-    start_time_partial = functions.timestamp(start_time_total)
+    start_time_partial = HCGB_time.timestamp(start_time_total)
 
     print ("+ Exiting Report generation module.")
     return()
@@ -263,7 +278,7 @@ def Saureus_specific(samples_df, samples_info, options, folder):
     EQC_genes = os.path.join(Staphylococcus_path, "EQC_genes.csv")
     arcA_gene = os.path.join(Staphylococcus_path, "arcA.fasta")
     
-    EQC_genes_df = functions.get_data(EQC_genes, ',', '')
+    EQC_genes_df = HCGB_main.get_data(EQC_genes, ',', '')
     ## Gene,ID,Source
     ## mecA,ARO:3000617,CARD
     ## mecC,ARO:3001209,CARD

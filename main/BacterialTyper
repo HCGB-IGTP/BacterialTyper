@@ -600,7 +600,7 @@ subparser_report = subparsers.add_parser(
     description='This module creates a report summarizing and providing information of the analysis generated.'
 )
 in_out_group_report = subparser_report.add_argument_group("Input/Output")
-in_out_group_report.add_argument("--input", help="Folder containing a project or assemblies. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv) )
+in_out_group_report.add_argument("-i", "--input", help="Folder containing a project or assemblies. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv) )
 ##in_out_group_annot.add_argument("--batch", help="Provide a csv file containing the name and the path for each assembly. No header. Provided it in format: name,tag,file. tag = chromosome/plasmid. e.g. sample1,chromosome,/path/to/sample1/assembly/file.fasta\nsample1,plasmid,/path/to/sample1/assembly/file.fasta")
 in_out_group_report.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
 in_out_group_report.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
@@ -610,7 +610,7 @@ in_out_group_report.add_argument("--include_lane", action="store_true", help="In
 in_out_group_report.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
 dataset_group_report = subparser_report.add_argument_group("Databases")
-dataset_group_report.add_argument("--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv) )
+dataset_group_report.add_argument("-db", "--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv) )
 
 species_report = subparser_report.add_argument_group("Species specific")
 species_report.add_argument("--species", dest='species_report', choices=['Saureus'])
@@ -618,7 +618,8 @@ species_report.add_argument("--species", dest='species_report', choices=['Saureu
 gene_report = subparser_report.add_argument_group("Gene specific")
 gene_report.add_argument("--genes_ids_fasta", help="List of gene IDs to retrieve fasta file from profile analysis")
 gene_report.add_argument("--genes_ids_profile", help="List of gene IDs to retrieve profile value from profile analysis")
-gene_report.add_argument("--genes_fasta", help="Fasta sequence of genes to retrieve fasta file")
+#gene_report.add_argument("--genes_fasta", help="Fasta sequence of genes to retrieve fasta file") given a list of fasta sequences search using blast against proteins annotated or genome
+gene_report.add_argument("--promoter_bp", type=int, help="Number of base pairs to retrieve upstream CDS start site from --gene_ids_fasta genes [Example: 500].")
 
 info_group_report = subparser_report.add_argument_group("Additional information")
 info_group_report.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
