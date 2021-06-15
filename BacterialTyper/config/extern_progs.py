@@ -143,13 +143,13 @@ def print_dependencies():
 def min_python_module_version():
 	"""Returns a dictionary containing minimum version for each python package.
 
-	Reads information from :file:`BacterialTyper/config/python/python_requirements.csv`.
+	Reads information from :file:`BacterialTyper/config/python/python_requirements_summary.csv`.
 
 	:returns: dictionary
 	"""
 	## read from file: prog2default.csv
-	python_modules = file_list("python_requirements")
-	package_min_versions = functions.file2dictionary(python_modules, "==")
+	python_modules = file_list("python_requirements_summary")
+	package_min_versions = functions.file2dictionary(python_modules, ",")
 
 	return(package_min_versions)
 ##################

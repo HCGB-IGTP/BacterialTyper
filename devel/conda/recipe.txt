@@ -1,30 +1,8 @@
-
-### mamba tested with python3.7
-conda install -c conda-forge mamba
-
-mamba create -n BacterialTyper_mamba python=3.8
-conda activate BacterialTyper_mamba
-mamba install -n BacterialTyper_mamba -c bioconda -c conda-forge trimmomatic fastqc spades=3.15.2 busco=5.1.2 prokka=1.14.6
-
-## ERROR:prokka=1.14.6
-Problem: package prokka-1.14.6-pl526_0 requires perl-bioperl >=1.7.2, but none of the providers can be installed
-
-mamba install -c bioconda -c conda-forge trimmomatic fastqc spades=3.15.2 busco=5.1.2 prokka ariba
-mamba install -c bioconda ariba
-
-## prokka fails:
-Blastp 2.2 is required, found version 2.11. It would be fixed in 1.14.6 but conflicts with perl or bioperl arise.
-
-
-mamba install -c bioconda snippy=4.6.0 prokka=1.14.6
-Problem: nothing provides libdeflate >=1.3,<1.4.0a0 needed by htslib-1.10.2-h78d89cc_0
-
-
-
-
-
+#################################
 ### conda
-## python
+#################################
+
+## python 3.8
 conda create -n BacterialTyper python=3.8
 
 conda activate BacterialTypery
@@ -32,19 +10,26 @@ conda activate BacterialTypery
 ## install all 
 conda install -c conda-forge -c bioconda -c defaults trimmomatic fastqc spades=3.15.2 busco=5.1.2 prokka=1.14.6
 
-
+#################################
 1) ## trimmomatic, fastqc, iqtree
+#################################
 conda install -c conda-forge -c bioconda -c defaults trimmomatic fastqc iqtree
 
+#################################
 2) ## spades
+#################################
 conda install -c conda-forge -c bioconda -c defaults spades=3.15.2
 
+#################################
 3) ## busco
+#################################
 conda install -c conda-forge -c bioconda -c defaults busco=5.1.2
 installs: 
 	blast, entrez-direct, augustus, biopython, hmmer, prodigal, 
 
+#################################
 4) ## prokka
+#################################
 conda install -c conda-forge -c bioconda -c defaults prokka=1.14.6
 installs: 
 	bioperl, aragorn, tbl2asn, parallel, bedtools, barrnap, tcoffee, clustalw
@@ -79,27 +64,92 @@ installs:
 		(BacterialTyper) jfsanchez@debian:~/tests/test_BacterialTyper$ conda config --set channel_priority strict
 		#----------------------------------------------------------------------------------------------#
 
-
+#################################
 ## snippy
+#################################
 conda install -c conda-forge -c bioconda -c defaults snippy=4.6
 installs:
 	samtools, bcftools, snp-sites, seqtk, vt, bwa, freebayes, minimap2
 
+#################################
 ## phispy
+#################################
 conda install -c conda-forge -c bioconda -c defaults phispy=4.2.12
 
+#################################
 ##  iqtree
+#################################
 conda install -c conda-forge -c bioconda -c defaults iqtree
 
+#################################
 ## ariba 
+#################################
 conda install -c conda-forge -c bioconda -c defaults ariba
 installs:
 	mummer, pymummer, cd-hit, bowtie2
 
+#################################
 ## kma
+#################################
 conda install -c conda-forge -c bioconda -c defaults kma=1.3.15
 
+#################################
 ## spatyper
+#################################
 conda install -c conda-forge -c bioconda -c defaults spatyper
 
 
+
+#################################
+## mamba
+#################################
+### tested in python 3.8
+conda install -c conda-forge mamba
+
+mamba create -n BacterialTyper_mamba python=3.8
+conda activate BacterialTyper_mamba
+mamba install -n BacterialTyper_mamba -c bioconda -c conda-forge trimmomatic fastqc spades=3.15.2 busco=5.1.2 prokka=1.14.6
+
+#################################
+## ERROR:prokka=1.14.6
+#################################
+Problem: package prokka-1.14.6-pl526_0 requires perl-bioperl >=1.7.2, but none of the providers can be installed
+
+mamba install -c bioconda -c conda-forge trimmomatic fastqc spades=3.15.2 busco=5.1.2 prokka ariba
+mamba install -c bioconda ariba
+
+#################################
+## prokka fails:
+#################################
+Blastp 2.2 is required, found version 2.11. It would be fixed in 1.14.6 but conflicts with perl or bioperl arise.
+
+
+mamba install -c bioconda snippy=4.6.0 prokka=1.14.6
+#################################
+Problem: nothing provides libdeflate >=1.3,<1.4.0a0 needed by htslib-1.10.2-h78d89cc_0
+#################################
+
+mamba install -c bioconda -c conda-forge trimmomatic fastqc spades=3.15.2 busco=5.1.2 ariba snippy=4.6.0 prokka=1.14.6
+
+#################################
+bioperl_tcoffee requires python3.7...
+#################################
+
+
+#################################
+## python 3.7
+#################################
+
+mamba create -n BacterialTyper_mamba python=3.7
+conda activate BacterialTyper_mamba
+mamba install -c r -c bioconda -c conda-forge trimmomatic fastqc \
+										 spades=3.15.2 busco=5.1.2 ariba \ 
+										 snippy=4.6.0 prokka=1.14.6  \
+										 perl-bioperl=1.7.2 perl-bio-tools-run-alignment-tcoffee t_coffee \
+										 r-optparse r-devtools
+
+
+phispy
+iqtree
+kma
+spatyper

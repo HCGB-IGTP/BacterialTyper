@@ -421,7 +421,7 @@ def get_python_packages(Debug):
 	"""
 	Retrieves the version of the python packages installed in the system.
 
-	It retrieves the dependencies name conversion from file :file:`BacterialTyper/config/python/module_dependencies.csv`
+	It retrieves the dependencies name conversion from file :file:`BacterialTyper/config/python/name_conversion_module.csv` if any.
 	using function :func:`BacterialTyper.config.extern_progs.file_list` and :func:`BacterialTyper.scripts.functions.get_data`.
 	For each module it retrieves the package version installed in the system using 
 	:func:`BacterialTyper.config.set_config.check_package_version`.	
@@ -439,16 +439,13 @@ def get_python_packages(Debug):
 	"""
 
 	## get import names for packages:
-	## some modules do not have the same name when install from pip and called from import
-	file_module_dependecies = extern_progs.file_list("module_dependencies")
-	module_dependencies = HCGB_main.file2dictionary(file_module_dependecies, ',')
-
+	dict_python_packages = extern_progs.min_python_module_version()
+	
+	## get version of packages	
 	my_packages_installed = {}
-
-	for each in module_dependencies:
-		module_name = module_dependencies[each]
+	for module_name in dict_python_packages.keys():
 		installed = check_package_version(module_name, Debug) ## check version installed in system
-		my_packages_installed[each] = installed
+		my_packages_installed[module_name] = installed
 
 	return (my_packages_installed)
 
@@ -499,9 +496,9 @@ def check_python_packages(Debug, option_install, install_path):
 		print ("my_packages_requirements")
 		print (my_packages_requirements)
 
-	## my module name conversion
-	file_module_dependecies = extern_progs.file_list("module_dependencies")
-	module_dependencies = HCGB_main.file2dictionary(file_module_dependecies, ',')
+	## some modules do not have the same name when install from pip and called from import
+	file_module_dependecies = extern_progs.file_list("name_conversion_module")
+	name_conversion_module = HCGB_main.file2dictionary(file_module_dependecies, ',')
 
 	## check each package
 	for each in my_packages_requirements:
@@ -511,8 +508,11 @@ def check_python_packages(Debug, option_install, install_path):
 		## get version installed in system
 		installed = my_packages_installed[each] 
 
-		## module name conversion
-		module_name = module_dependencies[each]
+		## module name conversion (if any)
+		if each in list(name_conversion_module.keys()):
+			module_name = name_conversion_module[each]
+		else:
+			module_name = each
 
 		## debug messages
 		if (Debug):
@@ -837,7 +837,7 @@ def print_module_comparison(module_name, message, color, tag):
 
 	:returns: Print message
 	"""
-	print (colored("{:.<15}{:.>15}".format("%s: %s" %(tag, module_name), "[ %s ]" %message), color))
+	print (colored("{:.<30}{:.>35}".format("%s: %s" %(tag, module_name), "[ %s ]" %message), color))
 
 #########
 

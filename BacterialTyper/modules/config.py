@@ -35,11 +35,15 @@ from termcolor import colored
 from distutils.version import LooseVersion
 
 ## import my modules
-from BacterialTyper.config import set_config
 from BacterialTyper.config import extern_progs
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import install_dependencies
+from BacterialTyper.config import set_config
 
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.files_functions as HCGB_files
+
+###################################################################
 def run(options):
 	"""
 	This is the main function of the module ``config``. It basically checks 
@@ -81,10 +85,10 @@ def run(options):
 	else:
 		Debug = False
 
-	functions.pipeline_header()
-	functions.boxymcboxface("Pipeline Configuration")
+	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.boxymcboxface("Pipeline Configuration")
 	print ("--------- Starting Process ---------")
-	functions.print_time()
+	HCGB_time.print_time()
 
 	if (options.install_path):
 		if os.path.isdir(options.install_path):
@@ -107,9 +111,11 @@ def run(options):
 			print ("Retrieve environment path as installation path:")
 			print ("Path: " + options.install_path)
 
-		functions.create_folder(options.install_path)
+		HCGB_files.create_folder(options.install_path)
 
+	#######################
 	## install or only check
+	#######################
 	option_install = False
 	if (options.option == 'install'):
 		print ("\n+ Check dependencies")
@@ -134,10 +140,12 @@ def run(options):
 	elif (options.option == 'only_check'):
 		print ("\nCheck dependencies, modules or third party software and print report...")
 
+	#######################
 	## python version
-	functions.print_sepLine("+", 20, False)
+	#######################
+	HCGB_aes.print_sepLine("+", 20, False)
 	print ('Python:')
-	functions.print_sepLine("+", 20, False)
+	HCGB_aes.print_sepLine("+", 20, False)
 
 	this_python_version = str(sys.version)
 	python_min_version = extern_progs.return_min_version_soft('python')
@@ -147,11 +155,13 @@ def run(options):
 		print (colored("Minimum version (%s) not satisfied: %s" %(python_min_version, this_python_version), 'red'))
 		exit()
 		
+	#######################
 	## perl_version
+	#######################
 	print ('\n')
-	functions.print_sepLine("+", 50, False)
+	HCGB_aes.print_sepLine("+", 50, False)
 	print ('Perl:')
-	functions.print_sepLine("+", 50, False)
+	HCGB_aes.print_sepLine("+", 50, False)
 	
 	perl_min_version = extern_progs.return_min_version_soft('perl')
 	this_perl_path = set_config.get_exe("perl", Debug)
@@ -162,53 +172,62 @@ def run(options):
 		print (colored("Minimum version (%s) not satisfied: %s" %(perl_min_version, this_perl_version), 'red'))
 		exit()
 
+	#######################
 	## third-party software
+	#######################
 	print ('\n')
-	functions.print_sepLine("+", 20, False)
+	HCGB_aes.print_sepLine("+", 20, False)
 	print ('External dependencies:')
-	functions.print_sepLine("+", 20, False)
+	HCGB_aes.print_sepLine("+", 20, False)
 	
 	set_config.check_dependencies(option_install, options.install_path, Debug)
 	print ('\n')	
 
+	#######################
 	## python packages
+	#######################
 	print ('\n')
-	functions.print_sepLine("+", 20, False)
+	HCGB_aes.print_sepLine("+", 20, False)
 	print ('Python packages:')
-	functions.print_sepLine("+", 20, False)
+	HCGB_aes.print_sepLine("+", 20, False)
 
 	set_config.check_python_packages(Debug, option_install, options.install_path)
-	functions.print_sepLine("+", 20, False)
+	HCGB_aes.print_sepLine("+", 20, False)
 	print ('\n')
 
+	#######################
 	## perl packages
+	#######################
 	print ('\n')
-	functions.print_sepLine("+", 20, False)
+	HCGB_aes.print_sepLine("+", 20, False)
 	print ('Perl packages:')
-	functions.print_sepLine("+", 20, False)
+	HCGB_aes.print_sepLine("+", 20, False)
 
 	set_config.check_perl_packages("perl_dependencies", Debug, option_install, options.install_path)
-	functions.print_sepLine("+", 20, False)
+	HCGB_aes.print_sepLine("+", 20, False)
 	print ('\n')
 
+	#######################
 	## IslandPath dependencies
+	#######################
 	if (options.IslandPath):
 		print ('\n')
-		functions.print_sepLine("+", 20, False)
+		HCGB_aes.print_sepLine("+", 20, False)
 		print ('IslandPath packages and software required:')
-		functions.print_sepLine("+", 20, False)
+		HCGB_aes.print_sepLine("+", 20, False)
 	
 		set_config.check_IslandPath(Debug, option_install, options.install_path)
-		functions.print_sepLine("+", 20, False)
+		HCGB_aes.print_sepLine("+", 20, False)
 		print ('\n')
 
-
+	#######################
 	## R packages
+	#######################
 	print ('\n')
-	functions.print_sepLine("+", 20, False)
+	HCGB_aes.print_sepLine("+", 20, False)
 	print ('R packages:')
-	functions.print_sepLine("+", 20, False)
+	HCGB_aes.print_sepLine("+", 20, False)
 
 	set_config.check_R_packages(option_install, options.install_path, Debug)
-	functions.print_sepLine("+", 20, False)
+	HCGB_aes.print_sepLine("+", 20, False)
 	print ('\n')
