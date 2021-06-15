@@ -19,11 +19,16 @@ import pandas as pd
 
 ## import my modules
 from HCGB import sampleParser
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
 from BacterialTyper.scripts import database_generator
 from BacterialTyper.scripts import min_hash_caller
+
+from BacterialTyper.scripts import functions
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
 
 ##############################################
 def run_cluster(options):
@@ -56,10 +61,10 @@ def run_cluster(options):
 	else:
 		options.pair = True
 	
-	functions.pipeline_header()
-	functions.boxymcboxface("Clustering samples")
+	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.boxymcboxface("Clustering samples")
 	print ("--------- Starting Process ---------")
-	functions.print_time()
+	HCGB_time.print_time()
 
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
@@ -106,10 +111,10 @@ def run_cluster(options):
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
 	if not options.project:
-		functions.create_folder(outdir)
+		HCGB_files.create_folder(outdir)
 	
 	## for each sample
-	outdir_dict = functions.outdir_project(outdir, options.project, pd_samples_retrieved, "mash", options.debug)	
+	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "mash", options.debug)	
 
 	## debug message
 	if (Debug):
@@ -120,11 +125,11 @@ def run_cluster(options):
 	retrieve_databases = get_options_db(options)
 	
 	## time stamp
-	start_time_partial = functions.timestamp(start_time_total)
+	start_time_partial = HCGB_time.timestamp(start_time_total)
 	
 	## remove samples if specified
 	if options.ex_sample:
-		ex_samples = functions.get_info_file(options.ex_sample)
+		ex_samples = HCGB_main.get_info_file(options.ex_sample)
 		retrieve_databases = retrieve_databases.loc[~retrieve_databases.index.isin(ex_samples)]
 	
 	## debug message
@@ -139,7 +144,7 @@ def run_cluster(options):
 	for index, row in retrieve_databases.iterrows():
 		if not row['path'] == 'NaN':
 			if (Debug):
-				functions.print_sepLine("*",25, False)
+				HCGB_aes.print_sepLine("*",25, False)
 				print (row)
 				
 			if all([ int(options.kmer_size) == int(row['ksize']), int(options.n_sketch) == int(row['num_sketch']) ]):
@@ -180,7 +185,7 @@ def run_cluster(options):
 			if not os.path.exists(file2print):
 				original = ['NaN']
 			else:
-				original = functions.readList_fromFile(file2print)
+				original = HCGB_main.readList_fromFile(file2print)
 				if all([ int(options.kmer_size) == int(original[1]), int(options.n_sketch) == int(original[2])]):
 					siglist_all.append(min_hash_caller.read_signature(this_sig, options.kmer_size)) 
 					pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, this_sig, row['sample'], options.kmer_size, options.n_sketch)
@@ -246,14 +251,14 @@ def run_cluster(options):
 
 	## parse results
 	if options.project:
-		outdir_report = functions.create_subfolder("report", outdir)
+		outdir_report = HCGB_files.create_subfolder("report", outdir)
 		#final_dir = outdir + '/report/cluster'
 		final_dir = functions.create_subfolder("cluster", outdir_report) 
 	else:
 		final_dir = outdir
 
 	## compare
-	name = 'cluster_' + str(functions.create_human_timestamp())
+	name = 'cluster_' + str(HCGB_time.create_human_timestamp())
 	tag_cluster_info = final_dir + '/' + name
 	print ('+ Saving results in folder: ', final_dir)
 	print ('\tFile name: ', name)
@@ -290,7 +295,7 @@ def get_options_db(options):
 	if (options.external_file):
 		abs_path_ext_file = os.path.abspath(options.external_file)
 		if options.batch_external:
-			myList = functions.readList_fromFile(abs_path_ext_file)
+			myList = HCGB_main.readList_fromFile(abs_path_ext_file)
 			join_str = ','.join(myList)
 		else:
 			join_str = abs_path_ext_file
@@ -339,7 +344,7 @@ def get_options_db(options):
 	###############
 	print ("\n+ Parsing information to retrieve databases")
 	print ("+ Reading from database: " + database2use)
-	functions.print_sepLine("-",50, False)
+	HCGB_aes.print_sepLine("-",50, False)
 
 	###############
 	## debug message
@@ -347,7 +352,7 @@ def get_options_db(options):
 		print (colored("**DEBUG: option_db: " +  option_db + " **", 'yellow'))
 
 	pd_MASH = database_generator.getdbs("MASH", database2use, option_db, Debug)
-	functions.print_sepLine("-",50, False)
+	HCGB_aes.print_sepLine("-",50, False)
 
 	## return both dataframes
 	return (pd_MASH)
@@ -366,7 +371,7 @@ def generate_sketch(folder, assembly, entry, ksize, n_sketch, Debug):
 	assembly_tmp_path = "../assembly/" + os.path.basename(assembly)
 	
 	list_fna = [assembly_tmp_path, str(ksize), str(n_sketch)]
-	functions.printList2file(file2print, list_fna)
+	HCGB_main.printList2file(file2print, list_fna)
 	return (sigfile[0], siglist[0])
 
 	

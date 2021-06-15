@@ -289,14 +289,13 @@ def get_reference_gbk(options):
             print (colored("**DEBUG: db_frame_ncbi **", 'yellow'))
             print (db_frame_ncbi) 
 
-        NCBI_folder = os.path.join(options.database, 'NCBI')
+        NCBI_folder = HCGB_files.create_subfolder('NCBI', options.database)
         dir_path = os.path.join(NCBI_folder, 'genbank', 'bacteria', options.Genbank_ID)    
         if (options.Genbank_ID in db_frame_ncbi.index): 
             print('\t+ Reference (%s) available in database provided' %options.Genbank_ID)
         else:
             print ('\t+ Reference (%s) is not available in database provided' %options.Genbank_ID)
             print ('\t+ Try to download it.')
-            NCBI_folder = os.path.join(options.database, 'NCBI')
             database_generator.ngd_download(dir_path, options.Genbank_ID, NCBI_folder)
     
         ## get files download
@@ -307,7 +306,7 @@ def get_reference_gbk(options):
                 print (colored("**DEBUG: gff:" + gff, 'yellow'))
                 print (colored("**DEBUG: gbk:" + gbk, 'yellow'))
                 
-        if HCGB_main.is_non_zero_file(gbk):
+        if HCGB_files.is_non_zero_file(gbk):
             print('\t+ Genbank file format reference available.')
             reference_gbk_file = gbk
         else:
@@ -357,7 +356,7 @@ def get_reference_gbk(options):
             print ('gbk:' + gbk)
   
         ## check if exists
-        if HCGB_main.is_non_zero_file(gbk):
+        if HCGB_files.is_non_zero_file(gbk):
             print('\t+ Genbank file format reference available.')
             reference_gbk_file = gbk
         else:

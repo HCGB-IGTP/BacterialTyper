@@ -182,7 +182,8 @@ def compare(siglist, output, Debug):
 			D[i][j] = similarity
 			D[j][i] = similarity
 
-		labeltext.append(E.name())
+		#labeltext.append(E.name())
+		labeltext.append(E.name)
 
    	## Debug messages
 	if Debug:

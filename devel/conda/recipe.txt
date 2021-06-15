@@ -16,6 +16,12 @@ mamba install -c bioconda ariba
 Blastp 2.2 is required, found version 2.11. It would be fixed in 1.14.6 but conflicts with perl or bioperl arise.
 
 
+mamba install -c bioconda snippy=4.6.0 prokka=1.14.6
+Problem: nothing provides libdeflate >=1.3,<1.4.0a0 needed by htslib-1.10.2-h78d89cc_0
+
+
+
+
 
 ### conda
 ## python
