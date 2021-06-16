@@ -22,7 +22,8 @@ from Bio import SeqIO
 from BacterialTyper.config import set_config
 
 ## import my HCGB module 
-from HCGB.functions import main_functions
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.aesthetics_functions as HCGB_aes
 
 ##############
 def help_options():
@@ -38,23 +39,24 @@ def retrieve_genes_ids_sequences(profile, gene_ID, debug):
     """
     ## given a profile folder
     if debug:
-        print ("** DEBUG **")
-        print ("profile: ", profile)
-        print ("gene_id: ", gene_ID)
+        HCGB_aes.debug_message('profile: ', 'yellow')
+        print (profile)
+        HCGB_aes.debug_message('gene_id: ', 'yellow')
+        print (gene_ID)
         
     ##
-    assembled_genes_list = main_functions.retrieve_matching_files(profile, "assembled_genes.fa", debug)
+    assembled_genes_list = HCGB_main.retrieve_matching_files(profile, "assembled_genes.fa", debug)
     assembled_genes_list = [s for s in assembled_genes_list if 'ariba.tmp' not in s]
     
     if debug:
-        print ("** DEBUG **")
-        print ("assembled_genes_list: ", assembled_genes_list)
+        HCGB_aes.debug_message('assembled_genes_list: ', 'yellow')
+        print(assembled_genes_list)
 
     if os.path.isfile(assembled_genes_list[0]):
         for record in SeqIO.parse(assembled_genes_list[0], "fasta"):
             if debug:
-                print ("** DEBUG: ", record.description, " **")
-                #print (record.seq)
+                HCGB_aes.debug_message('record.description: ', 'yellow')
+                print(record.description)
  
             search_ID = re.search(gene_ID, record.description)
             if (search_ID):
@@ -74,27 +76,34 @@ def get_genes_profile(samples_info, gene_names, debug, option):
         #print ("\t+", g)
         for name, cluster_df in sample_frame:
             my_list_profiles = cluster_df.loc[cluster_df['tag'] == 'profile']['ext'].to_list()
-	   
+	       
             if debug:
-                print ("name: ", name)
-                print ("my_list_profiles:")
+                HCGB_aes.debug_message('name: ' + name, 'yellow')
+                HCGB_aes.debug_message('my_list_profiles: ', 'yellow')
                 print (my_list_profiles)
-                print ("cluster_df")
+                HCGB_aes.debug_message('cluster_df: ', 'yellow')
                 print (cluster_df)
+
+            ## skip files
+            if name == 'report':
+                continue
 
             fill=False
             for p in my_list_profiles:
                 profile_csv = cluster_df.loc[cluster_df['ext'] == p]['sample'].to_list()[0]
-                if debug:
-                    print ("profile_csv: ", profile_csv)
-            
-                value = retrieve_genes_ids_profile(profile_csv, g, debug, option)
-            
-                ## save results 
-                if (not value.empty):
-                    for Name, Data in value.iterrows():
-                        results_profileIDs.loc[name,Name] = Data['Status']
-                    fill=True
+                
+                ## skip files
+                if not profile_csv.endswith('report_summary.csv'):
+                    if debug:
+                        HCGB_aes.debug_message('profile_csv: ' + profile_csv, 'yellow')
+                
+                    value = retrieve_genes_ids_profile(profile_csv, g, debug, option)
+                    
+                    ## save results 
+                    if (not value.empty):
+                        for Name, Data in value.iterrows():
+                            results_profileIDs.loc[name,Name] = Data['Status']
+                        fill=True
 
             if not fill:
                 results_profileIDs.loc[name, g] = 'no'
@@ -106,7 +115,7 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug, option):
     """    
     """
     ## read data    
-    get_csv_data = functions.main_functions.get_data(profile, ',', '')
+    get_csv_data = HCGB_main.get_data(profile, ',', '')
     
     if option == 'name':
         list_Genes = get_csv_data['Genes'].to_list()
@@ -118,13 +127,12 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug, option):
     
     ## debug messages
     if debug:
-        print ("** DEBUG **")
-        print ("profile: ", profile)
-        print ("gene_id: ", gene_ID)
-        print ("data")
-        print (get_csv_data)
-        print ("Option: ", option)
-        print ("Genes")
+        HCGB_aes.debug_message('profile: ' + profile, 'yellow')
+        HCGB_aes.debug_message('gene_id: ' + str(gene_ID), 'yellow')
+        HCGB_aes.debug_message('data: ', 'yellow')
+        print(get_csv_data)
+        HCGB_aes.debug_message('Option: ' + option, 'yellow')
+        HCGB_aes.debug_message('Genes: ', 'yellow')
         print (list_Genes)
         
     ## search accordingly
@@ -134,8 +142,9 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug, option):
         
         ## debug messages
         if debug:
-            print ("** DEBUG **")
+            HCGB_aes.debug_message('filtered_genes: ', 'yellow')
             print (filtered_genes)
+            HCGB_aes.debug_message('filtered_genes.loc[filtered_genes]: ', 'yellow')
             print (get_csv_data.loc[filtered_genes])
         
         return (get_csv_data.loc[filtered_genes]) 
@@ -144,10 +153,10 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug, option):
         if gene_ID in list_Genes:
             ## debug messages
             if debug:
-                print ("** DEBUG **")
-                print ("gene_ID: ", gene_ID)
-                print (get_csv_data.loc[gene_ID])
-            return (get_csv_data.loc[gene_ID])
+                HCGB_aes.debug_message('gene_id: ' + gene_ID, 'yellow')
+                print (get_csv_data.loc[gene_ID].to_frame().transpose())
+                
+            return (get_csv_data.loc[gene_ID].to_frame().transpose())
         else:
             return(pd.DataFrame()) 
     

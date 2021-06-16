@@ -619,7 +619,7 @@ species_report.add_argument("--species", dest='species_report', choices=['Saureu
 gene_report = subparser_report.add_argument_group("Gene specific")
 gene_report.add_argument("--genes_ids_fasta", help="List of gene IDs to retrieve fasta file from profile analysis")
 gene_report.add_argument("--genes_ids_profile", help="List of gene IDs to retrieve profile value from profile analysis")
-#gene_report.add_argument("--genes_fasta", help="Fasta sequence of genes to retrieve fasta file") given a list of fasta sequences search using blast against proteins annotated or genome
+gene_report.add_argument("--genes_fasta", help="Fasta sequence of genes to retrieve fasta file") ## given a list of fasta sequences search using blast against proteins annotated or genome
 gene_report.add_argument("--promoter_bp", type=int, help="Number of base pairs to retrieve upstream CDS start site from --gene_ids_fasta genes [Example: 500].")
 
 info_group_report = subparser_report.add_argument_group("Additional information")

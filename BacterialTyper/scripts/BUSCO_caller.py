@@ -33,7 +33,7 @@ def print_help_BUSCO():
 	HCGB_aes.print_sepLine("*", 50, 'yellow')
 	print ('BUSCO Help')
 	HCGB_aes.print_sepLine("*", 50, 'yellow')
-	print ("Benchmarking of Universal Single Copy Orhtologs (BUSCO)\n")	
+	print ("Benchmarking of Universal Single Copy Orthologs (BUSCO)\n")	
 	
 	print ("BUSCO provides quantitative measures for the assessment of genome assembly, gene set, and transcriptome completeness.")
 	print ("It is based on evolutionary-informed expectations of gene content from near-universal single-copy orthologs selected from OrthoDB v9.\n")

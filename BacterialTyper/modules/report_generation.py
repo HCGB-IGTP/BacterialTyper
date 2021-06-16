@@ -21,6 +21,7 @@ from BacterialTyper.config import set_config
 from BacterialTyper.report import retrieve_genes
 from BacterialTyper.report import get_promoter
 from BacterialTyper.report.Staphylococcus import get_spa_typing
+from BacterialTyper.report.Staphylococcus import agr_typing
 from BacterialTyper import __version__ as pipeline_version
 
 ##
@@ -58,6 +59,8 @@ def run_report(options):
         help_info.project_help()
         exit()
 
+    ## set default
+    options.batch = False
 
     ## debugging messages
     global Debug
@@ -103,12 +106,16 @@ def run_report(options):
     
     ## get files: trimm, assembly, annotation
     pd_samples_retrieved = database_user.get_userData_files(options, input_dir)
+    pd_samples_retrieved['new_name'] = pd_samples_retrieved['name']
     
     ## get info: profile, ident, cluster, MGE
     pd_samples_info = database_user.get_userData_info(options, input_dir)
     
     ## get databases to list
     #retrieve_databases = get_options_db(options)
+
+    ## create output files
+    outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "report", options.debug)
 
     ## debug message
     if (Debug):
@@ -117,7 +124,7 @@ def run_report(options):
         
         print (colored("**DEBUG: pd_samples_info **", 'yellow'))
         print (pd_samples_info)
-        
+    
     ## generate output folder, if necessary
     print ("\n\n\n+ Generate a report summarizing analysis and sample information")
     if not options.project:
@@ -140,7 +147,7 @@ def run_report(options):
     if (options.species_report):
         ## Saureus
         if options.species_report == "Saureus":
-            Saureus_specific(pd_samples_retrieved, pd_samples_info, options, summary_report)
+            Saureus_specific(pd_samples_retrieved, pd_samples_info, options, summary_report, outdir_dict)
         
         ## else
         ## to add accordingly        
@@ -265,7 +272,7 @@ def run_report(options):
     return()
 
 #######################3
-def Saureus_specific(samples_df, samples_info, options, folder):
+def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
     """
     Retrieves Saureus specific information.
     
@@ -287,14 +294,13 @@ def Saureus_specific(samples_df, samples_info, options, folder):
     
     ## debugging messages
     if options.debug:
-        print ("## DEBUG: Saureus_specific")
+        HCGB_aes.debug_message("Saureus_specific", 'yellow')
         print (Staphylococcus_path)
         print (arcA_gene)
         
-        print ("EQC genes")
+        HCGB_aes.debug_message("EQC_genes", 'yellow')
         print (EQC_genes)
         print (EQC_genes_df)
- 
 
     ####################
     ## get gene info by unique ID
@@ -302,10 +308,11 @@ def Saureus_specific(samples_df, samples_info, options, folder):
     ## get gene names
     gene_IDs = EQC_genes_df['ID'].to_list()
     
-    results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'ID')
+    ## outdir_dict
+    #results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'ID')
     if options.debug:
-        print ("results_Profiles")
-        print (results_Profiles)
+        HCGB_aes.debug_message("results_Profiles_ids", 'yellow')
+    #    print (results_Profiles_ids)
     
     ########################################
     ## add additional genes if required
@@ -317,7 +324,8 @@ def Saureus_specific(samples_df, samples_info, options, folder):
         if options.debug:
             print ("gene_names")
             print (gene_names)
-    
+        
+        ## outdir_dict
         results_Profiles_names = retrieve_genes.get_genes_profile(samples_info, gene_names, options.debug, 'name')
         if options.debug:
             print ("results_Profiles")
@@ -335,12 +343,23 @@ def Saureus_specific(samples_df, samples_info, options, folder):
     samples_df = samples_df.set_index('name')
     assembly_files = samples_df.loc[samples_df['tag'] == "assembly", "sample"]
     results_spaType = pd.DataFrame()
-    results_spaType = get_spa_typing.module_call(options.database, assembly_files.to_dict(), options.debug)
+    #results_spaType = get_spa_typing.module_call(options.database, assembly_files.to_dict(), options.debug)
     
+    ####################
+    ## get agr typing
+    ####################
+    ## 
+    agr_results = agr_typing.agrvate_caller(assembly_files.to_dict(), outdir_dict, options.debug)
+    
+    ## copy excel file and operon into report folder
+    ## remove from dataframe
+    
+       
     ####################
     ## get sccmec
     ####################
     ## todo
+    
     
     ####################
     ## save results
@@ -358,6 +377,9 @@ def Saureus_specific(samples_df, samples_info, options, folder):
 
     # results_spaType
     results_spaType.to_excel(writer, sheet_name="spaTyper")
+
+    # agr_results
+    agr_results.to_excel(writer, sheet_name="agr typing")
 
     ## close
     writer.save()
