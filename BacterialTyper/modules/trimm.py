@@ -23,6 +23,7 @@ from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
 from BacterialTyper.modules import qc
 from BacterialTyper.data import data_files
+from BacterialTyper import __version__ as pipeline_version
 
 import HCGB
 from HCGB import sampleParser
@@ -70,7 +71,7 @@ def run(options):
 	else:
 		options.pair = True
 	
-	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
 	HCGB_aes.boxymcboxface("Trimming samples")
 	print ("--------- Starting Process ---------")
 	HCGB_time.print_time()

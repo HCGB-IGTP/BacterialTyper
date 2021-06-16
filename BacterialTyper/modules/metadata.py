@@ -14,10 +14,10 @@ import time
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts import database_generator
 from BacterialTyper.scripts import database_user
+from BacterialTyper import __version__ as pipeline_version
 
 ##############################################
 def run(options):

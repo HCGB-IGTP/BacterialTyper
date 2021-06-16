@@ -21,9 +21,6 @@ import concurrent.futures
 from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 
-
-
-
 ###############
 def get_fields(file_name_list, pair, Debug, include_all):
     """

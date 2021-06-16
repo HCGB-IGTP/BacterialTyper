@@ -22,9 +22,9 @@ from Bio import SeqIO
 from BacterialTyper.config import set_config
 
 ## import my HCGB module 
-from HCGB.functions import HCGB_files
-from HCGB.functions import HCGB_time
-from HCGB.functions import HCGB_main
+import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
 
 ##############
 def help_options():

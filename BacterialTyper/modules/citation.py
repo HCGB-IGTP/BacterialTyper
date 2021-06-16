@@ -9,7 +9,9 @@ Prints an index of citation for the different packages and other softwares emplo
 
 ## import my modules
 from BacterialTyper.config import set_config
-from BacterialTyper.scripts import functions
+import HCGB.functions.aesthetics_functions as HCGB_aes
+from BacterialTyper import __version__ as pipeline_version
+
 from termcolor import colored
 import os, sys
 import pandas as pd
@@ -48,9 +50,9 @@ def ariba_citation():
 #########
 def print_all():
 	print ("")
-	functions.print_sepLine("+", 50, 'yellow')
+	HCGB_aes.print_sepLine("+", 50, 'yellow')
 	print ("\tSOFTWARE")
-	functions.print_sepLine("+", 50, 'yellow')
+	HCGB_aes.print_sepLine("+", 50, 'yellow')
 	print ("Third party softwares included or employed during the pipeline workflow.")
 	print ("")
 	df_software_citation = pd.DataFrame.from_dict(software_citation(), orient='index', columns=('Article Title', 'Authors', 'PUBMED ID', 'Website'))	
@@ -60,31 +62,31 @@ def print_all():
 	print (df_software_citation)
 	print ("")
 	
-	functions.print_sepLine("+", 50, 'yellow')
+	HCGB_aes.print_sepLine("+", 50, 'yellow')
 	print ("\tDATABASES")
-	functions.print_sepLine("+", 50, 'yellow')
+	HCGB_aes.print_sepLine("+", 50, 'yellow')
 	print ("")
 	print ("Please cite according to your selection.")
 	print ("")
 	
-	functions.print_sepLine("+", 50, False)
+	HCGB_aes.print_sepLine("+", 50, False)
 	print ("\tARIBA databases")
-	functions.print_sepLine("*", 50, False)	
+	HCGB_aes.print_sepLine("*", 50, False)	
 	df_ARIBA_DB_citation = pd.DataFrame.from_dict(ariba_citation(), orient='index', columns=('Article Title', 'Authors', 'PUBMED ID', 'Website'))	
 	df_ARIBA_DB_citation.index.names = ['Databases']
 	print (df_ARIBA_DB_citation)
 	print ("\n")
 	
-	functions.print_sepLine("*", 50, False)
+	HCGB_aes.print_sepLine("*", 50, False)
 	print ("\tKMA software & databases")
-	functions.print_sepLine("*", 50, False)
+	HCGB_aes.print_sepLine("*", 50, False)
 
 	print ()	
 	print ()	
 
-	functions.print_sepLine("*", 50, False)
+	HCGB_aes.print_sepLine("*", 50, False)
 	print ("\tBUSCO software & dataset")
-	functions.print_sepLine("*", 50, False)
+	HCGB_aes.print_sepLine("*", 50, False)
 	print ("BUSCO applications from quality assessments to gene prediction and phylogenomics.")
 	print ("Robert M. Waterhouse, Mathieu Seppey, Felipe A. Simão, Mose Manni, Panagiotis ")
 	print ("Ioannidis, Guennadi Klioutchnikov, Evgenia V. Kriventseva, and Evgeny M. Zdobnov")
@@ -107,8 +109,8 @@ def only_us():
 
 #########
 def run(options):
-	functions.pipeline_header()
-	functions.boxymcboxface("Citation")
+	HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
+	HCGB_aes.boxymcboxface("Citation")
 	if (options.option == 'all'):
 		print (colored("\n+ BacterialTyper citation:", 'blue'))
 		only_us()

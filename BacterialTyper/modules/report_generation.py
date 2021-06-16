@@ -21,6 +21,7 @@ from BacterialTyper.config import set_config
 from BacterialTyper.report import retrieve_genes
 from BacterialTyper.report import get_promoter
 from BacterialTyper.report.Staphylococcus import get_spa_typing
+from BacterialTyper import __version__ as pipeline_version
 
 ##
 import HCGB.functions.aesthetics_functions as HCGB_aes
@@ -72,7 +73,7 @@ def run_report(options):
         options.pair = True
 
     ## message header
-    HCGB_aes.pipeline_header("BacterialTyper")
+    HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
     HCGB_aes.boxymcboxface("Report generation module")
     print ("--------- Starting Process ---------")
     HCGB_time.print_time()

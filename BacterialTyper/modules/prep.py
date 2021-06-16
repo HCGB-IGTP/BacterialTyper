@@ -19,6 +19,7 @@ from termcolor import colored
 ## import my modules
 from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
+from BacterialTyper import __version__ as pipeline_version
 
 import HCGB
 from HCGB import sampleParser
@@ -63,7 +64,7 @@ def run_prep(options):
 		help_info.help_fastq_format()
 		exit()
 		
-	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
 	HCGB_aes.boxymcboxface("Preparing samples")
 	print ("--------- Starting Process ---------")
 	HCGB_time.print_time()

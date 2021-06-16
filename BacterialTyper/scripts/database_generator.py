@@ -32,7 +32,6 @@ from BacterialTyper.scripts import ariba_caller
 from BacterialTyper.scripts import species_identification_KMA
 from BacterialTyper.scripts import min_hash_caller
 
-#from BacterialTyper.scripts import functions
 import HCGB
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.system_call_functions as HCGB_sys

@@ -17,20 +17,20 @@ from io import open
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
+import HCGB.functions.system_call_functions as HCGB_sys
 
 ## https://pyvcf.readthedocs.io/en/latest/
 
-######
+##############################
 def	help_options():
 	print ("\nUSAGE: python %s arguments...\n"  %os.path.realpath(__file__))
 
-######
+##############################
 def help_Snippy():
 	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
-
+##############################
 def parse_snippy_files(folder_results):
 	"""
 	Parse Snippy output files 
@@ -40,7 +40,7 @@ def parse_snippy_files(folder_results):
 	
 	return ()
 
-######
+##############################
 def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_option, other_options, Debug):
 	"""
 	Creates variant calling for a sample vs. a reference.
@@ -102,9 +102,9 @@ def snippy_call(reference_fasta, list_files, threads, outdir, name, contig_optio
 		print (snippy_cmd)
 	
 	## create system call
-	return(functions.system_call(snippy_cmd, returned=False, message=True))
+	return(HCGB_sys.system_call(snippy_cmd, returned=False, message=True))
 
-######
+###############################
 def snippy_core_call(list_folder, options, name, output_dir, output_format, Debug):
 	"""
 	Create core alignment for samples align to the same reference
@@ -139,9 +139,9 @@ def snippy_core_call(list_folder, options, name, output_dir, output_format, Debu
 	reference_fasta = list_folder[1] + "/ref.fa"	
 	snippy_core_cmd = '%s -aformat %s --ref %s --prefix %s %s 2> %s' %(snippy_core_exe, output_format, reference_fasta, name_outdir, list_folder_string, log_file)
 	
-	return (functions.system_call(snippy_core_cmd))
+	return (HCGB_sys.system_call(snippy_core_cmd))
 
-
+##############################
 def main():
 
   	## control if options provided or help
@@ -152,8 +152,7 @@ def main():
 		exit()    	
 	
 	
-######
-
+####################################
 '''******************************************'''
 if __name__== "__main__":
 	main()

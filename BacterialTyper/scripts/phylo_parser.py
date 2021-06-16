@@ -25,10 +25,11 @@ import networkx
 import pylab
 
 ## import my modules
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts import min_hash_caller
+import HCGB.functions.system_call_functions as HCGB_sys
 
+##################################
 def get_snp_distance(aln_file, mode, countGaps, output, Debug):
     """
     
@@ -60,7 +61,7 @@ def get_snp_distance(aln_file, mode, countGaps, output, Debug):
         
     return()
 
-#################
+##################################
 def snp_distance(aln_file, mode, countGaps, Debug):
     """
     Calculate SNP difference between records in alignment
@@ -113,7 +114,7 @@ def snp_distance(aln_file, mode, countGaps, Debug):
         
     return (D, labeltext)
 
-#################
+##################################
 def distance(seq1, seq2, gaps=False):
     """
     Get distance between strings
@@ -148,7 +149,7 @@ def distance(seq1, seq2, gaps=False):
                
     return(snps)
 
-#################
+##################################
 def ml_tree(folder, name, threads, output, Debug):
     """
     Create Maximum Likelihood tree reconstruction 
@@ -172,7 +173,7 @@ def ml_tree(folder, name, threads, output, Debug):
     iqtree_cmd = '%s -s %s -redo --threads-max %s --prefix %s -B %s 2> %s' %(iqtree_exe, aln_file, 
                                                                       threads, output_files, 
                                                                       bootstrap_number, output_log)
-    code = functions.system_call(iqtree_cmd)
+    code = HCGB_sys.system_call(iqtree_cmd)
     
     if code == 'OK':
         return ()
@@ -184,11 +185,11 @@ def ml_tree(folder, name, threads, output, Debug):
     ## https://anaconda.org/bioconda/raxml
     ## other possibility is FastTree   
     
-######
+##################################
 def help_options():
     print ("\nUSAGE: python %s file_aln format[nexus,phylip,clustalw,fasta]\n"  %os.path.realpath(__file__))
 
-######
+##################################
 def main():
     ## this code runs when call as a single script
 

@@ -12,7 +12,6 @@ import io
 import os
 import re
 import sys
-import fastqcparser
 from sys import argv
 from io import open
 import pandas as pd

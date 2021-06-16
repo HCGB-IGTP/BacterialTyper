@@ -10,12 +10,13 @@ import argparse
 import os
 import sys
 import BacterialTyper.modules
+from BacterialTyper import __version__ as pipeline_version
 
 ## initiate parser
 parser = argparse.ArgumentParser(
     prog='BacterialTyper',
-    description='BacterialTyper: Bacterial Genotyping using NGS'
-    #,epilog="(c) 2019. Jose F. Sanchez, Cristina Prat and Lauro Sumoy."
+    description='BacterialTyper: Pipeline for bacterial Genotyping using NGS\n',
+    epilog=f" 2019-2021. Jose F. Sanchez, Alicia Lacoma, Cristina Prat and Lauro Sumoy.\n\n Version: {pipeline_version}"
     
 )
 subparsers = parser.add_subparsers(title='Available modules', help='', metavar='')

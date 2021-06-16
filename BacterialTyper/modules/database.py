@@ -21,6 +21,7 @@ from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.scripts import species_identification_KMA
 from BacterialTyper.scripts import BUSCO_caller
 from BacterialTyper.config import set_config 
+from BacterialTyper import __version__ as pipeline_version
 
 import HCGB
 import HCGB.functions.aesthetics_functions as HCGB_aes
@@ -43,7 +44,7 @@ def run_database(options):
 		Debug = False
 
 	## message header
-	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
 	HCGB_aes.boxymcboxface("Database")
 	print ("--------- Starting Process ---------")
 	HCGB_time.print_time()

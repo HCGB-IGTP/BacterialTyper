@@ -38,6 +38,7 @@ from distutils.version import LooseVersion
 from BacterialTyper.config import extern_progs
 from BacterialTyper.config import install_dependencies
 from BacterialTyper.config import set_config
+from BacterialTyper import __version__ as pipeline_version
 
 import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
@@ -85,7 +86,7 @@ def run(options):
 	else:
 		Debug = False
 
-	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
 	HCGB_aes.boxymcboxface("Pipeline Configuration")
 	print ("--------- Starting Process ---------")
 	HCGB_time.print_time()

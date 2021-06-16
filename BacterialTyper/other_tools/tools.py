@@ -9,7 +9,7 @@ Retrieves files within ``other_tools`` directory and returns path to given scrip
 ## useful imports
 import os
 ## import my modules
-from BacterialTyper.scripts import functions
+import HCGB.functions.main_functions as HCGB_main
 from BacterialTyper.config import install_dependencies
 
 ####################################################################
@@ -18,10 +18,10 @@ def perl_scripts(script):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.scripts.functions.get_fullpath_list`
+		- :func:`HCGB.functions.main_functions.get_fullpath_list`
 	"""
 	perlDir = os.path.dirname(os.path.realpath(__file__)) + '/perl/'
-	list_perl = functions.get_fullpath_list(perlDir)
+	list_perl = HCGB_main.get_fullpath_list(perlDir)
 	
 	dict_perl = {}
 	for f in list_perl:
@@ -35,10 +35,10 @@ def R_scripts(script):
 	
 	.. seealso:: This function depends on other BacterialTyper functions called:
 	
-		- :func:`BacterialTyper.scripts.functions.get_fullpath_list`
+		- :func:`HCGB.functions.main_functions.get_fullpath_list`
 	"""
 	RDir = os.path.dirname(os.path.realpath(__file__)) + '/R/'
-	list_R = functions.get_fullpath_list(RDir)
+	list_R = HCGB_main.get_fullpath_list(RDir)
 	
 	dict_R = {}
 	for f in list_R:

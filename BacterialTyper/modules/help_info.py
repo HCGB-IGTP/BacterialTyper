@@ -21,7 +21,6 @@ from BacterialTyper.config import set_config
 from BacterialTyper.scripts import annotation
 from BacterialTyper.scripts import BUSCO_caller
 from BacterialTyper.scripts import ariba_caller
-from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import bacteriophage
 from BacterialTyper.scripts import trimmomatic_call
 from BacterialTyper.scripts import multiQC_report
@@ -30,6 +29,7 @@ from BacterialTyper.modules import MGE
 from BacterialTyper.scripts import min_hash_caller
 from BacterialTyper.scripts import variant_calling
 from BacterialTyper.scripts import genomic_island
+from BacterialTyper import __version__ as pipeline_version
 
 import HCGB.functions.aesthetics_functions as HCGB_aes
 
@@ -43,7 +43,7 @@ def run_info(options):
 
 	## help_format option
 	if (options.help_format):
-		sampleParser.help_format()
+		help_fastq_format()
 		exit()
 
 	## information for Prokka	

@@ -25,6 +25,8 @@ from BacterialTyper.scripts import ariba_caller
 from BacterialTyper.scripts import card_trick_caller
 from BacterialTyper.modules import help_info
 from BacterialTyper.scripts import database_user
+from BacterialTyper import __version__ as pipeline_version
+
 
 from BacterialTyper.config import set_config
 
@@ -73,7 +75,7 @@ def run_profile(options):
 		options.pair = True
 
 	## message header
-	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
 	HCGB_aes.boxymcboxface("Virulence & Resistance profile module")
 	print ("--------- Starting Process ---------")
 	HCGB_time.print_time()

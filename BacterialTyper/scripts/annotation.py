@@ -25,7 +25,6 @@ import pandas as pd
 from termcolor import colored
 
 ## import my modules
-#from BacterialTyper.scripts import functions
 import HCGB
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.system_call_functions as HCGB_sys

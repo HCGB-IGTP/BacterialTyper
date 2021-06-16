@@ -18,9 +18,7 @@ from termcolor import colored
 import pandas as pd
 
 ## import my modules
-from BacterialTyper.scripts import functions
 from BacterialTyper.config import set_config
-
 from BacterialTyper.modules import prep
 from BacterialTyper.modules import qc
 from BacterialTyper.modules import ident
@@ -32,10 +30,10 @@ from BacterialTyper.modules import assemble
 from BacterialTyper.modules import annot
 from BacterialTyper.modules import database
 from BacterialTyper.modules import trimm
-#from BacterialTyper.modules import report_generation
+from BacterialTyper.modules import report_generation
 from BacterialTyper.modules import help_info
+from BacterialTyper import __version__ as pipeline_version
 
-from BacterialTyper.scripts import sampleParser
 from BacterialTyper.scripts import BUSCO_caller
 from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.scripts import annotation
@@ -46,6 +44,11 @@ from BacterialTyper.scripts import species_identification_KMA
 from BacterialTyper.scripts import MLSTar
 from BacterialTyper.scripts import bacteriophage
 
+from HCGB import sampleParser
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.time_functions as HCGB_time
+import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.files_functions as HCGB_files
 
 ####################################
 def run_BacterialTyper(options):
@@ -65,7 +68,7 @@ def run_BacterialTyper(options):
 	##################################
 	if (options.help_format):
 		## help_format option
-		sampleParser.help_format()
+		help_info.help_fastq_format()
 		exit()
 
 	elif (options.help_BUSCO):
@@ -128,11 +131,11 @@ def run_BacterialTyper(options):
 		exit()
 
 	### 
-	functions.pipeline_header()
-	functions.boxymcboxface("BacterialTyper analysis")
+	HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
+	HCGB_aes.boxymcboxface("BacterialTyper analysis")
 
 	print ("--------- Starting Process ---------")
-	functions.print_time()
+	HCGB_time.print_time()
 
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)

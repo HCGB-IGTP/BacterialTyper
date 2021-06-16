@@ -19,3 +19,4 @@ sourmash,4.1.2
 spaTyper,0.3.3
 wget,3.2
 XlsxWriter,1.4.3
+pytest,6.2.4

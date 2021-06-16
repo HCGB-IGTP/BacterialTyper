@@ -23,6 +23,7 @@ from BacterialTyper.scripts import BUSCO_caller
 from BacterialTyper.modules import qc
 from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.modules import help_info
+from BacterialTyper import __version__ as pipeline_version
 
 import HCGB
 from HCGB import sampleParser
@@ -76,7 +77,7 @@ def run_annotation(options):
 	options.batch = False
 	
 	### 
-	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
 	HCGB_aes.boxymcboxface("Assembly annotation")
 
 	print ("--------- Starting Process ---------")

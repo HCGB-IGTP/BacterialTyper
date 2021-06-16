@@ -23,8 +23,8 @@ from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
 from BacterialTyper.scripts import database_generator
 from BacterialTyper.scripts import min_hash_caller
+from BacterialTyper import __version__ as pipeline_version
 
-from BacterialTyper.scripts import functions
 import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
@@ -61,7 +61,7 @@ def run_cluster(options):
 	else:
 		options.pair = True
 	
-	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
 	HCGB_aes.boxymcboxface("Clustering samples")
 	print ("--------- Starting Process ---------")
 	HCGB_time.print_time()

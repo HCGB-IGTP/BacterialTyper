@@ -24,6 +24,7 @@ from BacterialTyper.scripts import MLSTar
 from BacterialTyper.scripts import edirect_caller
 from BacterialTyper.modules import help_info
 from BacterialTyper.config import set_config
+from BacterialTyper import __version__ as pipeline_version
 
 import HCGB
 from HCGB import sampleParser
@@ -88,7 +89,7 @@ def run_ident(options):
 		options.pair = True
 
 	### species_identification_KMA -> most similar taxa
-	HCGB_aes.pipeline_header("BacterialTyper")
+	HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
 	HCGB_aes.boxymcboxface("Species identification")
 
 	print ("--------- Starting Process ---------")

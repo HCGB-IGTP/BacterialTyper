@@ -20,14 +20,14 @@ import pandas as pd
 import shutil
 
 ## import my modules
-from BacterialTyper.scripts import functions, bacteriophage, genomic_island
+from BacterialTyper.scripts import bacteriophage, genomic_island
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts import annotation
 from BacterialTyper.scripts import bacteriophage
-from BacterialTyper.scripts import sampleParser
 from BacterialTyper.modules import help_info
 from BacterialTyper.scripts import database_generator
 from BacterialTyper.scripts import database_user
+from BacterialTyper import __version__ as pipeline_version
 
 ###
 global phage_Results
@@ -44,7 +44,7 @@ def run_MGE(options):
 	##################################
 	if (options.help_format):
 		## help_format option
-		sampleParser.help_format()
+		help_info.help_fastq_format()
 		exit()
 
 	if (options.help_project):
@@ -89,8 +89,8 @@ def run_MGE(options):
 	start_time_total = time.time()
 
 	### species_identification_KMA -> most similar taxa
-	functions.pipeline_header()
-	functions.boxymcboxface("Mobile Genetic Elements (MGE) identification")
+	HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
+	HCGB_aes.boxymcboxface("Mobile Genetic Elements (MGE) identification")
 
 	print ("--------- Starting Process ---------")
 	functions.print_time()

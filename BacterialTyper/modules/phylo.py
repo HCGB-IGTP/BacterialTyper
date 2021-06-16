@@ -23,8 +23,7 @@ from BacterialTyper.scripts import database_user
 from BacterialTyper.scripts import variant_calling
 from BacterialTyper.scripts import phylo_parser
 from BacterialTyper.config import set_config
-
-from BacterialTyper.scripts import functions
+from BacterialTyper import __version__ as pipeline_version
 
 import HCGB
 from HCGB import sampleParser
@@ -67,7 +66,7 @@ def run_phylo(options):
     else:
         options.pair = True
 
-    HCGB_aes.pipeline_header("BacterialTyper")
+    HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
     HCGB_aes.boxymcboxface("Phylogenetic reconstruction")
 
     print ("--------- Starting Process ---------")
@@ -396,7 +395,7 @@ def get_reference_gbk(options):
             print ('gbk:' + gbk)
 
         ## check if exists
-        if functions.is_non_zero_file(gbk):
+        if HCGB_files.is_non_zero_file(gbk):
             print('\t+ Genbank file format reference available.')
             reference_gbk_file = gbk
         else:
@@ -408,7 +407,7 @@ def get_reference_gbk(options):
     ####################
     elif options.user_ref:
         options.user_ref = os.path.abspath(options.user_ref)
-        if functions.is_non_zero_file(options.user_ref):
+        if HCGB_files.is_non_zero_file(options.user_ref):
             print('\t+ Reference provided via --user_ref is available and ready to use.')
         else:
             print('\n** ERROR: Reference provided via --user_ref not available or accessible.')
@@ -424,20 +423,20 @@ def snippy_variant_caller(reference, files, threads, outdir, name, contig_option
     
     ## create subfolder within phylo for this mapping
     tag = sample_name + '_vs_' + name
-    subdir = functions.create_subfolder(tag, outdir)
+    subdir = HCGB_files.create_subfolder(tag, outdir)
        
     ## check if previously process and succeeded
     filename_stamp = subdir + '/.success'
     
     if os.path.isfile(filename_stamp):
-        stamp = functions.read_time_stamp(filename_stamp)
+        stamp = HCGB_time.read_time_stamp(filename_stamp)
         print (colored("\tA previous command generated results on: %s [%s]" %(stamp, tag), 'yellow'))
     else:
          # Call variant calling
         code = variant_calling.snippy_call(reference, files, threads, subdir, 
                                            sample_name, contig_option, other_options, Debug)
         if code == 'OK':
-            stamp = functions.print_time_stamp(filename_stamp)
+            stamp = HCGB_time.print_time_stamp(filename_stamp)
 
         return(code)    
     
