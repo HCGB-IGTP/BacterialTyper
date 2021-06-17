@@ -127,6 +127,8 @@ def download_kma_database(folder, database, debug):
 		## debug message
 		if (debug):
 			print (colored("Folder database is already available:" + folder,'yellow'))
+			stamp =	HCGB_time.read_time_stamp(folder + '/.success')
+
 		
 	if (return_code_down == False): ## folder does not exists
 
@@ -194,6 +196,14 @@ def download_kma_database(folder, database, debug):
 		## print timestamp
 		filename_stamp = folder + '/.success'
 		stamp =	HCGB_time.print_time_stamp(filename_stamp)
+		
+	## create dictionary
+	db_info = {'ftp_site':url,
+			'database': database,
+			'path': folder,
+			'index_name': index_name,
+			'time':stamp}
+	return (db_info)
 
 
 ##################################################

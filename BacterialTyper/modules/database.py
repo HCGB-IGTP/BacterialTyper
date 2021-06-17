@@ -31,6 +31,20 @@ import HCGB.functions.files_functions as HCGB_files
 ###############################################################
 def run_database(options):
 
+	## print further information if requested
+	if (options.help_ARIBA):
+		print ("ARIBA databases information:")	
+		ariba_caller.help_ARIBA()
+		exit()
+
+	elif (options.help_BUSCO):
+		BUSCO_caller.print_help_BUSCO()
+		exit()
+		
+	elif (options.help_KMA):
+		species_identification_KMA.help_kma_database()
+		exit()
+	
 	## init time
 	start_time_total = time.time()
 	start_time_partial = start_time_total
@@ -48,27 +62,11 @@ def run_database(options):
 	HCGB_aes.boxymcboxface("Database")
 	print ("--------- Starting Process ---------")
 	HCGB_time.print_time()
-
+	
+	## set some vars
 	kma_bin = set_config.get_exe("kma")
 
-	######################################################
-	## print further information if requested
-	if (options.help_ARIBA):
-		print ("ARIBA databases information:")	
-		ariba_caller.help_ARIBA()
-		exit()
-
-	elif (options.help_BUSCO):
-		BUSCO_caller.print_help_BUSCO()
-		exit()
-		
-	elif (options.help_KMA):
-		species_identification_KMA.help_kma_database()
-		exit()
-	######################################################
-
-	## create folder
-	## absolute
+	## create folder absolute
 	options.path = os.path.abspath(options.path)	
 	HCGB_files.create_folder(options.path)
 
@@ -232,7 +230,7 @@ def run_database(options):
 	## downloads all "bacterial" genomes from KMA website
 	## kma: ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/
 
-	print ("+ Retrieving information from: ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder website")		
+	print ("+ Retrieving information from: KmerFinder CGE databases website")		
 
 	## KMA databases to use	
 	## only user dbs	
@@ -261,33 +259,15 @@ def run_database(options):
 		print (options.kma_dbs)
 
 	## Get databases
+	dict_db_info = {}
 	for db in options.kma_dbs:
 		print (colored("\n+ " + db, 'yellow'))
 		db_folder = HCGB_files.create_subfolder(db, kma_database)		
-		species_identification_KMA.download_kma_database(db_folder, db, Debug)
+		db_dict = species_identification_KMA.download_kma_database(db_folder, db, Debug)
+		dict_db_info[db] = db_dict
 
 	### timestamp
 	start_time_partial = HCGB_time.timestamp(start_time_partial)					
-
-	###########	
-	## BUSCO ##
-	###########
-	if (options.BUSCO_dbs):
-		print ()
-		HCGB_aes.print_sepLine("*",50, False)
-		print ("--------- Check BUSCO datasets provided ---------")
-		BUSCO_folder = HCGB_files.create_subfolder("BUSCO", options.path)
-
-		#########
-		if Debug:
-			print (colored("DEBUG: options.BUSCO_dbs", 'yellow'))
-			print (options.BUSCO_dbs)
-
-		print("+ BUSCO datasets would be downloaded when executed...")
-		#BUSCO_caller.BUSCO_retrieve_sets(options.BUSCO_dbs, BUSCO_folder)
-
-		### timestamp
-		start_time_partial = HCGB_time.timestamp(start_time_partial)					
 
 	print ("\n*************** Finish *******************\n")
 	start_time_partial = HCGB_time.timestamp(start_time_total)
