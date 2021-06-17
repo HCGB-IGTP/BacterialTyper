@@ -333,6 +333,13 @@ def run_ident(options):
 	print ("\n*************** Finish *******************")
 	start_time_partial = HCGB_time.timestamp(start_time_total)
 
+	## dump information and parameters
+	info_dir = HCGB_files.create_subfolder("info", outdir)
+	print("+ Dumping information and parameters")
+	runInfo = { "module":"ident", "time":HCGB_time.timestamp(time.time()),
+                "BacterialTyper version":pipeline_version }
+	HCGB_info.dump_info_run(info_dir, 'ident', options, runInfo, options.debug)
+
 	print ("+ Exiting identification module.")
 	return()
 

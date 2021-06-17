@@ -27,7 +27,6 @@ from BacterialTyper.modules import help_info
 from BacterialTyper.scripts import database_user
 from BacterialTyper import __version__ as pipeline_version
 
-
 from BacterialTyper.config import set_config
 
 import HCGB
@@ -149,6 +148,13 @@ def run_profile(options):
 
 	print ("\n*************** Finish *******************")
 	start_time_partial = HCGB_time.timestamp(start_time_total)
+
+	## dump information and parameters
+	info_dir = HCGB_files.create_subfolder("info", outdir)
+	print("+ Dumping information and parameters")
+	runInfo = { "module":"profile", "time":HCGB_time.timestamp(time.time()),
+                "BacterialTyper version":pipeline_version }
+	HCGB_info.dump_info_run(info_dir, 'profile', options, runInfo, options.debug)
 
 	print ("+ Exiting Virulence & Resistance profile module.")
 	return()

@@ -22,7 +22,9 @@ import pandas as pd
 from BacterialTyper.config import set_config
 
 ## import my HCGB module 
-from HCGB.functions import files_functions
+import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.main_functions as HCGB_main
 
 ##############
 def help_options():
@@ -66,12 +68,12 @@ def module_call(db_folder, dictionary_fasta_files, debug):
     
     """
         
-    files_functions.create_folder(db_folder)
+    HCGB_files.create_folder(db_folder)
     if db_folder.endswith("spaTyper"):
         spaTyper_db = db_folder
     else:
         spaTyper_db = os.path.join(db_folder, "spaTyper")
-        files_functions.create_folder(spaTyper_db)
+        HCGB_files.create_folder(spaTyper_db)
         
     ## check if files are available
     (spaTyper_repeats, spaTyper_types) = check_files(spaTyper_db, debug)
@@ -81,11 +83,12 @@ def module_call(db_folder, dictionary_fasta_files, debug):
     
     ## debug messages
     if debug:
-        print ('## Debug: seqDict: Too large to print: See repeat_file for details')
-        print ('## Debug: typeDict: Too large to print: See repeat_order_file for details')
-        print ('## Debug: letDict: conversion dictionary')
+        HCGB_aes.debug_message("seqDict: Too large to print: See repeat_file for details", 'yellow')
+        HCGB_aes.debug_message("seqDict: Too large to print: See repeat_file for details", 'yellow')
+        HCGB_aes.debug_message("typeDict: Too large to print: See repeat_order_file for details", 'yellow')
+        HCGB_aes.debug_message("letDict: conversion dictionary", 'yellow')
         print (letDict)
-        print ('## Debug: seqLengths:')
+        HCGB_aes.debug_message("seqLengths:", 'yellow')
         print (seqLengths)
         
     ## summary results
@@ -99,14 +102,26 @@ def module_call(db_folder, dictionary_fasta_files, debug):
         if len(returned_value.keys()) > 1:
             print (colored("** Attention: >1 spaTypes detected for sample: %s" %key, 'red'))
 
+        ## save in folder for each sample
+        HCGB_files.create_folder(outdir_dict[key])
+        results_file = os.path.join(outdir_dict[key], 'spatyper_results.txt')    
+        list_results = []
         for j in returned_value.keys():
             splitted = returned_value[j].split('::')
             
             results_summary.loc[len(results_summary)] = (key, j, splitted[2], splitted[1])    
+            res_string = "Sequence name: " + j +  "Repeats:" + splitted[2] + "Repeat Type:" +  splitted[1]
+            
+            ## save into file
+            list_results.append(res_string)
+            
             ## debug messages
             if debug:
-                print("Sequence name: ",j, "Repeats:", splitted[2], "Repeat Type:", splitted[1], '\n')    
-    
+                HCGB_aes.debug_message(res_string, "yellow")
+            
+        ## dump results in file
+        HCGB_main.printList2file(results_file, list_results)
+
     ##
     return (results_summary)
 
@@ -184,8 +199,6 @@ def main():
     for j in returned_value.keys():
         splitted = returned_value[j].split('::')
         print("Sequence name: ",j, "Repeats:", splitted[2], "Repeat Type:", splitted[1], '\n')    
-
-    
 
 '''******************************************'''
 if __name__== "__main__":

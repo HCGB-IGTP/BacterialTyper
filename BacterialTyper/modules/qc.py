@@ -95,15 +95,26 @@ def run_QC(options):
 		## get files
 		pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
 		fastqc(pd_samples_retrieved, outdir, options, start_time_total, "raw", Debug)
+		submodule_name = "raw_reads"
 	elif (options.trim_reads):
 		## get files
 		pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "trim", ['_trim'], options.debug)
 		fastqc(pd_samples_retrieved, outdir, options, start_time_total, "trimmed", Debug)
+		submodule_name = "trimm_reads"
 	elif (options.assembly):
 		BUSCO_check(input_dir, outdir, options, start_time_total, "genome")
+		submodule_name = "assembly_qc"
 	elif (options.annotation):
 		BUSCO_check(input_dir, outdir, options, start_time_total, "proteins")
+		submodule_name = "annot_qc"
 		
+	## dump information and parameters
+	info_dir = HCGB_files.create_subfolder("info", outdir)
+	print("+ Dumping information and parameters")
+	runInfo = { "module":"qc", "time":HCGB_time.timestamp(time.time()),
+                "BacterialTyper version":pipeline_version }
+	HCGB_info.dump_info_run(info_dir, submodule_name, options, runInfo, options.debug)
+	
 	return()
 
 ################################################

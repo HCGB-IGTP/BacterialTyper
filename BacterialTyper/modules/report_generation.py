@@ -268,6 +268,13 @@ def run_report(options):
     print ("\n*************** Finish *******************")
     start_time_partial = HCGB_time.timestamp(start_time_total)
 
+    ## dump information and parameters
+    info_dir = HCGB_files.create_subfolder("info", outdir)
+    print("+ Dumping information and parameters")
+    runInfo = { "module":"report", "time":HCGB_time.timestamp(time.time()),
+                "BacterialTyper version":pipeline_version }
+    HCGB_info.dump_info_run(info_dir, 'report', options, runInfo, options.debug)
+
     print ("+ Exiting Report generation module.")
     return()
 
@@ -308,11 +315,11 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
     ## get gene names
     gene_IDs = EQC_genes_df['ID'].to_list()
     
-    ## outdir_dict
-    #results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'ID')
+    ## get profiles
+    results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'ID')
     if options.debug:
         HCGB_aes.debug_message("results_Profiles_ids", 'yellow')
-    #    print (results_Profiles_ids)
+        print (results_Profiles_ids)
     
     ########################################
     ## add additional genes if required
@@ -343,12 +350,11 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
     samples_df = samples_df.set_index('name')
     assembly_files = samples_df.loc[samples_df['tag'] == "assembly", "sample"]
     results_spaType = pd.DataFrame()
-    #results_spaType = get_spa_typing.module_call(options.database, assembly_files.to_dict(), options.debug)
+    results_spaType = get_spa_typing.module_call(options.database, assembly_files.to_dict(), options.debug, outdir_dict)
     
     ####################
     ## get agr typing
     ####################
-    ## 
     agr_results = agr_typing.agrvate_caller(assembly_files.to_dict(), outdir_dict, options.debug)
     
     ## copy excel file and operon into report folder

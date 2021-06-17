@@ -66,7 +66,7 @@ def print_available_BUSCO():
 		print(f.read())	
 	
 	## clean
-	list_files = HCGB_main.get_fullpath_list("./busco_downloads", False)
+	list_files = HCGB_main.get_fullpath_list("./busco_downloads")
 	list_files + ['tmp']
 	for i in list_files:
 		os.remove(i)

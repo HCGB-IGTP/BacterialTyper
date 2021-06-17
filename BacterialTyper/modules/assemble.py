@@ -29,6 +29,7 @@ import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.info_functions as HCGB_info
 
 ##
 global assembly_stats
@@ -107,6 +108,7 @@ def run_assembly(options):
 	
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
+	options.input = os.path.abspath(options.input)
 	outdir=""
 
 	## Project mode as default
@@ -118,7 +120,12 @@ def run_assembly(options):
 	else:
 		options.project = True
 		outdir = input_dir	
-		
+
+	options.output_folder = outdir
+	
+	## abspath for database
+	options.database = os.path.abspath(options.database) 
+	
 	## get files
 	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "trim", ['_trim'], options.debug)
 	
@@ -171,6 +178,8 @@ def run_assembly(options):
 	start_time_partial = HCGB_time.timestamp(start_time_partial_assembly)
 
 	##
+	outdir_report = HCGB_files.create_subfolder("report", outdir)
+
 	if (assembly_stats):
 		###################
 		if Debug:
@@ -178,7 +187,7 @@ def run_assembly(options):
 			print (assembly_stats)
 	
 		## create single file	
-		get_assembly_stats_all(assembly_stats, outdir, Debug)		
+		get_assembly_stats_all(assembly_stats, outdir_report, Debug)		
 	
 	### symbolic links
 	print ("+ Retrieve all genomes assembled...")
@@ -193,13 +202,19 @@ def run_assembly(options):
 	print ("\n*************** Finish *******************")
 	start_time_partial = HCGB_time.timestamp(start_time_total)
 
+	## dump information and parameters
+	info_dir = HCGB_files.create_subfolder("info", outdir)
+	print("+ Dumping information and parameters")
+	runInfo = { "module":"assemble",  "time":HCGB_time.timestamp(time.time()),
+                "BacterialTyper version":pipeline_version }
+	HCGB_info.dump_info_run(info_dir, "assemble", options, runInfo, options.debug)
+	
 	print ("+ Exiting Assembly module.")
 	return()
 
 ####################################
-def get_assembly_stats_all(assembly_stats_dict, outdir, debug):
+def get_assembly_stats_all(assembly_stats_dict, outdir_report, debug):
 	## get all assembly stats
-	outdir_report = HCGB_files.create_subfolder("report", outdir)
 	final_dir = HCGB_files.create_subfolder("assembly_stats", outdir_report)
 	final_sub_dir = HCGB_files.create_subfolder("samples", final_dir)
 	

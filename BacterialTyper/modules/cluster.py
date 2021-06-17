@@ -273,6 +273,17 @@ def run_cluster(options):
 	## generate newick tree 
 	min_hash_caller.get_Newick_tree(cluster_returned, DataMatrix, labeltext, tag_cluster_info)	
 	
+	print ("\n*************** Finish *******************")
+	start_time_partial = HCGB_time.timestamp(start_time_total)
+
+	## dump information and parameters
+	info_dir = HCGB_files.create_subfolder("info", outdir)
+	print("+ Dumping information and parameters")
+	runInfo = { "module":"cluster", "time":HCGB_time.timestamp(time.time()),
+				"BacterialTyper version":pipeline_version }
+	HCGB_info.dump_info_run(info_dir, 'cluster', options, runInfo, options.debug)
+
+	print ("+ Exiting cluster module.")
 	return()
 
 ############################################################	

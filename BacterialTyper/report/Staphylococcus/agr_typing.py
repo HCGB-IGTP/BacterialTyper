@@ -43,7 +43,8 @@ def agrvate_caller(dict_assemblies, dict_folders, debug=False):
     ## No need to optimize. There is a problem with the working dir of agrvate and we 
     ## need to change every time.
     for name, assembly_file in dict_assemblies.items():
-        sample_folder = HCGB_files.create_folder(dict_folders[name])
+        report_folder = HCGB_files.create_folder(dict_folders[name])
+        sample_folder = HCGB_files.create_subfolder('agr_typing', report_folder) 
         ## check if previously done and succeeded
         filename_stamp = sample_folder + '/.success'
         if os.path.isfile(filename_stamp):

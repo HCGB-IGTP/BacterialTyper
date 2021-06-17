@@ -7,16 +7,11 @@
 Creates sccmec typing
 """
 ## useful imports
-import time
-import io
 import os
-import re
-import sys
 from sys import argv
 from io import open
 from termcolor import colored
 import pandas as pd
-from Bio import SeqIO
 
 ## import my modules
 from BacterialTyper.config import set_config

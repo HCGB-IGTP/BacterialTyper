@@ -149,7 +149,14 @@ def run_phylo(options):
     print ("\n*************** Finish *******************")
     start_time_partial = HCGB_time.timestamp(start_time_total)
 
-    print ("+ Exiting Annotation module.")
+    ## dump information and parameters
+    info_dir = HCGB_files.create_subfolder("info", outdir)
+    print("+ Dumping information and parameters")
+    runInfo = { "module":"phylo", "time":HCGB_time.timestamp(time.time()),
+                "BacterialTyper version":pipeline_version }
+    HCGB_info.dump_info_run(info_dir, 'phylo', options, runInfo, options.debug)
+
+    print ("+ Exiting phylo module.")
     return()
 
 #####################
