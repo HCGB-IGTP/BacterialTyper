@@ -251,8 +251,16 @@ in_out_group_trimm.add_argument("--include_all", action="store_true", help="Incl
 
 options_group_trimm = subparser_trimm.add_argument_group("Options")
 options_group_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]. See details in --help_multiqc")
-options_group_trimm.add_argument("--adapters", help="Adapter sequences to use for the trimming process. See --help_trimm_adapters for further information.")
 options_group_trimm.add_argument("-t", "--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+
+params_group_trimm = subparser_trimm.add_argument_group("Trimmomatic parameters")
+params_group_trimm.add_argument("--adapters", help="Adapter sequences to use for the trimming process. See --help_trimm_adapters for further information.")
+params_group_trimm.add_argument("--ILLUMINACLIP", help=".", default="2:30:10")
+params_group_trimm.add_argument("--LEADING", help=".", default=11)
+params_group_trimm.add_argument("--TRAILING", help=".", default=11)
+params_group_trimm.add_argument("--SLIDINGWINDOW", help=".", default="4:20")
+params_group_trimm.add_argument("--MINLEN", help=".", default=24)
+
 
 info_group_trimm = subparser_trimm.add_argument_group("Additional information")
 info_group_trimm.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
@@ -286,7 +294,7 @@ in_out_group_assembly.add_argument("--include_all", action="store_true", help="I
 
 dataset_group_assembly = subparser_assemble.add_argument_group("Datasets")
 dataset_group_assembly.add_argument("-db", "--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
-dataset_group_assembly.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", required= not any(elem in help_options for elem in sys.argv))
+dataset_group_assembly.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", )
 
 options_group_assembly = subparser_assemble.add_argument_group("Options")
 options_group_assembly.add_argument("-t", "--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
@@ -322,15 +330,15 @@ in_out_group_annot.add_argument("--detached", action="store_true", help="Isolate
 
 dataset_group_annot = subparser_annotate.add_argument_group("Datasets")
 dataset_group_annot.add_argument("-db", "--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required= not any(elem in help_options for elem in sys.argv) )
-dataset_group_annot.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", required= not any(elem in help_options for elem in sys.argv) )
+dataset_group_annot.add_argument("--BUSCO_dataset", dest='BUSCO_dbs', nargs='*', help="BUSCO dataset to use according to your sample(s) expected taxonomic range. Provide several input if desired. For more information provide --help_BUSCO option", )
 
 param_group_annot = subparser_annotate.add_argument_group("Parameters")
 param_group_annot.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]")
 param_group_annot.add_argument("-t", "--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 
 prokka_group_annot = subparser_annotate.add_argument_group("Prokka Options")
-prokka_group_annot.add_argument("-k", "--kingdom", help="Select a kingdom fitting your samples.", choices=['Archaea','Bacteria','Mitochondria','Viruses'], required= not any(elem in help_options for elem in sys.argv) )
-prokka_group_annot.add_argument("-g", "--genera", help="Select a genera fitting your samples.", choices=['Enterococcus','Escherichia','Staphylococcus', 'Other'], required= not any(elem in help_options for elem in sys.argv) )
+prokka_group_annot.add_argument("-k", "--kingdom", help="Select a kingdom fitting your samples.", choices=['Archaea','Bacteria','Mitochondria','Viruses'], default='Bacteria')
+prokka_group_annot.add_argument("-g", "--genera", help="Select a genera fitting your samples.", choices=['Enterococcus','Escherichia','Staphylococcus', 'Other'], default='Other')
 
 info_group_annot = subparser_annotate.add_argument_group("Additional information")
 info_group_annot.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")

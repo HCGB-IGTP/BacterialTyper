@@ -28,6 +28,8 @@ import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.info_functions as HCGB_info
+
 ###############################################################
 def run_database(options):
 
@@ -69,6 +71,9 @@ def run_database(options):
 	## create folder absolute
 	options.path = os.path.abspath(options.path)	
 	HCGB_files.create_folder(options.path)
+
+	## databases
+	dict_db_info = {}
 
 	#########
 	if Debug:
@@ -181,6 +186,9 @@ def run_database(options):
 		if Debug:
 			print (colored("DEBUG: No option ARIBA", 'yellow'))
 	
+		## set ARIBA information
+		dict_db_info['ARIBA'] = {}
+	
 	else:
 		#functions.print_sepLine("*",50, False)
 		
@@ -193,13 +201,21 @@ def run_database(options):
 			if (options.ariba_dbs):
 				ariba_dbs_list = ariba_dbs_list + options.ariba_dbs
 				ariba_dbs_list = set(ariba_dbs_list)
-			
+		
+		## set final
+		options.ariba_dbs = ariba_dbs_list 
+
 		#########
 		if Debug:
 			print (colored("DEBUG: Option ARIBA", 'yellow'))
-			print (options.ariba_dbs)
+			print (ariba_dbs_list)
 		
-		ariba_caller.download_ariba_databases(ariba_dbs_list, options.path, Debug, options.threads)
+		dict_ARIBA_info = ariba_caller.download_ariba_databases(ariba_dbs_list, options.path, Debug, options.threads)
+	
+		#########
+		if Debug:
+			print (colored("DEBUG: dict_ARIBA_info", 'yellow'))
+			print (dict_ARIBA_info)
 	
 		### ariba list databases		
 		if (options.ariba_users_fasta):
@@ -217,6 +233,9 @@ def run_database(options):
 		### timestamp
 		start_time_partial = HCGB_time.timestamp(start_time_partial)					
 
+		## set ARIBA information
+		dict_db_info['ARIBA'] = dict_ARIBA_info
+
 	#########
 	## kma ##
 	#########
@@ -228,7 +247,6 @@ def run_database(options):
 	
 	## types: bacteria, archaea, protozoa, fungi, plasmids, typestrains
 	## downloads all "bacterial" genomes from KMA website
-	## kma: ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/
 
 	print ("+ Retrieving information from: KmerFinder CGE databases website")		
 
@@ -244,7 +262,7 @@ def run_database(options):
 			
 	## default dbs + user
 	else:
-		kma_dbs = ["bacteria", "plasmids"]
+		kma_dbs = ["bacteria"] ## no plasmids available anymore
 
 		## default dbs + user
 		if (options.kma_dbs):
@@ -259,13 +277,21 @@ def run_database(options):
 		print (options.kma_dbs)
 
 	## Get databases
-	dict_db_info = {}
+	dict_KMA_db_info = {}
 	for db in options.kma_dbs:
 		print (colored("\n+ " + db, 'yellow'))
 		db_folder = HCGB_files.create_subfolder(db, kma_database)		
 		db_dict = species_identification_KMA.download_kma_database(db_folder, db, Debug)
-		dict_db_info[db] = db_dict
+		dict_KMA_db_info[db] = db_dict
 
+	#########
+	if Debug:
+		print (colored("DEBUG: dict_KMA_db_info", 'yellow'))
+		print (dict_KMA_db_info)
+
+	## set dictionary
+	dict_db_info['kma'] = dict_KMA_db_info
+	
 	### timestamp
 	start_time_partial = HCGB_time.timestamp(start_time_partial)					
 
@@ -273,10 +299,13 @@ def run_database(options):
 	start_time_partial = HCGB_time.timestamp(start_time_total)
 
 	## dump information and parameters
-	info_dir = HCGB_files.create_subfolder("info", outdir)
+	info_dir = HCGB_files.create_subfolder("info", options.path)
 	print("+ Dumping information and parameters")
-	runInfo = { "module":"database", "time":HCGB_time.timestamp(time.time()),
-				"BacterialTyper version":pipeline_version }
+	runInfo = { "module":"database", "time":time.time(),
+				"BacterialTyper version":pipeline_version,
+				'database_info': dict_db_info}
+	
+	## dump database information
 	HCGB_info.dump_info_run(info_dir, 'database', options, runInfo, options.debug)
 
 	print ("+ Exiting Database module.\n")

@@ -143,7 +143,8 @@ def SPADES_systemCall(sample_folder, file1, file2, name, SPADES_bin, options, th
 	logFile = sample_folder + '/' + name + '.log'
 	
 	## command	
-	cmd_SPADES = '%s %s-t %s -o %s -1 %s -2 %s > %s 2> %s' %(SPADES_bin, options, threads, sample_folder, file1, file2, logFile, logFile)
+	cmd_SPADES = '%s %s-t %s -o %s -1 %s -2 %s > %s 2> %s' %(SPADES_bin, options, threads, 
+															sample_folder, file1, file2, logFile, logFile)
 	code = HCGB_sys.system_call(cmd_SPADES)
 	
 	if (code == 'OK'):
@@ -211,7 +212,7 @@ def run_module_assembly(name, folder, file1, file2, threads, debug=False):
 		(stats_dict, excel_file) = contig_stats(path_to_contigs, debug)
 	
 		## check statistics in file
-		print ("+ Check statistics for sample %s in file:\n%s" %(name, excel_file))
+		print ("+ Check statistics for sample %s in file:\n\t%s" %(name, excel_file))
 		return([stats_dict, excel_file])
 
 

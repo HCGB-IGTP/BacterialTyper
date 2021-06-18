@@ -27,6 +27,7 @@ import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.info_functions as HCGB_info
 
 
 ################################
@@ -74,7 +75,9 @@ def run_prep(options):
 	
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
+	options.input = input_dir 
 	outdir = os.path.abspath(options.output_folder)
+	options.output_folder = outdir
 
 	### set as default paired_end mode
 	if (options.single_end):
@@ -106,7 +109,7 @@ def run_prep(options):
 	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
 		
 	## Information returned in pd_samples_retrieved
-	### sample, dirname, name, name_len, lane, read_pair, lane_file, ext, gz
+	### sample, dirname, name, new_name, name_len, lane, read_pair, lane_file, ext, gz
 	
 	if options.debug:
 		HCGB_aes.debug_message("pd_samples_retrieved", "yellow")
@@ -242,11 +245,18 @@ def run_prep(options):
 	print ("\n*************** Finish *******************")
 	start_time_partial = HCGB_time.timestamp(start_time_total)
 
+	## samples information dictionary
+	samples_info = {}
+	samples_frame = pd_samples_retrieved.groupby('new_name')
+	for name, grouped in samples_frame:
+		samples_info[name] = grouped['sample'].to_list()
+	
 	## dump information and parameters
 	info_dir = HCGB_files.create_subfolder("info", outdir)
 	print("+ Dumping information and parameters")
-	runInfo = { "module":"prep",  "time":HCGB_time.timestamp(time.time()),
-                "BacterialTyper version":pipeline_version }
+	runInfo = { "module":"prep",  "time":time.time(),
+                "BacterialTyper version":pipeline_version,
+                'sample_info': samples_info}
 	HCGB_info.dump_info_run(info_dir, "prep", options, runInfo, options.debug)
 
 	print ("+ Exiting prep module.")

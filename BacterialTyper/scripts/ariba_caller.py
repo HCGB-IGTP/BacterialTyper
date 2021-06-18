@@ -133,6 +133,9 @@ def download_ariba_databases(list_dbs, main_folder, Debug, threads):
 	print("\n\n+ Download databases for Antimicrobial Resistance Identification By Assembly (ARIBA).")
 	ariba_folder = HCGB_files.create_subfolder("ARIBA", main_folder)
 
+	## information
+	dict_info = {}
+
 	## print ARIBA databases: 
 	print ("+ Available databases:")
 	dbs = get_ARIBA_dbs(list_dbs)
@@ -148,7 +151,8 @@ def download_ariba_databases(list_dbs, main_folder, Debug, threads):
 
 		## stamp time file
 		filename_stamp_prepare = outdir_prepare_ref + '/.success'
-	
+		stamp_ariba_getref  = False
+		
 		## check if previously done
 		if os.path.isfile(filename_stamp_prepare):
 			stamp =	HCGB_time.read_time_stamp(filename_stamp_prepare)
@@ -161,16 +165,25 @@ def download_ariba_databases(list_dbs, main_folder, Debug, threads):
 			print ("\t\t** %s days ago" %days_passed)		
 			if (days_passed > 30): ## download again
 				print ("\t\t** Downloading information again just to be sure...")
-				return_ariba_getref = ariba_getref(db_set, folder_set, Debug, threads)
-			else:
-				return_ariba_getref = 'OK'
-		else:
-			return_ariba_getref = ariba_getref(db_set, folder_set, Debug, threads)
+
+		(stamp_ariba_getref, fasta, metadata) = ariba_getref(db_set, folder_set, Debug, threads)
 		
-		if (return_ariba_getref == 'OK'):
-			print()
-		else:
+		#else:
+		#	(stamp_ariba_getref, fasta, metadata) = ariba_getref(db_set, folder_set, Debug, threads)
+		
+		if not stamp_ariba_getref:
 			print (colored("** ARIBA getref failed or generated a warning for " + db_set, 'red'))
+			stamp_ariba_getref='ERROR'
+			fasta  = ""
+			metadata = ""
+			
+		## fill information
+		dict_info[db_set] = {'folder': outdir_prepare_ref,
+							'stamp': stamp_ariba_getref,
+							'fasta':fasta,
+							'metadata': metadata }
+			
+	return (dict_info)
 
 ##########
 def check_db_indexed(folder, option):
@@ -280,53 +293,51 @@ def ariba_getref(database, outdir, Debug, threads):
 
 	if os.path.isfile(filename_stamp):
 		stamp =	HCGB_time.read_time_stamp(filename_stamp)
-		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 		download_ariba_cmd = 'OK'
-	else:
-		cmd_getref = 'ariba getref %s %s' %(database, outdir_name)
-		download_ariba_cmd = HCGB_sys.system_call(cmd_getref)
-	
-	if (download_ariba_cmd == 'OK'):
-		stamp =	HCGB_time.print_time_stamp(filename_stamp)
+
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: ariba getref %s succeed " %database + "**", 'yellow'))
 
-	else: 
+	else:
+		cmd_getref = 'ariba getref %s %s' %(database, outdir_name)
+		download_ariba_cmd = HCGB_sys.system_call(cmd_getref)
+	
+	if not download_ariba_cmd:
 		## rise error & exit
 		print (colored("***ERROR: ariba getref %s failed " %database + " **",'red'))
-		return('FAIL')
+		return(False, "", "")
 
 	## debug message
 	if (Debug):
 		print (colored("**DEBUG: Run ariba prepareref %s " %database + "**", 'yellow'))
 
 	## check if previously prepareref and succeeded
+	## get information
+	list_files = os.listdir(outdir)
+	fasta = ""
+	metadata = ""
+	for f in list_files:
+		if f.endswith('tsv'):
+			metadata = outdir + '/' + f
+		elif f.endswith('fa'):
+			fasta = outdir + '/' + f
+
 	filename_stamp_prepare = outdir_prepare_ref + '/.success'
 	if os.path.isfile(filename_stamp_prepare):
 		stamp =	HCGB_time.read_time_stamp(filename_stamp_prepare)
-		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
-	
+		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, database), 'yellow'))
+		return(stamp, fasta, metadata)
 	else:
-		## get information
-		list_files = os.listdir(outdir)
-		fasta = ""
-		metadata = ""
-		for f in list_files:
-			if f.endswith('tsv'):
-				metadata = outdir + '/' + f
-			elif f.endswith('fa'):
-				fasta = outdir + '/' + f
-	
 		code = ariba_prepareref(fasta, metadata, outdir_prepare_ref, threads)
 		
 		if (code == 'OK'):
 			filename_stamp = outdir_prepare_ref + '/.success'
-
-		HCGB_time.print_time_stamp(filename_stamp_prepare)
-
-	return()		
-	
+			HCGB_time.print_time_stamp(filename_stamp_prepare)
+			return(time.time(), fasta, metadata)
+		else:
+			return(False, fasta, metadata)
+				
 ##########
 def ariba_prepareref(fasta, metadata, outfolder, threads):
 	## prepareref

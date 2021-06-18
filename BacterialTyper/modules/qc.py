@@ -32,6 +32,7 @@ import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.info_functions as HCGB_info
 
 ################################################
 def run_QC(options):
@@ -95,26 +96,38 @@ def run_QC(options):
 		## get files
 		pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
 		fastqc(pd_samples_retrieved, outdir, options, start_time_total, "raw", Debug)
-		submodule_name = "raw_reads"
+		submodule_name = "qc_raw_reads"
 	elif (options.trim_reads):
 		## get files
 		pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "trim", ['_trim'], options.debug)
 		fastqc(pd_samples_retrieved, outdir, options, start_time_total, "trimmed", Debug)
-		submodule_name = "trimm_reads"
+		submodule_name = "qc_trimm_reads"
 	elif (options.assembly):
-		BUSCO_check(input_dir, outdir, options, start_time_total, "genome")
-		submodule_name = "assembly_qc"
+		pd_samples_retrieved = BUSCO_check(input_dir, outdir, options, start_time_total, "genome")
+		submodule_name = "qc_assembly"
 	elif (options.annotation):
-		BUSCO_check(input_dir, outdir, options, start_time_total, "proteins")
-		submodule_name = "annot_qc"
+		pd_samples_retrieved = BUSCO_check(input_dir, outdir, options, start_time_total, "proteins")
+		submodule_name = "qc_annot"
 		
+	print ("\n*************** Finish *******************")
+	start_time_partial = HCGB_time.timestamp(start_time_total)
+	
+	## samples information dictionary
+	samples_info = {}
+	samples_frame = pd_samples_retrieved.groupby('new_name')
+	for name, grouped in samples_frame:
+		samples_info[name] = grouped['sample'].to_list()
+	
 	## dump information and parameters
 	info_dir = HCGB_files.create_subfolder("info", outdir)
 	print("+ Dumping information and parameters")
-	runInfo = { "module":"qc", "time":HCGB_time.timestamp(time.time()),
-                "BacterialTyper version":pipeline_version }
+	runInfo = { "module":"qc", "time":time.time(),
+                "BacterialTyper version":pipeline_version,
+                'sample_info': samples_info }
+	
 	HCGB_info.dump_info_run(info_dir, submodule_name, options, runInfo, options.debug)
 	
+	print ("\n+ Exiting QC module.")
 	return()
 
 ################################################
@@ -198,11 +211,8 @@ def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysi
 		multiQC_report.multiQC_module_call(my_outdir_list, "FASTQC", fastqc_final_report,"")
 		print ('\n+ A summary HTML report of each sample is generated in folder: %s' %fastqc_final_report)
 
-	print ("\n*************** Finish *******************")
-	start_time_partial = HCGB_time.timestamp(start_time_total)
+	return()
 
-	print ("+ Exiting qc module.")
-	exit()
 
 ################################################
 def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
@@ -303,4 +313,4 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 		
 		print ('\n+ Check quality statistics in folder: %s' %BUSCO_report)
 	
-	return(dataFrame_results)
+	return(dataFrame_results, pd_samples_retrieved)

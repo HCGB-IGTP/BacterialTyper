@@ -31,6 +31,7 @@ import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.info_functions as HCGB_info
 
 ##############################################
 def run(options):
@@ -78,7 +79,17 @@ def run(options):
 
 	## absolute path for in & out
 	input_dir = os.path.abspath(options.input)
+	options.input = input_dir
 	outdir=""
+
+	## Default parameters:
+	trimmomatic_params = {
+		"ILLUMINACLIP": options.ILLUMINACLIP,
+		"LEADING": str(options.LEADING),
+		"TRAILING": str(options.TRAILING),
+		"SLIDINGWINDOW": options.SLIDINGWINDOW,
+		"MINLEN": str(options.MINLEN)
+		}
 
 	## Project mode as default
 	if (options.detached):
@@ -87,6 +98,9 @@ def run(options):
 	else:
 		options.project = True
 		outdir = input_dir	
+	
+	##
+	options.output_folder = outdir
 	
 	## get files
 	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
@@ -131,7 +145,7 @@ def run(options):
 		
 	## send for each sample
 	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
-		commandsSent = { executor.submit(trimmo_caller, sorted(cluster["sample"].tolist()), outdir_dict[name], name, threads_job, Debug, options.adapters): name for name, cluster in sample_frame }
+		commandsSent = { executor.submit(trimmo_caller, sorted(cluster["sample"].tolist()), outdir_dict[name], name, threads_job, Debug, trimmomatic_params, options.adapters): name for name, cluster in sample_frame }
 
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
@@ -196,19 +210,36 @@ def run(options):
 	print ("\n*************** Finish *******************")
 	start_time_partial = HCGB_time.timestamp(start_time_total)
 	
+	################################################
 	## dump information and parameters
+	################################################
+	## samples information dictionary
+	samples_info = {}
+	samples_frame = pd_samples_retrieved_trimmed.groupby('new_name')
+	for name, grouped in samples_frame:
+		samples_info[name] = grouped['sample'].to_list()
+	
+	## trimmomatic params
+	del options.MINLEN
+	del options.ILLUMINACLIP
+	del options.LEADING
+	del options.TRAILING
+	del options.SLIDINGWINDOW
+	
 	info_dir = HCGB_files.create_subfolder("info", outdir)
 	print("+ Dumping information and parameters")
-	runInfo = { "module":"trimm", "time":HCGB_time.timestamp(time.time()),
-				"BacterialTyper version":pipeline_version }
+	runInfo = { "module":"trimm", "time":time.time(),
+				"BacterialTyper version":pipeline_version,
+				'sample_info': samples_info,
+				'trimmomatic_params': trimmomatic_params }
+	
 	HCGB_info.dump_info_run(info_dir, 'trimm', options, runInfo, options.debug)
 
 	print ("\n+ Exiting trimm module.")
 	return()
 	
-
 #############################################
-def trimmo_caller(list_reads, sample_folder, name, threads, Debug, adapters):
+def trimmo_caller(list_reads, sample_folder, name, threads, Debug, trimmomatic_params, adapters):
 	## check if previously assembled and succeeded
 	filename_stamp = sample_folder + '/.success'
 	if os.path.isfile(filename_stamp):
@@ -216,8 +247,4 @@ def trimmo_caller(list_reads, sample_folder, name, threads, Debug, adapters):
 		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 	else:
 		# Call trimmomatic
-		trimmomatic_call.trimmo_module(list_reads, sample_folder, name, threads, Debug, adapters)
-
-
-
-	
+		trimmomatic_call.trimmo_module(list_reads, sample_folder, name, threads, Debug, adapters, trimmomatic_params)

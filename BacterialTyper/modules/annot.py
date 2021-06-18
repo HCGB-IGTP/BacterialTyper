@@ -31,6 +31,7 @@ import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.info_functions as HCGB_info
 
 ####################################
 def run_annotation(options):
@@ -72,7 +73,6 @@ def run_annotation(options):
 		annotation.print_list_prokka()
 		exit()
 
-
 	## set default
 	options.batch = False
 	
@@ -107,6 +107,14 @@ def run_annotation(options):
 	if (Debug):
 		print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
 		print (pd_samples_retrieved)
+
+	## set default BUSCO dataset
+	if not options.BUSCO_dbs:
+		options.BUSCO_dbs = ["bacteria_odb10"]
+	else:
+		options.BUSCO_dbs += ["bacteria_odb10"]
+		options.BUSCO_dbs = list(set(options.BUSCO_dbs))
+	
 
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
@@ -203,11 +211,32 @@ def run_annotation(options):
 	print ("\n*************** Finish *******************")
 	start_time_partial = HCGB_time.timestamp(start_time_total)
 
+	################################################
 	## dump information and parameters
+	################################################
+	## samples information dictionary
+	samples_info = {}
+	samples_frame = pd_samples_retrieved.groupby('new_name')
+	for name, grouped in samples_frame:
+		samples_info[name] = grouped['sample'].to_list()
+	
+	## options
+	prokka_options = {'kingdom': options.kingdom,
+					'genera': options.genera,
+					'addgenes': True,
+					'addmrna': True,
+					'cdsrnaolap':True }
+	
+	del options.kingdom
+	del options.genera
+	
 	info_dir = HCGB_files.create_subfolder("info", outdir)
 	print("+ Dumping information and parameters")
-	runInfo = { "module":"annot", "time":HCGB_time.timestamp(time.time()),
-                "BacterialTyper version":pipeline_version }
+	runInfo = { "module":"annot", "time":time.time(),
+                "BacterialTyper version":pipeline_version,
+                'sample_info': samples_info,
+                'prokka_options': prokka_options }
+	
 	HCGB_info.dump_info_run(info_dir, 'annot', options, runInfo, options.debug)
 	
 	print ("+ Exiting Annotation module.")

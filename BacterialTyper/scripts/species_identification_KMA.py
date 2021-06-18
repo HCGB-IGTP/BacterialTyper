@@ -84,7 +84,9 @@ def download_kma_database(folder, database, debug):
 
 	## ToDo: update with latest version
 	ftp_site = "http://www.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/latest/"
-	
+	db_url = ftp_site + database + '.tar.gz'
+	md5_url = ftp_site + database + '.md5'
+
 	## In v20190107 there was a plasmid database.
 	#ftp_site = "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/20190107/"
 
@@ -105,10 +107,11 @@ def download_kma_database(folder, database, debug):
 	#archaea.ATG	Archaea	Archaea library prefix=ATG	
 	
 	HCGB_files.create_folder(folder)
+	db_folder = HCGB_files.create_subfolder(database, folder)
 	
 	## debug message
 	if (debug):
-		print (colored("Function call: download_kma_database " + folder + ' ' + database + '\n','yellow'))
+		print (colored("Function call: download_kma_database " + db_folder + ' ' + database + '\n','yellow'))
 
 	## prefix
 	if (database == 'plasmids'):
@@ -118,18 +121,18 @@ def download_kma_database(folder, database, debug):
 	else:
 		prefix = '.ATG'
 		
-	index_name = os.path.join(folder, database + prefix)
+	index_name = os.path.join(db_folder, database + prefix)
 
 	## check if already download
 	return_code_down = False
-	if os.path.exists(folder):
-		return_code_down = check_db_indexed(index_name, folder)
+	if os.path.exists(db_folder):
+		return_code_down = check_db_indexed(index_name, db_folder)
+		stamp =	HCGB_time.read_time_stamp(db_folder + '/.success')
+		
 		## debug message
 		if (debug):
-			print (colored("Folder database is already available:" + folder,'yellow'))
-			stamp =	HCGB_time.read_time_stamp(folder + '/.success')
-
-		
+			print (colored("Folder database is already available:" + db_folder,'yellow'))
+			
 	if (return_code_down == False): ## folder does not exists
 
 		## Download data
@@ -139,22 +142,19 @@ def download_kma_database(folder, database, debug):
 		if (debug):
 			print (colored("Download files via function wget_download:",'yellow'))
 		
-		## connect to url
-		url = ftp_site + database + '.tar.gz'
-		HCGB_sys.wget_download(url, folder)
-
-		md5_url = ftp_site + database + '.md5'
-		HCGB_sys.wget_download(md5_url, folder)
+		## connect to db_url
+		HCGB_sys.wget_download(db_url, db_folder)
+		HCGB_sys.wget_download(md5_url, db_folder)
 		print ("\n\t+ Data downloaded.....")
 
 		## get files
-		files = os.listdir(folder)
+		files = os.listdir(db_folder)
 		md5_sum = ""
 		for f in files:
 			if f.endswith('tar.gz'):
-				tar_file = folder + '/' + f
+				tar_file = db_folder + '/' + f
 			elif f.endswith('md5'):
-				md5_sum = folder + '/' + f
+				md5_sum = db_folder + '/' + f
 		
 		## check md5sum
 		print ("\t+ Checking for integrity using md5sum")
@@ -176,29 +176,29 @@ def download_kma_database(folder, database, debug):
 				print (colored("result md5sum matches code provided for file " + tar_file,'yellow'))
 
 			# extract
-			print ("\t+ Extracting database into destination folder: " + folder)
-			HCGB_files.extract(tar_file, folder)	
+			print ("\t+ Extracting database into destination folder: " + db_folder)
+			HCGB_files.extract(tar_file, db_folder)	
 
 		else:
 			print (colored("*** ERROR: Some error occurred during the downloading and file is corrupted ***", 'red'))
 			return ("Error")
 			
 		## database should be unzipped and containing files...
-		return_code_extract = check_db_indexed(index_name, folder)
+		return_code_extract = check_db_indexed(index_name, db_folder)
 		
 		if (return_code_extract):
-			print("+ Database (%s) successfully extracted in folder: %s..." %(database, folder))
+			print("+ Database (%s) successfully extracted in folder: %s..." %(database, db_folder))
 		else:
 			string = "*** ERROR: Some error occurred during the extraction of the database (%s). Please check folder (%s) and downloading and file is corrupted ***" %(database, folder)
 			print (colored(string, 'red'))
 			return ("Error")
 		
 		## print timestamp
-		filename_stamp = folder + '/.success'
+		filename_stamp = db_folder + '/.success'
 		stamp =	HCGB_time.print_time_stamp(filename_stamp)
 		
 	## create dictionary
-	db_info = {'ftp_site':url,
+	db_info = {'ftp_site':db_url,
 			'database': database,
 			'path': folder,
 			'index_name': index_name,

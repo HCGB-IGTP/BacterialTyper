@@ -134,6 +134,13 @@ def run_assembly(options):
 		print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
 		print (pd_samples_retrieved)
 	
+	## set default BUSCO dataset
+	if not options.BUSCO_dbs:
+		options.BUSCO_dbs = ["bacteria_odb10"]
+	else:
+		options.BUSCO_dbs += ["bacteria_odb10"]
+		options.BUSCO_dbs = list(set(options.BUSCO_dbs))
+	
 	## generate output folder, if necessary
 	print ("\n+ Create output folder(s):")
 	if not options.project:
@@ -162,7 +169,10 @@ def run_assembly(options):
 	print ('+ Running modules SPADES...')
 	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
 		## send for each sample
-		commandsSent = { executor.submit( check_sample_assembly, name, outdir_dict[name],  sorted(cluster["sample"].tolist()), threads_job): name for name, cluster in sample_frame }
+		commandsSent = { executor.submit( check_sample_assembly, 
+										name, outdir_dict[name],  
+										sorted(cluster["sample"].tolist()), 
+										threads_job): name for name, cluster in sample_frame }
 
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
@@ -202,11 +212,21 @@ def run_assembly(options):
 	print ("\n*************** Finish *******************")
 	start_time_partial = HCGB_time.timestamp(start_time_total)
 
+	################################################
 	## dump information and parameters
+	################################################
+	## samples information dictionary
+	samples_info = {}
+	samples_frame = pd_samples_retrieved.groupby('new_name')
+	for name, grouped in samples_frame:
+		samples_info[name] = grouped['sample'].to_list()
+	
 	info_dir = HCGB_files.create_subfolder("info", outdir)
 	print("+ Dumping information and parameters")
-	runInfo = { "module":"assemble",  "time":HCGB_time.timestamp(time.time()),
-                "BacterialTyper version":pipeline_version }
+	runInfo = { "module":"assemble",  "time":time.time(),
+                "BacterialTyper version":pipeline_version,
+                'sample_info': samples_info }
+	
 	HCGB_info.dump_info_run(info_dir, "assemble", options, runInfo, options.debug)
 	
 	print ("+ Exiting Assembly module.")

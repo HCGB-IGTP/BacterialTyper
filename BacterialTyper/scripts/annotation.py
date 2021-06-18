@@ -30,7 +30,7 @@ import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.system_call_functions as HCGB_sys
 from BacterialTyper.config import set_config
 
-### print info prokka
+#############################################
 def print_list_prokka():
 	"""
 	Prints Prokka_ databases that has installed to use. It is the output from the call: 
@@ -52,7 +52,7 @@ def print_list_prokka():
 	cmd = prokka_bin + " --listdb"
 	HCGB_sys.system_call(cmd)
 
-######
+#############################################
 def module_call(sequence_fasta, kingdom, genus, path, name, threads):
 	"""
 	Function that checks and generates annotation.
@@ -109,7 +109,7 @@ def module_call(sequence_fasta, kingdom, genus, path, name, threads):
 
 	return(dirname)	
 
-######
+#############################################
 def prokka_call(prokka_bin, sequence_fasta, kingdom, genus, outdir_name, name, threads):
 	"""Create system call for Prokka_ software. 
 	
@@ -155,15 +155,17 @@ def prokka_call(prokka_bin, sequence_fasta, kingdom, genus, outdir_name, name, t
 	options = "--cdsrnaolap --addgenes --addmrna --kingdom " + kingdom
 	if genus != "Other":
 		options = options + " --usegenus --genus " + genus
-	prokka = "%s --force --outdir %s --prefix %s --locustag %s %s --cpus %s %s 2> %s" %(prokka_bin, outdir_name, name, name, options, threads, sequence_fasta, log_file)
+	prokka = "%s --force --outdir %s --prefix %s --locustag %s %s --cpus %s %s 2> %s" %(prokka_bin, 
+																					outdir_name, name, name, options, 
+																					threads, sequence_fasta, log_file)
 	HCGB_sys.system_call(prokka)
 	return(outdir_name)
 
-######
+#############################################
 def help_options():
 	print ("\nUSAGE: python %s sequence_file path name CPUs kingdom prokka_bin\n"  %os.path.realpath(__file__))
 
-######
+#############################################
 def main():
 
  	## control if options provided or help

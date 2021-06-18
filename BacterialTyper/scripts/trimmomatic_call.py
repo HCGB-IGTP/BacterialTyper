@@ -25,7 +25,7 @@ import HCGB.functions.system_call_functions as HCGB_sys
 from BacterialTyper.config import set_config
 
 ################################################
-def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_adapters):
+def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_adapters, trimmomatic_params):
 	## 
 	## This functions generates a trimmomatic call using java and trimmomatic from 
 	## the system with a minimum version (specified in config.py)
@@ -49,7 +49,7 @@ def trimmo_module(files, path_name, sample_name, threads, Debug, trimmomatic_ada
 		exit()
 	
 	## call
-	return(trimmo_call(java_path, path_name, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug))
+	return(trimmo_call(java_path, path_name, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, trimmomatic_params, Debug))
 
 ################################################
 def print_help_adapters():
@@ -74,7 +74,7 @@ def print_help_adapters():
 	print("Users can provide any sequencing adapter of interest using the option --adapters in fasta format file.")
 
 ################################################
-def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, Debug):
+def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, threads, trimmomatic_adapters, trimmomatic_params, Debug):
 	##
 	## Function to call trimmomatic using java. Can take single-end and pair-end files
 	## sample_folder must exists before calling this function. 
@@ -130,14 +130,23 @@ def trimmo_call(java_path, sample_folder, sample_name, files, trimmomatic_jar, t
 		trim_R2 = sample_folder + '/' + sample_name + '_trim_R2.fastq'
 		orphan_R2 = sample_folder + '/' + sample_name + '_orphan_R2.fastq'
 
-		cmd = cmd + " PE -threads %s -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(threads, log_file, file_R1, file_R2, trim_R1, orphan_R1, trim_R2, orphan_R2, trimmomatic_adapters, trimmo_log)
-
+		cmd = cmd + " PE -threads %s -trimlog %s %s %s %s %s %s %s " %(threads, log_file, 
+																	file_R1, file_R2, trim_R1, 
+																	orphan_R1, trim_R2, orphan_R2)
 	else: ## single end
 		file_R1 = files[0]
 		trim_R1 = sample_folder + '/' + sample_name + '_trim.fastq'
 
-		cmd = cmd + " SE -threads %s -trimlog %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:11 TRAILING:11 SLIDINGWINDOW:4:20 MINLEN:24 2> %s" %(threads, log_file, file_R1, trim_R1, trimmomatic_adapters, trimmo_log)
+		cmd = cmd + " SE -threads %s -trimlog %s %s %s " %(threads, log_file, file_R1, trim_R1)
 
+	## common parameters
+	cmd = cmd + "ILLUMINACLIP:%s:%s LEADING:%s TRAILING:%s SLIDINGWINDOW:%s MINLEN:%s 2> %s" %(trimmomatic_adapters, 
+																								trimmomatic_params['ILLUMINACLIP'],
+																								trimmomatic_params['LEADING'],
+																								trimmomatic_params['TRAILING'],
+																								trimmomatic_params['SLIDINGWINDOW'],
+																								trimmomatic_params['MINLEN'],
+																								trimmo_log)
 	## system call & return
 	code = HCGB_sys.system_call(cmd)
 	if code == 'OK':
@@ -173,8 +182,20 @@ def main():
 	trimmomatic_adapters = os.path.abspath(argv[6]) ##"/imppc/labs/lslab/share/data/references/Trimmomatic_adapters.fa"
 	sample_name = argv[7]
 
+	## default
+	trimmomatic_params = {
+		"ILLUMINACLIP": "2:30:10",
+		"LEADING": "11",
+		"TRAILING":"11",
+		"SLIDINGWINDOW": "4:20",
+		"MINLEN": "24"
+		
+		}
+
 	## call
-	trimmo_call(path_name, sample_name, file_R1, file_R2, trimmomatic_jar, threads, trimmomatic_adapters)
+	trimmo_call(path_name, sample_name, file_R1, file_R2, 
+			trimmomatic_jar, threads, trimmomatic_adapters, 
+			trimmomatic_params, True)
 		
 ################################################
 
