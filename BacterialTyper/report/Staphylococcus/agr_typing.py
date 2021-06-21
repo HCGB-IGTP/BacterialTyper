@@ -36,6 +36,11 @@ def agrvate_caller(dict_assemblies, dict_folders, debug=False):
     ## ATTENTION: agrvate needs to chdir to output folder
     path_here = os.getcwd()
     
+    ## info2return
+    agrvate_bin = set_config.get_exe('agrvate')
+    info_dict={ 'agrvate database': os.path.join(os.path.basename(agrvate_bin), "agrvate_databases")}
+    
+    
     print ("+ Checking agr genes for each sample retrieved...")
     
     agrvate_results = pd.DataFrame()
@@ -50,26 +55,29 @@ def agrvate_caller(dict_assemblies, dict_folders, debug=False):
         if os.path.isfile(filename_stamp):
             stamp =  HCGB_time.read_time_stamp(filename_stamp)
             print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
+            info_sample = get_results_agrvate(assembly_file, sample_folder, name, debug) 
         else:
             os.chdir(sample_folder)
             info_sample = agrvate_call(name, assembly_file, sample_folder, debug)
-            agrvate_results = pd.concat([agrvate_results, info_sample], join='outer')
-            
+        
             if (info_sample.shape[0] == 0):
                 print("+ Some error occurred with sample %s. Please re-run analysis or check log files." %name)
             else:
                 ## success
                 HCGB_time.print_time_stamp(filename_stamp)
-    
-    print ("+ Jobs finished%s\n+ Collecting information for all samples...")
+        
+        ## merge results
+        agrvate_results = pd.concat([agrvate_results, info_sample], join='outer')
+        
+    print ("+ Jobs finished\n+ Collecting information for all samples...")
     os.chdir(path_here)
     
     ## debug messages
     if debug:
         HCGB_aes.debug_message('agrvate_results', 'yellow')
         HCGB_main.print_all_pandaDF(agrvate_results)
-    
-    return(agrvate_results)
+
+    return(agrvate_results, info_dict)
 
 ##############################
 def agrvate_call(sample, assembly_file, folder, debug=False):
@@ -86,6 +94,14 @@ def agrvate_call(sample, assembly_file, folder, debug=False):
                                                log_call, err_call) ## use mummer (-m) and force results folder (-f)
     status = HCGB_sys.system_call(cmd_call)
     
+    if status:
+        res = get_results_agrvate(assembly_file, folder, sample, debug)
+        return (res)
+    else:
+        return(False)
+    
+#########################################
+def get_results_agrvate(assembly_file, folder, sample, debug=False):
     ## check results
     ## see https://github.com/VishnuRaghuram94/AgrVATE#results for additional details
     results = pd.DataFrame()
@@ -95,6 +111,7 @@ def agrvate_call(sample, assembly_file, folder, debug=False):
     original_results_folder = os.path.join(folder, assembly_file_name + '-results')
     results_folder = os.path.join(folder, 'agrvate_results')
     
+    ## rename folder
     if os.path.isdir(original_results_folder):
         print("+ Results folder generated OK")
         print("+ Check results generated:")
@@ -102,8 +119,10 @@ def agrvate_call(sample, assembly_file, folder, debug=False):
         ## rename folder
         os.rename(original_results_folder, results_folder)
         os.rename(os.path.join(folder, assembly_file_name + '.fna-error-report.tab'), os.path.join(results_folder, 'error_report.tab'))
-        
-        ## write to excel
+    
+    ## get results
+    if (os.path.isdir(results_folder)):
+        ## write to excel1
         file_name_Excel = os.path.join(folder, sample + '_agr_results.xlsx')
         writer_Excel = pd.ExcelWriter(file_name_Excel, engine='xlsxwriter') ## open excel handle
     

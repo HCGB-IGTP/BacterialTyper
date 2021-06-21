@@ -3,6 +3,7 @@
 ## Jose F. Sanchez                                      ##
 ## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain ##
 ##########################################################
+from _ast import If
 """
 Calls spaTyper for obtaining Staphylococcus aureus Spa protein type.
 """
@@ -25,6 +26,7 @@ from BacterialTyper.config import set_config
 import HCGB.functions.files_functions as HCGB_files
 import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.time_functions as HCGB_time
 
 ##############
 def help_options():
@@ -59,11 +61,22 @@ def check_files(db_folder, debug):
     
     print ("Check file: http://spa.ridom.de/dynamic/spatypes.txt")
     spaTyper_types = spaTyper.utils.download_file_types(db_folder, debug)
-        
-    return(spaTyper_repeats, spaTyper_types)
+    
+    timeStamp = HCGB_main.retrieve_matching_files(db_folder, 'success')
+    
+    ## info2return
+    info_dict = { 'repeats' : spaTyper_repeats,
+                 'url_repeats': "http://spa.ridom.de/dynamic/sparepeats.fasta",
+                 'types': spaTyper_types,
+                 'url_types': "http://spa.ridom.de/dynamic/spatypes.txt",
+                 'folder': db_folder,
+                 'stamp': HCGB_main.get_info_file(timeStamp[0])[0]
+        }
+    
+    return(spaTyper_repeats, spaTyper_types, info_dict)
 
 ##############
-def module_call(db_folder, dictionary_fasta_files, debug):
+def module_call(db_folder, dictionary_fasta_files, outdir_dict, debug):
     """
     
     """
@@ -76,14 +89,17 @@ def module_call(db_folder, dictionary_fasta_files, debug):
         HCGB_files.create_folder(spaTyper_db)
         
     ## check if files are available
-    (spaTyper_repeats, spaTyper_types) = check_files(spaTyper_db, debug)
+    (spaTyper_repeats, spaTyper_types, info_dict) = check_files(spaTyper_db, debug)
 
     ## Get the SpaTypes in fasta sequences
     seqDict, letDict, typeDict, seqLengths = spaTyper.spa_typing.getSpaTypes(spaTyper_repeats, spaTyper_types, debug)
     
+    ## add info to return
+    info_dict["letDict"] = letDict
+    info_dict["seqLengths"] = list(seqLengths)
+    
     ## debug messages
     if debug:
-        HCGB_aes.debug_message("seqDict: Too large to print: See repeat_file for details", 'yellow')
         HCGB_aes.debug_message("seqDict: Too large to print: See repeat_file for details", 'yellow')
         HCGB_aes.debug_message("typeDict: Too large to print: See repeat_order_file for details", 'yellow')
         HCGB_aes.debug_message("letDict: conversion dictionary", 'yellow')
@@ -94,36 +110,56 @@ def module_call(db_folder, dictionary_fasta_files, debug):
     ## summary results
     results_summary = pd.DataFrame(columns=("sample", "sequence", "Repeats", "Repeat Type"))
     
+    print("\n+ Create Staphylococcus Protein A (spa) typing for each sample:")
+    
     ## for each sample get spaType
     for key, value in dictionary_fasta_files.items():
-        print ("+ Sample: ", key)
-        returned_value = call_spaTyper(value, seqDict, letDict, typeDict, seqLengths, debug)
         
-        if len(returned_value.keys()) > 1:
-            print (colored("** Attention: >1 spaTypes detected for sample: %s" %key, 'red'))
-
         ## save in folder for each sample
-        HCGB_files.create_folder(outdir_dict[key])
-        results_file = os.path.join(outdir_dict[key], 'spatyper_results.txt')    
-        list_results = []
-        for j in returned_value.keys():
-            splitted = returned_value[j].split('::')
+        report_folder = HCGB_files.create_folder(outdir_dict[key])
+        spaType_folder = HCGB_files.create_subfolder('spatype', report_folder)
+        results_file = os.path.join(spaType_folder, 'spatyper_results.txt')    
+        stampfile = os.path.join(spaType_folder, '.success')
+        ## check if previously done
+        if os.path.isfile(stampfile):
+            stamp = HCGB_time.read_time_stamp(stampfile)
+            print (colored("\tA previous command generated results on: %s [%s]" %(stamp, key), 'yellow'))
+            results_spa = HCGB_main.get_info_file(results_file)
+            for i in results_spa:
+                i_list = i.split(';')
+                
+                results_summary.loc[len(results_summary)] = (key, i_list[0].split(":")[1], 
+                                                             i_list[1].split(":")[1], 
+                                                             i_list[2].split(":")[1])    
+        else:
+            print ("\t+ Sample: ", key)
+            returned_value = call_spaTyper(value, seqDict, letDict, typeDict, seqLengths, debug)
             
-            results_summary.loc[len(results_summary)] = (key, j, splitted[2], splitted[1])    
-            res_string = "Sequence name: " + j +  "Repeats:" + splitted[2] + "Repeat Type:" +  splitted[1]
-            
-            ## save into file
-            list_results.append(res_string)
-            
-            ## debug messages
-            if debug:
-                HCGB_aes.debug_message(res_string, "yellow")
-            
-        ## dump results in file
-        HCGB_main.printList2file(results_file, list_results)
+            if len(returned_value.keys()) > 1:
+                print (colored("** Attention: >1 spaTypes detected for sample: %s" %key, 'red'))
 
+            list_results = []
+            for j in returned_value.keys():
+                splitted = returned_value[j].split('::')
+                results_summary.loc[len(results_summary)] = (key, j, splitted[2], splitted[1])    
+                res_string = "Sequence name: " + j +  "; Repeats: " + splitted[2] + "; Repeat Type: " +  splitted[1]
+                
+                ## save into file
+                list_results.append(res_string)
+                
+                ## debug messages
+                if debug:
+                    HCGB_aes.debug_message(res_string, "yellow")
+                
+            ## dump results in file
+            HCGB_main.printList2file(results_file, list_results)
+            
+            ## print time stamp
+            ## dump results in file
+            HCGB_time.print_time_stamp(stampfile)
+            
     ##
-    return (results_summary)
+    return (results_summary, info_dict)
 
 ##############
 def call_spaTyper(fasta_file, seqDict, letDict, typeDict, seqLengths, debug):

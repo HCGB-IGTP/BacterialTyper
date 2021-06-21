@@ -14,14 +14,18 @@ import time
 from termcolor import colored
 import pandas as pd
 from Bio import SeqIO
+import shutil
 
 ## import my modules
 from BacterialTyper.scripts import database_user
 from BacterialTyper.config import set_config
 from BacterialTyper.report import retrieve_genes
 from BacterialTyper.report import get_promoter
+
 from BacterialTyper.report.Staphylococcus import get_spa_typing
 from BacterialTyper.report.Staphylococcus import agr_typing
+from BacterialTyper.report.Staphylococcus import get_sccmec
+
 from BacterialTyper import __version__ as pipeline_version
 
 ##
@@ -30,6 +34,8 @@ import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
 import HCGB.functions.system_call_functions as HCGB_sys
+import HCGB.functions.info_functions as HCGB_info
+
 
 ## example report check: https://github.com/tseemann/nullarbor
 
@@ -141,13 +147,17 @@ def run_report(options):
     ## time stamp
     start_time_partial = HCGB_time.timestamp(start_time_partial)
     
+    ## info2dump
+    info_dict = {'folder':summary_report}
+    
     ########################################
     ## create species specific report if any
     ########################################
     if (options.species_report):
         ## Saureus
         if options.species_report == "Saureus":
-            Saureus_specific(pd_samples_retrieved, pd_samples_info, options, summary_report, outdir_dict)
+            info_returned = Saureus_specific(pd_samples_retrieved, pd_samples_info, options, summary_report, outdir_dict)
+            info_dict['Saureus'] = info_returned
         
         ## else
         ## to add accordingly        
@@ -268,11 +278,28 @@ def run_report(options):
     print ("\n*************** Finish *******************")
     start_time_partial = HCGB_time.timestamp(start_time_total)
 
+    ## dump
+    ## samples information dictionary
+    samples_info = {}
+    samples_frame = pd_samples_retrieved.groupby('new_name')
+    for name, grouped in samples_frame:
+        samples_info[name] = grouped['sample'].to_list()
+
+    ## 
+    samples_info2 = {'example':'test'}
+    print(pd_samples_info)
+    
     ## dump information and parameters
     info_dir = HCGB_files.create_subfolder("info", outdir)
     print("+ Dumping information and parameters")
-    runInfo = { "module":"report", "time":HCGB_time.timestamp(time.time()),
-                "BacterialTyper version":pipeline_version }
+    runInfo = { "module":"report", 
+               "time":time.time(),
+               "BacterialTyper version":pipeline_version,
+               'sample_info': samples_info,
+               #'sample_info2': samples_info2,
+               'info_analysis': info_dict
+                }
+    
     HCGB_info.dump_info_run(info_dir, 'report', options, runInfo, options.debug)
 
     print ("+ Exiting Report generation module.")
@@ -285,7 +312,8 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
     
     See additional information in :doc:`../../user_guide/report/Saureus/saureus_report`
     """
-    
+    HCGB_aes.boxymcboxface("Staphylococcus aureus report submodule")
+
     ########################################
     ## get European Quality Control genes
     ########################################
@@ -298,6 +326,10 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
     ## mecA,ARO:3000617,CARD
     ## mecC,ARO:3001209,CARD
     ## mupA,ARO:3000521,CARD
+    
+    
+    ## info Saureus
+    info_Saures = {}
     
     ## debugging messages
     if options.debug:
@@ -315,12 +347,21 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
     ## get gene names
     gene_IDs = EQC_genes_df['ID'].to_list()
     
-    ## get profiles
-    results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'ID')
-    if options.debug:
-        HCGB_aes.debug_message("results_Profiles_ids", 'yellow')
-        print (results_Profiles_ids)
+    results_Profiles_ids = pd.DataFrame()
     
+    ## dataframe is NOT empty
+    if samples_info.shape[0] != 0:
+        
+        HCGB_aes.print_sepLine('+', 35, 'yellow')
+        print("Retrieve genes profiles")
+        HCGB_aes.print_sepLine('+', 35, 'yellow')
+        
+        ## get profiles
+        results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'ID')
+        if options.debug:
+            HCGB_aes.debug_message("results_Profiles_ids", 'yellow')
+            print (results_Profiles_ids)
+        
     ########################################
     ## add additional genes if required
     ########################################
@@ -332,12 +373,14 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
             print ("gene_names")
             print (gene_names)
         
-        ## outdir_dict
-        results_Profiles_names = retrieve_genes.get_genes_profile(samples_info, gene_names, options.debug, 'name')
-        if options.debug:
-            print ("results_Profiles")
-            print (results_Profiles)
-        
+        ## dataframe is NOT empty
+        if samples_info.shape[0] != 0:
+            ## outdir_dict
+            results_Profiles_names = retrieve_genes.get_genes_profile(samples_info, gene_names, options.debug, 'name')
+            if options.debug:
+                print ("results_Profiles")
+                print (results_Profiles)
+            
             
     #################################
     ## get blast sequence         ###
@@ -347,39 +390,65 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
     ####################
     ## get spatyping  ##
     ####################
+    HCGB_aes.print_sepLine('+', 35, 'yellow')
+    print("Get SPA typing")
+    HCGB_aes.print_sepLine('+', 35, 'yellow')
+
     samples_df = samples_df.set_index('name')
     assembly_files = samples_df.loc[samples_df['tag'] == "assembly", "sample"]
     results_spaType = pd.DataFrame()
-    results_spaType = get_spa_typing.module_call(options.database, assembly_files.to_dict(), options.debug, outdir_dict)
+    (results_spaType, info_spa) = get_spa_typing.module_call(options.database, assembly_files.to_dict(), outdir_dict, options.debug)
+    info_Saures['spa typing'] = info_spa
     
     ####################
     ## get agr typing
     ####################
-    agr_results = agr_typing.agrvate_caller(assembly_files.to_dict(), outdir_dict, options.debug)
+    print()
+    HCGB_aes.print_sepLine('+', 35, 'yellow')
+    print("Get agr typing")
+    HCGB_aes.print_sepLine('+', 35, 'yellow')
+
+    (agr_results, info_agr) = agr_typing.agrvate_caller(assembly_files.to_dict(), outdir_dict, options.debug)
+    info_Saures['agr typing'] = info_agr
     
     ## copy excel file and operon into report folder
     ## remove from dataframe
     
-       
+    files2copy = agr_results['operon_fna'].to_list() + agr_results['agr_operon_xlsx'].to_list()
+    files2copy = list(filter(None, files2copy))
+    arg_results_folder = HCGB_files.create_subfolder('agr_results', folder)
+    for f in files2copy:
+        shutil.copy(f, arg_results_folder)
+
+    del agr_results['operon_fna']
+    del agr_results['agr_operon_xlsx']
+    
     ####################
     ## get sccmec
     ####################
-    ## todo
-    
-    
+    print()
+    HCGB_aes.print_sepLine('+', 35, 'yellow')
+    print("Get sccmec typing")
+    HCGB_aes.print_sepLine('+', 35, 'yellow')
+
+    (sccmec_results, info_sccmec) = get_sccmec.module_call(assembly_files.to_dict(), outdir_dict, options.debug)
+    info_Saures['sccmec typing'] = info_sccmec
+        
     ####################
     ## save results
     ####################
+    print()
     ## open excel writer
-    name_excel = folder + '/Saureus_report.xlsx'
+    name_excel = os.path.join(folder, 'Saureus_report.xlsx')
     writer = pd.ExcelWriter(name_excel, engine='xlsxwriter')
     
     # results_Profiles ids
-    results_Profiles_ids.to_excel(writer, sheet_name="gene_ids")
+    if results_Profiles_ids.shape[0] > 0:
+        results_Profiles_ids.to_excel(writer, sheet_name="gene_ids")
 
     if options.genes_ids_profile:
         # results_Profiles names
-        results_Profiles_ids.to_excel(writer, sheet_name="gene_names")
+        results_Profiles_names.to_excel(writer, sheet_name="gene_names")
 
     # results_spaType
     results_spaType.to_excel(writer, sheet_name="spaTyper")
@@ -387,6 +456,11 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
     # agr_results
     agr_results.to_excel(writer, sheet_name="agr typing")
 
+    # sccmec_results
+    sccmec_results.to_excel(writer, sheet_name="sccmec")
+
     ## close
     writer.save()
+    
+    return(info_Saures)
 
