@@ -35,6 +35,7 @@ import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.info_functions as HCGB_info
 
 ####################################
 def run_profile(options):
@@ -149,11 +150,23 @@ def run_profile(options):
 	print ("\n*************** Finish *******************")
 	start_time_partial = HCGB_time.timestamp(start_time_total)
 
+	################################################
+	## dump information and parameters
+	################################################
+	## samples information dictionary
+	samples_info = {}
+	samples_frame = pd_samples_retrieved.groupby('new_name')
+	for name, grouped in samples_frame:
+		samples_info[name] = grouped['sample'].to_list()
+	
 	## dump information and parameters
 	info_dir = HCGB_files.create_subfolder("info", outdir)
 	print("+ Dumping information and parameters")
 	runInfo = { "module":"profile", "time":HCGB_time.timestamp(time.time()),
-                "BacterialTyper version":pipeline_version }
+                "BacterialTyper version":pipeline_version,
+                'sample_info': samples_info,
+                'db_info': retrieve_databases.to_dict('index')}
+	
 	HCGB_info.dump_info_run(info_dir, 'profile', options, runInfo, options.debug)
 
 	print ("+ Exiting Virulence & Resistance profile module.")
@@ -217,10 +230,10 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 	for	index, db2use in retrieve_databases.iterrows():
 		## index_name
 		if (db2use['source'] == 'ARIBA'):
-			index_status = ariba_caller.check_db_indexed(db2use['path'], 'YES')
+			(index_status, stamp) = ariba_caller.check_db_indexed(db2use['path'], 'YES')
 			if (index_status == True):
 				#print (colored("\t+ Databases %s seems to be fine...\n\n" % db2use['db'], 'green'))
-				databases2use.append([ db2use['path'], db2use['db'] ])
+				databases2use.append([ db2use['path'], db2use['db'], stamp])
 			
 				## prepare card database ontology for later 		
 				if (db2use['db'] == 'card'):

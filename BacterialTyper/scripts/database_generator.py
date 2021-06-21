@@ -329,7 +329,7 @@ def getdbs(source, database_folder, option, debug):
 	"""
 	
 	## init dataframe
-	colname = ["source", "db", "path"]
+	colname = ["source", "db", "path", "timestamp"]
 	db_Dataframe  = pd.DataFrame(columns = colname)
 
 	## read folders within database
@@ -367,7 +367,7 @@ def getdbs(source, database_folder, option, debug):
 				## add to dataframe			
 				for ext in external:
 					name_ext = os.path.basename(ext)
-					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_External', name_ext, ext]
+					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_External', name_ext, ext, '']
 
 			elif (option_item.startswith('kma_user_data:')):
 				dbs2use_tmp = option_item.split(":")[1].split(",")
@@ -403,7 +403,7 @@ def getdbs(source, database_folder, option, debug):
 				for ext in external:
 					name_ext = os.path.basename(ext)
 					name_ext_ = name_ext.split('.fna')[0]
-					db_Dataframe.loc[len(db_Dataframe)] = ['Mash_external', name_ext_, ext]
+					db_Dataframe.loc[len(db_Dataframe)] = ['Mash_external', name_ext_, ext, '']
 			else:
 				dbs2use_tmp = option_item.split(":")[1].split(",")
 
@@ -418,10 +418,6 @@ def getdbs(source, database_folder, option, debug):
 	if (debug):
 		print (colored("\ndbs2use:\n\t" + "\n\t".join(dbs2use), 'yellow'))
 
-	## init dataframe
-	#colname = ["source", "db", "path"]
-	#db_Dataframe  = pd.DataFrame(columns = colname)
-	
 	###############
 	#### ARIBA ####
 	###############
@@ -433,18 +429,24 @@ def getdbs(source, database_folder, option, debug):
 		ARIBA_dbs = ariba_caller.get_ARIBA_dbs(dbs2use) ## get names
 		for ariba_db in ARIBA_dbs:
 			this_db = os.path.join(ARIBA_folder, ariba_db + '_prepareref')
+			## debug message
+			if (debug):
+				print (colored("Checking: " + this_db, 'yellow'))
+
 			if os.path.exists(this_db):
-				code_check_db = ariba_caller.check_db_indexed(this_db, 'NO')
+				(code_check_db, stamp) = ariba_caller.check_db_indexed(this_db, 'NO')
 				if (code_check_db == True):
-					db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db]
+					db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db, stamp]
 					print (colored("\t- ARIBA: including information from database: " + ariba_db, 'green'))
+				else:
+					print("Fail...")
 			else:
 				print ("+ Database: ", ariba_db, " is not downloaded...")
 				print ("+ Download now:")
 				folder_db = HCGB_files.create_subfolder(ariba_db, ARIBA_folder)
 				code_db = ariba_caller.ariba_getref(ariba_db, folder_db, debug, 2) ## get names 
 				if (code_db == 'OK'):
-					db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db]
+					db_Dataframe.loc[len(db_Dataframe)] = ['ARIBA', ariba_db, this_db, time.time()]
 					print (colored("\t- ARIBA: including information from database: " + ariba_db, 'green'))
 
 	#############
@@ -473,7 +475,8 @@ def getdbs(source, database_folder, option, debug):
 				this_db_file = this_db + '/genbank_KMA'
 				if os.path.isfile(this_db_file + '.comp.b'):
 					print (colored("\t- genbank: including information from different reference strains available.", 'green')) ## include data from NCBI
-					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_genbank', 'genbank', this_db_file]
+					stamp = time.time() ## to do add time
+					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_genbank', 'genbank', this_db_file, stamp]
 		
 			#### user_data
 			elif (db == "user_data"):
@@ -481,7 +484,8 @@ def getdbs(source, database_folder, option, debug):
 				this_db_file = this_db + '/userData_KMA'
 				if os.path.isfile(this_db_file + '.comp.b'):
 					print (colored("\t- user_data: including information from user previously generated results", 'green')) ## include user data
-					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_user_data', 'user_data', this_db_file]
+					stamp = time.time() ## to do add time
+					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_user_data', 'user_data', this_db_file, stamp]
 					
 			
 			## default KMA databases: bacteria & plasmids
@@ -500,7 +504,8 @@ def getdbs(source, database_folder, option, debug):
 					print (colored("this_db_file:" + this_db_file , 'yellow'))
 
 				if os.path.isfile(this_db_file + '.comp.b'):
-					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_db', db, this_db_file]
+					stamp = os.path.join(this_db, '.success')
+					db_Dataframe.loc[len(db_Dataframe)] = ['KMA_db', db, this_db_file, HCGB_main.get_info_file(stamp)[0]]
 					print (colored("\t- KMA: including information from database " + db, 'green'))
 				else:
 					print (colored("\t**KMA: Database %s was not available." %db, 'red'))
@@ -511,7 +516,8 @@ def getdbs(source, database_folder, option, debug):
 						os.path.join(database_folder, 'KMA_db', db), db, debug)
 
 					if os.path.isfile(this_db_file + '.comp.b'):
-						db_Dataframe.loc[len(db_Dataframe)] = ['KMA_db', db, this_db_file]
+						stamp = time.time() ## to do add time
+						db_Dataframe.loc[len(db_Dataframe)] = ['KMA_db', db, this_db_file, stamp]
 						print (colored("\t- KMA: including information from database " + db, 'green'))
 					else:
 						print (colored("\t**KMA: Database %s was not available." %db, 'red'))
@@ -535,7 +541,8 @@ def getdbs(source, database_folder, option, debug):
 				genbank_entries = os.listdir(os.path.join(path_genbank, 'bacteria'))
 				for entry in genbank_entries:
 					this_db = os.path.join(path_genbank,'bacteria', entry)
-					db_Dataframe.loc[len(db_Dataframe)] = ['NCBI:genbank', entry, this_db]
+					stamp = time.time() ## to do add time
+					db_Dataframe.loc[len(db_Dataframe)] = ['NCBI:genbank', entry, this_db, stamp]
 
 		elif dbs2use[0] == 'tax_id':		
 			tax_id_entries = db2use_abs
@@ -550,7 +557,8 @@ def getdbs(source, database_folder, option, debug):
 		user_entries = os.listdir(db2use_abs)
 		for entry in user_entries:
 			this_db = db2use_abs + '/' + entry
-			db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, this_db]
+			stamp = time.time() ## to do add time
+			db_Dataframe.loc[len(db_Dataframe)] = ['user_data', entry, this_db, stamp]
 	
 	#################
 	#### PubMLST ####
@@ -565,12 +573,14 @@ def getdbs(source, database_folder, option, debug):
 
 				for entry in list_profiles:
 					this_db = db2use_abs + '/' + entry
-					db_Dataframe.loc[len(db_Dataframe)] = ['MLST', 'PubMLST', entry + ',' + this_db]
+					stamp = time.time() ## to do add time
+					db_Dataframe.loc[len(db_Dataframe)] = ['MLST', 'PubMLST', entry + ',' + this_db, stamp]
 					print (colored("\t- MLST: including information from profile: " + entry, 'green'))
 					
 			else:
-					db_Dataframe.loc[len(db_Dataframe)] = ['MLST', 'user_profile', db]
-					print (colored("\t- MLST: including information from profile provided by user: " + db, 'green'))
+				stamp = time.time() ## to do add time
+				db_Dataframe.loc[len(db_Dataframe)] = ['MLST', 'user_profile', db, stamp]
+				print (colored("\t- MLST: including information from profile provided by user: " + db, 'green'))
 
 	##################
 	#### Min Hash ####
@@ -620,14 +630,15 @@ def getdbs(source, database_folder, option, debug):
 								original = ['NaN']
 							else:
 								original = HCGB_main.readList_fromFile(file2print)
-
-							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry_strain, list_msh[0], this_db + '/mash/' + original[0], original[1], original[2], this_db]
+							stamp = time.time() ## to do add time
+							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry_strain, list_msh[0], stamp, this_db + '/mash/' + original[0], original[1], original[2], this_db]
 						else:
 							## index assembly or reads...
 							list_fna = HCGB_main.retrieve_matching_files(this_db, 'genomic.fna', debug)
 
 							## not available
-							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry_strain, 'NaN', list_fna[0], 'NaN', 'NaN', this_db]
+							stamp = time.time() ## to do add time
+							db_Dataframe.loc[len(db_Dataframe)] = ['genbank', entry_strain, 'NaN', stamp, list_fna[0], 'NaN', 'NaN', this_db]
 
 			#### user_data
 			elif (db == "user_data"):

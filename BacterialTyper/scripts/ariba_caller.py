@@ -24,6 +24,7 @@ import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.system_call_functions as HCGB_sys
 import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.main_functions as HCGB_main
 
 from BacterialTyper.config import set_config
 from BacterialTyper.modules import citation
@@ -207,15 +208,16 @@ def check_db_indexed(folder, option):
 	"""
 	
 	path_basename = folder.split('/')
-	if os.path.isfile(folder + '00.info.txt'):
-		if os.path.isfile(folder + '.success'):
-			stamp =	HCGB_time.read_time_stamp(folder + '.success')
+	if os.path.isfile(os.path.join(folder,'00.info.txt')):
+		time_stamp = os.path.join(folder, '.success')
+		if os.path.isfile(time_stamp):
+			stamp =	HCGB_main.get_info_file(time_stamp)
 			print (colored("\tA previous command generated results on: %s [%s]" %(stamp, path_basename[-2]), 'yellow'))
-			return True
+			return (True, stamp[0])
 	else:
 		if (option == 'YES'):
 			print (colored("\t- ARIBA database: " + path_basename + " [ ERROR ]", 'red'))
-		return False
+		return (False, "")
 	
 ##########
 def ariba_summary(out, infileList, options):
