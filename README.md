@@ -1,4 +1,4 @@
-## BacterialTyper: a bioinformatics pipeline for the integrative analysis of bacterial WGS 
+# BacterialTyper: a bioinformatics pipeline for the integrative analysis of bacterial WGS 
 
 # Table of Contents
 
