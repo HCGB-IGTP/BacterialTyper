@@ -139,7 +139,8 @@ man_pages = [
     (master_doc, 'BacterialTyper', 'BacterialTyper pipeline documentation',
     [author], 1)
 ]
-
+# -- Options for sphinxcontrib.bibtex
+bibtex_bibfiles=['bib/references.bib']
 
 # -- Options for Texinfo output ----------------------------------------------
 
