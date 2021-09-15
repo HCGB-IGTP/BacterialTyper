@@ -1,3 +1,6 @@
+[submodule "third_party/spa_typing"]
+	path = third_party/spa_typing
+	url = https://github.com/HCGB-IGTP/spa_typing.git
 [submodule "third_party/pyan"]
         path = third_party/pyan
         url = https://github.com/HCGB-IGTP/pyan.git
