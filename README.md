@@ -4,6 +4,7 @@
 
 - [Introduction](#introduction)
 - [Installation](#installation)
+- [Documentation](#documentation)
 - [License](#license)
 - [Citation](#citation)
 
@@ -44,6 +45,9 @@ pip install BacterialTyper
 
 This will create a working installation of _BacterialTyper_ and all dependencies.
 
+# Documentation
+
+For a full documentation and details visit Read the Docs site [here](https://bacterialtyper.readthedocs.io/en/latest/index.html).
 
 # License
 
