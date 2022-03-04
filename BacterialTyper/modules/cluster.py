@@ -29,6 +29,7 @@ import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.info_functions as HCGB_info
 
 ##############################################
 def run_cluster(options):
@@ -84,7 +85,7 @@ def run_cluster(options):
 	if options.reads:
 		if options.noTrim:
 			## raw reads
-			pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
+			pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ["fastq", "fq", "fastq.gz", "fq.gz"], options.debug)
 		else:
 			## trimm reads
 			pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "trim", ['_trim'], options.debug)
@@ -253,7 +254,7 @@ def run_cluster(options):
 	if options.project:
 		outdir_report = HCGB_files.create_subfolder("report", outdir)
 		#final_dir = outdir + '/report/cluster'
-		final_dir = functions.create_subfolder("cluster", outdir_report) 
+		final_dir = HCGB_files.create_subfolder("cluster", outdir_report) 
 	else:
 		final_dir = outdir
 

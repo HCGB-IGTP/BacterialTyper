@@ -25,7 +25,6 @@ from BacterialTyper.config import set_config
 from BacterialTyper.scripts import assembly_stats_caller
 
 import HCGB
-from HCGB import sampleParser
 import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
