@@ -384,10 +384,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 		
 	.. include:: ../../links.inc	
 	
-	"""
-	
-	return(pd.DataFrame())
-	
+	"""	
 	
 	### print header
 	HCGB_aes.boxymcboxface("KMA Identification")
