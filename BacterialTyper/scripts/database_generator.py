@@ -150,9 +150,6 @@ def NCBI_descendant(tax_ID, NCBI_folder, Debug):
 	## and call NCBI_DB to download and update database, then returned dataframe.
 	
 	# Use BacDup implementation for this purpose
-	
-
-
 def ngd_download(dir_path, acc_ID, data_folder):
 	download = False
 	print ('+ Check data for ID: ', acc_ID)
@@ -498,7 +495,7 @@ def getdbs(source, database_folder, option, debug):
 				else:
 					prefix = '.ATG'
 
-				this_db_file =os.path.join(this_db, db, db + prefix)
+				this_db_file =os.path.join(this_db, db + prefix)
 				## debug message
 				if (debug):
 					print (colored("this_db_file:" + this_db_file , 'yellow'))
