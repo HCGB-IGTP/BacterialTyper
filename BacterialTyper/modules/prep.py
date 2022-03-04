@@ -106,7 +106,7 @@ def run_prep(options):
 		final_dir = outdir
 	
 	## get files
-	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
+	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ["fastq", "fq", "fastq.gz", "fq.gz"], options.debug)
 		
 	## Information returned in pd_samples_retrieved
 	### sample, dirname, name, new_name, name_len, lane, read_pair, lane_file, ext, gz
@@ -144,7 +144,7 @@ def run_prep(options):
 		## TODO: check integrity of new names and special characters
 	
 		## print to a file
-		timestamp = time_functions.create_human_timestamp()
+		timestamp = HCGB_time.create_human_timestamp()
 		rename_details = final_dir + '/' + timestamp + '_prep_renameDetails.txt'
 		rename_details_hd = open(rename_details, 'w')
 	

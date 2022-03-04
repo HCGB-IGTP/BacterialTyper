@@ -103,7 +103,7 @@ def run(options):
 	options.output_folder = outdir
 	
 	## get files
-	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ("fastq", "fq", "fastq.gz", "fq.gz"), options.debug)
+	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ["fastq", "fq", "fastq.gz", "fq.gz"], options.debug)
 	
 	## debug message
 	if (Debug):
