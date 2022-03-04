@@ -158,7 +158,7 @@ def install(software, min_version, install_path, Debug):
 			print()
 		
 		## create symbolic link in bin directory in environment
-		HCGB_main.get_symbolic_link(file_list, env_bin_directory)
+		HCGB_files.get_symbolic_link(file_list, env_bin_directory)
 		print(colored("**Software (%s - Version: %s) installed in the system and add it to $PATH environment variable." %(software, versionInstalled),'green'))
 
 	return (versionInstalled)
@@ -380,7 +380,7 @@ def install_binary(folder_software, site, install_path, Debug):
 			
 	## check if file already available
 	compress_file_name = os.path.join(install_path, site.rsplit('/', 1)[-1])
-	if not HCGB_main.is_non_zero_file(compress_file_name):
+	if not HCGB_files.is_non_zero_file(compress_file_name):
 		## download
 		HCGB_sys.wget_download(site, install_path)
 	

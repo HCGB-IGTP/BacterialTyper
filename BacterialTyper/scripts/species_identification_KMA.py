@@ -258,8 +258,8 @@ def check_db_indexed(index_name, folder):
 		print ("\t\t** %s days ago" %days_passed)		
 		## download again
 		if (days_passed > 60): 
-			print ("\t\t** Downloading information again just to be sure...")
-			return(False)
+			print ("\t\t** Downloading information again is recommended just to be sure...")
+			#return(False)
 	
 	## dump in screen
 	names = index_name + '.name'
