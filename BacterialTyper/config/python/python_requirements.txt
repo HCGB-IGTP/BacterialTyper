@@ -40,7 +40,7 @@ matplotlib==3.4.2
 multiqc==1.10.1
 ncbi-genome-download==0.3.0
 networkx==2.5.1
-numpy==1.20.3
+numpy==1.22.0
 olefile==0.46
 packaging==20.9
 pandas==1.2.4
