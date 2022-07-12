@@ -129,7 +129,7 @@ def run_profile(options):
 	######################################
 	## update database for later usage
 	######################################
-	if not options.fast:
+	if options.slow:
 		## functions.timestamp
 		start_time_partial = HCGB_time.timestamp(start_time_partial)
 
@@ -145,7 +145,7 @@ def run_profile(options):
 			print (colored("**DEBUG: results obtained **", 'yellow'))
 	
 	else:
-		print ("+ No update of the database has been requested using option --fast")
+		print ("+ No update of the database has been requested [Default]. Use option --slow instead")
 
 	print ("\n*************** Finish *******************")
 	start_time_partial = HCGB_time.timestamp(start_time_total)

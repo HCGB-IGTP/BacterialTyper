@@ -397,7 +397,7 @@ exclusive_group2.add_argument("--only_external_kma", action="store_true", help="
 parameters_group_ident = subparser_ident.add_argument_group("Parameters")
 parameters_group_ident.add_argument("-t", "--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 parameters_group_ident.add_argument("--KMA_cutoff", type=int, help="Similarity cutoff for databases filtering. Range: 1-100. [Default = 80]", default=80)
-parameters_group_ident.add_argument("--fast", action="store_true", help="Do not update database, just identify samples according to databases provided [Default OFF].")
+parameters_group_ident.add_argument("--slow", action="store_true", help="Update database: not only identify samples but update results to database provided [Default OFF].")
 
 info_group_ident = subparser_ident.add_argument_group("Additional information")
 info_group_ident.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
@@ -432,7 +432,7 @@ dataset_group_profile.add_argument("--additional_database", action="store_true",
 
 parameters_group_profile = subparser_profile.add_argument_group("Parameters")
 parameters_group_profile.add_argument("-t", "--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-parameters_group_profile.add_argument("--fast", action="store_true", help="Do not update database, just identify samples according to databases provided [Default OFF].")
+parameters_group_profile.add_argument("--slow", action="store_true", help="Update database: not only identify samples but update results to database provided [Default OFF].")
 
 ## ariba
 ariba_db_group_profile = subparser_profile.add_argument_group("ARIBA databases")

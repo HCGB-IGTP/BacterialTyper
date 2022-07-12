@@ -167,7 +167,7 @@ def run_ident(options):
 			if (i == 'viral'):
 				print ()
 				MLST_results = ''
-				options.fast = True
+				options.slow = False
 				skip=True
 			
 			## what if only plasmids?
@@ -303,7 +303,7 @@ def run_ident(options):
 	######################################
 	## update database for later usage
 	######################################
-	if not options.fast:
+	if options.slow:
 
 		HCGB_aes.boxymcboxface("Update Sample Database")
 
@@ -328,7 +328,7 @@ def run_ident(options):
 		database_generator.NCBI_DB(data2download, NCBI_folder, Debug)
 
 	else:
-		print ("+ No update of the database has been requested using option --fast")
+		print ("+ No update of the database has been requested [Default]. Use option --slow instead")
 		
 	print ("\n*************** Finish *******************")
 	start_time_partial = HCGB_time.timestamp(start_time_total)
