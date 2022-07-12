@@ -325,6 +325,9 @@ def ariba_getref(database, outdir, Debug, threads):
 		elif f.endswith('fa'):
 			fasta = outdir + '/' + f
 
+	## In newest version of VFDB there are several inconsistencies between fasta and tsv file:
+	
+
 	filename_stamp_prepare = outdir_prepare_ref + '/.success'
 	if os.path.isfile(filename_stamp_prepare):
 		stamp =	HCGB_time.read_time_stamp(filename_stamp_prepare)
