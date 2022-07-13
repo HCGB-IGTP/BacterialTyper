@@ -45,13 +45,18 @@ def retrieve_genes_ids_sequences(profile, gene_ID, debug):
         print (gene_ID)
         
     ##
+    assembled_genes_list = []
     assembled_genes_list = HCGB_main.retrieve_matching_files(profile, "assembled_genes.fa", debug)
     assembled_genes_list = [s for s in assembled_genes_list if 'ariba.tmp' not in s]
+    
+    ## return if empty
+    if len(assembled_genes_list) == 0:
+        return('','')
     
     if debug:
         HCGB_aes.debug_message('assembled_genes_list: ', 'yellow')
         print(assembled_genes_list)
-
+        
     if os.path.isfile(assembled_genes_list[0]):
         for record in SeqIO.parse(assembled_genes_list[0], "fasta"):
             if debug:

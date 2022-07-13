@@ -194,7 +194,9 @@ def run_report(options):
                         if p == 'vfdb':
                             p = p + '_full'
                         
-                        profile_folder = os.path.join(main_profile_folder, p)
+                        profile_folder = os.path.join(main_profile_folder, p + '_prepareref')
+                        if options.debug:
+                            print ("profile_folder: ", profile_folder)
                         (seq_id, seq_sequence) = retrieve_genes.retrieve_genes_ids_sequences(profile_folder, g, Debug)
                         if (seq_id):
                              ## save results 
