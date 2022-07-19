@@ -37,13 +37,28 @@ conda activate BacterialTyper_mamba
 mamba install -c r -c bioconda -c conda-forge trimmomatic fastqc spades=3.15.2 busco=5.1.2 ariba snippy=4.6.0 prokka=1.14.6 perl-bioperl=1.7.2 perl-bio-tools-run-alignment-tcoffee t_coffee kma=1.3.15 phispy=4.2.12 iqtree=2.1.2 r-optparse r-devtools agrvate staphopia-sccmec 
 ```
 
-Then, you will need to install _BacterialTyper_ which is host in pypi [here](https://pypi.org/project/BacterialTyper/). Use _pip_ and type:
+Finally, you will need to install _BacterialTyper_ which is host in pypi [here](https://pypi.org/project/BacterialTyper/). Use _pip_ and type:
 
 ```
 pip install BacterialTyper
 ```
 
+If you get conflicting errors between dependencies you can also download requirements yml file from github:
+```
+## get requirements
+wget https://raw.githubusercontent.com/HCGB-IGTP/BacterialTyper/master/devel/conda/environment.yml 
+
+## create conda environemnt
+conda create -f environment.yml
+conda activate BacterialTyper
+```
+
 This will create a working installation of _BacterialTyper_ and all dependencies.
+
+Verify the configuration using 
+```
+BacterialTyper config check
+```
 
 # Documentation
 
@@ -53,7 +68,7 @@ For a full documentation and details visit Read the Docs site [here](https://bac
 
 MIT License
 
-Copyright (c) 2020-2021 HCGB-IGTP
+Copyright (c) 2020-2022 HCGB-IGTP
 
 See additional details [here](./LICENSE)
 
