@@ -158,8 +158,7 @@ def run_ident(options):
 		pd.set_option('display.max_columns', None)
 		print ("dataframe_kma")
 		print (dataFrame_kma)
-	
-	
+		
 	## exit if viral search
 	skip=False
 	if (len(options.kma_dbs) == 1):

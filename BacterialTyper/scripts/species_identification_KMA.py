@@ -6,6 +6,8 @@
 """
 Call KMA_ software to find the best match in reads file or fasta file in a (kmer) database produced using the KMA program 
 
+Check information here: https://cge.cbs.dtu.dk/services/KmerFinder/
+
 .. include:: ../../links.inc 
 """
 ## useful imports
@@ -59,7 +61,7 @@ def download_kma_database(folder, database, debug):
 	It also downloads the md5sum for the dataset selected and compares with the 
 	
 	:param folder: Absolute path to folder that contains database.
-	:param database: Possible options: [bacteria, archaea, protozoa, fungi, plasmids, typestrains, viral].
+	:param database: Possible options: [bacteria, archaea, protozoa, fungi, typestrains, viral]. All will be downloaded
 	:param debug: True/false for printing debugging messages.
 	
 	:type folder: string
@@ -82,59 +84,70 @@ def download_kma_database(folder, database, debug):
 
 	"""
 
-	## ToDo: update with latest version
-	ftp_site = "http://www.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/latest/"
-	db_url = ftp_site + database + '.tar.gz'
-	md5_url = ftp_site + database + '.md5'
-
+	############################################################################
+	## OLD:
+	############################################################################
 	## In v20190107 there was a plasmid database.
-	#ftp_site = "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/20190107/"
+	#  ftp_site = "ftp://ftp.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/20190107/"
 
-	############################################################################
-	## ToDo: Set automatic: download config file and look for prefix for each 
-	## sample and generate a dictionary to code the prefix for each db.
-	############################################################################
+	## ftp_site = "http://www.cbs.dtu.dk/public/CGE/databases/KmerFinder/version/latest/"
+	## db_url = ftp_site + database + '.tar.gz'
+	## md5_url = ftp_site + database + '.md5'
+
+	## Since 2022 it changed the way to obtain the kma db. https://bitbucket.org/genomicepidemiology/kmerfinder_db/src/master/
+	## The KmerFinder database can be downloaded directly and ready to use as a Tar archive here.
 	
-	# Database configuration file - Describes the content of the database
-	# Each db consist of 5 files with the following extensions: b, comp.b, length.b, seq.b, name
-	# Other important files are: .name, .kma.entries.all, .kma.entries.deleted, .kma.entries.added, .md5
-	# db_prefix	name	description
-	#bacteria.ATG	Bacteria Organisms	Bacteria organisms library prefix=ATG
+	## Before there was an additional entry: 
 	#plasmids.T	Bacteria Plasmids	Bacteria plasmids library prefix=T
-	#typestrains.ATG	Bacteria Type Strains	Bacteria type strains library prefix=ATG
-	#fungi.ATG	Fungi	Fungi library prefix=ATG
-	#protozoa.ATG	Protozoa	Protozoa library prefix=ATG
-	#archaea.ATG	Archaea	Archaea library prefix=ATG	
+	############################################################################
 	
-	HCGB_files.create_folder(folder)
-	db_folder = HCGB_files.create_subfolder(database, folder)
+	## Update with new database implementation
+	## All databases included
+	ftp_site="https://cge.food.dtu.dk/services/KmerFinder/etc/kmerfinder_db.tar.gz"
+
+	main_db_folder = HCGB_files.create_folder(folder)
+	#db_folder = HCGB_files.create_subfolder(database, folder)
 	
 	## debug message
 	if (debug):
-		print (colored("Function call: download_kma_database " + db_folder + ' ' + database + '\n','yellow'))
+		print (colored("Function call: download_kma_database " + main_db_folder + '\n','yellow'))
 
-	## prefix
-	if (database == 'plasmids'):
-		prefix = '.T'
-	elif (database == 'viral'):
-		prefix = '.TG'
+	## prefix all ATG
+	
+	## Config file  
+	##	# Database configuration file - Describes the content of the database
+	##	# Each db consist of 5 files with the following extensions: b, comp.b, length.b, seq.b, name
+	##	# Other important files are: .name, .kma.entries.all, .kma.entries.deleted, .kma.entries.added, .md5
+	##	# db_prefix	name	description
+	##	typestrain.ATG	Bacteria type strains	Bacteria type strains library prefix=ATG
+	##	archaea.ATG	Archaea	Archaea library prefix=ATG
+	##	fungi.ATG	Fungi	Fungi library prefix=ATG
+	##	protozoa.ATG	Protozoa	Protozoa library prefix=ATG
+	##	bacteria.ATG	Bacteria organisms	Bacteria organisms library prefix=ATG
+	##	viral.ATG	Viral	Viral library prefix=ATG
+	
+	list_of_databases = ["bacteria", "archaea", "protozoa", "fungi", "typestrains", "viral"]
+	
+	## Check main file database is downloaded
+	main_file = os.path.join(main_db_folder, "kmerfinder_db.tar.gz")
+	filename_stamp = main_db_folder + '/.success'
+	return_code_down=True
+	if os.path.exists(main_file):
+		if os.path.exists(filename_stamp):
+			stamp =	HCGB_time.read_time_stamp(main_db_folder + '/.success')
+			print (colored("\tDatabase tar.gz file was downloaded on: %s" %stamp, 'yellow'))
+
+			## debug message
+			if (debug):
+				print (colored("Folder for KMA database is already available:" + main_db_folder,'yellow'))
+				print()
+		else:
+			return_code_down = False
 	else:
-		prefix = '.ATG'
-		
-	index_name = os.path.join(db_folder, database + prefix)
-
-	## check if already download
-	return_code_down = False
-	if os.path.exists(db_folder):
-		return_code_down = check_db_indexed(index_name, db_folder)
-		stamp =	HCGB_time.read_time_stamp(db_folder + '/.success')
-		
-		## debug message
-		if (debug):
-			print (colored("Folder database is already available:" + db_folder,'yellow'))
-			
-	if (return_code_down == False): ## folder does not exists
-
+		return_code_down = False
+	
+	if (return_code_down == False): ## folder does not exists or some database are missing/error
+	
 		## Download data
 		print ("\t+ Downloading data now, it may take a while....")
 
@@ -143,65 +156,76 @@ def download_kma_database(folder, database, debug):
 			print (colored("Download files via function wget_download:",'yellow'))
 		
 		## connect to db_url
-		HCGB_sys.wget_download(db_url, db_folder)
-		HCGB_sys.wget_download(md5_url, db_folder)
+		HCGB_sys.wget_download(ftp_site, db_folder)
 		print ("\n\t+ Data downloaded.....")
 
-		## get files
-		files = os.listdir(db_folder)
-		md5_sum = ""
-		for f in files:
-			if f.endswith('tar.gz'):
-				tar_file = db_folder + '/' + f
-			elif f.endswith('md5'):
-				md5_sum = db_folder + '/' + f
-		
-		## check md5sum
-		print ("\t+ Checking for integrity using md5sum")
-		
-		# get md5 sum from source
-		md5_string = ""
-		with open(md5_sum, 'r') as myfile:
-			line = myfile.read()
-		
-		line = re.sub(r"\s", ',', line)
-		md5_string = line.split(",")[0]
-		
-		## calculate md5 for file
-		result_md5 = HCGB_sys.check_md5sum(md5_string, tar_file) ## FIXME: Not conda supported
-		if (result_md5 == True):
-		
-			## debug message
-			if (debug):
-				print (colored("result md5sum matches code provided for file " + tar_file,'yellow'))
+		if os.path.exists(main_file):
 
 			# extract
-			print ("\t+ Extracting database into destination folder: " + db_folder)
-			HCGB_files.extract(tar_file, db_folder)	
+			print ("\t+ Extracting database into destination folder: " + main_db_folder)
+			HCGB_files.extract(main_file, db_folder)	
+	
+			## get files
+			files = os.listdir(main_db_folder)
+			
+			md5_sum = ""
+			count_dbs=0
+			for f in files:
+				for database in list_of_databases:
+					if f == database:
+						if os.path.isdir(f):
+							## check md5sum
+							print ("\t+ Database %s available..." %database)
+							index_name = os.path.join(f, database + '.ATG')
+							return_code_down = check_db_indexed(index_name, f)
+							filename_stamp = f + '/.success'
+							stamp =	HCGB_time.print_time_stamp(filename_stamp)
+							count_dbs +=1
+
+			
+			if (count_dbs==5):
+				print("+ Database KMA successfully extracted in folder: %s..." %main_db_folder)
+			else:
+				string = "*** ERROR: Some error occurred during the extraction of the database (%s). Please check folder (%s) and downloading and file is corrupted ***" %(database, folder)
+				print (colored(string, 'red'))
+				return ("Error")
+				
+			## print timestamp
+			filename_stamp = main_db_folder + '/.success'
+			stamp =	HCGB_time.print_time_stamp(filename_stamp)
 
 		else:
 			print (colored("*** ERROR: Some error occurred during the downloading and file is corrupted ***", 'red'))
 			return ("Error")
+					
+	####################################
+	## Check each database file is downloaded and correctly placed
+	####################################
+	for database in list_of_databases:
+	
+		db_folder = os.path.join(main_db_folder, database)
+		index_name = os.path.join(db_folder, database + '.ATG')
+
+		## if folder exists
+		if os.path.exists(db_folder):
+			return_code_down = check_db_indexed(index_name, db_folder)
+
+			## debug message
+			if (debug):
+				print (colored("Folder for the database %s is already available: %s" %(database, db_folder),'yellow'))
 			
-		## database should be unzipped and containing files...
-		return_code_extract = check_db_indexed(index_name, db_folder)
-		
-		if (return_code_extract):
-			print("+ Database (%s) successfully extracted in folder: %s..." %(database, db_folder))
+			if return_code_down:
+				stamp =	HCGB_time.read_time_stamp(db_folder + '/.success')
+				print("+ Database (%s) successfully extracted in folder: %s on %s..." %(database, db_folder, stamp))
+				
 		else:
-			string = "*** ERROR: Some error occurred during the extraction of the database (%s). Please check folder (%s) and downloading and file is corrupted ***" %(database, folder)
-			print (colored(string, 'red'))
-			return ("Error")
-		
-		## print timestamp
-		filename_stamp = db_folder + '/.success'
-		stamp =	HCGB_time.print_time_stamp(filename_stamp)
-		
+			print("+ Database (%s) is not available in KMA folder: %s..." %(database, main_db_folder))
+			return_code_down = False
+	
 	## create dictionary
-	db_info = {'ftp_site':db_url,
-			'database': database,
+	db_info = {'ftp_site':ftp_site,
+			'database': "Main KMA database",
 			'path': folder,
-			'index_name': index_name,
 			'time':stamp}
 	return (db_info)
 
@@ -581,11 +605,15 @@ def main():
 	## this code runs when call as a single script
 
   	## control if options provided or help
-	if len(sys.argv) > 1:
-		print ("")
-	else:
-		help_options()
-		exit()    	
+	#if len(sys.argv) > 1:
+	#	print ("")
+	#else:
+	#	help_options()
+	#	exit()    	
+	
+	
+	download_kma_database("/imppc/labs/lslab/share/data/references/BacterialTyper_database/KMA_db/", "test", True)
+	exit()
 	
 	## arguments
 	name = argv[1]
