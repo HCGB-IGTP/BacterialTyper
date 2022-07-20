@@ -43,19 +43,10 @@ Finally, you will need to install _BacterialTyper_ which is host in pypi [here](
 pip install BacterialTyper
 ```
 
-If you get conflicting errors between dependencies you can also download requirements yml file from github:
-```
-## get requirements
-wget https://raw.githubusercontent.com/HCGB-IGTP/BacterialTyper/master/devel/conda/environment.yml 
-
-## create conda environemnt
-conda create -f environment.yml
-conda activate BacterialTyper
-```
-
 This will create a working installation of _BacterialTyper_ and all dependencies.
 
 Verify the configuration using 
+
 ```
 BacterialTyper config check
 ```
