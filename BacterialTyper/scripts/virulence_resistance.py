@@ -416,11 +416,11 @@ def check_results(db2use, outdir_sample, assembly_cutoff, card_trick_info):
 				database = 'vfdb_full'
 				name_db = 'VFDB'
 			else:
+				## might generate conflicts if several other databases provided
 				database = 'other'
 				name_db = 'other'
 
-			## might generate conflicts if several other databases provided
-			## TODO: check
+			## Timestamp created in profile/ folder for each db analyzed
 			filename_stamp = outfolder + '/.success_' + database
 			if os.path.isfile(filename_stamp):
 				stamp =	HCGB_time.read_time_stamp(filename_stamp)

@@ -427,6 +427,8 @@ def ariba_run_caller(db2use, db_name, list_files, folder_out, threads, cutoff):
 	# generate a stamp when finish parsing each file
 
 	## make stamp time
+	## Timestamp generated within each db folder analyzed
+	## profile/card_prepareref/.success_card_prepareref
 	filename_stamp = os.path.join(folder_out, '.success_' + db_name)
 	if os.path.isfile(filename_stamp):
 		stamp =	HCGB_time.read_time_stamp(filename_stamp)
