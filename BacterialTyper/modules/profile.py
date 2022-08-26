@@ -357,10 +357,10 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
 				report_files_databases[sample] = file_report
 
 		outfile_summary = subfolder + "/"			
-		if database.endswith('card_prepareref/'):
+		if "card" in database:
 			outfile_summary = outfile_summary + 'CARD_summary'
 			name_db = 'CARD'
-		elif database.endswith('vfdb_full_prepareref/'):
+		elif "vfdb_full" in database:
 			outfile_summary = outfile_summary + 'VFDB_summary'
 			name_db = 'VFDB'
 			vfdb=True
