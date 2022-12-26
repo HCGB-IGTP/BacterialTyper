@@ -81,6 +81,6 @@ tornado==6.1
 typing-extensions==3.10.0.0
 urllib3==1.26.5
 wget==3.2
-wheel==0.36.2
+wheel==0.38.1
 XlsxWriter==1.4.3
 zipp==3.4.1
