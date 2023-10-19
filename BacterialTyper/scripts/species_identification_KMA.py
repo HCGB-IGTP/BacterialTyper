@@ -562,10 +562,10 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, option, th
 	###
 	out_file_log = out_file + '.log'
 	if len(files) == 2:
-		cmd_kma_search = "%s -ipe %s %s -o %s -t_db %s -t %s %s 2> %s" %(kma_bin, files[0], files[1], out_file, index_name, threads, option, out_file_log)
+		cmd_kma_search = "%s -ipe %s %s -o %s -shm 0 -t_db %s -t %s %s 2> %s" %(kma_bin, files[0], files[1], out_file, index_name, threads, option, out_file_log)
 	else:
 		## TODO: test Single End
-		cmd_kma_search = "%s -i %s -o %s -t_db %s -t %s %s 2> %s" %(kma_bin, files[0], out_file, index_name, threads, option, out_file_log)
+		cmd_kma_search = "%s -i %s -o %s -shm 0 -t_db %s -t %s %s 2> %s" %(kma_bin, files[0], out_file, index_name, threads, option, out_file_log)
 
 	code = HCGB_sys.system_call(cmd_kma_search)
 

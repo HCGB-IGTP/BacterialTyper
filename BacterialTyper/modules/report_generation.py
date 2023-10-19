@@ -25,7 +25,6 @@ from BacterialTyper.report import get_promoter
 from BacterialTyper.report.Staphylococcus import get_spa_typing
 from BacterialTyper.report.Staphylococcus import agr_typing
 from BacterialTyper.report.Staphylococcus import get_sccmec
-
 from BacterialTyper import __version__ as pipeline_version
 
 ##
@@ -201,6 +200,9 @@ def run_report(options):
                         if (seq_id):
                              ## save results 
                              results_geneIDs.loc[len(results_geneIDs)] = (name, g, seq_id, seq_sequence)
+        else:
+            print ("No file provided via --genes_ids_fasta option\n")
+            exit()
 
         ## save for each gene in a separate fasta file
         list_of_genes = set(results_geneIDs['gene'].to_list())

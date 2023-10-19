@@ -88,6 +88,11 @@ def run_ident(options):
 	else:
 		options.pair = True
 
+	if not options.kma_ident:
+		if not options.species2use:
+			print ("Provide a species name for all samples or --kma_ident to identify for each sample")
+			exit()	
+
 	### species_identification_KMA -> most similar taxa
 	HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
 	HCGB_aes.boxymcboxface("Species identification")
@@ -145,63 +150,92 @@ def run_ident(options):
 		pd.set_option('display.max_columns', None)
 		print (retrieve_databases)
 	
-	######## KMA identification
-	dataFrame_kma = KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
 	
-	## functions.timestamp
-	start_time_partial = HCGB_time.timestamp(start_time_partial)
+	###########################################################################
+	if options.kma_ident:
+		## Flag to identify from scratch using KMA, and download samples and additional
+		## information using edirect 
 	
-	## debug message
-	if (Debug):
-		print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
-		pd.set_option('display.max_colwidth', None)
-		pd.set_option('display.max_columns', None)
-		print ("dataframe_kma")
-		print (dataFrame_kma)
-		
-	## exit if viral search
-	skip=False
-	if (len(options.kma_dbs) == 1):
-		for i in options.kma_dbs:
-			if (i == 'viral'):
-				print ()
-				MLST_results = ''
-				options.slow = False
-				skip=True
-			
-			## what if only plasmids?
-			
-	## do edirect and MLST if bacteria
-	if (not skip):		
-		dataFrame_edirect = pd.DataFrame()
-		
-		######## EDirect identification
-		#dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict, Debug)
+		######## KMA identification
+		dataFrame_kma = KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
 		
 		## functions.timestamp
 		start_time_partial = HCGB_time.timestamp(start_time_partial)
-	
-		## debug message
-		if (Debug):
-			print (colored("**DEBUG: retrieve results from NCBI **", 'yellow'))
-			pd.set_option('display.max_colwidth', None)
-			pd.set_option('display.max_columns', None)
-			print ("dataFrame_edirect")
-			print (dataFrame_edirect)
-			
-		######## MLST identification
-		MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, dataFrame_edirect, retrieve_databases)
-	
-		## functions.timestamp
-		start_time_partial = HCGB_time.timestamp(start_time_partial)
-
+		
 		## debug message
 		if (Debug):
 			print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
 			pd.set_option('display.max_colwidth', None)
 			pd.set_option('display.max_columns', None)
-			print ("MLST_results")
-			print (MLST_results)
+			print ("dataframe_kma")
+			print (dataFrame_kma)
+			
+		## exit if viral search
+		skip=False
+		if (len(options.kma_dbs) == 1):
+			for i in options.kma_dbs:
+				if (i == 'viral'):
+					print ()
+					MLST_results = ''
+					options.slow = False
+					skip=True
+				
+				## what if only plasmids?
+				
+		## do edirect and MLST if bacteria
+		if (not skip):		
+			dataFrame_edirect = pd.DataFrame()
+			
+			######## EDirect identification
+			dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict, Debug)
+			
+			## functions.timestamp
+			start_time_partial = HCGB_time.timestamp(start_time_partial)
+		
+			## debug message
+			if (Debug):
+				print (colored("**DEBUG: retrieve results from NCBI **", 'yellow'))
+				pd.set_option('display.max_colwidth', None)
+				pd.set_option('display.max_columns', None)
+				print ("dataFrame_edirect")
+				print (dataFrame_edirect)
+
+		###########################################################################
+	else:
+		###########################################################################
+		## species provided by user as option
+		# create fake dataFrame_kma and dataFrame_edirect
+		dataFrame_kma = pd.DataFrame()
+		
+		## dataFrame_edirect
+		#name, genus, species,
+		dataFrame_edirect = pd.DataFrame(columns=("sample", "genus", "species"))
+		
+		## get string
+		species2use = options.species2use.split(" ")
+		print(species2use)
+
+		# Group dataframe sample name
+		sample_results = pd_samples_retrieved.groupby(["new_name"])
+		for name, grouped in sample_results:
+			dataFrame_edirect.loc[len(dataFrame_edirect)] = (name, species2use[0], species2use[1])
+		###########################################################################
+		
+		
+	######## MLST identification
+	MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, 
+							dataFrame_edirect, retrieve_databases)
+
+	## functions.timestamp
+	start_time_partial = HCGB_time.timestamp(start_time_partial)
+
+	## debug message
+	if (Debug):
+		print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
+		pd.set_option('display.max_colwidth', None)
+		pd.set_option('display.max_columns', None)
+		print ("MLST_results")
+		print (MLST_results)
 
 	## generate summary for sample: all databases
 	## MLST, plasmids, genome, etc
@@ -413,6 +447,13 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 
 	## Start identification of samples
 	print ("\n+ Send KMA identification jobs...")
+	
+	
+	### ATTENTION:
+	## KMA is not working so far, no valid output results are generated and continuos memory crash errors are produced...
+	## just skip the process
+	results_summary = pd.DataFrame()
+#	return results_summary
 
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())
@@ -464,6 +505,12 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 	print ("+ KMA identification call finished for all samples...")
 	print ("+ Parse results now")
 	results_summary = pd.DataFrame()
+	
+	### ATTENTION:
+	## KMA is not working so far, no valid output results are generated and continuos memory crash errors are produced...
+	## just skip the process
+	return results_summary
+	
 	for db2use in databases2use:
 		### [TODO]: parse data according to database: bacteria, plasmids or user data or genbank data provided
 		
@@ -523,8 +570,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 
 ###################################
 def send_kma_job(outdir_file, list_files, name, database, threads, Debug):
-	"""
-	Executes KMA identification jobs
+	"""Executes KMA identification jobs
 	
 	This function automates the process of checking if any previous run succeeded or
 	runs the appropiate identification process for the sample and database provided.
@@ -677,6 +723,14 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
 		
 	.. include:: ../../links.inc	
 	"""
+	
+	
+	### ATTENTION:
+	## KMA is not working so far, no valid output results are generated and continuos memory crash errors are produced...
+	## just skip the process
+	return pd.DataFrame()
+
+	
 	################################################
 	## TODO: What to do if multi-isolate sample?
 	################################################
@@ -843,12 +897,10 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
 	
 	## TODO: Samples might not be assembled...to take into account and return 0
 	
-	
 	## TODO: Fix and install MLSTar during installation
+	
+	print(colored("Attention: Fix:", 'red'))
 	print(MLSTar.get_MLSTar_package_installed())
-	exit()
-	
-	
 	
 	########################################################################################
 

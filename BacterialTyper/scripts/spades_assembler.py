@@ -262,9 +262,8 @@ def main():
 	if len(sys.argv) > 1:
 		print ("")
 	else:
-		help_options()
-		exit()    	
-
+            raise SystemExit(help_options())
+        
 	file1 = os.path.abspath(argv[1])
 	file2 = os.path.abspath(argv[2])
 	sample = argv[3]

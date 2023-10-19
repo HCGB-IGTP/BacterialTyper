@@ -172,8 +172,7 @@ def main():
 	if len(sys.argv) > 1:
 		print ("")
 	else:
-		help_options()
-		exit()
+		raise SystemExit(help_options())
 	
 	## argv
 	seq_file = os.path.abspath(argv[1])

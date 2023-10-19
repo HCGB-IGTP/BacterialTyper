@@ -74,6 +74,7 @@ def get_install_R_files():
 ##################
 def install_R_packages(package, source, install_path, extra):
 	
+	## get files from BacterialTyper source code
 	(install_R, install_github_package) = get_install_R_files()
 	
 	HCGB_files.create_folder(install_path)

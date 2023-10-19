@@ -21,6 +21,7 @@ from io import open
 import pandas as pd
 from termcolor import colored
 import shutil
+import HCGB
 
 import matplotlib
 matplotlib.use('agg')
@@ -29,7 +30,7 @@ from pandas.plotting import table
 from matplotlib.backends.backend_pdf import PdfPages
 
 ## import my modules
-from BacterialTyper.scripts import functions
+import HCGB.functions as functions
 from BacterialTyper.config import set_config
 from BacterialTyper.config import install_dependencies
 from BacterialTyper.other_tools import tools
@@ -64,11 +65,11 @@ def run_MLSTar(species_mlst_folder, rscript, species, scheme, name, path, fileGi
 	
 	## scheme folder
 	scheme_name = 'scheme_' + str(scheme)
-	scheme_folder = functions.create_subfolder(scheme_name, species_mlst_folder)
+	scheme_folder = functions.files_functions.create_subfolder(scheme_name, species_mlst_folder)
 
 	## seq/profile folder
-	seq_folder = functions.create_subfolder('seq', scheme_folder)
-	profile_folder = functions.create_subfolder('prf', scheme_folder)
+	seq_folder = functions.files_functions.create_subfolder('seq', scheme_folder)
+	profile_folder = functions.files_functions.create_subfolder('prf', scheme_folder)
 
 	print ("##################################################")
 	print ("+ MLST profiling for sample: %s" %name)
@@ -92,7 +93,7 @@ def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threa
 	## success timestamp
 	filename_stamp = path + '/.success'
 	if os.path.isfile(filename_stamp):
-		stamp =	functions.read_time_stamp(filename_stamp)
+		stamp =	functions.time_functions.read_time_stamp(filename_stamp)
 		print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
 		res_file = path + '/' + name + "_MLST_results.csv"
 		return(res_file)
@@ -103,7 +104,7 @@ def run_doMLST(profile_folder, seq_folder, name, rscript, path, fileGiven, threa
 			
 		logFile = path + '_logFile.txt'
 		cmd_profiler = "%s %s --dir_profile %s --dir_seq %s --file %s --dir %s --name %s --threads %s --lib.loc %s 2> %s" %(rscript, MLSTarR_script, profile_folder, seq_folder, fileGiven, path, name, threads, get_MLSTar_package_installed(), logFile)
-		callCode = functions.system_call(cmd_profiler)
+		callCode = functions.system_call_functions.system_call(cmd_profiler)
 
 	if callCode == 'OK':
 		res_file = path + '/' + name + "_MLST_results.csv"
@@ -196,14 +197,14 @@ def getPUBMLST(species, rscript, out_name):
 	path_package = get_MLSTar_package_installed()
 	#MLSTar_getpubmlst
 	cmd_getPUBMLST = "%s %s --species %s --output %s --lib.loc %s 2> /dev/null" %(rscript, MLSTarR_getpubmlst, species, out_name, path_package)
-	return(functions.system_call(cmd_getPUBMLST))
+	return(functions.system_call_functions.system_call(cmd_getPUBMLST))
 
 ##########################################
 def plot_MLST(results, profile, rscript):
 	path_package = get_MLSTar_package_installed()
 	path_folder = os.path.dirname(results)
 	cmd_plotter = "%s %s --output %s --folder_profile %s --file_result %s --lib.loc %s" %(rscript, MLSTarR_plot, path_folder, profile, results, path_package)
-	return(functions.system_call(cmd_plotter))
+	return(functions.system_call_functions.system_call(cmd_plotter))
 	
 ##########################################
 def download_PubMLST(profile_folder, scheme, seq_folder, rscript, species):
@@ -221,7 +222,7 @@ def download_PubMLST(profile_folder, scheme, seq_folder, rscript, species):
 		filename_stamp = profile_folder + '/.success'
 
 		if os.path.isfile(filename_stamp):
-			stamp =	functions.read_time_stamp(filename_stamp)
+			stamp =	functions.time_functions.read_time_stamp(filename_stamp)
 			print (colored("\tA previous command generated results on: %s [%s -- %s]" %(stamp, species, 'profile'), 'yellow'))
 		#
 		#else
@@ -232,12 +233,12 @@ def download_PubMLST(profile_folder, scheme, seq_folder, rscript, species):
 		print ('+ Downloading profile...')
 		logFile = profile_folder + '_download.log'
 		cmd_profile = "%s %s --species %s --scheme %s --dir_profile %s --lib.loc %s 2> %s" %(rscript, MLSTarR_download_prf, species, scheme, profile_folder, get_MLSTar_package_installed(), logFile)
-		callCode = functions.system_call(cmd_profile)
+		callCode = functions.system_call_functions.system_call(cmd_profile)
 		
 		if (callCode == 'OK'):
 			## success timestamp
 			filename_stamp = profile_folder + '/.success'
-			stamp =	functions.print_time_stamp(filename_stamp)
+			stamp =	functions.aesthetics_functions.print_time_stamp(filename_stamp)
 	
 	#######################
 	## download sequence ##
@@ -250,7 +251,7 @@ def download_PubMLST(profile_folder, scheme, seq_folder, rscript, species):
 		filename_stamp = seq_folder + '/.success'
 		
 		if os.path.isfile(filename_stamp):
-			stamp =	functions.read_time_stamp(filename_stamp)
+			stamp =	functions.time_functions.read_time_stamp(filename_stamp)
 			print (colored("\tA previous command generated results on: %s [%s -- %s]" %(stamp, species,'sequence'), 'yellow'))
 
 			########################################################################
@@ -277,15 +278,19 @@ def download_PubMLST(profile_folder, scheme, seq_folder, rscript, species):
 			print ('+ Downloading sequences...')
 			logFile = seq_folder + '_download.log'
 			cmd_seq = "%s %s --species %s --scheme %s --dir_seq %s --lib.loc %s 2> %s" %(rscript, MLSTarR_download_seq, species, scheme, seq_folder, get_MLSTar_package_installed(), logFile)
-			callCode = functions.system_call(cmd_seq)
+			callCode = functions.system_call_functions.system_call(cmd_seq)
 			
 			if (callCode == 'OK'):
 				## success timestamp
 				filename_stamp = seq_folder + '/.success'
 				stamp =	functions.print_time_stamp(filename_stamp)
 
+#################################
 def get_MLSTar_package_installed(debug=False):
 
+	## ATTENTION: no working installed within conda environment,
+	## need to further test and check
+	
 	install_path = set_config.R_package_path_installed()
 	(check_install_system, check_install_path) = set_config.get_check_R_files()
 	R_script_exe = set_config.get_exe('Rscript')
@@ -293,29 +298,41 @@ def get_MLSTar_package_installed(debug=False):
 	if debug:
 		print ('\n+ Check package: MLSTar')
 		
-	## ATTENTION: optparse library missing, no installation withn conda
-	
 	## first try to check if package available in system
 	cmd_check = R_script_exe + ' ' + check_install_system + ' -l MLSTar'
-	code = functions.system_call(cmd_check, message=False, returned=False)
+	code = functions.system_call_functions.system_call(cmd_check, message=False, returned=False)
 	if (code=='OK'):
 		return('system')
 	else:
 		## check if installed in path
 		cmd_check_path = R_script_exe + ' ' + check_install_path + ' -l MLSTar -p ' + install_path
-		code2 = functions.system_call(cmd_check_path, message=False, returned=False)
+		code2 = functions.system_call_functions.system_call(cmd_check_path, message=False, returned=False)
 
 		if (code2=='OK'):
 			return(install_path)
 		else:
-			(install_R, install_github_package) = install_dependencies.get_install_R_files()
-			cmd_R = '%s %s -l iferres/MLSTar -p %s' %(R_script_exe, install_github_package, install_path)
-			code3 = functions.system_call(cmd_R, message=False, returned=False)
-			if (code3):
-				return (install_path)
+			## somewhere else in the system
+			cmd_check_path2 = "Rscript -e \"find.package('MLSTar')\""
+			outR = functions.system_call_functions.system_call(cmd_check_path2, message=True, returned=True)
+			print(outR)
+			
+			## original: 
+			#b'[1] "/imppc/labs/lslab/jsanchez/R/x86_64-pc-linux-gnu-library/MLSTar"\n'
+
+			## parse appropriately
+			outR="/imppc/labs/lslab/jsanchez/R/x86_64-pc-linux-gnu-library/"
+		
+			if (outR):
+				return outR
 			else:
-				print ('ERROR')
-				exit()	
+				(install_R, install_github_package) = install_dependencies.get_install_R_files()
+				cmd_R = '%s %s -l iferres/MLSTar -p %s' %(R_script_exe, install_github_package, install_path)
+				code3 = functions.system_call_functions.system_call(cmd_R, message=False, returned=False)
+				if (code3):
+					return (install_path)
+				else:
+					print ('ERROR')
+					exit()	
 
 ##########################################
 def main():
@@ -338,13 +355,13 @@ def main():
 	
 	##
 	threads = 1
-	functions.create_folder(path)
+	functions.files_functions.create_folder(path)
 	
 	## PubMLST folder
-	pubmlst_folder = functions.create_subfolder('PubMLST', database)
+	pubmlst_folder = functions.files_functions.create_subfolder('PubMLST', database)
 	
 	## species folder
-	species_mlst_folder = functions.create_subfolder(species, pubmlst_folder)
+	species_mlst_folder = functions.files_functions.create_subfolder(species, pubmlst_folder)
 
 	## output file
 	output_file = species_mlst_folder + '/PubMLST_available_scheme.csv'

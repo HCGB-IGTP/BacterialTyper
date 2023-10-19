@@ -115,7 +115,7 @@ def run(options):
 	if not options.project:
 		HCGB_files.create_folder(outdir)
 	## for samples
-	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "trimm", options.debug)
+	outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "trim", options.debug)
 	
 	## optimize threads
 	name_list = set(pd_samples_retrieved["name"].tolist())
