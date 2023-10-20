@@ -31,8 +31,6 @@ import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
 import HCGB.functions.info_functions as HCGB_info
 
-
-
 ## example report check: https://github.com/tseemann/nullarbor
 
 ## for staphyloccocus aureus: https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-018-0593-7

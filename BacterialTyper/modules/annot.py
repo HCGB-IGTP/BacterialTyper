@@ -73,7 +73,8 @@ def run_annotation(options):
     #################################
     
     ## if any help_flag provided will print and exit
-    help_info.help_info(options)
+    if (help_info.help_info(options) == 1):
+        raise SystemExit() 
     
 
     ## set default

@@ -77,7 +77,8 @@ def run_assembly(options):
     #################################
     
     ## if any help_flag provided will print and exit
-    help_info.help_info(options)
+    if (help_info.help_info(options) == 1):
+        raise SystemExit() 
     
     ### set as default paired_end mode
     if (options.single_end):

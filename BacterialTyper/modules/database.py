@@ -59,8 +59,8 @@ def run_database(options):
     #################################
     
     ## if any help_flag provided will print and exit
-    help_info.help_info(options)
-    
+    if (help_info.help_info(options) == 1):
+        raise SystemExit()     
     ## init time
     start_time_total = time.time()
     start_time_partial = start_time_total

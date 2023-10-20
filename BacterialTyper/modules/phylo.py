@@ -40,16 +40,9 @@ def run_phylo(options):
     ##################################
     ### show help messages if desired    
     ##################################
-    if (options.help_format):
-        ## help_format option
-        sampleParser.help_format()
-        exit()
-
-    elif (options.help_project):
-        ## information for project
-        help_info.project_help()
-        exit()
-    
+    if (help_info.help_info(options) == 1):
+        raise SystemExit() 
+        
     ## init time
     start_time_total = time.time()
 

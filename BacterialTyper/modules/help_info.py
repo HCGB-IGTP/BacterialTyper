@@ -38,125 +38,153 @@ def help_info(options):
     
     """
     
-    HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
-    
     ## project help
     try:
         if (options.help_project):
-            project_help()        
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
+            project_help()
+            return(1)
     except:
         pass
 
     ## help_format option
     try:
         if (options.help_format):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             help_fastq_format()        
+            return(1)
     except:
         pass
     
     ## information for Prokka    
     try:
         if (options.help_Prokka):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             annotation.print_list_prokka()
+            return(1)
     except:
         pass
     
     ## information for BUSCO databases    
     try:
         if (options.help_BUSCO):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             BUSCO_caller.print_help_BUSCO()        
+            return(1)
     except:
         pass
 
     ## information for ARIBA databases
     try:
         if (options.help_ARIBA):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             print ("ARIBA databases information:")    
             ariba_caller.help_ARIBA()        
+            return(1)
     except:
         pass
 
     ## information for trimm adapters
     try:
         if (options.help_trimm_adapters):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             trimmomatic_call.print_help_adapters()        
+            return(1)
     except:
         pass
 
     ## information for Multiqc
     try:
         if (options.help_multiqc):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             multiQC_report.multiqc_help()        
+            return(1)
     except:
         pass
 
     ## information for KMA Software
     try:
         if (options.help_KMA):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             KMA_caller.help_kma_database()        
+            return(1)
     except:
         pass
 
     ## information for PhiSpy
     try:
        if (options.help_PhiSpy):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             bacteriophage.help_PhiSpy()        
+            return(1)
     except:
         pass
             
     ## information for MGE analysis
     try:
        if (options.help_MGE_analysis):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             MGE.help_MGE_analysis()
+            return(1)
     except:
         pass
 
     ## information for MGE module
     try:
         if (options.help_input_MGE):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             MGE.help_input_MGE()
+            return(1)
     except:
         pass
                 
     ## information for MLSTar Software
     try:
         if (options.help_MLSTar):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             MLSTar.help_MLSTar()        
+            return(1)
     except:
         pass
     
     ## information for Min Hash Software
     try:
         if (options.help_Mash):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             min_hash_caller.helpMash()        
+            return(1)
     except:
         pass
     
     ## information for Snippy
     try:
         if (options.help_Snippy):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             variant_calling.help_Snippy()        
+            return(1)
     except:
         pass
 
     ## information for Dimob
     try:
         if (options.help_Dimob):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             genomic_island.help_Dimob()
+            return(1)
     except:
         pass
 
     ## Information for spatyper
     try:
         if (options.help_spaTyper):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
             ## help_format option
             get_spa_typing.help_spaTyper()
+            return(1)
     except:
         pass
 
-
-    exit()
-
+    return(0)
 
 ##########################
 def project_help():
