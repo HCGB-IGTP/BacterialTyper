@@ -18,7 +18,8 @@ __all__ = [
     'phylo_parser',
     #'sampleParser',
     'spades_assembler',
-    'species_identification_KMA',
+    'KMA_caller',
+    'Kraken2_caller',
     'trimmomatic_call',
     'variant_calling',
     'virulence_resistance'

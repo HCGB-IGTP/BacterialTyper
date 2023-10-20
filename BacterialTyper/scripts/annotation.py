@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-##########################################################
-## Jose F. Sanchez										##
-## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
-##########################################################
+##################################################################
+## Jose F. Sanchez                                              ##
+## Copyright (C) 2019 - 2023 Lauro Sumoy Lab, IGTP, Spain       ##
+##################################################################
 """
 It generates a protein annotation using Prokka_ for the genomes assembled generated
 
@@ -14,18 +14,12 @@ shown in :func:`BacterialTyper.scripts.annotation.print_list_prokka`. If no genu
 """
 
 ## useful imports
-import time
-import io
 import os
-import re
 import sys
 from sys import argv
-from io import open
-import pandas as pd
 from termcolor import colored
 
 ## import my modules
-import HCGB
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.system_call_functions as HCGB_sys
 from BacterialTyper.config import set_config

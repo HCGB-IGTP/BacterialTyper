@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
-##########################################################
-## Jose F. Sanchez										##
-## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
-##########################################################
+##################################################################
+## Jose F. Sanchez                                              ##
+## Copyright (C) 2019 - 2023 Lauro Sumoy Lab, IGTP, Spain       ##
+##################################################################
 """
 This script calls SPADES assembler and plasmidSPADES. It also generates descriptive statistics of the assembly process.
 
 This script can be called as a single script if desired or called from the BacterialTyper module assemble or as a python api.
 """
 ## useful imports
-import time
-import io
 import os
-import re
 import sys
 from sys import argv
 from io import open
@@ -24,8 +21,6 @@ from termcolor import colored
 from BacterialTyper.config import set_config
 from BacterialTyper.scripts import assembly_stats_caller
 
-import HCGB
-import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files

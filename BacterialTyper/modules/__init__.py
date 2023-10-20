@@ -18,7 +18,7 @@ __all__ = [
 	'run',
 	'report_generation',
 	'test',
-	'trimm',
+	'trim',
 	'version'
 ]
 

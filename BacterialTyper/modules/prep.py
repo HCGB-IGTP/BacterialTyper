@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-##########################################################
-## Jose F. Sanchez										##
-## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
-##########################################################
+##################################################################
+## Jose F. Sanchez                                              ##
+## Copyright (C) 2019 - 2023 Lauro Sumoy Lab, IGTP, Spain       ##
+####################################################################
 """
 Get fastq files and prepare them for other purposes. 
 """
@@ -10,25 +10,21 @@ Get fastq files and prepare them for other purposes.
 ## import useful modules
 import time
 import os
-import sys
 from io import open
 import shutil
 import pandas as pd
 from termcolor import colored
 
 ## import my modules
-from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
 from BacterialTyper import __version__ as pipeline_version
 
-import HCGB
 from HCGB import sampleParser
 import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
 import HCGB.functions.info_functions as HCGB_info
-
 
 ################################
 def run_prep(options):
@@ -106,7 +102,10 @@ def run_prep(options):
 		final_dir = outdir
 	
 	## get files
-	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ["fastq", "fq", "fastq.gz", "fq.gz"], options.debug)
+	pd_samples_retrieved = sampleParser.files.get_files(options, 
+                                                     input_dir, "fastq", 
+                                                     ["fastq", "fq", "fastq.gz", "fq.gz"], 
+                                                     options.debug)
 		
 	## Information returned in pd_samples_retrieved
 	### sample, dirname, name, new_name, name_len, lane, read_pair, lane_file, ext, gz
@@ -142,7 +141,7 @@ def run_prep(options):
 			print (names_retrieved)
 			
 		## TODO: check integrity of new names and special characters
-	
+
 		## print to a file
 		timestamp = HCGB_time.create_human_timestamp()
 		rename_details = final_dir + '/' + timestamp + '_prep_renameDetails.txt'
@@ -196,7 +195,7 @@ def run_prep(options):
 		else:
 			print ("+ Sample files have been merged...")
 		
-		## process is finished here
+        ## process is finished here
 		print ("\n*************** Finish *******************")
 		start_time_partial = HCGB_time.timestamp(start_time_total)
 	
@@ -243,7 +242,8 @@ def run_prep(options):
 			HCGB_files.get_symbolic_link(list_reads, outdir)
 	
 	print ("\n*************** Finish *******************")
-	start_time_partial = HCGB_time.timestamp(start_time_total)
+	HCGB_time.timestamp(start_time_total)
+    
 
 	## samples information dictionary
 	samples_info = {}

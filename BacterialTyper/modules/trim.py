@@ -8,24 +8,19 @@ Trimms sequence adapters within fastq reads.
 """
 ## import useful modules
 import os
-import sys
 import re
 import time
-from io import open
-import shutil
 import concurrent.futures
 from termcolor import colored
 
 ## import my modules
 from BacterialTyper.scripts import trimmomatic_call
 from BacterialTyper.scripts import multiQC_report
-from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
 from BacterialTyper.modules import qc
 from BacterialTyper.data import data_files
 from BacterialTyper import __version__ as pipeline_version
 
-import HCGB
 from HCGB import sampleParser
 import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
@@ -103,7 +98,9 @@ def run(options):
 	options.output_folder = outdir
 	
 	## get files
-	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "fastq", ["fastq", "fq", "fastq.gz", "fq.gz"], options.debug)
+	pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, 
+                                                     "fastq", ["fastq", "fq", "fastq.gz", "fq.gz"], 
+                                                     options.debug)
 	
 	## debug message
 	if (Debug):
@@ -145,7 +142,11 @@ def run(options):
 		
 	## send for each sample
 	with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
-		commandsSent = { executor.submit(trimmo_caller, sorted(cluster["sample"].tolist()), outdir_dict[name], name, threads_job, Debug, trimmomatic_params, options.adapters): name for name, cluster in sample_frame }
+		commandsSent = { executor.submit(trimmo_caller, 
+                                   sorted(cluster["sample"].tolist()), 
+                                   outdir_dict[name], name, threads_job, 
+                                   Debug, trimmomatic_params, 
+                                   options.adapters): name for name, cluster in sample_frame }
 
 		for cmd2 in concurrent.futures.as_completed(commandsSent):
 			details = commandsSent[cmd2]
@@ -219,7 +220,7 @@ def run(options):
 	for name, grouped in samples_frame:
 		samples_info[name] = grouped['sample'].to_list()
 	
-	## trimmomatic params
+	## trimmomatic params are already available in trimmomatic_params dictionary
 	del options.MINLEN
 	del options.ILLUMINACLIP
 	del options.LEADING

@@ -1,122 +1,168 @@
 #!/usr/bin/env python3
 ##########################################################
-## Jose F. Sanchez										##
-## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
+## Jose F. Sanchez                                        ##
+## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain        ##
 ##########################################################
-import BacterialTyper
 '''
 Prints help messages for several modules and options.
 '''
 ## useful imports
-import time
-import io
-import os
-import re
-import sys
-from io import open
 from termcolor import colored
-	
+    
 ## import my modules
-from BacterialTyper.config import set_config
-from BacterialTyper.scripts import annotation
-from BacterialTyper.scripts import BUSCO_caller
-from BacterialTyper.scripts import ariba_caller
 from BacterialTyper.scripts import bacteriophage
-from BacterialTyper.scripts import trimmomatic_call
-from BacterialTyper.scripts import multiQC_report
-from BacterialTyper.scripts import MLSTar
 from BacterialTyper.modules import MGE
-from BacterialTyper.scripts import min_hash_caller
+
 from BacterialTyper.scripts import variant_calling
 from BacterialTyper.scripts import genomic_island
+from BacterialTyper.scripts import BUSCO_caller
+from BacterialTyper.scripts import multiQC_report
+from BacterialTyper.scripts import annotation
+from BacterialTyper.scripts import ariba_caller
+from BacterialTyper.scripts import min_hash_caller
+from BacterialTyper.scripts import trimmomatic_call
+from BacterialTyper.scripts import KMA_caller
+from BacterialTyper.scripts import Kraken2_caller
+from BacterialTyper.scripts import MLSTar
+from BacterialTyper.report.Staphylococcus import get_spa_typing
 from BacterialTyper import __version__ as pipeline_version
 
 import HCGB.functions.aesthetics_functions as HCGB_aes
 
 ##########################
-def run_info(options):
+def help_info(options):
+    """
+    Main function to control all help messages requested from any modules.
+    
+    Given the option provided via options dictionary flags, it calls the specific information in each script.
+    
+    """
+    
+    HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
+    
+    ## project help
+    try:
+        if (options.help_project):
+            project_help()        
+    except:
+        pass
 
-	## project help
-	if (options.help_project):
-		project_help()
-		exit()
+    ## help_format option
+    try:
+        if (options.help_format):
+            help_fastq_format()        
+    except:
+        pass
+    
+    ## information for Prokka    
+    try:
+        if (options.help_Prokka):
+            annotation.print_list_prokka()
+    except:
+        pass
+    
+    ## information for BUSCO databases    
+    try:
+        if (options.help_BUSCO):
+            BUSCO_caller.print_help_BUSCO()        
+    except:
+        pass
 
-	## help_format option
-	if (options.help_format):
-		help_fastq_format()
-		exit()
+    ## information for ARIBA databases
+    try:
+        if (options.help_ARIBA):
+            print ("ARIBA databases information:")    
+            ariba_caller.help_ARIBA()        
+    except:
+        pass
 
-	## information for Prokka	
-	if (options.help_Prokka):
-		annotation.print_list_prokka()
-		exit()
-	
-	## information for BUSCO databases	
-	if (options.help_BUSCO):
-		BUSCO_caller.print_help_BUSCO()
-		exit()
+    ## information for trimm adapters
+    try:
+        if (options.help_trimm_adapters):
+            trimmomatic_call.print_help_adapters()        
+    except:
+        pass
 
-	## information for ARIBA databases
-	if (options.help_ARIBA):
-		print ("ARIBA databases information:")	
-		ariba_caller.help_ARIBA()
-		exit()
+    ## information for Multiqc
+    try:
+        if (options.help_multiqc):
+            multiQC_report.multiqc_help()        
+    except:
+        pass
 
-	## information for trimm adapters
-	if (options.help_trimm_adapters):
-		trimmomatic_call.print_help_adapters()
-		exit()
+    ## information for KMA Software
+    try:
+        if (options.help_KMA):
+            KMA_caller.help_kma_database()        
+    except:
+        pass
 
-	## information for Multiqc
-	if (options.help_multiqc):
-		multiQC_report.multiqc_help()
-		exit()
+    ## information for PhiSpy
+    try:
+       if (options.help_PhiSpy):
+            bacteriophage.help_PhiSpy()        
+    except:
+        pass
+            
+    ## information for MGE analysis
+    try:
+       if (options.help_MGE_analysis):
+            MGE.help_MGE_analysis()
+    except:
+        pass
 
-	## information for KMA Software
-	if (options.help_KMA):
-		species_identification_KMA.help_kma_database()
-		exit()
+    ## information for MGE module
+    try:
+        if (options.help_input_MGE):
+            MGE.help_input_MGE()
+    except:
+        pass
+                
+    ## information for MLSTar Software
+    try:
+        if (options.help_MLSTar):
+            MLSTar.help_MLSTar()        
+    except:
+        pass
+    
+    ## information for Min Hash Software
+    try:
+        if (options.help_Mash):
+            min_hash_caller.helpMash()        
+    except:
+        pass
+    
+    ## information for Snippy
+    try:
+        if (options.help_Snippy):
+            variant_calling.help_Snippy()        
+    except:
+        pass
 
-	## information for PhiSpy
-	if (options.help_PhiSpy):
-		bacteriophage.help_PhiSpy()
-		exit()
-		
-	## information for MGE analysis
-	if (options.help_MGE_analysis):
-		MGE.help_MGE_analysis()
-		exit()
+    ## information for Dimob
+    try:
+        if (options.help_Dimob):
+            genomic_island.help_Dimob()
+    except:
+        pass
 
-	## information for MGE module
-	if (options.help_input_MGE):
-		MGE.help_input_MGE()
-		exit()
-		
-	## information for MLSTar Software
-	if (options.help_MLSTar):
-		MLSTar.help_MLSTar()
-		exit()
-	
-	## information for Min Hash Software
-	if (options.help_Mash):
-		min_hash_caller.helpMash()
-		exit()
-	
-	## information for Snippy
-	if (options.help_Snippy):
-		variant_calling.help_Snippy()
-		exit()
+    ## Information for spatyper
+    try:
+        if (options.help_spaTyper):
+            ## help_format option
+            get_spa_typing.help_spaTyper()
+    except:
+        pass
 
-	## information for Dimob
-	if (options.help_Dimob):
-		genomic_island.help_Dimob()
-		exit()
-	
-	
+
+    exit()
+
+
 ##########################
 def project_help():
-	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
+    print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
+##########################
 def help_fastq_format():
     """
     Explanation of fastq format details.

@@ -7,8 +7,6 @@
 Calls BUSCO software for quality control of annotation and assembly datasets
 """
 ## useful imports
-import time
-import io
 import os
 import re
 import sys
@@ -18,7 +16,6 @@ from termcolor import colored
 import concurrent.futures
 
 ## import my modules
-import HCGB
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.system_call_functions as HCGB_sys
 import HCGB.functions.aesthetics_functions as HCGB_aes
@@ -143,12 +140,12 @@ def BUSCO_retrieve_sets(list_datasets, folder):
 			print (colored("Dataset provided: " + elem + "...... OK", 'green'))
 
 	## check if in database: folder
-	dataset = {}
 	for elem in list_datasets:
 		if not elem == "auto-lineage":
 			## folder + lineages + elem
 			status = BUSCO_check_dataset(os.path.abspath( os.path.join (folder, 'lineages', elem)), elem)
-	
+			#print(status)  
+            
 	return (list_datasets)
 
 ##############################
@@ -343,6 +340,7 @@ def BUSCO_stats(summary_file, sample, dataset):
 
 ###############
 def BUSCO_plot(outfolder):
+    
 	busco_plot_bin = set_config.get_exe('generate_plot')
 	
 	os.chdir(outfolder)

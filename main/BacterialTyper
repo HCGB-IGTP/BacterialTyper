@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-##########################################################
-## Jose F. Sanchez                                      ##
-## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain ##
-##########################################################
+##################################################################
+## Jose F. Sanchez                                              ##
+## Copyright (C) 2019 - 2023 Lauro Sumoy Lab, IGTP, Spain       ##
+##################################################################
 """
 Main script for the BacterialTyper project.
 """
 import argparse 
-import os
 import sys
 import BacterialTyper.modules
 from BacterialTyper import __version__ as pipeline_version
@@ -16,7 +15,7 @@ from BacterialTyper import __version__ as pipeline_version
 parser = argparse.ArgumentParser(
     prog='BacterialTyper',
     description='BacterialTyper: Pipeline for bacterial Genotyping using NGS\n',
-    epilog=f" 2019-2021. Jose F. Sanchez, Alicia Lacoma, Cristina Prat and Lauro Sumoy.\n\n Version: {pipeline_version}"
+    epilog=f" 2019-2023. Jose F. Sanchez, Alicia Lacoma, Cristina Prat and Lauro Sumoy.\n\n Version: {pipeline_version}"
     
 )
 subparsers = parser.add_subparsers(title='Available modules', help='', metavar='')
@@ -29,7 +28,7 @@ help_options = ('--help_Database',
 				'--help_Prokka',
 				'--help_ARIBA',
 				'--help_PhiSpy',
-				'--help_trimm_adapters',
+				'--help_trim_adapters',
 				'--help_multiqc',
 				'--help_KMA',
 				'--help_MLSTar',
@@ -46,6 +45,7 @@ subparser_space = subparsers.add_parser('==============', help='')
 #######################
 #### Configuration ####
 #######################
+
 ##------------------------------ Information help ---------------------- ##
 subparser_help = subparsers.add_parser(
     'info',
@@ -56,7 +56,7 @@ subparser_help_name = subparser_help.add_argument_group("Show additional help in
 subparser_help = subparser_help_name.add_mutually_exclusive_group(required= True)
 subparser_help.add_argument("--help_project", action="store_true", help="...")
 subparser_help.add_argument("--help_format", action="store_true", help="...")
-subparser_help.add_argument("--help_trimm_adapters", action="store_true", help="Show additional information on trimm adapters.")
+subparser_help.add_argument("--help_trim_adapters", action="store_true", help="Show additional information on triming adapters.")
 subparser_help.add_argument("--help_BUSCO", action="store_true", help="...")
 subparser_help.add_argument("--help_Prokka", action="store_true", help="...")
 subparser_help.add_argument("--help_multiqc", action="store_true", help="Show additional help on the multiQC module.")
@@ -69,7 +69,7 @@ subparser_help.add_argument("--help_Mash", action="store_true", help="Print furt
 subparser_help.add_argument("--help_Snippy", action="store_true", help="Print further information for Snippy analysis.")
 subparser_help.add_argument("--help_MLSTar", action="store_true", help="Print further information for MLST analysis.")
 
-subparser_help.set_defaults(func=BacterialTyper.modules.help_info.run_info)
+subparser_help.set_defaults(func=BacterialTyper.modules.help_info.help_info)
 ##-------------------------------------------------------------##
 
 ##------------------------------ config ---------------------- ##
@@ -232,44 +232,44 @@ info_group_qc.add_argument("--help_multiqc", action="store_true", help="Show add
 subparser_qc.set_defaults(func=BacterialTyper.modules.qc.run_QC)
 ##-------------------------------------------------------------##
 
-##------------------------------ trimm ----------------------- ##
-subparser_trimm = subparsers.add_parser(
-    'trimm',
-    help='Trimms sequencing adapters.',
-    description='This module trimms sequencing adapters that could be present in next generation sequencing files',
+##------------------------------ trim ----------------------- ##
+subparser_trim = subparsers.add_parser(
+    'trim',
+    help='trims sequencing adapters.',
+    description='This module trims sequencing adapters that could be present in next generation sequencing files',
 )
-in_out_group_trimm = subparser_trimm.add_argument_group("Input/Output")
-in_out_group_trimm.add_argument("-i", "--input", help="Folder containing a project or reads, according to the mode selected. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv))
-in_out_group_trimm.add_argument("-o", "--output_folder", help="Output folder.", required = '--detached' in sys.argv)
-in_out_group_trimm.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
-in_out_group_trimm.add_argument("-b", "--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
-in_out_group_trimm.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
-in_out_group_trimm.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
-in_out_group_trimm.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
-in_out_group_trimm.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
-in_out_group_trimm.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
+in_out_group_trim = subparser_trim.add_argument_group("Input/Output")
+in_out_group_trim.add_argument("-i", "--input", help="Folder containing a project or reads, according to the mode selected. Files could be .fastq/.fq/ or fastq.gz/.fq.gz. See --help_format for additional details.", required= not any(elem in help_options for elem in sys.argv))
+in_out_group_trim.add_argument("-o", "--output_folder", help="Output folder.", required = '--detached' in sys.argv)
+in_out_group_trim.add_argument("--single_end", action="store_true", help="Single end files [Default OFF]. Default mode is paired-end.")
+in_out_group_trim.add_argument("-b", "--batch", action="store_true", help="Provide this option if input is a file containing multiple paths instead a path.")
+in_out_group_trim.add_argument("--in_sample", help="File containing a list of samples to include (one per line) from input folder(s) [Default OFF].")
+in_out_group_trim.add_argument("--ex_sample", help="File containing a list of samples to exclude (one per line) from input folder(s) [Default OFF].")
+in_out_group_trim.add_argument("--detached", action="store_true", help="Isolated mode. No project folder initiated for further steps [Default OFF; Project mode ON]")
+in_out_group_trim.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
+in_out_group_trim.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
-options_group_trimm = subparser_trimm.add_argument_group("Options")
-options_group_trimm.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]. See details in --help_multiqc")
-options_group_trimm.add_argument("-t", "--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
+options_group_trim = subparser_trim.add_argument_group("Options")
+options_group_trim.add_argument("--skip_report", action="store_true", help="Do not report statistics using MultiQC report module [Default OFF]. See details in --help_multiqc")
+options_group_trim.add_argument("-t", "--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
 
-params_group_trimm = subparser_trimm.add_argument_group("Trimmomatic parameters")
-params_group_trimm.add_argument("--adapters", help="Adapter sequences to use for the trimming process. See --help_trimm_adapters for further information.")
-params_group_trimm.add_argument("--ILLUMINACLIP", help=".", default="2:30:10")
-params_group_trimm.add_argument("--LEADING", help=".", default=11)
-params_group_trimm.add_argument("--TRAILING", help=".", default=11)
-params_group_trimm.add_argument("--SLIDINGWINDOW", help=".", default="4:20")
-params_group_trimm.add_argument("--MINLEN", help=".", default=24)
+params_group_trim = subparser_trim.add_argument_group("trimomatic parameters")
+params_group_trim.add_argument("--adapters", help="Adapter sequences to use for the triming process. See --help_trim_adapters for further information.")
+params_group_trim.add_argument("--ILLUMINACLIP", help=".", default="2:30:10")
+params_group_trim.add_argument("--LEADING", help=".", default=11)
+params_group_trim.add_argument("--TRAILING", help=".", default=11)
+params_group_trim.add_argument("--SLIDINGWINDOW", help=".", default="4:20")
+params_group_trim.add_argument("--MINLEN", help=".", default=24)
 
 
-info_group_trimm = subparser_trimm.add_argument_group("Additional information")
-info_group_trimm.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
-info_group_trimm.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
-info_group_trimm.add_argument("--help_trimm_adapters", action="store_true", help="Show additional information on trimm adapters.")
-info_group_trimm.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
-info_group_trimm.add_argument("--help_multiqc", action="store_true", help="Show additional help on the multiQC module.")
+info_group_trim = subparser_trim.add_argument_group("Additional information")
+info_group_trim.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
+info_group_trim.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
+info_group_trim.add_argument("--help_trim_adapters", action="store_true", help="Show additional information on trimming adapters.")
+info_group_trim.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
+info_group_trim.add_argument("--help_multiqc", action="store_true", help="Show additional help on the multiQC module.")
 
-subparser_trimm.set_defaults(func=BacterialTyper.modules.trimm.run)
+subparser_trim.set_defaults(func=BacterialTyper.modules.trim.run)
 ##-------------------------------------------------------------##
 
 ##################
@@ -384,8 +384,15 @@ kma_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database
 kma_group.add_argument("--kma_external_file", dest='kma_external_files', nargs='*', help="External fasta file to include in the search. It could be indexed or not. [Default OFF].")
 kma_group.add_argument("--only_kma_db", action="store_true", help="Provide this option if only user defined kma database(s) provided via --kma_db should be used for species identification. Discard Bacteria as default.")
 
+kraken_group = subparser_ident.add_argument_group("Kraken2 Databases Configuration")
+kraken_group.add_argument("--kraken2_ident", action="store_true", 
+                          help="Set this flag to use Kraken2 to identify samples from scratch")
+kraken_group.add_argument("--kraken2_db", dest='kraken2_dbs', nargs='*', 
+                          help="kraken2 database(s) to check. Provide several input if desired. If it is not available it would be downloaded and included in default database folder. [Default: Standard-8]", 
+                          choices=['Standard-8', 'Viral', 'PlusPFP-8'])
+
 options_group_name_ident = subparser_ident.add_argument_group("Options")
-options_group_name_ident.add_argument("--species2use", help="Provide the name of the species to use MLST profile")
+options_group_name_ident.add_argument("--species2use", help="Skip identification and provide the name of the species to use MLST profile")
 options_group_name_ident.add_argument("--user_data", action="store_true", help="Use previously identified samples in user_data [Default OFF].")
 options_group_name_ident.add_argument("--genbank_data", action="store_true", help="Use reference genomes from NCBI stored in database folder [Default OFF].")
 

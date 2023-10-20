@@ -13,28 +13,20 @@ Several functions are implemented for:
 """
 ## useful imports
 import time
-import io
 import os
 import re
-import sys
 import pandas as pd
 import ncbi_genome_download as ngd
-import shutil
-from sys import argv
 from io import open
 from termcolor import colored
 from Bio import SeqIO
-import concurrent.futures
 
 ## import my modules
-from BacterialTyper.config import set_config
 from BacterialTyper.scripts import ariba_caller
-from BacterialTyper.scripts import species_identification_KMA
+from BacterialTyper.scripts import KMA_caller
 from BacterialTyper.scripts import min_hash_caller
 
-import HCGB
 import HCGB.functions.time_functions as HCGB_time
-import HCGB.functions.system_call_functions as HCGB_sys
 import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.files_functions as HCGB_files
 import HCGB.functions.main_functions as HCGB_main
@@ -509,7 +501,7 @@ def getdbs(source, database_folder, option, debug):
 
 					## if missing: call download module
 					print ("+ Download missing KMA_db (%s) provided" %db)
-					species_identification_KMA.download_kma_database(
+					KMA_caller.download_kma_database(
 						os.path.join(database_folder, 'KMA_db', db), db, debug)
 
 					if os.path.isfile(this_db_file + '.comp.b'):

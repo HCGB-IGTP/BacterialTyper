@@ -1,6 +1,3 @@
-import os
-import shutil
-import sys
 import glob
 import setuptools
 
@@ -35,6 +32,7 @@ def get_version():
 long_description_text = ""
 with open("README.md", "r") as fh:
     long_description_text = fh.read()
+
 
 #######
 setuptools.setup(

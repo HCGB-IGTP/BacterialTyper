@@ -8,17 +8,13 @@ Creates a report in HTML for each step of the process analyzed.
 """
 ## import useful modules
 import os
-import sys
-import re
 import time
 from termcolor import colored
 import pandas as pd
-from Bio import SeqIO
 import shutil
 
 ## import my modules
 from BacterialTyper.scripts import database_user
-from BacterialTyper.config import set_config
 from BacterialTyper.report import retrieve_genes
 from BacterialTyper.report import get_promoter
 
@@ -26,14 +22,15 @@ from BacterialTyper.report.Staphylococcus import get_spa_typing
 from BacterialTyper.report.Staphylococcus import agr_typing
 from BacterialTyper.report.Staphylococcus import get_sccmec
 from BacterialTyper import __version__ as pipeline_version
+from BacterialTyper.modules import help_info
 
 ##
 import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
-import HCGB.functions.system_call_functions as HCGB_sys
 import HCGB.functions.info_functions as HCGB_info
+
 
 
 ## example report check: https://github.com/tseemann/nullarbor
@@ -53,16 +50,9 @@ def run_report(options):
     ##################################
     ### show help messages if desired    
     ##################################
-
-    if (options.help_spaTyper):
-        ## help_format option
-        get_spa_typing.help_spaTyper()
-        exit()
-
-    elif (options.help_project):
-        ## information for project
-        help_info.project_help()
-        exit()
+    
+    ## if any help_flag provided will print and exit
+    help_info.help_info(options)
 
     ## set default
     options.batch = False

@@ -25,7 +25,7 @@ import concurrent.futures
 
 ## import my modules
 from BacterialTyper.config import set_config
-from BacterialTyper.scripts import species_identification_KMA
+from BacterialTyper.scripts import KMA_caller
 from BacterialTyper.scripts import min_hash_caller
 from BacterialTyper.scripts import database_generator
 

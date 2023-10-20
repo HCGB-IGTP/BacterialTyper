@@ -2,6 +2,7 @@
 *__pycache__/
 *.project
 *.pydevproject
+.spyproject/
 
 ## docs
 *docs/build/

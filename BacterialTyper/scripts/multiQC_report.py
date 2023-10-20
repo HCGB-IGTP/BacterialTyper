@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-##########################################################
-## Jose F. Sanchez										##
-## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain		##
-##########################################################
+##################################################################
+## Jose F. Sanchez                                              ##
+## Copyright (C) 2019 - 2023 Lauro Sumoy Lab, IGTP, Spain       ##
+##################################################################
 """
 Calls multiQC_ to generate HTML statistics reports.
 
@@ -10,112 +10,110 @@ Calls multiQC_ to generate HTML statistics reports.
 """
 ## useful imports
 import os
-import io
 import sys
-from io import open
 from sys import argv
 from termcolor import colored
 
 ## import my modules
-import HCGB
 import HCGB.functions.system_call_functions as HCGB_sys
 import HCGB.functions.main_functions as HCGB_main
-from BacterialTyper.config import set_config
 
 ############
 def multiQC_module_call(givenList, name, path, option):
-	"""
-	Prepares files for multiQC report generation.
-	
-	:param givenList: List of folder to search for multiQC report.
-	:param name: Name to include in the html report.
-	:param path: Absolute path for the output folder.
-	:param option: Some options to provide to multiQC_call.
-	
-	:type givenList: list
-	:type name: string
-	:type path: string
-	:type option: string
-	
-	.. seealso:: This function depends on other BacterialTyper functions called:
-	
-		- :func:`HCGB.functions.main_functions.printList2file`
-		
-		- :func:`BacterialTyper.scripts.multiQC_report.multiQC_call`
-	
-	"""
-	pathFile = path + '/' + 'samples.txt'
-	HCGB_main.printList2file(pathFile, givenList)
-	multiQC_call(pathFile, name, path, option)	
-	
+    """
+    Prepares files for multiQC report generation.
+    
+    :param givenList: List of folder to search for multiQC report.
+    :param name: Name to include in the html report.
+    :param path: Absolute path for the output folder.
+    :param option: Some options to provide to multiQC_call.
+    
+    :type givenList: list
+    :type name: string
+    :type path: string
+    :type option: string
+    
+    .. seealso:: This function depends on other BacterialTyper functions called:
+    
+        - :func:`HCGB.functions.main_functions.printList2file`
+        
+        - :func:`BacterialTyper.scripts.multiQC_report.multiQC_call`
+    
+    """
+    pathFile = os.path.join(os.path.abspath(path), 'samples.txt')
+    
+    ## print list to file
+    HCGB_main.printList2file(pathFile, givenList)
+    multiQC_call(pathFile, name, path, option)    
+    
 ############
 def multiQC_call(pathFile, name, folder, option):
-	"""
-	multiQC_ report generation call.
-	
-	:param pathFile: File containing list of files to include in report.
-	:param name: Name to include in the html report.
-	:param folder: Absolute path for the output folder.
-	:param option: Options to provide to multiQC call.
-	
-	:type pathFile: string
-	:type name: string 
-	:type folder: string 
-	:type option: string
-	
-	:returns: :func:`BacterialTyper.scripts.functions.system_call` output (OK/FALSE)
-		
-	.. seealso:: This function depends on other BacterialTyper functions called:
-	
-		- :func:`HCGB.functions.system_call_functions`
-	
-	"""
-	multiqc_bin = "multiqc" ## if we activate the environment it should be in $PATH
-	## set options for call
-	cmd = "%s --force -o %s -n %s -l %s -p -i 'MultiQC report' -b 'HTML report generated for multiple samples and steps' %s" %(multiqc_bin, folder, name, pathFile, option)
-	
-	## if a report was previously generated in the folder 
-	## force to delete and generate a new one
-	return(HCGB_sys.system_call(cmd))
+    """
+    multiQC_ report generation call.
+    
+    :param pathFile: File containing list of files to include in report.
+    :param name: Name to include in the html report.
+    :param folder: Absolute path for the output folder.
+    :param option: Options to provide to multiQC call.
+    
+    :type pathFile: string
+    :type name: string 
+    :type folder: string 
+    :type option: string
+    
+    :returns: :func:`HCGB_sys.system_call` output (OK/FALSE)
+        
+    .. seealso:: This function depends on other HCGB functions called:
+    
+        - :func:`HCGB_sys.system_call_function`
+    
+    """
+    multiqc_bin = "multiqc" ## if we activate the environment it should be in $PATH
+    ## set options for call
+    cmd = "%s --force -o %s -n %s -l %s -p -i 'MultiQC report' -b 'HTML report generated for multiple samples and steps' %s" %(multiqc_bin, folder, name, pathFile, option)
+    
+    ## if a report was previously generated in the folder 
+    ## force to delete and generate a new one
+    return(HCGB_sys.system_call(cmd))
 
 ############
-def	help_options():
-	"""
-	multiQC_ help options for call as a single script.
-	"""
-	print ("\nUSAGE:\npython %s folder sample_list name\n"  %os.path.abspath(argv[0]))
+def help_options():
+    """
+    multiQC_ help options for call as a single script.
+    """
+    print ("\nUSAGE:\npython %s folder sample_list name\n"  %os.path.abspath(argv[0]))
 
 ############
 def multiqc_help():
-	"""
-	multiQC_ software description message.
-	"""
-	## [TODO]
-	print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
+    """
+    multiQC_ software description message.
+    """
+    ## [TODO]
+    print (colored("\n\n***** TODO: Generate this help message *****\n\n", 'red'))
 
 ############
 def main():
-  	
-  	## control if options provided or help
-	if len(sys.argv) > 1:
-		print ("")
-	else:
-		help_options()
-		exit()    	
+      
+      ## control if options provided or help
+    if len(sys.argv) > 1:
+        print ("")
+    else:
+        raise SystemExit(help_options())
+        
 
-	## ARGV
-	folder_name = os.path.abspath(argv[1])
-	samples_path = os.path.abspath(argv[2])
-	name = argv[3]
+    ## ARGV
+    folder_name = os.path.abspath(argv[1])
+    samples_path = os.path.abspath(argv[2])
+    name = argv[3]
 
-	## call
-	multiQC_call(samples_path, name, folder_name,"")
-		
+    ## call
+    multiQC_call(samples_path, name, folder_name,"")
+        
 ############
 '''******************************************'''
 if __name__== "__main__":
-	main()
-	
+    main()
+    
 ##Options multiqc, version 1.7 :
 ##  -f, --force                     Overwrite any existing reports
 ##  -d, --dirs                      Prepend directory to sample names
