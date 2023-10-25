@@ -279,6 +279,10 @@ def run_cluster(options):
                 "BacterialTyper version":pipeline_version }
     HCGB_info.dump_info_run(info_dir, 'cluster', options, runInfo, options.debug)
 
+    ## dump conda details
+    HCGB_info.dump_info_conda(info_dir, "cluster", options.debug)
+
+
     print ("+ Exiting cluster module.")
     return()
 

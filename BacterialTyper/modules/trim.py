@@ -130,9 +130,9 @@ def run(options):
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
         commandsSent = { executor.submit(trimmo_caller, 
                                    sorted(cluster["sample"].tolist()), 
-                                   outdir_dict[name], name, threads_job, 
+                                   outdir_dict[name[0]], name[0], threads_job, 
                                    Debug, trimmomatic_params, 
-                                   options.adapters): name for name, cluster in sample_frame }
+                                   options.adapters): name[0] for name, cluster in sample_frame }
 
         for cmd2 in concurrent.futures.as_completed(commandsSent):
             details = commandsSent[cmd2]
@@ -186,7 +186,7 @@ def run(options):
             print (my_outdir_list)
             print ("\n")
 
-        trimm_report = HCGB_files.create_subfolder("trimm", outdir_report)
+        trimm_report = HCGB_files.create_subfolder("trim", outdir_report)
         multiQC_report.multiQC_module_call(my_outdir_list, "Trimmomatic", trimm_report,"")
         print ('\n+ A summary HTML report of each sample is generated in folder: %s' %trimm_report)
         
@@ -203,7 +203,8 @@ def run(options):
     ## samples information dictionary
     samples_info = {}
     samples_frame = pd_samples_retrieved_trimmed.groupby('new_name')
-    for name, grouped in samples_frame:
+    for name_tuple, grouped in samples_frame:
+        name = name_tuple[0]
         samples_info[name] = grouped['sample'].to_list()
     
     ## trimmomatic params are already available in trimmomatic_params dictionary
@@ -215,14 +216,17 @@ def run(options):
     
     info_dir = HCGB_files.create_subfolder("info", outdir)
     print("+ Dumping information and parameters")
-    runInfo = { "module":"trimm", "time":time.time(),
+    runInfo = { "module":"trim", "time":time.time(),
                 "BacterialTyper version":pipeline_version,
                 'sample_info': samples_info,
                 'trimmomatic_params': trimmomatic_params }
     
-    HCGB_info.dump_info_run(info_dir, 'trimm', options, runInfo, options.debug)
+    HCGB_info.dump_info_run(info_dir, 'trim', options, runInfo, options.debug)
 
-    print ("\n+ Exiting trimm module.")
+    ## dump conda details
+    HCGB_info.dump_info_conda(info_dir, "trim", options.debug)
+
+    print ("\n+ Exiting trim module.")
     return()
     
 #############################################

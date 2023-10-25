@@ -31,6 +31,8 @@ import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
 import HCGB.functions.files_functions as HCGB_files
+import HCGB.functions.info_functions as HCGB_info
+
 ####################################
 def run_phylo(options):
     """
@@ -148,6 +150,10 @@ def run_phylo(options):
     runInfo = { "module":"phylo", "time":HCGB_time.timestamp(time.time()),
                 "BacterialTyper version":pipeline_version }
     HCGB_info.dump_info_run(info_dir, 'phylo', options, runInfo, options.debug)
+
+    ## dump conda details
+    HCGB_info.dump_info_conda(info_dir, "phylo", options.debug)
+
 
     print ("+ Exiting phylo module.")
     return()

@@ -125,7 +125,8 @@ def run_QC(options):
     ## samples information dictionary
     samples_info = {}
     samples_frame = pd_samples_retrieved.groupby('new_name')
-    for name, grouped in samples_frame:
+    for name_tuple, grouped in samples_frame:
+        name = name_tuple[0]
         samples_info[name] = grouped['sample'].to_list()
     
     ## dump information and parameters
@@ -136,6 +137,9 @@ def run_QC(options):
                 'sample_info': samples_info }
     
     HCGB_info.dump_info_run(info_dir, submodule_name, options, runInfo, options.debug)
+    
+    ## dump conda details
+    HCGB_info.dump_info_conda(info_dir, submodule_name, options.debug)
     
     print ("\n+ Exiting QC module.")
     return()
@@ -180,7 +184,7 @@ def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysi
     ## send for each sample
     print ("+ Calling fastqc for samples...")    
     with concurrent.futures.ThreadPoolExecutor(max_workers=int(max_workers_int)) as executor:
-        commandsSent = { executor.submit(fastqc_caller.run_module_fastqc, outdir_dict[name], sorted( cluster["sample"].tolist() ), name, threads_job): name for name, cluster in sample_frame }
+        commandsSent = { executor.submit(fastqc_caller.run_module_fastqc, outdir_dict[name[0]], sorted( cluster["sample"].tolist() ), name[0], threads_job): name[0] for name, cluster in sample_frame }
         
         for cmd2 in concurrent.futures.as_completed(commandsSent):
             details = commandsSent[cmd2]

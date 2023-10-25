@@ -256,7 +256,11 @@ def run_prep(options):
     runInfo = { "module":"prep",  "time":time.time(),
                 "BacterialTyper version":pipeline_version,
                 'sample_info': samples_info}
+    
     HCGB_info.dump_info_run(info_dir, "prep", options, runInfo, options.debug)
-
+    
+    ## dump conda details
+    HCGB_info.dump_info_conda(info_dir, "prep", options.debug)
+    
     print ("+ Exiting prep module.")
     return()

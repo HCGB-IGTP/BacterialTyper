@@ -293,6 +293,9 @@ def run_report(options):
                 }
     
     HCGB_info.dump_info_run(info_dir, 'report', options, runInfo, options.debug)
+    
+    ## dump conda details
+    HCGB_info.dump_info_conda(info_dir, "report", options.debug)
 
     print ("+ Exiting Report generation module.")
     return()

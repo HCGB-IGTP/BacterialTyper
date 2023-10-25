@@ -14,8 +14,6 @@ import shutil
 
 ## import my modules
 from BacterialTyper.scripts import spades_assembler
-from BacterialTyper.scripts import BUSCO_caller
-from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.modules import qc
 from BacterialTyper.modules import help_info
 from BacterialTyper import __version__ as pipeline_version
@@ -160,9 +158,9 @@ def run_assembly(options):
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
         ## send for each sample
         commandsSent = { executor.submit( check_sample_assembly, 
-                                        name, outdir_dict[name],  
+                                        name[0], outdir_dict[name[0]],  
                                         sorted(cluster["sample"].tolist()), 
-                                        threads_job): name for name, cluster in sample_frame }
+                                        threads_job): name[0] for name, cluster in sample_frame }
 
         for cmd2 in concurrent.futures.as_completed(commandsSent):
             details = commandsSent[cmd2]
@@ -208,16 +206,21 @@ def run_assembly(options):
     ## samples information dictionary
     samples_info = {}
     samples_frame = pd_samples_retrieved.groupby('new_name')
-    for name, grouped in samples_frame:
+    for name_tuple, grouped in samples_frame:
+        name = name_tuple[0]
         samples_info[name] = grouped['sample'].to_list()
     
     info_dir = HCGB_files.create_subfolder("info", outdir)
     print("+ Dumping information and parameters")
     runInfo = { "module":"assemble",  "time":time.time(),
                 "BacterialTyper version":pipeline_version,
-                'sample_info': samples_info }
+                'sample_info': samples_info,
+                'BUSCO_results': results }
     
     HCGB_info.dump_info_run(info_dir, "assemble", options, runInfo, options.debug)
+    
+    ## dump conda details
+    HCGB_info.dump_info_conda(info_dir, "assemble", options.debug)
     
     print ("+ Exiting Assembly module.")
     return()
@@ -272,16 +275,17 @@ def get_assembly_stats_all(assembly_stats_dict, outdir_report, debug):
     cols = cols[-1:] + cols[:-1]
     results_summary_toPrint_all = results_summary_toPrint_all[cols]
     
-    ## write to excel
-    name_excel_summary = final_dir + '/summary_stats.xlsx'
-    writer_summary = pd.ExcelWriter(name_excel_summary, engine='xlsxwriter') ## open excel handle
-    
     ## filter important columns        
-    results_summary_toPrint_all = results_summary_toPrint_all.set_axis(column_names, 1)
+    #results_summary_toPrint_all = results_summary_toPrint_all.set_axis(column_names, 1)
+    
+    ## write to excel
+    name_excel_summary = os.path.join(final_dir, 'summary_stats.xlsx')
     
     ## save in excel
-    results_summary_toPrint_all.to_excel(writer_summary, sheet_name="all_data") ## write excel handle
-    writer_summary.save() ## close excel handle
+    with pd.ExcelWriter(name_excel_summary, engine="xlsxwriter", engine_kwargs={"options": {"nan_inf_to_errors": True}}) as writer:
+        results_summary_toPrint_all.to_excel(writer)  
+    
+    
 
 #############################################
 def check_sample_assembly(name, sample_folder, files, threads):

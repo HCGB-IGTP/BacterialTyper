@@ -221,7 +221,8 @@ def run_annotation(options):
     ## samples information dictionary
     samples_info = {}
     samples_frame = pd_samples_retrieved.groupby('new_name')
-    for name, grouped in samples_frame:
+    for name_tuple, grouped in samples_frame:
+        name = name_tuple[0]
         samples_info[name] = grouped['sample'].to_list()
     
     ## options
@@ -242,6 +243,10 @@ def run_annotation(options):
                 'prokka_options': prokka_options }
     
     HCGB_info.dump_info_run(info_dir, 'annot', options, runInfo, options.debug)
+    
+    ## dump conda details
+    HCGB_info.dump_info_conda(info_dir, "annot", options.debug)
+
     
     print ("+ Exiting Annotation module.")
     return()
