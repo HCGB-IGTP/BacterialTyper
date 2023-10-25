@@ -39,8 +39,8 @@ help_options = ('--help_Database',
                 '--help_spaTyper',
                 '--no_BUSCO')
 
-subparser_space = subparsers.add_parser('Configuration', help='')
-subparser_space = subparsers.add_parser('==============', help='')
+subparser_space = subparsers.add_parser(' Configuration', help='')
+subparser_space = subparsers.add_parser('================', help='')
 
 #######################
 #### Configuration ####
@@ -145,8 +145,8 @@ subparser_database.set_defaults(func=BacterialTyper.modules.database.run_databas
 ## space
 subparser_space = subparsers.add_parser(' ', help='')
 
-subparser_space = subparsers.add_parser('Analysis', help='')
-subparser_space = subparsers.add_parser('==============', help='')
+subparser_space = subparsers.add_parser(' Analysis', help='')
+subparser_space = subparsers.add_parser('============', help='')
 
 #########################
 #### Prepare samples ####
@@ -601,14 +601,14 @@ subparser_phylo.set_defaults(func=BacterialTyper.modules.phylo.run_phylo)
 ##-------------------------------------------------------------##
 
 ## space
-subparser_space = subparsers.add_parser(' ', help='')
+subparser_space = subparsers.add_parser('  ', help='')
 
 #############################
 #### Additional messages ####
 #############################
 
-subparser_space = subparsers.add_parser('Additional information', help='')
-subparser_space = subparsers.add_parser('======================', help='')
+subparser_space = subparsers.add_parser(' Additional information', help='')
+subparser_space = subparsers.add_parser('=========================', help='')
 
 
 ##--------------------------- report ----------------------- ##
@@ -668,7 +668,7 @@ subparser_citation.add_argument("option", help="Print only this pipeline citatio
 subparser_citation.set_defaults(func=BacterialTyper.modules.citation.run)
 ##-------------------------------------------------------------##
 
-subparser_space = subparsers.add_parser(' ', help='')
+subparser_space = subparsers.add_parser('    ', help='')
 
 #####
 args = parser.parse_args()
