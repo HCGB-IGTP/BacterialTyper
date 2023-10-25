@@ -3,7 +3,6 @@
 ## Jose F. Sanchez                                        ##
 ## Copyright (C) 2019-2021 Lauro Sumoy Lab, IGTP, Spain   ##
 ############################################################
-from pandas.tests.io.json.conftest import orient
 """
 Calls assembly_stats pip module
 """
@@ -66,18 +65,18 @@ def parse_stats(stat_output, assembly_stats_file, debug):
     
     ## create single excel file
     ## write to excel
-    writer_Excel = pd.ExcelWriter(assembly_stats_file, engine='xlsxwriter') ## open excel handle
+    with pd.ExcelWriter(assembly_stats_file, engine="xlsxwriter", engine_kwargs={"options": {"nan_inf_to_errors": True}}) as writer:
     
-    ## loop over dictionary and print dataframe
-    for name, each_data in stat_output.items():
-        if debug:
-            print ("Name: ", name)
-            print ("Data: ", each_data)
-            
-        each_df = pd.DataFrame.from_dict(each_data, orient='index')
-        each_df.to_excel(writer_Excel, sheet_name=name) ## write excel handle
-            
-    writer_Excel.save() ## close excel handle
+        ## loop over dictionary and print dataframe
+        for name, each_data in stat_output.items():
+            if debug:
+                print ("Name: ", name)
+                print ("Data: ", each_data)
+                
+            each_df = pd.DataFrame.from_dict(each_data, orient='index')
+            each_df.to_excel(writer, sheet_name=name) ## write excel handle
+
+
 
 ############
 def help_options():
