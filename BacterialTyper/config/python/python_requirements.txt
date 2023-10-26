@@ -79,7 +79,7 @@ threadpoolctl==2.1.0
 toml==0.10.2
 tornado==6.1
 typing-extensions==3.10.0.0
-urllib3==1.26.5
+urllib3==1.26.18
 wget==3.2
 wheel==0.36.2
 XlsxWriter==1.4.3
