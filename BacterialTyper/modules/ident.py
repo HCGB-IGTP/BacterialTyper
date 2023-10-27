@@ -323,6 +323,7 @@ def run_ident(options):
         print ("*** Sum: Query_coverage ***")        
         print (total_coverage)
     
+    ## TODO: Fix this chunk of code
     ## TODO: FIX SUMMARY REPORT
     results_summary_KMA = results_summary_KMA.set_index('Sample')
     results_summary_KMA = results_summary_KMA.sort_values(by=['Sample', 'Database', 'Query_Coverage'],ascending=[True, True,True])
@@ -556,7 +557,8 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
                     ## add both strains if detected    
                     results['Sample'] = name
                     results_summary = results_summary.append(results, ignore_index=True)
-                    
+
+                    ## TODO: Fix this chunk of code
                     ## TODO: add multi-isolate flag
         
             elif (results.index.size == 1): ## 1 clear reference
@@ -741,6 +743,7 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
 
     
     ################################################
+    ## TODO: Fix this chunk of code
     ## TODO: What to do if multi-isolate sample?
     ################################################
     
@@ -913,6 +916,7 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
     
     ########################################################################################
 
+    ## TODO: Fix this chunk of code
     ## TODO: What to do if multi-isolate sample?
     ## TODO: Control if a different profile is provided via --MLST_profile
     ## TODO: Check time passed and download again if >?? days passed]

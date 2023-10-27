@@ -132,35 +132,56 @@ def run_prep(options):
             print (options.rename)
             exit()
         
-        names_retrieved = pd.read_csv(options.rename, sep=',', 
-                                    index_col=0, squeeze=True, 
-                                    header=None).to_dict() ## read csv to dictionary
+        ## read csv to pandas
+        names_retrieved = pd.read_csv(options.rename, sep=',', index_col=0,
+                                         names = ['original', 'new_name'],
+                                         header=None)
+        
+        names_retrieved = names_retrieved.drop_duplicates()
+        
         if (options.debug):
             HCGB_aes.debug_message("names_retrieved", "yellow")
-            print (names_retrieved)
+            print(names_retrieved)
             
+        ## TODO: Fix this chunk of code
         ## TODO: check integrity of new names and special characters
 
         ## print to a file
         timestamp = HCGB_time.create_human_timestamp()
-        rename_details = final_dir + '/' + timestamp + '_prep_renameDetails.txt'
+        rename_details = os.path.join(final_dir, timestamp + '_prep_renameDetails.txt')
         rename_details_hd = open(rename_details, 'w')
     
         ## rename files         
         for index, row in pd_samples_retrieved.iterrows():
+            
+            if (options.debug):
+                print ("-----------------------")
+                HCGB_aes.debug_message("pd_samples_retrieved.iterrows", "yellow")
+                print ("index")
+                print (index)
+                print ("row")
+                print (row)
+            
+            
+            ## get extensions
             if (row['gz']):
                 extension_string = row['ext'] + row['gz']
             else:
                 extension_string = row['ext']
             
-            if options.single_end:
-                renamed = names_retrieved[row['name']] + '.' + extension_string
-            else:
-                renamed = names_retrieved[row['name']] + '_' + row['read_pair'] + '.' + extension_string
             
+            ## Get new name provided
+            rename_id = names_retrieved.loc[row['name'], 'new_name']
+            
+            ## if several files for the same sample to be renamed, it produces an error
+            if options.single_end:
+                renamed =  rename_id + '.' + extension_string
+            else:
+                renamed = rename_id + '_' + row['read_pair'] + '.' + extension_string
+        
             ## modify frame
-            pd_samples_retrieved.loc[index, 'new_file'] = renamed
-            pd_samples_retrieved.loc[index, 'new_name'] = names_retrieved[row['name']]
+            pd_samples_retrieved.at[index, 'new_file'] = renamed
+            pd_samples_retrieved.at[index, 'new_name'] = rename_id
             ## save in file
             string = row['sample'] + '\t' + renamed + '\n'
             rename_details_hd.write(string)
@@ -168,9 +189,10 @@ def run_prep(options):
             if (options.debug):
                 print (colored('** DEBUG: rename', 'yellow'))
                 print ("Original: ", row['name'])
-                print ("Renamed: ", names_retrieved[row['name']])
+                print ("Renamed: ", rename_id)
                 print ("File:", renamed)
         
+            
         rename_details_hd.close()    
 
         ##elif (options.single_end): It should work for both
@@ -184,6 +206,7 @@ def run_prep(options):
     ## merge option
     if (options.merge):
         print ("+ Sample files will be merged...")
+        ## TODO: Fix this chunk of code
         ## TODO: check when rename option provided
         pd_samples_merged = sampleParser.merge.one_file_per_sample(
             pd_samples_retrieved, outdir_dict, options.threads,    
@@ -221,6 +244,7 @@ def run_prep(options):
     list_reads = []
     for index, row in pd_samples_retrieved.iterrows():
         if (options.copy):
+            ## TODO: Fix this chunk of code
             ## TODO: debug & set threads to copy faster
             shutil.copy(row['sample'], os.path.join(outdir_dict[row['new_name']], row['new_file'] ))            
             string = row['sample'] + '\t' + os.path.join(outdir_dict[row['new_name']], row['new_file']) + '\n'

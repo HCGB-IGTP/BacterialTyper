@@ -7,24 +7,15 @@
 Calls card-trick module to parse CARD resistance information.
 '''
 ## useful imports
-import time
-import io
 import os
-import re
-import sys
-import pandas as pd
-from sys import argv
 from io import open
 from termcolor import colored
 import card_trick
 
 ## import my modules
-import HCGB
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.files_functions as HCGB_files
 import HCGB.functions.main_functions as HCGB_main
-
-from BacterialTyper.config import set_config
 
 ##########
 def get_info_CARD(IDs, term, dataF):
@@ -76,28 +67,28 @@ def prepare_card_data(database_folder):
 			filename_stamp = CARD_folder + '/.success'
 			stamp =	HCGB_time.print_time_stamp(filename_stamp)	
 		else:
-			return (FAIL)
+			return ('FAIL')
 
 	## return folder name
 	return(CARD_folder)
 
 
-def dead_code():
-	## card_prepareref
-	rename_info = card_prepareref + '00.rename_info'
-	
-	## outfile
-	outfile = card_prepareref + '00.info_dictionary'
-	out_file_handle = open(outfile, 'w')	
-	
-	## get info
-	lines = HCGB_main.readList_fromFile(rename_info)
-	for l in lines:
-		names = l.split('\t')
-		## original name \t ariba_name
-		out_file_handle.write(names[1].split('.')[0] + '\t' + names[0].split('.')[0] + '\n')
+# def dead_code():
+# 	## card_prepareref
+# 	rename_info = card_prepareref + '00.rename_info'
+# 	
+# 	## outfile
+# 	outfile = card_prepareref + '00.info_dictionary'
+# 	out_file_handle = open(outfile, 'w')	
+# 	
+# 	## get info
+# 	lines = HCGB_main.readList_fromFile(rename_info)
+# 	for l in lines:
+# 		names = l.split('\t')
+# 		## original name \t ariba_name
+# 		out_file_handle.write(names[1].split('.')[0] + '\t' + names[0].split('.')[0] + '\n')
 
-	out_file_handle.close()	
-	return (outfile)
+# 	out_file_handle.close()	
+# 	return (outfile)
 	
 

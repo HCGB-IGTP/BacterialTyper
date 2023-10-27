@@ -194,7 +194,7 @@ def run_assembly(options):
     if (options.no_BUSCO):
         print ()
     else:
-        results = qc.BUSCO_check(outdir, outdir, options, start_time_partial, "genome")
+        results = qc.BUSCO_check(outdir, outdir, options, start_time_partial, "genome", Debug)
     
     ## print to file results         
     print ("\n*************** Finish *******************")
@@ -214,8 +214,7 @@ def run_assembly(options):
     print("+ Dumping information and parameters")
     runInfo = { "module":"assemble",  "time":time.time(),
                 "BacterialTyper version":pipeline_version,
-                'sample_info': samples_info,
-                'BUSCO_results': results }
+                'sample_info': samples_info}
     
     HCGB_info.dump_info_run(info_dir, "assemble", options, runInfo, options.debug)
     

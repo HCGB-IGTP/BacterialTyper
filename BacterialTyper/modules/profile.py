@@ -127,6 +127,7 @@ def run_profile(options):
 
         ## update db
         print ("+ Update database with samples identified")
+        ## TODO: Fix this chunk of code
         ## TODO: check if it works
         dataBase_user = database_user.update_database_user_data(options.database, input_dir, Debug, options)        
         

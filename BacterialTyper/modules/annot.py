@@ -208,7 +208,7 @@ def run_annotation(options):
     start_time_partial_BUSCO = HCGB_time.timestamp(start_time_total)
 
     ## Check each annotation using BUSCO
-    results = qc.BUSCO_check(input_dir, outdir, options, start_time_partial_BUSCO, "proteins")
+    results = qc.BUSCO_check(input_dir, outdir, options, start_time_partial_BUSCO, "proteins", Debug)
 
     ## print to file: results     
     
@@ -255,7 +255,7 @@ def run_annotation(options):
 #############################################
 def annot_caller(seq_file, sample_folder, options, name, threads):
     ## check if previously assembled and succeeded
-    filename_stamp = sample_folder + '/.success'
+    filename_stamp = os.path.join(sample_folder, '.success')
 
     if os.path.isfile(filename_stamp):
         stamp =    HCGB_time.read_time_stamp(filename_stamp)
@@ -273,12 +273,17 @@ def annot_caller(seq_file, sample_folder, options, name, threads):
         
         
 
-## 
-## Error: Could not run command tbl2asn: 
-## 
-## Tbl2asn is a command-line program that automates the creation of sequence records for 
-## submission to GenBank. It uses many of the same functions as Sequin but is driven generally 
-## by data files. Tbl2asn generates .sqn files for submission to GenBank. Additional manual 
-## editing is not required before submission.
-
-
+# -------------
+## Error when running Prokka
+# -------------
+# Running: cat ./example\/data\/sample1\/annot\/sample1\.HAMAP\.hmm\.tmp\.461668\.faa | parallel --gnu --plain -j 4 --block 51546 
+# Bio::SearchIO: hmmer3 cannot be found
+# Exception 
+# ------------- EXCEPTION -------------
+# MSG: Failed to load module Bio::SearchIO::hmmer3. Can't locate Bio/SearchIO/hmmer3.pm in @INC (you may need to install the Bio::SearchIO::hmmer3 module) (@INC contains: /home/labs/lslab/jsanchez/perl5/lib/perl5 
+# STACK Bio::Root::Root::_load_module ./miniconda3/envs/Bacterialtyper_dev/lib/perl5/site_perl/Bio/Root/Root.pm:522
+# STACK (eval) ./miniconda3/envs/Bacterialtyper_dev/lib/perl5/site_perl/Bio/SearchIO.pm:620
+# STACK Bio::SearchIO::_load_format_module ./miniconda3/envs/Bacterialtyper_dev/lib/perl5/site_perl/Bio/SearchIO.pm:619
+# STACK Bio::SearchIO::new ./miniconda3/envs/Bacterialtyper_dev/lib/perl5/site_perl/Bio/SearchIO.pm:217
+# STACK toplevel ./miniconda3/envs/Bacterialtyper_dev/bin/prokka:1113
+# -------------

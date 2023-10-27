@@ -146,6 +146,35 @@ def run_QC(options):
 
 ################################################
 def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysis, Debug):
+    """
+    Function of the QC module to produce results for FASTQC.
+    
+    It creates a FASTQC quality check for each sample: it can be generated at the raw reads 
+    or trimmed reads, It uses fastqc and summarizes using MultiQC.
+    
+    This function is called from the run_QC function in this QC module and from
+    the run_trim() function from the trim module after trimming reads.
+    
+    It controls the read file inputs provided and calls fastqc_caller.run_module_fastqc()
+    Then it generates a report using MultiQC.
+    
+    It uses variables name_analysis for creating different analysis: raw, trimmed, etc
+    
+    :param pd_samples_retrieved: Dataframe containing samples information generated using HCGB.sampleParser
+    :param outdir: Absolute path file to store results
+    :param options: DIctionary of options as retrieved from BacterialTyper
+    :param start_time_total: Timestamp for starting time
+    :param name_analysis: Type of analysis
+    :param Debug: Print debug messages or not
+    
+    :type pd_samples_retrieved: pd.dataFrame
+    :type outdir: string
+    :type options:  dictionary
+    :type start_time_total: timestamp
+    :type name_analysis: string
+    :type Debug: boolean
+    
+    """
     
     HCGB_aes.boxymcboxface("FASTQC Quality check for samples")
     
@@ -229,7 +258,37 @@ def fastqc(pd_samples_retrieved, outdir, options, start_time_total, name_analysi
 
 
 ################################################
-def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
+def BUSCO_check(input_dir, outdir, options, start_time_total, mode, Debug=False):
+    
+    """
+    Function of the QC module to produce results for BUSCO.
+    
+    It creates a BUSCO quality check for each sample: it can be generated using 
+    assembled contigs or annotated proteins to check the assembly completeness
+
+    This function is called from the run_QC function in this QC module and from
+    the run_assemble() & run_annot() function from the assemble and annot modules.
+    
+    It controls the fasta file inputs provided and calls BUSCO_caller.BUSCO_call()
+    Then it generates a report using MultiQC.
+    
+    It uses variables mode for creating different analysis: genome or proteins
+    
+    :param input_dir: Folder containing files to check: assembled genomes or protein fasta sequences.
+    :param outdir: Absolute path file to store results
+    :param options: DIctionary of options as retrieved from BacterialTyper
+    :param start_time_total: Timestamp for starting time
+    :param mode: Type of analysis
+    :param Debug: Print debug messages or not
+    
+    :type input_dir: pd.dataFrame
+    :type outdir: string
+    :type options:  dictionary
+    :type start_time_total: timestamp
+    :type mode: string
+    :type Debug: boolean
+    
+    """
 
     HCGB_aes.boxymcboxface("BUSCO Analysis Quality check")
 
@@ -291,12 +350,16 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
     ## call
     (dataFrame_results, stats_results) = BUSCO_caller.BUSCO_call(options.BUSCO_dbs, 
                                                               pd_samples_retrieved, 
-                                                              BUSCO_Database, options.threads, mode)
+                                                              BUSCO_Database, options.threads, mode, Debug)
     
     ## debug message
     if (options.debug):
         HCGB_aes.debug_message("dataFrame_results", 'yellow')
         HCGB_main.print_all_pandaDF(dataFrame_results)
+    
+        HCGB_aes.debug_message("stats_results", 'yellow')
+        HCGB_main.print_all_pandaDF(stats_results)
+        
     
     ## functions.timestamp
     print ("+ Quality control of all samples finished: ")
@@ -320,19 +383,20 @@ def BUSCO_check(input_dir, outdir, options, start_time_total, mode):
 
         ## generate plots
         print ("+ Generate summarizing plots...")
-        BUSCO_caller.BUSCO_plots(dataFrame_results, BUSCO_report, options.threads)    
+        BUSCO_caller.BUSCO_plots(dataFrame_results, BUSCO_report, options.threads, Debug)    
         print ('\n+ Check quality plots in folder: %s' %BUSCO_report)
 
-        ##    TODO 
+        ## TODO: Fix this chunk of code
         ##    Parse BUSCO statistics in dataframe (stats_results) for discarding samples if necessary
         ##    given a cutoff, discard or advise to discard some samples
 
         ### print statistics
-        stats_results.to_csv(BUSCO_report + "/BUSCO_stats.csv")
-        name_excel = BUSCO_report + "/BUSCO_stats.xlsx"
-        writer = pd.ExcelWriter(name_excel, engine='xlsxwriter')
-        stats_results.to_excel(writer, sheet_name="BUSCO statistics")    
-        writer.save()
+        stats_results.to_csv( os.path.join(BUSCO_report, "BUSCO_stats.csv"))
+        name_excel = os.path.join(BUSCO_report, "BUSCO_stats.xlsx")
+        
+        ## save in excel
+        with pd.ExcelWriter(name_excel, engine="xlsxwriter", engine_kwargs={"options": {"nan_inf_to_errors": True}}) as writer:
+            stats_results.to_excel(writer, sheet_name="BUSCO statistics")    
         
         print ('\n+ Check quality statistics in folder: %s' %BUSCO_report)
     

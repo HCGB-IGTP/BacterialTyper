@@ -10,7 +10,7 @@ Prokka_ contains several databases with known parameters for several kingdom and
 Several options are available for kingdom and genus. See details below and see output from :code:`prokka --listdb`
 shown in :func:`BacterialTyper.scripts.annotation.print_list_prokka`. If no genus matches user desired option, use option "Other".
 
-.. include:: ../../links.inc	 	
+.. include:: ../../links.inc         
 """
 
 ## useful imports
@@ -26,161 +26,165 @@ from BacterialTyper.config import set_config
 
 #############################################
 def print_list_prokka():
-	"""
-	Prints Prokka_ databases that has installed to use. It is the output from the call: 
-	
-	.. code-block:: sh
+    """
+    Prints Prokka_ databases that has installed to use. It is the output from the call: 
+    
+    .. code-block:: sh
 
-		prokka --listdb
-	
-	.. include:: ../../devel/results/print_list_prokka.txt
-		:literal:
-	
-	.. seealso:: This function depends on other BacterialTyper functions called:
-	
-		- :func:`BacterialTyper.scripts.set_config.get_exe`
-			
-	.. include:: ../../links.inc	 	
-	"""
-	prokka_bin = set_config.get_exe('prokka')
-	cmd = prokka_bin + " --listdb"
-	HCGB_sys.system_call(cmd)
+        prokka --listdb
+    
+    .. include:: ../../devel/results/print_list_prokka.txt
+        :literal:
+    
+    .. seealso:: This function depends on other BacterialTyper functions called:
+    
+        - :func:`BacterialTyper.scripts.set_config.get_exe`
+            
+    .. include:: ../../links.inc         
+    """
+    prokka_bin = set_config.get_exe('prokka')
+    cmd = prokka_bin + " --listdb"
+    HCGB_sys.system_call(cmd)
 
 #############################################
 def module_call(sequence_fasta, kingdom, genus, path, name, threads):
-	"""
-	Function that checks and generates annotation.
-	
-	- It uses Prokka_ via :func:`BacterialTyper.scripts.annotation.prokka_call`.
-	
-	- It checks if previously generated 
-	
-	- Once finished, it prints timestamp 
-	
-	:param sequence_fasta: Assembled sequences in fasta file format. 
-	:param kingdom: Available kingdoms mode for Prokka software: Archaea|Bacteria|Mitochondria|Viruses
-	:param genus: Available genus options for Prokka software. See details above.
-	:param path: Absolute path to the output folder to include results.
-	:param name: Sample name and tag to include in the annotation report and files.
-	:param threads: Number of CPUs to use.
-	  
-	:type sequence_fasta: string
-	:type kingdom: string
-	:type genus: string 
-	:type path: string 
-	:type name: string 
-	:type threads: integer 
-	
-	.. seealso:: This function depends on other BacterialTyper functions called:
-	
-		- :func:`BacterialTyper.scripts.set_config.get_exe`
-		
-		- :func:`HCGB.functions.time_functions.read_time_stamp`
-		
-		- :func:`HCGB.functions.time_functions.print_time_stamp`
-				
-		- :func:`HCGB.functions.time_functions.prokka_call`	
+    """
+    Function that checks and generates annotation.
+    
+    - It uses Prokka_ via :func:`BacterialTyper.scripts.annotation.prokka_call`.
+    
+    - It checks if previously generated 
+    
+    - Once finished, it prints timestamp 
+    
+    :param sequence_fasta: Assembled sequences in fasta file format. 
+    :param kingdom: Available kingdoms mode for Prokka software: Archaea|Bacteria|Mitochondria|Viruses
+    :param genus: Available genus options for Prokka software. See details above.
+    :param path: Absolute path to the output folder to include results.
+    :param name: Sample name and tag to include in the annotation report and files.
+    :param threads: Number of CPUs to use.
+      
+    :type sequence_fasta: string
+    :type kingdom: string
+    :type genus: string 
+    :type path: string 
+    :type name: string 
+    :type threads: integer 
+    
+    .. seealso:: This function depends on other BacterialTyper functions called:
+    
+        - :func:`BacterialTyper.scripts.set_config.get_exe`
+        
+        - :func:`HCGB.functions.time_functions.read_time_stamp`
+        
+        - :func:`HCGB.functions.time_functions.print_time_stamp`
+                
+        - :func:`HCGB.functions.time_functions.prokka_call`    
 
-	.. include:: ../../links.inc	 	
-	"""
-	
-	## check if previously assembled and succeeded
-	filename_stamp = path + '/.success'
+    .. include:: ../../links.inc         
+    """
+    
+    ## check if previously assembled and succeeded
+    filename_stamp = os.path.join('.success')
 
-	if os.path.isdir(path):
-		if os.path.isfile(filename_stamp):
-			stamp =	HCGB_time.read_time_stamp(filename_stamp)
-			print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
-			return ()
-	
-	## call prokka
-	prokka_bin = set_config.get_exe('prokka')
-	dirname = prokka_call(prokka_bin, sequence_fasta, kingdom, genus, path, name, threads)
+    if os.path.isdir(path):
+        if os.path.isfile(filename_stamp):
+            stamp =    HCGB_time.read_time_stamp(filename_stamp)
+            print (colored("\tA previous command generated results on: %s [%s]" %(stamp, name), 'yellow'))
+            return ()
+    
+    ## call prokka
+    prokka_bin = set_config.get_exe('prokka')
+    dirname = prokka_call(prokka_bin, sequence_fasta, kingdom, genus, path, name, threads)
 
-	## success stamps
-	filename_stamp = path + '/.success'
-	stamp =	HCGB_time.print_time_stamp(filename_stamp)
+    if (dirname=="FAIL"):
+        print (colored("\tAn error ocurred for sample: ", name), 'yellow')
+    else:
+        ## success stamps
+        stamp = HCGB_time.print_time_stamp(filename_stamp)
 
-	return(dirname)	
+    return(dirname)
 
 #############################################
 def prokka_call(prokka_bin, sequence_fasta, kingdom, genus, outdir_name, name, threads):
-	"""Create system call for Prokka_ software. 
-	
-	It generates genome annotation using Prokka software. 
-		
-	:param prokka_bin: Path to the prokka binary file.
-	:param sequence_fasta: Assembled sequences in fasta file format. 
-	:param kingdom: Available kingdoms mode for Prokka software: Archaea|Bacteria|Mitochondria|Viruses
-	:param genus: Available genus options for Prokka software. See details above.
-	:param outdir_name: Absolute path to the output folder to include results.
-	:param name: Sample name and tag to include in the annotation report and files.
-	:param threads: Number of CPUs to use.
-	  
-	:type prokka_bin: string
-	:type sequence_fasta: string
-	:type kingdom: string
-	:type genus: string 
-	:type outdir_name: string 
-	:type name: string 
-	:type threads: integer 
-	
-	.. seealso:: Check description of output files generated in:
-	
-		- :ref:`Prokka-output-files`
+    """Create system call for Prokka_ software. 
+    
+    It generates genome annotation using Prokka software. 
+        
+    :param prokka_bin: Path to the prokka binary file.
+    :param sequence_fasta: Assembled sequences in fasta file format. 
+    :param kingdom: Available kingdoms mode for Prokka software: Archaea|Bacteria|Mitochondria|Viruses
+    :param genus: Available genus options for Prokka software. See details above.
+    :param outdir_name: Absolute path to the output folder to include results.
+    :param name: Sample name and tag to include in the annotation report and files.
+    :param threads: Number of CPUs to use.
+      
+    :type prokka_bin: string
+    :type sequence_fasta: string
+    :type kingdom: string
+    :type genus: string 
+    :type outdir_name: string 
+    :type name: string 
+    :type threads: integer 
+    
+    .. seealso:: Check description of output files generated in:
+    
+        - :ref:`Prokka-output-files`
 
 
-	.. seealso:: This function depends on other BacterialTyper functions called:
-	
-		- :func:`BacterialTyper.scripts.set_config.get_exe`
-		
-		- :func:`HCGB.functions.time_functions.read_time_stamp`
-		
-		- :func:`HCGB.functions.time_functions.print_time_stamp`
-				
-		- :func:`BacterialTyper.scripts.annotation.prokka_call`	
-	
-	.. include:: ../../links.inc
-	"""
-	
-	## set parameters and options for prokka
-	print ("\n+ Starting annotation for: %s\n" %name)
-	log_file = outdir_name + '/run.log'
-	options = "--cdsrnaolap --addgenes --addmrna --kingdom " + kingdom
-	if genus != "Other":
-		options = options + " --usegenus --genus " + genus
-	prokka = "%s --force --outdir %s --prefix %s --locustag %s %s --cpus %s %s 2> %s" %(prokka_bin, 
-																					outdir_name, name, name, options, 
-																					threads, sequence_fasta, log_file)
-	HCGB_sys.system_call(prokka)
-	return(outdir_name)
+    .. seealso:: This function depends on other BacterialTyper functions called:
+    
+        - :func:`BacterialTyper.scripts.set_config.get_exe`
+        
+        - :func:`HCGB.functions.time_functions.read_time_stamp`
+        
+        - :func:`HCGB.functions.time_functions.print_time_stamp`
+                
+        - :func:`BacterialTyper.scripts.annotation.prokka_call`    
+    
+    .. include:: ../../links.inc
+    """
+    
+    ## set parameters and options for prokka
+    print ("\n+ Starting annotation for: %s\n" %name)
+    log_file = outdir_name + '/run.log'
+    options = "--cdsrnaolap --addgenes --addmrna --kingdom " + kingdom
+    if genus != "Other":
+        options = options + " --usegenus --genus " + genus
+    prokka = "%s --force --outdir %s --prefix %s --locustag %s %s --cpus %s %s 2> %s" %(prokka_bin, 
+                                                                                    outdir_name, name, name, options, 
+                                                                                    threads, sequence_fasta, log_file)
+    if HCGB_sys.system_call(prokka) == 'OK':
+        return(outdir_name)
+    else:
+        return('FAIL')
 
 #############################################
 def help_options():
-	print ("\nUSAGE: python %s sequence_file path name CPUs kingdom prokka_bin\n"  %os.path.realpath(__file__))
+    print ("\nUSAGE: python %s sequence_file path name CPUs kingdom prokka_bin\n"  %os.path.realpath(__file__))
 
 #############################################
 def main():
 
- 	## control if options provided or help
-	if len(sys.argv) > 1:
-		print ("")
-	else:
-		raise SystemExit(help_options())
-	
-	## argv
-	seq_file = os.path.abspath(argv[1])
-	folder = os.path.abspath(argv[2])
-	name = argv[3]
-	threads = int(argv[4])
-	kingdom = argv[5]
-	prokka_bin = argv[6]
-	
-	## call
-	dir_annot=prokka_call(prokka_bin, seq_file, kingdom, folder, name, threads)
-	print ("\n+ Annotation for sample %s has been generated in folder: %s" %(name, dir_annot))
+     ## control if options provided or help
+    if len(sys.argv) > 1:
+        print ("")
+    else:
+        raise SystemExit(help_options())
+    
+    ## argv
+    seq_file = os.path.abspath(argv[1])
+    folder = os.path.abspath(argv[2])
+    name = argv[3]
+    threads = int(argv[4])
+    kingdom = argv[5]
+    prokka_bin = argv[6]
+    
+    ## call
+    dir_annot=prokka_call(prokka_bin, seq_file, kingdom, folder, name, threads)
+    print ("\n+ Annotation for sample %s has been generated in folder: %s" %(name, dir_annot))
 
 ######
 '''******************************************'''
 if __name__== "__main__":
-	main()
+    main()
