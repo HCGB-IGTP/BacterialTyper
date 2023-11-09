@@ -16,14 +16,14 @@ import pandas as pd
 
 ## import my modules
 from BacterialTyper.scripts import KMA_caller
-from BacterialTyper.scripts import Kraken2_caller
+from BacterialTyper.scripts import kraken2_caller
 from BacterialTyper.scripts import database_generator
-from BacterialTyper.scripts import MLSTar
+from BacterialTyper.scripts import MLST_caller
 from BacterialTyper.scripts import edirect_caller
 from BacterialTyper.modules import help_info
 from BacterialTyper.config import set_config
+from BacterialTyper.scripts import database_user
 from BacterialTyper import __version__ as pipeline_version
-
 
 from HCGB import sampleParser
 import HCGB.functions.aesthetics_functions as HCGB_aes
@@ -47,9 +47,6 @@ def run_ident(options):
     
     
     """
-
-
-    print(options)
 
 
     ##################################
@@ -76,11 +73,6 @@ def run_ident(options):
     else:
         options.pair = True
 
-    if not options.kma_ident:
-        if not options.species2use:
-            print ("Provide a species name for all samples or --kma_ident to identify for each sample")
-            exit()    
-
     ### KMA_caller -> most similar taxa
     HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
     HCGB_aes.boxymcboxface("Species identification")
@@ -105,25 +97,27 @@ def run_ident(options):
         outdir = input_dir
         Project=True
 
-    ## get files
-    pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "trim", ['_trim'], options.debug)
+    ## get files: trimmed, assembly, annot
+    pd_samples_retrieved = database_user.get_userData_files(options, input_dir)
     
     ## debug message
     if (Debug):
-        print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
+        HCGB_aes.debug_message("pd_samples_retrieve")
         print (pd_samples_retrieved)
     
     ## generate output folder, if necessary
     print ("\n+ Create output folder(s):")
     if not options.project:
         HCGB_files.create_folder(outdir)
+        
     ## for each sample
     outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "ident", options.debug)    
     
     ## let's start the process
-    print ("+ Generate an species typification for each sample retrieved using:")
-    print ("(1) Kmer alignment (KMA) software.")    
-    print ("(2) Pre-defined databases by KMA or user-defined databases.")    
+    print ("+ Generate an species typification for each sample retrieved using some of the following options:")
+    print ("(1) Kmer alignment (KMA) or kraken2 software.")    
+    print ("(2) Pre-defined databases by KMA or user-defined databases.")
+    print ("(3) MLST profiles based on species identification or user provided input.")
         
     ## get databases to check
     retrieve_databases = get_options_db(options)
@@ -133,16 +127,110 @@ def run_ident(options):
     
     ## debug message
     if (Debug):
-        print (colored("**DEBUG: retrieve_database **", 'yellow'))
-        pd.set_option('display.max_colwidth', None)
-        pd.set_option('display.max_columns', None)
-        print (retrieve_databases)
+        HCGB_aes.debug_message("retrieve_database")
+        HCGB_main.print_all_pandaDF(retrieve_databases)
     
+    ## init
+    dataFrame_edirect = pd.DataFrame()
+    
+    print ("+ Generate an species typification for each sample retrieved using:")
+
+   ###########################################################################
+    if options.species2use or options.other_MLST_profile:
+    ###########################################################################
+     
+        print ("+ No species typification will be generated, as user provided some information:")
+        HCGB_aes.warning_message("Information provided will be applied for all samples")
+           
+        ## get MLST_profile: default or provided
+        mlst_profile_dict = MLST_caller.get_MLST_profiles()
+       
+        #name, genus, species,
+        dataFrame_edirect = pd.DataFrame(columns=("sample", "genus", "species", "mlst"))
+        
+        if options.species2use:
+            
+            ## get string
+            print ("+ Species provided by user: " + options.species2use)
+            species2use = options.species2use.split(" ")
+            mlst2use = (species2use[0][0] + species2use[1]).lower()
+            
+            try:
+                if mlst_profile_dict[mlst2use]:
+                    print(colored("\t- Species name matches MLST available: OK", 'green'))
+            except:
+                print("\n")
+                HCGB_aes.error_message("MLST provided is not available")
+                ## exit if error
+                HCGB_aes.raise_and_exit("Check your mlst configuration or options with --help_MLST")
+            
+            ## species provided by user as option
+             
+            # Group dataframe sample name
+            sample_results = pd_samples_retrieved.groupby(["new_name"])
+            for name, grouped in sample_results:
+                dataFrame_edirect.loc[len(dataFrame_edirect)] = (name[0], species2use[0], species2use[1], mlst2use)
+            ##########################################################################
+    
+        ###########################################################################
+        elif options.other_MLST_profile:
+        ###########################################################################
+            ## user provides the name of the MLST to use
+            
+            ## get string
+            MLST_profile2use = options.other_MLST_profile
+            
+            print ("+ MLST provided by user: " + MLST_profile2use)
+            ## species provided by user as option
+            
+            try:
+                if mlst_profile_dict[MLST_profile2use]:
+                    print(colored("\t- MLST provided is OK", 'green'))
+            except:
+                print("\n")
+                HCGB_aes.error_message("MLST provided is not available")
+                ## exit if error
+                HCGB_aes.raise_and_exit("Check your mlst configuration or options with --help_MLST")
+   
+            # Group dataframe sample name
+            sample_results = pd_samples_retrieved.groupby(["new_name"])
+            species2use_list = mlst_profile_dict[MLST_profile2use].split(" ")
+            for name, grouped in sample_results:
+                dataFrame_edirect.loc[len(dataFrame_edirect)] = (name[0], species2use_list[0], species2use_list[1], MLST_profile2use)
+            ###########################################################################
+    
+    
+        if Debug:
+            HCGB_aes.debug_message("dataFrame_edirect for MLST call")
+            HCGB_main.print_all_pandaDF(dataFrame_edirect)
+
+    ###########################################################################
+    ## Determine species using kraken2
+    elif options.use_kraken2: 
+    ###########################################################################
+
+        ## Flag to identify from scratch using kraken2
+
+        ######## Kraken2 identification
+        dataFrame_kraken = Kraken_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
+        
+        ## functions.timestamp
+        start_time_partial = HCGB_time.timestamp(start_time_partial)
+        
+        ## debug message
+        if (Debug):
+            HCGB_aes.debug_message("retrieve results to summarize")
+            HCGB_aes.debug_message("dataFrame_kraken")
+            HCGB_main.print_all_pandaDF(dataFrame_kraken)
+            
+        ## create input edirect df & MLST
+        input_edirect = dataFrame_kraken
     
     ###########################################################################
-    if options.kma_ident:
-        ## Flag to identify from scratch using KMA, and download samples and additional
-        ## information using edirect 
+    elif options.kma_ident:
+    ###########################################################################
+        ## Flag to identify from scratch using KMA
+        ## using other databases, user provided sequences or input genbank entries
     
         ######## KMA identification
         dataFrame_kma = KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
@@ -152,12 +240,14 @@ def run_ident(options):
         
         ## debug message
         if (Debug):
-            print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
-            pd.set_option('display.max_colwidth', None)
-            pd.set_option('display.max_columns', None)
-            print ("dataframe_kma")
-            print (dataFrame_kma)
+            HCGB_aes.debug_message("retrieve results to summarize")
+            HCGB_aes.debug_message("dataFrame_kma")
+            HCGB_main.print_all_pandaDF(dataFrame_kma)
             
+        ## create input edicrect df
+        #input_edirect = dataFrame_kma.copy()
+
+        ###########################################################################
         ## exit if viral search
         skip=False
         if (len(options.kma_dbs) == 1):
@@ -169,83 +259,45 @@ def run_ident(options):
                     skip=True
                 
                 ## what if only plasmids?
-                
+        ###########################################################################
+        
+        ## Call edirect to retrieve selected bacteria identified
         ## do edirect and MLST if bacteria
         if (not skip):        
             dataFrame_edirect = pd.DataFrame()
             
             ######## EDirect identification
-            dataFrame_edirect = edirect_ident(dataFrame_kma, outdir_dict, Debug)
+            dataFrame_edirect = edirect_ident(input_edirect, outdir_dict, Debug)
             
             ## functions.timestamp
             start_time_partial = HCGB_time.timestamp(start_time_partial)
         
             ## debug message
             if (Debug):
-                print (colored("**DEBUG: retrieve results from NCBI **", 'yellow'))
-                pd.set_option('display.max_colwidth', None)
-                pd.set_option('display.max_columns', None)
-                print ("dataFrame_edirect")
-                print (dataFrame_edirect)
+                HCGB_aes.debug_message("retrieve results from NCBI")
+                HCGB_main.print_all_pandaDF(dataFrame_edirect)
 
     ###########################################################################
-    if options.kraken2:
-        print("a")
-        ## Flag to identify from scratch using kraken2
 
-        ######## KMA identification
-        dataFrame_kraken = Kraken_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
-        
-        ## functions.timestamp
-        start_time_partial = HCGB_time.timestamp(start_time_partial)
-        
-        ## debug message
-        if (Debug):
-            print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
-            pd.set_option('display.max_colwidth', None)
-            pd.set_option('display.max_columns', None)
-            print ("dataframe_kma")
-            print (dataFrame_kraken)
-        
-    
-    if options.species2use:
-        ###########################################################################
-        ## species provided by user as option
-        # create fake dataFrame_kma and dataFrame_edirect
-        dataFrame_kma = pd.DataFrame()
-        
-        ## dataFrame_edirect
-        #name, genus, species,
-        dataFrame_edirect = pd.DataFrame(columns=("sample", "genus", "species"))
-        
-        ## get string
-        species2use = options.species2use.split(" ")
-        print(species2use)
 
-        # Group dataframe sample name
-        sample_results = pd_samples_retrieved.groupby(["new_name"])
-        for name, grouped in sample_results:
-            dataFrame_edirect.loc[len(dataFrame_edirect)] = (name, species2use[0], species2use[1])
-        ###########################################################################
-        
-        
-    ######## MLST identification
-    MLST_results = MLST_ident(options, dataFrame_kma, outdir_dict, 
-                            dataFrame_edirect, retrieve_databases)
+    ###########################################################################
+    # MLST identification
+    ###########################################################################
+    MLST_results = MLST_ident(options, pd_samples_retrieved, dataFrame_edirect, outdir_dict, retrieve_databases)
 
     ## functions.timestamp
     start_time_partial = HCGB_time.timestamp(start_time_partial)
 
     ## debug message
     if (Debug):
-        print (colored("**DEBUG: retrieve results to summarize **", 'yellow'))
-        pd.set_option('display.max_colwidth', None)
-        pd.set_option('display.max_columns', None)
-        print ("MLST_results")
-        print (MLST_results)
+        HCGB_aes.debug_message("MLST_results")
+        HCGB_main.print_all_pandaDF(MLST_results)
 
+
+    ###########################################################################
     ## generate summary for sample: all databases
     ## MLST, plasmids, genome, etc
+    ###########################################################################
     HCGB_aes.boxymcboxface("Results Summary")
     
     #####################################
@@ -271,7 +323,7 @@ def run_ident(options):
     if (Debug):
         print (colored("**DEBUG: sample_results_summary **", 'yellow'))
         print (sample_results_summary)
-    
+
     ##
     results_summary_KMA = pd.DataFrame()
     MLST_all = pd.DataFrame()
@@ -690,8 +742,7 @@ def get_outfile(output_dir, name, index_name):
         
     out_file = output_path + '/' + name + '_' + basename_tag    
     return(out_file)
-    
-
+   
 ####################################
 def edirect_ident(dataFrame, outdir_dict, Debug):
     """Connect to NCBI for information retrieval
@@ -858,151 +909,64 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
 
 ####################################
 def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_databases):
-    """Generate MLST profile identification
-    
-    This functions uses the `MLSTar software`_ to retrieve Multi locus sequence typing (MLST) profiles from PubMLST_ for the given species previously identified by KMA. It generates MLST profiling for each sample. 
-    
-    :param options: options passed to the :func:`BacterialTyper.modules.ident.run_ident` main function (threads, KMA_cutoff, etc). See details in...
-    :param dataFrame: pandas dataframe for samples to process. Result from :func:`BacterialTyper.modules.ident.KMA_ident`.
-    :param outdir_dict: dictionary containing information for each sample of the output folder for this process.
-    :param dataFrame_edirect: pandas dataframe resulted from :func:`BacterialTyper.modules.ident.edirect_ident`.
-    :param retrieve_databases: 
-    
-    :type options: 
-    :type dataFrame: pandas.DataFrame()
-    :type outdir_dict: Dictionary
-    :type dataFrame_edirect: pandas.DataFrame()
-    :type retrieve_databases: pandas.DataFrame()
-    
-    :return: Information of the MLST identification. Dictionary keys are samples and values are the absolute path to file generate by :func:`BacterialTyper.scripts.MLSTar.run_doMLST` containing MLST information.
-    :rtype: Dictionary
-
-    
-    See example of returned dataframe in file :file:`/devel/results/doMLST_result_example.csv` here:
-    
-    .. include:: ../../devel/results/doMLST_result_example.csv
-        :literal:
-    
-    .. seealso:: Additional information to PubMLST available datasets.
-    
-        - :doc:`PubMLST datasets<../../../data/PubMLST_datasets>`
-    
-    
-    .. seealso:: This function depends on other ``BacterialTyper`` functions called:
-    
-        - :func:`BacterialTyper.scripts.functions.read_time_stamp`
-    
-        - :func:`BacterialTyper.scripts.functions.create_subfolder`
-        
-        - :func:`BacterialTyper.scripts.functions.boxymcboxface`
-        
-        - :func:`BacterialTyper.scripts.MLSTar.run_MLSTar`
-        
-        - :func:`HCGB.sampleParser.files.get_files`
-        
-        - :func:`BacterialTyper.scripts.MLSTar.get_MLSTar_species`
-        
-    .. include:: ../../links.inc    
     """
-    ## set config
-    rscript = set_config.get_exe("Rscript")
     
-    ## TODO: Samples might not be assembled...to take into account and return 0
+    conda_env/db/pubmlst
     
-    ## TODO: Fix and install MLSTar during installation
-    
-    print(colored("Attention: Fix:", 'red'))
-    print(MLSTar.get_MLSTar_package_installed())
-    
-    ########################################################################################
+    https://rest.pubmlst.org/db/...
 
-    ## TODO: Fix this chunk of code
-    ## TODO: What to do if multi-isolate sample?
-    ## TODO: Control if a different profile is provided via --MLST_profile
-    ## TODO: Check time passed and download again if >?? days passed]
-    
+    Parameters
+    ----------
+    options : TYPE
+        DESCRIPTION.
+    dataFrame : TYPE
+        DESCRIPTION.
+    outdir_dict : TYPE
+        DESCRIPTION.
+    dataFrame_edirect : TYPE
+        DESCRIPTION.
+    retrieve_databases : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
+    """
+    print()
+
+
     ## debug message
     if (Debug):
-        print (colored("**DEBUG: dataFrame_edirect identified**", 'yellow'))
+        HCGB_aes.debug_message("dataFrame_edirect identified")
         print (dataFrame_edirect)
-
+    
     ## MLST call    
     HCGB_aes.boxymcboxface("MLST typing")
     print ("+ Create classical MLST typification of each sample according to species retrieved by kmer...")
-
+    
     ## get assembly files
     input_dir = os.path.abspath(options.input)
     assembly_samples_retrieved = sampleParser.files.get_files(options, input_dir, "assembly", ["fna"], options.debug)
-
+    
     ## debug message
     if (Debug):
-        print (colored("**DEBUG: assembly_samples_retrieved**", 'yellow'))
+        HCGB_aes.debug_message("assembly_samples_retrieved")
         print (assembly_samples_retrieved)    
     
     # init
     MLST_results = {}
         
     ## get MLST_profile: default or provided
-    mlst_profile_list = retrieve_databases.loc[ retrieve_databases['db'] == 'PubMLST']['path'].tolist()
-
+    mlst_profile_dict = MLST_caller.get_MLST_profiles()
+    
     if (Debug):
-        print ("** Debug **")
-        print ("mlst_profile_list")
+        HCGB_aes.debug_message("mlst_profile_list")
         print (mlst_profile_list)
-
-        print ("dataFrame_edirect")
+    
+        HCGB_aes.debug_message("dataFrame_edirect")
         print (dataFrame_edirect)
 
-
-    ## Generate MLST call according to species identified for each sample
-    for index, row in dataFrame_edirect.iterrows():
-        MLSTar_taxa_name = MLSTar.get_MLSTar_species(row['genus'], row['species'] )
-        
-        if (MLSTar_taxa_name == 'NaN'):
-            print (colored("\t- Not available PubMLST profile for sample [%s] identified as %s %s" %(row['sample'], row['genus'], row['species']), 'yellow'))
-        
-        else:
-            for mlst_profile in mlst_profile_list:
-
-                ## species folder
-                #species_mlst_folder = functions.create_subfolder(MLSTar_taxa_name, pubmlst_folder)
-                species_mlst = mlst_profile.split(',')[0]
-                species_mlst_folder = mlst_profile.split(',')[1]
-            
-                ## output file
-                output_file = species_mlst_folder + '/PubMLST_available_scheme.csv'
-                filename_stamp = species_mlst_folder + '/.success_scheme'
-            
-                ## 
-                if MLSTar_taxa_name == species_mlst:        
-                    if os.path.isfile(filename_stamp):
-                        stamp =    HCGB_time.read_time_stamp(filename_stamp)
-                        print (colored("\tA previous command generated results on: %s" %stamp, 'yellow'))
-                    else:
-                        ### get scheme available
-                        MLSTar.getPUBMLST(MLSTar_taxa_name, rscript, output_file)
-                        stamp =    HCGB_time.print_time_stamp(filename_stamp)
-
-                    ## parse and get scheme for classical MLST
-                    schemes_MLST = pd.read_csv(output_file, sep=',', header=0)
-
-                    ##
-                    for item, cluster in schemes_MLST.iterrows():
-                        if cluster['len'] < 10:
-                            scheme2use = int(cluster['scheme'])
-                            continue            
-                    ### 
-                    sample = row['sample']
-                    MLSTar_folder = HCGB_files.create_subfolder('MLST', outdir_dict[sample])
-                    genome_file = assembly_samples_retrieved.loc[assembly_samples_retrieved['name'] == sample]['sample'].values[0]
-    
-                    ## call MLST
-                    (results, profile_folder) = MLSTar.run_MLSTar(species_mlst_folder, rscript, MLSTar_taxa_name, scheme2use, sample, MLSTar_folder, genome_file, options.threads)
-                    MLST_results[sample] = results
-
-    ##    
-    print ("+ Finish this step...")
-    return (MLST_results)
 
 ####################################
 def get_external_kma(kma_external_files, Debug):
@@ -1058,7 +1022,7 @@ def get_options_db(options):
     
     ## debug message
     if (Debug):
-        print (colored("**DEBUG: Database to use: " +  database2use + " **", 'yellow'))
+        HCGB_aes.debug_message("Database to use: " +  database2use)
     
     ## according to user input: select databases to use
     option_db = ""
@@ -1079,8 +1043,7 @@ def get_options_db(options):
 
     ## rise error & exit if no dbs provided
     if not (options.kma_dbs):
-        print (colored("***ERROR: No database provided via --kma_db option.\n",'red'))
-        exit()
+        HCGB_aes.raise_and_exit("No database provided via --kma_db option.\n")
 
     ############################################################
     ### Options:
@@ -1101,14 +1064,15 @@ def get_options_db(options):
     ## 3) only external kma
     ############
     elif (options.only_external_kma):
-        option_db = get_external_kma(options.kma_external_files, Debug)
+        option_db = database_generator.get_external_kma(options.kma_external_files, Debug)
         ## rise attention
         if (options.kma_dbs):
-            print (colored("***ATTENTION:\nDefatult databases and databases provided via --kma_dbs option would not be used as --only_external_kma option provided.\n",'red'))
+            HCGB_aes.warning_message("Defatult databases and databases provided via --kma_dbs \
+                                     option would not be used as --only_external_kma option provided.\n")
 
-    #################
-    ## all databases 
-    #################
+    #####################
+    ## all databases KMA
+    #####################
     else:        
         ####################
         ## default KMA dbs
@@ -1124,7 +1088,7 @@ def get_options_db(options):
         ## External file
         #################
         if (options.kma_external_files):
-            option_db_tmp = get_external_kma(options.kma_external_files, Debug)
+            option_db_tmp = database_generator.get_external_kma(options.kma_external_files, Debug)
             option_db = option_db + '#' + option_db_tmp
             
         #############################
@@ -1139,42 +1103,195 @@ def get_options_db(options):
         if any([options.genbank_data, options.all_data]):
             option_db = option_db + '#kma_NCBI:genbank'
 
-    ###############
-    ### PubMLST ###
-    ###############
-    print ("\n\t - Select MLST profiles")    
-    option_db_PubMLST = 'MLST:PubMLST'
-    print (colored("\t\t + Default MLST profile under database provided: PubMLST", 'green'))
 
-    if options.MLST_profile:
-        ## user provides a PubMLST profile
-        options.MLST_profile = os.path.abspath(options.MLST_profile)
-        option_db_PubMLST = option_db_PubMLST + '#MLST:'    + options.MLST_profile
-        print (colored("\t\t + User provided MLST profile: %s" %options.MLST_profile, 'green'))
-    
-    ###############
+    ##############
     ### get dbs
     ###############
     print ("\n+ Parsing information to retrieve databases")
     print ("+ Reading from database: " + database2use)
     HCGB_aes.print_sepLine("-",50, False)
 
+    ## get KMA databases    
+    pd_KMA = database_generator.getdbs("KMA", database2use, option_db, Debug)    
+
+    #####################
+    ## databases Kraken
+    #####################
+    if options.kraken_dbs:
+        k2_db = os.path.join(options.database, "Kraken", options.kraken_dbs)
+        if os.path.isdir(k2_db):
+            option_db = option_db + '#kraken:' + options.kraken_dbs
+        else:
+            try:
+                kraken2_caller.get_dbs(db_name=options.kraken_dbs, fold=os.path.join(options.database, "Kraken"))
+            except:
+                HCGB_aes.raise_and_exit("No database available provided for Kraken2")
+        
+    elif options.other_kraken2_db:
+        option_db = option_db + '#user_kraken:' + os.path.abspath(options.other_kraken2_db)
+
     ###############
     ## debug message
     if (Debug):
-        print (colored("**DEBUG: option_db: " +  option_db + " **", 'yellow'))
-        print (colored("**DEBUG: option_db_PubMLST : " +  option_db_PubMLST  + " **", 'yellow'))
-
-    pd_KMA = database_generator.getdbs("KMA", database2use, option_db, Debug)
-    pd_PubMLST = database_generator.getdbs("MLST", database2use, option_db_PubMLST, Debug)
+        HCGB_aes.debug_message("option_db: " +  option_db)
+        
+    ## Get kraken databases
+    pd_Kraken = database_generator.getdbs("Kraken2", database2use, option_db, Debug)    
+    
+    if (Debug):
+        HCGB_aes.debug_message("pd_KMA")
+        HCGB_main.print_all_pandaDF(pd_KMA)
+        HCGB_aes.debug_message("pd_Kraken")
+        HCGB_main.print_all_pandaDF(pd_Kraken)
 
     HCGB_aes.print_sepLine("-",50, False)
 
-    ## return both dataframes
-    pd_Merge = pd.concat([pd_KMA, pd_PubMLST], sort=True, ignore_index=True)
-    return (pd_Merge)
+    return (pd.concat([pd_KMA, pd_Kraken]))
 
 ####################################
-def Kraken_ident(options, dataFrame, outdir_dict, retrieve_databases, time_partial):
-    print("")
+def Kraken_ident(options, dataFrame_samples, outdir_dict, retrieve_databases, time_partial):
+    """
+    
+
+    Parameters
+    ----------
+    options : TYPE
+        DESCRIPTION.
+    dataFrame_samples : TYPE
+        DESCRIPTION.
+    outdir_dict : TYPE
+        DESCRIPTION.
+    retrieve_databases : TYPE
+        DESCRIPTION.
+    time_partial : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
+    """
+    
+    ### print header
+    HCGB_aes.boxymcboxface("Kraken2 Identification")
+
+    ## check status
+    databases2use = []
+    for index, db2use in retrieve_databases.iterrows():
+        ## index_name
+        if (str(db2use['source']).startswith('kraken')):
+            print ('+ Check database: ' + db2use['db'])
+            print (colored("\t+ Databases %s seems to be fine...\n\n" % db2use['db'], 'green'))
+            databases2use.append(db2use['path'])
+            
+            #fold_name = os.path.dirname(db2use['path'])
+            # index_status = KMA_caller.check_db_indexed(db2use['path'], fold_name )
+            # if (index_status == True):
+            #     print (colored("\t+ Databases %s seems to be fine...\n\n" % db2use['db'], 'green'))
+            #     
+            # else:
+            #     #databases2use.remove(db2use)
+            #     print (colored("\t**Databases %s is not correctly indexed. Not using it...\n" % db2use['db'], 'red'))
+
+    ## debug message
+    if (Debug):
+        print (colored("**DEBUG: databases2use\n" +  "\n".join(databases2use) + "\n**", 'yellow'))
+
+    ## Start identification of samples
+    print ("\n+ Send Kraken2 identification jobs...")
+    
+    ## optimize threads
+    name_list = set(dataFrame_samples["name"].tolist())
+    threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
+    max_workers_int = int(options.threads/threads_job)
+
+    ## debug message
+    if (Debug):
+        print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
+        print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
+        print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
+
+    # Group dataframe by sample name
+    sample_frame = dataFrame_samples.groupby(["name"])
+    
+    ## send for each sample
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
+         ## send for each sample
+         ## sample_name, read_files, threads_num, db_fold, outfolder, 
+         ## level_abundance="S", thres_count = 50, hit_groups=3, others="", debug=False
+         
+         commandsSent = { executor.submit(kraken2_caller.kraken_run_all,
+                         name[0],                                                       ## sample_name
+                         sorted(cluster[ cluster['ext']=='fastq']["sample"].tolist()),  ## read_files
+                         threads_job,                                                   ## threads                    
+                         databases2use[0],                                              ## database
+                         outdir_dict[name[0]],                                          ## outfolder
+                         options.kraken2_level,                                         ## level_abundance
+                         options.kraken2_read_count,                                    ## read threshold
+                         options.kraken2_hit_groups,                                    ## hit groups kraken2
+                         options.others_kraken2,                                        ## other options
+                         Debug): name[0] for name, cluster in sample_frame }
+
+         for cmd2 in concurrent.futures.as_completed(commandsSent):
+             details = commandsSent[cmd2]
+             try:
+                 data = cmd2.result()
+             except Exception as exc:
+                 print ('***ERROR:')
+                 print (cmd2)
+                 print('%r generated an exception: %s' % (details, exc))
+
+         ## functions.timestamp
+         time_partial = HCGB_time.timestamp(time_partial)
+        
+    ## parse results        
+    print ("+ Kraken2 identification call finished for all samples...")
+    print ("+ Parse results now")
+    
+    ## parse results and generate summary file
+    results_summary = pd.DataFrame()
+    pd_samples_bracken = sampleParser.files.get_files(options, options.input, "ident", ["bracken"], options.debug)
+
+    ## debug message
+    if (Debug):
+        HCGB_aes.debug_message("pd_samples_bracken")
+        HCGB_main.print_all_pandaDF(pd_samples_bracken)
+
+
+    ## 
+    mlst_profile_dict = MLST_caller.get_MLST_profiles()
+    pd_samples_bracken['specied_id'] = ""
+    pd_samples_bracken['mlst'] = ""
+
+    print("+ Parsing kraken2/bracken results")
+    for i in range( len(pd_samples_bracken) ):
+        print("Sample: " + pd_samples_bracken.loc[i, "name"])
+        try:
+            species2use = kraken2_caller.parse_results(bracken_res= pd_samples_bracken.loc[i, "sample"], 
+                                     folder = os.path.dirname(pd_samples_bracken.loc[i, "sample"]), cut_off=0.90)
+        except:
+            HCGB_aes.error_message("Parsing error for Kraken output")
+            print(pd_samples_bracken.loc[i])
+            HCGB_aes.raise_and_exit("")
+
+        print("\tSpecies: " + species2use)
+
+        pd_samples_bracken.loc[i, "specied_id"] = species2use
+        species2use_list = species2use.split(" ")
+        mlst2use = (species2use_list[0][0] + species2use_list[1]).lower()
+        print("\tMLST profile: " + mlst2use)
+        try:
+            if mlst_profile_dict[mlst2use]:
+                print(colored("\t- Species name matches MLST available: OK", 'green'))
+        except:
+            print("\n")
+            HCGB_aes.error_message("MLST provided is not available")
+            HCGB_aes.warning_message("This sample will not be processed in the MLST analysis")
+
+    ## debug message
+    if (Debug):
+        HCGB_aes.debug_message("pd_samples_bracken")
+        HCGB_main.print_all_pandaDF(pd_samples_bracken)
+    
+    return pd_samples_bracken
     

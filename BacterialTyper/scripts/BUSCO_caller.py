@@ -471,6 +471,10 @@ def BUSCO_plot(outfolder, Debug):
     return()
 
     ## TODO: Fix this chunk of code
+    
+    # No ggplot2 installed in conda environment
+    
+    ## Using busco plot script
     busco_plot_bin = set_config.get_exe('generate_plot')
     
     os.chdir(outfolder)
@@ -479,6 +483,15 @@ def BUSCO_plot(outfolder, Debug):
     HCGB_sys.system_call(cmd)
     return()
     
+    ## using single R script 
+    ## BacterialTyper/other_tools/R/BUSCO_plotter.R -i csv -o folder
+    # ERROR: PACKAGE OR NAMESPACE LOAD FAILED FOR ‘GGPLOT2’ IN LOADNAMESPACE(I, C(LIB.LOC, .LIBPATHS()), VERSIONCHECK = VI[[I]]):
+    #  NAMESPACE ‘RLANG’ 1.0.2 IS BEING LOADED, BUT >= 1.1.0 IS REQUIRED
+    # IN ADDITION: WARNING MESSAGE:
+    # PACKAGE ‘GGPLOT2’ WAS BUILT UNDER R VERSION 4.3.0
+    # EXECUTION HALTED
+
+
 ################################################
 
 ################################################

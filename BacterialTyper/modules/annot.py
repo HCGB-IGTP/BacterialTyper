@@ -14,7 +14,6 @@ from termcolor import colored
 
 ## import my modules
 from BacterialTyper.scripts import annotation
-from BacterialTyper.scripts import BUSCO_caller
 from BacterialTyper.modules import qc
 from BacterialTyper.scripts import multiQC_report
 from BacterialTyper.modules import help_info

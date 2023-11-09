@@ -8,7 +8,8 @@ Prints help messages for several modules and options.
 '''
 ## useful imports
 from termcolor import colored
-    
+import os
+
 ## import my modules
 from BacterialTyper.scripts import bacteriophage
 from BacterialTyper.modules import MGE
@@ -22,8 +23,9 @@ from BacterialTyper.scripts import ariba_caller
 from BacterialTyper.scripts import min_hash_caller
 from BacterialTyper.scripts import trimmomatic_call
 from BacterialTyper.scripts import KMA_caller
-from BacterialTyper.scripts import Kraken2_caller
-from BacterialTyper.scripts import MLSTar
+from BacterialTyper.scripts import kraken2_caller
+from BacterialTyper.scripts import MLST_caller
+from BacterialTyper.scripts import amrfinder_caller
 from BacterialTyper.report.Staphylococcus import get_spa_typing
 from BacterialTyper import __version__ as pipeline_version
 
@@ -140,9 +142,9 @@ def help_info(options):
                 
     ## information for MLSTar Software
     try:
-        if (options.help_MLSTar):
+        if (options.help_MLST):
             HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
-            MLSTar.help_MLSTar()        
+            MLST_caller.help_MLST()        
             return(1)
     except:
         pass
@@ -184,6 +186,49 @@ def help_info(options):
     except:
         pass
 
+    ## Information for amrfinder
+    try:
+        if (options.help_amrfinder):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
+            ## help_format option
+            amrfinder_caller.help_amrfinder()
+            return(1)
+    except:
+        pass    
+    
+    ## Information for amrfinder
+    try:
+        if (options.help_amrfinder_organisms):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
+            ## help_format option
+            path2db = os.path.join(options.path, "AMRfinder/latest")
+            amrfinder_caller.organisms_amrfinder(path2db)
+            return(1)
+    except:
+        pass
+    
+    ## get AMRfinder version
+    try:
+        if (options.amrfinder_version):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
+            path2db = os.path.join(options.path, "AMRfinder/latest")
+            amrfinder_caller.amrfinder_version_db(db_folder = path2db)
+            return(1)
+    except:
+        pass
+            
+    
+    ## Information for kraken2
+    try:
+        if (options.help_amrfinder):
+            HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
+            ## help_format option
+            kraken2_caller.help_kraken()
+            return(1)
+    except:
+        pass    
+    
+    
     return(0)
 
 ##########################

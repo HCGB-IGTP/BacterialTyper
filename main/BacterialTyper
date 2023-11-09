@@ -31,12 +31,13 @@ help_options = ('--help_Database',
 				'--help_trim_adapters',
 				'--help_multiqc',
 				'--help_KMA',
-				'--help_MLSTar',
+				'--help_MLST',
 				'--help_MGE_analysis',
 				'--help_Mash',
 				'--help_input_MGE',
                 '--help_Snippy',
                 '--help_spaTyper',
+                '--help_amrfinder',
                 '--no_BUSCO')
 
 subparser_space = subparsers.add_parser(' Configuration', help='')
@@ -52,6 +53,10 @@ subparser_help = subparsers.add_parser(
     help='Print additional information & help messages ',
     description='For different modules, options or parameters print additional information and help messages',
 )
+
+subparser_help_db = subparser_help.add_argument_group("Path database")
+subparser_help_db.add_argument("--path", help="Absolute path to BacterialTyper database", required= any(elem in ("--help_amrfinder_organisms", "--amrfinder_version") for elem in sys.argv) )
+
 subparser_help_name = subparser_help.add_argument_group("Show additional help information")
 subparser_help = subparser_help_name.add_mutually_exclusive_group(required= True)
 subparser_help.add_argument("--help_project", action="store_true", help="...")
@@ -67,7 +72,10 @@ subparser_help.add_argument("--help_MGE_analysis", action="store_true", help="Pr
 subparser_help.add_argument("--help_PhiSpy", action="store_true", help="Print further information for PhiSpy analysis.")
 subparser_help.add_argument("--help_Mash", action="store_true", help="Print further information for Mash clustering analysis.")
 subparser_help.add_argument("--help_Snippy", action="store_true", help="Print further information for Snippy analysis.")
-subparser_help.add_argument("--help_MLSTar", action="store_true", help="Print further information for MLST analysis.")
+subparser_help.add_argument("--help_MLST", action="store_true", help="Print further information for MLST analysis.")
+subparser_help.add_argument("--help_amrfinder", action="store_true", help="Print further information for NCBI AMRfinderplus databases")
+subparser_help.add_argument("--help_amrfinder_organisms", action="store_true", help="Print further information for NCBI AMRfinderplus databases")
+subparser_help.add_argument("--amrfinder_version", action="store_true", help="Get version of database")
 
 subparser_help.set_defaults(func=BacterialTyper.modules.help_info.help_info)
 ##-------------------------------------------------------------##
@@ -118,6 +126,13 @@ initdb_KMAoptions_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help
 initdb_KMAoptions_group.add_argument("--no_def_kma", action="store_true", help="Only applicable if kma_db is ON. It discards default databases (bacteria & plasmids) from kma_db. Only user selected databases indexed. [Default: OFF]")
 ##initdb_KMAoptions_group.add_argument("--index_kma", action="store_true", help="Index the genomes downloaded for later usage during species identification. Not compatible with --kma_db options: available databases with broader taxonomic ranges. [Default: OFF]")
 
+## AMRfinder
+initdb_AMRfinder_options_group = subparser_database.add_argument_group("AMRfinderplus database")
+initdb_AMRfinder_options_group.add_argument("--amrfinder_update", action="store_true", help = "Update the database for AMRFinder from https://ftp.ncbi.nlm.nih.gov/pathogen/Antimicrobial_resistance/AMRFinderPlus/database/")
+initdb_AMRfinder_options_group.add_argument("--amrfinder_index", action="store_true", help = "Index the database for AMRfinder")
+initdb_AMRfinder_options_group.add_argument("--amrfinder_version", action="store_true", help="Get version of database")
+initdb_AMRfinder_options_group.add_argument("--help_amrfinder_organisms", action="store_true", help="...")
+
 ## ariba
 initdb_ARIBAoptions_group = subparser_database.add_argument_group("ARIBA Databases")
 initdb_ARIBAoptions_group.add_argument("--ARIBA_db", dest='ariba_dbs', nargs='*', help="ARIBA database(s) to download. Provide several input if desired. Not compatible with --no_ARIBA. [Default: CARD & VFDB]", choices=['CARD', 'MEGARes', 'VFDB', 'ResFinder', 'PlasmidFinder', 'VirulenceFinder', 'srst2', 'ARG-ANNOT'])
@@ -135,6 +150,7 @@ info_group_database = subparser_database.add_argument_group("Additional informat
 info_group_database.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")
 info_group_database.add_argument("--help_Database", action="store_true", help="Print further information for this database module")
 info_group_database.add_argument("--help_ARIBA", action="store_true", help="Print further information for ARIBA databases")
+info_group_database.add_argument("--help_amrfinder", action="store_true", help="Print further information for NCBI AMRfinderplus databases")
 info_group_database.add_argument("--help_BUSCO", action="store_true", help="Benchmarking Universal Single Copy Orthologs (BUSCO) dataset help information.")
 info_group_database.add_argument("--help_KMA", action="store_true", help="Show additional help on KMA software and options.")
 info_group_database.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
@@ -361,7 +377,11 @@ subparser_annotate.set_defaults(func=BacterialTyper.modules.annot.run_annotation
 subparser_ident = subparsers.add_parser(
     'ident',
     help='Species identification for each sample.',
-    description='This module calls a kmer strategy for a species and strain identification',
+    description="""This module calls different kmer strategy for a species and strain identification. \
+        Firstly, it identifies species for each sample using Kraken2 (defaulta kraken2 databases). 
+        Secondly, it can search additional databses using KMA, genbank entries or user previously analyzed samples.
+        Then, it creates a MSLT analysis if available.
+        """,
 )
 initial_group_ident = subparser_ident.add_argument_group("Input/Output")
 initial_group_ident.add_argument("-i", "--input", help="Folder containing trimmed reads. Files could be .fastq/.fq/ or fastq.gz/.fq.gz", required = not any(elem in help_options for elem in sys.argv))
@@ -374,27 +394,34 @@ initial_group_ident.add_argument("--detached", action="store_true", help="Isolat
 initial_group_ident.add_argument("--include_lane", action="store_true", help="Include the lane tag (*L00X*) in the sample name. See --help_format for additional details [Default OFF]")
 initial_group_ident.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
+dataset_search_ident = subparser_ident.add_argument_group("Search option")
+dataset_search_ident = dataset_search_ident.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
+dataset_search_ident.add_argument("--use_kraken2", action="store_true", help="Use kraken2 to identify species", default=True)
+dataset_search_ident.add_argument("--kma_ident", action="store_true", help="Set this flag to use KMA to identify samples from scratch")
+dataset_search_ident.add_argument("--other_MLST_profile", help="Provide a name for the MLST profile to use. See options available using --help_MLST.")
+dataset_search_ident.add_argument("--species2use", help="Skip identification and provide the name of the species to use MLST profile")
+
 dataset_group_ident = subparser_ident.add_argument_group("Datasets")
 dataset_group_ident.add_argument("-db", "--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
-dataset_group_ident.add_argument("--MLST_profile", help="Directory containing MLST profile. By default, a folder named PubMLST is generated under database folder. Provide this option if profile to be used is from another source than PubMLST.org.")
+dataset_group_ident.add_argument("--user_data", action="store_true", help="Use previously identified samples in user_data [Default OFF].")
+dataset_group_ident.add_argument("--genbank_data", action="store_true", help="Use reference genomes from NCBI stored in database folder [Default OFF].")
 
 kma_group = subparser_ident.add_argument_group("KMA Databases Configuration")
-kma_group.add_argument("--kma_ident", action="store_true", help="Set this flag to use KMA to identify samples from scratch")
-kma_group.add_argument("--kma_db", dest='kma_dbs', nargs='*', help="kma database(s) to check. Provide several input if desired. If it is not available it would be downloaded and included in default database folder. [Default: bacteria]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'typestrain', 'viral'])
+kma_group.add_argument("--kma_db", dest='kma_dbs', help="kma database(s) to check. Provide several input if desired. If it is not available it would be downloaded and included in default database folder. [Default: bacteria]", choices=['bacteria', 'archaea', 'protozoa', 'fungi', 'typestrain', 'viral'])
 kma_group.add_argument("--kma_external_file", dest='kma_external_files', nargs='*', help="External fasta file to include in the search. It could be indexed or not. [Default OFF].")
 kma_group.add_argument("--only_kma_db", action="store_true", help="Provide this option if only user defined kma database(s) provided via --kma_db should be used for species identification. Discard Bacteria as default.")
+kma_group.add_argument("--KMA_cutoff", type=int, help="Similarity cutoff for databases filtering. Range: 1-100. [Default = 80]", default=80)
 
 kraken_group = subparser_ident.add_argument_group("Kraken2 Databases Configuration")
-kraken_group.add_argument("--kraken2_ident", action="store_true", 
-                          help="Set this flag to use Kraken2 to identify samples from scratch")
-kraken_group.add_argument("--kraken2_db", dest='kraken2_dbs', nargs='*', 
-                          help="kraken2 database(s) to check. Provide several input if desired. If it is not available it would be downloaded and included in default database folder. [Default: Standard-8]", 
-                          choices=['Standard-8', 'Viral', 'PlusPFP-8'])
+kraken_group.add_argument("--kraken2_db", dest="kraken_dbs", help="kraken2 database to check. Provide a single input path if desired. If it is not available it would be downloaded and included in default database folder. [Default: Standard-8]", choices=['standard_8', 'viral', 'pluspfp_8'])
+kraken_group.add_argument("--other_kraken2_db", help="kraken2 database to check. Not available in default BacterialTyper folder. Provide absolute path")
 
-options_group_name_ident = subparser_ident.add_argument_group("Options")
-options_group_name_ident.add_argument("--species2use", help="Skip identification and provide the name of the species to use MLST profile")
-options_group_name_ident.add_argument("--user_data", action="store_true", help="Use previously identified samples in user_data [Default OFF].")
-options_group_name_ident.add_argument("--genbank_data", action="store_true", help="Use reference genomes from NCBI stored in database folder [Default OFF].")
+kraken_param_group = subparser_ident.add_argument_group("Kraken2 Parameters Configuration")
+kraken_param_group.add_argument("--kraken2_hit_groups", help="Kraken2 parameter (--minimum-hit-groups 3): Minimum number of hit groups (overlapping k-mers sharing the same minimizer) needed to make a call", default=3)
+kraken_param_group.add_argument("--kraken2_level", help="Bracken parameter (-l S): Level to estimate abundance", default="S")
+kraken_param_group.add_argument("--kraken2_read_count", help="Bracken parameter (-t 0): Number of reads required propr to abundance estimation", default=50)
+kraken_param_group.add_argument("--others_kraken2", help="Other kraken2 or bracken parameters to include in the call")
+
 
 exclusive_group_name_ident2 = subparser_ident.add_argument_group("Exclusive")
 exclusive_group2 = exclusive_group_name_ident2.add_mutually_exclusive_group()
@@ -405,7 +432,6 @@ exclusive_group2.add_argument("--only_external_kma", action="store_true", help="
 
 parameters_group_ident = subparser_ident.add_argument_group("Parameters")
 parameters_group_ident.add_argument("-t", "--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
-parameters_group_ident.add_argument("--KMA_cutoff", type=int, help="Similarity cutoff for databases filtering. Range: 1-100. [Default = 80]", default=80)
 parameters_group_ident.add_argument("--slow", action="store_true", help="Update database: not only identify samples but update results to database provided [Default OFF].")
 
 info_group_ident = subparser_ident.add_argument_group("Additional information")
@@ -413,7 +439,7 @@ info_group_ident.add_argument("--debug", action="store_true", help="Show additio
 info_group_ident.add_argument("--help_format", action="store_true", help="Show additional help on name format for files.")
 info_group_ident.add_argument("--help_project", action="store_true", help="Show additional help on the project scheme.")
 info_group_ident.add_argument("--help_KMA", action="store_true", help="Show additional help on KMA software and options.")
-info_group_ident.add_argument("--help_MLSTar", action="store_true", help="Show additional help on MLSTar software and options.")
+info_group_ident.add_argument("--help_MLST", action="store_true", help="Show additional help on MLST software and options.")
 
 subparser_ident.set_defaults(func=BacterialTyper.modules.ident.run_ident)
 ##-------------------------------------------------------------##
@@ -436,8 +462,13 @@ initial_group_profile.add_argument("--include_lane", action="store_true", help="
 initial_group_profile.add_argument("--include_all", action="store_true", help="Include all characters as tag name before read pair, if any. See --help_format for additional details [Default OFF]")
 
 dataset_group_profile = subparser_profile.add_argument_group("Datasets")
-dataset_group_profile.add_argument("-db", "--database", help="Directory containing databases previously downloaded such as ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
+dataset_group_profile.add_argument("-db", "--database", help="Directory containing BacterialTyper databases previously downloaded such as AMRfinder, ARIBA, KMA, BUSCO genbank and user_data folders.", required=not any(elem in help_options for elem in sys.argv))
 dataset_group_profile.add_argument("--additional_database", action="store_true", help="## [TODO]")
+
+## soft to use
+software_group_profile = subparser_profile.add_argument_group()
+software_group_profile.add_argument("--software", dest='soft_profile', nargs='*', choices=['ARIBA', 'AMRfinder'], 
+                                    help="Software to use in the Antibiotic & Virulence search", default="AMRfinder")
 
 parameters_group_profile = subparser_profile.add_argument_group("Parameters")
 parameters_group_profile.add_argument("-t", "--threads", type=int, help="Number of CPUs to use [Default: 2].", default=2)
@@ -448,6 +479,12 @@ ariba_db_group_profile = subparser_profile.add_argument_group("ARIBA databases")
 ariba_db_group_profile.add_argument("--ARIBA_db", dest='ariba_dbs', nargs='*', help="ARIBA database(s) to download. Provide several input if desired. Not compatible with --no_ARIBA. [Default: CARD & VFDB]", choices=['CARD', 'MEGARes', 'VFDB', 'ResFinder', 'PlasmidFinder', 'VirulenceFinder', 'srst2', 'ARG-ANNOT'])
 ariba_db_group_profile.add_argument("--no_def_ARIBA", action="store_true", help="Only applicable if ARIBA_db is ON. It discards default databases (CARD & VFDB) from ARIBA_db. Only user selected databases indexed. [Default: OFF]")
 ariba_db_group_profile.add_argument("--ARIBA_cutoff", type=float, help="ARIBA assembly threshold cutoff [0-1]. [ Default: 0.90]", default=0.90)
+
+## AMRfinder
+amrfinder_db_group_profile = subparser_profile.add_argument_group("AMRfinder databases")
+amrfinder_db_group_profile.add_argument("--AMRfinder_db", help="Add a different database to search different from main AMRfinder available within --database folder provided")
+amrfinder_db_group_profile.add_argument("--AMRfinder_options", help="Any other options to add to the system call for amrfinder search")
+
 
 info_group_profile = subparser_profile.add_argument_group("Additional information")
 info_group_profile.add_argument("--debug", action="store_true", help="Show additional message for debugging purposes.")

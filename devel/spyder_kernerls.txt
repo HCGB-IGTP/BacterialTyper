@@ -1,0 +1,1 @@
+mamba install spyder-kernerls=2.4

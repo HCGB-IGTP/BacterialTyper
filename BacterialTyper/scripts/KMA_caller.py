@@ -147,14 +147,14 @@ def download_kma_database(folder, database, debug):
             print (colored("Download files via function wget_download:",'yellow'))
         
         ## connect to db_url
-        HCGB_sys.wget_download(ftp_site, db_folder)
+        HCGB_sys.wget_download(ftp_site, main_db_folder)
         print ("\n\t+ Data downloaded.....")
 
         if os.path.exists(main_file):
 
             # extract
             print ("\t+ Extracting database into destination folder: " + main_db_folder)
-            HCGB_files.extract(main_file, db_folder)    
+            HCGB_files.extract(main_file, main_db_folder)    
     
             ## get files
             files = os.listdir(main_db_folder)

@@ -8,11 +8,7 @@ Generates a resistance and virulence profile for each sample.
 """
 ## useful imports
 import time
-import io
 import os
-import re
-import sys
-from io import open
 import concurrent.futures
 from termcolor import colored
 import pandas as pd
@@ -25,12 +21,10 @@ from BacterialTyper.scripts import ariba_caller
 from BacterialTyper.scripts import card_trick_caller
 from BacterialTyper.modules import help_info
 from BacterialTyper.scripts import database_user
+from BacterialTyper.scripts import amrfinder_caller
+
 from BacterialTyper import __version__ as pipeline_version
 
-from BacterialTyper.config import set_config
-
-import HCGB
-from HCGB import sampleParser
 import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
@@ -64,6 +58,16 @@ def run_profile(options):
     else:
         options.pair = True
 
+    
+    ### set as default paired_end mode
+    try:
+        if not (options.soft_profile):
+            options.soft_profile = "AMRfinder"
+    except:
+        pass
+
+
+
     ## message header
     HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
     HCGB_aes.boxymcboxface("Virulence & Resistance profile module")
@@ -87,34 +91,65 @@ def run_profile(options):
         outdir = input_dir    
         Project=True
     
-    ## get files
-    pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "trim", ['_trim'], options.debug)
+    ## get files: trim, assembly, annot
+    pd_samples_retrieved = database_user.get_userData_files(options, input_dir)
+    
+    ## get info: ident, cluster, MGE
+    pd_samples_info = database_user.get_userData_info(options, input_dir)
     
     ## debug message
     if (Debug):
         print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
         print (pd_samples_retrieved)
-    
+        
+        print (colored("**DEBUG: pd_samples_info **", 'yellow'))
+        print (pd_samples_info)
+        
+        
     ## generate output folder, if necessary
     print ("\n+ Create output folder(s):")
     if not options.project:
         HCGB_files.create_folder(outdir)
+    
     ## for each sample
     outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "profile", options.debug)
     
     ###
     print ("+ Generate a sample profile for virulence and resistance candidate genes for each sample retrieved using:")
-    print ("(1) Antimicrobial Resistance Inference By Assembly (ARIBA) software")
+    print ("(1) Antimicrobial Resistance Inference By Assembly (ARIBA) software or NCBI-AMRfinder software")
     print ("(2) Pre-defined databases by different suppliers or user-defined databases.")
     
     ## get databases to check
     retrieve_databases = get_options_db(options)
     
+    if (Debug):
+        print (colored("**DEBUG: retrieve_databases **", 'yellow'))
+        print (retrieve_databases)
+    
     ## functions.timestamp
     start_time_partial = HCGB_time.timestamp(start_time_total)
+    
+    
+    if options.soft_profile == "ARIBA":
+    
+        ######## ARIBA
+        print ("--------- ARIBA pipeline ---------")
+        print ("+ Trimmed reads will be retrieved to generated ")
+        print()
         
-    ########
-    ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
+        ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial)
+
+    elif options.soft_profile == "AMRfinder":    
+    
+        ####### AMRFinderplus
+        print()
+        print ("--------- AMRfinder pipeline ---------")
+        print()
+        AMRfinder_ident(options, pd_samples_retrieved, pd_samples_info, outdir_dict, retrieve_databases, start_time_partial)
+        exit()
+    else:
+        print("No additional software option provided")
+        exit()
     
     ######################################
     ## update database for later usage
@@ -186,38 +221,69 @@ def get_options_db(options):
     ## according to user input: select databases to use
     option_db = ""
     
-    ## Default
-    ARIBA_dbs = ["CARD", "VFDB"]
-
-    ############
-    ## 1) only provided databases
-    ############
-    if (options.no_def_ARIBA):
-        ARIBA_dbs = set(options.ariba_dbs)
-        
-    ############
-    ## 2) all
-    ############
-    elif (options.ariba_dbs):
-        ARIBA_dbs = ARIBA_dbs + options.ariba_dbs
-        ARIBA_dbs = set(ARIBA_dbs)
-
-    ARIBA_dbs_string = ','.join(ARIBA_dbs)
-    option_db = "ARIBA:" + ARIBA_dbs_string
-
-    ## debug message
-    if (Debug):
-        print (colored("**DEBUG: Database to use: " +  option_db + " **", 'yellow'))
+    ################################################
+    if options.soft_profile == "ARIBA":
     
-    ### get dbs    
-    return (database_generator.getdbs('ARIBA', database2use, option_db, Debug))
+        ######## ARIBA
+        
+        ## Default
+        ARIBA_dbs = ["CARD", "VFDB"]
+        
+        ############
+        ## 1) only provided databases
+        ############
+        if (options.no_def_ARIBA):
+            ARIBA_dbs = set(options.ariba_dbs)
+            
+        ############
+        ## 2) all
+        ############
+        elif (options.ariba_dbs):
+            ARIBA_dbs = ARIBA_dbs + options.ariba_dbs
+            ARIBA_dbs = set(ARIBA_dbs)
+        
+        ARIBA_dbs_string = ','.join(ARIBA_dbs)
+        option_db = "ARIBA:" + ARIBA_dbs_string
+        
+        ## debug message
+        if (Debug):
+            print (colored("**DEBUG: Database to use: " +  option_db + " **", 'yellow'))
+        
+        ### get dbs    
+        db2return = database_generator.getdbs('ARIBA', database2use, option_db, Debug)
+    
+    ################################################
+    elif options.soft_profile == "AMRfinder":    
+        
+        ############
+        ## 1) only main database
+        ############
+        ## default
+        AMRfinder_dbs = os.path.join(options.database, 'AMRfinder/latest')
+        
+        ############
+        ## 2) additional database provided
+        ############
+        if (options.AMRfinder_db):
+            AMRfinder_dbs = options.AMRfinder_db
+        
+        ## Only 1 database can be provided
+        option_db = "AMRfinder:" + AMRfinder_dbs
+        
+        ### get dbs    
+        db2return = database_generator.getdbs('AMRfinder', database2use, option_db, Debug)
+    
+    
+    ####
+    return (db2return)
 
+    
 ####################################
 def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial):
     HCGB_aes.boxymcboxface("ARIBA Identification")
 
     ##################
-    ## check status    ##    
+    ## check status ##    
     ##################
     databases2use = [] ## path, db name
     card_trick_info = ""
@@ -255,7 +321,8 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
     # Group dataframe by sample name
     sample_frame = pd_samples_retrieved.groupby(["name"])
 
-    for name, cluster in sample_frame:
+    for name_tuple, cluster in sample_frame:
+        name = name_tuple[0]
         for db2use in databases2use:
             tmp = get_outfile(outdir_dict[name], name, db2use[0])
             outdir_samples.loc[len(outdir_samples)] = (name, outdir_dict[name], db2use[1], tmp)
@@ -294,9 +361,9 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
             ## send for each sample
             commandsSent = { executor.submit(ariba_run_caller, 
                                             db2use[0], db2use[1],                                 ## database path & dbname
-                                            sorted(cluster["sample"].tolist()),                 ## files
-                                            outdir_samples.loc[(name, db2use[1]), 'output'],    ## output
-                                            threads_job, options.ARIBA_cutoff): name for name, cluster in sample_frame }
+                                            sorted(cluster["sample"].tolist()),                   ## files
+                                            outdir_samples.loc[(name[0], db2use[1]), 'output'],   ## output
+                                            threads_job, options.ARIBA_cutoff): name[0] for name, cluster in sample_frame }
                 
             for cmd2 in concurrent.futures.as_completed(commandsSent):
                 details = commandsSent[cmd2]
@@ -415,7 +482,149 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
     print ("+ Go to website: https://jameshadfield.github.io/phandango/#/")
     print ("+ For each database upload files *phandango.csv and *phandango.tre and visualize results")
     ## print additional help?
+ 
+####################################    
+def AMRfinder_ident(options, samples_retrieved, sample_info, out_dict, retrieve_db, start_time_partial):
+    """
     
+
+    Parameters
+    ----------
+    options : TYPE
+        DESCRIPTION.
+    samples_retrieved : TYPE
+        DESCRIPTION.
+    sample_info : TYPE
+        DESCRIPTION.
+    out_dict : TYPE
+        DESCRIPTION.
+    retrieve_db : TYPE
+        DESCRIPTION.
+    start_time_partial : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
+    """
+    HCGB_aes.boxymcboxface("AMRfinder Identification")
+
+    ##################
+    ## check status ##    
+    ##################
+    databases2use = [] ## path, db name
+    print ('+ Check database status: ')
+    for index, db2use in retrieve_db.iterrows():
+        print(index)
+        databases2use.append([ db2use['path'], db2use['db'], db2use['timestamp']])
+
+    ## debug message
+    if (Debug):
+        print (colored("**DEBUG: databases2use\n**", 'yellow'))
+        print (databases2use)
+
+
+    ## Get information parsed
+    # merge samples_retrieved and samples_info
+
+
+        
+    ######################################################
+    ## Start identification of samples
+    ######################################################
+    print ("\n+ Send AMRfinder identification jobs...")
+
+    # Group dataframe by sample name
+    sample_frame = samples_retrieved.groupby(["name"])
+
+    ## debug message
+    if (Debug):
+        print (colored("**DEBUG: outdir_samples **", 'yellow'))
+        print (out_dict)
+        
+    ######################################################
+    ## send for each sample
+    ######################################################
+    
+    ## optimize threads
+    name_list = set(samples_retrieved["name"].tolist())
+    threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
+    max_workers_int = int(options.threads/threads_job)
+
+    ## debug message
+    if (Debug):
+        print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
+        print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
+        print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
+
+    ## send job for each sample
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
+        ## send for each sample:
+        ## amrfinder_caller(sample_name, protein_file, gff_file, nuc_file, threads_num, db_fold, outfile, others)
+        commandsSent = { executor.submit(amr_run_caller, 
+                                         db2use[1],                         ## database path & dbname
+                                         cluster,                           ## dataframe with information
+                                         out_dict[name_tuple[0]],                 ## output
+                                         threads_job, options,
+                                         name_tuple[0],
+                                         Debug): name_tuple[0] for name_tuple, cluster in sample_frame }
+             
+        for cmd2 in concurrent.futures.as_completed(commandsSent):
+            details = commandsSent[cmd2]
+            try:
+                data = cmd2.result()
+            except Exception as exc:
+                print ('***ERROR:')
+                print (cmd2)
+                print('%r generated an exception: %s' % (details, exc))
+         
+    # check results for each database
+    print ("+ Collecting information for each sample analyzed for database")
+     
+    ## functions.timestamp
+    start_time_partial = HCGB_time.timestamp(start_time_partial)
+
+    ######################################################
+    ## Generate final report for all samples
+    ######################################################
+    
+####################################
+def amr_run_caller(db_folder, df_sample, outfold, threads_num, options, name_ID, debug=False):
+    ## check if already is done
+    # amrfinder_caller automatically generates a stamp when finish parsing each file
+
+    ## make stamp time
+    ## Timestamp generated within each db folder analyzed
+    ## profile/card_prepareref/.success_card_prepareref
+    filename_stamp = os.path.join(outfold, '.success')
+    if os.path.isfile(filename_stamp):
+        stamp =    HCGB_time.read_time_stamp(filename_stamp)
+        print (colored("\tA previous command generated results on: %s [Files: %s]" %(stamp, name_ID), 'yellow'))
+    
+    else:
+        if os.path.exists(outfold):
+            shutil.rmtree(outfold) ## delete folder if exists but failed before
+
+        ## parse df_sample to get: proteins, gff, assembly and species identification
+        if debug:        
+            HCGB_aes.debug_message("Sample information:")
+            HCGB_main.print_all_pandaDF(df_sample)
+        
+        ## call
+        code = amrfinder_caller.amrfinder_caller(sample_name=name_ID, 
+                                                 protein_file = df_sample[ df_sample.ext=="faa"].iat[0, 4], 
+                                                 gff_file = df_sample[ df_sample.ext=="gff"].iat[0, 4], 
+                                                 nuc_file = df_sample[ df_sample.ext=="fna"].iat[0, 4], 
+                                                 threads_num = threads_num, 
+                                                 db_fold = db_folder, outfolder = outfold, 
+                                                 others = options.AMRfinder_options,   
+                                                 species_ident = "", 
+                                                 Debug=debug)
+        if code == 'FAIL':
+            print ("*** ERROR: System call failed for ", name_ID)        
+
+
 ####################################
 def ariba_run_caller(db2use, db_name, list_files, folder_out, threads, cutoff):
     ## check if already is done

@@ -18,7 +18,8 @@ from BacterialTyper.scripts import database_generator
 from BacterialTyper.scripts import database_user
 from BacterialTyper.scripts import ariba_caller
 from BacterialTyper.scripts import KMA_caller
-from BacterialTyper.scripts import Kraken2_caller
+from BacterialTyper.scripts import kraken2_caller
+from BacterialTyper.scripts import amrfinder_caller
 from BacterialTyper.scripts import BUSCO_caller
 from BacterialTyper.config import set_config 
 from BacterialTyper import __version__ as pipeline_version
@@ -94,7 +95,7 @@ def run_database(options):
         print (colored("DEBUG: absolute path folder: " + options.path, 'yellow'))
 
     ##########
-    ## NCBI    ##
+    ## NCBI ##
     ##########
     ## if any NCBI options provided
     if any ([options.ID_file, options.descendant]):
@@ -144,7 +145,7 @@ def run_database(options):
         genbank_kma_db = HCGB_files.create_subfolder('genbank', kma_db)    
         
         print ('+ Database to update: ', genbank_kma_db)
-        species_identification_KMA.generate_db(list_of_files, 'genbank_KMA', genbank_kma_db, 'new', 'batch', Debug, kma_bin)
+        KMA_caller.generate_db(list_of_files, 'genbank_KMA', genbank_kma_db, 'new', 'batch', Debug, kma_bin)
 
         ## time stamp
         start_time_partial = HCGB_time.timestamp(start_time_total)
@@ -181,7 +182,7 @@ def run_database(options):
         user_kma_db = HCGB_files.create_subfolder('user_data', kma_db)    
         
         print ('+ Database to update: ', user_kma_db)
-        species_identification_KMA.generate_db(list_of_files, 'userData_KMA', user_kma_db, 'new', 'batch', Debug, kma_bin)
+        KMA_caller.generate_db(list_of_files, 'userData_KMA', user_kma_db, 'new', 'batch', Debug, kma_bin)
         
         ## time stamp
         start_time_partial = HCGB_time.timestamp(start_time_total)
@@ -294,7 +295,7 @@ def run_database(options):
     for db in options.kma_dbs:
         print (colored("\n+ " + db, 'yellow'))
         db_folder = HCGB_files.create_subfolder(db, kma_database)        
-        db_dict = species_identification_KMA.download_kma_database(db_folder, db, Debug)
+        db_dict = KMA_caller.download_kma_database(db_folder, db, Debug)
         dict_KMA_db_info[db] = db_dict
 
     #########
@@ -307,6 +308,28 @@ def run_database(options):
     
     ### timestamp
     start_time_partial = HCGB_time.timestamp(start_time_partial)                    
+
+
+    ##########
+    ## AMRfinder
+    ##########
+    print()
+    HCGB_aes.print_sepLine("*", 50, False)
+    print("------------ Check AMRfinder database ---------")
+    amrfinder_db = os.path.join(options.path, "AMRfinder")
+    HCGB_files.create_folder(amrfinder_db)
+    
+    print("Retrieve information for AMRFinder from\nhttps://ftp.ncbi.nlm.nih.gov/pathogen/Antimicrobial_resistance/AMRFinderPlus/database/")
+
+    ####
+    if options.amrfinder_update:
+        ## update database
+        print()
+        amrfinder_caller.download_database(amrfinder_db, Debug=Debug)
+
+    if options.amrfinder_index:
+        ## index database
+        print()
 
     print ("\n*************** Finish *******************\n")
     start_time_partial = HCGB_time.timestamp(start_time_total)
