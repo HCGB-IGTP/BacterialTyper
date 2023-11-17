@@ -255,16 +255,21 @@ def get_userData_info(options, project_folder):
     print()
     HCGB_aes.print_sepLine("-", 60, 'yellow')
     print ("+ Retrieve virulence/resistance profile information:")
-    pd_samples_profile = sampleParser.files.get_files(options, project_folder, "profile", ["csv"], options.debug)
+    pd_samples_profile = sampleParser.files.get_files(options, project_folder, "profile", ["csv", "tsv"], options.debug)
     pd_samples_profile.set_index('name')
     HCGB_aes.print_sepLine("-", 60, 'yellow')
+
+    if not pd_samples_profile.empty:
+        pd_samples_profile = pd_samples_profile.set_index('name')
 
     print()
     HCGB_aes.print_sepLine("-", 60, 'yellow')
     print ("+ Retrieve species identification information:")
-    pd_samples_ident = sampleParser.files.get_files(options, project_folder, "ident", ["csv"], options.debug)
+    pd_samples_ident = sampleParser.files.get_files(options, project_folder, "ident", ["csv", 'species.csv'], options.debug)
+    
     if not pd_samples_ident.empty:
         pd_samples_ident = pd_samples_ident.set_index('name')
+    
     HCGB_aes.print_sepLine("-", 60, 'yellow')
     
     ## get mash information

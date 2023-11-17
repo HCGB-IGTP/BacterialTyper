@@ -8,9 +8,12 @@ Created on Thu Nov  9 12:34:19 2023
 
 from BacterialTyper.config import set_config
 import os
-import pandas as pd
 import HCGB.functions.files_functions as HCGB_files
-import HCGB.functions.main_functions as HCGB_main
+import HCGB.functions.aesthetics_functions as HCGB_aes
+import HCGB.functions.system_call_functions as HCGB_sys
+import HCGB.functions.time_functions as HCGB_time
+
+
 from termcolor import colored
 import pprint
 
@@ -59,4 +62,74 @@ def get_MLST_profiles(debug=False):
         print(colored("ERROR: File not available", 'red'))
         print(colored("ERROR: Check mlst software installation", 'red'))
         raise SystemExit()
+
+########################################
+def MLST_call(outfolder, assembly_file, mlst_profile, sample_name, 
+              minid=95, mincov=10, minscore=50, debug=False):
+    mlst_bin = set_config.get_exe("mlst",Debug=debug)
+    
+    
+    outfolder = HCGB_files.create_subfolder('MLST', outfolder)
+    out_csv = os.path.join(outfolder, 'MLST_res.csv')
+    out_json = os.path.join(outfolder, 'MLST_res.json')
+    out_err  = os.path.join(outfolder, 'MLST_res.log')
+    
+    filename_stamp = os.path.join(outfolder, '.success_mlst')
+    if HCGB_files.is_non_zero_file(filename_stamp):
+        return True
+    else:
         
+        ## init
+        cmd_mlst = mlst_bin
+        
+        ## add label
+        cmd_mlst += " --label " + sample_name
+        
+        ## add options
+        cmd_mlst += " --minid %s --mincov %s" %(minid, mincov)
+        
+        if debug:
+            cmd_mlst += " --debug"    
+        
+        ## add output
+        cmd_mlst += " --csv --json " + out_json
+        
+        cmd_mlst1 = cmd_mlst
+        
+        if mlst_profile:
+            cmd_mlst += " --legacy --scheme %s  --minscore %s" %(mlst_profile, minscore)    
+        else:
+            ## mlst2use is not available or it was not determined
+            pass
+        
+        ## add input assemble
+        ## add output
+        cmd_mlst += ' %s > %s 2> %s' %(assembly_file, out_csv, out_err)
+        
+        if debug:
+            HCGB_aes.debug_message("call:", color='yellow')
+            print(cmd_mlst)
+        
+        code = HCGB_sys.system_call(cmd_mlst)
+        if (code == 'OK'):
+            ## success stamps
+            HCGB_time.print_time_stamp(filename_stamp)
+            return True
+        else:
+            ## Sometime the scheme name provided is not 100% correct and creates error: mtuberculosis -> mtuberculosis_2
+            ## re-run in auto scheme lineage selection
+            cmd_mlst1 += ' %s > %s 2> %s' %(assembly_file, out_csv, out_err)
+            code = HCGB_sys.system_call(cmd_mlst1)
+            if (code == 'OK'):
+                ## success stamps
+                HCGB_time.print_time_stamp(filename_stamp)
+                return True
+            else:
+                return False
+    
+    
+    
+    
+    
+    
+    

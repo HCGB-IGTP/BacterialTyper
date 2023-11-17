@@ -85,7 +85,7 @@ def module_call(sequence_fasta, kingdom, genus, path, name, threads):
     """
     
     ## check if previously assembled and succeeded
-    filename_stamp = os.path.join('.success')
+    filename_stamp = os.path.join(path, '.success')
 
     if os.path.isdir(path):
         if os.path.isfile(filename_stamp):

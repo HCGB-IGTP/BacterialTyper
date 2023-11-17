@@ -396,8 +396,8 @@ initial_group_ident.add_argument("--include_all", action="store_true", help="Inc
 
 dataset_search_ident = subparser_ident.add_argument_group("Search option")
 dataset_search_ident = dataset_search_ident.add_mutually_exclusive_group(required= not any(elem in help_options for elem in sys.argv))
-dataset_search_ident.add_argument("--use_kraken2", action="store_true", help="Use kraken2 to identify species", default=True)
-dataset_search_ident.add_argument("--kma_ident", action="store_true", help="Set this flag to use KMA to identify samples from scratch")
+dataset_search_ident.add_argument("--kraken2", action="store_true", help="Use kraken2 to identify species")
+dataset_search_ident.add_argument("--kma", action="store_true", help="Set this flag to use KMA to identify samples from scratch")
 dataset_search_ident.add_argument("--other_MLST_profile", help="Provide a name for the MLST profile to use. See options available using --help_MLST.")
 dataset_search_ident.add_argument("--species2use", help="Skip identification and provide the name of the species to use MLST profile")
 
@@ -422,6 +422,10 @@ kraken_param_group.add_argument("--kraken2_level", help="Bracken parameter (-l S
 kraken_param_group.add_argument("--kraken2_read_count", help="Bracken parameter (-t 0): Number of reads required propr to abundance estimation", default=50)
 kraken_param_group.add_argument("--others_kraken2", help="Other kraken2 or bracken parameters to include in the call")
 
+MLST_param_group = subparser_ident.add_argument_group("MLST Parameters Configuration")
+MLST_param_group.add_argument("--minid", type=int, help="DNA % identitity of allelle to consider similar", default=95)
+MLST_param_group.add_argument("--mincov", type=int, help="DNA % coverage to report partial allelle at all", default=10)
+MLST_param_group.add_argument("--minscore", type=int, help="Minimum score out of 100 to match scheme when no mlst previously assessed", default=50)
 
 exclusive_group_name_ident2 = subparser_ident.add_argument_group("Exclusive")
 exclusive_group2 = exclusive_group_name_ident2.add_mutually_exclusive_group()

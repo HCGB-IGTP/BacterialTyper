@@ -110,6 +110,10 @@ def run_assembly(options):
     ## abspath for database
     options.database = os.path.abspath(options.database) 
     
+    ## print options
+    if (Debug):
+        HCGB_aes.print_argparse_dict(options)
+        
     ## get files
     pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, 
                                                         "trim", ['_trim'], 

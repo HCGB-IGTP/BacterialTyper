@@ -68,6 +68,10 @@ def run_report(options):
     else:
         options.pair = True
 
+    ## print options
+    if (Debug):
+        HCGB_aes.print_argparse_dict(options)
+
     ## message header
     HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
     HCGB_aes.boxymcboxface("Report generation module")
@@ -99,7 +103,7 @@ def run_report(options):
     
     ## get files: trimm, assembly, annotation
     pd_samples_retrieved = database_user.get_userData_files(options, input_dir)
-    pd_samples_retrieved['new_name'] = pd_samples_retrieved['name']
+    #pd_samples_retrieved['new_name'] = pd_samples_retrieved['name']
     
     ## get info: profile, ident, cluster, MGE
     pd_samples_info = database_user.get_userData_info(options, input_dir)
@@ -278,8 +282,8 @@ def run_report(options):
         samples_info[name] = grouped['sample'].to_list()
 
     ## 
-    samples_info2 = {'example':'test'}
-    print(pd_samples_info)
+    #samples_info2 = {'example':'test'}
+    #print(pd_samples_info)
     
     ## dump information and parameters
     info_dir = HCGB_files.create_subfolder("info", outdir)
@@ -313,10 +317,18 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
     ## get European Quality Control genes
     ########################################
     Staphylococcus_path = os.path.abspath( os.path.join( os.path.realpath(__file__), '..', '..', 'report', 'Staphylococcus'))
-    EQC_genes = os.path.join(Staphylococcus_path, "EQC_genes.csv")
+    
     arcA_gene = os.path.join(Staphylococcus_path, "arcA.fasta")
     
+    ## TODO: Maybe set an option to include ARIBA or AMRfinder
+    ## ARIBA
+    EQC_genes = os.path.join(Staphylococcus_path, "EQC_genes.csv")
+    
+    ## AMRFinder
+    EQC_genes = os.path.join(Staphylococcus_path, "EQC_genes_amrfinder.csv")
     EQC_genes_df = HCGB_main.get_data(EQC_genes, ',', '')
+    
+    
     ## Gene,ID,Source
     ## mecA,ARO:3000617,CARD
     ## mecC,ARO:3001209,CARD
@@ -340,19 +352,21 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
     ## get gene info by unique ID
     ####################
     ## get gene names
-    gene_IDs = EQC_genes_df['ID'].to_list()
+    #gene_IDs = EQC_genes_df['ID'].to_list()
+    gene_IDs = EQC_genes_df['Gene'].to_list()
     
     results_Profiles_ids = pd.DataFrame()
     
     ## dataframe is NOT empty
-    if samples_info.shape[0] != 0:
+    if not samples_info.empty:
         
         HCGB_aes.print_sepLine('+', 35, 'yellow')
         print("Retrieve genes profiles")
         HCGB_aes.print_sepLine('+', 35, 'yellow')
         
         ## get profiles
-        results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'ID')
+        #results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'ID') ## ARIBA
+        results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'Gene symbol') ## AMRFinder
         if options.debug:
             HCGB_aes.debug_message("results_Profiles_ids", 'yellow')
             print (results_Profiles_ids)
@@ -369,13 +383,13 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
             print (gene_names)
         
         ## dataframe is NOT empty
-        if samples_info.shape[0] != 0:
+        if not samples_info.empty:
             ## outdir_dict
-            results_Profiles_names = retrieve_genes.get_genes_profile(samples_info, gene_names, options.debug, 'name')
+            #results_Profiles_names = retrieve_genes.get_genes_profile(samples_info, gene_names, options.debug, 'name')
+            results_Profiles_names = retrieve_genes.get_genes_profile(samples_info, gene_names, options.debug, 'Gene symbol')
             if options.debug:
-                print ("results_Profiles")
-                print (results_Profiles)
-            
+                print ("results_Profiles_names")
+                print (results_Profiles_names)
             
     #################################
     ## get blast sequence         ###
@@ -435,27 +449,25 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
     print()
     ## open excel writer
     name_excel = os.path.join(folder, 'Saureus_report.xlsx')
-    writer = pd.ExcelWriter(name_excel, engine='xlsxwriter')
     
-    # results_Profiles ids
-    if results_Profiles_ids.shape[0] > 0:
-        results_Profiles_ids.to_excel(writer, sheet_name="gene_ids")
+    ### 
+    with pd.ExcelWriter(name_excel, engine="xlsxwriter", engine_kwargs={"options": {"nan_inf_to_errors": True}}) as writer:
+        # results_Profiles ids
+        if results_Profiles_ids.shape[0] > 0:
+            results_Profiles_ids.to_excel(writer, sheet_name="gene_ids")
+        
+        if options.genes_ids_profile:
+            # results_Profiles names
+            results_Profiles_names.to_excel(writer, sheet_name="gene_names")
 
-    if options.genes_ids_profile:
-        # results_Profiles names
-        results_Profiles_names.to_excel(writer, sheet_name="gene_names")
-
-    # results_spaType
-    results_spaType.to_excel(writer, sheet_name="spaTyper")
-
-    # agr_results
-    agr_results.to_excel(writer, sheet_name="agr typing")
-
-    # sccmec_results
-    sccmec_results.to_excel(writer, sheet_name="sccmec")
-
-    ## close
-    writer.save()
+        # results_spaType
+        results_spaType.to_excel(writer, sheet_name="spaTyper")
     
+        # agr_results
+        agr_results.to_excel(writer, sheet_name="agr typing")
+    
+        # sccmec_results
+        sccmec_results.to_excel(writer, sheet_name="sccmec")
+
     return(info_Saures)
 

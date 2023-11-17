@@ -10,10 +10,9 @@ Creates agr typing
 import os
 import sys
 from sys import argv
-from io import open
 from termcolor import colored
 import pandas as pd
-from Bio import SeqIO
+import shutil
 
 ## import my modules
 from BacterialTyper.config import set_config
@@ -116,16 +115,16 @@ def get_results_agrvate(assembly_file, folder, sample, debug=False):
         print("+ Results folder generated OK")
         print("+ Check results generated:")
         
+        ## maybe it is previously generated with an error, remove and re-run
+        if (os.path.isdir(results_folder)):
+            shutil.rmtree(results_folder)
+        
         ## rename folder
         os.rename(original_results_folder, results_folder)
         os.rename(os.path.join(folder, assembly_file_name + '.fna-error-report.tab'), os.path.join(results_folder, 'error_report.tab'))
     
     ## get results
     if (os.path.isdir(results_folder)):
-        ## write to excel1
-        file_name_Excel = os.path.join(folder, sample + '_agr_results.xlsx')
-        writer_Excel = pd.ExcelWriter(file_name_Excel, engine='xlsxwriter') ## open excel handle
-    
         ## get all files
         list_files = HCGB_main.get_fullpath_list(results_folder)
     
@@ -154,12 +153,9 @@ def get_results_agrvate(assembly_file, folder, sample, debug=False):
         del summary_tab['#filename']
         results = summary_tab.copy()
 
-        ## save summary_tab into excel
-        ## tab summary
-        summary_tab.to_excel(writer_Excel, sheet_name='summary') ## write excel handle
-
         ## agr_gp tab
         agr_gp_tab_file = [s for s in list_files if s.endswith("agr_gp.tab")][0]
+        agr_gp_tab = pd.DataFrame()
         if HCGB_files.is_non_zero_file(agr_gp_tab_file):
             agr_gp_tab =  HCGB_main.get_data(agr_gp_tab_file, '\t', options='header=None')
             agr_gp_tab.columns = ['contig', 'agr', 'evalue', 'identity', 'start', 'end']
@@ -179,10 +175,6 @@ def get_results_agrvate(assembly_file, folder, sample, debug=False):
                 print(agr_gp_tab_file)
                 print(agr_gp_tab)
             
-            ## save agr_gp_tab file into excel
-            ## tab operon
-            agr_gp_tab.to_excel(writer_Excel, sheet_name='operon') ## write excel handle
-
         ## agr_operon fna
         try:
             agr_operon_fna_file = [s for s in list_files if s.endswith("agr_operon.fna")][0]
@@ -206,24 +198,39 @@ def get_results_agrvate(assembly_file, folder, sample, debug=False):
             print(error_report_file)
             print(error_report)
             
-        ## save error_report file into excel
-        ## tab steps
-        error_report.to_excel(writer_Excel, sheet_name='steps') ## write excel handle
-        
         ## merge results
         results = pd.concat([results, error_report], axis=1)
 
+        ## write to excel1
+        file_name_Excel = os.path.join(folder, sample + '_agr_results.xlsx')
+        with pd.ExcelWriter(file_name_Excel, engine="xlsxwriter", engine_kwargs={"options": {"nan_inf_to_errors": True}}) as writer_Excel:
+
+            ## save summary_tab into excel
+            ## tab summary
+            summary_tab.to_excel(writer_Excel, sheet_name='summary') ## write excel handle
+
+            ## save agr_gp_tab file into excel
+            if not agr_gp_tab.empty:
+                ## tab operon
+                agr_gp_tab.to_excel(writer_Excel, sheet_name='operon') ## write excel handle
+
+            ## save error_report file into excel
+            ## tab steps
+            error_report.to_excel(writer_Excel, sheet_name='steps') ## write excel handle
+            
         ## close xlsx file
-        writer_Excel.save() ## close excel handle
     
+
         ## add to pandas dataframe
         results['agr_operon_xlsx'] = file_name_Excel
+
 
     ## debug messages
     if debug:
         HCGB_aes.debug_message("agrvate results", 'yellow')
         HCGB_main.print_all_pandaDF(results)
-        
+            
+ 
     return (results)
 
 ##############

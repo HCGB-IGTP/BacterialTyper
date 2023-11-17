@@ -100,6 +100,10 @@ def run_prep(options):
     else:
         final_dir = outdir
     
+    ## print options
+    if (options.Debug):
+        HCGB_aes.print_argparse_dict(options)
+    
     ## get files
     pd_samples_retrieved = sampleParser.files.get_files(options, 
                                                      input_dir, "fastq", 
@@ -200,6 +204,11 @@ def run_prep(options):
     else:
         pd_samples_retrieved['new_file'] = pd_samples_retrieved['file']
 
+
+    ## rename columns: name -> original; new_name -> name
+    pd_samples_retrieved = pd_samples_retrieved.rename(columns={'name': 'original_name', 
+                                                                'new_name' : 'name'})
+
     ## create outdir for each sample
     outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "raw", options.debug)    
         
@@ -246,8 +255,8 @@ def run_prep(options):
         if (options.copy):
             ## TODO: Fix this chunk of code
             ## TODO: debug & set threads to copy faster
-            shutil.copy(row['sample'], os.path.join(outdir_dict[row['new_name']], row['new_file'] ))            
-            string = row['sample'] + '\t' + os.path.join(outdir_dict[row['new_name']], row['new_file']) + '\n'
+            shutil.copy(row['sample'], os.path.join(outdir_dict[row['name']], row['new_file'] ))            
+            string = row['sample'] + '\t' + os.path.join(outdir_dict[row['name']], row['new_file']) + '\n'
             copy_details_hd.write(string)            
         else:
             list_reads.append(row['new_file'])
@@ -255,7 +264,7 @@ def run_prep(options):
             if options.project:
                 
                 HCGB_files.get_symbolic_link_file(row['sample'], 
-                                                 os.path.join(outdir_dict[row['new_name']], row['new_file']))
+                                                 os.path.join(outdir_dict[row['name']], row['new_file']))
 
     if (options.copy):
         print ("+ Sample files have been copied...")
@@ -270,7 +279,7 @@ def run_prep(options):
 
     ## samples information dictionary
     samples_info = {}
-    samples_frame = pd_samples_retrieved.groupby('new_name')
+    samples_frame = pd_samples_retrieved.groupby('name')
     for name, grouped in samples_frame:
         samples_info[name] = grouped['sample'].to_list()
     

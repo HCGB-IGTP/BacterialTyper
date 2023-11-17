@@ -13,6 +13,7 @@ import os
 import concurrent.futures
 from termcolor import colored
 import pandas as pd
+import pprint
 
 ## import my modules
 from BacterialTyper.scripts import KMA_caller
@@ -38,6 +39,12 @@ def run_ident(options):
     """
     Main function acting as an entry point to the module *ident*.
     
+    This function generates an species typification for each sample retrieved using some of the following options
+    1. Kmer alignment (KMA) or kraken2 software.
+    2. MLST profiles based on species identification or user provided input.
+    
+    Additionally, it can also search against pre-defined databases by KMA or user-defined databases.
+
     Arguments:
     
     
@@ -64,6 +71,7 @@ def run_ident(options):
     global Debug
     if (options.debug):
         Debug = True
+        
     else:
         Debug = False
         
@@ -97,6 +105,10 @@ def run_ident(options):
         outdir = input_dir
         Project=True
 
+    ## print options
+    if (Debug):
+        HCGB_aes.print_argparse_dict(options)
+
     ## get files: trimmed, assembly, annot
     pd_samples_retrieved = database_user.get_userData_files(options, input_dir)
     
@@ -118,7 +130,18 @@ def run_ident(options):
     print ("(1) Kmer alignment (KMA) or kraken2 software.")    
     print ("(2) Pre-defined databases by KMA or user-defined databases.")
     print ("(3) MLST profiles based on species identification or user provided input.")
-        
+    
+    ## default kraken database
+    if options.kraken2:
+        print("Kraken2 databases:")
+        if options.kraken_dbs:
+            print("+ Using database provided:")
+            print(options.kraken_dbs)
+        else:
+            print("+ Using default database: PlusPFP-8 Gb")
+            options.kraken_dbs = 'pluspfp_8'
+
+    
     ## get databases to check
     retrieve_databases = get_options_db(options)
     
@@ -131,7 +154,7 @@ def run_ident(options):
         HCGB_main.print_all_pandaDF(retrieve_databases)
     
     ## init
-    dataFrame_edirect = pd.DataFrame()
+    dataFrame_MLST = pd.DataFrame()
     
     print ("+ Generate an species typification for each sample retrieved using:")
 
@@ -146,7 +169,7 @@ def run_ident(options):
         mlst_profile_dict = MLST_caller.get_MLST_profiles()
        
         #name, genus, species,
-        dataFrame_edirect = pd.DataFrame(columns=("sample", "genus", "species", "mlst"))
+        dataFrame_MLST = pd.DataFrame(columns=("sample", "genus", "species", "mlst"))
         
         if options.species2use:
             
@@ -169,7 +192,7 @@ def run_ident(options):
             # Group dataframe sample name
             sample_results = pd_samples_retrieved.groupby(["new_name"])
             for name, grouped in sample_results:
-                dataFrame_edirect.loc[len(dataFrame_edirect)] = (name[0], species2use[0], species2use[1], mlst2use)
+                dataFrame_MLST.loc[len(dataFrame_MLST)] = (name[0], species2use[0], species2use[1], mlst2use)
             ##########################################################################
     
         ###########################################################################
@@ -196,17 +219,17 @@ def run_ident(options):
             sample_results = pd_samples_retrieved.groupby(["new_name"])
             species2use_list = mlst_profile_dict[MLST_profile2use].split(" ")
             for name, grouped in sample_results:
-                dataFrame_edirect.loc[len(dataFrame_edirect)] = (name[0], species2use_list[0], species2use_list[1], MLST_profile2use)
+                dataFrame_MLST.loc[len(dataFrame_MLST)] = (name[0], species2use_list[0], species2use_list[1], MLST_profile2use)
             ###########################################################################
     
     
         if Debug:
             HCGB_aes.debug_message("dataFrame_edirect for MLST call")
-            HCGB_main.print_all_pandaDF(dataFrame_edirect)
+            HCGB_main.print_all_pandaDF(dataFrame_MLST)
 
     ###########################################################################
     ## Determine species using kraken2
-    elif options.use_kraken2: 
+    elif options.kraken2: 
     ###########################################################################
 
         ## Flag to identify from scratch using kraken2
@@ -223,12 +246,21 @@ def run_ident(options):
             HCGB_aes.debug_message("dataFrame_kraken")
             HCGB_main.print_all_pandaDF(dataFrame_kraken)
             
-        ## create input edirect df & MLST
-        input_edirect = dataFrame_kraken
+            
+        ## For later MLST
+        dataFrame_MLST = dataFrame_kraken
+            
+    ###########################################################################
+    elif options.kma:
+    ###########################################################################
+        
+        HCGB_aes.raise_and_exit("KMA identification process is not enabled due to unexpected errors. Further debugging required!")
+        exit()
     
-    ###########################################################################
-    elif options.kma_ident:
-    ###########################################################################
+        ## ATTENTION: This option was producing errors, it might need debugging
+        ## KMA is not working so far, no valid output results are generated and continuos memory crash errors are produced...
+        ## just skip the process
+    
         ## Flag to identify from scratch using KMA
         ## using other databases, user provided sequences or input genbank entries
     
@@ -244,9 +276,6 @@ def run_ident(options):
             HCGB_aes.debug_message("dataFrame_kma")
             HCGB_main.print_all_pandaDF(dataFrame_kma)
             
-        ## create input edicrect df
-        #input_edirect = dataFrame_kma.copy()
-
         ###########################################################################
         ## exit if viral search
         skip=False
@@ -261,13 +290,14 @@ def run_ident(options):
                 ## what if only plasmids?
         ###########################################################################
         
+        ## create input edicrect df
         ## Call edirect to retrieve selected bacteria identified
         ## do edirect and MLST if bacteria
         if (not skip):        
             dataFrame_edirect = pd.DataFrame()
             
             ######## EDirect identification
-            dataFrame_edirect = edirect_ident(input_edirect, outdir_dict, Debug)
+            dataFrame_MLST = edirect_ident(dataFrame_kma, outdir_dict, Debug)
             
             ## functions.timestamp
             start_time_partial = HCGB_time.timestamp(start_time_partial)
@@ -283,7 +313,7 @@ def run_ident(options):
     ###########################################################################
     # MLST identification
     ###########################################################################
-    MLST_results = MLST_ident(options, pd_samples_retrieved, dataFrame_edirect, outdir_dict, retrieve_databases)
+    MLST_results = MLST_ident(options, pd_samples_retrieved, dataFrame_MLST, outdir_dict, start_time_partial)
 
     ## functions.timestamp
     start_time_partial = HCGB_time.timestamp(start_time_partial)
@@ -303,7 +333,6 @@ def run_ident(options):
     #####################################
     ## Summary identification results  ##
     #####################################
-
     ## parse results
     if options.project:
         final_dir = os.path.join(outdir, 'report', 'ident')
@@ -316,80 +345,112 @@ def run_ident(options):
     print ('+ Print summary results in folder: ', final_dir)
     print ('+ Print sample results in folder: ', excel_folder)
     
-    # Group dataframe results summary by sample name
-    sample_results_summary = dataFrame_kma.groupby(["Sample"])
-
+    # Merge dataframe results summary by sample name
+    sample_results_summary = pd.merge(MLST_results, dataFrame_MLST, on="new_name")
+    
     ## debug message
     if (Debug):
         print (colored("**DEBUG: sample_results_summary **", 'yellow'))
-        print (sample_results_summary)
-
-    ##
+        HCGB_main.print_all_pandaDF(sample_results_summary)
+    
+    ## init some variables
+    bracken_results = pd.DataFrame()
     results_summary_KMA = pd.DataFrame()
-    MLST_all = pd.DataFrame()
-    for name, grouped in sample_results_summary:
-        
-        ## create a excel and txt for sample
-        name_sample_excel = excel_folder + '/' + name + '_ident.xlsx'
-        name_sample_csv = outdir_dict[name] + '/ident_summary.csv' ## check in detached mode
 
-        writer_sample = pd.ExcelWriter(name_sample_excel, engine='xlsxwriter') ## open excel handle
-        
-        ## subset dataframe    & print result
-        results_summary_toPrint_sample = grouped[['Sample','#Template',
+    ###########################################################################
+    ## Loop for each sample and save results in ident/samples folder generated
+    ###########################################################################    
+    for index, grouped in sample_results_summary.iterrows():
+    ###########################################################################
+    
+        name = grouped['name']
+    
+        ## create a excel and txt for sample
+        name_sample_excel = os.path.join(excel_folder,  name + '_ident.xlsx')
+        name_sample_csv = os.path.join(outdir_dict[name], 'ident_summary.csv') ## check in detached mode
+
+        ## A summary for all samples
+        with pd.ExcelWriter(name_sample_excel, engine="xlsxwriter", engine_kwargs={"options": {"nan_inf_to_errors": True}}) as writer_sample:
+
+            ###########################################################################
+            if options.kma:
+            ###########################################################################
+                
+                ## subset dataframe    & print result
+                results_summary_toPrint_sample = grouped[['Sample','#Template',
+                                                        'Query_Coverage','Template_Coverage',
+                                                        'Depth', 'Database']] 
+                results_summary_toPrint_sample.to_excel(writer_sample, sheet_name="KMA") ## write excel handle
+                results_summary_toPrint_sample.to_csv(name_sample_csv) ## write csv for sample
+                
+            ###########################################################################
+            elif options.kraken2:
+            ###########################################################################
+                
+                bracken_df = pd.read_csv(grouped['sample'], sep="\t")
+                bracken_df['sample'] = grouped['name']
+                bracken_results = pd.concat([bracken_results, bracken_df])
+    
+                ## print kraken2/bracken results in xlsx format
+                bracken_df.to_excel(writer_sample, sheet_name="Kraken2") ## write excel handle
+                ## kraken already saves species name in .species file                
+                
+                
+            ## read MLST
+            if not MLST_results.empty:
+                results_summary_MLST = grouped[['new_name','species_id', 'scheme', 'alleles']] 
+                results_summary_MLST.to_excel(writer_sample, sheet_name="MLST") ## write excel handle
+    
+    
+    ###########################################################################
+    ## A summary for all samples
+    ###########################################################################
+    name_excel = os.path.join(final_dir, 'identification_summary.xlsx')
+    print ('+ Summary information in excel file: ', name_excel)
+    with pd.ExcelWriter(name_excel, engine="xlsxwriter", engine_kwargs={"options": {"nan_inf_to_errors": True}}) as writer:
+        ## write MLST
+        if not MLST_results.empty:
+            MLST_results.to_excel(writer, sheet_name='MLST')
+    
+        ## kma results
+        if options.kma:            
+            ## KMA dataframe: print result for sources
+            results_summary_KMA = dataFrame_MLST[['Sample','#Template',
                                                 'Query_Coverage','Template_Coverage',
                                                 'Depth', 'Database']] 
-        results_summary_toPrint_sample.to_excel(writer_sample, sheet_name="KMA") ## write excel handle
-        results_summary_toPrint_sample.to_csv(name_sample_csv) ## write csv for sample
+            
+            ## Sum plasmid and chromosome statistics ##
+            ## sum coverage
+            total_coverage = results_summary_KMA.groupby('Sample')['Query_Coverage'].sum().reset_index()
+            
+            ## debug message
+            if (Debug):
+                print ("*** Sum: Query_coverage ***")        
+                print (total_coverage)
+            
+            ## TODO: Fix this chunk of code
+            ## TODO: FIX SUMMARY REPORT
+            results_summary_KMA = results_summary_KMA.set_index('Sample')
+            results_summary_KMA = results_summary_KMA.sort_values(by=['Sample', 'Database', 'Query_Coverage'],ascending=[True, True,True])
+            results_summary_KMA.to_excel(writer, sheet_name='KMA') ## write excel handle
         
-        ## read MLST
-        if MLST_results:
-            if name in MLST_results:
-                sample_MLST = pd.read_csv(MLST_results[name], header=0, sep=',')
-                sample_MLST['genus'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'genus'].values[0]
-                sample_MLST['species'] = dataFrame_edirect.loc[dataFrame_edirect['sample'] == name, 'species'].values[0]
-                sample_MLST.to_excel(writer_sample, sheet_name="MLST") ## write excel handle
+            if (Debug):
+                print (colored("**DEBUG: results_summary_KMA **", 'yellow'))
+                HCGB_main.print_all_pandaDF(results_summary_KMA)
+
+        ###
+        elif options.kraken2:
             
-                ## Return information to excel
-                MLST_all = pd.concat([MLST_all, sample_MLST]) 
+            ## read ecah bracken file and create merge dataframe
+            print()
+            bracken_results.to_excel(writer, sheet_name='Kraken2')
             
-        ## close excel handle
-        writer_sample.save()         
+            
+        else:
+            ## user provided species or mlst profile
+            print()
+            dataFrame_MLST.to_excel(writer, sheet_name='KMA') ## write excel handle
 
-    ##
-    name_excel = final_dir + '/identification_summary.xlsx'
-    print ('+ Summary information in excel file: ', name_excel)
-    writer = pd.ExcelWriter(name_excel, engine='xlsxwriter') ## open excel handle
-
-    ## KMA dataframe: print result for sources
-    results_summary_KMA = dataFrame_kma[['Sample','#Template',
-                                        'Query_Coverage','Template_Coverage',
-                                        'Depth', 'Database']] 
-    
-    ## Sum plasmid and chromosome statistics ##
-    ## sum coverage
-    total_coverage = results_summary_KMA.groupby('Sample')['Query_Coverage'].sum().reset_index()
-    
-    ## debug message
-    if (Debug):
-        print ("*** Sum: Query_coverage ***")        
-        print (total_coverage)
-    
-    ## TODO: Fix this chunk of code
-    ## TODO: FIX SUMMARY REPORT
-    results_summary_KMA = results_summary_KMA.set_index('Sample')
-    results_summary_KMA = results_summary_KMA.sort_values(by=['Sample', 'Database', 'Query_Coverage'],ascending=[True, True,True])
-    results_summary_KMA.to_excel(writer, sheet_name='KMA') ## write excel handle
-    
-    ## write MLST
-    if (MLST_results):
-        MLST_all.to_excel(writer, sheet_name='MLST')
-    
-    ## write excel and close
-    writer.save() ## close excel handle
-
-    print ("\n+ Check summary of results in file generated" )
-    
     ### timestamp
     start_time_partial = HCGB_time.timestamp(start_time_partial)
     
@@ -431,7 +492,11 @@ def run_ident(options):
     print("+ Dumping information and parameters")
     runInfo = { "module":"ident", "time":HCGB_time.timestamp(time.time()),
                 "BacterialTyper version":pipeline_version }
+
     HCGB_info.dump_info_run(info_dir, 'ident', options, runInfo, options.debug)
+    
+    ## dump conda details
+    HCGB_info.dump_info_conda(info_dir, "ident", options.debug)
 
     print ("+ Exiting identification module.")
     return()
@@ -533,15 +598,23 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
     ## send for each sample
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
         for db2use in databases2use:
+            try:
+                print ("+ Removing database from memory...")
+                return_code_rm = KMA_caller.remove_db(kma_bin, db2use)
+            except:
+                pass
+            
             
             ## load database on memory
             print ("+ Loading database on memory for faster identification.")
             return_code_load = KMA_caller.load_db(kma_bin, db2use)
+            
+            print ("+ Sending jobs for species identification.")
             ## send for each sample
             commandsSent = { executor.submit(send_kma_job, 
-                                            outdir_dict[name], 
-                                            sorted(cluster["sample"].tolist()), 
-                                            name, db2use, threads_job, Debug): name for name, cluster in sample_frame }
+                                            outdir_dict[name[0]], 
+                                            sorted(cluster[ cluster['ext']=='fastq']["sample"].tolist()), 
+                                            name[0], db2use, threads_job, Debug): name[0] for name, cluster in sample_frame }
 
             for cmd2 in concurrent.futures.as_completed(commandsSent):
                 details = commandsSent[cmd2]
@@ -568,10 +641,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
     print ("+ Parse results now")
     results_summary = pd.DataFrame()
     
-    ### ATTENTION:
-    ## KMA is not working so far, no valid output results are generated and continuos memory crash errors are produced...
-    ## just skip the process
-    return results_summary
+    #return results_summary
     
     for db2use in databases2use:
         ### [TODO]: parse data according to database: bacteria, plasmids or user data or genbank data provided
@@ -716,7 +786,7 @@ def send_kma_job(outdir_file, list_files, name, database, threads, Debug):
         option = option + '-shm 1'
     
         # Call KMA
-        species_identification_KMA.kma_ident_call(outfile, list_files, name, database, kma_bin, option, threads)
+        KMA_caller.kma_ident_call(outfile, list_files, name, database, kma_bin, option, threads)
         stamp =    HCGB_time.print_time_stamp(filename_stamp)
 
 ####################################
@@ -908,7 +978,7 @@ def edirect_ident(dataFrame, outdir_dict, Debug):
     return (edirect_frame)
 
 ####################################
-def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_databases):
+def MLST_ident(options, dataFrame, dataFrame_species, outdir_dict, time_partial):
     """
     
     conda_env/db/pubmlst
@@ -933,40 +1003,91 @@ def MLST_ident(options, dataFrame, outdir_dict, dataFrame_edirect, retrieve_data
     None.
 
     """
-    print()
-
-
-    ## debug message
-    if (Debug):
-        HCGB_aes.debug_message("dataFrame_edirect identified")
-        print (dataFrame_edirect)
     
     ## MLST call    
     HCGB_aes.boxymcboxface("MLST typing")
     print ("+ Create classical MLST typification of each sample according to species retrieved by kmer...")
     
     ## get assembly files
-    input_dir = os.path.abspath(options.input)
-    assembly_samples_retrieved = sampleParser.files.get_files(options, input_dir, "assembly", ["fna"], options.debug)
+    subset_Df = dataFrame[ dataFrame['tag'] == 'assembly']
     
-    ## debug message
-    if (Debug):
-        HCGB_aes.debug_message("assembly_samples_retrieved")
-        print (assembly_samples_retrieved)    
-    
-    # init
-    MLST_results = {}
-        
     ## get MLST_profile: default or provided
     mlst_profile_dict = MLST_caller.get_MLST_profiles()
     
+    ## debug message
     if (Debug):
-        HCGB_aes.debug_message("mlst_profile_list")
-        print (mlst_profile_list)
+        HCGB_aes.debug_message("dataFrame_species identified")
+        print (dataFrame_species)
     
-        HCGB_aes.debug_message("dataFrame_edirect")
-        print (dataFrame_edirect)
+        HCGB_aes.debug_message("subset_Df")
+        print (subset_Df)    
+    
+        HCGB_aes.debug_message("mlst_profile_dict")
+        pprint.pprint(mlst_profile_dict)    
 
+
+    ## Start identification of samples
+    print ("\n+ Send MLST identification jobs...")
+    
+    ## optimize threads
+    name_list = set(subset_Df["name"].tolist())
+    threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
+    max_workers_int = int(options.threads/threads_job)
+    
+    ## debug message
+    if (Debug):
+        print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
+        print (colored("**DEBUG: max_workers " +  str(max_workers_int) + " **", 'yellow'))
+        print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
+    
+    
+    ## send for each sample
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
+         ## send for each sample
+         commandsSent = { executor.submit(MLST_caller.MLST_call,
+                                          outfolder = outdir_dict[row['new_name']],  ## outfolder
+                                          assembly_file = row['sample'],             ## assembly file
+                                          mlst_profile = dataFrame_species.loc[ dataFrame_species['name'] == row['new_name'], 'mlst'].item(), 
+                                          sample_name = row['new_name'],
+                                          minid=options.minid, 
+                                          mincov=options.mincov, 
+                                          minscore=options.minscore, 
+                                          debug=Debug): index for index, row in subset_Df.iterrows() }
+    
+         for cmd2 in concurrent.futures.as_completed(commandsSent):
+             details = commandsSent[cmd2]
+             try:
+                 data = cmd2.result()
+             except Exception as exc:
+                 print ('***ERROR:')
+                 print (cmd2)
+                 print(details)
+                 print('%r generated an exception: %s' % (details, exc))
+    
+         ## functions.timestamp
+         time_partial = HCGB_time.timestamp(time_partial)
+
+
+    ## parse results and return
+    print("+ Parse MLST results now...")
+    MLST_results = pd.DataFrame()
+    for sample_id in outdir_dict:
+        print("\t+ Parsing: " + sample_id)
+        
+        json_file = os.path.join(outdir_dict[sample_id], 'MLST/MLST_res.json')
+        sample_dict = HCGB_main.read_json_file(json_file, debug=Debug)
+        if Debug:
+            HCGB_aes.debug_message("Sample dictionary from json file:")
+            print("JSON file: " + json_file)
+            print("Information:")            
+            print(sample_dict)
+        
+        ## concat
+        MLST_results = pd.concat([MLST_results, pd.DataFrame.from_dict(sample_dict)])
+        
+    ## rename and return
+    MLST_results.rename(columns = {'id':'new_name'}, inplace=True)
+    return(MLST_results)
 
 ####################################
 def get_external_kma(kma_external_files, Debug):
@@ -990,7 +1111,7 @@ def get_external_kma(kma_external_files, Debug):
             print ()
 
             ## generate db
-            databaseKMA = species_identification_KMA.generate_db([f], file_name, fold_name, 'new', 'single', Debug, kma_bin)
+            databaseKMA = KMA_caller.generate_db([f], file_name, fold_name, 'new', 'single', Debug, kma_bin)
             if not databaseKMA:
                 print (colored("***ERROR: Database provided is not indexed.\n" %databaseKMA,'orange'))
             else:
@@ -1260,7 +1381,7 @@ def Kraken_ident(options, dataFrame_samples, outdir_dict, retrieve_databases, ti
 
     ## 
     mlst_profile_dict = MLST_caller.get_MLST_profiles()
-    pd_samples_bracken['specied_id'] = ""
+    pd_samples_bracken['species_id'] = ""
     pd_samples_bracken['mlst'] = ""
 
     print("+ Parsing kraken2/bracken results")
@@ -1276,13 +1397,15 @@ def Kraken_ident(options, dataFrame_samples, outdir_dict, retrieve_databases, ti
 
         print("\tSpecies: " + species2use)
 
-        pd_samples_bracken.loc[i, "specied_id"] = species2use
+        pd_samples_bracken.loc[i, "species_id"] = species2use
         species2use_list = species2use.split(" ")
         mlst2use = (species2use_list[0][0] + species2use_list[1]).lower()
         print("\tMLST profile: " + mlst2use)
         try:
             if mlst_profile_dict[mlst2use]:
                 print(colored("\t- Species name matches MLST available: OK", 'green'))
+                pd_samples_bracken.loc[i, "mlst"] = mlst2use
+
         except:
             print("\n")
             HCGB_aes.error_message("MLST provided is not available")

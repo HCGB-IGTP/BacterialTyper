@@ -80,6 +80,10 @@ def run_database(options):
     print ("--------- Starting Process ---------")
     HCGB_time.print_time()
     
+    ## print options
+    if (Debug):
+        HCGB_aes.print_argparse_dict(options)
+        
     ## set some vars
     kma_bin = set_config.get_exe("kma")
 

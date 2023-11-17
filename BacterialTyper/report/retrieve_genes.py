@@ -7,19 +7,12 @@
 Retrieves genes ids from profile analysis generated
 """
 ## useful imports
-import time
-import io
 import os
 import re
 import sys
-from sys import argv
-from io import open
 from termcolor import colored
 import pandas as pd
 from Bio import SeqIO
-
-## import my modules
-from BacterialTyper.config import set_config
 
 ## import my HCGB module 
 import HCGB.functions.main_functions as HCGB_main
@@ -73,14 +66,23 @@ def retrieve_genes_ids_sequences(profile, gene_ID, debug):
 def get_genes_profile(samples_info, gene_names, debug, option):
     """    
     """
+    
+    if debug:
+        HCGB_aes.debug_message('gene_names: ', 'yellow')
+        print(gene_names)
+        HCGB_aes.debug_message('option: ' + option, 'yellow')
+        
+    
     ## search by group id or gene name
     print ('\n+ Retrieve selected genes profile for each sample.')
     results_profileIDs = pd.DataFrame()
     sample_frame = samples_info.groupby(["name"])
     for g in gene_names:
         #print ("\t+", g)
-        for name, cluster_df in sample_frame:
-            my_list_profiles = cluster_df.loc[cluster_df['tag'] == 'profile']['ext'].to_list()
+        for name_tuple, cluster_df in sample_frame:
+            name = name_tuple[0]
+            ## get list of files retrieved from profile
+            my_list_profiles = cluster_df.loc[cluster_df['tag'] == 'profile']['sample'].to_list() 
 	       
             if debug:
                 HCGB_aes.debug_message('name: ' + name, 'yellow')
@@ -94,40 +96,61 @@ def get_genes_profile(samples_info, gene_names, debug, option):
                 continue
 
             fill=False
-            for p in my_list_profiles:
-                profile_csv = cluster_df.loc[cluster_df['ext'] == p]['sample'].to_list()[0]
-                
+            for profile_csv in my_list_profiles:
+                if debug:
+                    HCGB_aes.debug_message('profile_csv: ' + profile_csv, 'yellow')
+
                 ## skip files
-                if not profile_csv.endswith('report_summary.csv'):
-                    if debug:
-                        HCGB_aes.debug_message('profile_csv: ' + profile_csv, 'yellow')
+                if profile_csv.endswith('report_summary.csv'):
+                    pass
                 
-                    value = retrieve_genes_ids_profile(profile_csv, g, debug, option)
+                elif profile_csv.endswith('norm.tsv'): ## amrfinder
                     
+                    value = retrieve_genes_ids_profile(profile_csv, g, debug, option, sep_field="\t")
+                    ## save results 
+                    if (not value.empty):
+                        for Name, Data in value.iterrows():
+                            results_profileIDs.loc[name,Name] = "Yes"
+                        fill=True
+                    break
+                
+                else: 
+                    continue
+                
+                    ## TODO: Control for ariba if necessary
+                    ## ARIBA
+                    value = retrieve_genes_ids_profile(profile_csv, g, debug, option)
                     ## save results 
                     if (not value.empty):
                         for Name, Data in value.iterrows():
                             results_profileIDs.loc[name,Name] = Data['Status']
                         fill=True
+                    break
 
             if not fill:
-                results_profileIDs.loc[name, g] = 'no'
+                results_profileIDs.loc[name, g] = 'No'
 
     return (results_profileIDs)
 
 ##############
-def retrieve_genes_ids_profile(profile, gene_ID, debug, option):
+def retrieve_genes_ids_profile(profile, gene_ID, debug, option, sep_field=","):
     """    
     """
     ## read data    
-    get_csv_data = HCGB_main.get_data(profile, ',', '')
+    get_csv_data = HCGB_main.get_data(profile, sep_field, '')
     
-    if option == 'name':
+    if option == 'name': ## ariba
         list_Genes = get_csv_data['Genes'].to_list()
         get_csv_data.index = get_csv_data['Genes']
-    elif option == 'ID':
+    
+    elif option == 'ID': ## ariba
         list_Genes = get_csv_data['ID'].to_list()
         get_csv_data.index = get_csv_data['ID']
+    
+    elif option == 'Gene symbol': ## gene symbol by amrfinderplus
+        list_Genes = get_csv_data['Gene symbol'].to_list()
+        get_csv_data.index = get_csv_data['Gene symbol']
+        
 
     
     ## debug messages
@@ -155,6 +178,7 @@ def retrieve_genes_ids_profile(profile, gene_ID, debug, option):
         return (get_csv_data.loc[filtered_genes]) 
         
     else:
+        ##
         if gene_ID in list_Genes:
             ## debug messages
             if debug:

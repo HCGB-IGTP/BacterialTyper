@@ -564,7 +564,7 @@ def kma_ident_call(out_file, files, sample_name, index_name, kma_bin, option, th
         ## success stamps
         basename_tag = os.path.basename(out_file)
         folder = os.path.dirname(out_file)
-        filename_stamp = folder + '.success_' + basename_tag
+        filename_stamp = os.path.join(folder, '.success_' + basename_tag)
         stamp =    HCGB_time.print_time_stamp(filename_stamp)
         return('OK')
     else:

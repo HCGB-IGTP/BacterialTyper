@@ -13,6 +13,7 @@ import concurrent.futures
 from termcolor import colored
 import pandas as pd
 import shutil
+from collections import Counter
 
 ## import my modules
 from BacterialTyper.scripts import virulence_resistance
@@ -22,9 +23,12 @@ from BacterialTyper.scripts import card_trick_caller
 from BacterialTyper.modules import help_info
 from BacterialTyper.scripts import database_user
 from BacterialTyper.scripts import amrfinder_caller
+from BacterialTyper.scripts import argnorm_caller
+
 
 from BacterialTyper import __version__ as pipeline_version
 
+import HCGB.sampleParser as sampleParser
 import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.main_functions as HCGB_main
@@ -33,7 +37,24 @@ import HCGB.functions.info_functions as HCGB_info
 
 ####################################
 def run_profile(options):
+    """
     
+
+    Parameters
+    ----------
+    options : TYPE
+        DESCRIPTION.
+
+    Raises
+    ------
+    SystemExit
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
+    """
     ## init time
     start_time_total = time.time()
     
@@ -66,8 +87,6 @@ def run_profile(options):
     except:
         pass
 
-
-
     ## message header
     HCGB_aes.pipeline_header("BacterialTyper", ver=pipeline_version)
     HCGB_aes.boxymcboxface("Virulence & Resistance profile module")
@@ -91,20 +110,29 @@ def run_profile(options):
         outdir = input_dir    
         Project=True
     
+    ## print options
+    if (Debug):
+        HCGB_aes.print_argparse_dict(options)
+
     ## get files: trim, assembly, annot
     pd_samples_retrieved = database_user.get_userData_files(options, input_dir)
     
     ## get info: ident, cluster, MGE
     pd_samples_info = database_user.get_userData_info(options, input_dir)
     
+    ## merge information
+    pd_samples = pd.concat([pd_samples_retrieved, pd_samples_info])
+    
     ## debug message
     if (Debug):
-        print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
-        print (pd_samples_retrieved)
+        HCGB_aes.debug_message('pd_samples_retrieve')
+        HCGB_main.print_all_pandaDF(pd_samples_retrieved)
         
-        print (colored("**DEBUG: pd_samples_info **", 'yellow'))
-        print (pd_samples_info)
+        HCGB_aes.debug_message('pd_samples_info')
+        HCGB_main.print_all_pandaDF(pd_samples_info)
         
+        HCGB_aes.debug_message('pd_samples')
+        HCGB_main.print_all_pandaDF(pd_samples)
         
     ## generate output folder, if necessary
     print ("\n+ Create output folder(s):")
@@ -113,6 +141,9 @@ def run_profile(options):
     
     ## for each sample
     outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "profile", options.debug)
+    
+    #print(outdir_dict)
+    #exit()
     
     ###
     print ("+ Generate a sample profile for virulence and resistance candidate genes for each sample retrieved using:")
@@ -123,12 +154,11 @@ def run_profile(options):
     retrieve_databases = get_options_db(options)
     
     if (Debug):
-        print (colored("**DEBUG: retrieve_databases **", 'yellow'))
-        print (retrieve_databases)
-    
+        HCGB_aes.debug_message('retrieve_databases')
+        HCGB_main.print_all_pandaDF(retrieve_databases)
+
     ## functions.timestamp
     start_time_partial = HCGB_time.timestamp(start_time_total)
-    
     
     if options.soft_profile == "ARIBA":
     
@@ -145,8 +175,8 @@ def run_profile(options):
         print()
         print ("--------- AMRfinder pipeline ---------")
         print()
-        AMRfinder_ident(options, pd_samples_retrieved, pd_samples_info, outdir_dict, retrieve_databases, start_time_partial)
-        exit()
+        AMRfinder_ident(options, pd_samples, outdir_dict, retrieve_databases, start_time_partial)
+
     else:
         print("No additional software option provided")
         exit()
@@ -277,7 +307,6 @@ def get_options_db(options):
     ####
     return (db2return)
 
-    
 ####################################
 def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, start_time_partial):
     HCGB_aes.boxymcboxface("ARIBA Identification")
@@ -483,8 +512,37 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
     print ("+ For each database upload files *phandango.csv and *phandango.tre and visualize results")
     ## print additional help?
  
+    
+####################################
+def ariba_run_caller(db2use, db_name, list_files, folder_out, threads, cutoff):
+    ## check if already is done
+    # generate a stamp when finish parsing each file
+
+    ## make stamp time
+    ## Timestamp generated within each db folder analyzed
+    ## profile/card_prepareref/.success_card_prepareref
+    filename_stamp = os.path.join(folder_out, '.success_' + db_name)
+    if os.path.isfile(filename_stamp):
+        stamp =    HCGB_time.read_time_stamp(filename_stamp)
+        files_names = [os.path.basename(s) for s in list_files]
+        print (colored("\tA previous command generated results on: %s [Files: %s]" %(stamp, files_names), 'yellow'))
+    
+    else:
+        if os.path.exists(folder_out):
+            shutil.rmtree(folder_out) ## delete folder if exists but failed before
+
+        ## call
+        code = ariba_caller.ariba_run(db2use, list_files, folder_out, threads, cutoff)
+        if code == 'FAIL':
+            print ("*** ERROR: System call failed for ", folder_out)        
+
+        ## print success timestamp
+        HCGB_time.print_time_stamp(filename_stamp)
+
+    
+ 
 ####################################    
-def AMRfinder_ident(options, samples_retrieved, sample_info, out_dict, retrieve_db, start_time_partial):
+def AMRfinder_ident(options, samples_retrieved, out_dict, retrieve_db, start_time_partial):
     """
     
 
@@ -523,13 +581,10 @@ def AMRfinder_ident(options, samples_retrieved, sample_info, out_dict, retrieve_
     if (Debug):
         print (colored("**DEBUG: databases2use\n**", 'yellow'))
         print (databases2use)
-
-
+        
     ## Get information parsed
     # merge samples_retrieved and samples_info
 
-
-        
     ######################################################
     ## Start identification of samples
     ######################################################
@@ -540,7 +595,7 @@ def AMRfinder_ident(options, samples_retrieved, sample_info, out_dict, retrieve_
 
     ## debug message
     if (Debug):
-        print (colored("**DEBUG: outdir_samples **", 'yellow'))
+        HCGB_aes.debug_message("outdir_samples")
         print (out_dict)
         
     ######################################################
@@ -563,7 +618,7 @@ def AMRfinder_ident(options, samples_retrieved, sample_info, out_dict, retrieve_
         ## send for each sample:
         ## amrfinder_caller(sample_name, protein_file, gff_file, nuc_file, threads_num, db_fold, outfile, others)
         commandsSent = { executor.submit(amr_run_caller, 
-                                         db2use[1],                         ## database path & dbname
+                                         databases2use[0][1],                         ## database path & dbname
                                          cluster,                           ## dataframe with information
                                          out_dict[name_tuple[0]],                 ## output
                                          threads_job, options,
@@ -588,6 +643,104 @@ def AMRfinder_ident(options, samples_retrieved, sample_info, out_dict, retrieve_
     ######################################################
     ## Generate final report for all samples
     ######################################################
+    input_dir = os.path.abspath(options.input)
+
+    ## parse results
+    if Project:
+        final_dir = os.path.join(input_dir, 'report/profile')
+        HCGB_files.create_folder(final_dir) 
+        
+    else:
+        final_dir = os.path.abspath(options.output_folder)
+        outdir = input_dir
+
+    ## get output
+    pd_samples_profile = sampleParser.files.get_files(options, input_dir, "profile", ["tsv"], options.debug)
+    
+    ## debug message
+    if (Debug):
+        HCGB_aes.debug_message("pd_samples_profile")
+        HCGB_main.print_all_pandaDF(pd_samples_profile)
+    
+    ## create excel files and     
+    ## a summary for all samples
+    final_sample_dir = HCGB_files.create_subfolder("samples", final_dir)
+    print("+ Save results for each sample in " + final_sample_dir)
+    pd_concat_all = pd.DataFrame()    
+    grouped_samples = pd_samples_profile.groupby(["name"])
+    
+    for index, grouped in grouped_samples:
+        name_ID = index[0]
+        prof_file = grouped['sample'].to_list()
+        for i in prof_file:
+            if i.endswith('_norm.tsv'):
+                pd_here = pd.read_csv(i, sep="\t")
+                ## save in original folder
+                pd_here.to_excel( os.path.join( out_dict[ name_ID ], name_ID + ".xlsx"))
+                
+                ## save in report folder
+                pd_here.to_excel( os.path.join( final_sample_dir, name_ID + ".xlsx"))
+                pd_concat_all = pd.concat([pd_concat_all, pd_here])
+                break
+                
+            else:
+                ## what to do if argnom did not work
+                pass 
+
+    ##
+    if Debug:
+        HCGB_aes.debug_message("pd_concat_all")
+        HCGB_main.print_all_pandaDF(pd_concat_all)
+
+    ## Get further information of ARO IDs
+    card_trick_info = card_trick_caller.prepare_card_data(options.database)
+    card_ontology = HCGB_main.get_data( os.path.join(card_trick_info, 'aro.obo.csv'), ',', 'index_col=0') 		## read card_info generated for card_trick parse
+
+    if Debug:
+        HCGB_aes.debug_message("card_ontology retrieved using card_trick_caller")
+        HCGB_main.print_all_pandaDF(card_ontology)
+
+	############################################################################
+	## use card-trick python package to get ontology for each term
+    AROS_identified = set(pd_concat_all['ARO'])
+    if 'ARO:nan' in AROS_identified:
+            AROS_identified.remove('ARO:nan')
+    ## get info
+    information_ontology = card_trick_caller.get_info_CARD(AROS_identified, 'ARO', card_ontology)
+
+    ## all samples
+    name_excel = os.path.join(final_dir, 'profile_summary.xlsx')
+    name_csv = os.path.join(final_dir, 'profile_summary.csv')
+    pd_concat_all.to_csv(name_csv)
+
+    print ('+ Summary information available in CSV and excel file: ', name_excel)
+    ## groupy results by: Virulence, AMR and STRESS gene categories
+    dict_of_pandas = {}
+    subset_df = pd_concat_all.loc[:, ['Name', 'Gene symbol', 'Scope', 'Element type'] ].copy()
+    with pd.ExcelWriter(name_excel, engine="xlsxwriter", engine_kwargs={"options": {"nan_inf_to_errors": True}}) as writer:
+        ## save information for all samples in main tab
+        pd_concat_all.to_excel(writer, sheet_name="ALL")
+        information_ontology.to_excel(writer, sheet_name='CARD_ontology') 	## CARD ontology
+
+        ## for each cateagory
+        for cat, cluster in subset_df.groupby(by="Element type"):
+            dict_of_pandas[cat] = {}
+            
+            ## create dictionary of samples and genes for each category
+            for sample, cluster_sample in cluster.groupby(by="Name"):
+                ## Populate dictionary with list of genes for each sample and category
+                dict_of_pandas[cat][sample] = cluster_sample.loc[:,'Gene symbol'].values    
+    
+            ## create matrix of pressence or abscense
+            d = dict_of_pandas[cat]
+            df_cat = pd.DataFrame({k:Counter(v) for k, v in d.items()}).T.fillna(0).astype(int)
+            #print (df_cat)
+            
+            ## save information in CSV and Excel sheet
+            name_csv_Cat = os.path.join(final_dir, cat + '_profile_summary.csv')
+            df_cat.to_csv(name_csv_Cat)
+            df_cat.to_excel(writer, sheet_name=cat)
+    
     
 ####################################
 def amr_run_caller(db_folder, df_sample, outfold, threads_num, options, name_ID, debug=False):
@@ -606,6 +759,74 @@ def amr_run_caller(db_folder, df_sample, outfold, threads_num, options, name_ID,
         if os.path.exists(outfold):
             shutil.rmtree(outfold) ## delete folder if exists but failed before
 
+
+        ## check control steps
+        if Debug:
+            print("Check if all files are previously generated for sample: " + name_ID)
+
+
+        ## Check if species previously assembled and annotated
+        
+        ## check assembly
+        try:
+            if HCGB_files.is_non_zero_file(df_sample.loc[ df_sample.ext=="fna", "sample"].item()):
+                if Debug:
+                    print("[ " + name_ID + " -- Assembly file OK ]")
+            else:
+                HCGB_aes.warning_message("Samples " + name_ID +" is not previously assembled ")
+                return('FAIL')
+        except:
+            HCGB_aes.warning_message("Samples " + name_ID +" is not previously assembled ")
+            return('FAIL')
+            
+        ## check GFF
+        try:
+            if HCGB_files.is_non_zero_file(df_sample.loc[ df_sample.ext=="gff", "sample"].item()):
+                if Debug:
+                    print("[ " + name_ID + " -- Annot GFF file OK ]")
+            else:
+                HCGB_aes.warning_message("Samples " + name_ID +" is not previously annotated ")
+                return('FAIL')
+        except:
+            HCGB_aes.warning_message("Samples " + name_ID +" is not previously annotated ")
+            return('FAIL')
+        
+        
+        ## check FAA file
+        try: 
+            if HCGB_files.is_non_zero_file(df_sample.loc[ df_sample.ext=="faa", "sample"].item()):
+                if Debug:
+                    print("[ " + name_ID + " -- Annot FAA file OK ]")
+            else:
+                HCGB_aes.warning_message("Samples " + name_ID +" is not previously annotated ")
+                return('FAIL')
+        except:
+            HCGB_aes.warning_message("Samples " + name_ID +" is not previously annotated ")
+            return('FAIL')
+
+        ## Check if species previously identified
+        ident_files = df_sample.loc[ df_sample['tag']=='ident', 'sample'].to_list()
+        species_ident_string = ""
+        for i in ident_files:
+            if i.endswith('species.csv'):
+                with open(i, 'r') as reader:
+                    ## One line containing: "species:Escherichia coli"
+                    content_file = reader.readlines()
+
+                species_ident_string = content_file[0].split(":")[1]
+                
+        
+        ## check if available from AMRFinder options
+        if species_ident_string:
+            if Debug:
+                print("Species identified for sample: " + species_ident_string)
+            
+            species_ident_string = amrfinder_caller.parse_organism_provided(org_given=species_ident_string, 
+                                                     db_folder=db_folder, Debug=debug)
+            if Debug:
+                print("species_ident_string: " + species_ident_string)
+                
+
         ## parse df_sample to get: proteins, gff, assembly and species identification
         if debug:        
             HCGB_aes.debug_message("Sample information:")
@@ -613,43 +834,23 @@ def amr_run_caller(db_folder, df_sample, outfold, threads_num, options, name_ID,
         
         ## call
         code = amrfinder_caller.amrfinder_caller(sample_name=name_ID, 
-                                                 protein_file = df_sample[ df_sample.ext=="faa"].iat[0, 4], 
-                                                 gff_file = df_sample[ df_sample.ext=="gff"].iat[0, 4], 
-                                                 nuc_file = df_sample[ df_sample.ext=="fna"].iat[0, 4], 
+                                                 protein_file = df_sample.loc[ df_sample.ext=="faa", "sample"].item(), 
+                                                 gff_file = df_sample.loc[ df_sample.ext=="gff", "sample"].item(), 
+                                                 nuc_file = df_sample.loc[ df_sample.ext=="fna", "sample"].item(), 
                                                  threads_num = threads_num, 
                                                  db_fold = db_folder, outfolder = outfold, 
                                                  others = options.AMRfinder_options,   
-                                                 species_ident = "", 
+                                                 species_ident = species_ident_string, 
                                                  Debug=debug)
+        
+        ## normalize gene names and add CARD IDs
+        argnorm_caller.call_argnorm(tsv_file= os.path.join(outfold, name_ID + ".tsv"), 
+                                    out_file = os.path.join(outfold, name_ID + "_norm.tsv"), 
+                                    softname="amrfinderplus", Debug=debug)
+                
         if code == 'FAIL':
             print ("*** ERROR: System call failed for ", name_ID)        
 
-
-####################################
-def ariba_run_caller(db2use, db_name, list_files, folder_out, threads, cutoff):
-    ## check if already is done
-    # generate a stamp when finish parsing each file
-
-    ## make stamp time
-    ## Timestamp generated within each db folder analyzed
-    ## profile/card_prepareref/.success_card_prepareref
-    filename_stamp = os.path.join(folder_out, '.success_' + db_name)
-    if os.path.isfile(filename_stamp):
-        stamp =    HCGB_time.read_time_stamp(filename_stamp)
-        files_names = [os.path.basename(s) for s in list_files]
-        print (colored("\tA previous command generated results on: %s [Files: %s]" %(stamp, files_names), 'yellow'))
-    
-    else:
-        if os.path.exists(folder_out):
-            shutil.rmtree(folder_out) ## delete folder if exists but failed before
-
-        ## call
-        code = ariba_caller.ariba_run(db2use, list_files, folder_out, threads, cutoff)
-        if code == 'FAIL':
-            print ("*** ERROR: System call failed for ", folder_out)        
-
-        ## print success timestamp
-        HCGB_time.print_time_stamp(filename_stamp)
 
 ####################################
 def get_outfile(output_dir, name, index_name):

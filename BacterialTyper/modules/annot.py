@@ -100,6 +100,11 @@ def run_annotation(options):
         options.project = True
         outdir = input_dir        
 
+
+    ## print options
+    if (Debug):
+        HCGB_aes.print_argparse_dict(options)
+        
     ### symbolic links
     print ("+ Retrieve all genomes assembled...")
 
@@ -219,7 +224,7 @@ def run_annotation(options):
     ################################################
     ## samples information dictionary
     samples_info = {}
-    samples_frame = pd_samples_retrieved.groupby('new_name')
+    samples_frame = pd_samples_retrieved.groupby('name')
     for name_tuple, grouped in samples_frame:
         name = name_tuple[0]
         samples_info[name] = grouped['sample'].to_list()

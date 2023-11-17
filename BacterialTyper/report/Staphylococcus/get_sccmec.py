@@ -32,6 +32,11 @@ def help_options():
 def module_call(dict_assemblies, dict_folders, debug=False):
     """Create sccmec call and control for parameters"""
     
+    if debug:
+        print("dict_assemblies")
+        print(dict_assemblies)
+    
+    
     ## info2return
     sccmec_bin = set_config.get_exe('staphopia-sccmec')
     path2database = os.path.abspath( os.path.join( os.path.dirname(sccmec_bin), '..', 'share', "staphopia-sccmec", 'data') )
@@ -62,22 +67,23 @@ def module_call(dict_assemblies, dict_folders, debug=False):
                 continue
             else:
                 info_sample['sccmec_type'] = sccmec_type
-                sccmec_results.to_csv(results_csv)
+                info_sample.to_csv(results_csv)
                 
                 ## success
                 HCGB_time.print_time_stamp(filename_stamp)
 
         ## merge results
         sccmec_results = pd.concat([sccmec_results, info_sample], join='outer')
-                
-
+        
+        
+    sccmec_results = sccmec_results.drop_duplicates()
     print ("+ Jobs finished\n+ Collecting information for all samples...")
     
     ## debug messages
     if debug:
         HCGB_aes.debug_message('sccmec_results', 'yellow')
         HCGB_main.print_all_pandaDF(sccmec_results)
-    
+        
     return(sccmec_results, info_dict)
 
 

@@ -76,6 +76,10 @@ def run_cluster(options):
         options.project = True
         outdir = input_dir    
     
+    ## print options
+    if (Debug):
+        HCGB_aes.print_argparse_dict(options)
+        
     ## get files
     if options.reads:
         if options.noTrim:

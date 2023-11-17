@@ -14,8 +14,7 @@ import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.aesthetics_functions as HCGB_aes
 import HCGB.functions.files_functions as HCGB_file
 
-
-###############33
+###############
 def help_amrfinder():
     """
     Print help message information for AMRfinder
@@ -23,7 +22,6 @@ def help_amrfinder():
     
     print (colored("\n\n***** AMRfinder help message *****\n\n", 'yellow'))
     print("""Identify AMR and virulence genes in proteins and/or contigs and print a report\nDOCUMENTATION: See https://github.com/ncbi/amr/wiki for full documentation""")
-
 
 ###################################
 def organisms_amrfinder(db_folder, Debug=False):
@@ -44,10 +42,11 @@ def organisms_amrfinder(db_folder, Debug=False):
     """    
     
     print (colored("\n\n***** Get the list of organisms available from NCBI AMRFinderplus software *****\n\n", 'yellow'))
+    
     amrfinder_bin = set_config.get_exe("amrfinder", Debug=Debug)
     HCGB_sys.system_call(amrfinder_bin + ' --list_organisms --database ' + db_folder + " > tmp.file")
     
-    print("")    
+    print("")
     with open('tmp.file','r') as reader:
         contents_file = reader.readline()
         while contents_file != "":
@@ -60,7 +59,7 @@ def organisms_amrfinder(db_folder, Debug=False):
             
 
     print ("Read additional information in: https://github.com/ncbi/amr/wiki/Running-AMRFinderPlus#--organism-option")
-
+    
 ###################
 def amrfinder_version_db(db_folder, Debug=False):
     """
@@ -112,7 +111,6 @@ def download_database(db_folder, Debug=False):
     code2return = HCGB_sys.system_call(cmd_update)
     
     return(code2return, time_Stamp)
-
 
 ###################
 def amrfinder_caller(sample_name, protein_file, gff_file, nuc_file, threads_num, db_fold, outfolder, others, species_ident = "", Debug=False):
@@ -199,18 +197,55 @@ def amrfinder_caller(sample_name, protein_file, gff_file, nuc_file, threads_num,
     else:
         return('FAIL')
 
+###################
+def parse_organism_provided(org_given, db_folder, Debug=False):
+    
+    ## string generate using amrfinder -l option
+    species_Available = "Acinetobacter_baumannii,Burkholderia_cepacia,Burkholderia_pseudomallei"
+    species_Available += ",Citrobacter_freundii,Clostridioides_difficile,Enterobacter_asburiae,Enterobacter_cloacae"
+    species_Available += ",Enterococcus_faecalis,Enterococcus_faecium,Klebsiella_oxytoca,Klebsiella_pneumoniae"
+    species_Available += ",Neisseria_gonorrhoeae,Neisseria_meningitidis,Pseudomonas_aeruginosa,Serratia_marcescens"
+    species_Available += ",Staphylococcus_aureus,Staphylococcus_pseudintermedius,Streptococcus_agalactiae"
+    species_Available += ",Streptococcus_pneumoniae,Streptococcus_pyogenes,Vibrio_cholerae"
+
+    species_list = species_Available.split(",")
+    exception_list = ["Campylobacter" , "Escherichia", "Salmonella"]
+    
+    if Debug:
+        print(species_list)
+        print(exception_list)
+    
+    if org_given.replace(" ","_") in species_list:
+        if Debug:
+            print("Species provided is available!")
+        
+        return(org_given.replace(" ","_"))
+    
+    if org_given.split(" ")[0] in exception_list:
+        if Debug:
+            print("Species provided is available at the genus level!")
+        
+        return(org_given.split(" ")[0])
 
     
-    
+    ## None
+    if Debug:
+        print("Species provided is not available at the species or genus level!")
+    return("")    
+        
 ##################################################
 def main():
     
     import sys
-    
-    if len(sys.argv)<6:
+
+        
+    if len(sys.argv)<7:
         print("Usage: ")
-        print("python " + sys.argv[0] + " prot_file gff_file nuc_file db outfile" )
+        print("python " + sys.argv[0] + " prot_file gff_file nuc_file db outfile species_ident" )
         exit()
+    
+    parse_organism_provided(sys.argv[6], sys.argv[4], Debug=True)
+    exit()
     
     amrfinder_caller(sample_name="test", 
                      protein_file= sys.argv[1], 

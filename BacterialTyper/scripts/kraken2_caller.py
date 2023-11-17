@@ -225,9 +225,9 @@ def parse_results(bracken_res, folder, cut_off=0.90):
     filt_db = bracken_df[bracken_df['fraction_total_reads']>cut_off]
     sp_put = filt_db.iat[0,0]
     
-    with open(os.path.join(folder, ".species"), 'w') as opener:
-        opener.write(sp_put)
-    
+    with open(os.path.join(folder, "species.csv"), 'w') as opener:
+        opener.write('species:' + sp_put)
+        
     return(sp_put)
     
 

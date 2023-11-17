@@ -3,24 +3,16 @@
 ## Jose F. Sanchez                                      ##
 ## Copyright (C) 2019-2020 Lauro Sumoy Lab, IGTP, Spain ##
 ##########################################################
-from _ast import If
 """
 Calls spaTyper for obtaining Staphylococcus aureus Spa protein type.
 """
 ## useful imports
-import time
-import io
 import os
-import re
 import sys
 from sys import argv
-from io import open
 from termcolor import colored
 import spaTyper
 import pandas as pd
-
-## import my modules
-from BacterialTyper.config import set_config
 
 ## import my HCGB module 
 import HCGB.functions.files_functions as HCGB_files

@@ -11,7 +11,7 @@ __all__ = [
     'edirect_caller',
     'fastqc_caller',
     'genomic_island',
-    'MLST_caller',
+    'MLST_caller',  
     'min_hash_caller',
     'multiQC_report',
     'plasmidID_call',
@@ -21,7 +21,8 @@ __all__ = [
     'kraken2_caller',
     'trimmomatic_call',
     'variant_calling',
-    'virulence_resistance'
+    'virulence_resistance',
+    'argnorm_caller'
 ]
 
 from BacterialTyper.scripts import *
