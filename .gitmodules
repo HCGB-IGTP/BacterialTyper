@@ -4,3 +4,6 @@
 [submodule "third_party/pyan"]
 	path = third_party/pyan
 	url = https://github.com/JFsanchezherrero/pyan
+[submodule "third_party/spaTyper"]
+	path = third_party/spaTyper
+	url = https://github.com/HCGB-IGTP/spaTyper
