@@ -35,7 +35,7 @@ sudo apt install graphviz
 ```
 
 
-To create the documentation execute:
+To create the documentation you will first need to install BacterialTyper and then execute:
 
 ```
 sphinx-quickstart

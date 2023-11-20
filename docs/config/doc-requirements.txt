@@ -1,11 +1,4 @@
-# Requirements for building docs
-#
-# You will first need to install BacterialTyper
-#
-# Install the documentation requirements with:
-#     pip install -r docs/config/doc-requirements.txt
-
-sphinx
-sphinxmark
-rinohtype
-sphinxcontrib-bibtex
+sphinx==7.1.2
+sphinxmark==1.0.0
+rinohtype==0.5.4
+sphinxcontrib-bibtex==2.6.1
