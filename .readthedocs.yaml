@@ -19,5 +19,3 @@ formats:
 python:
    install:
    - requirements: docs/doc_requirements.txt
-   
-   system_packages: TRUE
