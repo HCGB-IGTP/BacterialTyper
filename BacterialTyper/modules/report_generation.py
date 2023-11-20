@@ -172,7 +172,8 @@ def run_report(options):
             sample_frame = pd_samples_info.groupby(["name"])
             for g in gene_names:
                 print ("\t+", g)
-                for name, cluster_df in sample_frame:
+                for name_tuple, cluster_df in sample_frame:
+                    name = name_tuple[0]
                     my_list_profiles = cluster_df.loc[cluster_df['tag'] == 'profile']['ext'].to_list()
                     if options.debug:
                         print ("name: ", name)
