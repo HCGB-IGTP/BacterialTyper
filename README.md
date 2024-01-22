@@ -32,9 +32,9 @@ So far, you can either install BacterialTyper using:
 - or typing the following _conda_/_mamba_ command:
 
 ```
-mamba create -n BacterialTyper_mamba python=3.7
+mamba create -n BacterialTyper_mamba python
 conda activate BacterialTyper_mamba
-mamba install -c r -c bioconda -c conda-forge trimmomatic fastqc spades=3.15.2 busco=5.1.2 ariba snippy=4.6.0 prokka=1.14.6 perl-bioperl=1.7.2 perl-bio-tools-run-alignment-tcoffee t_coffee kma=1.3.15 phispy=4.2.12 iqtree=2.1.2 r-optparse r-devtools agrvate staphopia-sccmec 
+mamba install -c r -c bioconda -c conda-forge perl-bio-searchio-hmmer perl-bioperl trimmomatic fastqc spades snippy prokka kma agrvate staphopia-sccmec kraken2 bowtie2 ncbi-amrfinderplus bracken krakentools mlst
 ```
 
 Finally, you will need to install _BacterialTyper_ which is host in pypi [here](https://pypi.org/project/BacterialTyper/). Use _pip_ and type:
