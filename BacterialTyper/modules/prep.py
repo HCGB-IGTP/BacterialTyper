@@ -101,7 +101,7 @@ def run_prep(options):
         final_dir = outdir
     
     ## print options
-    if (options.Debug):
+    if (options.debug):
         HCGB_aes.print_argparse_dict(options)
     
     ## get files
@@ -117,7 +117,7 @@ def run_prep(options):
         HCGB_aes.debug_message("pd_samples_retrieved", "yellow")
         HCGB_main.print_all_pandaDF(pd_samples_retrieved)
     
-    ## time stamp
+   ## time stamp
     start_time_partial = HCGB_time.timestamp(start_time_total)
     
     ## check character limitation

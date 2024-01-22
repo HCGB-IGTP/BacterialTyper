@@ -8,6 +8,7 @@ Retrieves promoter sequences for gene ids from profile analysis generated
 """
 ## useful imports
 from Bio import SeqIO
+from termcolor import colored
 import os
 import sys
 

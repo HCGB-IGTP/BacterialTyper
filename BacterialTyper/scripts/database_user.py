@@ -92,7 +92,8 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
     project_info_df = get_userData_info(options, project_folder)
     
     ## merge data
-    project_all_data = pd.concat([project_data_df, project_info_df], join='outer', sort=True).drop_duplicates()
+    project_all_data = pd.concat([project_data_df, project_info_df], 
+                                 join='outer', sort=True).drop_duplicates()
     #project_all_data.index.name = 'name'
 
     ## debug messages:
@@ -162,7 +163,8 @@ def update_database_user_data(database_folder, project_folder, Debug, options):
                 print (colored("**DEBUG: dataGot dataframe **", 'yellow'))
                 print (dataGot)
     
-            user_data_db = pd.concat([user_data_db, dataGot], join='outer', sort=True).drop_duplicates()
+            user_data_db = pd.concat([user_data_db, dataGot], join='outer', 
+                                     sort=True).drop_duplicates()
             ## concatenating by outer we get all available entries
 
     if (options.debug):
@@ -189,7 +191,8 @@ def get_userData_files(options, project_folder):
     print()
     HCGB_aes.print_sepLine("-", 60, 'yellow')
     print ("+ Retrieve trimmed reads information:")
-    pd_samples_reads = sampleParser.files.get_files(options, project_folder, "trim", ['_trim'], options.debug)
+    pd_samples_reads = sampleParser.files.get_files(
+        options, project_folder, "trim", ['_trim'], options.debug)
     pd_samples_reads = pd_samples_reads.set_index('name')
     HCGB_aes.print_sepLine("-", 60, 'yellow')
 
@@ -197,7 +200,12 @@ def get_userData_files(options, project_folder):
     print()
     HCGB_aes.print_sepLine("-", 60, 'yellow')
     print ("+ Retrieve assembly information:")
-    pd_samples_assembly = sampleParser.files.get_files(options, project_folder, "assembly", ["fna"], options.debug)
+    pd_samples_assembly = sampleParser.files.get_files(options=options, 
+                                                       input_dir=project_folder, mode= "assembly", 
+                                                       extension=["fna"], 
+                                                       debug=options.debug, bam=False, 
+                                                       append_discard_list=['annot', 'agr_results'])
+    
     pd_samples_assembly = pd_samples_assembly.set_index('name')
     HCGB_aes.print_sepLine("-", 60, 'yellow')
 
@@ -205,7 +213,11 @@ def get_userData_files(options, project_folder):
     print()
     HCGB_aes.print_sepLine("-", 60, 'yellow')
     print ("+ Retrieve annotation information:")
-    pd_samples_annot = sampleParser.files.get_files(options, project_folder, "annot", ['gbf', 'faa', 'gff'], options.debug)
+    pd_samples_annot = sampleParser.files.get_files(options=options, 
+                                                    input_dir=project_folder, mode= "annot", 
+                                                    extension=['gbf', 'faa', 'gff'], 
+                                                    debug=options.debug, bam=False,
+                                                    append_discard_list=['assemble'])
     pd_samples_annot = pd_samples_annot.set_index('name')
     HCGB_aes.print_sepLine("-", 60, 'yellow')
 
@@ -233,8 +245,10 @@ def get_userData_files(options, project_folder):
         HCGB_main.print_all_pandaDF(df_merge)
      
     ## set new column with name of samples
-    df_merge = df_merge.reset_index()
-
+    df_merge['name_sample'] = df_merge.index
+    #df_merge = df_merge.reset_index()
+    
+    
     ## debug message
     if (options.debug):
         print (colored("**DEBUG: pd_concat reset_index**", 'yellow'))
@@ -255,17 +269,21 @@ def get_userData_info(options, project_folder):
     print()
     HCGB_aes.print_sepLine("-", 60, 'yellow')
     print ("+ Retrieve virulence/resistance profile information:")
-    pd_samples_profile = sampleParser.files.get_files(options, project_folder, "profile", ["csv", "tsv"], options.debug)
-    pd_samples_profile.set_index('name')
+    pd_samples_profile = sampleParser.files.get_files(options, project_folder, 
+                                                      "profile", ["csv", "tsv"], 
+                                                      options.debug)
+    pd_samples_profile.set_index('name', drop=False)
     HCGB_aes.print_sepLine("-", 60, 'yellow')
 
     if not pd_samples_profile.empty:
-        pd_samples_profile = pd_samples_profile.set_index('name')
+       pd_samples_profile = pd_samples_profile.set_index('name')
 
     print()
     HCGB_aes.print_sepLine("-", 60, 'yellow')
     print ("+ Retrieve species identification information:")
-    pd_samples_ident = sampleParser.files.get_files(options, project_folder, "ident", ["csv", 'species.csv'], options.debug)
+    pd_samples_ident = sampleParser.files.get_files(options, project_folder, 
+                                                    "ident", ["csv", 'species.csv'], 
+                                                    options.debug)
     
     if not pd_samples_ident.empty:
         pd_samples_ident = pd_samples_ident.set_index('name')
@@ -276,7 +294,8 @@ def get_userData_info(options, project_folder):
     print()
     HCGB_aes.print_sepLine("-", 60, 'yellow')
     print ("+ Retrieve cluster information:")
-    pd_samples_mash = sampleParser.files.get_files(options, project_folder, "mash", ["sig"], options.debug)
+    pd_samples_mash = sampleParser.files.get_files(options, project_folder, 
+                                                   "mash", ["sig"], options.debug)
     if not pd_samples_mash.empty:
         pd_samples_mash = pd_samples_mash.set_index('name')
     HCGB_aes.print_sepLine("-", 60, 'yellow')
@@ -294,7 +313,10 @@ def get_userData_info(options, project_folder):
         HCGB_main.print_all_pandaDF(pd_samples_mash)
     
     ## merge
-    df = pd.concat([pd_samples_profile, pd_samples_ident, pd_samples_mash], join='inner', sort=True).drop_duplicates()
+    df = pd.concat([pd_samples_profile, pd_samples_ident, pd_samples_mash], 
+                   join='inner', sort=True).drop_duplicates()
+    ## set new column with name of samples
+    df['name_sample'] = df.index
     ## joining by inner we only get common columns among all
 
     ## debug message
@@ -303,7 +325,7 @@ def get_userData_info(options, project_folder):
         print (df)
     
     ## set new column with name of samples
-    df = df.reset_index()
+    #df = df.reset_index()
 
     ## rename column
     df.rename(columns={'index':'name'}, inplace=True)
@@ -342,7 +364,9 @@ def update_sample(name, cluster, own_data, user_data_db, Debug):
         #functions.print_sepLine("+", 75, False)
 
     ## data to generate
-    data2dump = pd.DataFrame(columns=('ID','folder','genus','species','name','genome', 'GFF','proteins', 'signature', 'profile', 'ident', 'reads'))
+    data2dump = pd.DataFrame(columns=('ID','folder','genus','species','name',
+                                      'genome', 'GFF','proteins', 'signature', 
+                                      'profile', 'ident', 'reads'))
     ## iterate over files with different tags: reads, annot, assembly, profile, ident
 
     ##########

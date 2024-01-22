@@ -1,0 +1,20 @@
+Pinned packages:                                                                                                                                                                                                   
+  - python 3.11.*                                                                                                                                                                                                  
+                                                                                                                                                                                                                   
+                                                                                                                                                                                                                   
+warning  libmamba Added empty dependency for problem type SOLVER_RULE_UPDATE                                                                                                                                       
+Could not solve for environment specs                                                                                                                                                                              
+The following package could not be installed                                                                                                                                                                       
+└─ busco 5.5.0**  is installable and it requires                                                                                                                                                                   
+   └─ sepp >=4.3.10  with the potential options
+      ├─ sepp 4.3.10 would require
+      │  └─ python >=2.7,<2.8.0a0 , which can be installed;
+      ├─ sepp 4.3.10 would require
+      │  └─ python >=3.6,<3.7.0a0 , which can be installed;
+      ├─ sepp [4.3.10|4.5.1] would require
+      │  └─ python >=3.7,<3.8.0a0 , which can be installed;
+      ├─ sepp 4.3.10 would require
+      │  └─ python >=3.8,<3.9.0a0 , which can be installed;
+      └─ sepp 4.4.0 would require
+         └─ python >=3.9,<3.10.0a0 , which can be installed.
+

@@ -8,20 +8,15 @@ Clusters fasta files or fastq reads. Using: project data, genbank entries from d
 '''
 ## import useful modules
 import os
-import sys
-import re
 import time
-from io import open
-import shutil
-import concurrent.futures
 from termcolor import colored
 import pandas as pd
 
 ## import my modules
 from HCGB import sampleParser
-from BacterialTyper.config import set_config
 from BacterialTyper.modules import help_info
 from BacterialTyper.scripts import database_generator
+from BacterialTyper.scripts import database_user
 from BacterialTyper.scripts import min_hash_caller
 from BacterialTyper import __version__ as pipeline_version
 
@@ -67,13 +62,10 @@ def run_cluster(options):
     outdir=""
 
     ## Project mode as default
-    project_mode=True
+    options.project = True
     if (options.detached):
-        options.project = False
-        project_mode=False
         outdir = os.path.abspath(options.output_folder)
     else:
-        options.project = True
         outdir = input_dir    
     
     ## print options
@@ -95,15 +87,28 @@ def run_cluster(options):
 
     else:
         ## default
-        pd_samples_retrieved = sampleParser.files.get_files(options, input_dir, "assembly", ["fna"], options.debug)
+        pd_samples_retrieved = database_user.get_userData_files(options, input_dir)
+
+
+    ## get info: ident, cluster, MGE
+    pd_samples_info = database_user.get_userData_info(options, input_dir)
+    
+    ## merge information
+    pd_samples = pd.concat([pd_samples_retrieved, pd_samples_info])
+
 
     ## debug message
     if (Debug):
         print (colored("**DEBUG: pd_samples_retrieve **", 'yellow'))
-        print (pd_samples_retrieved)
+        HCGB_main.print_all_pandaDF(pd_samples)
+
+    ## now set project after obtaining samples
+    if (options.detached):
+        options.project = False
+
     
     # exit if empty
-    if pd_samples_retrieved.empty:
+    if pd_samples.empty:
         print ("No data has been retrieved from the project folder provided. Exiting now...")
         exit()
 
@@ -114,7 +119,7 @@ def run_cluster(options):
         HCGB_files.create_folder(outdir)
     
     ## for each sample
-    outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "mash", options.debug)    
+    outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples, "mash", options.debug,  groupby_col="new_name")    
 
     ## debug message
     if (Debug):
@@ -161,17 +166,17 @@ def run_cluster(options):
     ### Cluster project samples
     print (colored("\n+ Collect project data", 'green'))
     print ("+ Generate mash sketches for each sample analyzed...")
-    pd_samples_retrieved = pd_samples_retrieved.set_index('name')
+    pd_samples = pd_samples.set_index('name_sample')
     
     ## debug message
     if (Debug):
-        print (colored("**DEBUG: pd_samples_retrieved **", 'yellow'))
-        print (pd_samples_retrieved)
+        print (colored("**DEBUG: pd_samples **", 'yellow'))
+        print (pd_samples)
 
     ## init dataframe for project data
     colname = ["source", "name", "path", "original", "ksize", "num_sketch"]
     pd_samples_sketched  = pd.DataFrame(columns = colname)
-    for index, row in pd_samples_retrieved.iterrows():
+    for index, row in pd_samples.iterrows():
         if index in retrieve_databases.index:
             print (colored('\t+ Sketched signature (%s) available within user data...' %index, 'yellow'))
             continue
@@ -197,6 +202,10 @@ def run_cluster(options):
         (sigfile, siglist) = generate_sketch(outdir_dict[index], row['sample'], index, options.kmer_size, options.n_sketch, Debug)
         pd_samples_sketched.loc[len(pd_samples_sketched)] = ('project_data', index, sigfile, row['sample'], options.kmer_size, options.n_sketch)
         siglist_all.append(siglist)
+        
+    
+    ## remove any duplicated signature
+    siglist_all = list(set(siglist_all))
 
     print ("\n+ Clustering sequences...")
     pd_samples_sketched = pd_samples_sketched.set_index('name')
@@ -206,8 +215,8 @@ def run_cluster(options):
         cluster_df = pd_samples_sketched
     else:
         tmp = retrieve_databases[['source', 'db', 'path', 'original', 'ksize', 'num_sketch']]
-        tmp = tmp.rename(columns={'db': 'name'})
-        tmp.set_index('name')
+        tmp = tmp.rename(columns={'db': 'name_sample'})
+        tmp.set_index('name_sample')
         
         if (Debug):
             print (colored("**DEBUG: tmp **", 'yellow'))

@@ -123,7 +123,9 @@ def run_ident(options):
         HCGB_files.create_folder(outdir)
         
     ## for each sample
-    outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "ident", options.debug)    
+    outdir_dict = HCGB_files.outdir_project(outdir, options.project, 
+                                            pd_samples_retrieved, "ident", 
+                                            options.debug,  groupby_col="name_sample")    
     
     ## let's start the process
     print ("+ Generate an species typification for each sample retrieved using some of the following options:")
@@ -190,7 +192,7 @@ def run_ident(options):
             ## species provided by user as option
              
             # Group dataframe sample name
-            sample_results = pd_samples_retrieved.groupby(["new_name"])
+            sample_results = pd_samples_retrieved.groupby(["name_sample"])
             for name, grouped in sample_results:
                 dataFrame_MLST.loc[len(dataFrame_MLST)] = (name[0], species2use[0], species2use[1], mlst2use)
             ##########################################################################
@@ -216,7 +218,7 @@ def run_ident(options):
                 HCGB_aes.raise_and_exit("Check your mlst configuration or options with --help_MLST")
    
             # Group dataframe sample name
-            sample_results = pd_samples_retrieved.groupby(["new_name"])
+            sample_results = pd_samples_retrieved.groupby(["name_sample"])
             species2use_list = mlst_profile_dict[MLST_profile2use].split(" ")
             for name, grouped in sample_results:
                 dataFrame_MLST.loc[len(dataFrame_MLST)] = (name[0], species2use_list[0], species2use_list[1], MLST_profile2use)
@@ -346,7 +348,7 @@ def run_ident(options):
     print ('+ Print sample results in folder: ', excel_folder)
     
     # Merge dataframe results summary by sample name
-    sample_results_summary = pd.merge(MLST_results, dataFrame_MLST, on="new_name")
+    sample_results_summary = pd.merge(MLST_results, dataFrame_MLST, on="name_sample")
     
     ## debug message
     if (Debug):
@@ -387,8 +389,8 @@ def run_ident(options):
             elif options.kraken2:
             ###########################################################################
                 
-                bracken_df = pd.read_csv(grouped['sample'], sep="\t")
-                bracken_df['sample'] = grouped['name']
+                bracken_df = pd.read_csv(grouped['name_sample'], sep="\t")
+                bracken_df['name_sample'] = grouped['name_sample']
                 bracken_results = pd.concat([bracken_results, bracken_df])
     
                 ## print kraken2/bracken results in xlsx format
@@ -398,7 +400,7 @@ def run_ident(options):
                 
             ## read MLST
             if not MLST_results.empty:
-                results_summary_MLST = grouped[['new_name','species_id', 'scheme', 'alleles']] 
+                results_summary_MLST = grouped[['name_sample','species_id', 'scheme', 'alleles']] 
                 results_summary_MLST.to_excel(writer_sample, sheet_name="MLST") ## write excel handle
     
     
@@ -582,7 +584,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
 #    return results_summary
 
     ## optimize threads
-    name_list = set(pd_samples_retrieved["name"].tolist())
+    name_list = set(pd_samples_retrieved.index)
     threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
     max_workers_int = int(options.threads/threads_job)
 
@@ -593,7 +595,7 @@ def KMA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, ti
         print (colored("**DEBUG: cpu_here " +  str(threads_job) + " **", 'yellow'))
 
     # Group dataframe by sample name
-    sample_frame = pd_samples_retrieved.groupby(["name"])
+    sample_frame = pd_samples_retrieved.groupby(["name_sample"])
     
     ## send for each sample
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
@@ -1030,7 +1032,7 @@ def MLST_ident(options, dataFrame, dataFrame_species, outdir_dict, time_partial)
     print ("\n+ Send MLST identification jobs...")
     
     ## optimize threads
-    name_list = set(subset_Df["name"].tolist())
+    name_list = set(subset_Df.index)
     threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
     max_workers_int = int(options.threads/threads_job)
     
@@ -1045,10 +1047,10 @@ def MLST_ident(options, dataFrame, dataFrame_species, outdir_dict, time_partial)
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
          ## send for each sample
          commandsSent = { executor.submit(MLST_caller.MLST_call,
-                                          outfolder = outdir_dict[row['new_name']],  ## outfolder
+                                          outfolder = outdir_dict[row['name_sample']],  ## outfolder
                                           assembly_file = row['sample'],             ## assembly file
-                                          mlst_profile = dataFrame_species.loc[ dataFrame_species['name'] == row['new_name'], 'mlst'].item(), 
-                                          sample_name = row['new_name'],
+                                          mlst_profile = dataFrame_species.loc[ dataFrame_species['name_sample'] == row['name_sample'], 'mlst'].item(), 
+                                          sample_name = row['name_sample'],
                                           minid=options.minid, 
                                           mincov=options.mincov, 
                                           minscore=options.minscore, 
@@ -1086,7 +1088,7 @@ def MLST_ident(options, dataFrame, dataFrame_species, outdir_dict, time_partial)
         MLST_results = pd.concat([MLST_results, pd.DataFrame.from_dict(sample_dict)])
         
     ## rename and return
-    MLST_results.rename(columns = {'id':'new_name'}, inplace=True)
+    MLST_results.rename(columns = {'id':'name_sample'}, inplace=True)
     return(MLST_results)
 
 ####################################
@@ -1322,7 +1324,7 @@ def Kraken_ident(options, dataFrame_samples, outdir_dict, retrieve_databases, ti
     print ("\n+ Send Kraken2 identification jobs...")
     
     ## optimize threads
-    name_list = set(dataFrame_samples["name"].tolist())
+    name_list = set(dataFrame_samples.index)
     threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
     max_workers_int = int(options.threads/threads_job)
 

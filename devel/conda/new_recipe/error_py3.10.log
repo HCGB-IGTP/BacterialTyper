@@ -1,0 +1,1164 @@
+
+
+==> WARNING: A newer version of conda exists. <==
+  current version: 23.1.0
+  latest version: 23.9.0
+
+Please u
+## Package Plan ##
+
+  environment location: /imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev
+
+  added / updated specs:
+    - mamba
+    - python=3.10
+
+
+The followiwarning  libmamba Added empty dependency for problem type SOLVER_RULE_UPDATE
+/imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages/setuptools/command/build_py.py:204: _Warning: Package 'BacterialTyper.config.R' is absent from the `packages` configuration.
+!!
+
+        ********************************************************************************
+        ############################
+        # Package would be ignored #
+        ############################
+        Python recognizes 'BacterialTyper.config.R' as an importable package[^1],
+        but it is absent from setuptools' `packages` configuration.
+
+        This leads to an ambiguous overall configuration. If you want to distribute this
+        package, please make sure that 'BacterialTyper.config.R' is explicitly added
+        to the `packages` configuration field.
+
+        Alternatively, you can also rely on setuptools' discovery methods
+        (for example by using `find_namespace_packages(...)`/`find_namespace:`
+        instead of `find_packages(...)`/`find:`).
+
+        You can read more about "package discovery" on setuptools documentation page:
+
+        - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+        If you don't want 'BacterialTyper.config.R' to be distributed and are
+        already explicitly excluding 'BacterialTyper.config.R' via
+        `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+        you can try to use `exclude_package_data`, or `include-package-data=False` in
+        combination with a more fine grained `package-data` configuration.
+
+        You can read more about "package data files" on setuptools documentation page:
+
+        - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+        [^1]: For Python, any directory (with suitable naming) can be imported,
+              even if it does not contain any `.py` files.
+              On the other hand, currently there is no concept of package data
+              directory, all directories are treated like packages.
+        ********************************************************************************
+
+!!
+  check.warn(importable)
+/imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages/setuptools/command/build_py.py:204: _Warning: Package 'BacterialTyper.config.perl' is absent from the `packages` configuration.
+!!
+
+        ********************************************************************************
+        ############################
+        # Package would be ignored #
+        ############################
+        Python recognizes 'BacterialTyper.config.perl' as an importable package[^1],
+        but it is absent from setuptools' `packages` configuration.
+
+        This leads to an ambiguous overall configuration. If you want to distribute this
+        package, please make sure that 'BacterialTyper.config.perl' is explicitly added
+        to the `packages` configuration field.
+
+        Alternatively, you can also rely on setuptools' discovery methods
+        (for example by using `find_namespace_packages(...)`/`find_namespace:`
+        instead of `find_packages(...)`/`find:`).
+
+        You can read more about "package discovery" on setuptools documentation page:
+
+        - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+        If you don't want 'BacterialTyper.config.perl' to be distributed and are
+        already explicitly excluding 'BacterialTyper.config.perl' via
+        `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+        you can try to use `exclude_package_data`, or `include-package-data=False` in
+        combination with a more fine grained `package-data` configuration.
+
+        You can read more about "package data files" on setuptools documentation page:
+
+        - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+        [^1]: For Python, any directory (with suitable naming) can be imported,
+              even if it does not contain any `.py` files.
+              On the other hand, currently there is no concept of package data
+              directory, all directories are treated like packages.
+        ********************************************************************************
+
+!!
+  check.warn(importable)
+/imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages/setuptools/command/build_py.py:204: _Warning: Package 'BacterialTyper.config.python' is absent from the `packages` configuration.
+!!
+
+        ********************************************************************************
+        ############################
+        # Package would be ignored #
+        ############################
+        Python recognizes 'BacterialTyper.config.python' as an importable package[^1],
+        but it is absent from setuptools' `packages` configuration.
+
+        This leads to an ambiguous overall configuration. If you want to distribute this
+        package, please make sure that 'BacterialTyper.config.python' is explicitly added
+        to the `packages` configuration field.
+
+        Alternatively, you can also rely on setuptools' discovery methods
+        (for example by using `find_namespace_packages(...)`/`find_namespace:`
+        instead of `find_packages(...)`/`find:`).
+
+        You can read more about "package discovery" on setuptools documentation page:
+
+        - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+        If you don't want 'BacterialTyper.config.python' to be distributed and are
+        already explicitly excluding 'BacterialTyper.config.python' via
+        `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+        you can try to use `exclude_package_data`, or `include-package-data=False` in
+        combination with a more fine grained `package-data` configuration.
+
+        You can read more about "package data files" on setuptools documentation page:
+
+        - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+        [^1]: For Python, any directory (with suitable naming) can be imported,
+              even if it does not contain any `.py` files.
+              On the other hand, currently there is no concept of package data
+              directory, all directories are treated like packages.
+        ********************************************************************************
+
+!!
+  check.warn(importable)
+/imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages/setuptools/command/build_py.py:204: _Warning: Package 'BacterialTyper.config.software' is absent from the `packages` configuration.
+!!
+
+        ********************************************************************************
+        ############################
+        # Package would be ignored #
+        ############################
+        Python recognizes 'BacterialTyper.config.software' as an importable package[^1],
+        but it is absent from setuptools' `packages` configuration.
+
+        This leads to an ambiguous overall configuration. If you want to distribute this
+        package, please make sure that 'BacterialTyper.config.software' is explicitly added
+        to the `packages` configuration field.
+
+        Alternatively, you can also rely on setuptools' discovery methods
+        (for example by using `find_namespace_packages(...)`/`find_namespace:`
+        instead of `find_packages(...)`/`find:`).
+
+        You can read more about "package discovery" on setuptools documentation page:
+
+        - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+
+        If you don't want 'BacterialTyper.config.software' to be distributed and are
+        already explicitly excluding 'BacterialTyper.config.software' via
+        `find_namespace_packages(...)/find_namespace` or `find_packages(...)/find`,
+        you can try to use `exclude_package_data`, or `include-package-data=False` in
+        combination with a more fine grained `package-data` configuration.
+
+        You can read more about "package data files" on setuptools documentation page:
+
+        - https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+
+
+        [^1]: For Python, any directory (with suitable naming) can be imported,
+              even if it does not contain any `.py` files.
+              On the other hand, currently there is no concept of package data
+              directory, all directories are treated like packages.
+        ********************************************************************************
+
+!!
+  check.warn(importable)
+/imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages/setuptools/_distutils/cmd.py:66: SetuptoolsDeprecationWarning: setup.py install is deprecated.
+!!
+
+        ********************************************************************************
+        Please avoid running ``setup.py`` directly.
+        Instead, use pypa/build, pypa/installer or other
+        standards-based tools.
+
+        See https://blog.ganssle.io/articles/2021/10/setup-py-deprecated.html for details.
+        ********************************************************************************
+
+!!
+  self.initialize_options()
+####### | 100% [A
+
+
+
+
+
+
+
+python-3.10.12       | 24.4 MB   | ########   |  80% [A[A[A[A[A[A[A[A
+
+
+
+ruamel.yaml-0.17.40  | 196 KB    | ########## | 100% [A[A[A[A
+
+
+
+ruamel.yaml-0.17.40  | 196 KB    | ########## | 100% [A[A[A[A
+
+
+
+
+mamba-1.5.2          | 51 KB     | ########## | 100% [A[A[A[A[A
+
+
+
+
+mamba-1.5.2          | 51 KB     | ########## | 100% [A[A[A[A[A
+
+
+
+
+
+libmambapy-1.5.2     | 294 KB    | ########## | 100% [A[A[A[A[A[A
+
+
+
+
+
+libmambapy-1.5.2     | 294 KB    | ########## | 100% [A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+brotli-python-1.1.0  | 341 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+brotli-python-1.1.0  | 341 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+jsonpointer-2.4      | 16 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+cffi-1.16.0          | 236 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+cffi-1.16.0          | 236 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+ruamel.yaml.clib-0.2 | 132 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+ruamel.yaml.clib-0.2 | 132 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[Acryptography-41.0.5  | 1.9 MB    | ########## | 100% 
+
+
+
+
+
+
+conda-23.9.0         | 946 KB    | ########## | 100% [A[A[A[A[A[A[A
+
+
+
+
+
+
+conda-23.9.0         | 946 KB    | ########## | 100% [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+python-3.10.12       | 24.4 MB   | ########## | 100% [A[A[A[A[A[A[A[A                                                     
+                                                     [A
+
+                                                     [A[A
+
+
+                                                     [A[A[A
+
+
+
+                                                     [A[A[A[A
+
+
+
+
+                                                     [A[A[A[A[A
+
+
+
+
+
+                                                     [A[A[A[A[A[A
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+
+Looking for: ['trimmomatic', 'fastqc', 'spades', 'snippy', 'prokka', 'kma', 'kraken2', 'busco=5.5.0']
+
+
+Pinned packages:
+  - python 3.10.*
+
+
+Could not solve for environment specs
+The following package could not be installed
+└─ busco 5.5.0**  is installable and it requires
+   └─ sepp >=4.3.10  with the potential options
+      ├─ sepp 4.3.10 would require
+      │  └─ python >=2.7,<2.8.0a0 , which can be installed;
+      ├─ sepp 4.3.10 would require
+      │  └─ python >=3.6,<3.7.0a0 , which can be installed;
+      ├─ sepp [4.3.10|4.5.1] would require
+      │  └─ python >=3.7,<3.8.0a0 , which can be installed;
+      ├─ sepp 4.3.10 would require
+      │  └─ python >=3.8,<3.9.0a0 , which can be installed;
+      └─ sepp 4.4.0 would require
+         └─ python >=3.9,<3.10.0a0 , which can be installed.
+######################################
+## Clean old folders
+rm -r build
+rm -r dist
+rm -r BacterialTyper.egg-info
+
+######################################
+## Create new distribution
+running sdist
+running egg_info
+creating BacterialTyper.egg-info
+writing BacterialTyper.egg-info/PKG-INFO
+writing dependency_links to BacterialTyper.egg-info/dependency_links.txt
+writing requirements to BacterialTyper.egg-info/requires.txt
+writing top-level names to BacterialTyper.egg-info/top_level.txt
+writing manifest file 'BacterialTyper.egg-info/SOURCES.txt'
+reading manifest file 'BacterialTyper.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+writing manifest file 'BacterialTyper.egg-info/SOURCES.txt'
+running check
+creating BacterialTyper-0.6.4
+creating BacterialTyper-0.6.4/BacterialTyper
+creating BacterialTyper-0.6.4/BacterialTyper.egg-info
+creating BacterialTyper-0.6.4/BacterialTyper/config
+creating BacterialTyper-0.6.4/BacterialTyper/config/R
+creating BacterialTyper-0.6.4/BacterialTyper/config/perl
+creating BacterialTyper-0.6.4/BacterialTyper/config/python
+creating BacterialTyper-0.6.4/BacterialTyper/config/software
+creating BacterialTyper-0.6.4/BacterialTyper/data
+creating BacterialTyper-0.6.4/BacterialTyper/modules
+creating BacterialTyper-0.6.4/BacterialTyper/other_tools
+creating BacterialTyper-0.6.4/BacterialTyper/report
+creating BacterialTyper-0.6.4/BacterialTyper/report/Staphylococcus
+creating BacterialTyper-0.6.4/BacterialTyper/scripts
+creating BacterialTyper-0.6.4/docs
+creating BacterialTyper-0.6.4/docs/source
+creating BacterialTyper-0.6.4/docs/source/images
+creating BacterialTyper-0.6.4/docs/source/images/workflow
+creating BacterialTyper-0.6.4/main
+creating BacterialTyper-0.6.4/test
+copying files to BacterialTyper-0.6.4...
+copying LICENSE -> BacterialTyper-0.6.4
+copying MANIFEST.in -> BacterialTyper-0.6.4
+copying README.md -> BacterialTyper-0.6.4
+copying VERSION -> BacterialTyper-0.6.4
+copying setup.py -> BacterialTyper-0.6.4
+copying BacterialTyper/__init__.py -> BacterialTyper-0.6.4/BacterialTyper
+copying BacterialTyper.egg-info/PKG-INFO -> BacterialTyper-0.6.4/BacterialTyper.egg-info
+copying BacterialTyper.egg-info/SOURCES.txt -> BacterialTyper-0.6.4/BacterialTyper.egg-info
+copying BacterialTyper.egg-info/dependency_links.txt -> BacterialTyper-0.6.4/BacterialTyper.egg-info
+copying BacterialTyper.egg-info/requires.txt -> BacterialTyper-0.6.4/BacterialTyper.egg-info
+copying BacterialTyper.egg-info/top_level.txt -> BacterialTyper-0.6.4/BacterialTyper.egg-info
+copying BacterialTyper/config/__init__.py -> BacterialTyper-0.6.4/BacterialTyper/config
+copying BacterialTyper/config/conda_dumper.py -> BacterialTyper-0.6.4/BacterialTyper/config
+copying BacterialTyper/config/extern_progs.py -> BacterialTyper-0.6.4/BacterialTyper/config
+copying BacterialTyper/config/install_dependencies.py -> BacterialTyper-0.6.4/BacterialTyper/config
+copying BacterialTyper/config/set_config.py -> BacterialTyper-0.6.4/BacterialTyper/config
+copying BacterialTyper/config/R/R_dependencies.csv -> BacterialTyper-0.6.4/BacterialTyper/config/R
+copying BacterialTyper/config/R/R_package.info.txt -> BacterialTyper-0.6.4/BacterialTyper/config/R
+copying BacterialTyper/config/R/check_install_path.R -> BacterialTyper-0.6.4/BacterialTyper/config/R
+copying BacterialTyper/config/R/check_install_system.R -> BacterialTyper-0.6.4/BacterialTyper/config/R
+copying BacterialTyper/config/R/install_github.R -> BacterialTyper-0.6.4/BacterialTyper/config/R
+copying BacterialTyper/config/R/install_package.R -> BacterialTyper-0.6.4/BacterialTyper/config/R
+copying BacterialTyper/config/perl/IslandPath_dependencies.csv -> BacterialTyper-0.6.4/BacterialTyper/config/perl
+copying BacterialTyper/config/perl/install_perl_packages.py -> BacterialTyper-0.6.4/BacterialTyper/config/perl
+copying BacterialTyper/config/perl/perl_dependencies.csv -> BacterialTyper-0.6.4/BacterialTyper/config/perl
+copying BacterialTyper/config/python/name_conversion_module.csv -> BacterialTyper-0.6.4/BacterialTyper/config/python
+copying BacterialTyper/config/python/python_requirements.txt -> BacterialTyper-0.6.4/BacterialTyper/config/python
+copying BacterialTyper/config/python/python_requirements_summary.csv -> BacterialTyper-0.6.4/BacterialTyper/config/python
+copying BacterialTyper/config/software/dependencies.csv -> BacterialTyper-0.6.4/BacterialTyper/config/software
+copying BacterialTyper/config/software/software_details.csv -> BacterialTyper-0.6.4/BacterialTyper/config/software
+copying BacterialTyper/data/BUSCO_dataset.csv -> BacterialTyper-0.6.4/BacterialTyper/data
+copying BacterialTyper/data/PubMLST_datasets.csv -> BacterialTyper-0.6.4/BacterialTyper/data
+copying BacterialTyper/data/__init__.py -> BacterialTyper-0.6.4/BacterialTyper/data
+copying BacterialTyper/data/__init__.pyc -> BacterialTyper-0.6.4/BacterialTyper/data
+copying BacterialTyper/data/available_Trimmomatic_adapters.fasta -> BacterialTyper-0.6.4/BacterialTyper/data
+copying BacterialTyper/data/available_Trimmomatic_adapters_info.csv -> BacterialTyper-0.6.4/BacterialTyper/data
+copying BacterialTyper/data/available_plasmids_data.txt -> BacterialTyper-0.6.4/BacterialTyper/data
+copying BacterialTyper/data/data_files.py -> BacterialTyper-0.6.4/BacterialTyper/data
+copying BacterialTyper/data/data_files.pyc -> BacterialTyper-0.6.4/BacterialTyper/data
+copying BacterialTyper/data/toDownload.csv -> BacterialTyper-0.6.4/BacterialTyper/data
+copying BacterialTyper/modules/MGE.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/__init__.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/annot.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/assemble.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/citation.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/cluster.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/config.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/database.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/help_info.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/ident.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/metadata.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/phylo.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/prep.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/profile.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/qc.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/report_generation.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/run.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/test.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/trim.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/modules/version.py -> BacterialTyper-0.6.4/BacterialTyper/modules
+copying BacterialTyper/other_tools/__init__.py -> BacterialTyper-0.6.4/BacterialTyper/other_tools
+copying BacterialTyper/other_tools/tools.py -> BacterialTyper-0.6.4/BacterialTyper/other_tools
+copying BacterialTyper/report/__init__.py -> BacterialTyper-0.6.4/BacterialTyper/report
+copying BacterialTyper/report/get_promoter.py -> BacterialTyper-0.6.4/BacterialTyper/report
+copying BacterialTyper/report/retrieve_genes.py -> BacterialTyper-0.6.4/BacterialTyper/report
+copying BacterialTyper/report/Staphylococcus/__init__.py -> BacterialTyper-0.6.4/BacterialTyper/report/Staphylococcus
+copying BacterialTyper/report/Staphylococcus/agr_typing.py -> BacterialTyper-0.6.4/BacterialTyper/report/Staphylococcus
+copying BacterialTyper/report/Staphylococcus/get_sccmec.py -> BacterialTyper-0.6.4/BacterialTyper/report/Staphylococcus
+copying BacterialTyper/report/Staphylococcus/get_spa_typing.py -> BacterialTyper-0.6.4/BacterialTyper/report/Staphylococcus
+copying BacterialTyper/scripts/BUSCO_caller.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/KMA_caller.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/Kraken2_caller.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/MLSTar.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/__init__.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/annotation.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/ariba_caller.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/assembly_stats_caller.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/bacteriophage.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/card_trick_caller.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/database_generator.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/database_user.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/edirect_caller.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/fastqc_caller.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/functions.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/genomic_island.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/get_descendant.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/min_hash_caller.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/multiQC_report.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/phylo_parser.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/plasmidID_call.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/spades_assembler.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/trimmomatic_call.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/variant_calling.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying BacterialTyper/scripts/virulence_resistance.py -> BacterialTyper-0.6.4/BacterialTyper/scripts
+copying docs/source/images/workflow/all.jpg -> BacterialTyper-0.6.4/docs/source/images/workflow
+copying main/BacterialTyper -> BacterialTyper-0.6.4/main
+copying test/test.py -> BacterialTyper-0.6.4/test
+Writing BacterialTyper-0.6.4/setup.cfg
+creating dist
+Creating tar archive
+removing 'BacterialTyper-0.6.4' (and everything under it)
+running bdist_wheel
+running build
+running build_py
+creating build
+creating build/lib
+creating build/lib/BacterialTyper
+copying BacterialTyper/__init__.py -> build/lib/BacterialTyper
+creating build/lib/BacterialTyper/other_tools
+copying BacterialTyper/other_tools/__init__.py -> build/lib/BacterialTyper/other_tools
+copying BacterialTyper/other_tools/tools.py -> build/lib/BacterialTyper/other_tools
+creating build/lib/BacterialTyper/report
+copying BacterialTyper/report/get_promoter.py -> build/lib/BacterialTyper/report
+copying BacterialTyper/report/retrieve_genes.py -> build/lib/BacterialTyper/report
+copying BacterialTyper/report/__init__.py -> build/lib/BacterialTyper/report
+creating build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/Kraken2_caller.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/get_descendant.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/trimmomatic_call.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/genomic_island.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/fastqc_caller.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/virulence_resistance.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/database_generator.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/plasmidID_call.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/card_trick_caller.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/ariba_caller.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/bacteriophage.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/variant_calling.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/spades_assembler.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/min_hash_caller.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/KMA_caller.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/database_user.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/MLSTar.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/__init__.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/functions.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/annotation.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/phylo_parser.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/edirect_caller.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/BUSCO_caller.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/multiQC_report.py -> build/lib/BacterialTyper/scripts
+copying BacterialTyper/scripts/assembly_stats_caller.py -> build/lib/BacterialTyper/scripts
+creating build/lib/BacterialTyper/config
+copying BacterialTyper/config/conda_dumper.py -> build/lib/BacterialTyper/config
+copying BacterialTyper/config/install_dependencies.py -> build/lib/BacterialTyper/config
+copying BacterialTyper/config/set_config.py -> build/lib/BacterialTyper/config
+copying BacterialTyper/config/__init__.py -> build/lib/BacterialTyper/config
+copying BacterialTyper/config/extern_progs.py -> build/lib/BacterialTyper/config
+creating build/lib/BacterialTyper/data
+copying BacterialTyper/data/data_files.py -> build/lib/BacterialTyper/data
+copying BacterialTyper/data/__init__.py -> build/lib/BacterialTyper/data
+creating build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/cluster.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/metadata.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/profile.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/prep.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/report_generation.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/MGE.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/database.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/help_info.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/assemble.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/annot.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/run.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/ident.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/config.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/citation.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/version.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/test.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/__init__.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/qc.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/phylo.py -> build/lib/BacterialTyper/modules
+copying BacterialTyper/modules/trim.py -> build/lib/BacterialTyper/modules
+creating build/lib/BacterialTyper/report/Staphylococcus
+copying BacterialTyper/report/Staphylococcus/get_sccmec.py -> build/lib/BacterialTyper/report/Staphylococcus
+copying BacterialTyper/report/Staphylococcus/get_spa_typing.py -> build/lib/BacterialTyper/report/Staphylococcus
+copying BacterialTyper/report/Staphylococcus/__init__.py -> build/lib/BacterialTyper/report/Staphylococcus
+copying BacterialTyper/report/Staphylococcus/agr_typing.py -> build/lib/BacterialTyper/report/Staphylococcus
+creating build/lib/BacterialTyper/config/R
+copying BacterialTyper/config/R/R_dependencies.csv -> build/lib/BacterialTyper/config/R
+copying BacterialTyper/config/R/R_package.info.txt -> build/lib/BacterialTyper/config/R
+copying BacterialTyper/config/R/check_install_path.R -> build/lib/BacterialTyper/config/R
+copying BacterialTyper/config/R/check_install_system.R -> build/lib/BacterialTyper/config/R
+copying BacterialTyper/config/R/install_github.R -> build/lib/BacterialTyper/config/R
+copying BacterialTyper/config/R/install_package.R -> build/lib/BacterialTyper/config/R
+creating build/lib/BacterialTyper/config/perl
+copying BacterialTyper/config/perl/IslandPath_dependencies.csv -> build/lib/BacterialTyper/config/perl
+copying BacterialTyper/config/perl/install_perl_packages.py -> build/lib/BacterialTyper/config/perl
+copying BacterialTyper/config/perl/perl_dependencies.csv -> build/lib/BacterialTyper/config/perl
+creating build/lib/BacterialTyper/config/python
+copying BacterialTyper/config/python/name_conversion_module.csv -> build/lib/BacterialTyper/config/python
+copying BacterialTyper/config/python/python_requirements.txt -> build/lib/BacterialTyper/config/python
+copying BacterialTyper/config/python/python_requirements_summary.csv -> build/lib/BacterialTyper/config/python
+creating build/lib/BacterialTyper/config/software
+copying BacterialTyper/config/software/dependencies.csv -> build/lib/BacterialTyper/config/software
+copying BacterialTyper/config/software/software_details.csv -> build/lib/BacterialTyper/config/software
+copying BacterialTyper/data/BUSCO_dataset.csv -> build/lib/BacterialTyper/data
+copying BacterialTyper/data/PubMLST_datasets.csv -> build/lib/BacterialTyper/data
+copying BacterialTyper/data/__init__.pyc -> build/lib/BacterialTyper/data
+copying BacterialTyper/data/available_Trimmomatic_adapters.fasta -> build/lib/BacterialTyper/data
+copying BacterialTyper/data/available_Trimmomatic_adapters_info.csv -> build/lib/BacterialTyper/data
+copying BacterialTyper/data/available_plasmids_data.txt -> build/lib/BacterialTyper/data
+copying BacterialTyper/data/data_files.pyc -> build/lib/BacterialTyper/data
+copying BacterialTyper/data/toDownload.csv -> build/lib/BacterialTyper/data
+running build_scripts
+creating build/scripts-3.10
+copying and adjusting main/BacterialTyper -> build/scripts-3.10
+changing mode of build/scripts-3.10/BacterialTyper from 644 to 755
+installing to build/bdist.linux-x86_64/wheel
+running install
+running install_lib
+creating build/bdist.linux-x86_64
+creating build/bdist.linux-x86_64/wheel
+creating build/bdist.linux-x86_64/wheel/BacterialTyper
+creating build/bdist.linux-x86_64/wheel/BacterialTyper/other_tools
+copying build/lib/BacterialTyper/other_tools/__init__.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/other_tools
+copying build/lib/BacterialTyper/other_tools/tools.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/other_tools
+creating build/bdist.linux-x86_64/wheel/BacterialTyper/report
+creating build/bdist.linux-x86_64/wheel/BacterialTyper/report/Staphylococcus
+copying build/lib/BacterialTyper/report/Staphylococcus/get_sccmec.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/report/Staphylococcus
+copying build/lib/BacterialTyper/report/Staphylococcus/get_spa_typing.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/report/Staphylococcus
+copying build/lib/BacterialTyper/report/Staphylococcus/__init__.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/report/Staphylococcus
+copying build/lib/BacterialTyper/report/Staphylococcus/agr_typing.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/report/Staphylococcus
+copying build/lib/BacterialTyper/report/get_promoter.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/report
+copying build/lib/BacterialTyper/report/retrieve_genes.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/report
+copying build/lib/BacterialTyper/report/__init__.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/report
+creating build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/Kraken2_caller.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/get_descendant.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/trimmomatic_call.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/genomic_island.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/fastqc_caller.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/virulence_resistance.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/database_generator.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/plasmidID_call.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/card_trick_caller.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/ariba_caller.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/bacteriophage.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/variant_calling.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/spades_assembler.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/min_hash_caller.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/KMA_caller.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/database_user.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/MLSTar.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/__init__.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/functions.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/annotation.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/phylo_parser.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/edirect_caller.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/BUSCO_caller.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/multiQC_report.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+copying build/lib/BacterialTyper/scripts/assembly_stats_caller.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/scripts
+creating build/bdist.linux-x86_64/wheel/BacterialTyper/config
+creating build/bdist.linux-x86_64/wheel/BacterialTyper/config/software
+copying build/lib/BacterialTyper/config/software/dependencies.csv -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/software
+copying build/lib/BacterialTyper/config/software/software_details.csv -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/software
+creating build/bdist.linux-x86_64/wheel/BacterialTyper/config/perl
+copying build/lib/BacterialTyper/config/perl/IslandPath_dependencies.csv -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/perl
+copying build/lib/BacterialTyper/config/perl/install_perl_packages.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/perl
+copying build/lib/BacterialTyper/config/perl/perl_dependencies.csv -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/perl
+copying build/lib/BacterialTyper/config/conda_dumper.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/config
+creating build/bdist.linux-x86_64/wheel/BacterialTyper/config/python
+copying build/lib/BacterialTyper/config/python/python_requirements_summary.csv -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/python
+copying build/lib/BacterialTyper/config/python/name_conversion_module.csv -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/python
+copying build/lib/BacterialTyper/config/python/python_requirements.txt -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/python
+copying build/lib/BacterialTyper/config/install_dependencies.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/config
+creating build/bdist.linux-x86_64/wheel/BacterialTyper/config/R
+copying build/lib/BacterialTyper/config/R/R_dependencies.csv -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/R
+copying build/lib/BacterialTyper/config/R/R_package.info.txt -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/R
+copying build/lib/BacterialTyper/config/R/check_install_path.R -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/R
+copying build/lib/BacterialTyper/config/R/install_github.R -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/R
+copying build/lib/BacterialTyper/config/R/install_package.R -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/R
+copying build/lib/BacterialTyper/config/R/check_install_system.R -> build/bdist.linux-x86_64/wheel/BacterialTyper/config/R
+copying build/lib/BacterialTyper/config/set_config.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/config
+copying build/lib/BacterialTyper/config/__init__.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/config
+copying build/lib/BacterialTyper/config/extern_progs.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/config
+creating build/bdist.linux-x86_64/wheel/BacterialTyper/data
+copying build/lib/BacterialTyper/data/toDownload.csv -> build/bdist.linux-x86_64/wheel/BacterialTyper/data
+copying build/lib/BacterialTyper/data/data_files.pyc -> build/bdist.linux-x86_64/wheel/BacterialTyper/data
+copying build/lib/BacterialTyper/data/available_Trimmomatic_adapters_info.csv -> build/bdist.linux-x86_64/wheel/BacterialTyper/data
+copying build/lib/BacterialTyper/data/data_files.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/data
+copying build/lib/BacterialTyper/data/available_plasmids_data.txt -> build/bdist.linux-x86_64/wheel/BacterialTyper/data
+copying build/lib/BacterialTyper/data/BUSCO_dataset.csv -> build/bdist.linux-x86_64/wheel/BacterialTyper/data
+copying build/lib/BacterialTyper/data/__init__.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/data
+copying build/lib/BacterialTyper/data/__init__.pyc -> build/bdist.linux-x86_64/wheel/BacterialTyper/data
+copying build/lib/BacterialTyper/data/PubMLST_datasets.csv -> build/bdist.linux-x86_64/wheel/BacterialTyper/data
+copying build/lib/BacterialTyper/data/available_Trimmomatic_adapters.fasta -> build/bdist.linux-x86_64/wheel/BacterialTyper/data
+copying build/lib/BacterialTyper/__init__.py -> build/bdist.linux-x86_64/wheel/BacterialTyper
+creating build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/cluster.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/metadata.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/profile.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/prep.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/report_generation.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/MGE.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/database.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/help_info.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/assemble.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/annot.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/run.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/ident.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/config.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/citation.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/version.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/test.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/__init__.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/qc.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/phylo.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+copying build/lib/BacterialTyper/modules/trim.py -> build/bdist.linux-x86_64/wheel/BacterialTyper/modules
+running install_egg_info
+Copying BacterialTyper.egg-info to build/bdist.linux-x86_64/wheel/BacterialTyper-0.6.4-py3.10.egg-info
+running install_scripts
+creating build/bdist.linux-x86_64/wheel/BacterialTyper-0.6.4.data
+creating build/bdist.linux-x86_64/wheel/BacterialTyper-0.6.4.data/scripts
+copying build/scripts-3.10/BacterialTyper -> build/bdist.linux-x86_64/wheel/BacterialTyper-0.6.4.data/scripts
+changing mode of build/bdist.linux-x86_64/wheel/BacterialTyper-0.6.4.data/scripts/BacterialTyper to 755
+creating build/bdist.linux-x86_64/wheel/BacterialTyper-0.6.4.dist-info/WHEEL
+creating 'dist/BacterialTyper-0.6.4-py3-none-any.whl' and adding 'build/bdist.linux-x86_64/wheel' to it
+adding 'BacterialTyper/__init__.py'
+adding 'BacterialTyper/config/__init__.py'
+adding 'BacterialTyper/config/conda_dumper.py'
+adding 'BacterialTyper/config/extern_progs.py'
+adding 'BacterialTyper/config/install_dependencies.py'
+adding 'BacterialTyper/config/set_config.py'
+adding 'BacterialTyper/config/R/R_dependencies.csv'
+adding 'BacterialTyper/config/R/R_package.info.txt'
+adding 'BacterialTyper/config/R/check_install_path.R'
+adding 'BacterialTyper/config/R/check_install_system.R'
+adding 'BacterialTyper/config/R/install_github.R'
+adding 'BacterialTyper/config/R/install_package.R'
+adding 'BacterialTyper/config/perl/IslandPath_dependencies.csv'
+adding 'BacterialTyper/config/perl/install_perl_packages.py'
+adding 'BacterialTyper/config/perl/perl_dependencies.csv'
+adding 'BacterialTyper/config/python/name_conversion_module.csv'
+adding 'BacterialTyper/config/python/python_requirements.txt'
+adding 'BacterialTyper/config/python/python_requirements_summary.csv'
+adding 'BacterialTyper/config/software/dependencies.csv'
+adding 'BacterialTyper/config/software/software_details.csv'
+adding 'BacterialTyper/data/BUSCO_dataset.csv'
+adding 'BacterialTyper/data/PubMLST_datasets.csv'
+adding 'BacterialTyper/data/__init__.py'
+adding 'BacterialTyper/data/__init__.pyc'
+adding 'BacterialTyper/data/available_Trimmomatic_adapters.fasta'
+adding 'BacterialTyper/data/available_Trimmomatic_adapters_info.csv'
+adding 'BacterialTyper/data/available_plasmids_data.txt'
+adding 'BacterialTyper/data/data_files.py'
+adding 'BacterialTyper/data/data_files.pyc'
+adding 'BacterialTyper/data/toDownload.csv'
+adding 'BacterialTyper/modules/MGE.py'
+adding 'BacterialTyper/modules/__init__.py'
+adding 'BacterialTyper/modules/annot.py'
+adding 'BacterialTyper/modules/assemble.py'
+adding 'BacterialTyper/modules/citation.py'
+adding 'BacterialTyper/modules/cluster.py'
+adding 'BacterialTyper/modules/config.py'
+adding 'BacterialTyper/modules/database.py'
+adding 'BacterialTyper/modules/help_info.py'
+adding 'BacterialTyper/modules/ident.py'
+adding 'BacterialTyper/modules/metadata.py'
+adding 'BacterialTyper/modules/phylo.py'
+adding 'BacterialTyper/modules/prep.py'
+adding 'BacterialTyper/modules/profile.py'
+adding 'BacterialTyper/modules/qc.py'
+adding 'BacterialTyper/modules/report_generation.py'
+adding 'BacterialTyper/modules/run.py'
+adding 'BacterialTyper/modules/test.py'
+adding 'BacterialTyper/modules/trim.py'
+adding 'BacterialTyper/modules/version.py'
+adding 'BacterialTyper/other_tools/__init__.py'
+adding 'BacterialTyper/other_tools/tools.py'
+adding 'BacterialTyper/report/__init__.py'
+adding 'BacterialTyper/report/get_promoter.py'
+adding 'BacterialTyper/report/retrieve_genes.py'
+adding 'BacterialTyper/report/Staphylococcus/__init__.py'
+adding 'BacterialTyper/report/Staphylococcus/agr_typing.py'
+adding 'BacterialTyper/report/Staphylococcus/get_sccmec.py'
+adding 'BacterialTyper/report/Staphylococcus/get_spa_typing.py'
+adding 'BacterialTyper/scripts/BUSCO_caller.py'
+adding 'BacterialTyper/scripts/KMA_caller.py'
+adding 'BacterialTyper/scripts/Kraken2_caller.py'
+adding 'BacterialTyper/scripts/MLSTar.py'
+adding 'BacterialTyper/scripts/__init__.py'
+adding 'BacterialTyper/scripts/annotation.py'
+adding 'BacterialTyper/scripts/ariba_caller.py'
+adding 'BacterialTyper/scripts/assembly_stats_caller.py'
+adding 'BacterialTyper/scripts/bacteriophage.py'
+adding 'BacterialTyper/scripts/card_trick_caller.py'
+adding 'BacterialTyper/scripts/database_generator.py'
+adding 'BacterialTyper/scripts/database_user.py'
+adding 'BacterialTyper/scripts/edirect_caller.py'
+adding 'BacterialTyper/scripts/fastqc_caller.py'
+adding 'BacterialTyper/scripts/functions.py'
+adding 'BacterialTyper/scripts/genomic_island.py'
+adding 'BacterialTyper/scripts/get_descendant.py'
+adding 'BacterialTyper/scripts/min_hash_caller.py'
+adding 'BacterialTyper/scripts/multiQC_report.py'
+adding 'BacterialTyper/scripts/phylo_parser.py'
+adding 'BacterialTyper/scripts/plasmidID_call.py'
+adding 'BacterialTyper/scripts/spades_assembler.py'
+adding 'BacterialTyper/scripts/trimmomatic_call.py'
+adding 'BacterialTyper/scripts/variant_calling.py'
+adding 'BacterialTyper/scripts/virulence_resistance.py'
+adding 'BacterialTyper-0.6.4.data/scripts/BacterialTyper'
+adding 'BacterialTyper-0.6.4.dist-info/LICENSE'
+adding 'BacterialTyper-0.6.4.dist-info/METADATA'
+adding 'BacterialTyper-0.6.4.dist-info/WHEEL'
+adding 'BacterialTyper-0.6.4.dist-info/top_level.txt'
+adding 'BacterialTyper-0.6.4.dist-info/RECORD'
+removing build/bdist.linux-x86_64/wheel
+
+Obtaining file:///imppc/labs/lslab/jsanchez/git_repo/HCGB_git/BacterialTyper
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting ariba (from BacterialTyper==0.6.4)
+  Using cached ariba-2.14.6.tar.gz (2.7 MB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting assembly-stats (from BacterialTyper==0.6.4)
+  Using cached assembly_stats-0.1.4-py3-none-any.whl (5.0 kB)
+Collecting bcbio-gff (from BacterialTyper==0.6.4)
+  Using cached bcbio_gff-0.7.0-py3-none-any.whl (16 kB)
+Collecting beautifulsoup4 (from BacterialTyper==0.6.4)
+  Using cached beautifulsoup4-4.12.2-py3-none-any.whl (142 kB)
+Collecting biopython (from BacterialTyper==0.6.4)
+  Downloading biopython-1.81-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.1/3.1 MB 4.6 MB/s eta 0:00:00
+Collecting card-trick (from BacterialTyper==0.6.4)
+  Using cached card_trick-0.2.1-py3-none-any.whl (10 kB)
+Collecting ete3 (from BacterialTyper==0.6.4)
+  Using cached ete3-3.1.3.tar.gz (4.8 MB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting future (from BacterialTyper==0.6.4)
+  Using cached future-0.18.3.tar.gz (840 kB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting HCGB (from BacterialTyper==0.6.4)
+  Using cached HCGB-0.5.8.tar.gz (31 kB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting multiqc (from BacterialTyper==0.6.4)
+  Using cached multiqc-1.17-py3-none-any.whl.metadata (2.5 kB)
+Collecting ncbi-genome-download (from BacterialTyper==0.6.4)
+  Using cached ncbi_genome_download-0.3.3-py2.py3-none-any.whl.metadata (10 kB)
+Collecting networkx (from BacterialTyper==0.6.4)
+  Using cached networkx-3.2-py3-none-any.whl.metadata (5.2 kB)
+Collecting numpy (from BacterialTyper==0.6.4)
+  Downloading numpy-1.26.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (61 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 61.2/61.2 kB 511.2 kB/s eta 0:00:00
+Collecting pandas (from BacterialTyper==0.6.4)
+  Downloading pandas-2.1.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (18 kB)
+Collecting patool (from BacterialTyper==0.6.4)
+  Downloading patool-1.13-py2.py3-none-any.whl.metadata (3.5 kB)
+Collecting PhiSpy (from BacterialTyper==0.6.4)
+  Using cached PhiSpy-4.2.21.tar.gz (19.0 MB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting scipy (from BacterialTyper==0.6.4)
+  Downloading scipy-1.11.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 60.4/60.4 kB 503.6 kB/s eta 0:00:00
+Collecting sourmash (from BacterialTyper==0.6.4)
+  Using cached sourmash-4.8.4-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (8.7 kB)
+Collecting spaTyper (from BacterialTyper==0.6.4)
+  Using cached spaTyper-0.3.3-py3-none-any.whl (165 kB)
+Collecting wget (from BacterialTyper==0.6.4)
+  Using cached wget-3.2.zip (10 kB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting XlsxWriter (from BacterialTyper==0.6.4)
+  Using cached XlsxWriter-3.1.9-py3-none-any.whl.metadata (2.6 kB)
+Collecting pytest (from BacterialTyper==0.6.4)
+  Downloading pytest-7.4.3-py3-none-any.whl.metadata (7.9 kB)
+Collecting dendropy>=4.2.0 (from ariba->BacterialTyper==0.6.4)
+  Using cached DendroPy-4.6.1-py3-none-any.whl.metadata (3.8 kB)
+Collecting pyfastaq>=3.12.0 (from ariba->BacterialTyper==0.6.4)
+  Using cached pyfastaq-3.17.0.tar.gz (51 kB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting pysam>=0.9.1 (from ariba->BacterialTyper==0.6.4)
+  Downloading pysam-0.22.0-cp310-cp310-manylinux_2_28_x86_64.whl.metadata (1.5 kB)
+Collecting pymummer<=0.10.3 (from ariba->BacterialTyper==0.6.4)
+  Using cached pymummer-0.10.3.tar.gz (6.5 kB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting matplotlib>=3.1.0 (from ariba->BacterialTyper==0.6.4)
+  Downloading matplotlib-3.8.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.8 kB)
+Collecting soupsieve>1.2 (from beautifulsoup4->BacterialTyper==0.6.4)
+  Using cached soupsieve-2.5-py3-none-any.whl.metadata (4.7 kB)
+Collecting six (from bcbio-gff->BacterialTyper==0.6.4)
+  Using cached six-1.16.0-py2.py3-none-any.whl (11 kB)
+Collecting pronto>=2.2 (from card-trick->BacterialTyper==0.6.4)
+  Using cached pronto-2.5.5-py2.py3-none-any.whl.metadata (9.4 kB)
+Requirement already satisfied: requests in /imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages (from card-trick->BacterialTyper==0.6.4) (2.31.0)
+Collecting termcolor (from HCGB->BacterialTyper==0.6.4)
+  Using cached termcolor-2.3.0-py3-none-any.whl (6.9 kB)
+Collecting click (from multiqc->BacterialTyper==0.6.4)
+  Using cached click-8.1.7-py3-none-any.whl.metadata (3.0 kB)
+Collecting coloredlogs (from multiqc->BacterialTyper==0.6.4)
+  Using cached coloredlogs-15.0.1-py2.py3-none-any.whl (46 kB)
+Collecting jinja2>=3.0.0 (from multiqc->BacterialTyper==0.6.4)
+  Using cached Jinja2-3.1.2-py3-none-any.whl (133 kB)
+Collecting markdown (from multiqc->BacterialTyper==0.6.4)
+  Using cached Markdown-3.5-py3-none-any.whl.metadata (7.1 kB)
+Requirement already satisfied: packaging in /imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages (from multiqc->BacterialTyper==0.6.4) (23.2)
+Collecting pyyaml>=4 (from multiqc->BacterialTyper==0.6.4)
+  Downloading PyYAML-6.0.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.1 kB)
+Collecting rich>=10 (from multiqc->BacterialTyper==0.6.4)
+  Using cached rich-13.6.0-py3-none-any.whl.metadata (18 kB)
+Collecting rich-click (from multiqc->BacterialTyper==0.6.4)
+  Using cached rich_click-1.7.0-py3-none-any.whl.metadata (22 kB)
+Collecting spectra>=0.0.10 (from multiqc->BacterialTyper==0.6.4)
+  Using cached spectra-0.0.11.tar.gz (18 kB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting importlib-metadata (from multiqc->BacterialTyper==0.6.4)
+  Using cached importlib_metadata-6.8.0-py3-none-any.whl.metadata (5.1 kB)
+Collecting appdirs (from ncbi-genome-download->BacterialTyper==0.6.4)
+  Using cached appdirs-1.4.4-py2.py3-none-any.whl (9.6 kB)
+Requirement already satisfied: tqdm in /imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages (from ncbi-genome-download->BacterialTyper==0.6.4) (4.66.1)
+Collecting python-dateutil>=2.8.2 (from pandas->BacterialTyper==0.6.4)
+  Using cached python_dateutil-2.8.2-py2.py3-none-any.whl (247 kB)
+Collecting pytz>=2020.1 (from pandas->BacterialTyper==0.6.4)
+  Using cached pytz-2023.3.post1-py2.py3-none-any.whl.metadata (22 kB)
+Collecting tzdata>=2022.1 (from pandas->BacterialTyper==0.6.4)
+  Using cached tzdata-2023.3-py2.py3-none-any.whl (341 kB)
+Collecting scikit-learn>=0.21.3 (from PhiSpy->BacterialTyper==0.6.4)
+  Downloading scikit_learn-1.3.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (11 kB)
+Collecting iniconfig (from pytest->BacterialTyper==0.6.4)
+  Using cached iniconfig-2.0.0-py3-none-any.whl (5.9 kB)
+Requirement already satisfied: pluggy<2.0,>=0.12 in /imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages (from pytest->BacterialTyper==0.6.4) (1.3.0)
+Collecting exceptiongroup>=1.0.0rc8 (from pytest->BacterialTyper==0.6.4)
+  Downloading exceptiongroup-1.1.3-py3-none-any.whl.metadata (6.1 kB)
+Collecting tomli>=1.0.0 (from pytest->BacterialTyper==0.6.4)
+  Downloading tomli-2.0.1-py3-none-any.whl (12 kB)
+Collecting screed<2,>=1.1.2 (from sourmash->BacterialTyper==0.6.4)
+  Using cached screed-1.1.2-py2.py3-none-any.whl (95 kB)
+Requirement already satisfied: cffi>=1.14.0 in /imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages (from sourmash->BacterialTyper==0.6.4) (1.16.0)
+Collecting deprecation>=2.0.6 (from sourmash->BacterialTyper==0.6.4)
+  Using cached deprecation-2.1.0-py2.py3-none-any.whl (11 kB)
+Collecting cachetools<6,>=4 (from sourmash->BacterialTyper==0.6.4)
+  Downloading cachetools-5.3.2-py3-none-any.whl.metadata (5.2 kB)
+Collecting bitstring<5,>=3.1.9 (from sourmash->BacterialTyper==0.6.4)
+  Using cached bitstring-4.1.2-py3-none-any.whl.metadata (5.6 kB)
+Collecting bitarray<3.0.0,>=2.8.0 (from bitstring<5,>=3.1.9->sourmash->BacterialTyper==0.6.4)
+  Downloading bitarray-2.8.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (32 kB)
+Requirement already satisfied: pycparser in /imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages (from cffi>=1.14.0->sourmash->BacterialTyper==0.6.4) (2.21)
+Requirement already satisfied: setuptools in /imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages (from dendropy>=4.2.0->ariba->BacterialTyper==0.6.4) (68.2.2)
+Collecting MarkupSafe>=2.0 (from jinja2>=3.0.0->multiqc->BacterialTyper==0.6.4)
+  Downloading MarkupSafe-2.1.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.0 kB)
+Collecting contourpy>=1.0.1 (from matplotlib>=3.1.0->ariba->BacterialTyper==0.6.4)
+  Downloading contourpy-1.1.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.9 kB)
+Collecting cycler>=0.10 (from matplotlib>=3.1.0->ariba->BacterialTyper==0.6.4)
+  Using cached cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+Collecting fonttools>=4.22.0 (from matplotlib>=3.1.0->ariba->BacterialTyper==0.6.4)
+  Downloading fonttools-4.43.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (152 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 152.4/152.4 kB 1.1 MB/s eta 0:00:00
+Collecting kiwisolver>=1.0.1 (from matplotlib>=3.1.0->ariba->BacterialTyper==0.6.4)
+  Downloading kiwisolver-1.4.5-cp310-cp310-manylinux_2_12_x86_64.manylinux2010_x86_64.whl.metadata (6.4 kB)
+Collecting pillow>=6.2.0 (from matplotlib>=3.1.0->ariba->BacterialTyper==0.6.4)
+  Downloading Pillow-10.1.0-cp310-cp310-manylinux_2_28_x86_64.whl.metadata (9.5 kB)
+Collecting pyparsing>=2.3.1 (from matplotlib>=3.1.0->ariba->BacterialTyper==0.6.4)
+  Using cached pyparsing-3.1.1-py3-none-any.whl.metadata (5.1 kB)
+Collecting chardet~=5.0 (from pronto>=2.2->card-trick->BacterialTyper==0.6.4)
+  Using cached chardet-5.2.0-py3-none-any.whl.metadata (3.4 kB)
+Collecting fastobo~=0.12.2 (from pronto>=2.2->card-trick->BacterialTyper==0.6.4)
+  Downloading fastobo-0.12.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 3.2 MB/s eta 0:00:00
+Requirement already satisfied: charset-normalizer<4,>=2 in /imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages (from requests->card-trick->BacterialTyper==0.6.4) (3.3.1)
+Requirement already satisfied: idna<4,>=2.5 in /imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages (from requests->card-trick->BacterialTyper==0.6.4) (3.4)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages (from requests->card-trick->BacterialTyper==0.6.4) (2.0.7)
+Requirement already satisfied: certifi>=2017.4.17 in /imppc/labs/lslab/jsanchez/conda_package/miniconda3/envs/BT_dev/lib/python3.10/site-packages (from requests->card-trick->BacterialTyper==0.6.4) (2023.7.22)
+Collecting markdown-it-py>=2.2.0 (from rich>=10->multiqc->BacterialTyper==0.6.4)
+  Using cached markdown_it_py-3.0.0-py3-none-any.whl.metadata (6.9 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich>=10->multiqc->BacterialTyper==0.6.4)
+  Using cached Pygments-2.16.1-py3-none-any.whl.metadata (2.5 kB)
+Collecting joblib>=1.1.1 (from scikit-learn>=0.21.3->PhiSpy->BacterialTyper==0.6.4)
+  Using cached joblib-1.3.2-py3-none-any.whl.metadata (5.4 kB)
+Collecting threadpoolctl>=2.0.0 (from scikit-learn>=0.21.3->PhiSpy->BacterialTyper==0.6.4)
+  Using cached threadpoolctl-3.2.0-py3-none-any.whl.metadata (10.0 kB)
+Collecting colormath>=3.0.0 (from spectra>=0.0.10->multiqc->BacterialTyper==0.6.4)
+  Using cached colormath-3.0.0.tar.gz (39 kB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting humanfriendly>=9.1 (from coloredlogs->multiqc->BacterialTyper==0.6.4)
+  Using cached humanfriendly-10.0-py2.py3-none-any.whl (86 kB)
+Collecting zipp>=0.5 (from importlib-metadata->multiqc->BacterialTyper==0.6.4)
+  Using cached zipp-3.17.0-py3-none-any.whl.metadata (3.7 kB)
+Collecting typing-extensions (from rich-click->multiqc->BacterialTyper==0.6.4)
+  Using cached typing_extensions-4.8.0-py3-none-any.whl.metadata (3.0 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=10->multiqc->BacterialTyper==0.6.4)
+  Using cached mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Using cached multiqc-1.17-py3-none-any.whl (1.4 MB)
+Using cached networkx-3.2-py3-none-any.whl (1.6 MB)
+Using cached ncbi_genome_download-0.3.3-py2.py3-none-any.whl (26 kB)
+Downloading numpy-1.26.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (18.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 18.2/18.2 MB 12.5 MB/s eta 0:00:00
+Downloading pandas-2.1.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (12.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.3/12.3 MB 19.3 MB/s eta 0:00:00
+Downloading patool-1.13-py2.py3-none-any.whl (87 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 87.8/87.8 kB 700.5 kB/s eta 0:00:00
+Downloading pytest-7.4.3-py3-none-any.whl (325 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 325.1/325.1 kB 3.5 MB/s eta 0:00:00
+Downloading scipy-1.11.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (36.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 36.4/36.4 MB 12.1 MB/s eta 0:00:00
+Using cached sourmash-4.8.4-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.8 MB)
+Using cached XlsxWriter-3.1.9-py3-none-any.whl (154 kB)
+Using cached bitstring-4.1.2-py3-none-any.whl (59 kB)
+Downloading cachetools-5.3.2-py3-none-any.whl (9.3 kB)
+Using cached DendroPy-4.6.1-py3-none-any.whl (458 kB)
+Downloading exceptiongroup-1.1.3-py3-none-any.whl (14 kB)
+Downloading matplotlib-3.8.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (11.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.6/11.6 MB 13.6 MB/s eta 0:00:00
+Using cached pronto-2.5.5-py2.py3-none-any.whl (61 kB)
+Downloading pysam-0.22.0-cp310-cp310-manylinux_2_28_x86_64.whl (21.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 21.9/21.9 MB 16.5 MB/s eta 0:00:00
+Using cached pytz-2023.3.post1-py2.py3-none-any.whl (502 kB)
+Downloading PyYAML-6.0.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (705 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 705.5/705.5 kB 4.8 MB/s eta 0:00:00
+Using cached rich-13.6.0-py3-none-any.whl (239 kB)
+Downloading scikit_learn-1.3.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (10.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.8/10.8 MB 21.5 MB/s eta 0:00:00
+Using cached soupsieve-2.5-py3-none-any.whl (36 kB)
+Using cached click-8.1.7-py3-none-any.whl (97 kB)
+Using cached importlib_metadata-6.8.0-py3-none-any.whl (22 kB)
+Using cached Markdown-3.5-py3-none-any.whl (101 kB)
+Using cached rich_click-1.7.0-py3-none-any.whl (32 kB)
+Downloading bitarray-2.8.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (286 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 286.5/286.5 kB 2.7 MB/s eta 0:00:00
+Using cached chardet-5.2.0-py3-none-any.whl (199 kB)
+Downloading contourpy-1.1.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (301 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 301.7/301.7 kB 3.4 MB/s eta 0:00:00
+Using cached cycler-0.12.1-py3-none-any.whl (8.3 kB)
+Downloading fonttools-4.43.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.5/4.5 MB 14.4 MB/s eta 0:00:00
+Using cached joblib-1.3.2-py3-none-any.whl (302 kB)
+Downloading kiwisolver-1.4.5-cp310-cp310-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (1.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.6/1.6 MB 9.9 MB/s eta 0:00:00
+Using cached markdown_it_py-3.0.0-py3-none-any.whl (87 kB)
+Downloading MarkupSafe-2.1.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (25 kB)
+Downloading Pillow-10.1.0-cp310-cp310-manylinux_2_28_x86_64.whl (3.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.6/3.6 MB 12.6 MB/s eta 0:00:00
+Using cached Pygments-2.16.1-py3-none-any.whl (1.2 MB)
+Using cached pyparsing-3.1.1-py3-none-any.whl (103 kB)
+Using cached threadpoolctl-3.2.0-py3-none-any.whl (15 kB)
+Using cached zipp-3.17.0-py3-none-any.whl (7.4 kB)
+Using cached typing_extensions-4.8.0-py3-none-any.whl (31 kB)
+Building wheels for collected packages: ariba, ete3, future, HCGB, PhiSpy, wget, pyfastaq, pymummer, spectra, colormath
+  Building wheel for ariba (setup.py): started
+  Building wheel for ariba (setup.py): finished with status 'done'
+  Created wheel for ariba: filename=ariba-2.14.6-cp310-cp310-linux_x86_64.whl size=2933790 sha256=3d50eeb1a28f1eb67d7b6d7b89e9bd1c2b2f34906d1086e4659c5d151fa7eb2c
+  Stored in directory: /home/labs/lslab/jsanchez/.cache/pip/wheels/40/ba/7f/8c4f42911032a28068458724eb6558cc98840d456f8fbf51a6
+  Building wheel for ete3 (setup.py): started
+  Building wheel for ete3 (setup.py): finished with status 'done'
+  Created wheel for ete3: filename=ete3-3.1.3-py3-none-any.whl size=2273785 sha256=c9657ca97530676a5440d641e47eb9f7bd5c547c754b37d1c787705ee4631866
+  Stored in directory: /home/labs/lslab/jsanchez/.cache/pip/wheels/a0/72/00/1982bd848e52b03079dbf800900120bc1c20e92e9a1216e525
+  Building wheel for future (setup.py): started
+  Building wheel for future (setup.py): finished with status 'done'
+  Created wheel for future: filename=future-0.18.3-py3-none-any.whl size=492024 sha256=ed0029e7189885f5fb59e5765717bc275fb9578e9cd203365c449bc0988492a1
+  Stored in directory: /home/labs/lslab/jsanchez/.cache/pip/wheels/5e/a9/47/f118e66afd12240e4662752cc22cefae5d97275623aa8ef57d
+  Building wheel for HCGB (setup.py): started
+  Building wheel for HCGB (setup.py): finished with status 'done'
+  Created wheel for HCGB: filename=HCGB-0.5.8-py3-none-any.whl size=41343 sha256=e4644e5b693c06fa0671da43d7c3c687d11bbcabc188ac047959e4d8af0bcc30
+  Stored in directory: /home/labs/lslab/jsanchez/.cache/pip/wheels/1d/53/04/0713886172ed32744c35a28d32f697927f29641f7663de6749
+  Building wheel for PhiSpy (setup.py): started
+  Building wheel for PhiSpy (setup.py): finished with status 'done'
+  Created wheel for PhiSpy: filename=PhiSpy-4.2.21-cp310-cp310-linux_x86_64.whl size=19194874 sha256=ce3c63b2650fe6899272dd3782ea2fcb95798762c00a4ad1410dbc97deba2ea6
+  Stored in directory: /home/labs/lslab/jsanchez/.cache/pip/wheels/76/62/68/7203c743512899db9642ca9da09ffba715fc8f10f60e69c7ac
+  Building wheel for wget (setup.py): started
+  Building wheel for wget (setup.py): finished with status 'done'
+  Created wheel for wget: filename=wget-3.2-py3-none-any.whl size=9655 sha256=33bdda936029ed0cdbd163c19c6aa6fa94c59b051a183262c0a136305a2bf7d3
+  Stored in directory: /home/labs/lslab/jsanchez/.cache/pip/wheels/8b/f1/7f/5c94f0a7a505ca1c81cd1d9208ae2064675d97582078e6c769
+  Building wheel for pyfastaq (setup.py): started
+  Building wheel for pyfastaq (setup.py): finished with status 'done'
+  Created wheel for pyfastaq: filename=pyfastaq-3.17.0-py3-none-any.whl size=44396 sha256=add3a7528672e4ebbbe15cb5e6dde62cfda829ca3b1e8ff4539239eb356ac3d8
+  Stored in directory: /home/labs/lslab/jsanchez/.cache/pip/wheels/5d/15/49/53a866e14f599687efb46be51c18f14212ad5ff69e82ee28f5
+  Building wheel for pymummer (setup.py): started
+  Building wheel for pymummer (setup.py): finished with status 'done'
+  Created wheel for pymummer: filename=pymummer-0.10.3-py3-none-any.whl size=8690 sha256=ae9d76956f5702c7444ec966d2a6df622d1e3c02dc210a490079595baa5ddaa4
+  Stored in directory: /home/labs/lslab/jsanchez/.cache/pip/wheels/cb/58/b2/38823e7718016b6eb244f7df882eb5ddc467ab27c692072065
+  Building wheel for spectra (setup.py): started
+  Building wheel for spectra (setup.py): finished with status 'done'
+  Created wheel for spectra: filename=spectra-0.0.11-py3-none-any.whl size=17466 sha256=3cc3d12eff127adeb03e8575023bb8f7c717f9adde19e1c7e7cd18892b378132
+  Stored in directory: /home/labs/lslab/jsanchez/.cache/pip/wheels/bc/27/ec/cddaa9489a49ddcf702e1f4dc1791db28a3b0121e1ff254f97
+  Building wheel for colormath (setup.py): started
+  Building wheel for colormath (setup.py): finished with status 'done'
+  Created wheel for colormath: filename=colormath-3.0.0-py3-none-any.whl size=39405 sha256=e468fef29ab9dea61afa1eccecd29ea05faee7a064dd83ba06334026035e95a1
+  Stored in directory: /home/labs/lslab/jsanchez/.cache/pip/wheels/ab/b3/4d/c0738759c25a1df01958068f162cf2a9dc3ab1da8b972cfcfc
+Successfully built ariba ete3 future HCGB PhiSpy wget pyfastaq pymummer spectra colormath
+Installing collected packages: wget, spaTyper, pytz, pyfastaq, ete3, bitarray, appdirs, zipp, XlsxWriter, tzdata, typing-extensions, tomli, threadpoolctl, termcolor, soupsieve, six, screed, pyyaml, pysam, pyparsing, pymummer, pygments, pillow, patool, numpy, networkx, mdurl, MarkupSafe, markdown, kiwisolver, joblib, iniconfig, humanfriendly, future, fonttools, fastobo, exceptiongroup, deprecation, dendropy, cycler, click, chardet, cachetools, bitstring, scipy, python-dateutil, pytest, ncbi-genome-download, markdown-it-py, jinja2, importlib-metadata, contourpy, colormath, coloredlogs, biopython, beautifulsoup4, assembly-stats, spectra, scikit-learn, rich, pronto, pandas, matplotlib, bcbio-gff, sourmash, rich-click, PhiSpy, HCGB, card-trick, ariba, multiqc, BacterialTyper
+  Running setup.py develop for BacterialTyper
+Successfully installed BacterialTyper-0.6.4 HCGB-0.5.8 MarkupSafe-2.1.3 PhiSpy-4.2.21 XlsxWriter-3.1.9 appdirs-1.4.4 ariba-2.14.6 assembly-stats-0.1.4 bcbio-gff-0.7.0 beautifulsoup4-4.12.2 biopython-1.81 bitarray-2.8.2 bitstring-4.1.2 cachetools-5.3.2 card-trick-0.2.1 chardet-5.2.0 click-8.1.7 coloredlogs-15.0.1 colormath-3.0.0 contourpy-1.1.1 cycler-0.12.1 dendropy-4.6.1 deprecation-2.1.0 ete3-3.1.3 exceptiongroup-1.1.3 fastobo-0.12.2 fonttools-4.43.1 future-0.18.3 humanfriendly-10.0 importlib-metadata-6.8.0 iniconfig-2.0.0 jinja2-3.1.2 joblib-1.3.2 kiwisolver-1.4.5 markdown-3.5 markdown-it-py-3.0.0 matplotlib-3.8.0 mdurl-0.1.2 multiqc-1.17 ncbi-genome-download-0.3.3 networkx-3.2 numpy-1.26.1 pandas-2.1.1 patool-1.13 pillow-10.1.0 pronto-2.5.5 pyfastaq-3.17.0 pygments-2.16.1 pymummer-0.10.3 pyparsing-3.1.1 pysam-0.22.0 pytest-7.4.3 python-dateutil-2.8.2 pytz-2023.3.post1 pyyaml-6.0.1 rich-13.6.0 rich-click-1.7.0 scikit-learn-1.3.2 scipy-1.11.3 screed-1.1.2 six-1.16.0 soupsieve-2.5 sourmash-4.8.4 spaTyper-0.3.3 spectra-0.0.11 termcolor-2.3.0 threadpoolctl-3.2.0 tomli-2.0.1 typing-extensions-4.8.0 tzdata-2023.3 wget-3.2 zipp-3.17.0

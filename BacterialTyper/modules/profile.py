@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 ##########################################################
 ## Jose F. Sanchez                                        ##
 ## Copyright (C) 2019 Lauro Sumoy Lab, IGTP, Spain        ##
@@ -122,7 +123,7 @@ def run_profile(options):
     
     ## merge information
     pd_samples = pd.concat([pd_samples_retrieved, pd_samples_info])
-    
+
     ## debug message
     if (Debug):
         HCGB_aes.debug_message('pd_samples_retrieve')
@@ -133,17 +134,20 @@ def run_profile(options):
         
         HCGB_aes.debug_message('pd_samples')
         HCGB_main.print_all_pandaDF(pd_samples)
-        
+    
+    
     ## generate output folder, if necessary
     print ("\n+ Create output folder(s):")
     if not options.project:
         HCGB_files.create_folder(outdir)
     
     ## for each sample
-    outdir_dict = HCGB_files.outdir_project(outdir, options.project, pd_samples_retrieved, "profile", options.debug)
+    outdir_dict = HCGB_files.outdir_project(outdir, options.project, 
+                                            pd_samples, "profile", 
+                                            options.debug,  groupby_col="name_sample")
     
     #print(outdir_dict)
-    #exit()
+    
     
     ###
     print ("+ Generate a sample profile for virulence and resistance candidate genes for each sample retrieved using:")
@@ -211,7 +215,7 @@ def run_profile(options):
     ################################################
     ## samples information dictionary
     samples_info = {}
-    samples_frame = pd_samples_retrieved.groupby('new_name')
+    samples_frame = pd_samples.groupby('name_sample')
     for name_tuple, grouped in samples_frame:
         name = name_tuple[0]
         samples_info[name] = grouped['sample'].to_list()
@@ -348,7 +352,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
     outdir_samples = pd.DataFrame(columns=('sample', 'dirname', 'db', 'output'))
 
     # Group dataframe by sample name
-    sample_frame = pd_samples_retrieved.groupby(["name"])
+    sample_frame = pd_samples_retrieved.groupby(["name_sample"])
 
     for name_tuple, cluster in sample_frame:
         name = name_tuple[0]
@@ -372,7 +376,7 @@ def ARIBA_ident(options, pd_samples_retrieved, outdir_dict, retrieve_databases, 
         options.ARIBA_cutoff = 0.90
 
     ## optimize threads
-    name_list = set(pd_samples_retrieved["name"].tolist())
+    name_list = set(pd_samples_retrieved["name_sample"].tolist())
     threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
     max_workers_int = int(options.threads/threads_job)
 
@@ -591,19 +595,24 @@ def AMRfinder_ident(options, samples_retrieved, out_dict, retrieve_db, start_tim
     print ("\n+ Send AMRfinder identification jobs...")
 
     # Group dataframe by sample name
-    sample_frame = samples_retrieved.groupby(["name"])
+    sample_frame = samples_retrieved.groupby(["name_sample"])
 
     ## debug message
     if (Debug):
         HCGB_aes.debug_message("outdir_samples")
         print (out_dict)
         
+        HCGB_aes.debug_message("samples_retrieved")
+        HCGB_main.print_all_pandaDF(samples_retrieved)
+    
+       
     ######################################################
     ## send for each sample
     ######################################################
     
     ## optimize threads
-    name_list = set(samples_retrieved["name"].tolist())
+    #name_list = set(samples_retrieved.index)
+    name_list = set(samples_retrieved["name_sample"].tolist())
     threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
     max_workers_int = int(options.threads/threads_job)
 
@@ -706,7 +715,7 @@ def AMRfinder_ident(options, samples_retrieved, out_dict, retrieve_db, start_tim
     if 'ARO:nan' in AROS_identified:
             AROS_identified.remove('ARO:nan')
     ## get info
-    information_ontology = card_trick_caller.get_info_CARD(AROS_identified, 'ARO', card_ontology)
+    information_ontology = card_trick_caller.get_info_CARD(AROS_identified, 'ARO', card_ontology, Debug)
 
     ## all samples
     name_excel = os.path.join(final_dir, 'profile_summary.xlsx')

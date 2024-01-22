@@ -8,23 +8,23 @@ Calls card-trick module to parse CARD resistance information.
 '''
 ## useful imports
 import os
-from io import open
 from termcolor import colored
 import card_trick
 
 ## import my modules
 import HCGB.functions.time_functions as HCGB_time
 import HCGB.functions.files_functions as HCGB_files
-import HCGB.functions.main_functions as HCGB_main
 
 ##########
-def get_info_CARD(IDs, term, dataF):
+def get_info_CARD(IDs, term, dataF, Debug):
 	## dataF contains CARD ontology: downloaded and parse using prepare_card_data
 	## IDs is an input list
 	## term is the type of search to do using card_trick
 	
 	# search for terms provided	
-	matching_terms = card_trick.ontology_functions.search(IDs, dataF, term, False)
+	matching_terms = card_trick.ontology_functions.search(input_list = IDs, dataF = dataF, 
+                                                       type_term = term, 
+                                                       quiet = False, debug=Debug)
 	return (matching_terms)
 
 #####################
