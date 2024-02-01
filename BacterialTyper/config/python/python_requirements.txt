@@ -63,7 +63,7 @@ pytz==2021.1
 PyYAML==5.4.1
 requests==2.25.1
 rich==10.3.0
-scikit-learn==0.24.2
+scikit-learn==1.0.1
 scipy==1.6.3
 screed==1.0.5
 sepp==4.5.1
