@@ -349,6 +349,10 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
         print (EQC_genes)
         print (EQC_genes_df)
 
+        HCGB_aes.debug_message("samples_info", 'yellow')
+        print (samples_info)
+
+
     ####################
     ## get gene info by unique ID
     ####################
@@ -367,7 +371,7 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
         
         ## get profiles
         #results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'ID') ## ARIBA
-        results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'Gene symbol') ## AMRFinder
+        results_Profiles_ids = retrieve_genes.get_genes_profile(samples_info, gene_IDs, options.debug, 'Gene symbol', groupby_id="name_sample") ## AMRFinder
         if options.debug:
             HCGB_aes.debug_message("results_Profiles_ids", 'yellow')
             print (results_Profiles_ids)
@@ -404,7 +408,7 @@ def Saureus_specific(samples_df, samples_info, options, folder, outdir_dict):
     print("Get SPA typing")
     HCGB_aes.print_sepLine('+', 35, 'yellow')
 
-    samples_df = samples_df.set_index('name')
+    samples_df = samples_df.set_index('name_sample')
     assembly_files = samples_df.loc[samples_df['tag'] == "assembly", "sample"]
     results_spaType = pd.DataFrame()
     (results_spaType, info_spa) = get_spa_typing.module_call(options.database, assembly_files.to_dict(), outdir_dict, options.debug)

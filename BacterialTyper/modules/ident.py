@@ -347,12 +347,23 @@ def run_ident(options):
     print ('+ Print summary results in folder: ', final_dir)
     print ('+ Print sample results in folder: ', excel_folder)
     
-    # Merge dataframe results summary by sample name
-    sample_results_summary = pd.merge(MLST_results, dataFrame_MLST, on="name_sample")
+    dataFrame_MLST = dataFrame_MLST.rename(columns={"new_name": "name_sample"})
     
     ## debug message
     if (Debug):
-        print (colored("**DEBUG: sample_results_summary **", 'yellow'))
+        print("Merge")
+        HCGB_aes.debug_message("MLST_results")
+        HCGB_main.print_all_pandaDF(MLST_results)
+    
+        HCGB_aes.debug_message("dataFrame_MLST")
+        HCGB_main.print_all_pandaDF(dataFrame_MLST)
+
+    # Merge dataframe results summary by sample name
+    sample_results_summary = pd.merge(MLST_results, dataFrame_MLST, on='name_sample')
+    
+    ## debug message
+    if (Debug):
+        print (colored("**DEBUG: sample_results_summary merged **", 'yellow'))
         HCGB_main.print_all_pandaDF(sample_results_summary)
     
     ## init some variables
@@ -366,6 +377,9 @@ def run_ident(options):
     ###########################################################################
     
         name = grouped['name']
+        
+        print("Printing information for sample: ")
+        print(name)
     
         ## create a excel and txt for sample
         name_sample_excel = os.path.join(excel_folder,  name + '_ident.xlsx')
@@ -389,8 +403,8 @@ def run_ident(options):
             elif options.kraken2:
             ###########################################################################
                 
-                bracken_df = pd.read_csv(grouped['name_sample'], sep="\t")
-                bracken_df['name_sample'] = grouped['name_sample']
+                bracken_df = pd.read_csv(grouped['sample'], sep="\t")
+                bracken_df['name'] = grouped['name_sample']
                 bracken_results = pd.concat([bracken_results, bracken_df])
     
                 ## print kraken2/bracken results in xlsx format
@@ -1035,7 +1049,7 @@ def MLST_ident(options, dataFrame, dataFrame_species, outdir_dict, time_partial)
     name_list = set(subset_Df.index)
     threads_job = HCGB_main.optimize_threads(options.threads, len(name_list)) ## threads optimization
     max_workers_int = int(options.threads/threads_job)
-    
+     
     ## debug message
     if (Debug):
         print (colored("**DEBUG: options.threads " +  str(options.threads) + " **", 'yellow'))
@@ -1049,7 +1063,7 @@ def MLST_ident(options, dataFrame, dataFrame_species, outdir_dict, time_partial)
          commandsSent = { executor.submit(MLST_caller.MLST_call,
                                           outfolder = outdir_dict[row['name_sample']],  ## outfolder
                                           assembly_file = row['sample'],             ## assembly file
-                                          mlst_profile = dataFrame_species.loc[ dataFrame_species['name_sample'] == row['name_sample'], 'mlst'].item(), 
+                                          mlst_profile = dataFrame_species.loc[ dataFrame_species['name'] == row['name_sample'], 'mlst'].item(), 
                                           sample_name = row['name_sample'],
                                           minid=options.minid, 
                                           mincov=options.mincov, 

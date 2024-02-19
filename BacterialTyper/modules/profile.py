@@ -81,10 +81,12 @@ def run_profile(options):
         options.pair = True
 
     
-    ### set as default paired_end mode
+    ### set as default AMRfinder mode or if several provided: only the first!
     try:
         if not (options.soft_profile):
             options.soft_profile = "AMRfinder"
+        else:
+            options.soft_profile = options.soft_profile[0]
     except:
         pass
 
@@ -253,7 +255,8 @@ def get_options_db(options):
         print (colored("**DEBUG: Database to use: " +  database2use + " **", 'yellow'))
     
     ## according to user input: select databases to use
-    option_db = ""
+    option_db = ""    
+    db2return = ""
     
     ################################################
     if options.soft_profile == "ARIBA":

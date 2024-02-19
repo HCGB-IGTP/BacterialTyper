@@ -63,7 +63,7 @@ def retrieve_genes_ids_sequences(profile, gene_ID, debug):
         return('','')
 
 ##############
-def get_genes_profile(samples_info, gene_names, debug, option):
+def get_genes_profile(samples_info, gene_names, debug, option, groupby_id="name"):
     """    
     """
     
@@ -76,7 +76,7 @@ def get_genes_profile(samples_info, gene_names, debug, option):
     ## search by group id or gene name
     print ('\n+ Retrieve selected genes profile for each sample.')
     results_profileIDs = pd.DataFrame()
-    sample_frame = samples_info.groupby(["name"])
+    sample_frame = samples_info.groupby([groupby_id])
     for g in gene_names:
         #print ("\t+", g)
         for name_tuple, cluster_df in sample_frame:
