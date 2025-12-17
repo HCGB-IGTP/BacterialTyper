@@ -558,18 +558,30 @@ def BUSCO_plots(dataFrame_results, outdir, threads, Debug):
 def main():
     ## this code runs when call as a single script
 
-      ## control if options provided or help
+    # control if options provided or help
     if not len(sys.argv) > 1:
         print_help_BUSCO()
+
+        print("python BUSCO_caller.py BUSCO_dataset folder_datasets fasta_file sample_name threads")
+
         exit()
     
-    list_datasets = str(sys.argv[1]).split(',')
-    print (list_datasets)
-    list_dataset =  BUSCO_retrieve_sets(list_datasets, sys.argv[2])
+    print(sys.argv)
+
+        ## sample_name, fasta, threads, output_name, dataset_name, mode, busco_db
+    outp = os.path.join(os.path.abspath("."), sys.argv[4])
+    HCGB_files.create_folder(outp) 
     
-    for l in list_dataset:
-        outp = os.path.join(sys.argv[4], l)
-        BUSCO_run(os.path.abspath(sys.argv[3]), 1, sys.argv[4], l, "genome", os.path.abspath(sys.argv[2]))
+    BUSCO_run(sys.argv[4],                          ## sample_name
+                  os.path.abspath(sys.argv[3]),     ## fasta file
+                  sys.argv[5],                      ## threads
+                  outp,                             ## output
+                  sys.argv[1],                      ## dataset_name
+                  "genome",                         ## mode 
+                  os.path.abspath(sys.argv[2])      ## busco_db
+                )
+    
+        
     
 ######
 '''******************************************'''

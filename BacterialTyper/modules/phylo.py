@@ -261,7 +261,10 @@ def map_samples(options, reference_gbk_file, input_dir, outdir):
     
     ## send for each sample
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
-        commandsSent = { executor.submit(snippy_variant_caller, reference_gbk_file, sorted(cluster["sample"].tolist()), threads_job, outdir_dict[name], options.name, contig_option, options.other_options, name, options.debug): name for name, cluster in sample_frame }
+        commandsSent = { executor.submit(snippy_variant_caller, 
+                                         reference_gbk_file, sorted(cluster["sample"].tolist()), 
+                                         threads_job, outdir_dict[name[0]], options.name, 
+                                         contig_option, options.other_options, name[0], options.debug): name[0] for name, cluster in sample_frame }
         for cmd2 in concurrent.futures.as_completed(commandsSent):
             details = commandsSent[cmd2]
             try:

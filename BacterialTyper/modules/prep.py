@@ -293,7 +293,7 @@ def run_prep(options):
     HCGB_info.dump_info_run(info_dir, "prep", options, runInfo, options.debug)
     
     ## dump conda details
-    HCGB_info.dump_info_conda(info_dir, "prep", options.debug)
+    HCGB_info.dump_info_conda(info_dir, "prep", package_name="BacterialTyper", debug=options.debug)
     
     print ("+ Exiting prep module.")
     return()

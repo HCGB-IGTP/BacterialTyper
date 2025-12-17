@@ -139,7 +139,7 @@ def run_QC(options):
     HCGB_info.dump_info_run(info_dir, submodule_name, options, runInfo, options.debug)
     
     ## dump conda details
-    HCGB_info.dump_info_conda(info_dir, submodule_name, options.debug)
+    HCGB_info.dump_info_conda(info_dir, submodule_name, package_name="BacterialTyper", debug=options.debug)
     
     print ("\n+ Exiting QC module.")
     return()

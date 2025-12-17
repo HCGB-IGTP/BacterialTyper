@@ -1351,36 +1351,54 @@ def Kraken_ident(options, dataFrame_samples, outdir_dict, retrieve_databases, ti
     # Group dataframe by sample name
     sample_frame = dataFrame_samples.groupby(["name"])
     
-    ## send for each sample
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
-         ## send for each sample
-         ## sample_name, read_files, threads_num, db_fold, outfolder, 
-         ## level_abundance="S", thres_count = 50, hit_groups=3, others="", debug=False
+    # ## send for each sample
+    # with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers_int) as executor:
+    #      ## send for each sample
+    #      ## sample_name, read_files, threads_num, db_fold, outfolder, 
+    #      ## level_abundance="S", thres_count = 50, hit_groups=3, others="", debug=False
          
-         commandsSent = { executor.submit(kraken2_caller.kraken_run_all,
+    #      commandsSent = { executor.submit(kraken2_caller.kraken_run_all,
+    #                      name[0],                                                       ## sample_name
+    #                      sorted(cluster[ cluster['ext']=='fastq']["sample"].tolist()),  ## read_files
+    #                      threads_job,                                                   ## threads                    
+    #                      databases2use[0],                                              ## database
+    #                      outdir_dict[name[0]],                                          ## outfolder
+    #                      options.kraken2_level,                                         ## level_abundance
+    #                      options.kraken2_read_count,                                    ## read threshold
+    #                      options.kraken2_hit_groups,                                    ## hit groups kraken2
+    #                      options.others_kraken2,                                        ## other options
+    #                      Debug): name[0] for name, cluster in sample_frame }
+
+    #      for cmd2 in concurrent.futures.as_completed(commandsSent):
+    #          details = commandsSent[cmd2]
+    #          try:
+    #              data = cmd2.result()
+    #          except Exception as exc:
+    #              print ('***ERROR:')
+    #              print (cmd2)
+    #              print('%r generated an exception: %s' % (details, exc))
+
+    #      ## functions.timestamp
+    #      time_partial = HCGB_time.timestamp(time_partial)
+
+    for name, cluster in sample_frame:
+        kraken2_caller.kraken_run_all( 
                          name[0],                                                       ## sample_name
                          sorted(cluster[ cluster['ext']=='fastq']["sample"].tolist()),  ## read_files
-                         threads_job,                                                   ## threads                    
+                         options.threads,                                                   ## threads                    
                          databases2use[0],                                              ## database
                          outdir_dict[name[0]],                                          ## outfolder
                          options.kraken2_level,                                         ## level_abundance
                          options.kraken2_read_count,                                    ## read threshold
                          options.kraken2_hit_groups,                                    ## hit groups kraken2
                          options.others_kraken2,                                        ## other options
-                         Debug): name[0] for name, cluster in sample_frame }
+                         Debug)
 
-         for cmd2 in concurrent.futures.as_completed(commandsSent):
-             details = commandsSent[cmd2]
-             try:
-                 data = cmd2.result()
-             except Exception as exc:
-                 print ('***ERROR:')
-                 print (cmd2)
-                 print('%r generated an exception: %s' % (details, exc))
-
-         ## functions.timestamp
-         time_partial = HCGB_time.timestamp(time_partial)
-        
+        ## functions.timestamp
+        time_partial = HCGB_time.timestamp(time_partial)
+    
+    
+    
     ## parse results        
     print ("+ Kraken2 identification call finished for all samples...")
     print ("+ Parse results now")

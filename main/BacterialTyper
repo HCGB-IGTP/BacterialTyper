@@ -413,7 +413,7 @@ kma_group.add_argument("--only_kma_db", action="store_true", help="Provide this 
 kma_group.add_argument("--KMA_cutoff", type=int, help="Similarity cutoff for databases filtering. Range: 1-100. [Default = 80]", default=80)
 
 kraken_group = subparser_ident.add_argument_group("Kraken2 Databases Configuration")
-kraken_group.add_argument("--kraken2_db", dest="kraken_dbs", help="kraken2 database to check. Provide a single input path if desired. If it is not available it would be downloaded and included in default database folder. [Default: Standard-8]", choices=['standard_8', 'viral', 'pluspfp_8'])
+kraken_group.add_argument("--kraken2_db", dest="kraken_dbs", help="kraken2 database to check. Provide a single input path if desired. If it is not available it would be downloaded and included in default database folder. [Default: Standard-8]", choices=['standard_8', 'viral', 'pluspfp_8', 'k2_pluspfp'])
 kraken_group.add_argument("--other_kraken2_db", help="kraken2 database to check. Not available in default BacterialTyper folder. Provide absolute path")
 
 kraken_param_group = subparser_ident.add_argument_group("Kraken2 Parameters Configuration")
